@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image';
@@ -16,12 +16,16 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity } = useCart()
+  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity, appliedCoupon, applyCoupon, removeCoupon, finalTotal, discountAmount } = useCart()
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [bhaktiSevaOfferings, setBhaktiSevaOfferings] = useState<any[]>([])
+  const [couponCode, setCouponCode] = useState('')
+  const [validatingCoupon, setValidatingCoupon] = useState(false)
   
+  const [couponCode, setCouponCode] = useState('');
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [step, setStep] = useState<'addons' | 'details'>('addons')
 
   const [address, setAddress] = useState({
@@ -51,7 +55,7 @@ export default function CheckoutPage() {
     } else {
        if (dakshinaItem) removeFromCart('addon-dakshina')
        addToCart({ id: 'addon-dakshina', name: 'Pandit Dakshina', price: amt, image: '' })
-       toast.success(`Dakshina ₹${amt} added!`)
+       toast.success(`Dakshina â‚¹${amt} added!`)
     }
   }
 
@@ -119,6 +123,60 @@ export default function CheckoutPage() {
     }
   }, [loading, items.length, router])
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error('Please enter a coupon code')
+      return
+    }
+    setValidatingCoupon(true)
+    try {
+      const res = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode, cartTotal })
+      })
+      const data = await res.json()
+      if (data.ok && data.coupon) {
+        applyCoupon(data.coupon)
+        toast.success(`Coupon applied! You saved ₹${data.coupon.discountAmount}`)
+        setCouponCode('')
+      } else {
+        toast.error(data.error || 'Invalid coupon')
+      }
+    } catch (err) {
+      toast.error('Failed to validate coupon')
+    } finally {
+      setValidatingCoupon(false)
+    }
+  }
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error('Please enter a coupon code')
+      return
+    }
+    setValidatingCoupon(true)
+    try {
+      const res = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode, cartTotal })
+      })
+      const data = await res.json()
+      if (data.ok && data.coupon) {
+        applyCoupon(data.coupon)
+        toast.success(Coupon applied! You saved ₹ + data.coupon.discountAmount)
+        setCouponCode('')
+      } else {
+        toast.error(data.error || 'Invalid coupon')
+      }
+    } catch (err) {
+      toast.error('Failed to validate coupon')
+    } finally {
+      setValidatingCoupon(false)
+    }
+  }
+
   const initiatePayment = () => {
     if (!address.name || !address.phone || !address.pincode || !address.street || !address.city || !address.state) {
       toast.error('Please fill all address fields completely')
@@ -144,7 +202,8 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           items: items.map(i => ({ id: i.id, quantity: i.quantity })),
           shippingAddress: address,
-          notes: sankalpNotes
+          notes: sankalpNotes,
+          couponCode: appliedCoupon?.code
         })
       })
       const data = await res.json()
@@ -157,7 +216,7 @@ export default function CheckoutPage() {
 
       if (data.mode === 'manual') {
         clearCart()
-        toast.success(`🎉 ${data.message || 'Order placed successfully!'}`)
+        toast.success(`ðŸŽ‰ ${data.message || 'Order placed successfully!'}`)
         toast.info(`Order No: ${data.orderNumber}`, { duration: 8000 })
         router.push('/dashboard/orders')
         return
@@ -233,7 +292,7 @@ export default function CheckoutPage() {
                           {primaryItem.name}
                         </h1>
                         <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-orange-100">
-                          ✦ Selected Puja
+                          âœ¦ Selected Puja
                         </span>
                         
                         {/* Metadata Details */}
@@ -248,7 +307,7 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex items-center gap-3">
                             <User className="w-4 h-4 text-gray-400 shrink-0" />
-                            <span className="text-gray-800 font-medium">{primaryItem.name} - {totalItems} Item(s) ( ₹ {cartTotal} )</span>
+                            <span className="text-gray-800 font-medium">{primaryItem.name} - {totalItems} Item(s) ( â‚¹ {cartTotal} )</span>
                             <button onClick={() => router.back()} className="text-orange-600 text-xs font-semibold flex items-center gap-1 ml-2 hover:underline">
                               <Edit2 className="w-3 h-3" /> Change Package
                             </button>
@@ -272,7 +331,7 @@ export default function CheckoutPage() {
                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
                         <p className="text-sm text-gray-800 font-semibold mb-1">{addon.title}</p>
-                        <p className="text-sm text-gray-500">₹ {addon.price}</p>
+                        <p className="text-sm text-gray-500">â‚¹ {addon.price}</p>
                       </div>
                       <button className={`w-6 h-6 rounded-full flex items-center justify-center border ${inCart ? 'bg-green-600 border-green-600 text-white' : 'border-gray-400 text-gray-600'}`}>
                         {inCart ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -298,14 +357,14 @@ export default function CheckoutPage() {
                           onClick={() => handleDakshinaSelect(amt)}
                           className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all ${isSelected ? 'bg-orange-600 text-white border-orange-600 shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-orange-300 hover:bg-orange-50'}`}
                         >
-                          ₹ {amt}
+                          â‚¹ {amt}
                         </button>
                       )
                     })}
                     
                     {/* Custom Input */}
                     <div className={`flex items-center border rounded-lg overflow-hidden transition-all ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'border-orange-600 ring-1 ring-orange-600 shadow-md' : 'border-slate-200 focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400'}`}>
-                      <span className="px-3 text-slate-500 font-bold bg-slate-50 h-full flex items-center">₹</span>
+                      <span className="px-3 text-slate-500 font-bold bg-slate-50 h-full flex items-center">â‚¹</span>
                       <input 
                         type="number" 
                         value={customDakshinaInput} 
@@ -339,7 +398,7 @@ export default function CheckoutPage() {
                             <p className="text-xs text-gray-500 line-clamp-2">
                               {offering.description || `Offer ${offering.name} for divine blessings.`}
                             </p>
-                            <p className="font-bold text-sm text-gray-900 pt-1">₹ {offering.price}</p>
+                            <p className="font-bold text-sm text-gray-900 pt-1">â‚¹ {offering.price}</p>
                           </div>
                           <div className="relative flex flex-col items-center justify-center w-24">
                             <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
@@ -384,14 +443,14 @@ export default function CheckoutPage() {
                                 <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700 text-xs font-medium flex items-center gap-1"><Trash2 className="w-3 h-3"/> Remove</button>
                               </div>
                             </div>
-                            <span className="font-bold text-orange-600 whitespace-nowrap mt-1">₹{item.price * item.quantity}</span>
+                            <span className="font-bold text-orange-600 whitespace-nowrap mt-1">â‚¹{item.price * item.quantity}</span>
                           </div>
                         ))}
                       </div>
 
                       <div className="flex justify-between items-center mb-6">
                         <span className="font-bold text-lg text-gray-900">Total</span>
-                        <span className="font-black text-xl text-green-600">₹ {cartTotal}</span>
+                        <span className="font-black text-xl text-green-600">â‚¹ {cartTotal}</span>
                       </div>
 
                       <Button 
@@ -414,7 +473,7 @@ export default function CheckoutPage() {
               <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
                 <div className="font-bold text-gray-900">
                   <p className="text-xs text-gray-500 font-medium">To Pay</p>
-                  <p className="text-lg text-green-600">₹ {cartTotal}</p>
+                  <p className="text-lg text-green-600">â‚¹ {cartTotal}</p>
                 </div>
                 <button 
                   onClick={() => setStep('details')} 
@@ -502,7 +561,7 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                             </div>
-                            <span className="font-bold text-orange-600 whitespace-nowrap ml-4">₹{item.price * item.quantity}</span>
+                            <span className="font-bold text-orange-600 whitespace-nowrap ml-4">â‚¹{item.price * item.quantity}</span>
                          </div>
                        ))}
                      </div>
@@ -518,7 +577,7 @@ export default function CheckoutPage() {
                        </div>
                        <div className="pt-4 border-t flex justify-between font-black text-xl text-slate-900">
                          <span>To Pay</span>
-                         <span className="text-orange-600">₹{cartTotal}</span>
+                         <span className="text-orange-600">â‚¹{cartTotal}</span>
                        </div>
                      </div>
      
@@ -528,7 +587,7 @@ export default function CheckoutPage() {
                        className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-lg shadow-lg shadow-orange-200"
                      >
                        {processing ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : null}
-                       {processing ? 'Processing Securely...' : `Pay ₹${cartTotal} Securely`}
+                       {processing ? 'Processing Securely...' : `Pay â‚¹${cartTotal} Securely`}
                        {!processing && <ArrowRight className="ml-2 h-5 w-5" />}
                      </Button>
                      <p className="text-center text-xs text-slate-400">100% Secure & Encrypted Payments</p>
@@ -544,23 +603,23 @@ export default function CheckoutPage() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2 text-slate-800">
-              <span className="text-orange-600 font-black text-2xl">ॐ</span> संकल्प विवरण
+              <span className="text-orange-600 font-black text-2xl">à¥</span> à¤¸à¤‚à¤•à¤²à¥à¤ª à¤µà¤¿à¤µà¤°à¤£
             </DialogTitle>
             <DialogDescription>
-              कृपया पूजा में संकल्प के लिए अपना गोत्र और उद्देश्य भरें।
+              à¤•à¥ƒà¤ªà¤¯à¤¾ à¤ªà¥‚à¤œà¤¾ à¤®à¥‡à¤‚ à¤¸à¤‚à¤•à¤²à¥à¤ª à¤•à¥‡ à¤²à¤¿à¤ à¤…à¤ªà¤¨à¤¾ à¤—à¥‹à¤¤à¥à¤° à¤”à¤° à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ à¤­à¤°à¥‡à¤‚à¥¤
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>Gotra (गोत्र)</Label>
+              <Label>Gotra (à¤—à¥‹à¤¤à¥à¤°)</Label>
               <Input 
                 value={sankalp.gotra} 
                 onChange={e => setSankalp({...sankalp, gotra: e.target.value})} 
-                placeholder="e.g. Kashyap (कश्यप)" 
+                placeholder="e.g. Kashyap (à¤•à¤¶à¥à¤¯à¤ª)" 
               />
             </div>
             <div className="space-y-2">
-              <Label>Puja Purpose (पूजा का उद्देश्य / मन्नत)</Label>
+              <Label>Puja Purpose (à¤ªà¥‚à¤œà¤¾ à¤•à¤¾ à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ / à¤®à¤¨à¥à¤¨à¤¤)</Label>
               <textarea 
                 value={sankalp.purpose} 
                 onChange={e => setSankalp({...sankalp, purpose: e.target.value})} 
@@ -605,3 +664,4 @@ export default function CheckoutPage() {
     </>
   )
 }
+

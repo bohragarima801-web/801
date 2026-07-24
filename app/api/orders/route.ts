@@ -10,12 +10,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'You must be logged in to place an order' }, { status: 401 });
     }
 
+
     const body = await req.json()
-    const { items = [], shippingAddress } = body
+    const { items = [], shippingAddress, notes, couponCode } = body
 
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ ok: false, error: 'Cart is empty or invalid' }, { status: 400 });
     }
+
 
     if (!shippingAddress?.name || !shippingAddress?.phone || !shippingAddress?.pincode) {
       return NextResponse.json({ ok: false, error: 'Incomplete shipping address' }, { status: 400 });
@@ -89,7 +91,37 @@ export async function POST(req: NextRequest) {
        orderItemsData.push({ productId, name, price, quantity, total: itemTotal })
     }
 
-    const total = subtotal
+
+    let discountAmount = 0
+    let validCouponId = null
+
+    if (couponCode) {
+      const coupon = await prisma.coupon.findUnique({ where: { code: couponCode.trim().toUpperCase() } })
+      if (coupon && coupon.isActive) {
+        // Validate
+        let isValid = true
+        if (coupon.startsAt && new Date() < coupon.startsAt) isValid = false
+        if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) isValid = false
+        if (coupon.minAmount && subtotal < Number(coupon.minAmount)) isValid = false
+        
+        if (isValid) {
+          validCouponId = coupon.id
+          const val = Number(coupon.discountValue)
+          if (coupon.discountType === 'PERCENTAGE') {
+            discountAmount = (subtotal * val) / 100
+            if (coupon.maxDiscount && discountAmount > Number(coupon.maxDiscount)) {
+              discountAmount = Number(coupon.maxDiscount)
+            }
+          } else {
+            discountAmount = val
+          }
+          if (discountAmount > subtotal) discountAmount = subtotal
+        }
+      }
+    }
+
+    const total = Math.max(0, subtotal - discountAmount)
+
 
     // 2. Save Address
     const savedAddress = await prisma.address.create({
@@ -116,13 +148,23 @@ export async function POST(req: NextRequest) {
         subtotal,
         tax: 0,
         shipping: 0,
+        discount: discountAmount,
         total,
         status: 'PENDING',
         paymentStatus: 'PENDING',
+        couponId: validCouponId,
+        notes: notes || null,
         shippingAddressId: savedAddress.id,
         items: { create: orderItemsData }
       }
     })
+
+    if (validCouponId) {
+      await prisma.coupon.update({
+        where: { id: validCouponId },
+        data: { usedCount: { increment: 1 } }
+      }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
+    }
 
     // 4. Try Razorpay — fallback gracefully if keys missing
     try {

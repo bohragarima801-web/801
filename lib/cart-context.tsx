@@ -36,21 +36,28 @@ type CartContextType = {
   clearCart: () => void
   totalItems: number
   cartTotal: number
+  appliedCoupon: { id: string, code: string, discountAmount: number } | null
+  applyCoupon: (coupon: { id: string, code: string, discountAmount: number }) => void
+  removeCoupon: () => void
+  discountAmount: number
+  finalTotal: number
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
+  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string, code: string, discountAmount: number } | null>(null)
   const [mounted, setMounted] = useState(false)
 
   // Safe localStorage access - ONLY on client
   useEffect(() => {
     try {
       const stored = safeLocalStorage.getItem('dy_cart')
-      if (stored) {
-        setItems(JSON.parse(stored))
-      }
+      if (stored) setItems(JSON.parse(stored))
+      
+      const storedCoupon = safeLocalStorage.getItem('dy_coupon')
+      if (storedCoupon) setAppliedCoupon(JSON.parse(storedCoupon))
     } catch (error) {
       console.warn('Failed to load cart from localStorage:', error)
     } finally {
@@ -63,11 +70,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (mounted) {
       try {
         safeLocalStorage.setItem('dy_cart', JSON.stringify(items))
+        if (appliedCoupon) {
+          safeLocalStorage.setItem('dy_coupon', JSON.stringify(appliedCoupon))
+        } else {
+          safeLocalStorage.removeItem('dy_coupon')
+        }
       } catch (error) {
         console.warn('Failed to save cart to localStorage:', error)
       }
     }
-  }, [items, mounted])
+  }, [items, appliedCoupon, mounted])
 
   const addToCart = (product: Omit<CartItem, 'quantity'>, quantityToAdd = 1) => {
     setItems((current) => {
@@ -97,15 +109,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setItems([])
+    setAppliedCoupon(null)
     safeLocalStorage.removeItem('dy_cart')
+    safeLocalStorage.removeItem('dy_coupon')
+  }
+
+  const applyCoupon = (coupon: { id: string, code: string, discountAmount: number }) => {
+    setAppliedCoupon(coupon)
+  }
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null)
   }
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
   const cartTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0
+  const finalTotal = Math.max(0, cartTotal - discountAmount)
 
   return (
     <CartContext.Provider value={{
-      items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, cartTotal
+      items, addToCart, removeFromCart, updateQuantity, clearCart, 
+      totalItems, cartTotal, appliedCoupon, applyCoupon, removeCoupon, discountAmount, finalTotal
     }}>
       {children}
     </CartContext.Provider>
