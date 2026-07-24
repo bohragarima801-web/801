@@ -49,9 +49,10 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
 
 interface FooterProps {
   mapUrl?: string
+  siteData?: any
 }
 
-export function Footer({ mapUrl }: FooterProps) {
+export function Footer({ mapUrl, siteData }: FooterProps) {
   return (
     <footer className="footer-spiritual">
       <div className="container py-14">
