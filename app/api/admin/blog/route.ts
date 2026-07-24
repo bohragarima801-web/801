@@ -67,7 +67,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Title and Category are required' }, { status: 400 });
     }
 
-    const calculatedSlug = slug || title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = slug || title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    
+    // Ensure uniqueness
+    const existing = await prisma.blog.findUnique({ where: { slug: calculatedSlug } })
+    if (existing) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
 
     const post = await prisma.blog.create({
       data: {
@@ -92,6 +98,9 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     if (err.code === 'P2003') {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
+    }
+    if (err.code === 'P2002') {
+      return NextResponse.json({ ok: false, error: 'A post with this title/slug already exists' }, { status: 400 });
     }
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to create post' }, { status: 500 });
   }
@@ -130,6 +139,9 @@ export async function PUT(req: NextRequest) {
   } catch (err: any) {
     if (err.code === 'P2003') {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
+    }
+    if (err.code === 'P2002') {
+      return NextResponse.json({ ok: false, error: 'A post with this title/slug already exists' }, { status: 400 });
     }
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to update post' }, { status: 500 });
   }
