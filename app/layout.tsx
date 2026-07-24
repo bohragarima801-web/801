@@ -13,8 +13,21 @@ export const dynamic = 'force-dynamic'
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-poppins' })
 const yatraOne = Yatra_One({ subsets: ['latin', 'devanagari'], weight: ['400'], variable: '--font-yatra' })
 
-export const metadata: Metadata = {
-  title: { default: `${siteConfig.name} — ${siteConfig.tagline}`, template: `%s | ${siteConfig.name}` },
+import { getDynamicSiteConfig } from '@/lib/settings'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dynamicConfig = await getDynamicSiteConfig()
+  return {
+    title: { default: `${dynamicConfig.name} — ${dynamicConfig.tagline}`, template: `%s | ${dynamicConfig.name}` },
+    description: dynamicConfig.description,
+    keywords: dynamicConfig.keywords,
+    metadataBase: new URL(dynamicConfig.url),
+    openGraph: { title: dynamicConfig.name, description: dynamicConfig.description, url: dynamicConfig.url, siteName: dynamicConfig.name, type: 'website', images: [dynamicConfig.logo || dynamicConfig.ogImage] },
+    twitter: { card: 'summary_large_image', title: dynamicConfig.name, description: dynamicConfig.description, images: [dynamicConfig.logo || dynamicConfig.ogImage] },
+    manifest: '/manifest.json',
+    appleWebApp: { capable: true, statusBarStyle: 'default', title: dynamicConfig.name },
+  }
+} — ${siteConfig.tagline}`, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   metadataBase: new URL(siteConfig.url),

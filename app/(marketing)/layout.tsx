@@ -1,8 +1,10 @@
 import { Navbar } from '@/components/layouts/navbar'
 import { Footer } from '@/components/layouts/footer'
 import prisma from '@/lib/prisma'
+import { getDynamicSiteConfig } from '@/lib/settings'
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
+  const siteData = await getDynamicSiteConfig()
   const mapSetting = await prisma.websiteSetting.findFirst({
     where: { key: 'contact.google_map_url' }
   }).catch(() => null)
@@ -35,9 +37,9 @@ export default async function MarketingLayout({ children }: { children: React.Re
           {activeCoupon.description && <span className="hidden md:inline font-normal opacity-95"> - {activeCoupon.description}</span>}
         </div>
       )}
-      <Navbar />
+      <Navbar siteData={siteData} />
       <main className="flex-1">{children}</main>
-      <Footer mapUrl={mapUrl} />
+      <Footer mapUrl={mapUrl} siteData={siteData} />
     </div>
   )
 }

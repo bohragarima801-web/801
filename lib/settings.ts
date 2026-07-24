@@ -30,3 +30,34 @@ export async function getSetting(key: string, envFallback?: string): Promise<str
   }
   return ''
 }
+
+
+import { siteConfig as staticSiteConfig } from './site-config'
+
+export async function getDynamicSiteConfig() {
+  const name = await getSetting('site.name') || staticSiteConfig.name
+  const tagline = await getSetting('site.tagline') || staticSiteConfig.tagline
+  const logo = await getSetting('site.logo') || staticSiteConfig.ogImage
+  const copyright = await getSetting('site.copyright') || '© 2026 DivyaYagyam. All rights reserved. • हरि ओम् 🙏'
+  
+  const email = await getSetting('contact.email') || staticSiteConfig.contact.email
+  const phone = await getSetting('contact.phone') || staticSiteConfig.contact.phone
+  const whatsapp = await getSetting('contact.whatsapp') || staticSiteConfig.contact.whatsapp
+  const address = await getSetting('contact.address') || ''
+  const googleMap = await getSetting('contact.google_map_url') || ''
+
+  return {
+    name,
+    tagline,
+    logo,
+    copyright,
+    contact: {
+      email,
+      phone,
+      whatsapp,
+      address,
+      googleMap
+    },
+    ...staticSiteConfig
+  }
+}

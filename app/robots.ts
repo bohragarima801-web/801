@@ -1,12 +1,16 @@
 import { MetadataRoute } from 'next'
+import { getDynamicSiteConfig } from '@/lib/settings'
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const config = await getDynamicSiteConfig()
+  const baseUrl = config.url || 'https://divyayagyam.com'
+
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/'], // block admin and api routes
+      disallow: ['/admin/', '/api/', '/checkout/'],
     },
-    sitemap: 'https://divyayagyam.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   }
 }

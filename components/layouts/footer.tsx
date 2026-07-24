@@ -59,14 +59,14 @@ export function Footer({ mapUrl }: FooterProps) {
           <div className="lg:col-span-2">
             <Logo />
             <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 max-w-sm">
-              {siteConfig.description}
+              {(siteData?.description || '')}
             </p>
             
             {/* Newsletter Subscription (Archived) */}
 
             <div className="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-              <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {siteConfig.contact.email}</div>
-              <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {siteConfig.contact.phone}</div>
+              <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {(siteData?.contact?.email || '')}</div>
+              <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {(siteData?.contact?.phone || '')}</div>
             </div>
             <div className="mt-5 flex items-center gap-3">
               <a href={siteConfig.socials.facebook} className="text-muted-foreground hover:text-primary"><Facebook className="h-5 w-5" /></a>
