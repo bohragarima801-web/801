@@ -14,6 +14,9 @@ import { toast } from 'sonner'
 import { Loader2, Video, Search, Cloud, Upload } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
+import dynamic from 'next/dynamic'
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor').then(mod => mod.default), { ssr: false })
 
 function BlogForm() {
   const router = useRouter()
@@ -212,8 +215,14 @@ function BlogForm() {
               <Textarea rows={2} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Content (Markdown)</Label>
-              <Textarea rows={14} placeholder="# Heading\n\nWrite your post here…" value={content} onChange={(e) => setContent(e.target.value)} required />
+              <Label>Content</Label>
+              <div data-color-mode="light">
+                <MDEditor
+                  value={content}
+                  onChange={(val) => setContent(val || '')}
+                  height={500}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -112,7 +112,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           </div>
         ) : null}
 
-        <div className="prose prose-amber prose-lg max-w-none text-slate-700 leading-relaxed font-normal">
+        <div className="prose prose-amber prose-lg md:prose-xl max-w-none 
+          prose-headings:font-black prose-headings:text-slate-900 prose-headings:tracking-tight 
+          prose-h1:text-4xl prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-4 prose-h2:border-amber-100 
+          prose-h3:text-2xl prose-h3:text-slate-800 
+          prose-p:text-slate-700 prose-p:leading-loose prose-p:text-lg 
+          prose-a:text-[var(--primary-color)] prose-a:font-bold prose-a:no-underline hover:prose-a:underline 
+          prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:italic prose-blockquote:shadow-sm
+          prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
+          prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50">
           <ReactMarkdown>
             {post.content}
           </ReactMarkdown>
