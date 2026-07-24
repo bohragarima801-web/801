@@ -21,6 +21,27 @@ function getEmbedUrl(url: string | null): string | null {
   return url;
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await prisma.blog.findUnique({
+    where: { slug: slug },
+    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true }
+  });
+
+  if (!post) return { title: 'Not Found' };
+
+  return {
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt || '',
+    keywords: post.seoKeywords || undefined,
+    openGraph: {
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || '',
+      images: post.coverImage ? [post.coverImage] : [],
+    }
+  };
+}
+
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await prisma.blog.findUnique({

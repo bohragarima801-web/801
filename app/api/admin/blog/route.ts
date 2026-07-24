@@ -38,6 +38,9 @@ export async function GET(req: NextRequest) {
       author: p.author?.fullName || p.author?.email || 'Unknown',
       category: p.category?.name || 'Uncategorized',
       views: p.views,
+      seoTitle: p.seoTitle,
+      seoDescription: p.seoDescription,
+      seoKeywords: p.seoKeywords,
       comments: p._count?.comments || 0,
       status: p.status,
       date: p.createdAt.toLocaleDateString('en-IN')
@@ -58,7 +61,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
     const data = await req.json()
-    const { title, slug, excerpt, content, categoryId, coverImage, status, publishedAt, seoTitle, seoDescription, videoUrl, isVideoEnabled } = data
+    const { title, slug, excerpt, content, categoryId, coverImage, status, publishedAt, seoTitle, seoDescription, seoKeywords, videoUrl, isVideoEnabled } = data
 
     if (!title || !categoryId) {
       return NextResponse.json({ ok: false, error: 'Title and Category are required' }, { status: 400 });
@@ -79,6 +82,7 @@ export async function POST(req: NextRequest) {
         publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
         seoTitle,
         seoDescription,
+        seoKeywords,
         videoUrl,
         isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true
       }

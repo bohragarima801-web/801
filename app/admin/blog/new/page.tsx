@@ -33,6 +33,7 @@ function BlogForm() {
   const [content, setContent] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
+  const [seoKeywords, setSeoKeywords] = useState('')
   const [isPublished, setIsPublished] = useState(true)
   const [publishedAt, setPublishedAt] = useState('')
   const [coverImage, setCoverImage] = useState('')
@@ -58,6 +59,7 @@ function BlogForm() {
             setContent(post.content || '')
             setSeoTitle(post.seoTitle || '')
             setSeoDescription(post.seoDescription || '')
+            setSeoKeywords(post.seoKeywords || '')
             setIsPublished(post.status === 'PUBLISHED')
             setPublishedAt(post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '')
             setCoverImage(post.coverImage || '')
@@ -138,6 +140,7 @@ function BlogForm() {
           categoryId,
           seoTitle,
           seoDescription,
+          seoKeywords,
           coverImage,
           videoUrl,
           isVideoEnabled,
@@ -224,6 +227,7 @@ function BlogForm() {
           <CardContent className="space-y-4">
             <div className="space-y-2"><Label>SEO Meta Title</Label><Input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Title for Search Engines" /></div>
             <div className="space-y-2"><Label>SEO Meta Description</Label><Textarea rows={2} value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} placeholder="Description for Search Engines" /></div>
+            <div className="space-y-2"><Label>SEO Keywords</Label><Input value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. puja, havan, astrology (comma separated)" /></div>
           </CardContent>
         </Card>
       </div>
