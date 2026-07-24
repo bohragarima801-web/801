@@ -623,6 +623,13 @@ export default function SettingsPage() {
                       </Badge>
                     </h4>
                     <p className="text-sm text-slate-600 mt-1">{status.database?.details}</p>
+                    {!status.database?.healthy && (
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                        <strong>How to fix:</strong> Check your DATABASE_URL in Vercel or the Secrets tab. Ensure the database server is running and accessible.
+                        <br/>
+                        <Button variant="link" className="p-0 h-auto mt-1 text-blue-600" onClick={() => setActiveTab('secrets')}>Update Database URL &rarr;</Button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -643,6 +650,13 @@ export default function SettingsPage() {
                       </Badge>
                     </h4>
                     <p className="text-sm text-slate-600 mt-1">{status.supabase?.details}</p>
+                    {!status.supabase?.healthy && (
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                        <strong>How to fix:</strong> Go to <a href="https://supabase.com/dashboard" target="_blank" className="underline text-blue-600" rel="noreferrer">Supabase Dashboard</a> &gt; Project Settings &gt; API. Copy the Project URL and anon/public key.
+                        <br/>
+                        <Button variant="link" className="p-0 h-auto mt-1 text-blue-600" onClick={() => setActiveTab('secrets')}>Configure Supabase Keys &rarr;</Button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -663,6 +677,13 @@ export default function SettingsPage() {
                       </Badge>
                     </h4>
                     <p className="text-sm text-slate-600 mt-1">{status.razorpay?.details}</p>
+                    {!status.razorpay?.healthy && (
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                        <strong>How to fix:</strong> Go to <a href="https://dashboard.razorpay.com/app/keys" target="_blank" className="underline text-blue-600" rel="noreferrer">Razorpay Dashboard</a> &gt; Account Settings &gt; API Keys. Generate a new Key ID and Secret.
+                        <br/>
+                        <Button variant="link" className="p-0 h-auto mt-1 text-blue-600" onClick={() => setActiveTab('secrets')}>Configure Razorpay Keys &rarr;</Button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -683,6 +704,13 @@ export default function SettingsPage() {
                       </Badge>
                     </h4>
                     <p className="text-sm text-slate-600 mt-1">{status.openai?.details}</p>
+                    {!status.openai?.healthy && (
+                      <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                        <strong>How to fix:</strong> Go to <a href="https://platform.openai.com/api-keys" target="_blank" className="underline text-blue-600" rel="noreferrer">OpenAI Platform</a> and generate a new secret API key (starts with sk-).
+                        <br/>
+                        <Button variant="link" className="p-0 h-auto mt-1 text-blue-600" onClick={() => setActiveTab('secrets')}>Configure OpenAI Key &rarr;</Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
