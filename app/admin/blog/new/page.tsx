@@ -15,8 +15,20 @@ import { Loader2, Video, Search, Cloud, Upload } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
 import dynamic from 'next/dynamic'
+import 'react-quill/dist/quill.snow.css'
 
-const MDEditor = dynamic(() => import('@uiw/react-md-editor').then(mod => mod.default), { ssr: false })
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+
+const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    ['link', 'image'],
+    ['clean']
+  ],
+}
 
 function BlogForm() {
   const router = useRouter()
@@ -215,12 +227,14 @@ function BlogForm() {
               <Textarea rows={2} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Content</Label>
-              <div data-color-mode="light">
-                <MDEditor
+              <Label>Content (Rich Text)</Label>
+              <div className="bg-white text-slate-900 rounded-md">
+                <ReactQuill
+                  theme="snow"
                   value={content}
-                  onChange={(val) => setContent(val || '')}
-                  height={500}
+                  onChange={setContent}
+                  modules={modules}
+                  className="min-h-[400px]"
                 />
               </div>
             </div>
