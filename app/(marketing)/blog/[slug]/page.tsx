@@ -120,7 +120,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           prose-a:text-[var(--primary-color)] prose-a:font-bold prose-a:no-underline hover:prose-a:underline 
           prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:italic prose-blockquote:shadow-sm
           prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
-          prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50">
+          prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50">
           <ReactMarkdown>
             {post.content}
           </ReactMarkdown>

@@ -496,3 +496,9 @@ a[class*="bg-[var(--primary-color)]"]:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 20px rgba(33, 136, 56, 0.45) !important;
 }
+
+@layer base {
+  img {
+    @apply rounded-xl;
+  }
+}
