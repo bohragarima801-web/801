@@ -109,23 +109,41 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
 
           <div className="lg:col-span-3">
             {/* Dynamic Google Map Section */}
-            {mapUrl && mapUrl.includes('embed') && (
-              <div className="rounded-3xl overflow-hidden border shadow-sm aspect-square w-full relative">
-                <iframe
-                  src={mapUrl}
-                  className="absolute inset-0 w-full h-full border-0"
-                  allowFullScreen={false}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            )}
-            {mapUrl && !mapUrl.includes('embed') && (
-              <div className="rounded-3xl overflow-hidden border border-red-200 bg-red-50 p-6 text-center text-red-800 text-sm">
-                <p><strong>Invalid Map URL:</strong> The provided Google Map URL is not an embed link.</p>
-                <p className="text-xs mt-1">Please go to Admin Settings and paste an &quot;Embed a map&quot; link (e.g. contains <code>/maps/embed?pb=</code>).</p>
-              </div>
-            )}
+            {(() => {
+              let finalMapUrl = mapUrl || '';
+              // Automatically extract the src if the user accidentally pastes the entire iframe code
+              if (finalMapUrl.includes('<iframe') && finalMapUrl.includes('src="')) {
+                const match = finalMapUrl.match(/src="([^"]+)"/);
+                if (match && match[1]) {
+                  finalMapUrl = match[1];
+                }
+              }
+
+              if (finalMapUrl && finalMapUrl.includes('embed')) {
+                return (
+                  <div className="rounded-3xl overflow-hidden border shadow-sm aspect-square w-full relative">
+                    <iframe
+                      src={finalMapUrl}
+                      className="absolute inset-0 w-full h-full border-0"
+                      allowFullScreen={false}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                );
+              }
+              
+              if (finalMapUrl && !finalMapUrl.includes('embed')) {
+                return (
+                  <div className="rounded-3xl overflow-hidden border border-red-200 bg-red-50 p-6 text-center text-red-800 text-sm">
+                    <p><strong>Invalid Map URL:</strong> The provided Google Map URL is not an embed link.</p>
+                    <p className="text-xs mt-1">Please go to Admin Settings and paste an &quot;Embed a map&quot; link (e.g. contains <code>/maps/embed?pb=</code>).</p>
+                  </div>
+                );
+              }
+
+              return null;
+            })()}
           </div>
         </div>
 
