@@ -165,7 +165,7 @@ export default function CheckoutPage() {
       const data = await res.json()
       if (data.ok && data.coupon) {
         applyCoupon(data.coupon)
-        toast.success(Coupon applied! You saved ₹\)
+        toast.success(`Coupon applied! You saved ₹${data.coupon.discountAmount}`)
         setCouponCode('')
       } else {
         toast.error(data.error || 'Invalid coupon')
