@@ -56,8 +56,8 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
   return (
     <footer className="footer-spiritual">
       <div className="container py-14">
-        <div className="grid gap-10 lg:grid-cols-6">
-          <div className="lg:col-span-2">
+        <div className="grid gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-4">
             <Logo />
             <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 max-w-sm">
               {(siteData?.description || '')}
@@ -90,40 +90,44 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
             </div>
           </div>
 
-          {columns.map((col) => (
-            <div key={col.title}>
-              <h4 className="text-sm font-semibold mb-3">{col.title}</h4>
-              <ul className="space-y-2">
-                {col.links.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="text-sm text-muted-foreground hover:text-primary">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+          <div className="lg:col-span-5 grid grid-cols-2 gap-8">
+            {columns.map((col) => (
+              <div key={col.title}>
+                <h4 className="text-sm font-semibold mb-3">{col.title}</h4>
+                <ul className="space-y-2">
+                  {col.links.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="text-sm text-muted-foreground hover:text-primary">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-        {/* Dynamic Google Map Section */}
-        {mapUrl && mapUrl.includes('embed') && (
-          <div className="mt-10 rounded-3xl overflow-hidden border shadow-sm h-64 md:h-80 w-full relative">
-            <iframe
-              src={mapUrl}
-              className="absolute inset-0 w-full h-full border-0"
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+          <div className="lg:col-span-3">
+            {/* Dynamic Google Map Section */}
+            {mapUrl && mapUrl.includes('embed') && (
+              <div className="rounded-3xl overflow-hidden border shadow-sm aspect-square w-full relative">
+                <iframe
+                  src={mapUrl}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allowFullScreen={false}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            )}
+            {mapUrl && !mapUrl.includes('embed') && (
+              <div className="rounded-3xl overflow-hidden border border-red-200 bg-red-50 p-6 text-center text-red-800 text-sm">
+                <p><strong>Invalid Map URL:</strong> The provided Google Map URL is not an embed link.</p>
+                <p className="text-xs mt-1">Please go to Admin Settings and paste an &quot;Embed a map&quot; link (e.g. contains <code>/maps/embed?pb=</code>).</p>
+              </div>
+            )}
           </div>
-        )}
-        {mapUrl && !mapUrl.includes('embed') && (
-          <div className="mt-10 rounded-3xl overflow-hidden border border-red-200 bg-red-50 p-6 text-center text-red-800 text-sm">
-            <p><strong>Invalid Map URL:</strong> The provided Google Map URL is not an embed link.</p>
-            <p className="text-xs mt-1">Please go to Admin Settings and paste an &quot;Embed a map&quot; link (e.g. contains <code>/maps/embed?pb=</code>).</p>
-          </div>
-        )}
+        </div>
 
         <div className="mt-10 pt-6 border-t border-border/60 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
