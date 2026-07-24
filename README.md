@@ -1,20 +1,51 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Devyajnam Project
 
-# Run and deploy your AI Studio app
+This is the primary repository for **Devyajnam**. The project is built using modern web technologies to support booking astrology/puja services, e-commerce, blogging, and an advanced admin dashboard.
 
-This contains everything you need to run your app locally.
+## Tech Stack
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL (via Prisma ORM)
+- **Authentication & Storage:** Supabase
+- **Payments:** Razorpay
+- **Styling:** Tailwind CSS + Radix UI
 
-View your app in AI Studio: https://ai.studio/apps/3f3ad4e4-3344-4c4a-a102-28933675ead8
+## Getting Started
 
-## Run Locally
+### 1. Prerequisites
+- Node.js (v18 or higher recommended)
+- Yarn package manager (`npm install -g yarn`)
+- A PostgreSQL database (e.g., Supabase, Neon)
+- A Supabase project (for Storage and optional features)
 
-**Prerequisites:**  Node.js
+### 2. Environment Setup
+Copy the example environment file and fill in your credentials:
+```bash
+cp .env.example .env
+```
+Fill out the variables in `.env` (Database URL, Supabase keys, Admin credentials, Razorpay secrets, etc.).
 
+### 3. Install Dependencies
+```bash
+yarn install
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 4. Database Setup
+Push the Prisma schema to your database and generate the Prisma Client:
+```bash
+yarn db:generate
+yarn db:push
+```
+
+### 5. Run Development Server
+```bash
+yarn dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Scripts
+- `yarn dev` - Starts the local development server.
+- `yarn build` - Generates Prisma client and builds the application for production.
+- `yarn start` - Starts the production server.
+- `yarn db:studio` - Opens Prisma Studio to view and edit database records.
+- `yarn build:strict` - Runs a strict build that checks TypeScript and ESLint errors.

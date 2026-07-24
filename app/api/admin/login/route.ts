@@ -12,8 +12,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   const { email, password } = await req.json()
   await initSecrets()
 
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@divyayagyam.com'
-  const adminPass = process.env.ADMIN_PASSWORD || 'Admin@12345'
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPass = process.env.ADMIN_PASSWORD
 
   if (!email || !password) {
     return NextResponse.json({ ok: false, error: 'Email and password required' }, { status: 400 });
@@ -25,7 +25,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   let loginEmail = inputEmail
 
   // 1. Check Super Admin (Environment fallback) - compare both lowercase
-  if (inputEmail === adminEmail.trim().toLowerCase() && password === adminPass) {
+  if (adminEmail && adminPass && inputEmail === adminEmail.trim().toLowerCase() && password === adminPass) {
     isValid = true
     // Store lowercase so DB lookup in getAdminUser() works consistently
     loginEmail = adminEmail.trim().toLowerCase()

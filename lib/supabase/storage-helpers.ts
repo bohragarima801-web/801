@@ -34,8 +34,6 @@ export async function ensureBucketExists() {
 
 export async function uploadToSupabase(fileBuffer: Buffer, fileName: string, mimeType: string) {
   const supabase = await createAdminClient()
-  await ensureBucketExists()
-
   const fileExt = fileName.split('.').pop() || 'jpg'
   const uniqueId = uuidv4()
   

@@ -37,23 +37,13 @@ export async function initSecrets(force = false) {
 
       if (!cleanVal) return
 
-      // Map configuration keys to system process.env variables
+      // Only map safe configurations (e.g. non-secret settings)
+      // Highly privileged keys (Razorpay Secret, Supabase Service Role, Admin Password) 
+      // are no longer read from the database for security reasons.
       switch (setting.key) {
         case 'secret_razorpay_key_id':
           process.env.RAZORPAY_KEY_ID = cleanVal
           process.env['NEXT_PUBLIC_' + 'RAZORPAY_KEY_ID'] = cleanVal
-          break
-        case 'secret_razorpay_key_secret':
-          process.env.RAZORPAY_KEY_SECRET = cleanVal
-          break
-        case 'secret_razorpay_webhook_secret':
-          process.env.RAZORPAY_WEBHOOK_SECRET = cleanVal
-          break
-        case 'secret_emergent_llm_key':
-          process.env.EMERGENT_LLM_KEY = cleanVal
-          break
-        case 'secret_gemini_api_key':
-          process.env.GEMINI_API_KEY = cleanVal
           break
         case 'secret_supabase_url':
           process.env['NEXT_PUBLIC_' + 'SUPABASE_URL'] = cleanVal
@@ -61,23 +51,11 @@ export async function initSecrets(force = false) {
         case 'secret_supabase_anon_key':
           process.env['NEXT_PUBLIC_' + 'SUPABASE_ANON_KEY'] = cleanVal
           break
-        case 'secret_supabase_service_role_key':
-          process.env.SUPABASE_SERVICE_ROLE_KEY = cleanVal
-          break
         case 'secret_admin_email':
           process.env.ADMIN_EMAIL = cleanVal
           break
-        case 'secret_admin_password':
-          process.env.ADMIN_PASSWORD = cleanVal
-          break
-        case 'secret_admin_jwt_secret':
-          process.env.ADMIN_JWT_SECRET = cleanVal
-          break
         default:
-          if (setting.key.startsWith('secret_')) {
-            const envKey = setting.key.replace(/^secret_/, '').toUpperCase()
-            process.env[envKey] = cleanVal
-          }
+          // Do nothing for sensitive keys
           break
       }
     })

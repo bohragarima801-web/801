@@ -6,7 +6,8 @@
         "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=2048\" next dev --hostname 0.0.0.0 --port 3000",
         "dev:no-reload": "next dev --hostname 0.0.0.0 --port 3000",
         "dev:webpack": "next dev --hostname 0.0.0.0 --port 3000",
-        "build": "node fix_use_client.js && prisma generate && node patch_db.js && next build",
+        "build": "prisma generate && next build",
+        "build:strict": "next build",
         "start": "next start",
         "db:generate": "prisma generate",
         "db:migrate": "prisma migrate dev",
@@ -14,8 +15,7 @@
         "db:push": "prisma db push",
         "db:seed": "tsx prisma/seed.ts",
         "db:studio": "prisma studio",
-        "db:reset": "prisma migrate reset",
-        "heal": "node heal.js"
+        "db:reset": "prisma migrate reset"
     },
     "prisma": {
         "seed": "tsx prisma/seed.ts"
@@ -67,7 +67,7 @@
         "embla-carousel-react": "8.6.0",
         "framer-motion": "11.18.0",
         "input-otp": "1.4.2",
-        "lodash": "4.18.1",
+        "lodash": "^4.17.21",
         "lucide-react": "0.516.0",
         "mongodb": "6.6.0",
         "next": "15.5.16",
@@ -119,7 +119,7 @@
         "**/readdirp/picomatch": "2.3.2",
         "postcss": "8.5.10",
         "yaml": "2.8.3",
-        "lodash": "4.18.1"
+        "lodash": "^4.17.21"
     },
     "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

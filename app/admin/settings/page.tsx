@@ -167,15 +167,8 @@ export default function SettingsPage() {
       }
     } else if (group === 'secrets') {
       payload = {
-        'secret.supabase_url': supabaseUrl,
-        'secret.supabase_anon_key': supabaseAnonKey,
-        'secret.supabase_service_role_key': supabaseServiceRole,
-        'secret.openai_api_key': openaiApiKey,
-        'secret.gemini_api_key': geminiApiKey,
-        'secret.razorpay_key_id': razorpayKeyId,
-        'secret.razorpay_key_secret': razorpayKeySecret,
-        'secret.database_url': dbUrl,
-        'secret.direct_url': directUrlSetting,
+        'contact.database_url': dbUrl,
+        'contact.direct_url': directUrlSetting,
       }
     }
 
@@ -474,84 +467,55 @@ export default function SettingsPage() {
                 </AlertDescription>
               </Alert>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50">
+              <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-lg text-sm mb-6">
+                  <strong>Security Notice:</strong> High-privilege secrets (like Supabase Service Role Key, Razorpay Secret, and AI API Keys) have been migrated out of the database for security reasons. They must now be configured directly in your hosting provider's Environment Variables (e.g., Vercel).
+                </div>
+                
+                <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50 opacity-75">
                   <h3 className="font-semibold text-lg border-b pb-2 flex items-center justify-between">
                     Supabase Configuration
-                    <Badge variant="outline">Auth & Storage</Badge>
+                    <Badge variant="outline">Database & Storage</Badge>
                   </h3>
                   <div className="space-y-2">
-                    <Label>Supabase URL</Label>
-                    <Input 
-                      placeholder="https://xxx.supabase.co" 
-                      value={supabaseUrl} 
-                      onChange={(e) => setSupabaseUrl(e.target.value)} 
-                    />
+                    <Label>Supabase URL (NEXT_PUBLIC_SUPABASE_URL)</Label>
+                    <Input disabled value="Configured in Environment Variables" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Supabase Anon Key</Label>
-                    <Input 
-                      type="password" 
-                      placeholder="eyJhbGc..." 
-                      value={supabaseAnonKey} 
-                      onChange={(e) => setSupabaseAnonKey(e.target.value)} 
-                    />
+                    <Label>Supabase Anon Key (NEXT_PUBLIC_SUPABASE_ANON_KEY)</Label>
+                    <Input disabled type="password" value="************************" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Supabase Service Role Key</Label>
-                    <Input 
-                      type="password" 
-                      placeholder="Service key (used for server-side queries)..." 
-                      value={supabaseServiceRole} 
-                      onChange={(e) => setSupabaseServiceRole(e.target.value)} 
-                    />
+                    <Label>Supabase Service Role Key (SUPABASE_SERVICE_ROLE_KEY)</Label>
+                    <Input disabled type="password" value="************************" />
                   </div>
                 </div>
 
-                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50">
+                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50 opacity-75">
                   <h3 className="font-semibold text-lg border-b pb-2 flex items-center justify-between">
                     Razorpay Gateway
                     <Badge variant="outline">Payments</Badge>
                   </h3>
                   <div className="space-y-2">
-                    <Label>Razorpay Key ID</Label>
-                    <Input 
-                      placeholder="rzp_live_xxx / rzp_test_xxx" 
-                      value={razorpayKeyId} 
-                      onChange={(e) => setRazorpayKeyId(e.target.value)} 
-                    />
+                    <Label>Razorpay Key ID (RAZORPAY_KEY_ID)</Label>
+                    <Input disabled value="Configured in Environment Variables" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Razorpay Key Secret</Label>
-                    <Input 
-                      type="password" 
-                      placeholder="Key Secret..." 
-                      value={razorpayKeySecret} 
-                      onChange={(e) => setRazorpayKeySecret(e.target.value)} 
-                    />
+                    <Label>Razorpay Key Secret (RAZORPAY_KEY_SECRET)</Label>
+                    <Input disabled type="password" value="************************" />
                   </div>
 
                   <h3 className="font-semibold text-lg border-b pb-2 pt-2 flex items-center justify-between">
                     AI Integration (Gemini / OpenAI)
-                    <Badge variant="outline">AI Pandit Chat</Badge>
+                    <Badge variant="outline">AI Chat</Badge>
                   </h3>
                   <div className="space-y-2">
-                    <Label>Google Gemini API Key (Recommended)</Label>
-                    <Input 
-                      type="password" 
-                      placeholder="AIzaSy..." 
-                      value={geminiApiKey} 
-                      onChange={(e) => setGeminiApiKey(e.target.value)} 
-                    />
+                    <Label>Google Gemini API Key (GEMINI_API_KEY)</Label>
+                    <Input disabled type="password" value="************************" />
                   </div>
                   <div className="space-y-2">
-                    <Label>OpenAI API Key (Fallback)</Label>
-                    <Input 
-                      type="password" 
-                      placeholder="sk-proj-..." 
-                      value={openaiApiKey} 
-                      onChange={(e) => setOpenaiApiKey(e.target.value)} 
-                    />
+                    <Label>OpenAI API Key (OPENAI_API_KEY)</Label>
+                    <Input disabled type="password" value="************************" />
                   </div>
                 </div>
               </div>

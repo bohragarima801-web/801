@@ -37,7 +37,7 @@ async function hmacSign(secret: string, data: string): Promise<string> {
 }
 
 export async function signAdminToken(email: string): Promise<string> {
-  const secret = process.env.ADMIN_SESSION_SECRET || 'super-secret-key-108'
+  const secret = process.env.ADMIN_SESSION_SECRET || 'random-fallback-if-missing'
   const payload = JSON.stringify({ email, exp: Date.now() + SESSION_TTL_MS })
   const b64 = b64urlEncode(utf8Encode(payload))
   const sig = await hmacSign(secret, b64)
@@ -48,7 +48,7 @@ export async function verifyAdminToken(token: string | undefined | null): Promis
   if (!token) return null
   const [b64, sig] = token.split('.')
   if (!b64 || !sig) return null
-  const secret = process.env.ADMIN_SESSION_SECRET || 'super-secret-key-108'
+  const secret = process.env.ADMIN_SESSION_SECRET || 'random-fallback-if-missing'
   const expected = await hmacSign(secret, b64)
   if (expected !== sig) return null
   try {
@@ -96,8 +96,8 @@ export const getAdminUser = cache(async () => {
     }
 
     // Fallback: Super Admin from environment (may not have a DB record)
-    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@divyayagyam.com').trim().toLowerCase()
-    if (sessionEmail === adminEmail) {
+    const adminEmail = process.env.ADMIN_EMAIL ? process.env.ADMIN_EMAIL.trim().toLowerCase() : null
+    if (adminEmail && sessionEmail === adminEmail) {
       // Return a virtual super-admin object
       return {
         id: 'super-admin',
