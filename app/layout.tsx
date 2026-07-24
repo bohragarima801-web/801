@@ -27,14 +27,6 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: '/manifest.json',
     appleWebApp: { capable: true, statusBarStyle: 'default', title: dynamicConfig.name },
   }
-} — ${siteConfig.tagline}`, template: `%s | ${siteConfig.name}` },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  metadataBase: new URL(siteConfig.url),
-  openGraph: { title: siteConfig.name, description: siteConfig.description, url: siteConfig.url, siteName: siteConfig.name, type: 'website' },
-  twitter: { card: 'summary_large_image', title: siteConfig.name, description: siteConfig.description },
-  manifest: '/manifest.json',
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: siteConfig.name },
 }
 
 export const viewport: Viewport = {
