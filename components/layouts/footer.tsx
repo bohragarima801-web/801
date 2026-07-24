@@ -94,7 +94,7 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
         </div>
 
         {/* Dynamic Google Map Section */}
-        {mapUrl && (
+        {mapUrl && mapUrl.includes('embed') && (
           <div className="mt-10 rounded-3xl overflow-hidden border shadow-sm h-64 md:h-80 w-full relative">
             <iframe
               src={mapUrl}
@@ -103,6 +103,12 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+          </div>
+        )}
+        {mapUrl && !mapUrl.includes('embed') && (
+          <div className="mt-10 rounded-3xl overflow-hidden border border-red-200 bg-red-50 p-6 text-center text-red-800 text-sm">
+            <p><strong>Invalid Map URL:</strong> The provided Google Map URL is not an embed link.</p>
+            <p className="text-xs mt-1">Please go to Admin Settings and paste an &quot;Embed a map&quot; link (e.g. contains <code>/maps/embed?pb=</code>).</p>
           </div>
         )}
 

@@ -400,7 +400,8 @@ export default function SettingsPage() {
               </div>
               <div className="space-y-2">
                 <Label>Google Map Embed URL (iframe Src)</Label>
-                <Input value={googleMapUrl} onChange={(e) => setGoogleMapUrl(e.target.value)} placeholder={process.env.NEXT_PUBLIC_URL_4586 || ''} />
+                <Input value={googleMapUrl} onChange={(e) => setGoogleMapUrl(e.target.value)} placeholder="https://www.google.com/maps/embed?pb=..." />
+                <p className="text-[10px] text-slate-500">You must use the &apos;Embed a map&apos; link (contains /maps/embed?pb=). Standard google.com links will not work.</p>
               </div>
               <div className="flex gap-2 pt-4 border-t">
                 <Button variant="outline" type="button" onClick={() => handleUndo('contact')}>Undo Changes</Button>
