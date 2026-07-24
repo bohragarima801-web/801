@@ -8,12 +8,22 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
 
+import { STATIC_TOOLS } from '@/lib/static-tools'
+
 export const revalidate = 30
 
 export default async function ToolViewPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const tool = await prisma.spiritualTool.findUnique({ where: { slug: slug } })
+  let tool = await prisma.spiritualTool.findUnique({ where: { slug: slug } })
   
+  if (!tool) {
+    // Check static tools
+    const staticTool = STATIC_TOOLS.find(t => t.slug === slug)
+    if (staticTool) {
+      tool = staticTool as any
+    }
+  }
+
   if (!tool || !tool.isActive) {
     notFound()
   }

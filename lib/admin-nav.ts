@@ -52,7 +52,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'All Posts', href: '/admin/blog' }, { title: 'Add New', href: '/admin/blog/new' },
     { title: 'Categories', href: '/admin/blog/categories' }, { title: 'Comments', href: '/admin/blog/comments' },
   ]},
-  { title: 'Tools Manager', slug: 'tools', icon: Wrench, permission: 'cms.read', items: [
+  { title: 'Tools Manager', slug: 'tools', icon: Wrench, permission: '*', items: [
     { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },
   ]},
   { title: 'Gallery', slug: 'gallery', icon: ImageIcon, href: '/admin/gallery', permission: 'gallery.read' },
