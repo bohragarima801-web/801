@@ -1,6 +1,6 @@
 // Complete admin sidebar with Customizer added
 import {
-  LayoutDashboard, BarChart3, Users, Star, HeartHandshake,
+  LayoutDashboard, BarChart3, Users, Star, HeartHandshake, Wrench,
   Building2, Flame, Ticket, ShoppingBag, HandCoins, Sparkles, Sparkle,
   Newspaper, ImageIcon, MessageSquare, Bell, Megaphone, LineChart,
   Palette, Search, CreditCard, HardDrive, Settings, Lock, DatabaseBackup,
@@ -51,6 +51,9 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Blog & CMS', slug: 'blog', icon: Newspaper, permission: 'blog.read', items: [
     { title: 'All Posts', href: '/admin/blog' }, { title: 'Add New', href: '/admin/blog/new' },
     { title: 'Categories', href: '/admin/blog/categories' }, { title: 'Comments', href: '/admin/blog/comments' },
+  ]},
+  { title: 'Tools Manager', slug: 'tools', icon: Wrench, permission: 'cms.read', items: [
+    { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },
   ]},
   { title: 'Gallery', slug: 'gallery', icon: ImageIcon, href: '/admin/gallery', permission: 'gallery.read' },
   { title: 'Testimonials', slug: 'testimonials', icon: Star, href: '/admin/testimonials', permission: 'testimonial.read' },
