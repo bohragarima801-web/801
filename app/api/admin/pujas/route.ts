@@ -66,7 +66,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Category is required' }, { status: 400 });
     }
 
-    const calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+
+    // Auto-resolve slug conflicts
+    const existing = await prisma.puja.findUnique({ where: { slug: calculatedSlug } })
+    if (existing && existing.id !== id) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
+
     const finalPrice = Number(price) || 0
     const finalVipPrice = vipPrice ? Number(vipPrice) : null
 
@@ -150,6 +157,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, puja });
   } catch (err: any) {
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'A puja with this name/slug already exists' }, { status: 400 });
 // console.error('[DEBUG Admin Pujas POST Error]', err) (removed for production)
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save puja' }, { status: 500 });
   }

@@ -112,7 +112,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Name, Price, and Category are required' }, { status: 400 });
     }
 
-    const calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+
+    const existing = await prisma.product.findUnique({ where: { slug: calculatedSlug } })
+    if (existing && existing.id !== id) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
 
     const payload: any = {
       name,
@@ -183,6 +188,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, data: product });
   } catch (err: any) {
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'A product with this name/slug already exists' }, { status: 400 });
 // console.error('[API Products POST Error]', err) (removed for production)
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save product' }, { status: 500 });
   }

@@ -23,7 +23,12 @@ export async function POST(req: NextRequest) {
     const { name, slug, description, image, parentId } = await req.json()
     if (!name) return NextResponse.json({ ok: false, error: 'Name is required' }, { status: 400 });
 
-    const calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+
+    const existing = await prisma.productCategory.findUnique({ where: { slug: calculatedSlug } })
+    if (existing) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
 
     const category = await prisma.productCategory.create({
       data: {
@@ -37,6 +42,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, data: category });
   } catch (err: any) {
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'A category with this name/slug already exists' }, { status: 400 });
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to create category' }, { status: 500 });
   }
 }
@@ -53,7 +59,12 @@ export async function PUT(req: NextRequest) {
 
     const { name, slug, description, image, parentId } = await req.json()
 
-    const calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+
+    const existing = await prisma.productCategory.findUnique({ where: { slug: calculatedSlug } })
+    if (existing && existing.id !== id) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
 
     const category = await prisma.productCategory.update({
       where: { id },
@@ -68,6 +79,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ ok: true, data: category });
   } catch (err: any) {
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'A category with this name/slug already exists' }, { status: 400 });
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to update category' }, { status: 500 });
   }
 }

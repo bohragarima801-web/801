@@ -37,6 +37,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Title, start time, and end time are required' }, { status: 400 });
     }
 
+    let calculatedSlug = title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    const existing = await prisma.event.findUnique({ where: { slug: calculatedSlug } })
+    if (existing) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
+
     const event = await prisma.event.create({
       data: {
         title,
@@ -50,7 +56,7 @@ export async function POST(req: NextRequest) {
         streamUrl: streamUrl || null,
         isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true,
         templeId: templeId === 'none' ? null : templeId,
-        slug: title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+        slug: calculatedSlug
       }
     })
 
@@ -59,6 +65,7 @@ export async function POST(req: NextRequest) {
     if (err.code === 'P2003') {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
     }
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'An event with this title/slug already exists' }, { status: 400 });
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to create event' }, { status: 500 });
   }
 }
@@ -77,6 +84,15 @@ export async function PUT(req: NextRequest) {
     if (data.startsAt) data.startsAt = new Date(data.startsAt)
     if (data.endsAt) data.endsAt = new Date(data.endsAt)
     if (data.templeId === 'none') data.templeId = null
+
+    if (data.title && !data.slug) {
+      let calculatedSlug = data.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+      const existing = await prisma.event.findUnique({ where: { slug: calculatedSlug } })
+      if (existing && existing.id !== id) {
+        calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+      }
+      data.slug = calculatedSlug
+    }
     
     const event = await prisma.event.update({
       where: { id },
@@ -88,6 +104,7 @@ export async function PUT(req: NextRequest) {
     if (err.code === 'P2003') {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
     }
+    if (err.code === 'P2002') return NextResponse.json({ ok: false, error: 'An event with this title/slug already exists' }, { status: 400 });
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to update event' }, { status: 500 });
   }
 }
