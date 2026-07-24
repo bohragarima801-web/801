@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image';
@@ -23,9 +23,6 @@ export default function CheckoutPage() {
   const [bhaktiSevaOfferings, setBhaktiSevaOfferings] = useState<any[]>([])
   const [couponCode, setCouponCode] = useState('')
   const [validatingCoupon, setValidatingCoupon] = useState(false)
-  
-  const [couponCode, setCouponCode] = useState('');
-  const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [step, setStep] = useState<'addons' | 'details'>('addons')
 
   const [address, setAddress] = useState({
