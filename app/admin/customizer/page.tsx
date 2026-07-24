@@ -151,7 +151,8 @@ function CustomizerManager() {
     { label: 'Branding & Layout (ब्रांडिंग)', value: 'branding' },
     { label: 'Custom CSS (सीएसएस)', value: 'css' },
     { label: 'Custom JS (जावास्क्रिप्ट)', value: 'js' },
-    { label: 'Per-Page HTML (पेज ओवरराइड)', value: 'html' }
+    { label: 'Per-Page HTML (पेज ओवरराइड)', value: 'html' },
+    { label: 'Live Preview (लाइव)', value: 'preview' }
   ]
 
   return (
@@ -383,6 +384,37 @@ function CustomizerManager() {
                 </CardContent>
               </Card>
             </div>
+          )}
+
+          {activeTab === 'preview' && (
+            <Card className="rounded-3xl border shadow-sm col-span-full">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <div>
+                  <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <Layers className="h-5 w-5 text-orange-600" /> Live Preview
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    See exactly how your site looks with the saved customizer settings. (Please click "Save" first to see latest changes).
+                  </CardDescription>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => {
+                  const iframe = document.getElementById('preview-iframe') as HTMLIFrameElement;
+                  if (iframe) iframe.src = iframe.src;
+                }}>
+                  Refresh Preview
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="w-full bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200 h-[600px] relative">
+                  <iframe 
+                    id="preview-iframe"
+                    src="/" 
+                    className="w-full h-full border-none"
+                    title="Live Preview"
+                  />
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       )}

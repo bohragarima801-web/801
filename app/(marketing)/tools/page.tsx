@@ -84,7 +84,7 @@ export default function ToolsPage() {
           <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden border-2 border-primary/20">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-start justify-between">
-                <div className="h-12 w-12 rounded-xl om-gradient flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full om-gradient flex items-center justify-center">
                   <Bot className="h-6 w-6 text-white" />
                 </div>
                 <Badge className="bg-green-100 text-green-800">AI Live • Free</Badge>
@@ -116,7 +116,7 @@ export default function ToolsPage() {
                   <CardContent className="p-6 space-y-4 flex flex-col justify-between h-full">
                     <div className="space-y-3">
                       <div className="flex items-start justify-between">
-                        <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                        <div className="h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center">
                           <IconComponent className="h-6 w-6 text-primary" />
                         </div>
                         {t.isFree ? (
