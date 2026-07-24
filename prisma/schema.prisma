@@ -497,6 +497,7 @@ model Puja {
   status           PujaStatus @default(DRAFT)
   seoTitle         String?
   seoDescription   String?
+  seoKeywords      String?
   publishedAt      DateTime?
   location         String?
   createdAt        DateTime   @default(now())
@@ -663,6 +664,7 @@ model Product {
   weight           Float?
   seoTitle         String?
   seoDescription   String?
+  seoKeywords      String?
   tags             String?
   status           ProductStatus @default(DRAFT)
   createdAt        DateTime      @default(now())

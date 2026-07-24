@@ -11,8 +11,10 @@ async function main() {
   }
 
   try {
-    console.log("Patching seoKeywords...");
+    console.log("Patching seoKeywords for blogs, pujas, products...");
     await prisma.$executeRawUnsafe('ALTER TABLE "blogs" ADD COLUMN IF NOT EXISTS "seoKeywords" TEXT;');
+    await prisma.$executeRawUnsafe('ALTER TABLE "pujas" ADD COLUMN IF NOT EXISTS "seoKeywords" TEXT;');
+    await prisma.$executeRawUnsafe('ALTER TABLE "products" ADD COLUMN IF NOT EXISTS "seoKeywords" TEXT;');
   } catch (e) {
     console.log("seoKeywords already exists or error:", e.message);
   }

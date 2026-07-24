@@ -48,6 +48,7 @@ function NewPujaPage_Content() {
   const [publishedAt, setPublishedAt] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
+  const [seoKeywords, setSeoKeywords] = useState('')
   const [coverImage, setCoverImage] = useState('')
   const [packages, setPackages] = useState<any[]>([])
   const [saving, setSaving] = useState(false)
@@ -116,6 +117,7 @@ function NewPujaPage_Content() {
           setPublishedAt(p.publishedAt ? new Date(p.publishedAt).toISOString().slice(0, 16) : '')
           setSeoTitle(p.seoTitle || '')
           setSeoDescription(p.seoDescription || '')
+          setSeoKeywords(p.seoKeywords || '')
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
             setGalleryImages(p.images.map((img: any) => img.url))
@@ -259,6 +261,7 @@ function NewPujaPage_Content() {
         publishedAt: status === 'PUBLISHED' && publishedAt ? new Date(publishedAt).toISOString() : null,
         seoTitle,
         seoDescription,
+        seoKeywords,
         coverImage,
         packages,
         images: galleryImages
@@ -363,6 +366,7 @@ function NewPujaPage_Content() {
             <CardContent className="space-y-4">
               <div className="space-y-2"><Label>SEO Meta Title</Label><Input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Title for Search Engines" /></div>
               <div className="space-y-2"><Label>SEO Meta Description</Label><Textarea rows={2} value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} placeholder="Description for Search Engines" /></div>
+              <div className="space-y-2"><Label>SEO Keywords</Label><Input value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. puja, havan, shanti (comma separated)" /></div>
             </CardContent>
           </Card>
 

@@ -16,7 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: product.seoTitle || `${product.name} | DivyaYagyam`,
     description: product.seoDescription || product.shortDescription || `Buy ${product.name} at DivyaYagyam.`,
+    keywords: product.seoKeywords || undefined,
     openGraph: {
+      title: product.seoTitle || `${product.name} | DivyaYagyam`,
+      description: product.seoDescription || product.shortDescription || `Buy ${product.name} at DivyaYagyam.`,
       images: product.coverImage ? [product.coverImage] : []
     }
   }

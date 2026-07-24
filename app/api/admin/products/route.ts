@@ -43,6 +43,9 @@ export async function GET(req: NextRequest) {
       price: `₹${Number(p.price)}`,
       stock: p.inventory?.quantity ?? 0,
       status: p.status,
+      seoTitle: p.seoTitle,
+      seoDescription: p.seoDescription,
+      seoKeywords: p.seoKeywords,
     }))
 
     return NextResponse.json({ ok: true, data: mapped, total, page, limit });
@@ -101,6 +104,7 @@ export async function POST(req: NextRequest) {
       tags,
       seoTitle,
       seoDescription,
+      seoKeywords,
       extraImages
     } = data
 
@@ -126,7 +130,8 @@ export async function POST(req: NextRequest) {
       status: status || 'DRAFT',
       tags: tags || null,
       seoTitle: seoTitle || null,
-      seoDescription: seoDescription || null
+      seoDescription: seoDescription || null,
+      seoKeywords: seoKeywords || null
     }
 
     let product

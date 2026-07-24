@@ -47,6 +47,7 @@ function NewProductPage_Content() {
   const [tags, setTags] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
+  const [seoKeywords, setSeoKeywords] = useState('')
   const [saving, setSaving] = useState(false)
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -113,6 +114,7 @@ function NewProductPage_Content() {
           setTags(p.tags || '')
           setSeoTitle(p.seoTitle || '')
           setSeoDescription(p.seoDescription || '')
+          setSeoKeywords(p.seoKeywords || '')
           if (p.images && p.images.length > 0) {
             setExtraImages(p.images.map((img: any) => img.url))
           }
@@ -287,6 +289,7 @@ function NewProductPage_Content() {
         tags,
         seoTitle,
         seoDescription,
+        seoKeywords,
         extraImages
       }
 
@@ -398,6 +401,10 @@ function NewProductPage_Content() {
                 <div className="space-y-2">
                   <Label>Meta Description (SEO)</Label>
                   <Textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={2} placeholder="Description for search engines" />
+                </div>
+                <div className="space-y-2">
+                  <Label>SEO Keywords</Label>
+                  <Input type="text" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. rudraksha, yantra, spiritual (comma separated)" />
                 </div>
               </div>
             </CardContent>
