@@ -50,11 +50,7 @@ export default function ToolsListPage() {
       <PageHeader 
         title="Tools Management" 
         description="Manage your custom HTML/JS tools or map React code components."
-        action={
-          <Button asChild>
-            <Link href="/admin/tools/new"><Plus className="mr-2 h-4 w-4" /> Add New Tool</Link>
-          </Button>
-        }
+        action={{ label: "Add New Tool", href: "/admin/tools/new" }}
       />
 
       {loading ? (

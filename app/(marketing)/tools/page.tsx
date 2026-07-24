@@ -15,7 +15,7 @@ export default function ToolsPage() {
   const [activatedStatuses, setActivatedStatuses] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
-    fetch('/api/admin/tools')
+    fetch('/api/tools')
       .then((r) => r.json())
       .then((j) => {
         if (j.ok) {
