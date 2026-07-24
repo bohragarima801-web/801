@@ -147,32 +147,7 @@ export default function CheckoutPage() {
     }
   }
 
-  const handleApplyCoupon = async () => {
-    if (!couponCode.trim()) {
-      toast.error('Please enter a coupon code')
-      return
-    }
-    setValidatingCoupon(true)
-    try {
-      const res = await fetch('/api/coupons/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode, cartTotal })
-      })
-      const data = await res.json()
-      if (data.ok && data.coupon) {
-        applyCoupon(data.coupon)
-        toast.success(`Coupon applied! You saved ₹${data.coupon.discountAmount}`)
-        setCouponCode('')
-      } else {
-        toast.error(data.error || 'Invalid coupon')
-      }
-    } catch (err) {
-      toast.error('Failed to validate coupon')
-    } finally {
-      setValidatingCoupon(false)
-    }
-  }
+
 
   const initiatePayment = () => {
     if (!address.name || !address.phone || !address.pincode || !address.street || !address.city || !address.state) {
