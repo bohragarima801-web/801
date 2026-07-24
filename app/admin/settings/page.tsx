@@ -31,6 +31,10 @@ export default function SettingsPage() {
   const [whatsapp, setWhatsapp] = useState('+91-95871-71984')
   const [address, setAddress] = useState('')
   const [googleMapUrl, setGoogleMapUrl] = useState('')
+  const [facebook, setFacebook] = useState('')
+  const [instagram, setInstagram] = useState('')
+  const [youtube, setYoutube] = useState('')
+  const [twitter, setTwitter] = useState('')
   const [primaryColor, setPrimaryColor] = useState('#FF8C21')
   const [accentColor, setAccentColor] = useState('#B12D2D')
   const [secondaryColor, setSecondaryColor] = useState('#F0B429')
@@ -95,6 +99,10 @@ export default function SettingsPage() {
         if (s['contact.whatsapp']) setWhatsapp(s['contact.whatsapp'])
         if (s['contact.address']) setAddress(s['contact.address'])
         if (s['contact.google_map_url']) setGoogleMapUrl(s['contact.google_map_url'])
+        if (s['socials.facebook']) setFacebook(s['socials.facebook'])
+        if (s['socials.instagram']) setInstagram(s['socials.instagram'])
+        if (s['socials.youtube']) setYoutube(s['socials.youtube'])
+        if (s['socials.twitter']) setTwitter(s['socials.twitter'])
         if (s['theme.primary']) setPrimaryColor(s['theme.primary'])
         if (s['theme.accent']) setAccentColor(s['theme.accent'])
         if (s['theme.secondary']) setSecondaryColor(s['theme.secondary'])
@@ -145,6 +153,10 @@ export default function SettingsPage() {
         'contact.whatsapp': whatsapp,
         'contact.address': address,
         'contact.google_map_url': googleMapUrl,
+        'socials.facebook': facebook,
+        'socials.instagram': instagram,
+        'socials.youtube': youtube,
+        'socials.twitter': twitter,
       }
     } else if (group === 'theme') {
       payload = {
@@ -201,6 +213,10 @@ export default function SettingsPage() {
       setWhatsapp(settings['contact.whatsapp'] || '+91-95871-71984')
       setAddress(settings['contact.address'] || '')
       setGoogleMapUrl(settings['contact.google_map_url'] || '')
+      setFacebook(settings['socials.facebook'] || '')
+      setInstagram(settings['socials.instagram'] || '')
+      setYoutube(settings['socials.youtube'] || '')
+      setTwitter(settings['socials.twitter'] || '')
     } else if (group === 'theme') {
       setPrimaryColor(settings['theme.primary'] || '#FF8C21')
       setAccentColor(settings['theme.accent'] || '#B12D2D')
@@ -403,6 +419,28 @@ export default function SettingsPage() {
                 <Input value={googleMapUrl} onChange={(e) => setGoogleMapUrl(e.target.value)} placeholder="https://www.google.com/maps/embed?pb=..." />
                 <p className="text-[10px] text-slate-500">You must use the &apos;Embed a map&apos; link (contains /maps/embed?pb=). Standard google.com links will not work.</p>
               </div>
+
+              <div className="pt-4 border-t space-y-4">
+                <h3 className="font-semibold text-lg text-slate-800">Social Media Links</h3>
+                <p className="text-sm text-slate-500">Add links to your social media profiles to display them in the website footer. Leave blank to hide the icon.</p>
+                <div className="space-y-2">
+                  <Label>Facebook URL</Label>
+                  <Input value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Instagram URL</Label>
+                  <Input value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>YouTube URL</Label>
+                  <Input value={youtube} onChange={(e) => setYoutube(e.target.value)} placeholder="https://youtube.com/..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Twitter (X) URL</Label>
+                  <Input value={twitter} onChange={(e) => setTwitter(e.target.value)} placeholder="https://twitter.com/..." />
+                </div>
+              </div>
+
               <div className="flex gap-2 pt-4 border-t">
                 <Button variant="outline" type="button" onClick={() => handleUndo('contact')}>Undo Changes</Button>
                 <Button type="button" onClick={() => handleSave('contact')} disabled={saving}>

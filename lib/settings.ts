@@ -46,6 +46,11 @@ export async function getDynamicSiteConfig() {
   const address = await getSetting('contact.address') || ''
   const googleMap = await getSetting('contact.google_map_url') || ''
 
+  const facebook = await getSetting('socials.facebook') || staticSiteConfig.socials.facebook || ''
+  const instagram = await getSetting('socials.instagram') || staticSiteConfig.socials.instagram || ''
+  const youtube = await getSetting('socials.youtube') || staticSiteConfig.socials.youtube || ''
+  const twitter = await getSetting('socials.twitter') || staticSiteConfig.socials.twitter || ''
+
   return {
     name,
     tagline,
@@ -57,6 +62,12 @@ export async function getDynamicSiteConfig() {
       whatsapp,
       address,
       googleMap
+    },
+    socials: {
+      facebook,
+      instagram,
+      youtube,
+      twitter
     },
     ...staticSiteConfig
   }

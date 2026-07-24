@@ -69,11 +69,24 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
               <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {(siteData?.contact?.email || '')}</div>
               <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {(siteData?.contact?.phone || '')}</div>
             </div>
-            <div className="mt-5 flex items-center gap-3">
-              <a href={siteConfig.socials.facebook} className="text-muted-foreground hover:text-primary"><Facebook className="h-5 w-5" /></a>
-              <a href={siteConfig.socials.instagram} className="text-muted-foreground hover:text-primary"><Instagram className="h-5 w-5" /></a>
-              <a href={siteConfig.socials.youtube} className="text-muted-foreground hover:text-primary"><Youtube className="h-5 w-5" /></a>
-              <a href={siteConfig.socials.twitter} className="text-muted-foreground hover:text-primary"><Twitter className="h-5 w-5" /></a>
+            
+            {/* Social Links */}
+            <div className="space-y-4 mt-5">
+              <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Follow Us</h4>
+              <div className="flex gap-4">
+                {siteData?.socials?.facebook && siteData.socials.facebook !== '#' && (
+                  <a href={siteData.socials.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Facebook className="h-5 w-5" /></a>
+                )}
+                {siteData?.socials?.instagram && siteData.socials.instagram !== '#' && (
+                  <a href={siteData.socials.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Instagram className="h-5 w-5" /></a>
+                )}
+                {siteData?.socials?.youtube && siteData.socials.youtube !== '#' && (
+                  <a href={siteData.socials.youtube} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Youtube className="h-5 w-5" /></a>
+                )}
+                {siteData?.socials?.twitter && siteData.socials.twitter !== '#' && (
+                  <a href={siteData.socials.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Twitter className="h-5 w-5" /></a>
+                )}
+              </div>
             </div>
           </div>
 
