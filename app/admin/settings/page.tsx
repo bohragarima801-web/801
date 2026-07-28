@@ -513,13 +513,82 @@ export default function SettingsPage() {
                 </div>
               </div>
 
+              <div className="p-5 bg-gradient-to-br from-green-50 to-emerald-50/40 border border-green-200 rounded-2xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-extrabold text-green-900 text-sm flex items-center gap-1.5">
+                      📥 Official Meta Template Download System
+                    </h4>
+                    <p className="text-xs text-slate-600 mt-0.5">Download pre-approved Meta WhatsApp templates formatted for Meta Business Manager submission.</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-green-600 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
+                    onClick={async () => {
+                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
+                      const blob = new Blob([JSON.stringify(META_TEMPLATES.hi, null, 2)], { type: 'application/json' })
+                      const url = URL.createObjectURL(blob)
+                      const a = document.createElement('a')
+                      a.href = url
+                      a.download = 'Meta_WhatsApp_Templates_Hindi.json'
+                      a.click()
+                      toast.success('Downloaded Meta WhatsApp Templates (Hindi JSON)!')
+                    }}
+                  >
+                    🇮🇳 Hindi JSON
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-blue-600 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
+                    onClick={async () => {
+                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
+                      const blob = new Blob([JSON.stringify(META_TEMPLATES.en, null, 2)], { type: 'application/json' })
+                      const url = URL.createObjectURL(blob)
+                      const a = document.createElement('a')
+                      a.href = url
+                      a.download = 'Meta_WhatsApp_Templates_English.json'
+                      a.click()
+                      toast.success('Downloaded Meta WhatsApp Templates (English JSON)!')
+                    }}
+                  >
+                    🇬🇧 English JSON
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-orange-600 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
+                    onClick={async () => {
+                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
+                      const blob = new Blob([JSON.stringify(META_TEMPLATES.hinglish, null, 2)], { type: 'application/json' })
+                      const url = URL.createObjectURL(blob)
+                      const a = document.createElement('a')
+                      a.href = url
+                      a.download = 'Meta_WhatsApp_Templates_Hinglish.json'
+                      a.click()
+                      toast.success('Downloaded Meta WhatsApp Templates (Hinglish JSON)!')
+                    }}
+                  >
+                    ✨ Hinglish JSON
+                  </Button>
+                </div>
+              </div>
+
               <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl space-y-2 text-xs">
                 <h4 className="font-bold text-orange-900">🚀 Active WhatsApp Triggers:</h4>
                 <ul className="list-disc pl-4 space-y-1 text-slate-700">
-                  <li><strong>Order Placed / Paid:</strong> Instant order summary + tracking link sent to devotee's WhatsApp.</li>
-                  <li><strong>Puja Booking Confirmed:</strong> Sankalp registration details & temple pandit schedule alert.</li>
-                  <li><strong>Customer Support Query:</strong> Auto-reply acknowledgment to devotee's WhatsApp.</li>
-                  <li><strong>Invoice Download:</strong> Digital bill link sent directly to devotee's WhatsApp.</li>
+                  <li><strong>Product Booking / Order:</strong> Instant order summary + tracking link.</li>
+                  <li><strong>Puja & Sankalp Booking:</strong> Sankalp registration details & temple schedule alert.</li>
+                  <li><strong>VIP Privilege Anusthan:</strong> Priority Yajaman Sankalp confirmation.</li>
+                  <li><strong>Special Offer & Coupon:</strong> Festive discount code & claim link.</li>
+                  <li><strong>Customer Query / Support:</strong> Auto-reply acknowledgment to devotee.</li>
+                  <li><strong>Invoice & Digital Bill:</strong> Downloadable tax invoice link.</li>
                 </ul>
               </div>
 
