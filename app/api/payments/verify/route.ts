@@ -96,10 +96,25 @@ export async function POST(req: NextRequest) {
         }
 
         if (linkedBookingId) {
-          await prisma.booking.update({
+          const updatedBk = await prisma.booking.update({
             where: { id: linkedBookingId },
             data: { paymentStatus: 'SUCCESS', status: 'CONFIRMED' },
-          }).catch(() => {})
+            include: { puja: true, user: true }
+          }).catch(() => null)
+
+          if (updatedBk) {
+            const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
+            sendWhatsAppNotification({
+              type: 'PUJA_CONFIRMED',
+              phone: (updatedBk.user as any)?.phone || updatedBk.user?.email || '',
+              name: updatedBk.user?.fullName || 'Devotee',
+              details: {
+                bookingNumber: updatedBk.bookingNumber,
+                pujaName: updatedBk.puja?.name || 'Puja Ritual',
+                amount: Number(updatedBk.total)
+              }
+            }).catch(() => {})
+          }
         }
       }
     } catch (dbErr: any) {
