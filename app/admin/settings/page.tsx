@@ -538,6 +538,8 @@ export default function SettingsPage() {
                   <a
                     href="/api/admin/templates/download?lang=hi"
                     download="Meta_WhatsApp_Templates_HI.json"
+                    target="_blank"
+                    rel="noreferrer"
                     className="border border-green-600 bg-green-50 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
                     🇮🇳 Hindi JSON 📥
@@ -546,6 +548,8 @@ export default function SettingsPage() {
                   <a
                     href="/api/admin/templates/download?lang=en"
                     download="Meta_WhatsApp_Templates_EN.json"
+                    target="_blank"
+                    rel="noreferrer"
                     className="border border-blue-600 bg-blue-50 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
                     🇬🇧 English JSON 📥
@@ -554,6 +558,8 @@ export default function SettingsPage() {
                   <a
                     href="/api/admin/templates/download?lang=hinglish"
                     download="Meta_WhatsApp_Templates_HINGLISH.json"
+                    target="_blank"
+                    rel="noreferrer"
                     className="border border-orange-600 bg-orange-50 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
                     ✨ Hinglish JSON 📥
