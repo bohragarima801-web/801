@@ -222,6 +222,19 @@ export async function POST(req: NextRequest) {
         }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
       }
 
+      // Trigger WhatsApp Notification for Order Placed
+      const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
+      sendWhatsAppNotification({
+        type: 'ORDER_SUCCESS',
+        phone: shippingAddress.phone || user.email,
+        name: shippingAddress.name || user.fullName || 'Devotee',
+        details: {
+          orderNumber: dbOrder.orderNumber,
+          amount: total,
+          items: orderItemsData.map((i: any) => i.name).join(', ')
+        }
+      }).catch(() => {})
+
       return NextResponse.json({
         ok: true,
         mode: 'manual',

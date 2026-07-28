@@ -141,6 +141,21 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }
   })
 
+  // Trigger WhatsApp Notification for Puja Booking Confirmed
+  try {
+    const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
+    sendWhatsAppNotification({
+      type: 'PUJA_CONFIRMED',
+      phone: (user as any)?.phone || user.email,
+      name: devoteeName || user.fullName || 'Devotee',
+      details: {
+        bookingNumber: booking.bookingNumber,
+        pujaName: puja.name,
+        amount: total
+      }
+    }).catch(() => {})
+  } catch (e) {}
+
   if (total === 0) {
     await prisma.booking.update({
       where: { id: booking.id },

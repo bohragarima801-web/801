@@ -41,6 +41,19 @@ export async function POST(req: NextRequest) {
       include: { messages: true }
     })
 
+    // Trigger WhatsApp Notification for Support Ticket Query
+    try {
+      const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
+      sendWhatsAppNotification({
+        type: 'QUERY_SUBMITTED',
+        phone: user.email,
+        name: user.fullName || 'Devotee',
+        details: {
+          querySubject: subject
+        }
+      }).catch(() => {})
+    } catch (e) {}
+
     return NextResponse.json({ ok: true, data: ticket });
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to submit ticket' }, { status: 500 });

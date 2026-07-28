@@ -52,6 +52,12 @@ export default function SettingsPage() {
   const [dbUrl, setDbUrl] = useState('')
   const [directUrlSetting, setDirectUrlSetting] = useState('')
 
+  // WhatsApp Automation states
+  const [waApiUrl, setWaApiUrl] = useState('')
+  const [waApiKey, setWaApiKey] = useState('')
+  const [waSenderNumber, setWaSenderNumber] = useState('')
+  const [waEnabled, setWaEnabled] = useState(true)
+
   const [uploadingLogo, setUploadingLogo] = useState(false)
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,6 +117,12 @@ export default function SettingsPage() {
         if (s['maintenance.enabled'] !== undefined) setMaintenanceMode(!!s['maintenance.enabled'])
         if (s['maintenance.message']) setMaintenanceMsg(s['maintenance.message'])
 
+        // WhatsApp Automation
+        if (s['secret.whatsapp_api_url']) setWaApiUrl(s['secret.whatsapp_api_url'])
+        if (s['secret.whatsapp_api_key']) setWaApiKey(s['secret.whatsapp_api_key'])
+        if (s['secret.whatsapp_sender_number']) setWaSenderNumber(s['secret.whatsapp_sender_number'])
+        if (s['whatsapp.automation_enabled'] !== undefined) setWaEnabled(s['whatsapp.automation_enabled'] !== 'false')
+
         // Secrets
         if (s['secret.supabase_url']) setSupabaseUrl(s['secret.supabase_url'])
         if (s['secret.supabase_anon_key']) setSupabaseAnonKey(s['secret.supabase_anon_key'])
@@ -157,6 +169,13 @@ export default function SettingsPage() {
         'socials.instagram': instagram,
         'socials.youtube': youtube,
         'socials.twitter': twitter,
+      }
+    } else if (group === 'whatsapp') {
+      payload = {
+        'secret.whatsapp_api_url': waApiUrl,
+        'secret.whatsapp_api_key': waApiKey,
+        'secret.whatsapp_sender_number': waSenderNumber,
+        'whatsapp.automation_enabled': waEnabled ? 'true' : 'false',
       }
     } else if (group === 'theme') {
       payload = {
@@ -216,6 +235,11 @@ export default function SettingsPage() {
       setInstagram(settings['socials.instagram'] || '')
       setYoutube(settings['socials.youtube'] || '')
       setTwitter(settings['socials.twitter'] || '')
+    } else if (group === 'whatsapp') {
+      setWaApiUrl(settings['secret.whatsapp_api_url'] || '')
+      setWaApiKey(settings['secret.whatsapp_api_key'] || '')
+      setWaSenderNumber(settings['secret.whatsapp_sender_number'] || '')
+      setWaEnabled(settings['whatsapp.automation_enabled'] !== 'false')
     } else if (group === 'theme') {
       setPrimaryColor(settings['theme.primary'] || '#FF8C21')
       setAccentColor(settings['theme.accent'] || '#B12D2D')
@@ -259,9 +283,10 @@ export default function SettingsPage() {
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px]">
+        <TabsList className="grid w-full grid-cols-5 lg:w-[750px]">
           <TabsTrigger value="general">Branding & General</TabsTrigger>
           <TabsTrigger value="contact">Contact Details</TabsTrigger>
+          <TabsTrigger value="whatsapp">WhatsApp Automation</TabsTrigger>
           <TabsTrigger value="secrets">Secrets & API Keys</TabsTrigger>
           <TabsTrigger value="status">System Status</TabsTrigger>
         </TabsList>
@@ -444,6 +469,65 @@ export default function SettingsPage() {
                 <Button type="button" onClick={() => handleSave('contact')} disabled={saving}>
                   {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Save Contact Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* WHATSAPP AUTOMATION TAB */}
+        <TabsContent value="whatsapp" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-green-700">
+                💬 WhatsApp (WhatsAPI) Automation Manager
+              </CardTitle>
+              <CardDescription>
+                Configure WhatsAPI endpoint & keys to automatically send WhatsApp notifications for Orders, Puja Bookings, Queries & Invoices.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6 max-w-xl">
+              <div className="flex items-center justify-between p-4 border rounded-xl bg-green-50/50">
+                <div>
+                  <h4 className="font-bold text-slate-800 text-sm">Enable WhatsApp Automation</h4>
+                  <p className="text-xs text-slate-500">Automatically trigger WhatsApp alerts on order & puja booking confirmation.</p>
+                </div>
+                <Switch checked={waEnabled} onCheckedChange={setWaEnabled} />
+              </div>
+
+              <div className="space-y-4 border p-4 rounded-xl bg-slate-50">
+                <div className="space-y-2">
+                  <Label className="font-bold">WhatsAPI Provider URL</Label>
+                  <Input value={waApiUrl} onChange={(e) => setWaApiUrl(e.target.value)} placeholder="https://api.whatsapi.in/v1/send-message" />
+                  <p className="text-[10px] text-slate-500">Enter your WhatsAPI gateway endpoint URL.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-bold">WhatsAPI Key / Bearer Token</Label>
+                  <Input type="password" value={waApiKey} onChange={(e) => setWaApiKey(e.target.value)} placeholder="Paste WhatsAPI API Key or Token" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-bold">Sender WhatsApp Number</Label>
+                  <Input value={waSenderNumber} onChange={(e) => setWaSenderNumber(e.target.value)} placeholder="919587171984" />
+                </div>
+              </div>
+
+              <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl space-y-2 text-xs">
+                <h4 className="font-bold text-orange-900">🚀 Active WhatsApp Triggers:</h4>
+                <ul className="list-disc pl-4 space-y-1 text-slate-700">
+                  <li><strong>Order Placed / Paid:</strong> Instant order summary + tracking link sent to devotee's WhatsApp.</li>
+                  <li><strong>Puja Booking Confirmed:</strong> Sankalp registration details & temple pandit schedule alert.</li>
+                  <li><strong>Customer Support Query:</strong> Auto-reply acknowledgment to devotee's WhatsApp.</li>
+                  <li><strong>Invoice Download:</strong> Digital bill link sent directly to devotee's WhatsApp.</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-2 pt-4 border-t">
+                <Button variant="outline" type="button" onClick={() => handleUndo('whatsapp')}>Undo Changes</Button>
+                <Button type="button" onClick={() => handleSave('whatsapp')} disabled={saving} className="bg-green-600 hover:bg-green-700 text-white font-bold">
+                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Save WhatsApp Automation Config
                 </Button>
               </div>
             </CardContent>
