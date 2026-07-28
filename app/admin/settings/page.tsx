@@ -534,33 +534,30 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="border-green-600 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
-                    onClick={() => triggerJsonDownload('hi', 'Meta_WhatsApp_Templates_Hindi.json')}
+                <div className="grid grid-cols-3 gap-3 pt-1">
+                  <a
+                    href="/api/admin/templates/download?lang=hi"
+                    download="Meta_WhatsApp_Templates_HI.json"
+                    className="border border-green-600 bg-green-50 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
-                    🇮🇳 Hindi JSON
-                  </Button>
+                    🇮🇳 Hindi JSON 📥
+                  </a>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="border-blue-600 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
-                    onClick={() => triggerJsonDownload('en', 'Meta_WhatsApp_Templates_English.json')}
+                  <a
+                    href="/api/admin/templates/download?lang=en"
+                    download="Meta_WhatsApp_Templates_EN.json"
+                    className="border border-blue-600 bg-blue-50 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
-                    🇬🇧 English JSON
-                  </Button>
+                    🇬🇧 English JSON 📥
+                  </a>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="border-orange-600 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
-                    onClick={() => triggerJsonDownload('hinglish', 'Meta_WhatsApp_Templates_Hinglish.json')}
+                  <a
+                    href="/api/admin/templates/download?lang=hinglish"
+                    download="Meta_WhatsApp_Templates_HINGLISH.json"
+                    className="border border-orange-600 bg-orange-50 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-11 rounded-xl flex items-center justify-center gap-1 shadow-sm transition-all text-center px-2"
                   >
-                    ✨ Hinglish JSON
-                  </Button>
+                    ✨ Hinglish JSON 📥
+                  </a>
                 </div>
               </div>
 
