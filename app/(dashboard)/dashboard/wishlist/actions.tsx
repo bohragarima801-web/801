@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { ShoppingCart, Trash2, Loader2 } from 'lucide-react'
-import { useCart } from '@/lib/cart-context'
 
 export function WishlistActions({ wishlistId, productSlug }: { wishlistId: string; productSlug: string }) {
   const [removing, setRemoving] = useState(false)
@@ -14,8 +13,10 @@ export function WishlistActions({ wishlistId, productSlug }: { wishlistId: strin
     setRemoving(true)
     try {
       const res = await fetch(`/api/wishlist?id=${wishlistId}`, { method: 'DELETE' })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to remove')
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Failed to remove')
+      }
       toast.success('Removed from wishlist')
       router.refresh()
     } catch (err: any) {

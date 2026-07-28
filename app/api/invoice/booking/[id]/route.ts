@@ -124,11 +124,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="info-box">
       <h3>Devotee Details</h3>
       <p>
-        <strong>${booking.devoteeName || user.fullName}</strong><br>
+        <strong>${user.fullName}</strong><br>
         ${booking.gotra ? `<strong>Gotra:</strong> ${booking.gotra}<br>` : ''}
-        ${booking.nakshatra ? `<strong>Nakshatra:</strong> ${booking.nakshatra}<br>` : ''}
-        ${booking.rashi ? `<strong>Rashi:</strong> ${booking.rashi}<br>` : ''}
-        ${booking.fatherName ? `<strong>Father/Husband:</strong> ${booking.fatherName}` : ''}
+        ${booking.sankalpText ? `<strong>Sankalp:</strong> ${booking.sankalpText}` : ''}
       </p>
     </div>
     <div class="info-box" style="text-align:right">
@@ -136,7 +134,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       <p>
         <strong>Booking Date:</strong> ${new Date(booking.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
         <strong>Status:</strong> ${booking.status}<br>
-        <strong>Package:</strong> ${booking.packageName || 'Standard'}<br>
         <strong>Members:</strong> ${booking.memberCount || 1}
       </p>
     </div>
@@ -150,7 +147,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       ${booking.members.map((m: any) => `
       <div class="sankalp-item">
         <label>Name</label>
-        <value>${m.name}</value>
+        <value>${m.fullName}</value>
         ${m.gotra ? `<label style="display:block;margin-top:4px">Gotra</label><value>${m.gotra}</value>` : ''}
       </div>`).join('')}
     </div>
@@ -160,8 +157,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="amount-section">
     <div>
       <table style="width:240px;font-size:13px;margin-bottom:12px;">
-        ${booking.courierCharge ? `<tr><td style="color:#6b7280;padding:4px 0">Prasad Courier</td><td style="text-align:right;font-weight:600">₹${Number(booking.courierCharge).toLocaleString('en-IN')}</td></tr>` : ''}
-        ${booking.dakshinaAmount ? `<tr><td style="color:#6b7280;padding:4px 0">Pandit Dakshina</td><td style="text-align:right;font-weight:600">₹${Number(booking.dakshinaAmount).toLocaleString('en-IN')}</td></tr>` : ''}
+        ${Number(booking.tax) > 0 ? `<tr><td style="color:#6b7280;padding:4px 0">Tax</td><td style="text-align:right;font-weight:600">₹${Number(booking.tax).toLocaleString('en-IN')}</td></tr>` : ''}
         <tr style="border-top:2px solid #e5e7eb">
           <td style="padding-top:8px;font-weight:800;font-size:15px">Total Paid</td>
           <td style="text-align:right;font-weight:800;font-size:15px;color:#4c1d95">₹${Number(booking.total).toLocaleString('en-IN')}</td>

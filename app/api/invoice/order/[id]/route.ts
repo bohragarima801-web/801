@@ -23,8 +23,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const paid = order.payments[0]
     const paymentDate = paid?.paidAt || order.updatedAt
-    const discount = order.discountAmount ? Number(order.discountAmount) : 0
-    const subtotal = Number(order.total) + discount
+    const discount = order.discount ? Number(order.discount) : 0
+    const subtotal = Number(order.subtotal)
     const addr = order.shippingAddress
 
     const html = `<!DOCTYPE html>
