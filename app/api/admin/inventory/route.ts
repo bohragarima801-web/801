@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getAdminSession } from '@/lib/admin-session'
 
 export async function GET() {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const products = await prisma.product.findMany({
       include: {
         inventory: true,
@@ -27,6 +30,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { id, quantity, warehouse } = await req.json()
 
     if (!id) {

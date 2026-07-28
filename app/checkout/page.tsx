@@ -203,10 +203,30 @@ export default function CheckoutPage() {
         name: 'Divya Yagyam',
         description: 'Store Purchase',
         order_id: orderId,
-        handler: function (response: any) {
-          clearCart()
-          toast.success('Payment Successful! Order placed.')
-          router.push('/dashboard/orders')
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              })
+            })
+            const verifyData = await verifyRes.json()
+            if (verifyRes.ok && verifyData.ok && verifyData.verified) {
+              clearCart()
+              toast.success('Payment Successful! Order placed.')
+              router.push('/dashboard/orders')
+            } else {
+              toast.error('Payment verification failed. If money was deducted, please contact support with your payment ID.')
+            }
+          } catch (e) {
+            toast.error('Could not confirm payment. If money was deducted, please contact support.')
+          } finally {
+            setProcessing(false)
+          }
         },
         prefill: {
           name: address.name,

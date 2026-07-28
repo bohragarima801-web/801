@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { getAdminSession } from '@/lib/admin-session'
 
 export async function GET() {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const devotees = await prisma.user.findMany({
       where: {
         role: { slug: 'devotee' },
@@ -42,6 +45,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { action, userId, newPassword, alertMessage, name, email, phone } = await req.json()
 
     // 1. ACTION: Create a new devotee
@@ -147,6 +152,8 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
 

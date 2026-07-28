@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getAdminSession } from '@/lib/admin-session'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { searchParams } = new URL(req.url)
     const mode = searchParams.get('mode')
 
@@ -38,6 +41,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { name, avatar, location, rating, message, isFeatured, isActive } = await req.json()
 
     if (!name || !message) {
@@ -67,6 +72,8 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { id, name, avatar, location, rating, message, isFeatured, isActive } = await req.json()
 
     if (!id) {
@@ -97,6 +104,8 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
 

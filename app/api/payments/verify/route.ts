@@ -43,8 +43,9 @@ export async function POST(req: NextRequest) {
 
     // Best-effort DB update
     try {
+      let paymentRecord: any = null
       if (paymentId) {
-        await prisma.payment.update({
+        paymentRecord = await prisma.payment.update({
           where: { id: paymentId },
           data: {
             status: isValid ? 'SUCCESS' : 'FAILED',
@@ -62,6 +63,20 @@ export async function POST(req: NextRequest) {
             paidAt: isValid ? new Date() : null,
           },
         })
+        paymentRecord = await prisma.payment.findFirst({ where: { gatewayOrderId: razorpay_order_id } })
+      }
+
+      // Mirror webhook behavior: also confirm the linked Order immediately,
+      // instead of waiting only on the async Razorpay webhook.
+      if (isValid) {
+        const linkedOrderId = paymentRecord?.orderId
+          || (paymentRecord?.metadata && typeof paymentRecord.metadata === 'object' ? (paymentRecord.metadata as any).orderId : null)
+        if (linkedOrderId) {
+          await prisma.order.update({
+            where: { id: linkedOrderId },
+            data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
+          }).catch(() => {})
+        }
       }
     } catch (dbErr: any) {
 // console.warn('[verify] DB update skipped:', dbErr?.message) (removed for production)
