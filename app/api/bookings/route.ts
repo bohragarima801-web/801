@@ -99,9 +99,29 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }))
   ]
 
+  // Resolve or Upsert DB User Record to prevent foreign key errors
+  let dbUserId = user.id
+  if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    let dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { id: user.id }] }
+    })
+    if (!dbUser) {
+      const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
+      dbUser = await prisma.user.create({
+        data: {
+          email: user.email,
+          fullName: user.fullName || 'Devotee',
+          supabaseId: user.supabaseId || user.id,
+          roleId: defaultRole?.id ?? null
+        }
+      })
+    }
+    dbUserId = dbUser.id
+  }
+
   const booking = await prisma.booking.create({
     data: {
-      userId: user.id,
+      userId: dbUserId,
       pujaId: puja.id,
       bookingNumber,
       memberCount: memberCount,
@@ -131,12 +151,12 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       amount: amountInPaise,
       currency: 'INR',
       receipt: booking.id,
-      notes: { paymentType: 'puja_booking', bookingId: booking.id, userId: user.id }
+      notes: { paymentType: 'puja_booking', bookingId: booking.id, userId: dbUserId }
     })
 
     await prisma.payment.create({
       data: {
-        userId: user.id,
+        userId: dbUserId,
         bookingId: booking.id,
         amount: total,
         currency: 'INR',
