@@ -62,27 +62,27 @@ export async function POST(req: NextRequest) {
              'addon-courier': 99
           }
           if (item.id === 'addon-dakshina') {
-             price = Math.max(0, Number(item.price) || 0) // Allow dynamic dakshina
+             price = Math.max(1, Number(item.price) || 0) // Dynamic dakshina
           } else if (item.id.startsWith('addon-bhaktiSeva-')) {
              const offeringId = item.id.replace('addon-bhaktiSeva-', '')
              const offering = bhaktiSevaOfferings.find(o => o.id === offeringId)
-             if (offering) {
+             if (offering && Number(offering.price) > 0) {
                 price = Number(offering.price)
              } else {
-                price = Number(item.price) // fallback
+                price = Math.max(1, Number(item.price) || 0) // fallback to item price
              }
           } else {
-             price = addonPrices[item.id] || Number(item.price)
+             price = addonPrices[item.id] || Number(item.price) || 0
           }
        }
        else if (item.id.startsWith('tool-')) {
           const toolId = item.id.replace('tool-', '')
           const spiritualTool = await prisma.spiritualTool.findUnique({ where: { id: toolId } })
-          if (spiritualTool) {
+          if (spiritualTool && Number(spiritualTool.price) > 0) {
              price = Number(spiritualTool.price)
              name = `Premium Tool: ${spiritualTool.name}`
           } else {
-             price = Number(item.price)
+             price = Math.max(1, Number(item.price) || 0)
              name = item.name || 'Spiritual Tool Access'
           }
        }
@@ -214,15 +214,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (total < 1) {
-      await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
-      await prisma.address.delete({ where: { id: savedAddress.id } }).catch(() => {})
-      return NextResponse.json({
-        ok: false,
-        error: 'Online payment requires a minimum order total of ₹1.'
-      }, { status: 400 });
-    }
-
     if (isExplicitManual) {
       if (validCouponId) {
         await prisma.coupon.update({
@@ -244,7 +235,7 @@ export async function POST(req: NextRequest) {
     try {
       const { getRazorpay } = await import('@/lib/razorpay')
       const razorpay = await getRazorpay()
-      const amountInPaise = Math.round(total * 100)
+      const amountInPaise = Math.max(100, Math.round(total * 100))
       const rzpOrder = await razorpay.orders.create({
         amount: amountInPaise,
         currency: 'INR',
