@@ -62,14 +62,20 @@ export default function Page() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {offerings.map((offering) => (
-            <Card key={offering.id} className="overflow-hidden group hover:shadow-xl hover:border-orange-500/30 transition-all border border-slate-200 bg-white rounded-2xl">
-              <div className="p-4 pb-0">
-                <div className="relative aspect-square w-full bg-gradient-to-b from-slate-50 to-slate-100 rounded-xl overflow-hidden shadow-inner border border-slate-200/50">
+            <Card key={offering.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 transition-all duration-500 border border-amber-200/60 bg-gradient-to-b from-amber-50/40 via-white to-white rounded-3xl relative">
+              <div className="p-5 pb-0">
+                {/* 3D Parallelogram Sacred Frame */}
+                <div className="relative aspect-square w-full bg-gradient-to-tr from-amber-100/50 via-orange-50/30 to-amber-50 rounded-2xl overflow-hidden shadow-lg border border-amber-300/60 transition-transform duration-500 group-hover:scale-[1.02]"
+                     style={{
+                       clipPath: 'polygon(6% 0%, 100% 0%, 94% 100%, 0% 100%)',
+                       transform: 'perspective(1000px) rotateX(4deg) rotateY(-4deg)',
+                       boxShadow: '0 20px 30px -10px rgba(234, 88, 12, 0.25), 0 10px 10px -5px rgba(245, 158, 11, 0.15)'
+                     }}>
                   {offering.image ? (
                     <Image src={offering.image}
                       alt={offering.name}
                       fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="absolute inset-0 object-contain p-6 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
+                      className="absolute inset-0 object-contain p-4 transition-transform duration-500 group-hover:scale-110 drop-shadow-xl"
                     />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center text-orange-400/40">
@@ -77,7 +83,7 @@ export default function Page() {
                     </div>
                   )}
                   {offering.videoUrl && (
-                    <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1.5 shadow-sm px-2 py-0.5 border-none">
+                    <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1.5 shadow-md px-2.5 py-1 border-none font-bold text-[10px] z-10">
                       <Video className="h-3.5 w-3.5" /> Video
                     </Badge>
                   )}
