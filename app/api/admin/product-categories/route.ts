@@ -6,6 +6,8 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const categories = await prisma.productCategory.findMany({
       orderBy: { order: 'asc' }
     })

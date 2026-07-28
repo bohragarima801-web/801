@@ -6,6 +6,8 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
 
     const { searchParams } = new URL(req.url)
