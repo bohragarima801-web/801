@@ -23,7 +23,7 @@ export default function BlogCategoriesPage() {
 
   async function loadCategories() {
     try {
-      const res = await fetch('/api/admin/blog-categories')
+      const res = await fetch('/api/admin/blog/categories')
       const data = await res.json()
       if (data.ok) {
         setCategories(data.data || [])
@@ -52,7 +52,7 @@ export default function BlogCategoriesPage() {
 
     setSaving(true)
     try {
-      const res = await fetch('/api/admin/blog-categories', {
+      const res = await fetch('/api/admin/blog/categories', {
         method: editingId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -82,7 +82,7 @@ export default function BlogCategoriesPage() {
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this category?')) return
     try {
-      const res = await fetch(`/api/admin/blog-categories?id=${id}`, {
+      const res = await fetch(`/api/admin/blog/categories?id=${id}`, {
         method: 'DELETE',
       })
       const data = await res.json()
