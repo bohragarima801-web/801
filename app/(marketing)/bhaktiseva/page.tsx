@@ -108,8 +108,33 @@ export default function Page() {
                   </div>
                 )}
                 <div className="pt-4 border-t border-slate-100 flex justify-end">
-                  <Button size="sm" className="rounded-full px-6 bg-orange-600 hover:bg-orange-700 text-white shadow-sm hover:shadow-md transition-all" asChild>
-                    <Link href={'/pujas'}>Book Now</Link>
+                  <Button
+                    size="sm"
+                    className="rounded-full px-6 bg-orange-600 hover:bg-orange-700 text-white shadow-sm hover:shadow-md transition-all font-bold"
+                    onClick={() => {
+                      try {
+                        const rawCart = localStorage.getItem('divyayagyam_cart')
+                        const cart = rawCart ? JSON.parse(rawCart) : []
+                        const itemId = `addon-bhaktiSeva-${offering.id}`
+                        const existingIndex = cart.findIndex((i: any) => i.id === itemId)
+                        if (existingIndex > -1) {
+                          cart[existingIndex].quantity += 1
+                        } else {
+                          cart.push({
+                            id: itemId,
+                            name: `BhaktiSeva: ${offering.name}`,
+                            price: Number(offering.price),
+                            quantity: 1,
+                            image: offering.image || ''
+                          })
+                        }
+                        localStorage.setItem('divyayagyam_cart', JSON.stringify(cart))
+                        window.dispatchEvent(new Event('cart-updated'))
+                      } catch (e) {}
+                      window.location.href = '/checkout'
+                    }}
+                  >
+                    Offer Seva Now (₹{Number(offering.price)})
                   </Button>
                 </div>
               </CardContent>
