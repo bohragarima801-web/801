@@ -28,7 +28,7 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
       const user = await getCurrentUser()
       if (user) {
         // Admin gets access to all tools
-        if (user.role === 'admin' || user.role === 'manager') {
+        if (user.role === 'super_admin' || user.role === 'store_manager') {
           allowed = true
         } else {
           // Check if user has an order for this tool
