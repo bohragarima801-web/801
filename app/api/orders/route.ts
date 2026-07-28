@@ -196,7 +196,7 @@ export async function POST(req: NextRequest) {
     if (total === 0) {
       await prisma.order.update({
         where: { id: dbOrder.id },
-        data: { status: 'PROCESSING', paymentStatus: 'PAID' }
+        data: { status: 'PROCESSING', paymentStatus: 'SUCCESS' }
       })
       if (validCouponId) {
         await prisma.coupon.update({

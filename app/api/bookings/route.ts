@@ -144,7 +144,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   if (total === 0) {
     await prisma.booking.update({
       where: { id: booking.id },
-      data: { status: 'CONFIRMED', paymentStatus: 'PAID' }
+      data: { status: 'CONFIRMED', paymentStatus: 'SUCCESS' }
     })
     return NextResponse.json({
       ok: true,
