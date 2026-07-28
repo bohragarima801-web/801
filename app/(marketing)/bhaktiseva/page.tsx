@@ -63,28 +63,28 @@ export default function Page() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {offerings.map((offering) => (
             <Card key={offering.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 transition-all duration-500 border border-amber-200/60 bg-gradient-to-b from-amber-50/40 via-white to-white rounded-3xl relative">
-              <div className="p-5 pb-0">
-                {/* 3D Parallelogram Sacred Frame */}
-                <div className="relative aspect-square w-full bg-gradient-to-tr from-amber-100/50 via-orange-50/30 to-amber-50 rounded-2xl overflow-hidden shadow-lg border border-amber-300/60 transition-transform duration-500 group-hover:scale-[1.02]"
+              <div className="p-4 pb-0 flex justify-center">
+                {/* Fixed Uniform 3D Parallelogram Frame (h-48) */}
+                <div className="relative h-48 w-full max-w-[220px] bg-gradient-to-tr from-amber-100/50 via-orange-50/30 to-amber-50 rounded-2xl overflow-hidden shadow-md border border-amber-300/60 transition-transform duration-500 group-hover:scale-[1.03]"
                      style={{
-                       clipPath: 'polygon(6% 0%, 100% 0%, 94% 100%, 0% 100%)',
-                       transform: 'perspective(1000px) rotateX(4deg) rotateY(-4deg)',
-                       boxShadow: '0 20px 30px -10px rgba(234, 88, 12, 0.25), 0 10px 10px -5px rgba(245, 158, 11, 0.15)'
+                       clipPath: 'polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%)',
+                       transform: 'perspective(800px) rotateX(3deg) rotateY(-3deg)',
+                       boxShadow: '0 12px 24px -8px rgba(234, 88, 12, 0.2)'
                      }}>
                   {offering.image ? (
                     <Image src={offering.image}
                       alt={offering.name}
-                      fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="absolute inset-0 object-contain p-4 transition-transform duration-500 group-hover:scale-110 drop-shadow-xl"
+                      fill sizes="220px"
+                      className="absolute inset-0 object-contain p-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
                     />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center text-orange-400/40">
-                      <Sparkles className="h-12 w-12" />
+                      <Sparkles className="h-10 w-10" />
                     </div>
                   )}
                   {offering.videoUrl && (
-                    <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1.5 shadow-md px-2.5 py-1 border-none font-bold text-[10px] z-10">
-                      <Video className="h-3.5 w-3.5" /> Video
+                    <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 shadow-sm px-2 py-0.5 border-none font-bold text-[9px] z-10">
+                      <Video className="h-3 w-3" /> Video
                     </Badge>
                   )}
                 </div>
