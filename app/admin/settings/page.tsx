@@ -131,20 +131,31 @@ export default function SettingsPage() {
         if (s['secret.razorpay_key_id']) setRazorpayKeyId(s['secret.razorpay_key_id'])
         if (s['secret.razorpay_key_secret']) setRazorpayKeySecret(s['secret.razorpay_key_secret'])
         if (s['secret.database_url']) setDbUrl(s['secret.database_url'])
-        if (s['secret.direct_url']) setDirectUrlSetting(s['secret.direct_url'])
-      } else {
-        toast.error('Failed to load settings: ' + data.error)
-      }
-    } catch (e: any) {
-      toast.error('Error loading settings')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const tabParam = params.get('tab')
+      if (tabParam) setActiveTab(tabParam)
+    }
     loadSettings()
   }, [])
+
+  const triggerJsonDownload = async (lang: 'hi' | 'en' | 'hinglish', fileName: string) => {
+    try {
+      const { META_TEMPLATES } = await import('@/lib/whatsapp')
+      const jsonStr = JSON.stringify(META_TEMPLATES[lang] || META_TEMPLATES.hi, null, 2)
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(jsonStr)
+      const linkElement = document.createElement('a')
+      linkElement.setAttribute('href', dataUri)
+      linkElement.setAttribute('download', fileName)
+      document.body.appendChild(linkElement)
+      linkElement.click()
+      document.body.removeChild(linkElement)
+      toast.success(`Downloaded ${fileName}!`)
+    } catch (e: any) {
+      toast.error('Download failed: ' + e?.message)
+    }
+  }
 
   const handleSave = async (group: string) => {
     setSaving(true)
@@ -527,17 +538,8 @@ export default function SettingsPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-green-600 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
-                    onClick={async () => {
-                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
-                      const blob = new Blob([JSON.stringify(META_TEMPLATES.hi, null, 2)], { type: 'application/json' })
-                      const url = URL.createObjectURL(blob)
-                      const a = document.createElement('a')
-                      a.href = url
-                      a.download = 'Meta_WhatsApp_Templates_Hindi.json'
-                      a.click()
-                      toast.success('Downloaded Meta WhatsApp Templates (Hindi JSON)!')
-                    }}
+                    className="border-green-600 text-green-800 hover:bg-green-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
+                    onClick={() => triggerJsonDownload('hi', 'Meta_WhatsApp_Templates_Hindi.json')}
                   >
                     🇮🇳 Hindi JSON
                   </Button>
@@ -545,17 +547,8 @@ export default function SettingsPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-blue-600 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
-                    onClick={async () => {
-                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
-                      const blob = new Blob([JSON.stringify(META_TEMPLATES.en, null, 2)], { type: 'application/json' })
-                      const url = URL.createObjectURL(blob)
-                      const a = document.createElement('a')
-                      a.href = url
-                      a.download = 'Meta_WhatsApp_Templates_English.json'
-                      a.click()
-                      toast.success('Downloaded Meta WhatsApp Templates (English JSON)!')
-                    }}
+                    className="border-blue-600 text-blue-800 hover:bg-blue-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
+                    onClick={() => triggerJsonDownload('en', 'Meta_WhatsApp_Templates_English.json')}
                   >
                     🇬🇧 English JSON
                   </Button>
@@ -563,17 +556,8 @@ export default function SettingsPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-orange-600 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1"
-                    onClick={async () => {
-                      const { META_TEMPLATES } = await import('@/lib/whatsapp')
-                      const blob = new Blob([JSON.stringify(META_TEMPLATES.hinglish, null, 2)], { type: 'application/json' })
-                      const url = URL.createObjectURL(blob)
-                      const a = document.createElement('a')
-                      a.href = url
-                      a.download = 'Meta_WhatsApp_Templates_Hinglish.json'
-                      a.click()
-                      toast.success('Downloaded Meta WhatsApp Templates (Hinglish JSON)!')
-                    }}
+                    className="border-orange-600 text-orange-800 hover:bg-orange-600 hover:text-white font-bold text-xs h-10 rounded-xl flex items-center justify-center gap-1 cursor-pointer"
+                    onClick={() => triggerJsonDownload('hinglish', 'Meta_WhatsApp_Templates_Hinglish.json')}
                   >
                     ✨ Hinglish JSON
                   </Button>
