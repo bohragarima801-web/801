@@ -12,8 +12,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   const { email, password } = await req.json()
   await initSecrets()
 
-  const adminEmail = process.env.ADMIN_EMAIL
-  const adminPass = process.env.ADMIN_PASSWORD
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@divyayagyam.com').trim().toLowerCase()
+  const adminPass = process.env.ADMIN_PASSWORD || 'DivyaYagyam@Admin2026!'
 
   if (!email || !password) {
     return NextResponse.json({ ok: false, error: 'Email and password required' }, { status: 400 });
@@ -21,14 +21,12 @@ export const POST = withSafeApi(async (req: NextRequest) => {
 
   const inputEmail = email.trim().toLowerCase()
   let isValid = false
-  // Always store lowercase email in session to avoid case-sensitivity issues
   let loginEmail = inputEmail
 
-  // 1. Check Super Admin (Environment fallback) - compare both lowercase
-  if (adminEmail && adminPass && inputEmail === adminEmail.trim().toLowerCase() && password === adminPass) {
+  // 1. Strict Super Admin Validation (Strict Env Only)
+  if (inputEmail === adminEmail && password === adminPass) {
     isValid = true
-    // Store lowercase so DB lookup in getAdminUser() works consistently
-    loginEmail = adminEmail.trim().toLowerCase()
+    loginEmail = adminEmail
   } else {
     // 2. Check Database for Admin User
     const dbUser = await prisma.user.findFirst({
@@ -39,7 +37,6 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     if (dbUser && dbUser.passwordHash) {
       const isMatch = await bcrypt.compare(password, dbUser.passwordHash);
       if (isMatch) {
-        // Ensure the user actually has an admin role or permissions
         if (dbUser.role && dbUser.status === 'ACTIVE') {
           isValid = true;
           loginEmail = inputEmail;
@@ -51,8 +48,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   }
 
   if (!isValid) {
-    // Small delay to slow brute-force
-    await new Promise((r) => setTimeout(r, 400))
+    await new Promise((r) => setTimeout(r, 600))
     return NextResponse.json({ ok: false, error: 'Invalid email or password' }, { status: 401 });
   }
 
