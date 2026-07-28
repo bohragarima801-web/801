@@ -15,64 +15,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
   ]
 
-  try {
-    // 1. Pujas
-    const pujas = await prisma.puja.findMany({
-      where: { status: 'PUBLISHED' },
-      select: { slug: true, updatedAt: true }
-    })
-    pujas.forEach(p => {
-      sitemapEntries.push({
-        url: `${baseUrl}/pujas/${p.slug}`,
-        lastModified: p.updatedAt,
-        changeFrequency: 'weekly',
-        priority: 0.8,
+  if (process.env.DATABASE_URL) {
+    try {
+      // 1. Pujas
+      const pujas = await prisma.puja.findMany({
+        where: { status: 'PUBLISHED' },
+        select: { slug: true, updatedAt: true }
       })
-    })
+      pujas.forEach(p => {
+        sitemapEntries.push({
+          url: `${baseUrl}/pujas/${p.slug}`,
+          lastModified: p.updatedAt,
+          changeFrequency: 'weekly',
+          priority: 0.8,
+        })
+      })
 
-    // 2. Products
-    const products = await prisma.product.findMany({
-      where: { status: 'ACTIVE' },
-      select: { slug: true, updatedAt: true }
-    })
-    products.forEach(p => {
-      sitemapEntries.push({
-        url: `${baseUrl}/products/${p.slug}`,
-        lastModified: p.updatedAt,
-        changeFrequency: 'weekly',
-        priority: 0.8,
+      // 2. Products
+      const products = await prisma.product.findMany({
+        where: { status: 'ACTIVE' },
+        select: { slug: true, updatedAt: true }
       })
-    })
+      products.forEach(p => {
+        sitemapEntries.push({
+          url: `${baseUrl}/products/${p.slug}`,
+          lastModified: p.updatedAt,
+          changeFrequency: 'weekly',
+          priority: 0.8,
+        })
+      })
 
-    // 3. Blog Posts
-    const posts = await prisma.blog.findMany({
-      where: { status: 'PUBLISHED' },
-      select: { slug: true, updatedAt: true }
-    })
-    posts.forEach(p => {
-      sitemapEntries.push({
-        url: `${baseUrl}/blog/${p.slug}`,
-        lastModified: p.updatedAt,
-        changeFrequency: 'weekly',
-        priority: 0.7,
+      // 3. Blog Posts
+      const posts = await prisma.blog.findMany({
+        where: { status: 'PUBLISHED' },
+        select: { slug: true, updatedAt: true }
       })
-    })
+      posts.forEach(p => {
+        sitemapEntries.push({
+          url: `${baseUrl}/blog/${p.slug}`,
+          lastModified: p.updatedAt,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        })
+      })
 
-    // 4. Spiritual Tools
-    const tools = await prisma.spiritualTool.findMany({
-      where: { isActive: true },
-      select: { slug: true, createdAt: true }
-    })
-    tools.forEach(t => {
-      sitemapEntries.push({
-        url: `${baseUrl}/tools/${t.slug}`,
-        lastModified: t.createdAt,
-        changeFrequency: 'monthly',
-        priority: 0.6,
+      // 4. Spiritual Tools
+      const tools = await prisma.spiritualTool.findMany({
+        where: { isActive: true },
+        select: { slug: true, createdAt: true }
       })
-    })
-  } catch (error) {
-    console.error('Error generating dynamic sitemap:', error)
+      tools.forEach(t => {
+        sitemapEntries.push({
+          url: `${baseUrl}/tools/${t.slug}`,
+          lastModified: t.createdAt,
+          changeFrequency: 'monthly',
+          priority: 0.6,
+        })
+      })
+    } catch (error) {
+      console.error('Error generating dynamic sitemap:', error)
+    }
   }
 
   return sitemapEntries

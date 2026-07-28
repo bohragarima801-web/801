@@ -9,18 +9,20 @@ export async function getSetting(key: string, envFallback?: string): Promise<str
     return cache[key].value
   }
 
-  try {
-    const setting = await prisma.websiteSetting.findUnique({
-      where: { key }
-    })
-    if (setting && setting.value) {
-      const val = typeof setting.value === 'string' ? setting.value : JSON.stringify(setting.value)
-      const cleaned = val.replace(/^"|"$/g, '')
-      cache[key] = { value: cleaned, expiry: now + CACHE_TTL_MS }
-      return cleaned
+  if (process.env.DATABASE_URL) {
+    try {
+      const setting = await prisma.websiteSetting.findUnique({
+        where: { key }
+      })
+      if (setting && setting.value) {
+        const val = typeof setting.value === 'string' ? setting.value : JSON.stringify(setting.value)
+        const cleaned = val.replace(/^"|"$/g, '')
+        cache[key] = { value: cleaned, expiry: now + CACHE_TTL_MS }
+        return cleaned
+      }
+    } catch (e) {
+      // DB unreachable or table doesn't exist
     }
-  } catch (e) {
-    // DB unreachable or table doesn't exist
   }
 
   if (envFallback) {
