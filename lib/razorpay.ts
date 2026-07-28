@@ -5,21 +5,24 @@ let _instance: Razorpay | null = null
 import { getSetting } from '@/lib/settings'
 
 export async function getRazorpay(): Promise<Razorpay> {
-  if (_instance) return _instance
-  
-  let key_id = (process.env.RAZORPAY_KEY_ID || '').replace(/^"|"$/g, '')
-  let key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"|"$/g, '')
+  let key_id = (process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '').replace(/^"|"$/g, '').trim()
+  let key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"|"$/g, '').trim()
 
-  if (!key_id || !key_secret) {
-    key_id = await getSetting('secret.razorpay_key_id')
-    key_secret = await getSetting('secret.razorpay_key_secret')
+  if (!key_id) {
+    key_id = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')).replace(/^"|"$/g, '').trim()
+  }
+  if (!key_id) {
+    key_id = (await getSetting('secret.razorpay_key_id', 'NEXT_PUBLIC_RAZORPAY_KEY_ID')).replace(/^"|"$/g, '').trim()
+  }
+
+  if (!key_secret) {
+    key_secret = (await getSetting('secret.razorpay_key_secret', 'RAZORPAY_KEY_SECRET')).replace(/^"|"$/g, '').trim()
   }
 
   if (!key_id || !key_secret) {
-    throw new Error('RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET are not configured')
+    throw new Error(`Razorpay key or secret is missing. KeyID: ${key_id ? 'Present' : 'Missing'}, KeySecret: ${key_secret ? 'Present' : 'Missing'}`)
   }
-  _instance = new Razorpay({ key_id, key_secret })
-  return _instance
+  return new Razorpay({ key_id, key_secret })
 }
 
 

@@ -210,7 +210,7 @@ export async function POST(req: NextRequest) {
         }
       }).catch(e => console.error('[Orders] Failed to create payment record:', e.message))
 
-      const rzpKeyId = (await getSetting('secret.razorpay_key_id')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
+      const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
 
       return NextResponse.json({
         ok: true,
@@ -224,8 +224,7 @@ export async function POST(req: NextRequest) {
         }
       });
     } catch (rzpErr: any) {
-      // Razorpay not configured — save order and notify admin via COD
-// console.error('[Orders] Razorpay unavailable, falling back to manual:', rzpErr?.message) (removed for production)
+      console.error('[Orders] Razorpay initialization/order error:', rzpErr?.message || rzpErr)
       return NextResponse.json({
         ok: true,
         mode: 'manual',
