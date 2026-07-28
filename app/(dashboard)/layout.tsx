@@ -24,11 +24,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Link href="/dashboard/orders" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
           <ShoppingBag className="h-3.5 w-3.5" /> Orders
         </Link>
-        <Link href="/dashboard/invoices" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
-          <FileText className="h-3.5 w-3.5" /> Invoices
+        <Link href="/dashboard/payments" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
+          <ScrollText className="h-3.5 w-3.5" /> Payments
         </Link>
-        <Link href="/dashboard/reports" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
-          <ScrollText className="h-3.5 w-3.5" /> Reports
+        <Link href="/dashboard/support" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
+          <FileText className="h-3.5 w-3.5" /> Support
         </Link>
         <Link href="/dashboard/profile" className="text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-muted flex items-center gap-1.5 whitespace-nowrap">
           <User className="h-3.5 w-3.5" /> Profile

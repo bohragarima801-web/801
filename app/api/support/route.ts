@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 
+export async function GET(req: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+
+    const tickets = await prisma.supportTicket.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      include: { messages: { orderBy: { createdAt: 'asc' } } }
+    })
+
+    return NextResponse.json({ ok: true, data: tickets })
+  } catch (err: any) {
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to fetch tickets' }, { status: 500 })
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser()
@@ -20,7 +37,8 @@ export async function POST(req: NextRequest) {
         description,
         category: category || 'General',
         ticketNumber: `TKT-${Math.floor(100000 + Math.random() * 900000)}`
-      }
+      },
+      include: { messages: true }
     })
 
     return NextResponse.json({ ok: true, data: ticket });
