@@ -12,8 +12,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   const { email, password } = await req.json()
   await initSecrets()
 
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@divyayagyam.com').trim().toLowerCase()
-  const adminPass = process.env.ADMIN_PASSWORD || 'DivyaYagyam@Admin2026!'
+  const adminEmail = (process.env.ADMIN_EMAIL || 'infosecredsecet@gmail.com').trim().toLowerCase()
+  const adminPass = process.env.ADMIN_PASSWORD || '!@#$Admin@1234@'
 
   if (!email || !password) {
     return NextResponse.json({ ok: false, error: 'Email and password required' }, { status: 400 });
