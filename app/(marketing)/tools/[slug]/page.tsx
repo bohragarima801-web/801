@@ -21,11 +21,38 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   const ip = headersList.get('x-forwarded-for') || '127.0.0.1'
 
   let allowed = tool.isFree
-  let trialExpired = false
 
-  // For now, assume it's locked if it's a paid tool (until real user payment check is implemented)
-  if (!tool.isFree) {
-    allowed = false
+  if (!allowed) {
+    try {
+      const { getCurrentUser } = await import('@/lib/auth')
+      const user = await getCurrentUser()
+      if (user) {
+        // Admin gets access to all tools
+        if (user.role === 'admin' || user.role === 'manager') {
+          allowed = true
+        } else {
+          // Check if user has an order for this tool
+          const userOrder = await prisma.order.findFirst({
+            where: {
+              userId: user.id,
+              items: {
+                some: {
+                  OR: [
+                    { name: { contains: tool.name } },
+                    { productId: `tool-${tool.id}` }
+                  ]
+                }
+              }
+            }
+          })
+          if (userOrder) {
+            allowed = true
+          }
+        }
+      }
+    } catch (err) {
+      allowed = false
+    }
   }
 
   return (

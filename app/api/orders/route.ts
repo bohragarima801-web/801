@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 1. Secure Price Calculation from DB
-    const productIds = items.filter((i: any) => !i.id.startsWith('puja-') && !i.id.startsWith('addon-')).map((i: any) => i.id)
+    const productIds = items.filter((i: any) => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-')).map((i: any) => i.id)
     const products = productIds.length > 0 ? await prisma.product.findMany({
       where: { id: { in: productIds } }
     }) : []
@@ -74,7 +74,18 @@ export async function POST(req: NextRequest) {
           } else {
              price = addonPrices[item.id] || Number(item.price)
           }
-       } 
+       }
+       else if (item.id.startsWith('tool-')) {
+          const toolId = item.id.replace('tool-', '')
+          const spiritualTool = await prisma.spiritualTool.findUnique({ where: { id: toolId } })
+          if (spiritualTool) {
+             price = Number(spiritualTool.price)
+             name = `Premium Tool: ${spiritualTool.name}`
+          } else {
+             price = Number(item.price)
+             name = item.name || 'Spiritual Tool Access'
+          }
+       }
        else {
           const product = products.find((p: any) => p.id === item.id)
           if (!product) throw new Error('Product mismatch')
