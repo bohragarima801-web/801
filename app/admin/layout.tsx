@@ -19,9 +19,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const user = await getAdminUser()
   if (!user) {
-    // If user is null but they passed middleware, the session token is orphaned or invalid.
-    // Redirect to the logout endpoint to clear the cookie and break the infinite loop.
-    redirect('/api/admin/logout')
+    // If not logged in, redirect to login page
+    redirect('/admin/login')
   }
 
   return (
