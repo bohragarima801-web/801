@@ -167,7 +167,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       }
     }).catch(() => {})
 
-    const rzpKeyId = (await getSetting('secret.razorpay_key_id')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
+    const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
 
     return NextResponse.json({
       ok: true,
@@ -181,13 +181,17 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       }
     });
   } catch (rzpErr: any) {
-    // Razorpay unavailable — keep booking as PENDING and let the customer know
-    // it is NOT confirmed yet, instead of silently treating it as paid.
+    const errorMsg = rzpErr?.error?.description || rzpErr?.message || 'Failed to initialize Razorpay payment'
+    console.error('================ Razorpay Booking Creation Error ================')
+    console.error('Error Details:', rzpErr)
+    console.error('==================================================================')
+    
+    // Clean up unconfirmed booking if payment failed to initiate
+    await prisma.booking.delete({ where: { id: booking.id } }).catch(() => {})
+
     return NextResponse.json({
-      ok: true,
-      data: booking,
-      mode: 'manual',
-      message: 'Booking saved but payment could not be started. Our team will contact you to complete payment.'
-    });
+      ok: false,
+      error: `Razorpay Error: ${errorMsg}. Please verify your Razorpay API Keys in Admin Settings.`
+    }, { status: 400 });
   }
 })

@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 // console.warn('[create-order] DB persistence skipped:', dbErr?.message) (removed for production)
     }
 
-    const rzpKeyId = (await getSetting('secret.razorpay_key_id')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
+    const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
 
     return cors(NextResponse.json({
       ok: true,
@@ -92,10 +92,10 @@ export async function POST(req: NextRequest) {
       },
     }))
   } catch (err: any) {
-// console.error('[create-order] error:', err) (removed for production)
+    console.error('[Create Order API] Error creating Razorpay order:', err?.message || err)
     return cors(NextResponse.json({
       ok: false,
-      error: err?.error?.description || err?.message || 'Failed to create order',
+      error: `Razorpay Error: ${err?.error?.description || err?.message || 'Failed to create Razorpay order'}`,
     }, { status: 500 }))
   }
 }
