@@ -595,23 +595,23 @@ export default function CheckoutPage() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2 text-slate-800">
-              <span className="text-orange-600 font-black text-2xl">à¥</span> à¤¸à¤‚à¤•à¤²à¥à¤ª à¤µà¤¿à¤µà¤°à¤£
+              <span className="text-orange-600 font-black text-2xl">ॐ</span> संकल्प विवरण
             </DialogTitle>
             <DialogDescription>
-              à¤•à¥ƒà¤ªà¤¯à¤¾ à¤ªà¥‚à¤œà¤¾ à¤®à¥‡à¤‚ à¤¸à¤‚à¤•à¤²à¥à¤ª à¤•à¥‡ à¤²à¤¿à¤ à¤…à¤ªà¤¨à¤¾ à¤—à¥‹à¤¤à¥à¤° à¤”à¤° à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ à¤­à¤°à¥‡à¤‚à¥¤
+              कृपया पूजा में संकल्प के लिए अपना गोत्र और उद्देश्य भरें।
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>Gotra (à¤—à¥‹à¤¤à¥à¤°)</Label>
+              <Label>Gotra (गोत्र)</Label>
               <Input 
                 value={sankalp.gotra} 
                 onChange={e => setSankalp({...sankalp, gotra: e.target.value})} 
-                placeholder="e.g. Kashyap (à¤•à¤¶à¥à¤¯à¤ª)" 
+                placeholder="e.g. Kashyap (कश्यप)" 
               />
             </div>
             <div className="space-y-2">
-              <Label>Puja Purpose (à¤ªà¥‚à¤œà¤¾ à¤•à¤¾ à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ / à¤®à¤¨à¥à¤¨à¤¤)</Label>
+              <Label>Puja Purpose (पूजा का उद्देश्य / मन्नत)</Label>
               <textarea 
                 value={sankalp.purpose} 
                 onChange={e => setSankalp({...sankalp, purpose: e.target.value})} 
