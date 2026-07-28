@@ -60,7 +60,23 @@ export async function POST(req: NextRequest) {
 
     try {
       if (statusUpdate && (orderEntityId || paymentEntityId)) {
-        const updatedPayment = await prisma.payment.updateMany({
+        // Read the existing payment FIRST so we don't lose its orderId/bookingId
+        // link before we've had a chance to use it (previous code overwrote
+        // metadata, then tried to read the link afterwards, always failing).
+        const existingPayment = await prisma.payment.findFirst({
+          where: {
+            OR: [
+              orderEntityId ? { gatewayOrderId: orderEntityId } : undefined,
+              paymentEntityId ? { gatewayRef: paymentEntityId } : undefined,
+            ].filter(Boolean) as any,
+          },
+        })
+
+        const existingMeta = (existingPayment?.metadata && typeof existingPayment.metadata === 'object')
+          ? existingPayment.metadata as any
+          : {}
+
+        await prisma.payment.updateMany({
           where: {
             OR: [
               orderEntityId ? { gatewayOrderId: orderEntityId } : undefined,
@@ -71,25 +87,31 @@ export async function POST(req: NextRequest) {
             status: statusUpdate as any,
             gatewayRef: paymentEntityId ?? undefined,
             paidAt: statusUpdate === 'SUCCESS' ? new Date() : undefined,
-            metadata: { webhookEvent: event.event, eventId, payload: event.payload },
+            metadata: { ...existingMeta, webhookEvent: event.event, eventId },
           },
         })
 
-        // Also fetch the payment to check if it's related to an order
-        const paymentData = await prisma.payment.findFirst({
-           where: { gatewayOrderId: orderEntityId }
-        })
-        
-        if (paymentData && paymentData.metadata && typeof paymentData.metadata === 'object' && (paymentData.metadata as any).orderId) {
-          const actualOrderId = (paymentData.metadata as any).orderId;
-          
+        const actualOrderId = existingPayment?.orderId || existingMeta.orderId
+        const actualBookingId = existingPayment?.bookingId || existingMeta.bookingId
+
+        if (actualOrderId) {
           await prisma.order.update({
             where: { id: actualOrderId },
             data: {
               paymentStatus: statusUpdate === 'SUCCESS' ? 'SUCCESS' : statusUpdate === 'FAILED' ? 'FAILED' : 'PENDING',
               status: statusUpdate === 'SUCCESS' ? 'PROCESSING' : 'PENDING'
             }
-          })
+          }).catch(() => {})
+        }
+
+        if (actualBookingId) {
+          await prisma.booking.update({
+            where: { id: actualBookingId },
+            data: {
+              paymentStatus: statusUpdate === 'SUCCESS' ? 'SUCCESS' : statusUpdate === 'FAILED' ? 'FAILED' : 'PENDING',
+              status: statusUpdate === 'SUCCESS' ? 'CONFIRMED' : 'PENDING'
+            }
+          }).catch(() => {})
         }
       }
     } catch (dbErr: any) {

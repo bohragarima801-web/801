@@ -121,5 +121,53 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }
   })
 
-  return NextResponse.json({ ok: true, data: booking });
+  // 3. CREATE RAZORPAY ORDER — booking must not be marked paid until real payment is verified
+  try {
+    const { getRazorpay } = await import('@/lib/razorpay')
+    const { getSetting } = await import('@/lib/settings')
+    const razorpay = await getRazorpay()
+    const amountInPaise = Math.round(total * 100)
+    const rzpOrder = await razorpay.orders.create({
+      amount: amountInPaise,
+      currency: 'INR',
+      receipt: booking.id,
+      notes: { paymentType: 'puja_booking', bookingId: booking.id, userId: user.id }
+    })
+
+    await prisma.payment.create({
+      data: {
+        userId: user.id,
+        bookingId: booking.id,
+        amount: total,
+        currency: 'INR',
+        gateway: 'RAZORPAY',
+        gatewayOrderId: rzpOrder.id,
+        status: 'PENDING',
+        metadata: { paymentType: 'puja_booking', bookingId: booking.id }
+      }
+    }).catch(() => {})
+
+    const rzpKeyId = (await getSetting('secret.razorpay_key_id')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
+
+    return NextResponse.json({
+      ok: true,
+      data: booking,
+      mode: 'razorpay',
+      paymentData: {
+        orderId: rzpOrder.id,
+        amount: rzpOrder.amount,
+        currency: rzpOrder.currency,
+        razorpayKeyId: rzpKeyId,
+      }
+    });
+  } catch (rzpErr: any) {
+    // Razorpay unavailable — keep booking as PENDING and let the customer know
+    // it is NOT confirmed yet, instead of silently treating it as paid.
+    return NextResponse.json({
+      ok: true,
+      data: booking,
+      mode: 'manual',
+      message: 'Booking saved but payment could not be started. Our team will contact you to complete payment.'
+    });
+  }
 })

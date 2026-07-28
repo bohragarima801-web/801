@@ -66,15 +66,22 @@ export async function POST(req: NextRequest) {
         paymentRecord = await prisma.payment.findFirst({ where: { gatewayOrderId: razorpay_order_id } })
       }
 
-      // Mirror webhook behavior: also confirm the linked Order immediately,
+      // Mirror webhook behavior: also confirm the linked Order/Booking immediately,
       // instead of waiting only on the async Razorpay webhook.
       if (isValid) {
-        const linkedOrderId = paymentRecord?.orderId
-          || (paymentRecord?.metadata && typeof paymentRecord.metadata === 'object' ? (paymentRecord.metadata as any).orderId : null)
+        const meta = (paymentRecord?.metadata && typeof paymentRecord.metadata === 'object') ? paymentRecord.metadata as any : {}
+        const linkedOrderId = paymentRecord?.orderId || meta.orderId
+        const linkedBookingId = paymentRecord?.bookingId || meta.bookingId
         if (linkedOrderId) {
           await prisma.order.update({
             where: { id: linkedOrderId },
             data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
+          }).catch(() => {})
+        }
+        if (linkedBookingId) {
+          await prisma.booking.update({
+            where: { id: linkedBookingId },
+            data: { paymentStatus: 'SUCCESS', status: 'CONFIRMED' },
           }).catch(() => {})
         }
       }

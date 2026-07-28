@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { ShoppingBag, Calendar, Package } from 'lucide-react'
 import Link from 'next/link'
-export const revalidate = 60; // ISR: Revalidate every 60s
+export const dynamic = 'force-dynamic';
 
 export default async function OrdersPage() {
   const user = await getCurrentUser()

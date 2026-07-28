@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import Image from 'next/image';
+import Script from 'next/script'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -181,15 +182,76 @@ function BookingForm() {
         }),
       })
       const data = await res.json()
-      if (data.ok) {
-        setSuccessBooking(data.data)
-        toast.success('Sankalp registered and Payment confirmed!')
-      } else {
+      if (!data.ok) {
         toast.error(data.error || 'Failed to complete booking')
+        setBooking(false)
+        return
       }
+
+      if (data.mode === 'manual' || !data.paymentData) {
+        // Payment gateway unavailable — booking saved but NOT paid yet.
+        toast.info(data.message || 'Booking saved. Our team will contact you to complete payment.')
+        setBooking(false)
+        return
+      }
+
+      const { orderId, amount, currency, razorpayKeyId } = data.paymentData
+
+      if (typeof window === 'undefined' || !(window as any).Razorpay) {
+        toast.error('Payment system is still loading. Please try again in a moment.')
+        setBooking(false)
+        return
+      }
+
+      const rzp = new (window as any).Razorpay({
+        key: razorpayKeyId,
+        amount,
+        currency,
+        name: 'Divyayagyam',
+        description: `Payment for ${puja.name || 'Puja Booking'}`,
+        order_id: orderId,
+        prefill: {
+          name: devoteeName,
+        },
+        theme: { color: '#ea580c' },
+        modal: {
+          ondismiss: () => {
+            setBooking(false)
+            toast.info('Payment cancelled. Your booking is saved but not confirmed yet.')
+          },
+        },
+        handler: async (response: any) => {
+          try {
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            })
+            const verifyData = await verifyRes.json()
+            if (verifyRes.ok && verifyData.ok && verifyData.verified) {
+              setSuccessBooking(data.data)
+              toast.success('Sankalp registered and Payment confirmed!')
+            } else {
+              toast.error('Payment verification failed. If money was deducted, please contact support with your booking number: ' + data.data.bookingNumber)
+            }
+          } catch {
+            toast.error('Could not confirm payment. If money was deducted, please contact support with your booking number: ' + data.data.bookingNumber)
+          } finally {
+            setBooking(false)
+          }
+        },
+      })
+      rzp.on('payment.failed', (response: any) => {
+        setBooking(false)
+        toast.error(response.error?.description || 'Payment failed')
+      })
+      rzp.open()
     } catch {
       toast.error('Network error during booking confirmation')
-    } finally {
       setBooking(false)
     }
   }
@@ -249,6 +311,8 @@ function BookingForm() {
   }
 
   return (
+    <>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
     <div className="max-w-5xl mx-auto py-10 px-4 grid gap-8 lg:grid-cols-12 items-start">
       
       {/* Left Column: Booking details & Add-ons */}
@@ -504,6 +568,7 @@ function BookingForm() {
       </div>
 
     </div>
+    </>
   )
 }
 

@@ -12,14 +12,7 @@ export function PaywallOverlay({ tool }: { tool: any }) {
   const { addToCart } = useCart()
 
   const handleUnlock = () => {
-    // Add the tool to cart and go to checkout
-    addToCart({
-      id: `tool-${tool.id}`,
-      name: `Premium Tool: ${tool.name}`,
-      price: Number(tool.price),
-    })
-    toast.success(`${tool.name} added to cart!`)
-    router.push('/checkout')
+    toast.info('Special Tool Unlock is coming soon! Please check back shortly or contact support.')
   }
 
   return (
