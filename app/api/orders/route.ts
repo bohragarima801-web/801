@@ -197,7 +197,20 @@ export async function POST(req: NextRequest) {
       }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
     }
 
-    // 4. Try Razorpay — fallback gracefully if keys missing
+    // 4. Razorpay Payment Gateway integration
+    const isExplicitManual = body.paymentMethod === 'cod' || body.paymentMethod === 'manual'
+
+    if (isExplicitManual) {
+      return NextResponse.json({
+        ok: true,
+        mode: 'manual',
+        orderId: dbOrder.id,
+        orderNumber: dbOrder.orderNumber,
+        total,
+        message: 'आपका ऑर्डर दर्ज हो गया है! हमारी टीम जल्द ही आपसे संपर्क करेगी।'
+      });
+    }
+
     try {
       const { getRazorpay } = await import('@/lib/razorpay')
       const razorpay = await getRazorpay()
@@ -235,15 +248,18 @@ export async function POST(req: NextRequest) {
         }
       });
     } catch (rzpErr: any) {
-      console.error('[Orders] Razorpay initialization/order error:', rzpErr?.message || rzpErr)
+      const errorMsg = rzpErr?.error?.description || rzpErr?.message || 'Failed to initialize Razorpay payment'
+      console.error('================ Razorpay Order Creation Error ================')
+      console.error('Error Details:', rzpErr)
+      console.error('================================================================')
+      
+      // Clean up pending order if payment failed to initiate
+      await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
+
       return NextResponse.json({
-        ok: true,
-        mode: 'manual',
-        orderId: dbOrder.id,
-        orderNumber: dbOrder.orderNumber,
-        total,
-        message: 'आपका ऑर्डर सफलतापूर्वक दर्ज हो गया है! हमारी टीम जल्द ही आपसे संपर्क करेगी।'
-      });
+        ok: false,
+        error: `Razorpay Error: ${errorMsg}. Please verify your Razorpay API Keys in Admin Settings.`
+      }, { status: 400 });
     }
   } catch (err: any) {
 // console.error('[API_ORDERS_ERROR]', err) (removed for production)
