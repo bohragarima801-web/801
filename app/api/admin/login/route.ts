@@ -23,10 +23,36 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   let isValid = false
   let loginEmail = inputEmail
 
-  // 1. Strict Super Admin Validation (Strict Env Only)
+  // 1. Strict Super Admin Validation
   if (inputEmail === adminEmail && password === adminPass) {
     isValid = true
     loginEmail = adminEmail
+
+    // Upsert Super Admin user in DB with active role & password hash to prevent mismatch
+    try {
+      let superAdminRole = await prisma.role.findFirst({ where: { isSystem: true } })
+      if (!superAdminRole) {
+        superAdminRole = await prisma.role.findFirst({ where: { slug: 'admin' } })
+      }
+      const hashed = await bcrypt.hash(adminPass, 10)
+      await prisma.user.upsert({
+        where: { email: adminEmail },
+        create: {
+          email: adminEmail,
+          fullName: 'Super Admin',
+          passwordHash: hashed,
+          status: 'ACTIVE',
+          roleId: superAdminRole?.id ?? null
+        },
+        update: {
+          passwordHash: hashed,
+          status: 'ACTIVE',
+          ...(superAdminRole ? { roleId: superAdminRole.id } : {})
+        }
+      })
+    } catch (e) {
+      // Ignore DB upsert errors if DB is temporarily unreachable
+    }
   } else {
     // 2. Check Database for Admin User
     const dbUser = await prisma.user.findFirst({
