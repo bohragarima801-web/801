@@ -73,21 +73,6 @@ export function RazorpayCheckoutButton({
           referenceId: referenceId || '',
         },
         theme: { color: '#FF8C21' },
-        config: {
-          display: {
-            blocks: {
-              banks: {
-                name: 'Pay via UPI / QR / Netbanking',
-                instruments: [
-                  { method: 'upi' },
-                  { method: 'card' },
-                  { method: 'netbanking' }
-                ]
-              }
-            },
-            sequence: ['block.banks']
-          }
-        },
         modal: {
           ondismiss: () => {
             setLoading(false)
