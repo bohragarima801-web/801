@@ -10,7 +10,7 @@ export function Logo({ className, showText = true }: { className?: string; showT
   const [siteName, setSiteName] = useState('दिव्ययज्ञम्')
 
   useEffect(() => {
-    fetch('/api/customizer')
+    fetch('/api/customizer', { cache: 'no-store' })
       .then((r) => r.json())
       .then((j) => {
         if (j?.ok && j.data?.theme) {
