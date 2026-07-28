@@ -18,7 +18,21 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: `${dynamicConfig.name} — ${dynamicConfig.tagline}`, template: `%s | ${dynamicConfig.name}` },
     description: dynamicConfig.description,
     keywords: dynamicConfig.keywords,
-    metadataBase: new URL(dynamicConfig.url),
+    metadataBase: new URL(dynamicConfig.url || 'https://divyayagyam.com'),
+    alternates: {
+      canonical: dynamicConfig.url || 'https://divyayagyam.com',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: { title: dynamicConfig.name, description: dynamicConfig.description, url: dynamicConfig.url, siteName: dynamicConfig.name, type: 'website', images: [dynamicConfig.logo || dynamicConfig.ogImage] },
     twitter: { card: 'summary_large_image', title: dynamicConfig.name, description: dynamicConfig.description, images: [dynamicConfig.logo || dynamicConfig.ogImage] },
     manifest: '/manifest.json',

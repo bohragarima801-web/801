@@ -1,13 +1,14 @@
 export const siteConfig = {
-  name: 'Divyayagyam',
-  tagline: 'Sanatan Seva',
+  name: 'DivyaYagyam',
+  tagline: 'India’s Most Trusted Sanatan Seva & Online Puja Booking',
   description:
-    'Experience divine blessings with DivyaYagyam. Book authentic online pujas, offer Bhakti Seva, order sacred prasad, and access expert astrology services on our trusted platform.',
-  url: process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_URL_4725 || 'http://localhost:3000',
-  ogImage: '/og.jpg',
+    'DivyaYagyam is India’s #1 trusted spiritual platform for booking authentic online pujas, VIP Mahayagya rituals, Kundali analysis, Bhakti Seva offerings, and pure temple prasad delivered to your home with live video proof.',
+  url: 'https://divyayagyam.com',
+  ogImage: '/logo.jpg',
   keywords: [
-    'Divyayagyam', 'Online Puja', 'VIP Puja', 'Temple Booking', 'Sanatan',
-    'Prasad', 'Bhakti Seva', 'Astrology', 'Kundali',
+    'DivyaYagyam', 'Online Puja Booking', 'VIP Puja', 'Maharudrabhishek', 'Baglamukhi Havan',
+    'Kalsarp Dosh Nivaran', 'Mahamrityunjay Jaap', 'Temple Prasad Delivery', 'Vedic Astrology',
+    'Online Pandit Booking', 'Sanatan Seva', 'Kundali Milan', 'Panchang', 'Grah Shanti Puja'
   ],
   contact: {
     email: 'seva@divyayagyam.com',
@@ -15,10 +16,10 @@ export const siteConfig = {
     whatsapp: '+91-95871-71984, +91-95320-11984',
   },
   socials: {
-    facebook: '#',
-    instagram: '#',
-    youtube: '#',
-    twitter: '#',
+    facebook: 'https://facebook.com/divyayagyam',
+    instagram: 'https://instagram.com/divyayagyam',
+    youtube: 'https://youtube.com/@divyayagyam',
+    twitter: 'https://twitter.com/divyayagyam',
   },
 }
 
