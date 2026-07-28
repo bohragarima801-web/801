@@ -176,7 +176,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       notes: { paymentType: 'puja_booking', bookingId: booking.id, userId: dbUserId }
     })
 
-    await prisma.payment.create({
+    const paymentRecord = await prisma.payment.create({
       data: {
         userId: dbUserId,
         bookingId: booking.id,
@@ -187,7 +187,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
         status: 'PENDING',
         metadata: { paymentType: 'puja_booking', bookingId: booking.id }
       }
-    }).catch(() => {})
+    }).catch(() => null)
 
     return NextResponse.json({
       ok: true,
@@ -198,6 +198,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
         amount: rzpOrder.amount,
         currency: rzpOrder.currency,
         razorpayKeyId: rzpKeyId,
+        paymentId: paymentRecord?.id || null,
       }
     });
   } catch (rzpErr: any) {

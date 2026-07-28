@@ -252,7 +252,7 @@ export async function POST(req: NextRequest) {
         }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
       }
 
-      await prisma.payment.create({
+      const paymentRecord = await prisma.payment.create({
         data: {
           userId: dbUserId,
           orderId: dbOrder.id,
@@ -263,17 +263,19 @@ export async function POST(req: NextRequest) {
           status: 'PENDING',
           metadata: { paymentType: 'product_order', orderId: dbOrder.id }
         }
-      }).catch(e => console.error('[Orders] Failed to create payment record:', e.message))
+      }).catch(e => { console.error('[Orders] Failed to create payment record:', e.message); return null })
 
       return NextResponse.json({
         ok: true,
         mode: 'razorpay',
+        orderNumber: dbOrder.orderNumber,
         paymentData: {
           orderId: rzpOrder.id,
           amount: rzpOrder.amount,
           currency: rzpOrder.currency,
           receipt: rzpOrder.receipt,
-          razorpayKeyId: rzpKeyId
+          razorpayKeyId: rzpKeyId,
+          paymentId: paymentRecord?.id || null,
         }
       });
     } catch (rzpErr: any) {

@@ -196,7 +196,7 @@ export default function CheckoutPage() {
       }
 
       const orderNumber = data.orderNumber || ''
-      const { orderId, amount, currency, receipt, razorpayKeyId } = data.paymentData
+      const { orderId, amount, currency, receipt, razorpayKeyId, paymentId: orderPaymentId } = data.paymentData
 
       if (!razorpayKeyId) {
         toast.error('Razorpay Key ID is missing. Please configure Razorpay Keys in Admin Settings.')
@@ -220,6 +220,7 @@ export default function CheckoutPage() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
+                paymentId: orderPaymentId,
               })
             })
             const verifyData = await verifyRes.json()

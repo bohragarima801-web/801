@@ -1,23 +1,40 @@
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 function ThankYouContent() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const orderNumber = searchParams.get('order') || ''
   const paymentId = searchParams.get('payment') || ''
+  const type = searchParams.get('type') || 'order' // 'booking' | 'order' | 'tool'
   const [show, setShow] = useState(false)
   const now = new Date()
 
   useEffect(() => {
     setShow(true)
-    // Confetti effect using CSS animation only
-    const timer = setTimeout(() => {}, 100)
-    return () => clearTimeout(timer)
   }, [])
+
+  const isBooking = type === 'booking'
+  const isTool = type === 'tool'
+
+  const titleEmoji = isBooking ? '🙏' : isTool ? '🛠️' : '🎉'
+  const title = isBooking ? 'पूजा बुकिंग सफल!' : isTool ? 'Tool Access Unlocked!' : 'भुगतान सफल!'
+  const subtitle = isBooking
+    ? 'आपकी पूजा बुकिंग कन्फर्म हो गई है'
+    : isTool
+    ? 'Your premium tool access has been activated'
+    : 'आपका ऑर्डर सफलतापूर्वक दर्ज हो गया है'
+  const message = isBooking
+    ? 'हमारे पंडित जी जल्द ही आपसे संपर्क करेंगे। पूजा का वीडियो और प्रसाद WhatsApp/Email पर भेजा जाएगा। 🌸'
+    : isTool
+    ? 'You can now access your spiritual tool. Navigate back to the tools section to begin using it.'
+    : 'भगवान आपके इस पुण्य कार्य को आशीर्वाद दें और आपके घर में सुख-समृद्धि बनाए रखें। 🌸'
+
+  const orderLabel = isBooking ? 'Booking Number' : 'Order Number'
+  const viewHref = isBooking ? '/dashboard/bookings' : isTool ? '/tools' : '/dashboard/orders'
+  const viewLabel = isBooking ? '📿 मेरी बुकिंग देखें' : isTool ? '🛠️ Tools Section' : '📦 मेरे Orders देखें'
 
   const formatDate = (d: Date) =>
     d.toLocaleString('hi-IN', {
@@ -43,7 +60,7 @@ function ThankYouContent() {
         transform: show ? 'translateY(0)' : 'translateY(30px)',
       }}>
 
-        {/* Top Success Card */}
+        {/* Success Card */}
         <div style={{
           background: 'linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,88,12,0.08))',
           border: '1px solid rgba(249,115,22,0.4)',
@@ -53,42 +70,24 @@ function ThankYouContent() {
           marginBottom: '1.5rem',
           boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(249,115,22,0.1)'
         }}>
-          {/* Diya */}
-          <div style={{
-            fontSize: '4rem',
-            marginBottom: '1rem',
-            animation: 'glow 2s infinite alternate'
-          }}>🪔</div>
-
+          <div style={{ fontSize: '4rem', marginBottom: '1rem', animation: 'glow 2s infinite alternate' }}>
+            {isBooking ? '🪔' : isTool ? '⚡' : '🪔'}
+          </div>
           <p style={{ color: '#f97316', fontSize: '0.9rem', margin: '0 0 0.5rem', letterSpacing: '0.1em' }}>
-            ॐ तत् सत् · जय श्री राम 🚩
+            {isBooking ? 'ॐ तत् सत् · जय श्री राम 🚩' : 'जय श्री राम 🚩'}
           </p>
-
-          <h1 style={{
-            color: '#fff',
-            fontSize: '2rem',
-            fontWeight: 800,
-            margin: '0.5rem 0',
-            lineHeight: 1.2
-          }}>
-            भुगतान सफल! 🎉
+          <h1 style={{ color: '#fff', fontSize: '2rem', fontWeight: 800, margin: '0.5rem 0', lineHeight: 1.2 }}>
+            {titleEmoji} {title}
           </h1>
           <p style={{ color: '#fbbf24', fontSize: '1.1rem', fontWeight: 600, margin: '0.5rem 0 1.2rem' }}>
-            आपकी सेवा स्वीकार कर ली गई है
+            {subtitle}
           </p>
-          <p style={{
-            color: '#d1d5db',
-            fontSize: '0.95rem',
-            lineHeight: 1.7,
-            maxWidth: '380px',
-            margin: '0 auto'
-          }}>
-            भगवान आपके इस पुण्य कार्य को आशीर्वाद दें और आपके घर में
-            सुख-समृद्धि बनाए रखें। 🌸
+          <p style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.7, maxWidth: '380px', margin: '0 auto' }}>
+            {message}
           </p>
         </div>
 
-        {/* Receipt / Invoice Card */}
+        {/* Receipt Card */}
         <div style={{
           background: 'rgba(255,255,255,0.04)',
           border: '1px solid rgba(255,255,255,0.1)',
@@ -96,7 +95,7 @@ function ThankYouContent() {
           overflow: 'hidden',
           marginBottom: '1.5rem'
         }}>
-          {/* Receipt Header */}
+          {/* Header */}
           <div style={{
             background: 'linear-gradient(90deg, rgba(249,115,22,0.2), rgba(234,88,12,0.1))',
             padding: '1rem 1.5rem',
@@ -107,7 +106,7 @@ function ThankYouContent() {
           }}>
             <span style={{ fontSize: '1.2rem' }}>🧾</span>
             <h2 style={{ color: '#fbbf24', fontSize: '1rem', fontWeight: 700, margin: 0 }}>
-              Payment Receipt
+              {isBooking ? 'Booking Receipt' : 'Payment Receipt'}
             </h2>
             <span style={{ marginLeft: 'auto', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
               ✅ CONFIRMED
@@ -118,11 +117,10 @@ function ThankYouContent() {
           <div style={{ padding: '1.2rem 1.5rem' }}>
             {[
               { label: '📅 दिनांक / Date', value: formatDate(now) },
-              ...(orderNumber ? [{ label: '📦 Order Number', value: orderNumber }] : []),
+              ...(orderNumber ? [{ label: `📋 ${orderLabel}`, value: orderNumber }] : []),
               ...(paymentId ? [{ label: '💳 Payment ID', value: paymentId }] : []),
-              { label: '🏦 Payment Gateway', value: 'Razorpay' },
+              { label: '🏦 Gateway', value: 'Razorpay' },
               { label: '📍 Status', value: 'SUCCESS ✅' },
-              { label: '🌐 Website', value: 'divyayagyam.com' },
             ].map((row, i) => (
               <div key={i} style={{
                 display: 'flex',
@@ -132,29 +130,16 @@ function ThankYouContent() {
                 borderBottom: '1px solid rgba(255,255,255,0.06)',
                 gap: '1rem'
               }}>
-                <span style={{ color: '#9ca3af', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
-                  {row.label}
-                </span>
-                <span style={{
-                  color: '#f3f4f6',
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  textAlign: 'right',
-                  wordBreak: 'break-all',
-                  maxWidth: '60%'
-                }}>
+                <span style={{ color: '#9ca3af', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{row.label}</span>
+                <span style={{ color: '#f3f4f6', fontSize: '0.85rem', fontWeight: 600, textAlign: 'right', wordBreak: 'break-all', maxWidth: '60%' }}>
                   {row.value}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Receipt Footer Note */}
-          <div style={{
-            padding: '0.8rem 1.5rem',
-            background: 'rgba(16,185,129,0.06)',
-            borderTop: '1px solid rgba(16,185,129,0.15)'
-          }}>
+          {/* Footer Note */}
+          <div style={{ padding: '0.8rem 1.5rem', background: 'rgba(16,185,129,0.06)', borderTop: '1px solid rgba(16,185,129,0.15)' }}>
             <p style={{ color: '#6ee7b7', fontSize: '0.78rem', margin: 0, textAlign: 'center' }}>
               📧 Receipt आपके registered email पर भेज दी गई है।
             </p>
@@ -163,7 +148,7 @@ function ThankYouContent() {
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-          <Link href="/dashboard/orders" style={{
+          <Link href={viewHref} style={{
             background: 'linear-gradient(135deg, #f97316, #ea580c)',
             color: '#fff',
             padding: '0.85rem 1.8rem',
@@ -176,7 +161,7 @@ function ThankYouContent() {
             alignItems: 'center',
             gap: '0.4rem'
           }}>
-            📦 मेरे Orders देखें
+            {viewLabel}
           </Link>
           <Link href="/" style={{
             background: 'transparent',
@@ -195,14 +180,19 @@ function ThankYouContent() {
           </Link>
         </div>
 
-        {/* Footer */}
-        <p style={{
-          color: '#4b5563',
-          fontSize: '0.78rem',
-          textAlign: 'center',
-          lineHeight: 1.6,
-          margin: 0
-        }}>
+        {/* Payment History Link */}
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <Link href="/dashboard/payments" style={{
+            color: '#6b7280',
+            fontSize: '0.82rem',
+            textDecoration: 'underline',
+            textDecorationColor: 'rgba(107,114,128,0.4)'
+          }}>
+            📊 View All Transactions
+          </Link>
+        </div>
+
+        <p style={{ color: '#4b5563', fontSize: '0.78rem', textAlign: 'center', lineHeight: 1.6, margin: 0 }}>
           किसी भी सहायता के लिए संपर्क करें · जय श्री राम 🚩
         </p>
       </div>

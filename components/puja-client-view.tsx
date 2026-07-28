@@ -6,13 +6,11 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MapPin, Calendar, CheckCircle2, Video, Gift, Sparkles, ShieldCheck, Star, User, HandHeart, Clock, ThumbsUp, ArrowRight, ArrowDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useCart } from '@/lib/cart-context'
 import { cn } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
-  const { addToCart } = useCart()
   
   // Custom packages based on the V2 design constraints (951, 1501, 2501, 3501 logic)
   const basePrice = Number(puja?.price || 951)
@@ -37,13 +35,8 @@ export function PujaClientView({ puja }: { puja: any }) {
     const pkgId = overridePkgId || selectedPackage
     const pkg = packages.find((p: any) => p.id === pkgId)
     if (pkg) {
-      addToCart({
-        id: `puja-${puja.id}-${pkg.id}`,
-        name: `${puja.name} - ${pkg.name}`,
-        price: Number(pkg.price),
-        image: activeImage
-      })
-      setTimeout(() => router.push('/checkout'), 50)
+      // Route to the dedicated booking form (creates proper Booking record with Sankalp details)
+      router.push(`/bookings/new?pujaId=${puja.id}&package=${pkgId}`)
     }
   }
 

@@ -195,6 +195,7 @@ function BookingForm() {
       }
 
       const { orderId, amount, currency, razorpayKeyId } = data.paymentData
+      const bookingPaymentId = data.paymentData?.paymentId || null
 
       if (typeof window === 'undefined' || !(window as any).Razorpay) {
         toast.error('Payment system is still loading. Please try again in a moment.')
@@ -228,18 +229,22 @@ function BookingForm() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
+                paymentId: bookingPaymentId,
               }),
             })
             const verifyData = await verifyRes.json()
             if (verifyRes.ok && verifyData.ok && verifyData.verified) {
-              setSuccessBooking(data.data)
-              toast.success('Sankalp registered and Payment confirmed!')
+              const params = new URLSearchParams()
+              params.set('type', 'booking')
+              if (data.data?.bookingNumber) params.set('order', data.data.bookingNumber)
+              if (verifyData.razorpay_payment_id) params.set('payment', verifyData.razorpay_payment_id)
+              window.location.href = `/checkout/thank-you?${params.toString()}`
             } else {
-              toast.error('Payment verification failed. If money was deducted, please contact support with your booking number: ' + data.data.bookingNumber)
+              toast.error('Payment verification failed. If money was deducted, please contact support with booking: ' + data.data.bookingNumber)
+              setBooking(false)
             }
           } catch {
-            toast.error('Could not confirm payment. If money was deducted, please contact support with your booking number: ' + data.data.bookingNumber)
-          } finally {
+            toast.error('Could not confirm payment. If money was deducted, please contact support with booking: ' + data.data.bookingNumber)
             setBooking(false)
           }
         },
