@@ -40,7 +40,10 @@ export async function POST(req: NextRequest) {
     // Optional: attach user (works even if unauth for donations/testing)
     const user = await getCurrentUser().catch(() => null)
 
+    const { getRazorpay, getRazorpayKeys } = await import('@/lib/razorpay')
     const razorpay = await getRazorpay()
+    const { key_id: rzpKeyId } = await getRazorpayKeys()
+
     const order = await razorpay.orders.create({
       amount: amountInPaise,
       currency: 'INR',
@@ -74,9 +77,6 @@ export async function POST(req: NextRequest) {
     } catch (dbErr: any) {
 // console.warn('[create-order] DB persistence skipped:', dbErr?.message) (removed for production)
     }
-
-    const { getRazorpay, getRazorpayKeys } = await import('@/lib/razorpay')
-    const { key_id: rzpKeyId } = await getRazorpayKeys()
 
     return cors(NextResponse.json({
       ok: true,
