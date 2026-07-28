@@ -233,8 +233,10 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      const { getRazorpay } = await import('@/lib/razorpay')
+      const { getRazorpay, getRazorpayKeys } = await import('@/lib/razorpay')
       const razorpay = await getRazorpay()
+      const { key_id: rzpKeyId } = await getRazorpayKeys()
+
       const amountInPaise = Math.max(100, Math.round(total * 100))
       const rzpOrder = await razorpay.orders.create({
         amount: amountInPaise,
@@ -261,8 +263,6 @@ export async function POST(req: NextRequest) {
           metadata: { paymentType: 'product_order', orderId: dbOrder.id }
         }
       }).catch(e => console.error('[Orders] Failed to create payment record:', e.message))
-
-      const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
 
       return NextResponse.json({
         ok: true,

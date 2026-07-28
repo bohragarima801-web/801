@@ -164,10 +164,11 @@ export const POST = withSafeApi(async (req: NextRequest) => {
 
   // 3. CREATE RAZORPAY ORDER — booking must not be marked paid until real payment is verified
   try {
-    const { getRazorpay } = await import('@/lib/razorpay')
-    const { getSetting } = await import('@/lib/settings')
+    const { getRazorpay, getRazorpayKeys } = await import('@/lib/razorpay')
     const razorpay = await getRazorpay()
-    const amountInPaise = Math.round(total * 100)
+    const { key_id: rzpKeyId } = await getRazorpayKeys()
+
+    const amountInPaise = Math.max(100, Math.round(total * 100))
     const rzpOrder = await razorpay.orders.create({
       amount: amountInPaise,
       currency: 'INR',
@@ -187,8 +188,6 @@ export const POST = withSafeApi(async (req: NextRequest) => {
         metadata: { paymentType: 'puja_booking', bookingId: booking.id }
       }
     }).catch(() => {})
-
-    const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
 
     return NextResponse.json({
       ok: true,

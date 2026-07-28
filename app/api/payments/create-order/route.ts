@@ -75,7 +75,8 @@ export async function POST(req: NextRequest) {
 // console.warn('[create-order] DB persistence skipped:', dbErr?.message) (removed for production)
     }
 
-    const rzpKeyId = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')) || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID
+    const { getRazorpay, getRazorpayKeys } = await import('@/lib/razorpay')
+    const { key_id: rzpKeyId } = await getRazorpayKeys()
 
     return cors(NextResponse.json({
       ok: true,
