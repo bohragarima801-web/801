@@ -477,37 +477,37 @@ export default function SettingsPage() {
                 </div>
                 
                 <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50 opacity-75">
+                <div className="space-y-4 border p-4 rounded-lg bg-slate-50">
                   <h3 className="font-semibold text-lg border-b pb-2 flex items-center justify-between">
                     Supabase Configuration
                     <Badge variant="outline">Database & Storage</Badge>
                   </h3>
                   <div className="space-y-2">
                     <Label>Supabase URL (NEXT_PUBLIC_SUPABASE_URL)</Label>
-                    <Input value={supabaseUrl} onChange={(e) => setSupabaseUrl(e.target.value)} />
+                    <Input value={supabaseUrl} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://xxx.supabase.co" />
                   </div>
                   <div className="space-y-2">
                     <Label>Supabase Anon Key (NEXT_PUBLIC_SUPABASE_ANON_KEY)</Label>
-                    <Input type="password" value={supabaseAnonKey} onChange={(e) => setSupabaseAnonKey(e.target.value)} />
+                    <Input type="password" value={supabaseAnonKey} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="sb_publishable_..." />
                   </div>
                   <div className="space-y-2">
                     <Label>Supabase Service Role Key (SUPABASE_SERVICE_ROLE_KEY)</Label>
-                    <Input type="password" value={supabaseServiceRole} onChange={(e) => setSupabaseServiceRole(e.target.value)} />
+                    <Input type="password" value={supabaseServiceRole} onChange={(e) => setSupabaseServiceRole(e.target.value)} placeholder="sb_secret_..." />
                   </div>
                 </div>
 
-                <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50 opacity-75">
+                <div className="space-y-4 border p-4 rounded-lg bg-slate-50">
                   <h3 className="font-semibold text-lg border-b pb-2 flex items-center justify-between">
                     Razorpay Gateway
                     <Badge variant="outline">Payments</Badge>
                   </h3>
                   <div className="space-y-2">
                     <Label>Razorpay Key ID (RAZORPAY_KEY_ID)</Label>
-                    <Input value={razorpayKeyId} onChange={(e) => setRazorpayKeyId(e.target.value)} />
+                    <Input value={razorpayKeyId} onChange={(e) => setRazorpayKeyId(e.target.value)} placeholder="rzp_live_..." />
                   </div>
                   <div className="space-y-2">
                     <Label>Razorpay Key Secret (RAZORPAY_KEY_SECRET)</Label>
-                    <Input type="password" value={razorpayKeySecret} onChange={(e) => setRazorpayKeySecret(e.target.value)} />
+                    <Input type="password" value={razorpayKeySecret} onChange={(e) => setRazorpayKeySecret(e.target.value)} placeholder="Secret Key" />
                   </div>
 
                   <h3 className="font-semibold text-lg border-b pb-2 pt-2 flex items-center justify-between">
@@ -516,7 +516,7 @@ export default function SettingsPage() {
                   </h3>
                   <div className="space-y-2">
                     <Label>Google Gemini API Key (GEMINI_API_KEY)</Label>
-                    <Input type="password" value={geminiApiKey} onChange={(e) => setGeminiApiKey(e.target.value)} />
+                    <Input type="password" value={geminiApiKey} onChange={(e) => setGeminiApiKey(e.target.value)} placeholder="AI Key" />
                   </div>
                 </div>
               </div>
