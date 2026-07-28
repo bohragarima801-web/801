@@ -196,6 +196,12 @@ export default function CheckoutPage() {
 
       const { orderId, amount, currency, receipt, razorpayKeyId } = data.paymentData
 
+      if (!razorpayKeyId) {
+        toast.error('Razorpay Key ID is missing. Please configure Razorpay Keys in Admin Settings.')
+        setProcessing(false)
+        return
+      }
+
       const options = {
         key: razorpayKeyId,
         amount,
