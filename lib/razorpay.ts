@@ -5,21 +5,17 @@ let _instance: Razorpay | null = null
 import { getSetting } from '@/lib/settings'
 
 export async function getRazorpay(): Promise<Razorpay> {
-  if (_instance) return _instance
-  
-  let key_id = (process.env.RAZORPAY_KEY_ID || '').replace(/^"|"$/g, '')
-  let key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"|"$/g, '')
+  // Check Admin Panel DB Settings first so live admin keys take immediate effect
+  let key_id = await getSetting('secret.razorpay_key_id')
+  let key_secret = await getSetting('secret.razorpay_key_secret')
 
-  if (!key_id || !key_secret) {
-    key_id = await getSetting('secret.razorpay_key_id')
-    key_secret = await getSetting('secret.razorpay_key_secret')
-  }
+  if (!key_id) key_id = (process.env.RAZORPAY_KEY_ID || '').replace(/^"|"$/g, '')
+  if (!key_secret) key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^"|"$/g, '')
 
   if (!key_id || !key_secret) {
     throw new Error('RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET are not configured')
   }
-  _instance = new Razorpay({ key_id, key_secret })
-  return _instance
+  return new Razorpay({ key_id, key_secret })
 }
 
 
