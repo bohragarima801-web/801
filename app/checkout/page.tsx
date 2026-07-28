@@ -188,12 +188,14 @@ export default function CheckoutPage() {
 
       if (data.mode === 'manual') {
         clearCart()
-        toast.success(`ðŸŽ‰ ${data.message || 'Order placed successfully!'}`)
-        toast.info(`Order No: ${data.orderNumber}`, { duration: 8000 })
-        router.push('/dashboard/orders')
+        toast.success('🎉 Order placed successfully!')
+        const params = new URLSearchParams()
+        if (data.orderNumber) params.set('order', data.orderNumber)
+        router.push(`/checkout/thank-you?${params.toString()}`)
         return
       }
 
+      const orderNumber = data.orderNumber || ''
       const { orderId, amount, currency, receipt, razorpayKeyId } = data.paymentData
 
       if (!razorpayKeyId) {
@@ -223,8 +225,11 @@ export default function CheckoutPage() {
             const verifyData = await verifyRes.json()
             if (verifyRes.ok && verifyData.ok && verifyData.verified) {
               clearCart()
-              toast.success('Payment Successful! Order placed.')
-              router.push('/dashboard/orders')
+              toast.success('🎉 Payment Successful! Order placed.')
+              const params = new URLSearchParams()
+              if (orderNumber) params.set('order', orderNumber)
+              if (verifyData.razorpay_payment_id) params.set('payment', verifyData.razorpay_payment_id)
+              router.push(`/checkout/thank-you?${params.toString()}`)
             } else {
               toast.error('Payment verification failed. If money was deducted, please contact support with your payment ID.')
             }

@@ -255,6 +255,7 @@ export async function POST(req: NextRequest) {
       await prisma.payment.create({
         data: {
           userId: dbUserId,
+          orderId: dbOrder.id,
           amount: total,
           currency: 'INR',
           gateway: 'RAZORPAY',

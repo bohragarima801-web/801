@@ -66,18 +66,35 @@ export async function POST(req: NextRequest) {
         paymentRecord = await prisma.payment.findFirst({ where: { gatewayOrderId: razorpay_order_id } })
       }
 
-      // Mirror webhook behavior: also confirm the linked Order/Booking immediately,
-      // instead of waiting only on the async Razorpay webhook.
+      // Mirror webhook behavior: also confirm the linked Order/Booking immediately
       if (isValid) {
         const meta = (paymentRecord?.metadata && typeof paymentRecord.metadata === 'object') ? paymentRecord.metadata as any : {}
+
+        // 1st priority: direct DB foreign key column
+        // 2nd priority: metadata JSON field
         const linkedOrderId = paymentRecord?.orderId || meta.orderId
         const linkedBookingId = paymentRecord?.bookingId || meta.bookingId
+
         if (linkedOrderId) {
           await prisma.order.update({
             where: { id: linkedOrderId },
             data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
           }).catch(() => {})
+        } else {
+          // Last resort: find order via Razorpay order ID in payment metadata
+          const orderViaGateway = await prisma.order.findFirst({
+            where: {
+              payments: { some: { gatewayOrderId: razorpay_order_id } }
+            }
+          }).catch(() => null)
+          if (orderViaGateway) {
+            await prisma.order.update({
+              where: { id: orderViaGateway.id },
+              data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
+            }).catch(() => {})
+          }
         }
+
         if (linkedBookingId) {
           await prisma.booking.update({
             where: { id: linkedBookingId },
