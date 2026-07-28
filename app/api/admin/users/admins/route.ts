@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
+import { getAdminSession } from '@/lib/admin-session'
+
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     const admins = await prisma.user.findMany({
       where: {
         role: {
@@ -61,6 +65,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+
     const { email, password, fullName, roleId, customPermissions } = await req.json()
     if (!email || !password || !roleId) {
       return NextResponse.json({ ok: false, error: 'Email, password, and role are required' }, { status: 400 });
@@ -135,6 +142,9 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+
     const payload = await req.json()
     const { id, action, email, fullName, roleId, customPermissions } = payload
     if (!id) {
