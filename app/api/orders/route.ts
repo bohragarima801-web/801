@@ -123,10 +123,30 @@ export async function POST(req: NextRequest) {
     const total = Math.max(0, subtotal - discountAmount)
 
 
-    // 2. Save Address
+    // 2. Resolve or Upsert DB User Record
+    let dbUserId = user.id
+    if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+      let dbUser = await prisma.user.findFirst({
+        where: { OR: [{ email: user.email }, { id: user.id }] }
+      })
+      if (!dbUser) {
+        const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
+        dbUser = await prisma.user.create({
+          data: {
+            email: user.email,
+            fullName: user.fullName || 'Devotee',
+            supabaseId: user.supabaseId || user.id,
+            roleId: defaultRole?.id ?? null
+          }
+        })
+      }
+      dbUserId = dbUser.id
+    }
+
+    // Save Address
     const savedAddress = await prisma.address.create({
       data: {
-        userId: user.id,
+        userId: dbUserId,
         type: 'SHIPPING',
         fullName: shippingAddress.name,
         phone: shippingAddress.phone,
@@ -144,7 +164,7 @@ export async function POST(req: NextRequest) {
     const dbOrder = await prisma.order.create({
       data: {
         orderNumber,
-        userId: user.id,
+        userId: dbUserId,
         subtotal,
         tax: 0,
         shipping: 0,
@@ -175,12 +195,12 @@ export async function POST(req: NextRequest) {
         amount: amountInPaise,
         currency: 'INR',
         receipt: dbOrder.id,
-        notes: { paymentType: 'product_order', orderId: dbOrder.id, userId: user.id }
+        notes: { paymentType: 'product_order', orderId: dbOrder.id, userId: dbUserId }
       })
 
       await prisma.payment.create({
         data: {
-          userId: user.id,
+          userId: dbUserId,
           amount: total,
           currency: 'INR',
           gateway: 'RAZORPAY',
