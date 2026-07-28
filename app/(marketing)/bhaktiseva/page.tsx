@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'
+import { useCart } from '@/lib/cart-context'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Loader2, Sparkles, Video, Flame } from 'lucide-react'
+import { Loader2, Sparkles, Video } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 function getEmbedUrl(url: string) {
   if (!url) return '';
@@ -18,17 +21,17 @@ function getEmbedUrl(url: string) {
 }
 
 export default function Page() {
+  const router = useRouter()
+  const { addToCart } = useCart()
   const [offerings, setOfferings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/admin/bhaktiseva')
+    fetch('/api/bhaktiseva')
       .then((r) => r.json())
       .then((j) => {
-        if (j.ok) {
-          // Show only active bhaktiSeva offerings on public page
-          setOfferings((j.data || []).filter((o: any) => o.isActive))
-        }
+        const items = j.offerings || j.data || []
+        setOfferings(items)
       })
       .catch(() => {})
       .finally(() => setLoading(false))
@@ -112,26 +115,15 @@ export default function Page() {
                     size="sm"
                     className="rounded-full px-6 bg-orange-600 hover:bg-orange-700 text-white shadow-sm hover:shadow-md transition-all font-bold"
                     onClick={() => {
-                      try {
-                        const rawCart = localStorage.getItem('divyayagyam_cart')
-                        const cart = rawCart ? JSON.parse(rawCart) : []
-                        const itemId = `addon-bhaktiSeva-${offering.id}`
-                        const existingIndex = cart.findIndex((i: any) => i.id === itemId)
-                        if (existingIndex > -1) {
-                          cart[existingIndex].quantity += 1
-                        } else {
-                          cart.push({
-                            id: itemId,
-                            name: `BhaktiSeva: ${offering.name}`,
-                            price: Number(offering.price),
-                            quantity: 1,
-                            image: offering.image || ''
-                          })
-                        }
-                        localStorage.setItem('divyayagyam_cart', JSON.stringify(cart))
-                        window.dispatchEvent(new Event('cart-updated'))
-                      } catch (e) {}
-                      window.location.href = '/checkout'
+                      const itemId = `addon-bhaktiSeva-${offering.id}`
+                      addToCart({
+                        id: itemId,
+                        name: `BhaktiSeva: ${offering.name}`,
+                        price: Number(offering.price),
+                        image: offering.image || ''
+                      })
+                      toast.success(`Added ${offering.name} to cart!`)
+                      router.push('/checkout')
                     }}
                   >
                     Offer Seva Now (₹{Number(offering.price)})
@@ -145,4 +137,5 @@ export default function Page() {
     </div>
   )
 }
+
 

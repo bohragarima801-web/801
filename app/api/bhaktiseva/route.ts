@@ -6,11 +6,13 @@ export async function GET() {
     const offerings = await prisma.bhaktiSevaOffering.findMany({
       where: {
         isActive: true
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
-    return NextResponse.json({ offerings })
+    return NextResponse.json({ ok: true, offerings, data: offerings })
   } catch (error) {
     console.error('Error fetching bhaktiSeva offerings:', error)
-    return NextResponse.json({ offerings: [] }, { status: 500 })
+    return NextResponse.json({ ok: false, offerings: [], data: [] }, { status: 500 })
   }
 }
+

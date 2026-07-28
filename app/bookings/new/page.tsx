@@ -73,11 +73,10 @@ function BookingForm() {
         }
 
         // 3. Load Offerings
-        const offeringsRes = await fetch('/api/admin/bhaktiseva')
+        const offeringsRes = await fetch('/api/bhaktiseva')
         const offeringsData = await offeringsRes.json()
-        if (offeringsData.ok) {
-          setDbOfferings((offeringsData.data || []).filter((o: any) => o.isActive))
-        }
+        const fetchedOfferings = offeringsData.offerings || offeringsData.data || []
+        setDbOfferings(fetchedOfferings.filter((o: any) => o.isActive !== false))
       } catch {
         toast.error('Error loading data')
       } finally {
