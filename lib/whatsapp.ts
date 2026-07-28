@@ -14,6 +14,7 @@ export interface WhatsAppNotificationPayload {
   type: WhatsAppTriggerType
   phone: string
   name: string
+  lang?: 'hi' | 'en'
   details: {
     orderNumber?: string
     bookingNumber?: string
@@ -32,7 +33,7 @@ export interface WhatsAppNotificationPayload {
 
 /**
  * Send automated WhatsApp notification using WhatsAPI / AiSensy Gateway
- * Implements Official AiSensy Approved Meta Templates for Products, Pujas, VIP Anusthan, Special Offers & Invoices
+ * Supports Dual Language (Hindi & English) Meta Approved Templates
  */
 export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayload): Promise<boolean> {
   try {
@@ -53,6 +54,8 @@ export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayl
       cleanPhone = `91${cleanPhone}`
     }
 
+    const isEnglish = payload.lang === 'en'
+
     // Prepare Template Name & Dynamic Parameters array as per AiSensy Meta Guide
     let templateName = ''
     let templateParams: string[] = []
@@ -62,7 +65,7 @@ export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayl
       // 1. PRODUCT BOOKING / ORDER CONFIRMATION TEMPLATE
       case 'PRODUCT_BOOKING':
       case 'ORDER_SUCCESS':
-        templateName = 'product_booking_confirmation'
+        templateName = isEnglish ? 'product_booking_confirmation_en' : 'product_booking_confirmation'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
           payload.details.productName || payload.details.items || 'Sanatan Product', // {{2}} Product Name
@@ -70,12 +73,17 @@ export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayl
           `₹${payload.details.amount || 0}`,                             // {{4}} Paid Amount
           payload.details.link || 'https://divyayagyam.com/dashboard/orders' // {{5}} Track Order Link
         ]
-        fallbackMessage = `🚩 *दिव्ययज्ञम् - उत्पाद बुकिंग पुष्टि (Product Order Confirmed)* 🚩\n\nनमस्ते *${payload.name}* जी,\n\nआपका सिद्ध *${payload.details.productName || payload.details.items}* ऑर्डर सफलतापूर्वक बुक हो गया है!\n\n📦 *ऑर्डर संख्या:* ${payload.details.orderNumber}\n💰 *कुल राशि:* ₹${payload.details.amount}\n\nअपने ऑर्डर की स्थिति ट्रैक करने के लिए नीचे दिए गए लिंक पर क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/orders'}\n\nहरि ओम्! 🙏`
+        
+        if (isEnglish) {
+          fallbackMessage = `🚩 *DivyaYagyam - Product Booking Confirmed* 🚩\n\nHello *${payload.name}*,\n\nYour order for consecrated *${payload.details.productName || payload.details.items}* has been successfully booked!\n\n📦 *Order Number:* ${payload.details.orderNumber}\n💰 *Total Paid:* ₹${payload.details.amount}\n\nTrack your order status here:\n${payload.details.link || 'https://divyayagyam.com/dashboard/orders'}\n\nHari Om! 🙏`
+        } else {
+          fallbackMessage = `🚩 *दिव्ययज्ञम् - उत्पाद बुकिंग पुष्टि (Product Order Confirmed)* 🚩\n\nनमस्ते *${payload.name}* जी,\n\nआपका सिद्ध *${payload.details.productName || payload.details.items}* ऑर्डर सफलतापूर्वक बुक हो गया है!\n\n📦 *ऑर्डर संख्या:* ${payload.details.orderNumber}\n💰 *कुल राशि:* ₹${payload.details.amount}\n\nअपने ऑर्डर की स्थिति ट्रैक करने के लिए नीचे दिए गए लिंक पर क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/orders'}\n\nहरि ओम्! 🙏`
+        }
         break
 
       // 2. PUJA SANKALP BOOKING TEMPLATE
       case 'PUJA_CONFIRMED':
-        templateName = 'puja_sankalp_confirmation'
+        templateName = isEnglish ? 'puja_sankalp_confirmation_en' : 'puja_sankalp_confirmation'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
           payload.details.pujaName || 'Sacred Puja Ritual',              // {{2}} Puja Ritual Name
@@ -83,12 +91,17 @@ export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayl
           `₹${payload.details.amount || 0}`,                             // {{4}} Dakshina Amount
           payload.details.link || 'https://divyayagyam.com/dashboard/bookings' // {{5}} Dashboard Link
         ]
-        fallbackMessage = `🕉️ *दिव्ययज्ञम् - संकल्प एवं पूजा बुकिंग पुष्टि* 🕉️\n\nप्रणाम *${payload.name}* जी,\n\nआपकी *${payload.details.pujaName}* का संकल्प एवं पूजा सेवा सफलतापूर्वक बुक हो गई है!\n\n📋 *बुकिंग संख्या:* ${payload.details.bookingNumber}\n💵 *दक्षिण/शुल्क:* ₹${payload.details.amount}\n\nपूजन पश्चात संकल्प वीडियो एवं प्रसाद अपडेट के लिए डैशबोर्ड देखें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/bookings'}\n\nदिव्ययज्ञम् सनातन सेवा 🙏`
+
+        if (isEnglish) {
+          fallbackMessage = `🕉️ *DivyaYagyam - Puja & Sankalp Confirmed* 🕉️\n\nNamaste *${payload.name}*,\n\nYour Sankalp for *${payload.details.pujaName}* has been registered successfully!\n\n📋 *Booking Number:* ${payload.details.bookingNumber}\n💵 *Dakshina/Fee:* ₹${payload.details.amount}\n\nView Sankalp Video and Prasad updates on your dashboard:\n${payload.details.link || 'https://divyayagyam.com/dashboard/bookings'}\n\nDivyaYagyam Sanatan Seva 🙏`
+        } else {
+          fallbackMessage = `🕉️ *दिव्ययज्ञम् - संकल्प एवं पूजा बुकिंग पुष्टि* 🕉️\n\nप्रणाम *${payload.name}* जी,\n\nआपकी *${payload.details.pujaName}* का संकल्प एवं पूजा सेवा सफलतापूर्वक बुक हो गई है!\n\n📋 *बुकिंग संख्या:* ${payload.details.bookingNumber}\n💵 *दक्षिण/शुल्क:* ₹${payload.details.amount}\n\nपूजन पश्चात संकल्प वीडियो एवं प्रसाद अपडेट के लिए डैशबोर्ड देखें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/bookings'}\n\nदिव्ययज्ञम् सनातन सेवा 🙏`
+        }
         break
 
       // 3. VIP PUJA ANUSTHAN BOOKING TEMPLATE
       case 'VIP_PUJA_BOOKING':
-        templateName = 'vip_puja_anusthan_confirmation'
+        templateName = isEnglish ? 'vip_puja_anusthan_confirmation_en' : 'vip_puja_anusthan_confirmation'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
           payload.details.pujaName || 'VIP Special Yagyam',              // {{2}} VIP Anusthan Name
@@ -96,47 +109,69 @@ export async function sendWhatsAppNotification(payload: WhatsAppNotificationPayl
           `₹${payload.details.amount || 0}`,                             // {{4}} Total Dakshina
           payload.details.date || 'As Scheduled'                         // {{5}} Live Stream Schedule
         ]
-        fallbackMessage = `🚩 *दिव्ययज्ञम् - VIP विशेषाधिकार अनुष्ठान बुकिंग* 🚩\n\nप्रणाम श्रेष्ठ *${payload.name}* जी,\n\nआपके *${payload.details.pujaName}* VIP अनुष्ठान का मुख्य यजमान संकल्प स्वीकार कर लिया गया है!\n\n👑 *VIP संदर्भ संख्या:* ${payload.details.bookingNumber}\n💎 *विशेष दक्षिणा:* ₹${payload.details.amount}\n📅 *लाइव प्रसारण समय:* ${payload.details.date || 'नियत तिथि पर'}\n\nमुख्य आचार्य द्वारा आपसे व्यक्तिगत संपर्क किया जाएगा।\n\nहरि ओम्! 🙏`
+
+        if (isEnglish) {
+          fallbackMessage = `🚩 *DivyaYagyam - VIP Anusthan Privilege Booking* 🚩\n\nGreetings *${payload.name}*,\n\nYour Yajaman Sankalp for *${payload.details.pujaName}* VIP Anusthan has been accepted!\n\n👑 *VIP Ref ID:* ${payload.details.bookingNumber}\n💎 *Special Dakshina:* ₹${payload.details.amount}\n📅 *Live Broadcast:* ${payload.details.date || 'As Scheduled'}\n\nOur Head Priest will connect with you personally.\n\nHari Om! 🙏`
+        } else {
+          fallbackMessage = `🚩 *दिव्ययज्ञम् - VIP विशेषाधिकार अनुष्ठान बुकिंग* 🚩\n\nप्रणाम श्रेष्ठ *${payload.name}* जी,\n\nआपके *${payload.details.pujaName}* VIP अनुष्ठान का मुख्य यजमान संकल्प स्वीकार कर लिया गया है!\n\n👑 *VIP संदर्भ संख्या:* ${payload.details.bookingNumber}\n💎 *विशेष दक्षिणा:* ₹${payload.details.amount}\n📅 *लाइव प्रसारण समय:* ${payload.details.date || 'नियत तिथि पर'}\n\nमुख्य आचार्य द्वारा आपसे व्यक्तिगत संपर्क किया जाएगा।\n\nहरि ओम्! 🙏`
+        }
         break
 
-      // 4. SPECIAL PROMOTIONAL OFFER & FESTIVAL DISCOUNT TEMPLATE
+      // 4. SPECIAL PROMOTIONAL OFFER TEMPLATE
       case 'SPECIAL_OFFER':
-        templateName = 'special_sanatan_offer'
+        templateName = isEnglish ? 'special_sanatan_offer_en' : 'special_sanatan_offer'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
-          payload.details.offerTitle || 'विशेष सनातन पर्व छूट',           // {{2}} Offer Title
+          payload.details.offerTitle || 'Special Festive Discount',      // {{2}} Offer Title
           payload.details.discountCode || 'SANATAN10',                  // {{3}} Coupon Code
           payload.details.link || 'https://divyayagyam.com/pujas'        // {{4}} Claim Offer Link
         ]
-        fallbackMessage = `🌸 *दिव्ययज्ञम् - विशेष पावन अवसर उपहार* 🌸\n\nनमस्ते *${payload.name}* जी,\n\n${payload.details.offerTitle || 'विशेष सनातन पर्व अवसर'} पर आपके लिए एक पावन उपहार!\n\n🎁 *कूपन कोड:* *${payload.details.discountCode || 'SANATAN10'}*\n\nअपनी पसंदीदा पूजा या अभिमंत्रित सामग्री बुक करने के लिए नीचे दिए गए लिंक पर क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/pujas'}\n\nहरि ओम्! 🙏`
+
+        if (isEnglish) {
+          fallbackMessage = `🌸 *DivyaYagyam - Special Festive Blessing Offer* 🌸\n\nNamaste *${payload.name}*,\n\nA special festive gift for you on *${payload.details.offerTitle || 'Sacred Festival'}*!\n\n🎁 *Coupon Code:* *${payload.details.discountCode || 'SANATAN10'}*\n\nBook your puja or consecrated samagri here:\n${payload.details.link || 'https://divyayagyam.com/pujas'}\n\nHari Om! 🙏`
+        } else {
+          fallbackMessage = `🌸 *दिव्ययज्ञम् - विशेष पावन अवसर उपहार* 🌸\n\nनमस्ते *${payload.name}* जी,\n\n${payload.details.offerTitle || 'विशेष सनातन पर्व अवसर'} पर आपके लिए एक पावन उपहार!\n\n🎁 *कूपन कोड:* *${payload.details.discountCode || 'SANATAN10'}*\n\nअपनी पसंदीदा पूजा या अभिमंत्रित सामग्री बुक करने के लिए नीचे दिए गए लिंक पर क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/pujas'}\n\nहरि ओम्! 🙏`
+        }
         break
 
-      // 5. QUERY / HELP SUBMITTED TEMPLATE
+      // 5. QUERY / SUPPORT SUBMITTED TEMPLATE
       case 'QUERY_SUBMITTED':
-        templateName = 'query_support_received'
+        templateName = isEnglish ? 'query_support_received_en' : 'query_support_received'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
           payload.details.querySubject || 'General Consultation'         // {{2}} Subject
         ]
-        fallbackMessage = `🚩 *दिव्ययज्ञम् - प्रश्न/सहायता प्राप्त हुई* 🚩\n\nनमस्ते *${payload.name}* जी,\n\nहमें आपका प्रश्न/परामर्श अनुरोध प्राप्त हुआ है:\n"${payload.details.querySubject || 'General Consultation'}"\n\nहमारे विद्वान आचार्य जल्द ही आपसे व्हाट्सएप पर संपर्क करेंगे।\n\nहरि ओम्! 🙏`
+
+        if (isEnglish) {
+          fallbackMessage = `🚩 *DivyaYagyam - Support Inquiry Received* 🚩\n\nHello *${payload.name}*,\n\nWe have received your query/consultation request:\n"${payload.details.querySubject || 'General Consultation'}"\n\nOur Vedic priests & support team will contact you on WhatsApp shortly.\n\nHari Om! 🙏`
+        } else {
+          fallbackMessage = `🚩 *दिव्ययज्ञम् - प्रश्न/सहायता प्राप्त हुई* 🚩\n\nनमस्ते *${payload.name}* जी,\n\nहमें आपका प्रश्न/परामर्श अनुरोध प्राप्त हुआ है:\n"${payload.details.querySubject || 'General Consultation'}"\n\nहमारे विद्वान आचार्य जल्द ही आपसे व्हाट्सएप पर संपर्क करेंगे।\n\nहरि ओम्! 🙏`
+        }
         break
 
       // 6. OFFICIAL INVOICE & BILL RECEIPT TEMPLATE
       case 'INVOICE_GENERATED':
-        templateName = 'official_invoice_receipt'
+        templateName = isEnglish ? 'official_invoice_receipt_en' : 'official_invoice_receipt'
         templateParams = [
           payload.name || 'Devotee',                                     // {{1}} Devotee Name
           payload.details.orderNumber || payload.details.bookingNumber || 'N/A', // {{2}} Invoice/Ref No
           `₹${payload.details.amount || 0}`,                             // {{3}} Total Amount Paid
           payload.details.link || 'https://divyayagyam.com/dashboard/invoices' // {{4}} Download Invoice Link
         ]
-        fallbackMessage = `📄 *दिव्ययज्ञम् - आधिकारिक भुगतान रसीद (Invoice)* 📄\n\nनमस्ते *${payload.name}* जी,\n\nआपके ऑर्डर *${payload.details.orderNumber || payload.details.bookingNumber}* की डिजिटल रसीद जारी कर दी गई है।\n\n💵 *कुल भुगतान:* ₹${payload.details.amount}\n\nअपनी आधिकारिक रसीद डाउनलोड करने के लिए यहाँ क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/invoices'}\n\nधन्यवाद! 🙏`
+
+        if (isEnglish) {
+          fallbackMessage = `📄 *DivyaYagyam - Official Invoice Receipt* 📄\n\nHello *${payload.name}*,\n\nThe digital invoice for your order *${payload.details.orderNumber || payload.details.bookingNumber}* has been issued.\n\n💵 *Total Paid:* ₹${payload.details.amount}\n\nDownload your official tax invoice here:\n${payload.details.link || 'https://divyayagyam.com/dashboard/invoices'}\n\nThank you! 🙏`
+        } else {
+          fallbackMessage = `📄 *दिव्ययज्ञम् - आधिकारिक भुगतान रसीद (Invoice)* 📄\n\nनमस्ते *${payload.name}* जी,\n\nआपके ऑर्डर *${payload.details.orderNumber || payload.details.bookingNumber}* की डिजिटल रसीद जारी कर दी गई है।\n\n💵 *कुल भुगतान:* ₹${payload.details.amount}\n\nअपनी आधिकारिक रसीद डाउनलोड करने के लिए यहाँ क्लिक करें:\n${payload.details.link || 'https://divyayagyam.com/dashboard/invoices'}\n\nधन्यवाद! 🙏`
+        }
         break
 
       default:
-        templateName = 'generic_divyayagyam_alert'
+        templateName = isEnglish ? 'generic_divyayagyam_alert_en' : 'generic_divyayagyam_alert'
         templateParams = [payload.name || 'Devotee']
-        fallbackMessage = `🚩 *दिव्ययज्ञम् सूचना:* नमस्ते *${payload.name}* जी, आपके अनुरोध के लिए धन्यवाद। हरि ओम्!`
+        fallbackMessage = isEnglish 
+          ? `🚩 *DivyaYagyam Notification:* Hello *${payload.name}*, thank you for your request. Hari Om!`
+          : `🚩 *दिव्ययज्ञम् सूचना:* नमस्ते *${payload.name}* जी, आपके अनुरोध के लिए धन्यवाद। हरि ओम्!`
     }
 
     // Construct Payload compatible with AiSensy + WhatsAPI Standard
