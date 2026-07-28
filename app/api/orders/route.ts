@@ -190,17 +190,17 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    if (validCouponId) {
-      await prisma.coupon.update({
-        where: { id: validCouponId },
-        data: { usedCount: { increment: 1 } }
-      }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
-    }
-
     // 4. Razorpay Payment Gateway integration
     const isExplicitManual = body.paymentMethod === 'cod' || body.paymentMethod === 'manual'
 
     if (isExplicitManual) {
+      if (validCouponId) {
+        await prisma.coupon.update({
+          where: { id: validCouponId },
+          data: { usedCount: { increment: 1 } }
+        }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
+      }
+
       return NextResponse.json({
         ok: true,
         mode: 'manual',
@@ -221,6 +221,13 @@ export async function POST(req: NextRequest) {
         receipt: dbOrder.id,
         notes: { paymentType: 'product_order', orderId: dbOrder.id, userId: dbUserId }
       })
+
+      if (validCouponId) {
+        await prisma.coupon.update({
+          where: { id: validCouponId },
+          data: { usedCount: { increment: 1 } }
+        }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
+      }
 
       await prisma.payment.create({
         data: {
@@ -253,8 +260,9 @@ export async function POST(req: NextRequest) {
       console.error('Error Details:', rzpErr)
       console.error('================================================================')
       
-      // Clean up pending order if payment failed to initiate
+      // Clean up pending order and orphan address if payment failed to initiate
       await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
+      await prisma.address.delete({ where: { id: savedAddress.id } }).catch(() => {})
 
       return NextResponse.json({
         ok: false,
