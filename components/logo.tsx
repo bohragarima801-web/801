@@ -24,8 +24,8 @@ export function Logo({ className, showText = true }: { className?: string; showT
   return (
     <Link href="/" className={cn('flex items-center gap-2 group', className)}>
       {logoUrl ? (
-        <div className="hidden sm:block om-badge group-hover:scale-105 transition-transform">
-          <img src={logoUrl} alt="Logo" className="h-full w-full object-cover" />
+        <div className="hidden sm:flex relative h-11 min-w-[44px] max-w-[140px] items-center justify-center overflow-hidden rounded-xl bg-transparent group-hover:scale-105 transition-transform shrink-0">
+          <img src={logoUrl} alt="DivyaYagyam Logo" className="h-full w-full object-contain object-center" />
         </div>
       ) : (
         <div className="hidden sm:flex relative h-11 w-11 items-center justify-center rounded-xl om-gradient shadow-md group-hover:scale-105 transition-transform">
