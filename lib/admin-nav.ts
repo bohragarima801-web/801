@@ -75,5 +75,12 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'SEO', slug: 'seo', icon: Search, href: '/admin/seo', permission: 'seo.read' },
   { title: 'Payment Settings', slug: 'payments', icon: CreditCard, href: '/admin/payments', permission: 'payment.read' },
   { title: 'Storage', slug: 'storage', icon: HardDrive, href: '/admin/storage', permission: 'storage.read' },
-  { title: 'Website Settings', slug: 'settings', icon: Palette, href: '/admin/settings', permission: 'settings.read' },
+  { title: 'Website Settings', slug: 'settings', icon: Palette, permission: 'settings.read', items: [
+    { title: 'Branding & General', href: '/admin/settings?tab=general' },
+    { title: 'Contact Details', href: '/admin/settings?tab=contact' },
+    { title: '💬 WhatsApp Automation', href: '/admin/settings?tab=whatsapp' },
+    { title: '📥 Meta WhatsApp Downloads', href: '/admin/settings?tab=whatsapp' },
+    { title: 'Secrets & API Keys', href: '/admin/settings?tab=secrets' },
+    { title: 'System Status', href: '/admin/settings?tab=status' },
+  ]},
 ]
