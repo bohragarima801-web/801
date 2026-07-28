@@ -193,6 +193,36 @@ export async function POST(req: NextRequest) {
     // 4. Razorpay Payment Gateway integration
     const isExplicitManual = body.paymentMethod === 'cod' || body.paymentMethod === 'manual'
 
+    if (total === 0) {
+      await prisma.order.update({
+        where: { id: dbOrder.id },
+        data: { status: 'PROCESSING', paymentStatus: 'PAID' }
+      })
+      if (validCouponId) {
+        await prisma.coupon.update({
+          where: { id: validCouponId },
+          data: { usedCount: { increment: 1 } }
+        }).catch(() => {})
+      }
+      return NextResponse.json({
+        ok: true,
+        mode: 'manual',
+        orderId: dbOrder.id,
+        orderNumber: dbOrder.orderNumber,
+        total: 0,
+        message: 'आपका ऑर्डर (नि:शुल्क / 100% डिस्काउंट) सफलतापूर्वक दर्ज हो गया है!'
+      });
+    }
+
+    if (total < 1) {
+      await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
+      await prisma.address.delete({ where: { id: savedAddress.id } }).catch(() => {})
+      return NextResponse.json({
+        ok: false,
+        error: 'Online payment requires a minimum order total of ₹1.'
+      }, { status: 400 });
+    }
+
     if (isExplicitManual) {
       if (validCouponId) {
         await prisma.coupon.update({

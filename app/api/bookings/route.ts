@@ -141,6 +141,27 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }
   })
 
+  if (total === 0) {
+    await prisma.booking.update({
+      where: { id: booking.id },
+      data: { status: 'CONFIRMED', paymentStatus: 'PAID' }
+    })
+    return NextResponse.json({
+      ok: true,
+      data: booking,
+      mode: 'manual',
+      message: 'आपकी पूजा बुकिंग (नि:शुल्क) सफलतापूर्वक कन्फर्म हो गई है!'
+    });
+  }
+
+  if (total < 1) {
+    await prisma.booking.delete({ where: { id: booking.id } }).catch(() => {})
+    return NextResponse.json({
+      ok: false,
+      error: 'Online payment requires a minimum booking total of ₹1.'
+    }, { status: 400 });
+  }
+
   // 3. CREATE RAZORPAY ORDER — booking must not be marked paid until real payment is verified
   try {
     const { getRazorpay } = await import('@/lib/razorpay')
