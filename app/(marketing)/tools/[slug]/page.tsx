@@ -23,6 +23,22 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   let allowed = tool.isFree
 
   if (!allowed) {
+    // 1. Check if there is a valid free trial for this IP
+    const trialLog = await prisma.toolUsageLog.findFirst({
+      where: {
+        toolId: tool.id,
+        ipAddress: ip
+      }
+    })
+    if (trialLog && tool.trialDays > 0) {
+      const daysSinceTrial = Math.floor((Date.now() - new Date(trialLog.usedAt).getTime()) / (1000 * 60 * 60 * 24))
+      if (daysSinceTrial < tool.trialDays) {
+        allowed = true
+      }
+    }
+  }
+
+  if (!allowed) {
     try {
       const { getCurrentUser } = await import('@/lib/auth')
       const user = await getCurrentUser()
@@ -31,10 +47,11 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
         if (user.role === 'super_admin' || user.role === 'store_manager') {
           allowed = true
         } else {
-          // Check if user has an order for this tool
+          // Check if user has a PAID order for this tool
           const userOrder = await prisma.order.findFirst({
             where: {
               userId: user.id,
+              paymentStatus: 'SUCCESS',
               items: {
                 some: {
                   OR: [
