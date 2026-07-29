@@ -29,7 +29,7 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
   if (!slides || slides.length === 0) {
     if (!children) return null;
     return (
-      <div className="relative min-h-[400px] w-full flex items-center bg-slate-100 overflow-hidden rounded-2xl">
+      <div className="relative min-h-[400px] w-full flex items-center bg-muted overflow-hidden rounded-2xl shadow-[var(--shadow-medium)]">
         {children}
       </div>
     )
@@ -48,25 +48,30 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
   }
 
   return (
-    <div className="relative w-full grid grid-cols-1 grid-rows-1 overflow-hidden bg-gray-100 select-none rounded-2xl group">
-      
+    <div className="relative w-full grid grid-cols-1 grid-rows-1 overflow-hidden bg-muted select-none rounded-2xl group shadow-[var(--shadow-medium)] border border-[var(--border)]">
+
       {/* Background Images Slider (Clickable) */}
       {slides.map((slide, idx) => {
         const imageUrl = slide.image || process.env.NEXT_PUBLIC_URL_4677 || ''
+        const isActive = currentIndex === idx
         const slideContent = (
-          <>
+          <div className="relative w-full">
             <img
               src={imageUrl}
               alt={slide.title || 'Slide Image'}
               className="w-full h-auto object-cover block"
             />
-          </>
+            {/* Bottom gradient for legibility of overlaid content/pagination */}
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent pointer-events-none" />
+          </div>
         )
         return (
           <div
             key={slide.id}
-            className={`col-start-1 row-start-1 transition-opacity duration-1000 block w-full ${
-              currentIndex === idx ? 'opacity-100 z-0' : 'opacity-0 z-[-1] pointer-events-none'
+            className={`col-start-1 row-start-1 block w-full transition-all duration-700 ease-out ${
+              isActive
+                ? 'opacity-100 z-0 scale-100'
+                : 'opacity-0 z-[-1] scale-[1.02] pointer-events-none'
             }`}
           >
             {slide.ctaUrl ? (
@@ -90,17 +95,17 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-[var(--card-bg)]/50 hover:bg-[var(--secondary-color)]/100/90 text-slate-800 hover:text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 hover:opacity-100 group-hover:opacity-100 lg:opacity-50 z-20 border border-slate-900/10 shadow-sm"
+            className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/70 hover:bg-primary text-foreground hover:text-primary-foreground flex items-center justify-center backdrop-blur-md transition-all duration-300 opacity-0 hover:opacity-100 group-hover:opacity-100 lg:opacity-60 z-20 border border-white/40 shadow-[var(--shadow-soft)]"
             aria-label="Previous slide"
           >
-            <ChevronLeft className="h-8 w-8" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-[var(--card-bg)]/50 hover:bg-[var(--secondary-color)]/100/90 text-slate-800 hover:text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 hover:opacity-100 group-hover:opacity-100 lg:opacity-50 z-20 border border-slate-900/10 shadow-sm"
+            className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/70 hover:bg-primary text-foreground hover:text-primary-foreground flex items-center justify-center backdrop-blur-md transition-all duration-300 opacity-0 hover:opacity-100 group-hover:opacity-100 lg:opacity-60 z-20 border border-white/40 shadow-[var(--shadow-soft)]"
             aria-label="Next slide"
           >
-            <ChevronRight className="h-8 w-8" />
+            <ChevronRight className="h-6 w-6" />
           </button>
         </>
       )}
@@ -126,7 +131,3 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
     </div>
   )
 }
-
-
-
-
