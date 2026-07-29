@@ -69,19 +69,10 @@ export default function ToolsPage() {
     })
   }
 
-  const iconMap: Record<string, any> = {
-    kundali: ScrollText,
-    milan: Sparkle,
-    panchang: Calendar,
-    muhurat: Sparkles,
-    numerology: Sparkles,
-    ratna: Gem,
-    mala: Music,
-    'ask-a-pandit': Bot,
-  }
+  const dummySlugs = ['kundali', 'panchang', 'milan', 'muhurat', 'numerology', 'ratna', 'mala']
 
   return (
-    <div className="container py-14 space-y-12">
+    <div className="container py-14 space-y-12 max-w-6xl">
       <div className="text-center max-w-2xl mx-auto">
         <Badge variant="secondary" className="mb-4 text-sm px-4 py-1">🔮 Spiritual Tools</Badge>
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Sacred Vedic Tools</h1>
@@ -97,7 +88,7 @@ export default function ToolsPage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           
-          {/* Static AI Pandit Tool (Always Free & Live) */}
+          {/* Real AI Pandit Tool (Active & Free) */}
           <Card className="group hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden border-2 border-green-500/30 bg-gradient-to-b from-green-50/50 to-white">
             <CardContent className="p-8 space-y-5 flex flex-col h-full">
               <div className="flex items-start justify-between">
@@ -120,11 +111,10 @@ export default function ToolsPage() {
             </CardContent>
           </Card>
 
-          {/* Database Tools */}
+          {/* Real Active Database Tools (Dummy tools excluded) */}
           {tools
-            .filter((t) => t.isActive)
+            .filter((t) => t.isActive && !dummySlugs.includes(t.slug))
             .map((t) => {
-              const IconComponent = iconMap[t.slug] || Sparkle
               const trialActive = trialStatuses[t.slug]
               const premiumActive = activatedStatuses[t.slug]
 
@@ -134,7 +124,7 @@ export default function ToolsPage() {
                     <div className="space-y-4">
                       <div className="flex items-start justify-between">
                         <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                          <IconComponent className="h-7 w-7 text-[var(--primary-color)]" />
+                          <Sparkles className="h-7 w-7 text-[var(--primary-color)]" />
                         </div>
                         {t.isFree ? (
                           <Badge variant="outline" className="font-bold">Free Access</Badge>
