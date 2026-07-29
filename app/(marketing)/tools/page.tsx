@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { Sparkles, Sparkle, Calendar, Gem, ScrollText, Bot, Music, ArrowRight, Loader2, Lock } from 'lucide-react'
 import Link from 'next/link'
+import { processToolPurchase } from '@/lib/tool-purchase'
 
 export default function ToolsPage() {
   const [tools, setTools] = useState<any[]>([])
@@ -20,6 +21,16 @@ export default function ToolsPage() {
       .then((j) => {
         if (j.ok) {
           setTools(j.data || [])
+          if (j.userPaidSlugs) {
+            const paidMap: Record<string, boolean> = {}
+            j.userPaidSlugs.forEach((s: string) => { paidMap[s] = true })
+            setActivatedStatuses(paidMap)
+          }
+          if (j.activeTrialSlugs) {
+            const trialMap: Record<string, boolean> = {}
+            j.activeTrialSlugs.forEach((s: string) => { trialMap[s] = true })
+            setTrialStatuses(trialMap)
+          }
         }
       })
       .catch(() => {})
@@ -46,9 +57,16 @@ export default function ToolsPage() {
     }
   }
 
-  function buyActivation(slug: string, price: number) {
-    setActivatedStatuses((prev) => ({ ...prev, [slug]: true }))
-    toast.success(`💳 Payment of ₹${price} received. Premium access activated!`)
+  async function buyActivation(slug: string, toolId: string, toolName: string) {
+    await processToolPurchase({
+      toolId,
+      toolSlug: slug,
+      toolName,
+      onSuccess: () => {
+        setActivatedStatuses((prev) => ({ ...prev, [slug]: true }))
+        window.location.href = `/tools/${slug}`
+      }
+    })
   }
 
   const iconMap: Record<string, any> = {
@@ -61,8 +79,6 @@ export default function ToolsPage() {
     mala: Music,
     'ask-a-pandit': Bot,
   }
-
-
 
   return (
     <div className="container py-14 space-y-12">
@@ -145,11 +161,16 @@ export default function ToolsPage() {
                         </Button>
                       ) : (
                         <div className="grid grid-cols-2 gap-3">
-                          <Button variant="outline" className="h-12 rounded-xl font-bold border-slate-300 text-slate-700" onClick={() => startTrial(t.slug, t.trialDays, t.id)}>
-                            {t.trialDays} Days Trial
-                          </Button>
-                          <Button className="h-12 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800" onClick={() => buyActivation(t.slug, Number(t.price))}>
-                            Activate
+                          {t.trialDays > 0 && (
+                            <Button variant="outline" className="h-12 rounded-xl font-bold border-slate-300 text-slate-700" onClick={() => startTrial(t.slug, t.trialDays, t.id)}>
+                              {t.trialDays} Days Trial
+                            </Button>
+                          )}
+                          <Button 
+                            className={`h-12 rounded-xl font-bold bg-primary text-primary-foreground hover:bg-primary/90 ${t.trialDays <= 0 ? 'col-span-2' : ''}`} 
+                            onClick={() => buyActivation(t.slug, t.id, t.name)}
+                          >
+                            Activate (₹{Number(t.price)})
                           </Button>
                         </div>
                       )}
@@ -158,7 +179,6 @@ export default function ToolsPage() {
                 </Card>
               )
             })}
-            
 
         </div>
       )}

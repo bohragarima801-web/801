@@ -1,24 +1,39 @@
 'use client'
 
-import React from 'react'
-import { Lock, ArrowRight, ShieldCheck, Zap } from 'lucide-react'
+import React, { useState } from 'react'
+import { Lock, ArrowRight, ShieldCheck, Zap, Loader2, ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart-context'
-import { toast } from 'sonner'
+import { processToolPurchase } from '@/lib/tool-purchase'
 
 export function PaywallOverlay({ tool }: { tool: any }) {
   const router = useRouter()
   const { addToCart } = useCart()
+  const [loading, setLoading] = useState(false)
 
-  const handleUnlock = () => {
-    // Add the tool to cart and go to checkout
+  const handleInstantUnlock = async () => {
+    setLoading(true)
+    await processToolPurchase({
+      toolId: tool.id,
+      toolSlug: tool.slug,
+      toolName: tool.name,
+      onSuccess: () => {
+        setLoading(false)
+        window.location.reload()
+      },
+      onError: () => {
+        setLoading(false)
+      }
+    })
+  }
+
+  const handleAddToCart = () => {
     addToCart({
       id: `tool-${tool.id}`,
       name: `Premium Tool: ${tool.name}`,
       price: Number(tool.price),
     })
-    toast.success(`${tool.name} added to cart!`)
     router.push('/checkout')
   }
 
@@ -47,14 +62,31 @@ export function PaywallOverlay({ tool }: { tool: any }) {
           </div>
         </div>
         
-        <Button 
-          onClick={handleUnlock}
-          size="lg" 
-          className="w-full h-14 text-lg font-bold bg-gradient-primary hover:opacity-90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] rounded-full"
-        >
-          Unlock for Rs. {Number(tool.price)}
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+        <div className="space-y-3">
+          <Button 
+            onClick={handleInstantUnlock}
+            disabled={loading}
+            size="lg" 
+            className="w-full h-14 text-lg font-bold bg-gradient-primary hover:opacity-90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] rounded-full"
+          >
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin mr-2" />
+            ) : (
+              <>
+                Unlock Instant Access — ₹{Number(tool.price)}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </>
+            )}
+          </Button>
+
+          <button
+            onClick={handleAddToCart}
+            className="text-xs text-muted-foreground hover:text-foreground font-medium underline flex items-center justify-center gap-1 mx-auto pt-1"
+          >
+            <ShoppingCart className="h-3.5 w-3.5" />
+            Add to cart & checkout with other items
+          </button>
+        </div>
       </div>
     </div>
   )
