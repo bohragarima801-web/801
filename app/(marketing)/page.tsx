@@ -224,7 +224,7 @@ export default async function HomePage() {
                   
                   {/* Description */}
                   <p className="text-xs md:text-sm text-slate-500 line-clamp-2 leading-relaxed">
-                    {p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.'}
+                    {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                   </p>
                 </div>
                 

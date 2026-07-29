@@ -66,7 +66,7 @@ export default async function PujasPage() {
                     {p.location || 'Any Holy Temple'}
                   </p>
                   <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mt-2">
-                    {p.shortDescription || 'Participate in this sacred puja for peace, health, and spiritual growth.'}
+                    {(p.shortDescription || 'Participate in this sacred puja for peace, health, and spiritual growth.').replace(/<[^>]*>?/gm, '')}
                   </p>
                 </div>
                 <div className="pt-3 border-t flex flex-col gap-3">
