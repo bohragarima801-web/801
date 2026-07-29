@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     
     await ensureDefaultCategoriesAndTemples()
-    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, publishedAt, seoTitle, seoDescription, seoKeywords } = await req.json()
+    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, publishedAt, pujaDate, isEvergreen, isFestival, seoTitle, seoDescription, seoKeywords } = await req.json()
 
     if (!name) {
       return NextResponse.json({ ok: false, error: 'Puja Name is required' }, { status: 400 });
@@ -91,8 +91,11 @@ export async function POST(req: NextRequest) {
       isVip: isVip !== undefined ? !!isVip : false,
       isOnline: isOnline !== undefined ? !!isOnline : false,
       isFeatured: isFeatured !== undefined ? !!isFeatured : false,
+      isEvergreen: isEvergreen !== undefined ? !!isEvergreen : false,
+      isFestival: isFestival !== undefined ? !!isFestival : false,
       status: status || 'DRAFT',
       publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
+      pujaDate: pujaDate ? new Date(pujaDate) : null,
       seoTitle: seoTitle || null,
       seoDescription: seoDescription || null,
       seoKeywords: seoKeywords || null,

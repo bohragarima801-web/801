@@ -499,6 +499,9 @@ model Puja {
   seoDescription   String?
   seoKeywords      String?
   publishedAt      DateTime?
+  pujaDate         DateTime?
+  isEvergreen      Boolean    @default(false)
+  isFestival       Boolean    @default(false)
   location         String?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt

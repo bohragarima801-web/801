@@ -7,10 +7,11 @@ import { Badge } from '@/components/ui/badge'
 import {
   Flame, HandCoins, Sparkles, ShoppingBag, Star, ArrowRight,
   MapPin, Calendar, ShieldCheck, Video, Play, BookOpen, User,
-  Truck, Lock
+  Truck, Lock, Heart, Sun, Sparkle, CalendarDays
 } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { MediaCarousel } from '@/components/ui/media-carousel'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { FadeIn } from '@/components/ui/fade-in'
 import { SacredVideoGallery } from '@/components/sacred-video-gallery'
@@ -47,7 +48,7 @@ export default async function HomePage() {
           { publishedAt: { lte: new Date() } }
         ]
       },
-      take: 4,
+      take: 50,
       include: { category: true, temple: true },
       orderBy: { createdAt: 'desc' }
     }).catch(() => []),
@@ -154,6 +155,86 @@ export default async function HomePage() {
     ]
   }
 
+  // Categorize Pujas
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  
+  const todayPujas = dbPujas.filter((p: any) => {
+    if (p.pujaDate) {
+      const pDate = new Date(p.pujaDate)
+      pDate.setHours(0, 0, 0, 0)
+      return pDate.getTime() === today.getTime()
+    }
+    return false
+  })
+  
+  const upcomingPujas = dbPujas.filter((p: any) => {
+    if (p.pujaDate) {
+      const pDate = new Date(p.pujaDate)
+      pDate.setHours(0, 0, 0, 0)
+      return pDate.getTime() > today.getTime()
+    }
+    return false
+  })
+
+  const evergreenPujas = dbPujas.filter((p: any) => p.isEvergreen)
+  const festivalPujas = dbPujas.filter((p: any) => p.isFestival)
+
+  const renderPujaCards = (pujas: any[]) => {
+    if (pujas.length === 0) {
+      return (
+        <div className="py-12 text-center text-muted-foreground bg-muted/20 rounded-2xl border border-dashed">
+          <Sparkles className="h-8 w-8 mx-auto mb-3 opacity-20" />
+          <p>No pujas available in this category currently.</p>
+        </div>
+      )
+    }
+    return (
+      <MediaCarousel>
+        {pujas.map((p) => (
+          <Link href={`/pujas/${p.slug}`} key={p.id} className="block h-full">
+            <Card className="overflow-hidden group border border-border/60 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full bg-card">
+              <div className="relative aspect-[16/9] overflow-hidden bg-muted">
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors z-10" />
+                {p.coverImage ? (
+                  p.coverImage.endsWith('.mp4') || p.coverImage.endsWith('.webm') || p.coverImage.startsWith('data:video/') ? (
+                    <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
+                  ) : (
+                    <Image src={p.coverImage} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  )
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center text-muted-foreground/30 bg-muted/50">
+                    <Sparkles className="h-8 w-8 opacity-40" />
+                  </div>
+                )}
+                {p.isVip && <Badge className="absolute top-3 left-3 bg-secondary text-secondary-foreground font-bold border-none rounded-sm px-3 py-1 z-20 shadow-sm uppercase tracking-wider text-[10px]">VIP</Badge>}
+                {p.pujaDate && (
+                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm shadow-sm px-2.5 py-1.5 rounded-md text-[10px] text-[var(--text-dark)] font-black flex items-center gap-1.5 z-20">
+                    <Calendar className="h-3.5 w-3.5 text-[var(--primary-color)]" /> {new Date(p.pujaDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                  </div>
+                )}
+              </div>
+              <CardContent className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-5">
+                <div className="space-y-3">
+                  <h3 className="font-heading font-semibold text-xl md:text-2xl text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">{p.name}</h3>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
+                    <MapPin className="h-4 w-4 text-primary shrink-0" /> {p.location || 'Any Holy Temple'}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between pt-6 border-t border-border/60">
+                  <span className="text-xl font-bold text-foreground">₹{p.price?.toString()}</span>
+                  <div className="inline-flex h-10 items-center justify-center whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg px-6 transition-all duration-300 text-sm shadow-sm">
+                    Participate
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </MediaCarousel>
+    )
+  }
+
   return (
     <div className="space-y-0">
       <Script
@@ -219,86 +300,54 @@ export default async function HomePage() {
 
 
 
-      {/* UPCOMING PUJAS */}
+      {/* PUJAS CATEGORIZED */}
       <section className="container py-16 md:py-24">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <span className="sacred-subtitle text-primary">Upcoming Ceremonies</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Sacred Ceremonies This Week</h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Join auspicious pujas happening this week at India's most revered temples.</p>
+            <span className="sacred-subtitle text-primary">Sacred Offerings</span>
+            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Book Divine Pujas</h2>
+            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Join auspicious pujas happening today, or book upcoming and special ceremonies.</p>
           </div>
           <Button variant="outline" className="border-border text-foreground/80 font-semibold" asChild>
             <Link href="/pujas">View All <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
           </Button>
         </div>
-        <MediaCarousel>
-          {dbPujas.length > 0 ? (
-            dbPujas.map((p) => (
-              <Link href={`/pujas/${p.slug}`} key={p.id} className="block h-full">
-                <Card className="overflow-hidden group border border-border/60 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full bg-card">
-                  <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors z-10" />
-                    {p.coverImage ? (
-                      p.coverImage.endsWith('.mp4') || p.coverImage.endsWith('.webm') || p.coverImage.startsWith('data:video/') ? (
-                        <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
-                      ) : (
-                        <Image src={p.coverImage} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                      )
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center text-muted-foreground/30 bg-muted/50">
-                        <Sparkles className="h-8 w-8 opacity-40" />
-                      </div>
-                    )}
-                    {p.isVip && <Badge className="absolute top-3 left-3 bg-secondary text-secondary-foreground font-bold border-none rounded-sm px-3 py-1 z-20 shadow-sm uppercase tracking-wider text-[10px]">VIP</Badge>}
-                  </div>
-                  <CardContent className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-5">
-                    <div className="space-y-3">
-                      <h3 className="font-heading font-semibold text-xl md:text-2xl text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">{p.name}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-4 w-4 text-primary shrink-0" /> {p.location || 'Any Holy Temple'}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-between pt-6 border-t border-border/60">
-                      <span className="text-xl font-bold text-foreground">₹{p.price?.toString()}</span>
-                      <div className="inline-flex h-10 items-center justify-center whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg px-6 transition-all duration-300 text-sm shadow-sm">
-                        Participate
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))
-          ) : (
-            dbPujas.map((p: any, i) => (
-              <Link href={`/pujas`} key={i} className="block h-full">
-                <Card className="overflow-hidden group border border-border/60 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full bg-card">
-                  <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                    <Image src={p.img} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                    {p.vip && <Badge className="absolute top-3 left-3 bg-secondary text-secondary-foreground font-bold border-none rounded-sm px-3 py-1 z-20 shadow-sm uppercase tracking-wider text-[10px]">⭐ VIP</Badge>}
-                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm shadow-sm px-2.5 py-1.5 rounded-md text-[10px] text-[var(--text-dark)] font-black flex items-center gap-1.5 z-20">
-                      <Calendar className="h-3.5 w-3.5 text-[var(--primary-color)]" /> {new Date(p.date || p.createdAt).toLocaleDateString('en-IN')}
-                    </div>
-                  </div>
-                  <CardContent className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-5">
-                    <div className="space-y-3">
-                      <h3 className="font-heading font-semibold text-xl md:text-2xl text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">{p.name}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-4 w-4 text-primary shrink-0" /> {p.location || 'Online'}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-between pt-6 border-t border-border/60">
-                      <span className="text-xl font-bold text-foreground">₹{p.price}</span>
-                      <div className="inline-flex h-10 items-center justify-center whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg px-6 transition-all duration-300 text-sm shadow-sm">
-                        Participate
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))
-          )}
-        </MediaCarousel>
+        
+        <Tabs defaultValue={todayPujas.length > 0 ? "today" : "upcoming"} className="w-full">
+          <TabsList className="mb-8 w-full justify-start overflow-x-auto h-auto p-1 bg-muted/50 rounded-xl">
+            <TabsTrigger value="today" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
+              <Sun className="h-4 w-4 mr-2" /> Today's Pujas
+            </TabsTrigger>
+            <TabsTrigger value="upcoming" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
+              <CalendarDays className="h-4 w-4 mr-2" /> Upcoming
+            </TabsTrigger>
+            <TabsTrigger value="evergreen" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
+              <Heart className="h-4 w-4 mr-2" /> Monthly & Evergreen
+            </TabsTrigger>
+            <TabsTrigger value="festival" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
+              <Sparkle className="h-4 w-4 mr-2" /> Festival Special
+            </TabsTrigger>
+            <TabsTrigger value="all" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
+              All Published
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="today" className="mt-0 outline-none">
+            {renderPujaCards(todayPujas)}
+          </TabsContent>
+          <TabsContent value="upcoming" className="mt-0 outline-none">
+            {renderPujaCards(upcomingPujas)}
+          </TabsContent>
+          <TabsContent value="evergreen" className="mt-0 outline-none">
+            {renderPujaCards(evergreenPujas)}
+          </TabsContent>
+          <TabsContent value="festival" className="mt-0 outline-none">
+            {renderPujaCards(festivalPujas)}
+          </TabsContent>
+          <TabsContent value="all" className="mt-0 outline-none">
+            {renderPujaCards(dbPujas.length > 0 ? dbPujas : fallbackTestimonials.map(() => upcomingPujasFallback[0]))}
+          </TabsContent>
+        </Tabs>
       </section>
 
       {/* SACRED PRODUCTS */}
@@ -348,9 +397,6 @@ export default async function HomePage() {
           </MediaCarousel>
         </section>
       )}
-
-      {/* SACRED ASTRO TOOLS & PANCHANG */}
-      <SacredAstroTools />
 
       {/* SACRED VIDEO GALLERY & REELS */}
       <SacredVideoGallery videos={dbVideos} />

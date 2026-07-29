@@ -44,7 +44,10 @@ function NewPujaPage_Content() {
   const [isVip, setIsVip] = useState(false)
   const [isOnline, setIsOnline] = useState(true)
   const [isFeatured, setIsFeatured] = useState(false)
+  const [isEvergreen, setIsEvergreen] = useState(false)
+  const [isFestival, setIsFestival] = useState(false)
   const [status, setStatus] = useState('DRAFT')
+  const [pujaDate, setPujaDate] = useState('')
   const [publishedAt, setPublishedAt] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
@@ -113,7 +116,10 @@ function NewPujaPage_Content() {
           setIsVip(!!p.isVip)
           setIsOnline(!!p.isOnline)
           setIsFeatured(!!p.isFeatured)
+          setIsEvergreen(!!p.isEvergreen)
+          setIsFestival(!!p.isFestival)
           setStatus(p.status || 'DRAFT')
+          setPujaDate(p.pujaDate ? new Date(p.pujaDate).toISOString().slice(0, 16) : '')
           setPublishedAt(p.publishedAt ? new Date(p.publishedAt).toISOString().slice(0, 16) : '')
           setSeoTitle(p.seoTitle || '')
           setSeoDescription(p.seoDescription || '')
@@ -257,7 +263,10 @@ function NewPujaPage_Content() {
         isVip,
         isOnline,
         isFeatured,
+        isEvergreen,
+        isFestival,
         status,
+        pujaDate: pujaDate ? new Date(pujaDate).toISOString() : null,
         publishedAt: status === 'PUBLISHED' && publishedAt ? new Date(publishedAt).toISOString() : null,
         seoTitle,
         seoDescription,
@@ -445,6 +454,26 @@ function NewPujaPage_Content() {
                   <p className="text-xs text-slate-500">Enable to mark this as a VIP Puja.</p>
                 </div>
                 <Switch checked={isVip} onCheckedChange={setIsVip} />
+              </div>
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-green-50/50">
+                <div className="space-y-0.5">
+                  <Label className="text-base font-bold text-slate-800">Monthly/Evergreen</Label>
+                  <p className="text-xs text-slate-500">Enable for pujas that always stay on the homepage.</p>
+                </div>
+                <Switch checked={isEvergreen} onCheckedChange={setIsEvergreen} />
+              </div>
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-red-50/50">
+                <div className="space-y-0.5">
+                  <Label className="text-base font-bold text-slate-800">Festival Special</Label>
+                  <p className="text-xs text-slate-500">Enable to highlight this during festivals.</p>
+                </div>
+                <Switch checked={isFestival} onCheckedChange={setIsFestival} />
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Date of the Puja (Ceremony Date)</Label>
+                <Input type="datetime-local" value={pujaDate} onChange={(e) => setPujaDate(e.target.value)} />
+                <p className="text-[10px] text-muted-foreground">Used for Today / Upcoming logic on the homepage.</p>
               </div>
               <div className="space-y-2">
                 <Label>Status</Label>
