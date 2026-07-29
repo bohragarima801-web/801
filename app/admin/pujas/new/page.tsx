@@ -478,25 +478,16 @@ function NewPujaPage_Content() {
               <div className="space-y-2">
                 <Label>Status</Label>
                 <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Select Status" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DRAFT">Draft</SelectItem>
-                    <SelectItem value="PUBLISHED">Published</SelectItem>
-                    <SelectItem value="ARCHIVED">Archived</SelectItem>
+                    <SelectItem value="DRAFT">Draft (Hidden)</SelectItem>
+                    <SelectItem value="PUBLISHED">Published (Live)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
-              {status === 'PUBLISHED' && (
-                <div className="space-y-2">
-                  <Label>Schedule Publish Date/Time</Label>
-                  <Input type="datetime-local" value={publishedAt} onChange={(e) => setPublishedAt(e.target.value)} />
-                  <p className="text-[10px] text-muted-foreground">Leave blank to publish immediately.</p>
-                </div>
-              )}
-
               <Button type="submit" disabled={saving} className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold">
-                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : (editId ? 'Update Puja' : (status === 'PUBLISHED' && publishedAt && new Date(publishedAt) > new Date() ? 'Schedule Puja' : 'Save Puja'))}
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : (editId ? 'Update Puja' : 'Save Puja')}
               </Button>
             </CardContent>
           </Card>
