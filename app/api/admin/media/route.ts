@@ -48,14 +48,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'URL is required' }, { status: 400 });
     }
 
+    // Auto detect if link or file is a video
+    const isVideo = type === 'VIDEO' || 
+      (mimeType && mimeType.startsWith('video/')) || 
+      url.includes('youtube.com') || 
+      url.includes('youtu.be') || 
+      url.includes('vimeo.com') || 
+      url.endsWith('.mp4') || 
+      url.endsWith('.webm') || 
+      url.endsWith('.mov')
+
     const media = await prisma.mediaLibrary.create({
       data: {
         url,
         filename: filename || 'Uploaded Media',
         size: size ? Number(size) : 0,
-        mimeType: mimeType || 'image/jpeg',
+        mimeType: isVideo ? 'video/mp4' : (mimeType || 'image/jpeg'),
         folder: folder || 'General',
-        type: type || 'IMAGE',
+        type: isVideo ? 'VIDEO' : 'IMAGE',
         uploadedBy: (await prisma.user.findUnique({ where: { email: session.email } }))?.id || null
       }
     })

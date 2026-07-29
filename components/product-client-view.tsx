@@ -314,7 +314,26 @@ export function ProductClientView({ product }: { product: any }) {
         </div>
       </div>
 
+      {/* Floating Sticky Mobile Bottom Bar */}
+      <div className="fixed bottom-0 left-0 w-full p-3 sm:p-4 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] z-50 md:hidden">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-500 font-semibold uppercase">मूल्य:</span>
+            <span className="text-xl font-black text-rose-900">₹{Number(product.salePrice || product.price)}</span>
+          </div>
+          <Button 
+            onClick={handleAddToCart}
+            disabled={!hasStock}
+            className="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black h-12 text-base rounded-xl shadow-md uppercase tracking-wider"
+          >
+            <ShoppingBag className="w-4 h-4 mr-2" />
+            {hasStock ? 'Add to Cart / अभी खरीदें' : 'Out of Stock'}
+          </Button>
+        </div>
+      </div>
+
     </div>
   )
 }
+
 

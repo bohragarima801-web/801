@@ -34,7 +34,7 @@ const fallbackTestimonials = [
 export const revalidate = 30
 
 export default async function HomePage() {
-  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideos] = await Promise.all([
+  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries] = await Promise.all([
     prisma.product.findMany({
       take: 4,
       include: { category: true }
@@ -64,16 +64,44 @@ export default async function HomePage() {
     prisma.mediaLibrary.findMany({ where: { folder: 'Customer Review' }, orderBy: { createdAt: 'desc' }, take: 12 }).catch(() => []),
     prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
     prisma.mediaLibrary.findMany({
-      where: {
-        OR: [
-          { type: 'VIDEO' },
-          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
-        ]
-      },
       orderBy: { createdAt: 'desc' },
-      take: 12
+      take: 30
     }).catch(() => []),
+    prisma.gallery.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    }).catch(() => [])
   ])
+
+  // Filter all uploaded items that are videos or contain video links
+  const allMediaVideos = dbVideosRaw.filter((m: any) => {
+    if (!m.url) return false
+    const url = m.url.toLowerCase()
+    return m.type === 'VIDEO' || 
+      url.includes('youtube.com') || 
+      url.includes('youtu.be') || 
+      url.includes('vimeo.com') || 
+      url.endsWith('.mp4') || 
+      url.endsWith('.webm') || 
+      url.endsWith('.mov') ||
+      ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'].includes(m.folder || '')
+  })
+
+  const galleryVideos = dbGalleries.filter((g: any) => {
+    if (!g.coverImage) return false
+    const url = g.coverImage.toLowerCase()
+    return g.type === 'VIDEO' || url.includes('youtube.com') || url.includes('youtu.be') || url.endsWith('.mp4')
+  }).map((g: any) => ({
+    id: g.id,
+    url: g.coverImage,
+    filename: g.title,
+    folder: 'Live Darshan',
+    type: 'VIDEO',
+    createdAt: g.createdAt
+  }))
+
+  const dbVideos = [...allMediaVideos, ...galleryVideos]
 
   let testimonials = dbTestimonials
   if (testimonials.length === 0) {

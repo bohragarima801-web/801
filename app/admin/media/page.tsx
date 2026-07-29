@@ -24,7 +24,8 @@ function MediaLibraryManager() {
 
   // Form states
   const [filename, setFilename] = useState('')
-  const [folderTag, setFolderTag] = useState('General')
+  const [folderTag, setFolderTag] = useState('Home Video')
+  const [videoUrlInput, setVideoUrlInput] = useState('')
 
   async function loadItems() {
     try {
@@ -44,6 +45,38 @@ function MediaLibraryManager() {
   useEffect(() => {
     loadItems()
   }, [activeTab])
+
+  async function handleAddVideoUrl() {
+    if (!videoUrlInput) {
+      toast.error('Please enter a YouTube or Video URL')
+      return
+    }
+    setUploading(true)
+    try {
+      const saveRes = await fetch('/api/admin/media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: videoUrlInput,
+          filename: filename || 'Divine Video',
+          mimeType: 'video/mp4',
+          type: 'VIDEO',
+          folder: folderTag,
+        }),
+      })
+      const saveData = await saveRes.json()
+      if (!saveData.ok) throw new Error(saveData.error || 'Failed to save video URL')
+
+      toast.success('Video URL successfully added to website!')
+      setVideoUrlInput('')
+      setFilename('')
+      loadItems()
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to save video')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -127,7 +160,7 @@ function MediaLibraryManager() {
     const newName = prompt('Enter new filename:', media.filename || '')
     if (newName === null) return
 
-    const newFolder = prompt('Enter new category (Past Puja, Festival Event, Customer Review, General):', media.folder || 'General')
+    const newFolder = prompt('Enter new category (Past Puja, Live Darshan, Aarti & Bhajan, Customer Review, Festival Event, Home Video, General):', media.folder || 'Home Video')
     if (newFolder === null) return
 
     try {
@@ -151,7 +184,7 @@ function MediaLibraryManager() {
   function copyToClipboard(url: string) {
     const fullUrl = url.startsWith('http') ? url : `${window.location.origin}${url}`
     navigator.clipboard.writeText(fullUrl)
-    toast.success('Media path URL copied to clipboard! You can paste this in any Puja/Blog Cover Image.')
+    toast.success('Media path URL copied to clipboard!')
   }
 
   const changeTab = (val: string) => {
@@ -160,48 +193,54 @@ function MediaLibraryManager() {
 
   const tabs = [
     { label: 'All Assets', value: 'all' },
+    { label: 'Live Darshan (लाइव दर्शन)', value: 'Live Darshan' },
     { label: 'Past Pujas (बीती हुई पूजा)', value: 'Past Puja' },
-    { label: 'Festival Events (त्योहार)', value: 'Festival Event' },
-    { label: 'Customer Reviews (लाइव रिव्यु)', value: 'Customer Review' },
+    { label: 'Aarti & Bhajan (आरती व भजन)', value: 'Aarti & Bhajan' },
+    { label: 'Customer Reviews (श्रद्धालु रिव्यु)', value: 'Customer Review' },
+    { label: 'Home Videos (होम वीडियो)', value: 'Home Video' },
     { label: 'General / Others', value: 'General' }
   ]
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Sacred Media Library"
-        description="Upload photos/videos of past pujas, customer live reviews, and festival event cover photos to display across the site."
+        title="Sacred Media & Video Library"
+        description="Upload video clips or add YouTube links of live darshan, past pujas, bhajan & customer reviews to display live on the website."
         breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Media' }]}
       />
 
       {/* Uploader panel */}
       <Card className="rounded-3xl border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-base font-bold text-slate-800">Add New Media Asset</CardTitle>
-          <CardDescription className="text-xs">Specify a display category so it syncs with sitemaps and sections.</CardDescription>
+          <CardTitle className="text-base font-bold text-slate-800">Add New Photo / Video Asset</CardTitle>
+          <CardDescription className="text-xs">Upload a local video/image file OR paste a YouTube video link directly.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3 items-end">
+        <CardContent className="space-y-6">
+          
+          <div className="grid gap-4 md:grid-cols-3 items-end border-b pb-6">
             <div className="space-y-2">
-              <Label htmlFor="mediaName">Asset Name (Optional)</Label>
+              <Label htmlFor="mediaName">Asset / Video Title</Label>
               <Input
                 id="mediaName"
-                placeholder="e.g. Sawan Somwar Pooja Prasadam"
+                placeholder="e.g. Kashi Vishwanath Live Aarti"
                 value={filename}
                 onChange={(e) => setFilename(e.target.value)}
               />
             </div>
             
             <div className="space-y-2">
-              <Label>Display Category / Website Tag</Label>
+              <Label>Display Category / Folder Tag</Label>
               <Select value={folderTag} onValueChange={setFolderTag}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Past Puja">Past Puja (बीती हुई पूजा)</SelectItem>
+                  <SelectItem value="Live Darshan">Live Darshan (🎥 लाइव दर्शन)</SelectItem>
+                  <SelectItem value="Past Puja">Past Puja (🕉️ बीती हुई पूजा)</SelectItem>
+                  <SelectItem value="Aarti & Bhajan">Aarti & Bhajan (🎵 आरती व भजन)</SelectItem>
+                  <SelectItem value="Customer Review">Customer Review (⭐ श्रद्धालुओं का अनुभव)</SelectItem>
+                  <SelectItem value="Home Video">Home Video (होम पेज वीडियो)</SelectItem>
                   <SelectItem value="Festival Event">Festival Event (त्योहार इवेंट)</SelectItem>
-                  <SelectItem value="Customer Review">Customer Review (श्रद्धालु लाइव रिव्यु)</SelectItem>
                   <SelectItem value="General">General / Others</SelectItem>
                 </SelectContent>
               </Select>
@@ -214,7 +253,7 @@ function MediaLibraryManager() {
                 ) : (
                   <Upload className="h-4 w-4" />
                 )}
-                {uploading ? 'Uploading…' : 'Upload Asset'}
+                {uploading ? 'Uploading…' : 'Upload Local File'}
                 <input
                   type="file"
                   accept="image/*,video/*"
@@ -225,6 +264,31 @@ function MediaLibraryManager() {
               </label>
             </div>
           </div>
+
+          {/* YouTube / Video Link Adding Option */}
+          <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 space-y-3">
+            <div className="flex items-center gap-2">
+              <Flame className="w-4 h-4 text-amber-600" />
+              <Label className="font-bold text-slate-800 text-sm">Add YouTube Video Link Directly (यूट्यूब वीडियो लिंक जोड़ें)</Label>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Input
+                placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
+                value={videoUrlInput}
+                onChange={(e) => setVideoUrlInput(e.target.value)}
+                className="bg-white border-slate-300 flex-1"
+              />
+              <Button 
+                onClick={handleAddVideoUrl}
+                disabled={uploading || !videoUrlInput}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 shrink-0 h-10 rounded-xl"
+              >
+                {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                Save Video Link (लाइव करें)
+              </Button>
+            </div>
+          </div>
+
         </CardContent>
       </Card>
 

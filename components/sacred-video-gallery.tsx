@@ -50,7 +50,16 @@ const fallbackVideos: VideoItem[] = [
 ]
 
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
-  const displayVideos = videos && videos.length > 0 ? videos : fallbackVideos
+  // Deduplicate and prioritize uploaded admin videos over fallback samples
+  const allCombined = [...(videos || []), ...fallbackVideos]
+  const uniqueMap = new Map()
+  allCombined.forEach(v => {
+    if (v.url && !uniqueMap.has(v.url)) {
+      uniqueMap.set(v.url, v)
+    }
+  })
+  const displayVideos = Array.from(uniqueMap.values())
+
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
 
