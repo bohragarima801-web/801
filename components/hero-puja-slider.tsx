@@ -29,7 +29,7 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
   if (!slides || slides.length === 0) {
     if (!children) return null;
     return (
-      <div className="relative min-h-[400px] w-full flex items-center bg-muted overflow-hidden rounded-2xl shadow-[var(--shadow-medium)]">
+      <div className="relative aspect-[16/9] sm:aspect-[21/9] md:aspect-[24/9] w-full flex items-center bg-muted overflow-hidden rounded-2xl shadow-[var(--shadow-medium)]">
         {children}
       </div>
     )
@@ -48,18 +48,18 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
   }
 
   return (
-    <div className="relative w-full grid grid-cols-1 grid-rows-1 overflow-hidden bg-muted select-none rounded-2xl group shadow-[var(--shadow-medium)] border border-[var(--border)]">
+    <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-[24/9] grid grid-cols-1 grid-rows-1 overflow-hidden bg-muted select-none rounded-2xl group shadow-[var(--shadow-medium)] border border-[var(--border)]">
 
       {/* Background Images Slider (Clickable) */}
       {slides.map((slide, idx) => {
         const imageUrl = slide.image || process.env.NEXT_PUBLIC_URL_4677 || ''
         const isActive = currentIndex === idx
         const slideContent = (
-          <div className="relative w-full">
+          <div className="relative w-full h-full">
             <img
               src={imageUrl}
               alt={slide.title || 'Slide Image'}
-              className="w-full h-auto object-cover block"
+              className="w-full h-full object-cover object-center block"
             />
             {/* Bottom gradient for legibility of overlaid content/pagination */}
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent pointer-events-none" />
@@ -68,14 +68,14 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
         return (
           <div
             key={slide.id}
-            className={`col-start-1 row-start-1 block w-full transition-all duration-700 ease-out ${
+            className={`col-start-1 row-start-1 block w-full h-full transition-all duration-700 ease-out ${
               isActive
                 ? 'opacity-100 z-0 scale-100'
                 : 'opacity-0 z-[-1] scale-[1.02] pointer-events-none'
             }`}
           >
             {slide.ctaUrl ? (
-              <Link href={slide.ctaUrl} className="block w-full cursor-pointer">
+              <Link href={slide.ctaUrl} className="block w-full h-full cursor-pointer">
                 {slideContent}
               </Link>
             ) : (
