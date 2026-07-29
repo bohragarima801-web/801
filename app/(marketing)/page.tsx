@@ -435,7 +435,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
             <span className="sacred-subtitle text-primary">Our Promise</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Why Thousands of Families Trust Devyajnam</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Why Thousands of Families Trust DivyaYagyam</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
             <div className="flex flex-col items-center text-center gap-4">

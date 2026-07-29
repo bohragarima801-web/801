@@ -181,10 +181,26 @@ function MediaLibraryManager() {
     }
   }
 
+  function getYouTubeId(url: string) {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? match[2] : null
+  }
+
+  function getMediaThumbnail(media: any) {
+    if (!media?.url) return ''
+    const ytId = getYouTubeId(media.url)
+    if (ytId) {
+      return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+    }
+    return media.url
+  }
+
   function copyToClipboard(url: string) {
     const fullUrl = url.startsWith('http') ? url : `${window.location.origin}${url}`
     navigator.clipboard.writeText(fullUrl)
-    toast.success('Media path URL copied to clipboard!')
+    toast.success('Media link copied to clipboard!')
   }
 
   const changeTab = (val: string) => {
@@ -201,12 +217,23 @@ function MediaLibraryManager() {
     { label: 'General / Others', value: 'General' }
   ]
 
+  const isVideoMedia = (media: any) => {
+    if (!media) return false
+    const url = (media.url || '').toLowerCase()
+    return media.type === 'VIDEO' || 
+      url.includes('youtube.com') || 
+      url.includes('youtu.be') || 
+      url.includes('vimeo.com') || 
+      url.endsWith('.mp4') || 
+      url.endsWith('.webm')
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Sacred Media & Video Library"
+        title="Sacred Media & Video Manager"
         description="Upload video clips or add YouTube links of live darshan, past pujas, bhajan & customer reviews to display live on the website."
-        breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Media' }]}
+        breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Media & Videos' }]}
       />
 
       {/* Uploader panel */}
@@ -312,42 +339,66 @@ function MediaLibraryManager() {
       ) : items.length === 0 ? (
         <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed">
           <ImageIcon className="h-12 w-12 text-muted-foreground mb-4 opacity-40" />
-          <h3 className="font-semibold text-sm">No Assets Found in Category</h3>
+          <h3 className="font-semibold text-sm">No Assets / Videos Found in Category</h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-            Upload images or videos under this category to display them live.
+            Upload images or paste YouTube video links under this category to display them live.
           </p>
         </Card>
       ) : (
         <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-          {items.map((media) => (
-            <Card key={media.id} className="overflow-hidden border group relative rounded-2xl shadow-sm">
-              <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
-                <img src={media.url} alt={media.filename} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div className="absolute top-2 left-2">
-                  <Badge className="bg-orange-500 text-white font-bold text-[9px] hover:bg-orange-600">
-                    {media.folder}
-                  </Badge>
+          {items.map((media) => {
+            const isVid = isVideoMedia(media)
+            const thumbUrl = getMediaThumbnail(media)
+            return (
+              <Card key={media.id} className="overflow-hidden border group relative rounded-2xl shadow-sm bg-white">
+                <div className="relative aspect-[16/10] bg-slate-900 overflow-hidden">
+                  {thumbUrl ? (
+                    <img 
+                      src={thumbUrl} 
+                      alt={media.filename} 
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90" 
+                    />
+                  ) : (
+                    <video src={media.url} className="h-full w-full object-cover" />
+                  )}
+                  
+                  <div className="absolute top-2 left-2 flex gap-1 flex-wrap">
+                    <Badge className="bg-orange-500 text-white font-bold text-[9px] hover:bg-orange-600 border-none">
+                      {media.folder || 'Home Video'}
+                    </Badge>
+                    {isVid && (
+                      <Badge className="bg-rose-600 text-white font-bold text-[9px] border-none">
+                        🎥 VIDEO
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="p-3 bg-white space-y-2">
-                <div className="flex flex-col">
-                  <span className="font-bold text-xs truncate text-slate-800" title={media.filename}>{media.filename || 'Unnamed Asset'}</span>
-                  <span className="text-[9px] text-muted-foreground">{(media.size / 1024).toFixed(1)} KB</span>
+
+                <div className="p-3 space-y-2">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-xs truncate text-slate-800" title={media.filename}>
+                      {media.filename || 'Unnamed Asset'}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground truncate" title={media.url}>
+                      {media.url}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 pt-2 border-t border-slate-100">
+                    <Button size="sm" variant="outline" className="flex-1 h-7 text-[10px] gap-1 rounded-lg" onClick={() => copyToClipboard(media.url)}>
+                      <Copy className="h-3 w-3" /> Link
+                    </Button>
+                    <Button size="icon" variant="secondary" className="h-7 w-7 rounded-lg shrink-0" onClick={() => handleEdit(media)} title="Edit Asset">
+                      <Edit2 className="h-3 w-3" />
+                    </Button>
+                    <Button size="icon" variant="destructive" className="h-7 w-7 rounded-lg shrink-0" onClick={() => handleDelete(media.id)} title="Delete Asset">
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 pt-1 border-t">
-                  <Button size="sm" variant="outline" className="flex-1 h-7 text-[10px] gap-1 rounded-lg" onClick={() => copyToClipboard(media.url)}>
-                    <Copy className="h-3 w-3" /> Copy Path
-                  </Button>
-                  <Button size="icon" variant="secondary" className="h-7 w-7 rounded-lg shrink-0" onClick={() => handleEdit(media)} title="Edit Asset">
-                    <Edit2 className="h-3 w-3" />
-                  </Button>
-                  <Button size="icon" variant="destructive" className="h-7 w-7 rounded-lg shrink-0" onClick={() => handleDelete(media.id)} title="Delete Asset">
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            )
+          })}
         </div>
       )}
     </div>

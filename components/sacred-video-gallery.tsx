@@ -184,7 +184,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                 </h3>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 font-medium">
                   <Flame className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-                  <span>Devyajnam Verified Media</span>
+                  <span>DivyaYagyam Verified Media</span>
                 </p>
               </CardContent>
             </Card>

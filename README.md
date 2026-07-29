@@ -1,6 +1,6 @@
-# Devyajnam Project
+# DivyaYagyam Project
 
-This is the primary repository for **Devyajnam**. The project is built using modern web technologies to support booking astrology/puja services, e-commerce, blogging, and an advanced admin dashboard.
+This is the primary repository for **DivyaYagyam**. The project is built using modern web technologies to support booking astrology/puja services, e-commerce, blogging, and an advanced admin dashboard.
 
 ## Tech Stack
 - **Framework:** Next.js 15 (App Router)
