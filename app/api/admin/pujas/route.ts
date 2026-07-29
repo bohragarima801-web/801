@@ -157,6 +157,7 @@ export async function POST(req: NextRequest) {
 
     revalidateTag('pujas')
     revalidatePath('/pujas')
+    revalidatePath('/')
 
     return NextResponse.json({ ok: true, puja });
   } catch (err: any) {
@@ -184,6 +185,7 @@ export async function DELETE(req: NextRequest) {
 
     revalidateTag('pujas')
     revalidatePath('/pujas')
+    revalidatePath('/')
 
     return NextResponse.json({ ok: true, message: 'Puja deleted successfully' });
   } catch (err: any) {
