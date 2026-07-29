@@ -8,10 +8,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     if (!user) return new NextResponse('Unauthorized', { status: 401 })
 
     const { id } = await params
+    const isAdmin = user.role === 'super_admin' || user.role === 'store_manager'
+
+    const whereCondition = isAdmin
+      ? { OR: [{ id }, { bookingNumber: id }] }
+      : { OR: [{ id }, { bookingNumber: id }], userId: user.id }
 
     const booking = await prisma.booking.findFirst({
-      where: { id, userId: user.id },
+      where: whereCondition,
       include: {
+        user: { select: { fullName: true, email: true, phone: true } },
         puja: { select: { name: true, location: true } },
         temple: { select: { name: true, city: true, state: true } },
         members: true,
@@ -19,10 +25,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       }
     })
 
-    if (!booking) return new NextResponse('Booking not found', { status: 404 })
+    if (!booking) return new NextResponse('Booking receipt not found', { status: 404 })
 
     const paid = booking.payments[0]
     const paymentDate = paid?.paidAt || booking.updatedAt
+    const devoteeName = booking.user?.fullName || user.fullName || 'Valued Devotee'
 
     const html = `<!DOCTYPE html>
 <html lang="hi">
@@ -69,7 +76,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   .amount-box .amount { font-size: 32px; font-weight: 800; margin-top: 4px; }
   .amount-box .sub { font-size: 11px; opacity: 0.7; margin-top: 4px; }
 
-  .footer { background: #f9fafb; border-top: 1px solid #f0f0f0; padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .footer { background: #f9fafb; border-top: 1px solid #f0f0f0; padding: 24px 40px; display: flex; justify-space-between; align-items: center; }
   .footer p { font-size: 11px; color: #9ca3af; }
 
   @media print {
@@ -124,7 +131,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="info-box">
       <h3>Devotee Details</h3>
       <p>
-        <strong>${user.fullName}</strong><br>
+        <strong>${devoteeName}</strong><br>
+        ${booking.user?.email ? `${booking.user.email}<br>` : ''}
+        ${booking.user?.phone ? `${booking.user.phone}<br>` : ''}
         ${booking.gotra ? `<strong>Gotra:</strong> ${booking.gotra}<br>` : ''}
         ${booking.sankalpText ? `<strong>Sankalp:</strong> ${booking.sankalpText}` : ''}
       </p>
@@ -188,6 +197,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       }
     })
   } catch (err: any) {
-    return new NextResponse('Error: ' + err.message, { status: 500 })
+    return new NextResponse('Error generating receipt: ' + err.message, { status: 500 })
   }
 }

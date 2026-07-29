@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Ticket, Clock, CheckCircle2, XCircle, Loader2, Trash2,
-  RefreshCw, RotateCcw, Calendar, IndianRupee
+  RefreshCw, RotateCcw, Calendar, IndianRupee, FileText
 } from 'lucide-react'
 import { toast } from 'sonner'
 import {
@@ -296,6 +296,11 @@ function BookingsManager() {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
+                  <Button size="sm" variant="outline" className="text-slate-700 border-slate-300 h-7 text-[10px] gap-1" asChild>
+                    <a href={`/api/invoice/booking/${r.id}`} target="_blank" rel="noopener noreferrer">
+                      <FileText className="h-3 w-3 text-purple-600" /> Receipt
+                    </a>
+                  </Button>
                   <Button size="icon" variant="ghost" className="h-7 w-7 text-red-500" onClick={() => handleDelete(r.id)}>
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
