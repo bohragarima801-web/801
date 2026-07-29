@@ -4,7 +4,7 @@ import {
   Building2, Flame, Ticket, ShoppingBag, HandCoins, Sparkles, Sparkle,
   Newspaper, ImageIcon, MessageSquare, Bell, Megaphone, LineChart,
   Palette, Search, CreditCard, HardDrive, Settings, Lock, DatabaseBackup,
-  Code2, Bot, FileText, Package, ClipboardList, Layers, CalendarDays, Wand2,
+  Code2, Bot, FileText, Package, ClipboardList, Layers, CalendarDays, Wand2, Video,
 } from 'lucide-react'
 
 export type AdminNavItem = { title: string; href: string; icon?: any; badge?: string | number }
@@ -55,6 +55,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Tools Manager', slug: 'tools', icon: Wrench, items: [
     { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },
   ]},
+  { title: '🎥 Videos & Reels', slug: 'videos', icon: Video, href: '/admin/videos', permission: 'media.read' },
   { title: 'Gallery', slug: 'gallery', icon: ImageIcon, href: '/admin/gallery', permission: 'gallery.read' },
   { title: 'Testimonials', slug: 'testimonials', icon: Star, href: '/admin/testimonials', permission: 'testimonial.read' },
   { title: 'Events', slug: 'events', icon: CalendarDays, href: '/admin/events', permission: 'event.read' },

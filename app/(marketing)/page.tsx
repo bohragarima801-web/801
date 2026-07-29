@@ -13,6 +13,8 @@ import { prisma } from '@/lib/prisma'
 import { MediaCarousel } from '@/components/ui/media-carousel'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { FadeIn } from '@/components/ui/fade-in'
+import { SacredVideoGallery } from '@/components/sacred-video-gallery'
+import { SacredAstroTools } from '@/components/sacred-astro-tools'
 
 const upcomingPujasFallback = [
   { name: 'महा रुद्राभिषेक (Maha Rudrabhishek)', temple: 'काशी विश्वनाथ मंदिर, वाराणसी', date: 'श्रावण सोमवार Special', img: process.env.NEXT_PUBLIC_URL_4496 || '', price: 1100, vip: false },
@@ -32,7 +34,7 @@ const fallbackTestimonials = [
 export const revalidate = 30
 
 export default async function HomePage() {
-  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents] = await Promise.all([
+  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideos] = await Promise.all([
     prisma.product.findMany({
       take: 4,
       include: { category: true }
@@ -61,6 +63,16 @@ export default async function HomePage() {
     prisma.mediaLibrary.findMany({ where: { folder: 'Past Puja' }, orderBy: { createdAt: 'desc' }, take: 10 }).catch(() => []),
     prisma.mediaLibrary.findMany({ where: { folder: 'Customer Review' }, orderBy: { createdAt: 'desc' }, take: 12 }).catch(() => []),
     prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
+    prisma.mediaLibrary.findMany({
+      where: {
+        OR: [
+          { type: 'VIDEO' },
+          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
+        ]
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 12
+    }).catch(() => []),
   ])
 
   let testimonials = dbTestimonials
@@ -309,7 +321,11 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* SACRED ASTRO TOOLS & PANCHANG */}
+      <SacredAstroTools />
 
+      {/* SACRED VIDEO GALLERY & REELS */}
+      <SacredVideoGallery videos={dbVideos} />
 
       {/* TESTIMONIALS */}
       <section className="container pb-16">
