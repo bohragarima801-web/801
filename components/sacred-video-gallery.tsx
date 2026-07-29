@@ -71,9 +71,28 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
     { id: 'Customer Review', label: '⭐ भक्तों का अनुभव' },
   ]
 
+  const categoryLabelMap: Record<string, string> = {
+    'Live Darshan': '🎥 लाइव दर्शन',
+    'Past Puja': '🕉️ बीती हुई पूजा',
+    'Aarti & Bhajan': '🎵 आरती व भजन',
+    'Customer Review': '⭐ भक्तों का अनुभव',
+    'Home Video': '🎥 दिव्य दर्शन',
+    'General': '🎥 वीडियो',
+  }
+
+  const getCategoryDisplayLabel = (folder?: string | null) => {
+    if (!folder) return '🎥 लाइव दर्शन'
+    return categoryLabelMap[folder] || folder
+  }
+
   const filteredVideos = selectedCategory === 'ALL'
     ? displayVideos
-    : displayVideos.filter(v => (v.folder || 'Home Video') === selectedCategory || selectedCategory === 'ALL')
+    : displayVideos.filter(v => {
+        const folder = (v.folder || '').toLowerCase().trim()
+        const targetCat = selectedCategory.toLowerCase().trim()
+        if (!folder) return selectedCategory === 'Live Darshan' || selectedCategory === 'ALL'
+        return folder === targetCat || folder.includes(targetCat) || targetCat.includes(folder)
+      })
 
   function getYouTubeId(url: string) {
     if (!url) return null
@@ -173,7 +192,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
 
                 {/* Category Badge */}
                 <Badge className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-amber-300 font-bold border border-amber-400/30 rounded-md px-2.5 py-1 text-[10px] tracking-wide">
-                  {video.folder || 'Home Video'}
+                  {getCategoryDisplayLabel(video.folder)}
                 </Badge>
               </div>
 
