@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -522,6 +523,9 @@ export function PujaClientView({ puja }: { puja: any }) {
             ))}
           </Accordion>
         </section>
+
+        {/* 100% Secure Payment Trust Badge */}
+        <PaymentTrustBadge className="my-8" />
 
       </div>
 

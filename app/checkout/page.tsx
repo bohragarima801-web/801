@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import Script from 'next/script'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Checkbox } from '@/components/ui/checkbox'
+import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -274,7 +275,7 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       <div className="min-h-screen bg-slate-50 text-gray-800 font-sans pb-24">
         
         {step === 'addons' && (

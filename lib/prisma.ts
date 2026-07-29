@@ -24,8 +24,8 @@ export const prisma = globalForPrisma.prisma ?? basePrisma.$extends({
           return null as any;
         }
 
-        const retries = 3;
-        const delayMs = 800;
+        const retries = 2;
+        const delayMs = 50;
         let lastError: any;
         
         for (let attempt = 1; attempt <= retries; attempt++) {

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Trash2, Plus, Minus, ArrowRight, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
+import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, cartTotal, totalItems } = useCart()
@@ -109,6 +110,7 @@ export default function CartPage() {
                   Proceed to Checkout <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+              <PaymentTrustBadge className="mt-4" />
             </CardContent>
           </Card>
         </div>

@@ -38,25 +38,29 @@ export async function updateSession(request: NextRequest) {
       }
     )
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
     const pathname = request.nextUrl.pathname
 
     // Protected route groups
     const isProtected =
       pathname.startsWith('/dashboard') ||
       pathname.startsWith('/orders') ||
-      pathname.startsWith('/bookings') ||
       pathname.startsWith('/profile')
-    // NOTE: /admin is intentionally NOT force-redirected via middleware so the panel
-    // can be previewed without a session. Access control is enforced in `app/admin/layout.tsx`.
 
     const isAuthPage =
       pathname.startsWith('/login') ||
       pathname.startsWith('/register') ||
       pathname.startsWith('/forgot-password')
+
+    const hasAuthCookie = request.cookies.getAll().some(c => c.name.includes('sb-') || c.name.includes('supabase'))
+
+    // Fast path for public pages: skip network call if not visiting auth/protected routes and no auth cookie present
+    if (!isProtected && !isAuthPage && !hasAuthCookie) {
+      return supabaseResponse
+    }
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user && isProtected) {
       const url = request.nextUrl.clone()

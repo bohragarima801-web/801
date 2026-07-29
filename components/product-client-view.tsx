@@ -12,6 +12,7 @@ import { useCart } from '@/lib/cart-context'
 import { FadeIn } from '@/components/ui/fade-in'
 import { cn } from '@/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export function ProductClientView({ product }: { product: any }) {
   const router = useRouter()
@@ -249,6 +250,8 @@ export function ProductClientView({ product }: { product: any }) {
                 dangerouslySetInnerHTML={{ __html: product.description }} />
         </div>
       )}
+
+      <PaymentTrustBadge className="my-6 max-w-4xl" />
 
       <hr className="my-10 border-slate-200" />
 

@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 function BookingForm() {
   const searchParams = useSearchParams()
@@ -316,7 +317,7 @@ function BookingForm() {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
     <div className="max-w-5xl mx-auto py-10 px-4 grid gap-8 lg:grid-cols-12 items-start">
       
       {/* Left Column: Booking details & Add-ons */}
@@ -569,6 +570,8 @@ function BookingForm() {
             )}
           </CardContent>
         </Card>
+
+        <PaymentTrustBadge className="mt-4" />
       </div>
 
     </div>
