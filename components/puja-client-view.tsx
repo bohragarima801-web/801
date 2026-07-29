@@ -77,7 +77,7 @@ export function PujaClientView({ puja }: { puja: any }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['packages', 'benefits', 'mantra', 'process', 'temple', 'media', 'faqs']
+      const sections = ['packages', 'benefits', 'process', 'temple', 'media', 'faqs']
       for (const section of sections) {
         const el = document.getElementById(section)
         if (el) {
@@ -199,10 +199,9 @@ export function PujaClientView({ puja }: { puja: any }) {
       <div className="sticky top-[58px] sm:top-[68px] z-40 w-full bg-white/95 backdrop-blur-md border-b border-amber-900/10 shadow-md overflow-x-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto flex items-center justify-start md:justify-center gap-6 sm:gap-8 px-4 py-3 min-w-max">
           {[
-            { id: 'packages', label: 'पूजा पैकेज (Packages)' },
-            { id: 'benefits', label: 'महत्व एवं लाभ (Benefits)' },
-            { id: 'mantra', label: 'मंत्र एवं महिमा (Mantra)' },
-            { id: 'process', label: 'पूजा विधि (Process)' },
+            { id: 'packages', label: 'विकल्प (Packages)' },
+            { id: 'benefits', label: 'लाभ (Benefits)' },
+            { id: 'process', label: 'प्रक्रिया (Process)' },
             { id: 'temple', label: 'मंदिर एवं धाम (Temple)' },
             { id: 'media', label: 'वीडियो एवं झलकियां (Videos)' },
             { id: 'faqs', label: 'सामान्य प्रश्न (FAQs)' }
@@ -362,26 +361,6 @@ export function PujaClientView({ puja }: { puja: any }) {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 5. Sacred Mantra Section */}
-        <section id="mantra" className="scroll-mt-32">
-          <div className="relative rounded-2xl p-6 sm:p-10 bg-gradient-to-r from-[#4A0404] via-[#5C0808] to-[#3B0202] text-white shadow-xl border-2 border-amber-400/30 text-center overflow-hidden">
-            <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 text-amber-500/10 text-9xl font-serif pointer-events-none select-none">
-              ॐ
-            </div>
-            <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-              <span className="text-amber-400 font-bold text-xs tracking-widest uppercase border border-amber-400/40 px-3 py-1 rounded-full">
-                महामंत्र व श्लोक
-              </span>
-              <h3 className="text-xl sm:text-3xl font-black text-amber-200 font-serif leading-relaxed italic pt-2">
-                "सर्वाबाधा विनिर्मुक्तो धन धान्य सुतान्वितः। मनुष्यो मत्प्रसादेन भविष्यति न संशयः॥"
-              </h3>
-              <p className="text-amber-100/80 text-xs sm:text-sm font-sans pt-2 border-t border-amber-500/20 max-w-xl mx-auto">
-                अर्थ: माँ भगवती एवं परमात्मा के आशीर्वाद से मनुष्य समस्त बाधाओं से मुक्त होकर धन, धान्य और पुत्र-पौत्रादि से सम्पन्न होता है।
-              </p>
             </div>
           </div>
         </section>
