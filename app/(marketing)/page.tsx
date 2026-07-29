@@ -300,7 +300,7 @@ export default async function HomePage() {
 
 
 
-      {/* PUJAS CATEGORIZED */}
+      {/* UPCOMING PUJAS */}
       <section className="container py-16 md:py-24">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
@@ -313,41 +313,17 @@ export default async function HomePage() {
           </Button>
         </div>
         
-        <Tabs defaultValue={todayPujas.length > 0 ? "today" : "upcoming"} className="w-full">
-          <TabsList className="mb-8 w-full justify-start overflow-x-auto h-auto p-1 bg-muted/50 rounded-xl">
-            <TabsTrigger value="today" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
-              <Sun className="h-4 w-4 mr-2" /> Today's Pujas
-            </TabsTrigger>
-            <TabsTrigger value="upcoming" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
-              <CalendarDays className="h-4 w-4 mr-2" /> Upcoming
-            </TabsTrigger>
-            <TabsTrigger value="evergreen" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
-              <Heart className="h-4 w-4 mr-2" /> Monthly & Evergreen
-            </TabsTrigger>
-            <TabsTrigger value="festival" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
-              <Sparkle className="h-4 w-4 mr-2" /> Festival Special
-            </TabsTrigger>
-            <TabsTrigger value="all" className="rounded-lg px-6 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
-              All Published
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="today" className="mt-0 outline-none">
-            {renderPujaCards(todayPujas)}
-          </TabsContent>
-          <TabsContent value="upcoming" className="mt-0 outline-none">
-            {renderPujaCards(upcomingPujas)}
-          </TabsContent>
-          <TabsContent value="evergreen" className="mt-0 outline-none">
-            {renderPujaCards(evergreenPujas)}
-          </TabsContent>
-          <TabsContent value="festival" className="mt-0 outline-none">
-            {renderPujaCards(festivalPujas)}
-          </TabsContent>
-          <TabsContent value="all" className="mt-0 outline-none">
-            {renderPujaCards(dbPujas.length > 0 ? dbPujas : fallbackTestimonials.map(() => upcomingPujasFallback[0]))}
-          </TabsContent>
-        </Tabs>
+        {renderPujaCards(
+          dbPujas.filter((p: any) => {
+            if (p.isEvergreen) return true;
+            if (p.pujaDate) {
+              const pDate = new Date(p.pujaDate);
+              pDate.setHours(0, 0, 0, 0);
+              return pDate.getTime() >= today.getTime();
+            }
+            return true; // Show if no specific date is set to prevent hiding all pujas
+          })
+        )}
       </section>
 
       {/* SACRED PRODUCTS */}
