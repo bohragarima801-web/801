@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Loader2, Plus, Trash2, Ticket } from 'lucide-react'
+import { Loader2, Plus, Trash2, Ticket, ToggleLeft, ToggleRight, Edit2 } from 'lucide-react'
 
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState<any[]>([])
@@ -103,6 +103,24 @@ export default function CouponsPage() {
       }
     } catch {
       toast.error('Network error deleting coupon')
+    }
+  }
+  async function handleToggleActive(id: string, currentActive: boolean) {
+    try {
+      const res = await fetch(`/api/admin/coupons?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: !currentActive }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        toast.success(`Coupon ${!currentActive ? 'activated' : 'deactivated'}`)
+        loadCoupons()
+      } else {
+        toast.error(data.error || 'Failed to update coupon')
+      }
+    } catch {
+      toast.error('Network error updating coupon')
     }
   }
 
@@ -289,15 +307,26 @@ export default function CouponsPage() {
               key: 'actions',
               label: 'Actions',
               render: (r) => (
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="h-8 w-8"
-                  onClick={() => handleDelete(r.id)}
-                  title="Delete Coupon"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                <div className="flex items-center gap-1 justify-end">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className={`h-8 w-8 ${r.isActive ? 'text-green-600' : 'text-slate-400'}`}
+                    onClick={() => handleToggleActive(r.id, r.isActive)}
+                    title={r.isActive ? 'Deactivate Coupon' : 'Activate Coupon'}
+                  >
+                    {r.isActive ? <ToggleRight className="h-4 w-4" /> : <ToggleLeft className="h-4 w-4" />}
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="h-8 w-8"
+                    onClick={() => handleDelete(r.id)}
+                    title="Delete Coupon"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               ),
             },
           ]}

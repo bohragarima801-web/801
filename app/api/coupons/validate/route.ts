@@ -17,7 +17,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Invalid coupon code' }, { status: 400 })
     }
 
-    // Validation checks
+    // Validation checks — in priority order
+    if (!coupon.isActive) {
+      return NextResponse.json({ ok: false, error: 'This coupon is no longer active' }, { status: 400 })
+    }
+
+    if (coupon.expiresAt && new Date() > coupon.expiresAt) {
+      return NextResponse.json({ ok: false, error: 'This coupon has expired' }, { status: 400 })
+    }
+
     if (coupon.startsAt && new Date() < coupon.startsAt) {
       return NextResponse.json({ ok: false, error: 'Coupon is not active yet' }, { status: 400 })
     }
@@ -40,7 +48,7 @@ export async function POST(req: NextRequest) {
         discountAmount = Number(coupon.maxDiscount)
       }
     } else {
-      // FIXED
+      // FIXED amount
       discountAmount = val
     }
 
@@ -54,6 +62,8 @@ export async function POST(req: NextRequest) {
       coupon: {
         id: coupon.id,
         code: coupon.code,
+        discountType: coupon.discountType,
+        discountValue: Number(coupon.discountValue),
         discountAmount: Math.round(discountAmount)
       }
     })

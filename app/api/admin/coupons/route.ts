@@ -58,6 +58,43 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
+    if (!id) return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
+
+    const data = await req.json()
+    const { code, description, discountType, discountValue, minAmount, maxDiscount, maxUses, expiresAt, startsAt, isActive } = data
+
+    const updated = await prisma.coupon.update({
+      where: { id },
+      data: {
+        ...(code && { code: code.toUpperCase() }),
+        ...(description !== undefined && { description }),
+        ...(discountType && { discountType }),
+        ...(discountValue !== undefined && { discountValue: parseFloat(discountValue) }),
+        ...(minAmount !== undefined && { minAmount: minAmount ? parseFloat(minAmount) : null }),
+        ...(maxDiscount !== undefined && { maxDiscount: maxDiscount ? parseFloat(maxDiscount) : null }),
+        ...(maxUses !== undefined && { maxUses: maxUses ? parseInt(maxUses) : null }),
+        ...(expiresAt !== undefined && { expiresAt: expiresAt ? new Date(expiresAt) : null }),
+        ...(startsAt !== undefined && { startsAt: startsAt ? new Date(startsAt) : null }),
+        ...(isActive !== undefined && { isActive }),
+      }
+    })
+
+    return NextResponse.json({ ok: true, data: updated });
+  } catch (err: any) {
+    if (err.code === 'P2003') {
+      return NextResponse.json({ ok: false, error: 'Cannot update: This item has linked records.' }, { status: 400 });
+    }
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to update coupon' }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const session = await getAdminSession()

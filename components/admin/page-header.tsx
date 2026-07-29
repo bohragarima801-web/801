@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -13,11 +14,11 @@ export function PageHeader({
   title: string
   description?: string
   breadcrumbs?: BreadCrumb[]
-  action?: { label: string; href?: string; onClick?: () => void; icon?: any; disabled?: boolean }
+  action?: { label: string; href?: string; onClick?: () => void; icon?: any; disabled?: boolean } | React.ReactNode
   secondaryAction?: { label: string; href?: string; onClick?: () => void }
   className?: string
 }) {
-  const ActionIcon = action?.icon || Plus
+  const ActionIcon = (action && typeof action === 'object' && 'icon' in action) ? (action as any).icon || Plus : Plus
   return (
     <div className={cn('mb-6', className)}>
       {breadcrumbs && breadcrumbs.length > 0 && (
@@ -48,10 +49,14 @@ export function PageHeader({
             )
           )}
           {action && (
-            action.href ? (
-              <Button asChild><Link href={action.href}><ActionIcon className="h-4 w-4 mr-1" />{action.label}</Link></Button>
+            React.isValidElement(action) ? (
+              action
             ) : (
-              <Button onClick={action.onClick}><ActionIcon className="h-4 w-4 mr-1" />{action.label}</Button>
+              (action as any).href ? (
+                <Button asChild><Link href={(action as any).href}><ActionIcon className="h-4 w-4 mr-1" />{(action as any).label}</Link></Button>
+              ) : (
+                <Button onClick={(action as any).onClick} disabled={(action as any).disabled}><ActionIcon className="h-4 w-4 mr-1" />{(action as any).label}</Button>
+              )
             )
           )}
         </div>

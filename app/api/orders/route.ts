@@ -3,6 +3,76 @@ import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 import { getSetting } from '@/lib/settings'
 
+export async function GET(req: NextRequest) {
+  try {
+    const user = await getCurrentUser().catch(() => null)
+    if (!user) {
+      return NextResponse.json({ ok: false, error: 'You must be logged in to view your orders' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url)
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(50, parseInt(searchParams.get('limit') || '20'))
+    const skip = (page - 1) * limit
+
+    // Resolve actual DB user ID
+    let dbUserId = user.id
+    if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+      const dbUser = await prisma.user.findFirst({ where: { email: user.email } })
+      if (!dbUser) return NextResponse.json({ ok: true, data: [], total: 0 });
+      dbUserId = dbUser.id
+    }
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where: { userId: dbUserId },
+        skip,
+        take: limit,
+        include: {
+          items: {
+            include: { product: { select: { name: true, coverImage: true } } }
+          },
+          payments: {
+            select: { status: true, gatewayRef: true, paidAt: true },
+            orderBy: { createdAt: 'desc' },
+            take: 1
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.order.count({ where: { userId: dbUserId } }),
+    ])
+
+    return NextResponse.json({
+      ok: true,
+      data: orders.map(o => ({
+        id: o.id,
+        orderNumber: o.orderNumber,
+        status: o.status,
+        paymentStatus: o.paymentStatus,
+        subtotal: Number(o.subtotal),
+        discount: Number(o.discount),
+        total: Number(o.total),
+        items: o.items.map(i => ({
+          name: i.name,
+          quantity: i.quantity,
+          price: Number(i.price),
+          total: Number(i.total),
+          image: i.product?.coverImage || null,
+        })),
+        payment: o.payments[0] || null,
+        createdAt: o.createdAt,
+        updatedAt: o.updatedAt,
+      })),
+      total,
+      page,
+      limit,
+    });
+  } catch (err: any) {
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to fetch orders' }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser().catch(() => null)

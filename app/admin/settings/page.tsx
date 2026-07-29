@@ -131,6 +131,15 @@ export default function SettingsPage() {
         if (s['secret.razorpay_key_id']) setRazorpayKeyId(s['secret.razorpay_key_id'])
         if (s['secret.razorpay_key_secret']) setRazorpayKeySecret(s['secret.razorpay_key_secret'])
         if (s['secret.database_url']) setDbUrl(s['secret.database_url'])
+        if (s['secret.direct_url']) setDirectUrlSetting(s['secret.direct_url'])
+      }
+    } catch (err) {
+      toast.error('Failed to load settings')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)

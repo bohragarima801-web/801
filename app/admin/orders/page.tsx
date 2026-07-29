@@ -7,8 +7,13 @@ import { KpiCard } from '@/components/admin/kpi-card'
 import { DataTableShell } from '@/components/admin/data-table-shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Package, Clock, Truck, CheckCircle2, XCircle, Loader2, Trash2, RotateCcw } from 'lucide-react'
+import { Package, Clock, Truck, CheckCircle2, XCircle, Loader2, Trash2, RotateCcw, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
 
 function OrdersManager() {
   const searchParams = useSearchParams()
@@ -17,6 +22,7 @@ function OrdersManager() {
 
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [refunding, setRefunding] = useState<string | null>(null)
 
   async function loadOrders() {
     try {
@@ -43,9 +49,7 @@ function OrdersManager() {
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this order?')) return
     try {
-      const res = await fetch(`/api/admin/orders?id=${id}`, {
-        method: 'DELETE'
-      })
+      const res = await fetch(`/api/admin/orders?id=${id}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.ok) {
         toast.success('Order deleted successfully')
@@ -55,6 +59,31 @@ function OrdersManager() {
       }
     } catch {
       toast.error('Network error deleting order')
+    }
+  }
+
+  async function handleRefund(id: string, orderNumber: string, total: number) {
+    setRefunding(id)
+    try {
+      const res = await fetch('/api/admin/refund', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'order', id, reason: `Admin refund for order ${orderNumber}` })
+      })
+      const data = await res.json()
+      if (data.ok) {
+        toast.success(`Refund of ₹${data.refundAmount} initiated!`)
+        loadOrders()
+      } else if (res.status === 207) {
+        toast.warning(data.error || 'DB updated but Razorpay refund needs manual action')
+        loadOrders()
+      } else {
+        toast.error(data.error || 'Refund failed')
+      }
+    } catch {
+      toast.error('Network error during refund')
+    } finally {
+      setRefunding(null)
     }
   }
 
@@ -183,23 +212,55 @@ function OrdersManager() {
               key: 'actions',
               label: 'Actions',
               render: (r) => (
-                <div className="flex items-center gap-1 justify-end">
+                <div className="flex items-center gap-1 justify-end flex-wrap">
                   {r.status === 'PENDING' && (
-                    <Button size="sm" variant="outline" className="text-blue-600 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'PROCESSING')}>
+                    <Button size="sm" variant="outline" className="text-blue-600 border-blue-300 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'PROCESSING')}>
                       Process
                     </Button>
                   )}
                   {r.status === 'PROCESSING' && (
-                    <Button size="sm" variant="outline" className="text-orange-600 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'SHIPPED')}>
+                    <Button size="sm" variant="outline" className="text-orange-600 border-orange-300 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'SHIPPED')}>
                       Ship
                     </Button>
                   )}
                   {r.status === 'SHIPPED' && (
-                    <Button size="sm" variant="outline" className="text-green-600 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'DELIVERED')}>
+                    <Button size="sm" variant="outline" className="text-green-600 border-green-300 h-7 text-[10px]" onClick={() => updateStatus(r.id, 'DELIVERED')}>
                       Deliver
                     </Button>
                   )}
-                  <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600" onClick={() => handleDelete(r.id)}>
+                  {(r.paymentStatus === 'SUCCESS') && r.status !== 'RETURNED' && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-purple-700 border-purple-300 h-7 text-[10px]"
+                          disabled={refunding === r.id}
+                        >
+                          {refunding === r.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <RotateCcw className="h-3 w-3" />}
+                          Refund
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Initiate Refund</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will refund ₹{Number(r.total).toLocaleString('en-IN')} for order <strong>{r.orderNumber}</strong>. This cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
+                            onClick={() => handleRefund(r.id, r.orderNumber, Number(r.total))}
+                          >
+                            Confirm Refund ₹{Number(r.total).toLocaleString('en-IN')}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
+                  <Button size="icon" variant="ghost" className="h-7 w-7 text-red-500" onClick={() => handleDelete(r.id)}>
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
