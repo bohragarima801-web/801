@@ -116,8 +116,8 @@ export function AiChat({
                 {suggestions.map((s) => (
                   <button
                     key={s}
-                    onClick={() => {}}
-                    className="text-xs px-3 py-1.5 rounded-full border hover:bg-primary/5 hover:border-primary transition-colors"
+                    onClick={() => send(s)}
+                    className="text-xs px-3.5 py-2 rounded-full border border-orange-200 bg-orange-50/50 hover:bg-orange-600 hover:text-white hover:border-orange-600 font-medium text-slate-700 transition-all shadow-2xs cursor-pointer"
                   >
                     {s}
                   </button>

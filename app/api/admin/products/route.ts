@@ -48,6 +48,7 @@ export async function GET(req: NextRequest) {
       seoTitle: p.seoTitle,
       seoDescription: p.seoDescription,
       seoKeywords: p.seoKeywords,
+      customHtml: p.customHtml,
     }))
 
     return NextResponse.json({ ok: true, data: mapped, total, page, limit });
@@ -107,6 +108,7 @@ export async function POST(req: NextRequest) {
       seoTitle,
       seoDescription,
       seoKeywords,
+      customHtml,
       extraImages
     } = data
 
@@ -136,6 +138,7 @@ export async function POST(req: NextRequest) {
       weight: weight ? Number(weight) : null,
       status: status || 'DRAFT',
       tags: tags || null,
+      customHtml: customHtml || null,
       seoTitle: seoTitle || null,
       seoDescription: seoDescription || null,
       seoKeywords: seoKeywords || null

@@ -111,9 +111,9 @@ export default function ToolsPage() {
             </CardContent>
           </Card>
 
-          {/* Real Active Database Tools (Dummy tools excluded) */}
+          {/* Real Active Database Tools */}
           {tools
-            .filter((t) => t.isActive && !dummySlugs.includes(t.slug))
+            .filter((t) => t.isActive)
             .map((t) => {
               const trialActive = trialStatuses[t.slug]
               const premiumActive = activatedStatuses[t.slug]

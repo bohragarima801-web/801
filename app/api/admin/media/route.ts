@@ -13,18 +13,20 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const folder = searchParams.get('folder')
+    const type = searchParams.get('type')
 
     const where: any = {}
     if (folder && folder !== 'all') {
       where.folder = folder
+    }
+    if (type && type !== 'all') {
+      where.type = type
     }
 
     let media = await prisma.mediaLibrary.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     })
-
-
 
     return NextResponse.json({ ok: true, data: media });
   } catch (err: any) {
@@ -42,7 +44,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { url, filename, size, mimeType, folder, type } = await req.json()
+    const { url, filename, altText, size, mimeType, folder, type } = await req.json()
 
     if (!url) {
       return NextResponse.json({ ok: false, error: 'URL is required' }, { status: 400 });
@@ -62,6 +64,7 @@ export async function POST(req: NextRequest) {
       data: {
         url,
         filename: filename || 'Uploaded Media',
+        altText: altText || filename || 'Sacred Divine Image',
         size: size ? Number(size) : 0,
         mimeType: isVideo ? 'video/mp4' : (mimeType || 'image/jpeg'),
         folder: folder || 'General',
@@ -86,18 +89,21 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id, filename, folder } = await req.json()
+    const { id, filename, altText, folder, type } = await req.json()
 
     if (!id) {
       return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
     }
 
+    const updateData: any = {}
+    if (filename !== undefined) updateData.filename = filename
+    if (altText !== undefined) updateData.altText = altText
+    if (folder !== undefined) updateData.folder = folder
+    if (type !== undefined) updateData.type = type
+
     const media = await prisma.mediaLibrary.update({
       where: { id },
-      data: {
-        filename,
-        folder
-      }
+      data: updateData
     })
 
     return NextResponse.json({ ok: true, data: media });

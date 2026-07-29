@@ -109,7 +109,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   function getThumbnail(video: VideoItem) {
     const ytId = getYouTubeId(video.url)
     if (ytId) {
-      return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+      return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
     }
     return null
   }
@@ -161,21 +161,21 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
               className="group relative cursor-pointer overflow-hidden border border-amber-200/50 dark:border-border/60 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 bg-card flex flex-col justify-between"
             >
               {/* Media Aspect Ratio Container */}
-              <div className="relative aspect-video w-full bg-slate-950 overflow-hidden">
+              <div className="relative aspect-video w-full bg-slate-900 overflow-hidden">
                 {/* Thumbnail Image */}
                 {thumb ? (
-                  <Image
+                  <img
                     src={thumb}
                     alt={video.filename || 'Sacred Video'}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                    loading="lazy"
                   />
                 ) : (
                   <video
-                    src={video.url}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    src={video.url.includes('#') ? video.url : `${video.url}#t=0.5`}
+                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                     muted
+                    playsInline
                     preload="metadata"
                   />
                 )}

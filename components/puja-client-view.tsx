@@ -6,12 +6,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { 
   MapPin, Calendar, CheckCircle2, Video, Gift, Sparkles, ShieldCheck, 
-  Star, User, HandHeart, Clock, ThumbsUp, ArrowRight, ArrowDown, Play, PhoneCall, Award 
+  Star, User, HandHeart, Clock, ThumbsUp, ArrowRight, ArrowDown, Play, PhoneCall, Award,
+  ChevronLeft, ChevronRight 
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
+import { ProFormattedDescription } from '@/components/pro-formatted-description'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -56,7 +58,35 @@ export function PujaClientView({ puja }: { puja: any }) {
   if (!puja) return <div className="py-20 text-center text-slate-600 font-bold">Puja details loading or not found...</div>
 
   const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || ''
-  const activeImage = puja?.coverImage || fallbackImage
+  const rawImages = [
+    ...(puja?.coverImage ? [puja.coverImage] : []),
+    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img.url)
+  ].filter(Boolean)
+  
+  const mediaList = Array.from(new Set(rawImages.length > 0 ? rawImages : [fallbackImage]))
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0)
+  const currentMedia = mediaList[activeMediaIndex] || fallbackImage
+  const activeImage = currentMedia
+
+  const isVideoUrl = (url: string) => {
+    if (!url) return false
+    return url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('youtube') || url.includes('youtu.be')
+  }
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+  }
+
+  const handlePrevMedia = () => {
+    setActiveMediaIndex(prev => (prev === 0 ? mediaList.length - 1 : prev - 1))
+  }
+
+  const handleNextMedia = () => {
+    setActiveMediaIndex(prev => (prev === mediaList.length - 1 ? 0 : prev + 1))
+  }
 
   const handleBookNow = (overridePkgId?: string) => {
     const pkgId = overridePkgId || selectedPackage
@@ -98,42 +128,52 @@ export function PujaClientView({ puja }: { puja: any }) {
   return (
     <div className="relative bg-[#FAF8F5] pb-28 sm:pb-32 font-sans antialiased text-slate-800">
       
-      {/* 1. Hero Section (Vedic Deep Red & Rich Gold Gradient) */}
-      <section className="relative w-full py-12 sm:py-20 lg:py-24 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-b from-[#4A0404] via-[#660B0B] to-[#3B0202] text-white">
-        <div className="absolute inset-0 z-0 opacity-25 mix-blend-overlay">
+      {/* 1. Hero Section (Ultra-Pro Luxury Vedic Dark Gold Theme) */}
+      <section className="relative w-full py-12 sm:py-20 lg:py-24 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#120704] via-[#1E0C07] to-[#0A0302] text-white">
+        
+        {/* Background Atmosphere Image with Ambient Blur & Dark Vignette */}
+        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none overflow-hidden">
           {activeImage && (
-            <img src={activeImage} alt={puja.name} className="w-full h-full object-cover object-center filter blur-xs" />
+            <img 
+              src={activeImage} 
+              alt={puja.name} 
+              className="w-full h-full object-cover object-center scale-105 filter blur-sm transition-opacity duration-1000" 
+            />
           )}
-          <div className="absolute inset-0 bg-radial from-transparent via-[#4A0404]/60 to-[#2A0000]"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0302] via-[#120704]/80 to-[#1E0C07]/90"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,158,11,0.12),transparent_70%)]"></div>
         </div>
         
-        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+        {/* Ambient Gold Particle / Radial Glow */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14">
           
-          {/* Main Title & Badges */}
-          <div className="flex-1 space-y-5 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 border border-amber-400/50 bg-amber-950/60 backdrop-blur-md px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+          {/* Main Title & Details */}
+          <div className="flex-1 space-y-6 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 border border-amber-400/30 bg-amber-500/10 backdrop-blur-xl px-4 py-1.5 rounded-full shadow-[0_4px_20px_rgba(245,158,11,0.15)]">
               <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span className="text-amber-300 font-bold text-xs sm:text-sm tracking-wider uppercase">
+              <span className="text-amber-300 font-bold text-xs sm:text-sm tracking-widest uppercase">
                 {puja.category?.name || 'दिव्य अनुष्ठान एवं महायज्ञ'}
               </span>
             </div>
             
-            <h1 className="flex flex-col space-y-1">
-              <span className="text-amber-200 text-lg sm:text-2xl font-serif tracking-wide italic">
+            <h1 className="flex flex-col space-y-2">
+              <span className="text-amber-200/90 text-lg sm:text-2xl font-serif tracking-wide italic">
                 सर्व कार्य सिद्धि हेतु
               </span>
-              <span className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-500 pb-1">
+              <span className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-200 to-amber-400 pb-1">
                 {puja.name}
               </span>
             </h1>
 
             {/* Location & Date Details */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-amber-100/90 font-medium text-xs sm:text-sm pt-1">
-              <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-amber-500/20">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 text-amber-100/90 font-medium text-xs sm:text-sm pt-1">
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/20 shadow-inner">
                 <MapPin className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>{puja.location || 'विशेष सिद्ध शक्तिपीठ / उज्जैन धाम'}</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-amber-500/20">
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/20 shadow-inner">
                 <Calendar className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>
                   {puja.pujaDate 
@@ -143,39 +183,115 @@ export function PujaClientView({ puja }: { puja: any }) {
               </div>
             </div>
 
-            {/* Key Assurance Bullet Icons */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 text-center border-t border-amber-500/20">
-              <div className="bg-amber-950/40 p-2 sm:p-3 rounded-lg border border-amber-500/20">
-                <Video className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                <p className="text-[11px] sm:text-xs font-semibold text-amber-100">लाइव वीडियो रिकॉर्डिंग</p>
+            {/* Key Assurance Feature Chips */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 text-center">
+              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+                  <Video className="w-5 h-5" />
+                </div>
+                <p className="text-[11px] sm:text-xs font-bold text-amber-100">लाइव वीडियो रिकॉर्डिंग</p>
               </div>
-              <div className="bg-amber-950/40 p-2 sm:p-3 rounded-lg border border-amber-500/20">
-                <Gift className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                <p className="text-[11px] sm:text-xs font-semibold text-amber-100">घर पर शुद्ध प्रसाद</p>
+              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+                  <Gift className="w-5 h-5" />
+                </div>
+                <p className="text-[11px] sm:text-xs font-bold text-amber-100">घर पर शुद्ध प्रसाद</p>
               </div>
-              <div className="bg-amber-950/40 p-2 sm:p-3 rounded-lg border border-amber-500/20">
-                <ShieldCheck className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                <p className="text-[11px] sm:text-xs font-semibold text-amber-100">नाम व गोत्र संकल्प</p>
+              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <p className="text-[11px] sm:text-xs font-bold text-amber-100">नाम व गोत्र संकल्प</p>
               </div>
             </div>
           </div>
 
-          {/* Hero Media / Banner Card */}
-          <div className="w-full lg:w-[420px] shrink-0">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-amber-400/40 bg-rose-950 group">
-              <div className="aspect-[4/3] relative overflow-hidden">
-                <img 
-                  src={activeImage} 
-                  alt={puja.name} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                <Badge className="absolute top-3 left-3 bg-amber-500 text-slate-950 font-black border-none px-3 py-1 shadow-lg">
+          {/* Hero Media / Banner Showcase Card */}
+          <div className="w-full lg:w-[430px] shrink-0">
+            <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(245,158,11,0.18)] border border-amber-400/30 bg-[#1A0A06]/95 backdrop-blur-xl group">
+              
+              {/* Main Media Viewer */}
+              <div className="aspect-[4/3] relative overflow-hidden bg-black flex items-center justify-center">
+                {isVideoUrl(currentMedia) ? (
+                  getYouTubeEmbedUrl(currentMedia) ? (
+                    <iframe 
+                      src={getYouTubeEmbedUrl(currentMedia)!} 
+                      className="w-full h-full" 
+                      title={puja.name} 
+                      allowFullScreen 
+                    />
+                  ) : (
+                    <video src={currentMedia} controls autoPlay muted loop className="w-full h-full object-contain" />
+                  )
+                ) : (
+                  <img 
+                    src={currentMedia} 
+                    alt={puja.name} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A0A06] via-transparent to-transparent pointer-events-none"></div>
+                
+                <Badge className="absolute top-3.5 left-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black border-none px-3.5 py-1 text-xs shadow-lg z-10 rounded-full">
                   100% वैदिक विधान
                 </Badge>
+
+                {/* Slide Counter Badge */}
+                {mediaList.length > 1 && (
+                  <Badge className="absolute top-3.5 right-3.5 bg-black/75 backdrop-blur-md text-amber-300 font-bold border border-amber-400/30 px-2.5 py-0.5 text-xs shadow-md z-10 rounded-full">
+                    {activeMediaIndex + 1} / {mediaList.length}
+                  </Badge>
+                )}
+
+                {/* Prev / Next Slide Arrows */}
+                {mediaList.length > 1 && (
+                  <>
+                    <button 
+                      type="button" 
+                      onClick={handlePrevMedia}
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-amber-500 text-white hover:text-black flex items-center justify-center backdrop-blur-md border border-white/20 transition-all shadow-lg z-20 cursor-pointer"
+                      aria-label="Previous Media"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={handleNextMedia}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-amber-500 text-white hover:text-black flex items-center justify-center backdrop-blur-md border border-white/20 transition-all shadow-lg z-20 cursor-pointer"
+                      aria-label="Next Media"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
               </div>
 
-              <div className="p-5 bg-gradient-to-b from-[#5C0808] to-[#3B0202] space-y-4">
+              {/* Horizontal Thumbnails Carousel */}
+              {mediaList.length > 1 && (
+                <div className="flex gap-2 p-2.5 bg-[#120603] overflow-x-auto scrollbar-hide border-t border-amber-500/20">
+                  {mediaList.map((mediaUrl, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setActiveMediaIndex(idx)}
+                      className={cn(
+                        "relative h-12 w-16 shrink-0 rounded-lg overflow-hidden border transition-all p-0.5 bg-black cursor-pointer",
+                        activeMediaIndex === idx ? "border-amber-400 ring-2 ring-amber-400/50 scale-105 shadow-[0_0_12px_rgba(251,191,36,0.4)]" : "border-amber-900/40 opacity-65 hover:opacity-100"
+                      )}
+                    >
+                      {isVideoUrl(mediaUrl) ? (
+                        <div className="w-full h-full bg-slate-900 text-amber-300 flex items-center justify-center font-bold">
+                          <Play className="w-4 h-4 text-amber-400 fill-amber-400" />
+                        </div>
+                      ) : (
+                        <img src={mediaUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover rounded-xs" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Booking Summary Box */}
+              <div className="p-5 bg-gradient-to-b from-[#1F0C07] to-[#140603] space-y-4">
                 <div className="flex justify-between items-center text-sm border-b border-amber-500/20 pb-3">
                   <span className="text-amber-200/80 font-medium">बुकिंग शुल्क प्रारम्भ:</span>
                   <span className="text-2xl font-black text-amber-300">₹{basePrice.toLocaleString()}</span>
@@ -183,13 +299,13 @@ export function PujaClientView({ puja }: { puja: any }) {
                 
                 <Button 
                   onClick={() => handleScrollTo('packages')}
-                  className="w-full h-13 text-base sm:text-lg bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-black shadow-[0_8px_20px_rgba(16,185,129,0.35)] transition-all rounded-xl uppercase tracking-wider border-b-4 border-emerald-800"
+                  className="w-full h-13 text-base sm:text-lg bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black shadow-[0_8px_25px_rgba(245,158,11,0.3)] transition-all rounded-xl uppercase tracking-wider border-b-4 border-amber-700 cursor-pointer"
                 >
                   पूजा पैकेज चुनें (Book Now)
                 </Button>
 
-                <p className="text-center text-xs text-amber-200/70 flex items-center justify-center gap-1.5 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <p className="text-center text-xs text-amber-200/80 flex items-center justify-center gap-1.5 font-medium">
+                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
                   अनुभवी वेदपाठी आचार्यों द्वारा संकल्पित
                 </p>
               </div>
@@ -265,6 +381,13 @@ export function PujaClientView({ puja }: { puja: any }) {
                   )}
 
                   <div className="space-y-5">
+                    {/* Package Specific Custom Image */}
+                    {pkg.image && (
+                      <div className="aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-100 mb-3 shadow-xs">
+                        <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
+                      </div>
+                    )}
+
                     <div className="border-b border-slate-100 pb-4 text-center">
                       <h3 className="text-lg font-black text-slate-800 group-hover:text-rose-900 transition-colors">
                         {pkg.name}
@@ -338,11 +461,9 @@ export function PujaClientView({ puja }: { puja: any }) {
               </div>
 
               <div className="lg:col-span-7 space-y-4">
-                <div 
-                  className="prose prose-slate max-w-none text-slate-700 text-sm sm:text-base leading-relaxed whitespace-pre-line"
-                  dangerouslySetInnerHTML={{ 
-                    __html: puja.longDescription || puja.description || 'शास्त्रों के अनुसार इस महायज्ञ एवं पूजा अनुष्ठान से जातक के जीवन में आने वाली समस्त बाधायें, शत्रु बाधा, रोग, ऋण तथा मानसिक कष्टों का निवारण होता है। योग्य एवं विद्वान आचार्यों द्वारा नाम व गोत्र से सम्पादित इस पूजा से नवग्रह शांति तथा परिवार में सुख-समृद्धि का वास होता है।' 
-                  }} 
+                <ProFormattedDescription 
+                  content={puja.longDescription || puja.description || 'शास्त्रों के अनुसार इस महायज्ञ एवं पूजा अनुष्ठान से जातक के जीवन में आने वाली समस्त बाधायें, शत्रु बाधा, रोग, ऋण तथा मानसिक कष्टों का निवारण होता है। योग्य एवं विद्वान आचार्यों द्वारा नाम व गोत्र से सम्पादित इस पूजा से नवग्रह शांति तथा परिवार में सुख-समृद्धि का वास होता है।'} 
+                  type="puja" 
                 />
               </div>
             </div>
@@ -506,6 +627,19 @@ export function PujaClientView({ puja }: { puja: any }) {
             ))}
           </Accordion>
         </section>
+
+        {/* Custom HTML / JS Embed Code Section (Rendered clean & instant) */}
+        {puja.customHtml && puja.customHtml.trim() && (
+          <section className="my-8">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">विशेष जानकारी एवं लाइव विजेट</h3>
+              <div 
+                className="w-full overflow-x-auto leading-relaxed text-slate-800"
+                dangerouslySetInnerHTML={{ __html: puja.customHtml }} 
+              />
+            </div>
+          </section>
+        )}
 
         {/* 100% Secure Payment Trust Badge */}
         <PaymentTrustBadge className="my-8" />

@@ -12,21 +12,19 @@ export function TranslationProvider() {
     // PATCH: Prevent React from crashing when Google Translate modifies the DOM
     if (typeof Node === 'function' && Node.prototype) {
       const originalRemoveChild = Node.prototype.removeChild;
-      (Node.prototype as any).removeChild = function (child: any) {
+      Node.prototype.removeChild = function <T extends Node>(child: T): T {
         if (child.parentNode !== this) {
-// console.warn('DOM manipulation intercepted: removeChild', child, this); (removed for production)
           return child;
         }
-        return originalRemoveChild.apply(this, arguments as any);
+        return originalRemoveChild.call(this, child) as T;
       };
 
       const originalInsertBefore = Node.prototype.insertBefore;
-      (Node.prototype as any).insertBefore = function (newNode: any, referenceNode: any) {
+      Node.prototype.insertBefore = function <T extends Node>(newNode: T, referenceNode: Node | null): T {
         if (referenceNode && referenceNode.parentNode !== this) {
-// console.warn('DOM manipulation intercepted: insertBefore', referenceNode, this); (removed for production)
           return newNode;
         }
-        return originalInsertBefore.apply(this, arguments as any);
+        return originalInsertBefore.call(this, newNode, referenceNode) as T;
       };
     }
 

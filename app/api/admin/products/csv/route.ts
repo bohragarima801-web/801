@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     let createdCount = 0
     let updatedCount = 0
 
-    for (const record of records) {
+    for (const record of records as Record<string, string>[]) {
       const name = record.name || record.productname || record.title
       if (!name) continue
 

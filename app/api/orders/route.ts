@@ -173,6 +173,26 @@ export async function POST(req: NextRequest) {
     }
 
 
+    // Physical product subtotal calculation (only items with productId)
+    const productSubtotal = orderItemsData
+      .filter((item: any) => item.productId)
+      .reduce((sum: number, item: any) => sum + item.total, 0)
+
+    const deliveryEnabledStr = await getSetting('delivery.enabled', 'true')
+    const deliveryFeeStr = await getSetting('delivery.fee', '99')
+    const freeThresholdStr = await getSetting('delivery.free_threshold', '999')
+
+    const deliveryEnabled = deliveryEnabledStr !== 'false'
+    const deliveryFee = Number(deliveryFeeStr) > 0 ? Number(deliveryFeeStr) : 99
+    const freeThreshold = Number(freeThresholdStr) > 0 ? Number(freeThresholdStr) : 999
+
+    let shipping = 0
+    if (deliveryEnabled && productSubtotal > 0 && productSubtotal <= freeThreshold) {
+      shipping = deliveryFee
+    } else {
+      shipping = 0
+    }
+
     let discountAmount = 0
     let validCouponId: string | null = null
 
@@ -201,7 +221,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const total = Math.max(0, subtotal - discountAmount)
+    const total = Math.max(0, subtotal - discountAmount + shipping)
 
 
     // 2. Resolve or Upsert DB User Record
@@ -248,7 +268,7 @@ export async function POST(req: NextRequest) {
         userId: dbUserId,
         subtotal,
         tax: 0,
-        shipping: 0,
+        shipping: shipping,
         discount: discountAmount,
         total,
         status: 'PENDING',

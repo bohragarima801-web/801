@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     // Simulate sending notifications
 // console.log(`[CSV Engine] Starting notification dispatch for ${records.length} contacts...`) (removed for production)
     
-    records.forEach((rec, idx) => {
+    records.forEach((rec: Record<string, string>, idx: number) => {
       const contactName = rec.name || 'Devotee'
       const email = rec.email || rec.mail || ''
       const phone = rec.phone || rec.mobile || rec.whatsapp || ''
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       ok: true,
       message: `Successfully processed and dispatched alerts to ${records.length} contacts via email, SMS, and WhatsApp!`,
       details: {
-        recipients: records.map(r => ({
+        recipients: records.map((r: Record<string, string>) => ({
           name: r.name || 'Devotee',
           email: r.email || r.mail || 'No Email',
           phone: r.phone || r.mobile || r.whatsapp || 'No Phone'

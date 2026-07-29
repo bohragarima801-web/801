@@ -402,6 +402,9 @@ export default async function HomePage() {
       {/* SACRED VIDEO GALLERY & REELS */}
       <SacredVideoGallery videos={dbVideos} />
 
+      {/* SACRED ASTRO & SPIRITUAL TOOLS */}
+      <SacredAstroTools />
+
       {/* TESTIMONIALS */}
       <section className="container pb-16">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">

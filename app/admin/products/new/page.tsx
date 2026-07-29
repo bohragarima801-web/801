@@ -44,10 +44,13 @@ function NewProductPage_Content() {
   const [status, setStatus] = useState('DRAFT')
   const [coverImage, setCoverImage] = useState('')
   const [extraImages, setExtraImages] = useState<string[]>([])
+  const [videoUrl, setVideoUrl] = useState('')
+  const [uploadingVideo, setUploadingVideo] = useState(false)
   const [tags, setTags] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
   const [seoKeywords, setSeoKeywords] = useState('')
+  const [customHtml, setCustomHtml] = useState('')
   const [saving, setSaving] = useState(false)
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -115,8 +118,13 @@ function NewProductPage_Content() {
           setSeoTitle(p.seoTitle || '')
           setSeoDescription(p.seoDescription || '')
           setSeoKeywords(p.seoKeywords || '')
+          setCustomHtml(p.customHtml || '')
           if (p.images && p.images.length > 0) {
-            setExtraImages(p.images.map((img: any) => img.url))
+            const allUrls = p.images.map((img: any) => img.url)
+            const photos = allUrls.filter((u: string) => !u.endsWith('.mp4') && !u.endsWith('.webm') && !u.includes('youtube') && !u.includes('youtu.be'))
+            const vid = allUrls.find((u: string) => u.endsWith('.mp4') || u.endsWith('.webm') || u.includes('youtube') || u.includes('youtu.be'))
+            setExtraImages(photos)
+            if (vid) setVideoUrl(vid)
           }
         }
       } catch {
@@ -257,6 +265,37 @@ function NewProductPage_Content() {
     setExtraImages(prev => prev.filter((_, i) => i !== indexToRemove))
   }
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingVideo(true)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      const data = await res.json()
+      if (data.ok && data.url) {
+        setVideoUrl(data.url)
+        toast.success('Product video uploaded successfully!')
+      } else {
+        toast.error(data.error || 'Upload failed')
+      }
+    } catch {
+      toast.error('Error uploading video file')
+    } finally {
+      setUploadingVideo(false)
+    }
+  }
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim()) {
@@ -287,10 +326,14 @@ function NewProductPage_Content() {
         weight: weight ? Number(weight) : null,
         stock: Number(stock) || 0,
         tags,
+        customHtml,
         seoTitle,
         seoDescription,
         seoKeywords,
-        extraImages
+        extraImages: [
+          ...extraImages.filter(u => u && u.trim()),
+          ...(videoUrl.trim() ? [videoUrl.trim()] : [])
+        ]
       }
 
       const res = await fetch('/api/admin/products', {
@@ -406,6 +449,22 @@ function NewProductPage_Content() {
                   <Label>SEO Keywords</Label>
                   <Input type="text" value={seoKeywords} onChange={(e) => setSeoKeywords(e.target.value)} placeholder="e.g. rudraksha, yantra, spiritual (comma separated)" />
                 </div>
+
+                <div className="space-y-2 pt-4 border-t">
+                  <Label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    ⚡ Custom HTML / JS / Embed Code (कस्टम कोड आउटपुट)
+                  </Label>
+                  <Textarea 
+                    rows={4} 
+                    value={customHtml} 
+                    onChange={(e) => setCustomHtml(e.target.value)} 
+                    placeholder="e.g. <iframe src='...'></iframe> or <div class='custom-widget'>...</div>" 
+                    className="font-mono text-xs bg-slate-950 text-emerald-400 placeholder:text-slate-600"
+                  />
+                  <p className="text-[10px] text-slate-500">
+                    यह कोड उत्पाद विवरण पेज पर बिना किसी डिले या एरर के स्पष्ट रूप से रेंडर होगा।
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -440,54 +499,108 @@ function NewProductPage_Content() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader><CardTitle className="text-base">Product Image (उत्पाद छवि)</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {coverImage && (
-                <div className="aspect-[4/3] rounded-lg overflow-hidden border bg-slate-100 flex items-center justify-center overflow-hidden">
-                  <img src={coverImage} className="h-full w-full object-cover" alt="Preview" />
-                </div>
-              )}
-              
-              <label className="cursor-pointer inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm font-medium gap-2 w-full select-none">
-                {uploading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Upload className="h-4 w-4" />
+          {/* 🖼️ PHOTO & GALLERY MANAGEMENT */}
+          <Card className="border-orange-200">
+            <CardHeader className="bg-orange-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-slate-900">
+                🖼️ Product Cover & Gallery Photos (फ़ोटो प्रबंधन)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-bold text-slate-700">Main Cover Image (मुख्य फ़ोटो)</Label>
+                {coverImage && (
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border bg-slate-100 flex items-center justify-center shadow-xs">
+                    <img src={coverImage} className="h-full w-full object-cover" alt="Cover Preview" />
+                  </div>
                 )}
-                {uploading ? 'Uploading…' : 'Upload Product Image'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                  disabled={uploading}
-                />
-              </label>
+                
+                <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm font-medium gap-2 w-full select-none">
+                  {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  {uploading ? 'Uploading…' : 'Upload Main Cover Photo'}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={uploading} />
+                </label>
 
-              <Input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="Or paste image URL" className="text-xs" />
+                <Input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="Or paste image URL" className="text-xs" />
+              </div>
+
+              <div className="pt-3 border-t space-y-2">
+                <Label className="text-xs font-bold text-slate-700">Additional Gallery Photos (अतिरिक्त फ़ोटो)</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {extraImages.map((img, i) => (
+                    <div key={i} className="aspect-square rounded-lg border bg-slate-100 flex items-center justify-center relative overflow-hidden group shadow-xs">
+                      <img src={img} className="h-full w-full object-cover" alt={`Gallery ${i}`} />
+                      <button type="button" onClick={() => removeExtraImage(i)} className="absolute inset-0 bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-bold text-xs">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+                <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-dashed border-orange-300 bg-orange-50/50 hover:bg-orange-100/50 px-4 py-2 text-xs font-bold text-orange-800 gap-2 w-full select-none transition-colors">
+                  {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  Add Additional Photo
+                  <input type="file" accept="image/*" className="hidden" onChange={handleExtraImageUpload} disabled={uploading} />
+                </label>
+              </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader><CardTitle className="text-base">Gallery Images (अतिरिक्त छवियाँ)</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid grid-cols-3 gap-2">
-                {extraImages.map((img, i) => (
-                  <div key={i} className="aspect-square rounded border bg-slate-100 flex items-center justify-center relative overflow-hidden group">
-                    <img src={img} className="h-full w-full object-cover" alt={`Gallery ${i}`} />
-                    <button type="button" onClick={() => removeExtraImage(i)} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
+          {/* 🎥 PRODUCT VIDEO MANAGEMENT (SEPARATE FROM PHOTOS) */}
+          <Card className="border-blue-200">
+            <CardHeader className="bg-blue-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-blue-950">
+                🎥 Product Sacred Video (उत्पाद वीडियो - Photo से अलग)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-bold text-slate-700">YouTube Video URL / Direct MP4 Link</Label>
+                <Input 
+                  type="text" 
+                  value={videoUrl} 
+                  onChange={(e) => setVideoUrl(e.target.value)} 
+                  placeholder="https://www.youtube.com/watch?v=... or https://...video.mp4" 
+                  className="text-xs"
+                />
+                <p className="text-[10px] text-slate-500">
+                  यह वीडियो फ़ोटो से अलग रहेगा और उत्पाद पेज पर अलग से प्ले होगा।
+                </p>
               </div>
-              
-              <label className="cursor-pointer inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm font-medium gap-2 w-full select-none">
-                {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                Add Gallery Image
-                <input type="file" accept="image/*" className="hidden" onChange={handleExtraImageUpload} disabled={uploading} />
+
+              <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-xs font-semibold gap-2 w-full select-none">
+                {uploadingVideo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4 text-blue-600" />}
+                {uploadingVideo ? 'Uploading Video…' : 'Upload Video File (MP4/WebM)'}
+                <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} disabled={uploadingVideo} />
               </label>
+
+              {/* Video Live Preview */}
+              {videoUrl && (
+                <div className="space-y-1.5 pt-2 border-t">
+                  <Label className="text-xs font-bold text-emerald-700">Live Video Preview:</Label>
+                  <div className="aspect-video rounded-xl overflow-hidden border border-slate-300 bg-black relative shadow-xs">
+                    {getYouTubeEmbedUrl(videoUrl) ? (
+                      <iframe 
+                        src={getYouTubeEmbedUrl(videoUrl)!} 
+                        className="w-full h-full" 
+                        title="YouTube Product Video Preview" 
+                        allowFullScreen 
+                      />
+                    ) : (
+                      <video src={videoUrl} controls className="w-full h-full object-contain" />
+                    )}
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setVideoUrl('')} 
+                    className="text-red-600 hover:text-red-700 text-xs h-7 px-2"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" /> Remove Video
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
