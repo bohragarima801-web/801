@@ -117,7 +117,7 @@ export default function ToolsPage() {
                   <CardContent className="p-8 space-y-5 flex flex-col justify-between h-full">
                     <div className="space-y-4">
                       <div className="flex items-start justify-between">
-                        <div className="h-14 w-14 rounded-2xl bg-orange-100 flex items-center justify-center">
+                        <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
                           <IconComponent className="h-7 w-7 text-[var(--primary-color)]" />
                         </div>
                         {t.isFree ? (
@@ -138,7 +138,7 @@ export default function ToolsPage() {
 
                     <div className="pt-5 border-t border-slate-100 space-y-3">
                       {t.isFree || premiumActive || trialActive ? (
-                        <Button className="w-full h-12 rounded-xl font-bold bg-[var(--primary-color)] hover:bg-orange-700 text-white" asChild>
+                        <Button className="w-full h-12 rounded-xl font-bold bg-gradient-primary hover:opacity-90 text-white" asChild>
                           <Link href={`/tools/${t.slug}`}>
                             Open Tool <ArrowRight className="h-4 w-4 ml-2" />
                           </Link>
