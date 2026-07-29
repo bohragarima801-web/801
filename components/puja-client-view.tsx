@@ -135,7 +135,11 @@ export function PujaClientView({ puja }: { puja: any }) {
               </div>
               <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-amber-500/20">
                 <Calendar className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>{puja.publishedAt ? new Date(puja.publishedAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'आगामी शुभ मुहूर्त - बुकिंग चालू'}</span>
+                <span>
+                  {puja.pujaDate 
+                    ? new Date(puja.pujaDate).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }) 
+                    : (puja.isEvergreen ? 'नियमित शुभ मुहूर्त' : 'आगामी शुभ मुहूर्त - बुकिंग चालू')}
+                </span>
               </div>
             </div>
 
