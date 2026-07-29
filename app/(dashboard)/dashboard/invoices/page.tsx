@@ -1,4 +1,5 @@
 import { FileText, Download, Clock, CheckCircle, ExternalLink } from 'lucide-react'
+import { RealtimeRefresher } from '@/components/realtime-refresher'
 import { getCurrentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
@@ -54,6 +55,7 @@ export default async function InvoicesPage() {
 
   return (
     <div className="space-y-6">
+      <RealtimeRefresher />
       <div>
         <h1 className="text-2xl font-bold">मेरी रसीदें — Invoices</h1>
         <p className="text-muted-foreground text-sm mt-0.5">Download your payment receipts and invoices.</p>

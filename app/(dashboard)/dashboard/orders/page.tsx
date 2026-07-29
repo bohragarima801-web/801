@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ShoppingBag, Calendar, Package } from 'lucide-react'
+import { RealtimeRefresher } from '@/components/realtime-refresher'
 import Link from 'next/link'
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,7 @@ export default async function OrdersPage() {
 
   return (
     <div className="space-y-6">
+      <RealtimeRefresher />
       <div>
         <h1 className="text-2xl font-bold">My Orders</h1>
         <p className="text-muted-foreground text-sm">Track your purchases of sacred items and samagri.</p>

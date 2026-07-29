@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Clock, FileText } from 'lucide-react'
+import { RealtimeRefresher } from '@/components/realtime-refresher'
 import Link from 'next/link'
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,7 @@ export default async function BookingsPage() {
 
   return (
     <div className="space-y-6">
+      <RealtimeRefresher />
       <div>
         <h1 className="text-2xl font-bold">My Bookings</h1>
         <p className="text-muted-foreground text-sm">View and track your scheduled pujas and rituals.</p>
