@@ -25,43 +25,56 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
     return <Component tool={tool} isPremiumUnlocked={isPremiumUnlocked} />
   }
 
-  // FALLBACK: Load the HTML/JS from database in an iframe
-  const srcDoc = `<!DOCTYPE html>
+  const rawHtml = (tool.htmlCode || '').trim()
+  const isFullDocument = rawHtml.toLowerCase().includes('<!doctype html') || rawHtml.toLowerCase().includes('<html')
+
+  let srcDoc = ''
+
+  if (isFullDocument) {
+    srcDoc = rawHtml
+    if (tool.cssCode) {
+      srcDoc = srcDoc.replace('</head>', `<style>${tool.cssCode}</style></head>`)
+    }
+    if (tool.jsCode) {
+      srcDoc = srcDoc.replace('</body>', `<script>${tool.jsCode}</script></body>`)
+    }
+  } else {
+    srcDoc = `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${tool.name}</title>
+      <title>${tool.name || 'Spiritual Tool'}</title>
       <script src="https://cdn.tailwindcss.com"></script>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
       <style>
         body { 
           font-family: 'Inter', system-ui, -apple-system, sans-serif; 
           padding: 24px; 
-          background: transparent; 
+          background: #ffffff; 
           color: #0f172a;
-          line-height: 1.5;
+          line-height: 1.6;
         }
         h1, h2, h3, h4, h5 { font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem; }
         h1 { font-size: 1.75rem; }
         h2 { font-size: 1.5rem; }
         h3 { font-size: 1.25rem; }
         p { color: #475569; margin-top: 0; margin-bottom: 1rem; }
-        label { display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 0.375rem; }
+        label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.375rem; }
         input, select, textarea {
-          width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;
+          width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.75rem;
           background-color: #fff; color: #0f172a; font-size: 0.875rem; margin-bottom: 1.25rem;
           box-sizing: border-box; transition: all 0.2s; font-family: inherit; outline: none;
         }
-        input:focus, select:focus, textarea:focus { border-color: #f97316; box-shadow: 0 0 0 2px #ffedd5; }
-        button {
-          display: inline-flex; align-items: center; justify-content: center; padding: 0.625rem 1.25rem;
-          font-size: 0.875rem; font-weight: 600; border-radius: 0.5rem; border: none;
-          background-color: #ea580c; color: white; cursor: pointer; transition: background-color 0.2s;
-          box-sizing: border-box; width: 100%; font-family: inherit;
+        input:focus, select:focus, textarea:focus { border-color: #ea580c; box-shadow: 0 0 0 3px #ffedd5; }
+        button, .btn {
+          display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem;
+          font-size: 0.95rem; font-weight: 700; border-radius: 0.75rem; border: none;
+          background-color: #ea580c; color: white; cursor: pointer; transition: all 0.2s;
+          box-sizing: border-box; width: 100%; font-family: inherit; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
         }
-        button:hover { background-color: #c2410c; }
-        .card { border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem; background: white; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+        button:hover, .btn:hover { background-color: #c2410c; transform: translateY(-1px); }
+        .card { border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.75rem; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
         th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
         th { background-color: #f8fafc; font-weight: 600; color: #475569; font-size: 0.875rem; }
@@ -71,20 +84,25 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
       </style>
     </head>
     <body>
-      ${tool.htmlCode || '<div class="text-center p-10 text-gray-500">No UI configured for this tool yet.</div>'}
+      ${tool.htmlCode || '<div class="text-center p-12 text-slate-500 font-medium">Tool interface initialized. Content will render here.</div>'}
       <script>
-        ${tool.jsCode || ''}
+        try {
+          ${tool.jsCode || ''}
+        } catch(e) {
+          console.error("Tool Script Error:", e);
+        }
       </script>
     </body>
     </html>`
+  }
 
   return (
-    <div className="w-full bg-white border rounded-xl shadow-sm min-h-[600px] overflow-hidden relative">
+    <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[650px] overflow-hidden relative">
       <iframe 
         srcDoc={srcDoc}
-        className="w-full h-full min-h-[600px] border-0"
-        sandbox="allow-scripts allow-forms allow-same-origin"
-        title={tool.name}
+        className="w-full h-full min-h-[650px] border-0"
+        sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
+        title={tool.name || 'Spiritual Tool'}
       />
     </div>
   )

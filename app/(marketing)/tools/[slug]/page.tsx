@@ -3,18 +3,62 @@ import { prisma } from '@/lib/prisma'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, Lock, Sparkles } from 'lucide-react'
+import { AlertCircle, Lock, Sparkles, Wrench } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
-export const revalidate = 30
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function ToolViewPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  let tool = await prisma.spiritualTool.findUnique({ where: { slug: slug } })
+  const normalizedSlug = decodeURIComponent(slug).toLowerCase().trim()
 
-  if (!tool || !tool.isActive) {
-    notFound()
+  // 1. Try exact slug match
+  let tool = await prisma.spiritualTool.findFirst({
+    where: {
+      OR: [
+        { slug: slug },
+        { slug: normalizedSlug },
+        { id: slug }
+      ]
+    }
+  })
+
+  // 2. Fallback: case-insensitive search
+  if (!tool) {
+    tool = await prisma.spiritualTool.findFirst({
+      where: {
+        slug: { equals: normalizedSlug, mode: 'insensitive' }
+      }
+    })
+  }
+
+  // 3. Fallback: match by name slugified
+  if (!tool) {
+    const allTools = await prisma.spiritualTool.findMany()
+    tool = allTools.find(t => 
+      t.slug.toLowerCase().trim() === normalizedSlug ||
+      t.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === normalizedSlug
+    ) || null
+  }
+
+  if (!tool) {
+    return (
+      <div className="container max-w-2xl py-20 text-center space-y-6">
+        <div className="h-20 w-20 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto shadow-inner">
+          <Wrench className="h-10 w-10" />
+        </div>
+        <h1 className="text-3xl font-black text-slate-800">Spiritual Tool Coming Soon</h1>
+        <p className="text-slate-600 font-medium">
+          This Vedic tool is currently being configured or updated. Please check back shortly or explore our active tools.
+        </p>
+        <Button asChild className="bg-orange-600 hover:bg-orange-700 font-bold rounded-xl px-8 h-12">
+          <Link href="/tools">Explore Active Tools</Link>
+        </Button>
+      </div>
+    )
   }
 
   const headersList = await headers()
