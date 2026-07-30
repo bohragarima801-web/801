@@ -58,8 +58,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     manifest: '/manifest.json',
     icons: {
-      icon: '/logo.jpg',
-      apple: '/apple-touch-icon.png'
+      icon: dynamicConfig.logo || '/logo.jpg',
+      shortcut: dynamicConfig.logo || '/logo.jpg',
+      apple: dynamicConfig.logo || '/apple-touch-icon.png'
     },
     appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: dynamicConfig.name },
   }

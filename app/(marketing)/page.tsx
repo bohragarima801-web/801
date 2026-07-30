@@ -137,7 +137,7 @@ export default async function HomePage() {
         "@id": "https://divyayagyam.com/#organization",
         "name": "DivyaYagyam",
         "url": "https://divyayagyam.com",
-        "logo": "https://divyayagyam.com/logo.jpg",
+        "logo": siteData.logo || "https://divyayagyam.com/logo.jpg",
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "+91-95871-71984",
