@@ -14,9 +14,22 @@ import { MediaCarousel } from '@/components/ui/media-carousel'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { FadeIn } from '@/components/ui/fade-in'
-import { SacredVideoGallery } from '@/components/sacred-video-gallery'
+import { SacredVideoGallery, getYouTubeId, getYouTubeThumbnail } from '@/components/sacred-video-gallery'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
 import { getDynamicSiteConfig } from '@/lib/settings'
+
+function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean; thumbUrl: string | null } {
+  if (!url) return { isVideo: false, thumbUrl: null }
+  const ytId = getYouTubeId(url)
+  if (ytId) {
+    return { isVideo: true, thumbUrl: getYouTubeThumbnail(url) }
+  }
+  const lower = url.toLowerCase()
+  if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.mov') || lower.startsWith('data:video/')) {
+    return { isVideo: true, thumbUrl: url }
+  }
+  return { isVideo: false, thumbUrl: url }
+}
 
 const upcomingPujasFallback = [
   { name: 'महा रुद्राभिषेक (Maha Rudrabhishek)', temple: 'काशी विश्वनाथ मंदिर, वाराणसी', date: 'श्रावण सोमवार Special', img: process.env.NEXT_PUBLIC_URL_4496 || '', price: 1100, vip: false },
@@ -251,11 +264,24 @@ export default async function HomePage() {
               {/* Top Image Section */}
               <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-t-2xl">
                 {p.coverImage ? (
-                  p.coverImage.endsWith('.mp4') || p.coverImage.endsWith('.webm') || p.coverImage.startsWith('data:video/') ? (
-                    <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
-                  ) : (
-                    <Image src={p.coverImage} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  )
+                  (() => {
+                    const mediaInfo = getMediaDisplaySrc(p.coverImage)
+                    if (mediaInfo.isVideo && !getYouTubeId(p.coverImage)) {
+                      return <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
+                    }
+                    const imgSrc = mediaInfo.thumbUrl || p.coverImage
+                    return (
+                      <img
+                        src={imgSrc}
+                        alt={p.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                        }}
+                      />
+                    )
+                  })()
                 ) : (
                   <div className="h-full w-full flex items-center justify-center text-muted-foreground/30 bg-muted/50">
                     <Sparkles className="h-8 w-8 opacity-40" />
@@ -544,15 +570,35 @@ export default async function HomePage() {
             <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Divine moments captured during our successfully completed rituals.</p>
           </div>
           <MediaCarousel>
-            {pastPujas.map((media: any) => (
-              <div key={media.id} className="relative aspect-video rounded-2xl overflow-hidden border shadow-sm group mx-2">
-                <Image src={media.url} alt={media.filename || 'Past Puja'} fill sizes="50vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80" />
-                <div className="absolute bottom-4 left-4 text-white font-bold text-sm">
-                  {media.filename || 'Sacred Ritual'}
+            {pastPujas.map((media: any) => {
+              const mediaInfo = getMediaDisplaySrc(media.url)
+              const displaySrc = mediaInfo.thumbUrl || media.url
+
+              return (
+                <div key={media.id} className="relative aspect-video rounded-2xl overflow-hidden border border-amber-200/50 shadow-sm group mx-2 bg-slate-900 flex items-center justify-center">
+                  {mediaInfo.isVideo && !getYouTubeId(media.url) ? (
+                    <video src={media.url} className="w-full h-full object-cover" muted loop autoPlay playsInline />
+                  ) : displaySrc ? (
+                    <img
+                      src={displaySrc}
+                      alt={media.filename || 'Past Puja'}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                      }}
+                    />
+                  ) : null}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 z-10" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white font-bold text-sm z-20 flex items-center justify-between">
+                    <span className="line-clamp-1">{media.filename || 'Sacred Ritual'}</span>
+                    {mediaInfo.isVideo && (
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black uppercase">Video</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </MediaCarousel>
         </section>
       )}

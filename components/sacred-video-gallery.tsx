@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Play, Sparkles, Flame, ArrowRight } from 'lucide-react'
+import { Play, Sparkles, Flame, ArrowRight, Video as VideoIcon } from 'lucide-react'
 
 export interface VideoItem {
   id: string
@@ -20,6 +20,24 @@ interface SacredVideoGalleryProps {
   videos?: VideoItem[]
 }
 
+export function getYouTubeId(url: string | null | undefined): string | null {
+  if (!url) return null
+  const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+  const match = url.match(regExp)
+  return match && match[1] ? match[1] : null
+}
+
+export function getYouTubeEmbedUrl(url: string | null | undefined): string | null {
+  const id = getYouTubeId(url)
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null
+}
+
+export function getYouTubeThumbnail(url: string | null | undefined): string | null {
+  const id = getYouTubeId(url)
+  if (!id) return null
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+}
+
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
 
@@ -27,26 +45,6 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   const displayVideos = (videos || []).slice(0, 5)
 
   if (displayVideos.length === 0) {
-    return null
-  }
-
-  function getYouTubeId(url: string) {
-    if (!url) return null
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/
-    const match = url.match(regExp)
-    return (match && match[2].length === 11) ? match[2] : null
-  }
-
-  function getYouTubeEmbedUrl(url: string) {
-    const id = getYouTubeId(url)
-    return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null
-  }
-
-  function getThumbnail(video: VideoItem) {
-    const ytId = getYouTubeId(video.url)
-    if (ytId) {
-      return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
-    }
     return null
   }
 
@@ -61,14 +59,15 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
           🎥 दिव्य दर्शन एवं पूजा वीडियो
         </h2>
         <p className="text-sm md:text-base text-muted-foreground max-w-2xl font-medium">
-          प्रसिद्ध मंदिरों के लाइव दर्शन, संपन्न हुई महापूजाओं की झलकियां एवं पावन वीडियो देखें।
+          संपन्न हुई महापूजाओं की पावन झलकियां एवं दिव्य दर्शन वीडियो देखें।
         </p>
       </div>
 
       {/* Video Grid - Max 5 Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {displayVideos.map((video) => {
-          const thumb = getThumbnail(video)
+          const ytId = getYouTubeId(video.url)
+          const thumb = getYouTubeThumbnail(video.url)
 
           return (
             <Card
@@ -77,33 +76,59 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
               className="group relative cursor-pointer overflow-hidden border border-amber-200/50 dark:border-border/60 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 bg-card flex flex-col justify-between"
             >
               {/* Media Aspect Ratio Container */}
-              <div className="relative aspect-video w-full bg-slate-900 overflow-hidden">
+              <div className="relative aspect-[4/3] sm:aspect-video w-full bg-slate-950 overflow-hidden flex items-center justify-center">
+                {/* Fallback Background Gradient with Sacred Icon */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-950/90 via-slate-900 to-orange-950/90 flex flex-col items-center justify-center p-3 text-center">
+                  <VideoIcon className="h-8 w-8 text-amber-500/40 animate-pulse mb-1" />
+                  <span className="text-[10px] text-amber-300/50 font-semibold line-clamp-1">{video.filename || 'Divya Darshan'}</span>
+                </div>
+
                 {/* Thumbnail Image */}
                 {thumb ? (
                   <img
                     src={thumb}
                     alt={video.filename || 'Divya Darshan Video'}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                    className="relative z-10 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                     loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      if (ytId && !target.src.includes('mqdefault')) {
+                        target.src = `https://i.ytimg.com/vi/${ytId}/mqdefault.jpg`
+                      } else {
+                        target.style.display = 'none'
+                      }
+                    }}
                   />
-                ) : (
+                ) : video.url ? (
                   <video
                     src={video.url.includes('#') ? video.url : `${video.url}#t=0.5`}
-                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                    className="relative z-10 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                     muted
                     playsInline
                     preload="metadata"
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      const target = e.target as HTMLVideoElement
+                      target.style.display = 'none'
+                    }}
                   />
-                )}
+                ) : null}
 
                 {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20" />
 
                 {/* Play Button Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center z-30">
                   <div className="h-12 w-12 rounded-full bg-amber-500/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-amber-600 transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
                     <Play className="h-5 w-5 fill-white ml-0.5" />
                   </div>
+                </div>
+
+                {/* Video Badge */}
+                <div className="absolute top-2.5 left-2.5 z-30">
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-black/60 text-amber-400 border border-amber-500/30 backdrop-blur-md">
+                    {ytId ? 'Shorts' : 'Video'}
+                  </span>
                 </div>
               </div>
 
@@ -131,7 +156,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="relative aspect-video w-full bg-black">
+          <div className="relative aspect-video w-full bg-black flex items-center justify-center">
             {activeVideo && getYouTubeEmbedUrl(activeVideo.url) ? (
               <iframe
                 src={getYouTubeEmbedUrl(activeVideo.url)!}
