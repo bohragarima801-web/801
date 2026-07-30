@@ -34,6 +34,31 @@ export function slugify(str: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+export function generateShortSlug(str: string, maxLen = 35) {
+  if (!str) return '';
+  // Remove filler words to create concise, clean URLs
+  const cleanStr = str
+    .toLowerCase()
+    .replace(/\b(for|and|with|the|in|at|of|to|by|a|an|or|is|are|live|online|full|complete|special|divyayagyam)\b/gi, ' ')
+    .trim();
+  
+  const fullSlug = slugify(cleanStr.length > 0 ? cleanStr : str);
+  if (fullSlug.length <= maxLen) return fullSlug;
+  
+  // Truncate slug cleanly at word boundary hyphen
+  const parts = fullSlug.split('-');
+  let shortSlug = '';
+  for (const part of parts) {
+    if ((shortSlug ? shortSlug + '-' + part : part).length <= maxLen) {
+      shortSlug = shortSlug ? shortSlug + '-' + part : part;
+    } else {
+      break;
+    }
+  }
+  return shortSlug || fullSlug.slice(0, maxLen);
+}
+
+
 export function truncate(str: string, len = 100) {
   if (!str) return ''
   return str.length > len ? str.slice(0, len).trimEnd() + '…' : str

@@ -20,17 +20,18 @@ export async function GET() {
     const data: Record<string, any> = { theme: {} }
     
     settings.forEach(s => {
-      if (s.key === 'customizer.globalCss') data.globalCss = s.value
-      else if (s.key === 'customizer.globalJs') data.globalJs = s.value
+      const val = typeof s.value === 'string' ? s.value : JSON.stringify(s.value)
+      if (s.key === 'customizer.globalCss') data.globalCss = val
+      else if (s.key === 'customizer.globalJs') data.globalJs = val
       else if (s.key === 'customizer.pageCustom') {
         try {
           data.pageCustom = typeof s.value === 'string' ? JSON.parse(s.value) : s.value
         } catch {
-          data.pageCustom = s.value
+          data.pageCustom = val
         }
       }
       else if (s.key.startsWith('theme.') || s.key.startsWith('site.')) {
-        data.theme[s.key] = typeof s.value === 'string' ? s.value.replace(/^"|"$/g, '') : s.value
+        data.theme[s.key] = val.replace(/^"|"$/g, '')
       }
     })
 
@@ -50,7 +51,7 @@ export async function POST(req: NextRequest) {
     const upserts: any[] = []
 
     if (globalCss !== undefined) {
-      upserts.push(prisma.websiteSetting.upsert({
+      upserts.push((prisma.websiteSetting as any).upsert({
         where: { key: 'customizer.globalCss' },
         create: { key: 'customizer.globalCss', value: globalCss, group: 'customizer' },
         update: { value: globalCss }
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (globalJs !== undefined) {
-      upserts.push(prisma.websiteSetting.upsert({
+      upserts.push((prisma.websiteSetting as any).upsert({
         where: { key: 'customizer.globalJs' },
         create: { key: 'customizer.globalJs', value: globalJs, group: 'customizer' },
         update: { value: globalJs }
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (pageCustom !== undefined) {
-      upserts.push(prisma.websiteSetting.upsert({
+      upserts.push((prisma.websiteSetting as any).upsert({
         where: { key: 'customizer.pageCustom' },
         create: { key: 'customizer.pageCustom', value: pageCustom, group: 'customizer' },
         update: { value: pageCustom }
@@ -75,7 +76,7 @@ export async function POST(req: NextRequest) {
 
     if (theme && typeof theme === 'object') {
       for (const [k, v] of Object.entries(theme)) {
-        upserts.push(prisma.websiteSetting.upsert({
+        upserts.push((prisma.websiteSetting as any).upsert({
           where: { key: k },
           create: { key: k, value: v as string, group: 'theme' },
           update: { value: v as string }
@@ -83,7 +84,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    await prisma.$transaction(upserts)
+    await Promise.all(upserts)
 
     return NextResponse.json({ ok: true, message: 'Settings saved successfully' });
   } catch (err: any) {

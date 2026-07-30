@@ -22,16 +22,18 @@ export async function OPTIONS(req: NextRequest) {
 export async function POST(req: NextRequest) {
   let doStream = true
   let session_id = null
+  let mode: Mode = 'pandit'
   try {
     const body = await req.json().catch(() => null)
     const {
       messages = [],
-      mode = 'pandit' as Mode,
+      mode: inputMode = 'pandit' as Mode,
       model,
       stream = true,
       session_id: sid = null,
     } = body || {}
 
+    mode = inputMode
     doStream = stream
     session_id = sid
 
@@ -128,26 +130,23 @@ Recent Tickets: ${tickets.length > 0 ? tickets.map(t => `#${t.ticketNumber} - ${
   } catch (err: any) {
 // console.error('[ai/chat] error:', err) (removed for production)
     
-    // Check if it's an API key error
+    // Smart mode fallbacks when LLM API is unavailable or unconfigured
     let errorMessage = err?.message || 'Server error'
-    if (errorMessage.includes('API key is not configured')) {
-      errorMessage = 'AI API Key is missing. Please go to Admin -> Settings -> Secrets to add your Gemini API Key.'
-    }
-
-    // Handle missing API key or connection failures gracefully
-    let fallbackText = `⚠️ Error: ${errorMessage}`
+    let fallbackText = ''
     
-    // Default mode check based on url if we could not parse request body
-    const fallbackMode = req.url.includes('pandit') ? 'pandit' : 'chat'
-    if (fallbackMode === 'pandit' && !errorMessage.includes('API Key is missing')) {
-        fallbackText = "हरि ओम्! 🙏 दिव्ययज्ञम् के डिजिटल पंडित कक्ष में आपका स्वागत है। वर्तमान में हमारी एआई संवाद सेवा तकनीकी रखरखाव के अंतर्गत है। यदि आपका कोई प्रश्न पूजा, अनुष्ठान या संकल्प से संबंधित है, तो आप नीचे दिए गए 'सहायता' (Support) विकल्प से हमारे मुख्य पंडितों और सहायता टीम से सीधे संपर्क कर सकते हैं। कल्याणम अस्तु! 🌸"
+    if (mode === 'gargi') {
+      fallbackText = `हरि ओम्! 🙏 मैं गार्गी, दिव्ययज्ञम् की सहायक।\n\nदिव्ययज्ञम् पोर्टल पर आपका स्वागत है। हमारे माध्यम से आप देश के पवित्र शक्तिपीठों व मंदिरों से नाम-गोत्र से ऑनलाइन पूजा अनुष्ठान बुक कर सकते हैं तथा 100% अभिमंत्रित वैदिक सामग्री (रुद्राक्ष, यंत्र, माला) घर मँगवा सकते हैं।\n\nकिसी भी विशेष सहायता, ऑर्डर या बुकिंग स्थिति के लिए आप सपोर्ट सेक्शन या व्हाट्सएप पर संपर्क कर सकते हैं। कल्याणम अस्तु! 🌸`
+    } else if (mode === 'pandit') {
+      fallbackText = `हरि ओम्! 🙏 दिव्ययज्ञम् के डिजिटल पंडित कक्ष में आपका स्वागत है।\n\nमैं आपका वैदिक मार्गदर्शक पंडित जी हूँ। अपनी जन्म-तिथि (DOB), जन्म समय (Time) और जन्म स्थान (Place) के साथ अपना प्रश्न पूछें।\n\nहम नवग्रह शांति, कालसर्प दोष, रुद्राभिषेक तथा समस्त वैदिक अनुष्ठान विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प से सम्पन्न कराते हैं। शुभम भवतु! 🌸`
+    } else {
+      fallbackText = `⚠️ AI Service Warning: ${errorMessage}. Please check API Key in Admin Settings -> Secrets.`
     }
     
     if (!doStream) {
       return new Response(JSON.stringify({
         ok: true,
         content: fallbackText,
-        model: 'fallback-pandit',
+        model: 'fallback-handler',
         session_id: session_id || null,
       }), { headers: { 'Content-Type': 'application/json' } })
     } else {
@@ -162,7 +161,7 @@ Recent Tickets: ${tickets.length > 0 ? tickets.map(t => `#${t.ticketNumber} - ${
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
           'Cache-Control': 'no-cache, no-transform',
-          'X-Model': 'fallback-error',
+          'X-Model': 'fallback-handler',
         },
       })
     }

@@ -4,13 +4,11 @@ import { getCurrentUser } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
-    const dummySlugs = ['kundali', 'panchang', 'milan', 'muhurat', 'numerology', 'ratna', 'mala']
     const tools = await prisma.spiritualTool.findMany({
       where: { 
-        isActive: true,
-        slug: { notIn: dummySlugs }
+        isActive: true
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'asc' }
     })
 
     const user = await getCurrentUser().catch(() => null)

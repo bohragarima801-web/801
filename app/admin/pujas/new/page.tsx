@@ -52,7 +52,10 @@ function NewPujaPage_Content() {
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
   const [seoKeywords, setSeoKeywords] = useState('')
+  const [customHtml, setCustomHtml] = useState('')
   const [coverImage, setCoverImage] = useState('')
+  const [videoUrl, setVideoUrl] = useState('')
+  const [uploadingVideo, setUploadingVideo] = useState(false)
   const [packages, setPackages] = useState<any[]>([])
   const [saving, setSaving] = useState(false)
   const [loadingPuja, setLoadingPuja] = useState(false)
@@ -124,11 +127,16 @@ function NewPujaPage_Content() {
           setSeoTitle(p.seoTitle || '')
           setSeoDescription(p.seoDescription || '')
           setSeoKeywords(p.seoKeywords || '')
+          setCustomHtml(p.customHtml || '')
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
-            setGalleryImages(p.images.map((img: any) => img.url))
+            const allUrls = p.images.map((img: any) => img.url)
+            const photos = allUrls.filter((u: string) => !u.endsWith('.mp4') && !u.endsWith('.webm') && !u.includes('youtube') && !u.includes('youtu.be'))
+            const vid = allUrls.find((u: string) => u.endsWith('.mp4') || u.endsWith('.webm') || u.includes('youtube') || u.includes('youtu.be'))
+            setGalleryImages(photos)
+            if (vid) setVideoUrl(vid)
           }
-          setPackages(p.packages || [])
+          setPackages(p.packages ? p.packages.map((pkg: any) => ({ ...pkg, image: pkg.image || '' })) : [])
         } else {
           toast.error('Failed to find puja details')
         }
@@ -210,6 +218,37 @@ function NewPujaPage_Content() {
     setGalleryImages(prev => prev.filter((_, i) => i !== index))
   }
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingVideo(true)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      const data = await res.json()
+      if (data.ok && data.url) {
+        setVideoUrl(data.url)
+        toast.success('Puja video uploaded successfully!')
+      } else {
+        toast.error(data.error || 'Upload failed')
+      }
+    } catch {
+      toast.error('Error uploading video file')
+    } finally {
+      setUploadingVideo(false)
+    }
+  }
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+  }
+
   function handleDriveAdd() {
     if (!driveUrl) return
     const convertedUrl = convertGoogleDriveUrl(driveUrl)
@@ -271,9 +310,13 @@ function NewPujaPage_Content() {
         seoTitle,
         seoDescription,
         seoKeywords,
+        customHtml,
         coverImage,
         packages,
-        images: galleryImages
+        images: [
+          ...galleryImages.filter(u => u && u.trim()),
+          ...(videoUrl.trim() ? [videoUrl.trim()] : [])
+        ]
       }
 
       const res = await fetch('/api/admin/pujas', {
@@ -417,29 +460,72 @@ function NewPujaPage_Content() {
                 ) : (
                   <div className="space-y-4">
                     {packages.map((pkg, i) => (
-                      <div key={pkg.id || i} className="grid sm:grid-cols-12 gap-3 p-3 border rounded-lg bg-slate-50 relative">
-                        <div className="sm:col-span-4 space-y-1">
-                          <Label className="text-xs">Package Name</Label>
-                          <Input value={pkg.name} onChange={(e) => handlePackageChange(i, 'name', e.target.value)} placeholder="e.g. Basic Pack" required />
+                      <div key={pkg.id || i} className="p-3 border rounded-lg bg-slate-50 relative space-y-3">
+                        <div className="grid sm:grid-cols-12 gap-3">
+                          <div className="sm:col-span-4 space-y-1">
+                            <Label className="text-xs font-bold">Package Name (1 सदस्य / 2 सदस्य आदि)</Label>
+                            <Input value={pkg.name} onChange={(e) => handlePackageChange(i, 'name', e.target.value)} placeholder="e.g. 1 Member Puja Pack" required />
+                          </div>
+                          <div className="sm:col-span-3 space-y-1">
+                            <Label className="text-xs font-bold">Price (₹)</Label>
+                            <Input type="number" value={pkg.price} onChange={(e) => handlePackageChange(i, 'price', e.target.value)} placeholder="e.g. 1100" required />
+                          </div>
+                          <div className="sm:col-span-4 space-y-1">
+                            <Label className="text-xs font-bold">Description</Label>
+                            <Input value={pkg.description || ''} onChange={(e) => handlePackageChange(i, 'description', e.target.value)} placeholder="Package benefits..." />
+                          </div>
+                          <div className="sm:col-span-1 flex items-end justify-end">
+                            <Button type="button" variant="destructive" size="icon" onClick={() => handleRemovePackage(i)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="sm:col-span-3 space-y-1">
-                          <Label className="text-xs">Price (₹)</Label>
-                          <Input type="number" value={pkg.price} onChange={(e) => handlePackageChange(i, 'price', e.target.value)} placeholder="e.g. 1100" required />
-                        </div>
-                        <div className="sm:col-span-4 space-y-1">
-                          <Label className="text-xs">Description</Label>
-                          <Input value={pkg.description || ''} onChange={(e) => handlePackageChange(i, 'description', e.target.value)} placeholder="Package benefits..." />
-                        </div>
-                        <div className="sm:col-span-1 flex items-end justify-end">
-                          <Button type="button" variant="destructive" size="icon" onClick={() => handleRemovePackage(i)}>
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+
+                        {/* Package Specific Image Section */}
+                        <div className="flex items-center gap-3 pt-2 border-t border-slate-200">
+                          {pkg.image && (
+                            <div className="h-10 w-10 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs">
+                              <img src={pkg.image} alt={pkg.name} className="h-full w-full object-cover" />
+                            </div>
+                          )}
+                          <div className="flex-1 space-y-1">
+                            <Label className="text-[11px] font-bold text-slate-700">Package Image URL (इस सेक्शन/पैकेज की अलग फोटो)</Label>
+                            <Input 
+                              type="text" 
+                              value={pkg.image || ''} 
+                              onChange={(e) => handlePackageChange(i, 'image', e.target.value)} 
+                              placeholder="Paste image URL for 1 member / 2 members package..." 
+                              className="text-xs bg-white" 
+                            />
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
+            </CardContent>
+          </Card>
+
+          {/* ⚡ CUSTOM HTML / JS / EMBED CODE CARD */}
+          <Card className="border-indigo-200">
+            <CardHeader className="bg-indigo-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-indigo-950">
+                ⚡ Custom HTML / JS / Embed Code (कस्टम कोड आउटपुट)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-4">
+              <Label className="text-xs font-bold text-slate-700">Paste Custom HTML, Widget Code, iFrame or JS Snippet</Label>
+              <Textarea 
+                rows={4} 
+                value={customHtml} 
+                onChange={(e) => setCustomHtml(e.target.value)} 
+                placeholder="e.g. <iframe src='...'></iframe> or <div class='custom-widget'>...</div>" 
+                className="font-mono text-xs bg-slate-950 text-emerald-400 placeholder:text-slate-600"
+              />
+              <p className="text-[10px] text-slate-500">
+                यह कोड बिना किसी एरर या डिले के पूजा विवरण पेज पर स्पष्ट रूप से आउटपुट के रूप में रेंडर होगा।
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -492,98 +578,120 @@ function NewPujaPage_Content() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader><CardTitle className="text-base">Media Upload (इमेज/वीडियो)</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {coverImage && (
-                <div className="aspect-[4/3] rounded-lg overflow-hidden border bg-black flex items-center justify-center">
-                  {isVideoFile(coverImage) ? (
-                    <video src={coverImage} controls className="h-full w-full object-contain" />
-                  ) : (
-                    <img src={coverImage} className="h-full w-full object-cover" alt="Preview" />
-                  )}
-                </div>
-              )}
-              
-              <label className="cursor-pointer inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm font-medium gap-2 w-full select-none">
-                {uploading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Upload className="h-4 w-4" />
+          {/* 🖼️ PUJA PHOTO & GALLERY MANAGEMENT */}
+          <Card className="border-orange-200">
+            <CardHeader className="bg-orange-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-slate-900">
+                🖼️ Puja Cover Photo & Gallery (पूजा फ़ोटो प्रबंधन)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-bold text-slate-700">Main Puja Cover Image (मुख्य फ़ोटो)</Label>
+                {coverImage && (
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden border bg-slate-100 flex items-center justify-center shadow-xs">
+                    <img src={coverImage} className="h-full w-full object-cover" alt="Cover Preview" />
+                  </div>
                 )}
-                {uploading ? 'Uploading…' : 'Upload Cover Image/Video'}
-                <input
-                  type="file"
-                  accept="image/*,video/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                  disabled={uploading}
-                />
-              </label>
+                
+                <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm font-medium gap-2 w-full select-none">
+                  {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  {uploading ? 'Uploading…' : 'Upload Cover Photo'}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={uploading} />
+                </label>
 
-              <div className="flex gap-2">
-                <Input type="text" value={driveUrl} onChange={(e) => setDriveUrl(e.target.value)} placeholder="Or paste Google Drive link" className="text-xs" />
-                <Button type="button" size="sm" onClick={handleDriveAdd} disabled={!driveUrl} className="bg-blue-600 hover:bg-blue-700">
-                  <Cloud className="h-4 w-4 mr-1" /> Use
-                </Button>
+                <div className="flex gap-2 pt-1">
+                  <Input type="text" value={driveUrl} onChange={(e) => setDriveUrl(e.target.value)} placeholder="Google Drive Image link" className="text-xs" />
+                  <Button type="button" size="sm" onClick={handleDriveAdd} disabled={!driveUrl} className="bg-blue-600 hover:bg-blue-700 shrink-0">
+                    <Cloud className="h-4 w-4 mr-1" /> Use
+                  </Button>
+                </div>
+                <Input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="Or paste image URL" className="text-xs" />
               </div>
-              <div className="pt-2 border-t mt-2">
-                <Label className="text-xs mb-1 block">Manual Image/Video URL</Label>
-                <Input type="text" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="Direct URL..." className="text-xs" />
+
+              <div className="pt-3 border-t space-y-2">
+                <Label className="text-xs font-bold text-slate-700">Puja Gallery Photos (अतिरिक्त फ़ोटो)</Label>
+                {galleryImages.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2">
+                    {galleryImages.map((imgUrl, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-50 group shadow-xs">
+                        <img src={imgUrl} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
+                        <button 
+                          type="button"
+                          onClick={() => removeGalleryImage(idx)}
+                          className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-bold shadow"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-dashed border-orange-300 bg-orange-50/50 hover:bg-orange-100/50 px-4 py-2 text-xs font-bold text-orange-800 gap-2 w-full select-none transition-colors">
+                  {uploadingGallery ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  {uploadingGallery ? 'Uploading images…' : 'Upload Gallery Photos'}
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={handleGalleryUpload} disabled={uploadingGallery} />
+                </label>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader><CardTitle className="text-base">Gallery Images (अतिरिक्त चित्र)</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              {galleryImages.length > 0 && (
-                <div className="grid grid-cols-3 gap-2">
-                  {galleryImages.map((imgUrl, idx) => (
-                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-50 group shadow-sm">
-                      <img src={imgUrl} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
-                      <button 
-                        type="button"
-                        onClick={() => removeGalleryImage(idx)}
-                        className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-bold shadow"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              <label className="cursor-pointer inline-flex items-center justify-center rounded-md border border-dashed border-primary bg-primary/5 px-4 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition-colors gap-2 w-full select-none">
-                {uploadingGallery ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Upload className="h-4 w-4" />
-                )}
-                {uploadingGallery ? 'Uploading images…' : 'Upload Gallery Images'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleGalleryUpload}
-                  disabled={uploadingGallery}
-                />
-              </label>
-
-              <div className="space-y-1">
-                <Label className="text-[10px] text-slate-500">Or Paste Comma-Separated Image URLs</Label>
-                <Textarea 
-                  placeholder="Paste direct image links split by comma (,)" 
-                  value={galleryImages.join(', ')} 
-                  onChange={(e) => {
-                    const val = e.target.value
-                    setGalleryImages(val.split(',').map(s => s.trim()).filter(Boolean))
-                  }}
-                  rows={3}
+          {/* 🎥 PUJA SACRED VIDEO MANAGEMENT (SEPARATE FROM PHOTOS) */}
+          <Card className="border-blue-200">
+            <CardHeader className="bg-blue-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-blue-950">
+                🎥 Sacred Ritual Video & Live Stream (पूजा वीडियो - Photo से अलग)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-bold text-slate-700">YouTube Video Link / MP4 Live Recording</Label>
+                <Input 
+                  type="text" 
+                  value={videoUrl} 
+                  onChange={(e) => setVideoUrl(e.target.value)} 
+                  placeholder="https://www.youtube.com/watch?v=... or https://...video.mp4" 
                   className="text-xs"
                 />
+                <p className="text-[10px] text-slate-500">
+                  यह वीडियो फ़ोटो से पूरी तरह अलग रहेगा और पूजा पेज के वीडियो सेक्शन में प्ले होगा।
+                </p>
               </div>
+
+              <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-xs font-semibold gap-2 w-full select-none">
+                {uploadingVideo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4 text-blue-600" />}
+                {uploadingVideo ? 'Uploading Video…' : 'Upload Video File (MP4/WebM)'}
+                <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} disabled={uploadingVideo} />
+              </label>
+
+              {/* Video Live Preview */}
+              {videoUrl && (
+                <div className="space-y-1.5 pt-2 border-t">
+                  <Label className="text-xs font-bold text-emerald-700">Live Video Preview:</Label>
+                  <div className="aspect-video rounded-xl overflow-hidden border border-slate-300 bg-black relative shadow-xs">
+                    {getYouTubeEmbedUrl(videoUrl) ? (
+                      <iframe 
+                        src={getYouTubeEmbedUrl(videoUrl)!} 
+                        className="w-full h-full" 
+                        title="YouTube Puja Video Preview" 
+                        allowFullScreen 
+                      />
+                    ) : (
+                      <video src={videoUrl} controls className="w-full h-full object-contain" />
+                    )}
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setVideoUrl('')} 
+                    className="text-red-600 hover:text-red-700 text-xs h-7 px-2"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" /> Remove Video
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

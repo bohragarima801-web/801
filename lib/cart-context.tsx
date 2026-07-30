@@ -1,7 +1,6 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { toast } from 'sonner'
 
 // Safe localStorage access
 const safeLocalStorage = {
@@ -19,7 +18,6 @@ const safeLocalStorage = {
   }
 };
 
-
 export type CartItem = {
   id: string
   name: string
@@ -36,11 +34,17 @@ type CartContextType = {
   clearCart: () => void
   totalItems: number
   cartTotal: number
+  productSubtotal: number
   appliedCoupon: { id: string, code: string, discountAmount: number } | null
   applyCoupon: (coupon: { id: string, code: string, discountAmount: number }) => void
   removeCoupon: () => void
   discountAmount: number
+  deliveryEnabled: boolean
+  deliveryFee: number
+  freeShippingThreshold: number
+  shippingFee: number
   finalTotal: number
+  hasProducts: boolean
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -48,7 +52,24 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [appliedCoupon, setAppliedCoupon] = useState<{ id: string, code: string, discountAmount: number } | null>(null)
+  const [deliveryConfig, setDeliveryConfig] = useState<{ enabled: boolean, fee: number, freeThreshold: number }>({ enabled: true, fee: 99, freeThreshold: 999 })
   const [mounted, setMounted] = useState(false)
+
+  // Fetch delivery settings on mount
+  useEffect(() => {
+    const fetchDeliveryConfig = async () => {
+      try {
+        const res = await fetch('/api/delivery-config')
+        const data = await res.json()
+        if (data.ok && typeof data.fee === 'number') {
+          setDeliveryConfig({ enabled: data.enabled !== false, fee: data.fee, freeThreshold: data.freeThreshold })
+        }
+      } catch (err) {
+        console.warn('Failed to load delivery config:', err)
+      }
+    }
+    fetchDeliveryConfig()
+  }, [])
 
   // Safe localStorage access - ONLY on client
   useEffect(() => {
@@ -124,13 +145,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
   const cartTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  
+  // Product-only subtotal (excludes pujas, addons, tools)
+  const productSubtotal = items
+    .filter(item => !item.id.startsWith('puja-') && !item.id.startsWith('addon-') && !item.id.startsWith('tool-'))
+    .reduce((sum, item) => sum + (item.price * item.quantity), 0)
+
+  const hasProducts = productSubtotal > 0
   const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0
-  const finalTotal = Math.max(0, cartTotal - discountAmount)
+  
+  // Delivery Fee calculation (Applies ONLY to physical products! Pujas have 0 delivery fee):
+  // If deliveryEnabled == false -> 0
+  // If productSubtotal == 0 -> no products in cart -> 0
+  // If productSubtotal > freeThreshold -> FREE SHIPPING (0)
+  // If productSubtotal <= freeThreshold -> deliveryFee (default 99)
+  const deliveryEnabled = deliveryConfig.enabled
+  const deliveryFee = deliveryConfig.fee
+  const freeShippingThreshold = deliveryConfig.freeThreshold
+  
+  const shippingFee = (!deliveryEnabled || !hasProducts || productSubtotal > freeShippingThreshold) ? 0 : deliveryFee
+  
+  const finalTotal = Math.max(0, cartTotal - discountAmount + shippingFee)
 
   return (
     <CartContext.Provider value={{
       items, addToCart, removeFromCart, updateQuantity, clearCart, 
-      totalItems, cartTotal, appliedCoupon, applyCoupon, removeCoupon, discountAmount, finalTotal
+      totalItems, cartTotal, productSubtotal, appliedCoupon, applyCoupon, removeCoupon, discountAmount,
+      deliveryEnabled, deliveryFee, freeShippingThreshold, shippingFee, finalTotal, hasProducts
     }}>
       {children}
     </CartContext.Provider>

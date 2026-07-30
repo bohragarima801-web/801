@@ -7,8 +7,8 @@ export async function POST(req: NextRequest) {
     const session = await getAdminSession()
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
-    const adminUser = await prisma.user.findUnique({ where: { email: session.email } })
-    const userId = adminUser?.id || (await prisma.user.findFirst())?.id
+    const adminUser = await prisma.user.findUnique({ where: { email: session.email }, select: { id: true } })
+    const userId = adminUser?.id || (await prisma.user.findFirst({ select: { id: true } }))?.id
     if (!userId) return NextResponse.json({ ok: false, error: 'No user available to author review' }, { status: 500 });
 
     const data = await req.json()

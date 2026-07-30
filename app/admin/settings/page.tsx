@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2, CheckCircle2, XCircle, AlertTriangle, Key, Info } from 'lucide-react'
+import { Loader2, CheckCircle2, XCircle, AlertTriangle, Key, Info, Truck } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function SettingsPage() {
@@ -41,6 +41,9 @@ export default function SettingsPage() {
   const [bgColor, setBgColor] = useState('#fff9f2')
   const [maintenanceMode, setMaintenanceMode] = useState(false)
   const [maintenanceMsg, setMaintenanceMsg] = useState('We’ll be back soon…')
+  const [deliveryEnabled, setDeliveryEnabled] = useState(true)
+  const [deliveryFee, setDeliveryFee] = useState('99')
+  const [deliveryFreeThreshold, setDeliveryFreeThreshold] = useState('999')
 
   // Secrets states
   const [supabaseUrl, setSupabaseUrl] = useState('')
@@ -116,6 +119,9 @@ export default function SettingsPage() {
         if (s['theme.background']) setBgColor(s['theme.background'])
         if (s['maintenance.enabled'] !== undefined) setMaintenanceMode(!!s['maintenance.enabled'])
         if (s['maintenance.message']) setMaintenanceMsg(s['maintenance.message'])
+        if (s['delivery.enabled'] !== undefined) setDeliveryEnabled(s['delivery.enabled'] !== 'false')
+        if (s['delivery.fee']) setDeliveryFee(String(s['delivery.fee']))
+        if (s['delivery.free_threshold']) setDeliveryFreeThreshold(String(s['delivery.free_threshold']))
 
         // WhatsApp Automation
         if (s['secret.whatsapp_api_url']) setWaApiUrl(s['secret.whatsapp_api_url'])
@@ -177,6 +183,9 @@ export default function SettingsPage() {
         'site.logo': logoUrl,
         'maintenance.enabled': maintenanceMode,
         'maintenance.message': maintenanceMsg,
+        'delivery.enabled': deliveryEnabled ? 'true' : 'false',
+        'delivery.fee': deliveryFee,
+        'delivery.free_threshold': deliveryFreeThreshold,
       }
     } else if (group === 'contact') {
       payload = {
@@ -245,6 +254,9 @@ export default function SettingsPage() {
       setLogoUrl(settings['site.logo'] || '')
       setMaintenanceMode(!!settings['maintenance.enabled'])
       setMaintenanceMsg(settings['maintenance.message'] || 'We’ll be back soon…')
+      setDeliveryEnabled(settings['delivery.enabled'] !== 'false')
+      setDeliveryFee(settings['delivery.fee'] || '99')
+      setDeliveryFreeThreshold(settings['delivery.free_threshold'] || '999')
     } else if (group === 'contact') {
       setEmail(settings['contact.email'] || 'seva@divyayagyam.com')
       setPhone(settings['contact.phone'] || '+91-95871-71984')
@@ -384,6 +396,74 @@ export default function SettingsPage() {
                 <Button onClick={() => handleSave('general')} disabled={saving} variant="outline">
                   Save Maintenance Config
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* DELIVERY & SHIPPING CONTROL CARD */}
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-orange-600">
+                  <Truck className="h-5 w-5" />
+                  Store Delivery Fee & Shipping Control (उत्पाद डिलीवरी शुल्क नियंत्रण)
+                </CardTitle>
+                <CardDescription>
+                  Full admin control to turn product delivery fees ON/OFF, set standard fee (default ₹99), and set free shipping threshold (default ₹999).
+                  <span className="font-bold text-slate-700"> (Note: Applies strictly to Store Products; Puja bookings have ₹0 delivery fee).</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 border rounded-xl bg-orange-50/50">
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-sm">Enable Product Delivery Fee (डिलीवरी शुल्क चालू करें)</h4>
+                    <p className="text-xs text-slate-500">When enabled, delivery fee will apply to product orders below threshold. If disabled, delivery is FREE for all products.</p>
+                  </div>
+                  <Switch checked={deliveryEnabled} onCheckedChange={setDeliveryEnabled} />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="font-bold">Standard Delivery Fee (मानक शुल्क ₹)</Label>
+                    <Input 
+                      type="number" 
+                      value={deliveryFee} 
+                      onChange={(e) => setDeliveryFee(e.target.value)} 
+                      placeholder="99" 
+                      disabled={!deliveryEnabled}
+                    />
+                    <p className="text-[11px] text-slate-500">Default: ₹99 delivery fee.</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="font-bold">Free Delivery Minimum Amount (न्यूनतम राशि ₹)</Label>
+                    <Input 
+                      type="number" 
+                      value={deliveryFreeThreshold} 
+                      onChange={(e) => setDeliveryFreeThreshold(e.target.value)} 
+                      placeholder="999" 
+                      disabled={!deliveryEnabled}
+                    />
+                    <p className="text-[11px] text-slate-500">Default: Free delivery on product purchases above ₹999.</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                  <p className="font-bold text-slate-900">📌 वर्तमान लाइव नियम:</p>
+                  {deliveryEnabled ? (
+                    <>
+                      <p>• ₹{deliveryFreeThreshold} या उससे कम की प्रोडक्ट खरीद पर: <strong className="text-orange-700">₹{deliveryFee} डिलीवरी शुल्क</strong> जुड़ेगा।</p>
+                      <p>• ₹{deliveryFreeThreshold} से अधिक की प्रोडक्ट खरीद पर: <strong className="text-emerald-700">मुफ़्त डिलीवरी (FREE)</strong> रहेगी।</p>
+                      <p>• <strong>पूजा अनुष्ठान (Puja Bookings):</strong> डिलीवरी शुल्क पूर्णतः मुक्त (₹0) रहेगा।</p>
+                    </>
+                  ) : (
+                    <p className="text-emerald-700 font-bold">✓ डिलीवरी शुल्क बंद है — सभी प्रोडक्ट ऑर्डर्स पर मुफ़्त डिलीवरी (FREE) रहेगी!</p>
+                  )}
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <Button type="button" onClick={() => handleSave('general')} disabled={saving} className="bg-orange-600 hover:bg-orange-700 text-white font-bold">
+                    {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Save Delivery Settings
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 

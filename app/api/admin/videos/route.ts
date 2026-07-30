@@ -43,6 +43,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
     }
 
+    const count = await prisma.mediaLibrary.count({
+      where: {
+        OR: [
+          { type: 'VIDEO' },
+          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
+        ]
+      }
+    })
+
+    if (count >= 5) {
+      return NextResponse.json({ ok: false, error: 'Maximum limit of 5 videos reached. Please delete an existing video first.' }, { status: 400 })
+    }
+
     const { url, filename, folder, mimeType } = await req.json()
 
     if (!url) {

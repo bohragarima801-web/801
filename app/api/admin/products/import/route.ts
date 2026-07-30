@@ -148,7 +148,8 @@ export async function POST(req: NextRequest) {
       let existingProduct: { id: string; slug: string } | null = null
       if (skuVal) {
         existingProduct = await prisma.product.findUnique({
-          where: { sku: skuVal }
+          where: { sku: skuVal },
+          select: { id: true, slug: true }
         })
       }
 
@@ -161,7 +162,8 @@ export async function POST(req: NextRequest) {
               { slug: calculatedSlug },
               { name: { equals: name, mode: 'insensitive' } }
             ]
-          }
+          },
+          select: { id: true, slug: true }
         })
       }
 

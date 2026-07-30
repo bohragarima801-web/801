@@ -66,7 +66,7 @@ export default async function HomePage() {
     prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
     prisma.mediaLibrary.findMany({
       orderBy: { createdAt: 'desc' },
-      take: 30
+      take: 10
     }).catch(() => []),
     prisma.gallery.findMany({
       where: { isActive: true },
@@ -102,7 +102,7 @@ export default async function HomePage() {
     createdAt: g.createdAt
   }))
 
-  const dbVideos = [...allMediaVideos, ...galleryVideos]
+  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 5)
 
   let testimonials = dbTestimonials
   if (testimonials.length === 0) {
@@ -401,6 +401,9 @@ export default async function HomePage() {
 
       {/* SACRED VIDEO GALLERY & REELS */}
       <SacredVideoGallery videos={dbVideos} />
+
+      {/* SACRED ASTRO & SPIRITUAL TOOLS */}
+      <SacredAstroTools />
 
       {/* TESTIMONIALS */}
       <section className="container pb-16">

@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     
     await ensureDefaultCategoriesAndTemples()
-    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, publishedAt, pujaDate, isEvergreen, isFestival, seoTitle, seoDescription, seoKeywords } = await req.json()
+    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, publishedAt, pujaDate, isEvergreen, isFestival, seoTitle, seoDescription, seoKeywords, customHtml } = await req.json()
 
     if (!name) {
       return NextResponse.json({ ok: false, error: 'Puja Name is required' }, { status: 400 });
@@ -99,6 +99,7 @@ export async function POST(req: NextRequest) {
       seoTitle: seoTitle || null,
       seoDescription: seoDescription || null,
       seoKeywords: seoKeywords || null,
+      customHtml: customHtml || null,
       coverImage: coverImage || DEFAULT_PLACEHOLDER_IMAGE,
       category: { connect: { id: categoryId } }
     }
@@ -118,7 +119,8 @@ export async function POST(req: NextRequest) {
             create: Array.isArray(packages) ? packages.map((pkg: any) => ({
               name: pkg.name,
               price: Number(pkg.price) || 0,
-              description: pkg.description || ''
+              description: pkg.description || '',
+              image: pkg.image || null
             })) : []
           }
         }
@@ -132,7 +134,8 @@ export async function POST(req: NextRequest) {
             create: Array.isArray(packages) ? packages.map((pkg: any) => ({
               name: pkg.name,
               price: Number(pkg.price) || 0,
-              description: pkg.description || ''
+              description: pkg.description || '',
+              image: pkg.image || null
             })) : []
           }
         }

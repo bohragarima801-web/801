@@ -470,3 +470,39 @@
   background: var(--gradient-primary);
   border-radius: 4px;
 }
+
+/* ============================================================
+   PRO-LEVEL LUXURY VEDIC THEME UTILITIES
+   ============================================================ */
+.vedic-hero-banner {
+  background: linear-gradient(135deg, #120704 0%, #1E0C07 50%, #0A0302 100%);
+  position: relative;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+
+.vedic-gold-text {
+  background: linear-gradient(90deg, #FFE29F 0%, #FFAE34 50%, #ED8936 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.vedic-glass-chip {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+}
+
+.vedic-card-glow {
+  background: rgba(26, 10, 6, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  box-shadow: 0 20px 60px rgba(245, 158, 11, 0.18);
+  border-radius: 16px;
+}
+

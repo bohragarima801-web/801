@@ -77,14 +77,15 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
               alt={slide.title || 'Sacred Banner'}
               fill
               priority={idx === 0}
-              sizes="100vw"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
               className={`w-full h-full object-cover object-center transition-transform duration-1000 ${
                 isActive ? 'scale-100' : 'scale-105'
               }`}
             />
-            {/* Ambient gradients for high text contrast */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent z-10" />
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent z-10" />
+            {/* Subtle soft gradient overlay only behind text for maximum image clarity and zero blackness */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent z-10" />
           </div>
         )
 
@@ -98,17 +99,17 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
             }`}
           >
             {slide.ctaUrl ? (
-              <Link href={slide.ctaUrl} className="block w-full h-full relative group/slide">
+              <Link href={slide.ctaUrl} prefetch={true} className="block w-full h-full relative group/slide">
                 {slideContent}
 
                 {/* Banner Text Overlay */}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-12 max-w-3xl space-y-2.5">
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-8 md:p-12 max-w-2xl space-y-2">
                   {slide.subtitle && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/90 text-slate-950 backdrop-blur-md w-fit">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/90 text-slate-950 backdrop-blur-md w-fit shadow-sm">
                       <Sparkles className="h-3.5 w-3.5" /> {slide.subtitle}
                     </span>
                   )}
-                  <h3 className="text-2xl md:text-4xl font-heading font-extrabold text-white leading-tight drop-shadow-md">
+                  <h3 className="text-xl sm:text-2xl md:text-4xl font-heading font-extrabold text-white leading-tight drop-shadow-lg">
                     {slide.title}
                   </h3>
                 </div>
@@ -116,13 +117,13 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
             ) : (
               <div className="relative w-full h-full">
                 {slideContent}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-12 max-w-3xl space-y-2.5">
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-8 md:p-12 max-w-2xl space-y-2">
                   {slide.subtitle && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/90 text-slate-950 backdrop-blur-md w-fit">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/90 text-slate-950 backdrop-blur-md w-fit shadow-sm">
                       <Sparkles className="h-3.5 w-3.5" /> {slide.subtitle}
                     </span>
                   )}
-                  <h3 className="text-2xl md:text-4xl font-heading font-extrabold text-white leading-tight drop-shadow-md">
+                  <h3 className="text-xl sm:text-2xl md:text-4xl font-heading font-extrabold text-white leading-tight drop-shadow-lg">
                     {slide.title}
                   </h3>
                 </div>

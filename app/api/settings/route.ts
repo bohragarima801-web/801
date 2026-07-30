@@ -134,15 +134,15 @@ export async function POST(req: NextRequest) {
       if (typeof value === 'string') {
         cleanValue = value.trim().replace(/^["']|["']$/g, '')
       }
-      const result = await prisma.websiteSetting.upsert({
+      const result = await (prisma.websiteSetting as any).upsert({
         where: { key },
         create: {
           key,
-          value: cleanValue as any,
+          value: cleanValue,
           group: key.startsWith('secret.') ? 'secrets' : 'general',
         },
         update: {
-          value: cleanValue as any,
+          value: cleanValue,
         }
       })
       results.push(result)

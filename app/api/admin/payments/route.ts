@@ -16,11 +16,12 @@ export async function GET() {
     const data: Record<string, any> = {}
     settings.forEach(s => {
       const field = s.key.replace('payments.', '')
+      const val = typeof s.value === 'string' ? s.value : JSON.stringify(s.value)
       // Parse booleans and numbers correctly if possible
-      if (s.value === 'true') data[field] = true
-      else if (s.value === 'false') data[field] = false
-      else if (!isNaN(Number(s.value)) && s.value !== '') data[field] = Number(s.value)
-      else data[field] = s.value
+      if (val === 'true') data[field] = true
+      else if (val === 'false') data[field] = false
+      else if (!isNaN(Number(val)) && val !== '') data[field] = Number(val)
+      else data[field] = val
     })
 
     return NextResponse.json({ ok: true, data });
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
     const body = await req.json()
-    const upserts: Promise<any>[] = []
+    const upserts: any[] = []
 
     for (const [key, value] of Object.entries(body)) {
       let stringValue = ''
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
         stringValue = value as string
       }
 
-      upserts.push(prisma.websiteSetting.upsert({
+      upserts.push((prisma.websiteSetting as any).upsert({
         where: { key: `payments.${key}` },
         create: { key: `payments.${key}`, value: stringValue, group: 'payments' },
         update: { value: stringValue }
