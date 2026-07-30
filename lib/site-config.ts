@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: 'Sanatan Seva',
   description:
     'Experience divine blessings with DivyaYagyam. Book authentic online pujas, offer Bhakti Seva, order sacred prasad, and access expert astrology services on our trusted platform.',
-  url: process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_URL_4725 || 'http://localhost:3000',
+  url: process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_URL_4725 || 'https://divyayagyam.com',
   ogImage: '/og.jpg',
   keywords: [
     'Divyayagyam', 'Online Puja', 'VIP Puja', 'Temple Booking', 'Sanatan',
