@@ -122,7 +122,7 @@ export default async function HomePage() {
   }))
   const allHeroSlides = [...heroSlides, ...mediaHeroSlides].sort((a: any, b: any) => a.order - b.order)
 
-  // JSON-LD Structured Data for Google Sitelinks and Brand Knowledge Graph
+  // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets (Page 1 Google SEO)
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -132,6 +132,13 @@ export default async function HomePage() {
         "name": "DivyaYagyam",
         "url": "https://divyayagyam.com",
         "logo": "https://divyayagyam.com/logo.jpg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-95871-71984",
+          "contactType": "customer service",
+          "areaServed": "IN",
+          "availableLanguage": ["en", "hi"]
+        },
         "sameAs": [
           "https://www.facebook.com/divyayagyam",
           "https://www.instagram.com/divyayagyam",
@@ -143,6 +150,7 @@ export default async function HomePage() {
         "@id": "https://divyayagyam.com/#website",
         "url": "https://divyayagyam.com",
         "name": "DivyaYagyam",
+        "description": "Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar, Somnath with video proof on WhatsApp & home delivery of sacred prasad.",
         "publisher": {
           "@id": "https://divyayagyam.com/#organization"
         },
@@ -151,6 +159,44 @@ export default async function HomePage() {
           "target": "https://divyayagyam.com/pujas?q={search_term_string}",
           "query-input": "required name=search_term_string"
         }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://divyayagyam.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "काशी विश्वनाथ और महाकालेश्वर में ऑनलाइन पूजा कैसे बुक करें?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "DivyaYagyam पर आप सीधे प्रसिद्ध ज्योतिर्लिंगों जैसे काशी विश्वनाथ, महाकालेश्वर उज्जैन, सोमनाथ, त्र्यंबकेश्वर आदि में ऑनलाइन पूजा व रुद्राभिषेक बुक कर सकते हैं। पूजा के बाद आपको व्हाट्सएप पर वीडियो प्रूफ एवं घर पर पावन प्रसाद भेजा जाता है।"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "क्या ऑनलाइन पूजा का वीडियो प्रूफ व्हाट्सएप पर मिलता है?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "हां, DivyaYagyam द्वारा कराई जाने वाली प्रत्येक ऑनलाइन पूजा में संकल्प के समय आपका नाम और गोत्र स्पष्ट रूप से बोला जाता है और पूरा वीडियो प्रूफ आपके व्हाट्सएप नंबर पर भेजा जाता है।"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "क्या मंदिर का सिद्ध प्रसाद घर पर डिलीवर होता है?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "जी हां, पूजा संपन्न होने के बाद मंदिर का पवित्र प्रसाद सुरक्षित पैकिंग के साथ आपके दिए गए पते पर 3-5 दिनों के भीतर होम डिलीवर किया जाता है।"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "DivyaYagyam पर ऑनलाइन पूजा की फीस क्या है?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "DivyaYagyam पर पूजा शुल्क ₹1,100 से शुरू होता है जिसमें पंडित दक्षिणा, पूजन सामग्री, नाम-गोत्र संकल्प, वीडियो रिकॉर्डिंग और प्रसाद होम डिलीवरी शामिल है।"
+            }
+          }
+        ]
       }
     ]
   }
