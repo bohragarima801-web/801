@@ -61,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: '/logo.jpg',
       apple: '/apple-touch-icon.png'
     },
-    appleWebApp: { capable: true, statusBarStyle: 'default', title: dynamicConfig.name },
+    appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: dynamicConfig.name },
   }
 }
 
@@ -73,6 +73,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
