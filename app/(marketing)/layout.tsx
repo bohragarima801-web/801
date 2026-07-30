@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/layouts/navbar'
 import { Footer } from '@/components/layouts/footer'
 import { MobileBottomNav } from '@/components/layouts/mobile-bottom-nav'
+import { PwaInstallBanner } from '@/components/pwa-install-banner'
 import { GargiChatbot } from '@/components/gargi-chatbot'
 import prisma from '@/lib/prisma'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
@@ -42,6 +43,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
 
   return (
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
+      <PwaInstallBanner />
       {activeCoupon && (
         <div className="bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 text-white py-2.5 px-4 text-center text-xs md:text-sm font-bold flex flex-wrap justify-center items-center gap-1.5 shadow-md relative z-50">
           <span className="animate-pulse mr-1">🔥</span>
