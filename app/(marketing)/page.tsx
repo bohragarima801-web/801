@@ -16,6 +16,7 @@ import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { FadeIn } from '@/components/ui/fade-in'
 import { SacredVideoGallery } from '@/components/sacred-video-gallery'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
+import { getDynamicSiteConfig } from '@/lib/settings'
 
 const upcomingPujasFallback = [
   { name: 'महा रुद्राभिषेक (Maha Rudrabhishek)', temple: 'काशी विश्वनाथ मंदिर, वाराणसी', date: 'श्रावण सोमवार Special', img: process.env.NEXT_PUBLIC_URL_4496 || '', price: 1100, vip: false },
@@ -35,6 +36,7 @@ const fallbackTestimonials = [
 export const revalidate = 30
 
 export default async function HomePage() {
+  const siteData = await getDynamicSiteConfig()
   let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries] = await Promise.all([
     prisma.product.findMany({
       take: 4,
