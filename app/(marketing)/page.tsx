@@ -65,8 +65,14 @@ export default async function HomePage() {
     prisma.mediaLibrary.findMany({ where: { folder: 'Customer Review' }, orderBy: { createdAt: 'desc' }, take: 12 }).catch(() => []),
     prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
     prisma.mediaLibrary.findMany({
+      where: {
+        OR: [
+          { type: 'VIDEO' },
+          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
+        ]
+      },
       orderBy: { createdAt: 'desc' },
-      take: 10
+      take: 5
     }).catch(() => []),
     prisma.gallery.findMany({
       where: { isActive: true },
