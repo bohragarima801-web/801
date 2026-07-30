@@ -336,19 +336,19 @@ export default async function HomePage() {
               </p>
             </div>
 
-            {/* Trust Bar (New) */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
-              <div className="stat-badge">
+            {/* Trust Bar (Mobile-optimized 2-column grid / Desktop row) */}
+            <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap items-center justify-center md:justify-start pt-2">
+              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
                 <span className="icon"><ShieldCheck className="h-3.5 w-3.5" /></span> Verified Pandits
               </div>
-              <div className="stat-badge">
-                <span className="icon"><Video className="h-3.5 w-3.5" /></span> Video Proof on WhatsApp
+              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
+                <span className="icon"><Video className="h-3.5 w-3.5" /></span> Video Proof
               </div>
-              <div className="stat-badge">
-                <span className="icon"><Truck className="h-3.5 w-3.5" /></span> Prasad Delivered Home
+              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
+                <span className="icon"><Truck className="h-3.5 w-3.5" /></span> Prasad Delivery
               </div>
-              <div className="stat-badge">
-                <span className="icon"><Lock className="h-3.5 w-3.5" /></span> 100% Secure Payments
+              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
+                <span className="icon"><Lock className="h-3.5 w-3.5" /></span> 100% Secure
               </div>
             </div>
 

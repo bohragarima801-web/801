@@ -343,27 +343,30 @@
 .stat-badge {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.7);
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(178, 140, 52, 0.15);
+  border: 1px solid rgba(178, 140, 52, 0.2);
   border-radius: 60px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--charcoal);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  white-space: nowrap;
 }
 
 .stat-badge .icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--gradient-primary);
   color: white;
-  font-size: 14px;
+  font-size: 13px;
+  flex-shrink: 0;
 }
 
 /* ============================================================
