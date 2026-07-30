@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { ProductClientView } from '@/components/product-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
+import Script from 'next/script'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -53,16 +54,42 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlugOrFallback(slug);
   
-  if (!product) return { title: 'Product Not Found' }
+  if (!product) return { title: 'Product Not Found | DivyaYagyam' }
   
+  const pageUrl = `https://divyayagyam.com/products/${product.slug}`
+  const title = product.seoTitle || `${product.name} — Order Sacred Prasad & Essentials | DivyaYagyam`
+  const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '').slice(0, 160)
+
   return {
-    title: product.seoTitle || `${product.name} | DivyaYagyam`,
-    description: product.seoDescription || product.shortDescription || `Buy ${product.name} at DivyaYagyam.`,
-    keywords: product.seoKeywords || undefined,
+    title,
+    description,
+    keywords: product.seoKeywords || `${product.name}, Sacred Prasad, Puja Essentials, DivyaYagyam, ${product.category?.name || 'Sanatan Product'}`,
+    alternates: {
+      canonical: pageUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+      }
+    },
     openGraph: {
-      title: product.seoTitle || `${product.name} | DivyaYagyam`,
-      description: product.seoDescription || product.shortDescription || `Buy ${product.name} at DivyaYagyam.`,
-      images: product.coverImage ? [product.coverImage] : []
+      title,
+      description,
+      url: pageUrl,
+      siteName: 'DivyaYagyam',
+      locale: 'hi_IN',
+      type: 'website',
+      images: product.coverImage ? [{ url: product.coverImage, width: 1200, height: 630, alt: product.name }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: product.coverImage ? [product.coverImage] : [],
     }
   }
 }
@@ -80,6 +107,34 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     redirect(`/products/${product.slug}`);
   }
 
-  return <ProductClientView product={product} />
-}
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": (product.shortDescription || product.description || '').replace(/<[^>]*>?/gm, ''),
+    "image": product.coverImage ? [product.coverImage] : [],
+    "sku": product.sku || product.id,
+    "offers": {
+      "@type": "Offer",
+      "price": Number(product.salePrice || product.price),
+      "priceCurrency": "INR",
+      "url": `https://divyayagyam.com/products/${product.slug}`,
+      "availability": product.inventory && product.inventory.quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "DivyaYagyam"
+      }
+    }
+  }
 
+  return (
+    <>
+      <Script
+        id={`schema-product-${product.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductClientView product={product} />
+    </>
+  )
+}
