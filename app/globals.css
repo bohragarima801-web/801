@@ -141,7 +141,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', 'Georgia', serif;
-    letter-spacing: 0.02em;
+    letter-spacing: normal;
     line-height: 1.3;
   }
 

@@ -138,3 +138,4 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     </>
   )
 }
+
