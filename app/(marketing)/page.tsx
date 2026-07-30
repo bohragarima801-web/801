@@ -338,19 +338,42 @@ export default async function HomePage() {
               </p>
             </div>
 
-            {/* Trust Bar (Mobile-optimized 2-column grid / Desktop row) */}
-            <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap items-center justify-center md:justify-start pt-2">
-              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
-                <span className="icon"><ShieldCheck className="h-3.5 w-3.5" /></span> Verified Pandits
+            {/* Trust Bar (Ultra-Clean Mobile 2-Column Cards / Desktop Flex Row) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 max-w-3xl">
+              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                  Verified Pandits
+                </span>
               </div>
-              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
-                <span className="icon"><Video className="h-3.5 w-3.5" /></span> Video Proof
+
+              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
+                  <Video className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                  WhatsApp Video
+                </span>
               </div>
-              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
-                <span className="icon"><Truck className="h-3.5 w-3.5" /></span> Prasad Delivery
+
+              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
+                  <Truck className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                  Prasad Delivery
+                </span>
               </div>
-              <div className="stat-badge w-full sm:w-auto justify-center sm:justify-start">
-                <span className="icon"><Lock className="h-3.5 w-3.5" /></span> 100% Secure
+
+              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
+                  <Lock className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                  100% Secure
+                </span>
               </div>
             </div>
 
