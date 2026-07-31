@@ -7,11 +7,18 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   const baseUrl = rawBaseUrl.includes('localhost') ? 'https://divyayagyam.com' : rawBaseUrl
 
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/admin/', '/api/', '/checkout/'],
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
+      },
+    ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }
 }

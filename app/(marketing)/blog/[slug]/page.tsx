@@ -2,6 +2,8 @@
 
 import { notFound } from 'next/navigation'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generateArticleSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User, Eye } from 'lucide-react'
@@ -73,8 +75,33 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
 
   return (
-    <div className="container max-w-4xl py-12 px-4">
-      <Button variant="ghost" size="sm" asChild className="mb-8 hover:text-primary rounded-xl">
+    <>
+      <Script
+        id={`schema-blog-${post.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              generateArticleSchema({
+                title: post.title,
+                description: post.excerpt || post.content?.substring(0, 200) || '',
+                image: post.coverImage || '/logo.jpg',
+                slug: post.slug,
+                datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
+                dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
+              }),
+              generateBreadcrumbSchema([
+                { name: 'Home', url: BASE_URL },
+                { name: 'Blog', url: `${BASE_URL}/blog` },
+                { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
+              ]),
+            ]
+          })
+        }}
+      />
+      <div className="container max-w-4xl py-12 px-4">
+        <Button variant="ghost" size="sm" asChild className="mb-8 hover:text-primary rounded-xl">
         <Link href="/blog" className="inline-flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" /> Back to Blog
         </Link>
@@ -155,5 +182,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         )}
       </article>
     </div>
+    </>
   )
 }

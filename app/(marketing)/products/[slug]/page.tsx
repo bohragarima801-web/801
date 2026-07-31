@@ -3,6 +3,7 @@ import { ProductClientView } from '@/components/product-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Script from 'next/script'
+import { generateProductSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -109,22 +110,21 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    "name": product.name,
-    "description": (product.shortDescription || product.description || '').replace(/<[^>]*>?/gm, ''),
-    "image": product.coverImage ? [product.coverImage] : [],
-    "sku": product.sku || product.id,
-    "offers": {
-      "@type": "Offer",
-      "price": Number(product.salePrice || product.price),
-      "priceCurrency": "INR",
-      "url": `https://divyayagyam.com/products/${product.slug}`,
-      "availability": product.inventory && product.inventory.quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/InStock",
-      "seller": {
-        "@type": "Organization",
-        "name": "DivyaYagyam"
-      }
-    }
+    "@graph": [
+      generateProductSchema({
+        name: product.name,
+        description: product.shortDescription || product.description?.substring(0, 200) || '',
+        image: product.coverImage || '/logo.jpg',
+        price: Number(product.salePrice || product.price),
+        slug: product.slug,
+        inStock: product.inventory ? product.inventory.quantity > 0 : true,
+      }),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Products', url: `${BASE_URL}/products` },
+        { name: product.name, url: `${BASE_URL}/products/${product.slug}` },
+      ]),
+    ]
   }
 
   return (

@@ -1541,3 +1541,79 @@ model ConsultationBooking {
 
   @@map("consultation_bookings")
 }
+
+// ============================================================
+// SOCIAL MEDIA SCHEDULER & ANALYTICS MODULE
+// ============================================================
+
+model SocialAccount {
+  id           String   @id @default(uuid())
+  platform     String   // FACEBOOK, INSTAGRAM, TWITTER, YOUTUBE, LINKEDIN, TELEGRAM, WEBHOOK
+  accountName  String
+  accountId    String?  // Page ID, Channel ID, Chat ID
+  accessToken  String?  @db.Text
+  refreshToken String?  @db.Text
+  apiSecret    String?  @db.Text
+  webhookUrl   String?  @db.Text
+  isActive     Boolean  @default(true)
+  metadata     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([platform])
+  @@map("social_accounts")
+}
+
+model SocialPost {
+  id          String    @id @default(uuid())
+  title       String?
+  caption     String    @db.Text
+  hashtags    String?   @db.Text
+  mediaType   String    @default("IMAGE") // IMAGE, VIDEO, TEXT, MULTI_MEDIA
+  mediaUrls   String[]
+  platforms   String[]  // Array of target platforms e.g. ["facebook", "telegram"]
+  status      String    @default("DRAFT") // DRAFT, SCHEDULED, PUBLISHING, PUBLISHED, FAILED, PARTIAL
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  seoMetadata Json?
+  postResults Json?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  logs SocialPostLog[]
+
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("social_posts")
+}
+
+model SocialPostLog {
+  id           String   @id @default(uuid())
+  postId       String
+  platform     String
+  status       String   // SUCCESS, FAILED
+  response     Json?
+  errorMessage String?  @db.Text
+  postedAt     DateTime @default(now())
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("social_post_logs")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(uuid())
+  eventName String   // PageView, ViewContent, AddToCart, InitiateCheckout, Purchase, Lead
+  pageUrl   String
+  userIp    String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([eventName])
+  @@index([createdAt])
+  @@map("analytics_events")
+}
+

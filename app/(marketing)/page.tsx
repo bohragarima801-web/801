@@ -1,6 +1,16 @@
 import Script from 'next/script'
 import Link from 'next/link'
 import Image from 'next/image';
+import { generatePageMeta } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'DivyaYagyam — ऑनलाइन पूजा बुकिंग | Online Puja Booking India',
+    description: 'भारत के पवित्र मंदिरों से ऑनलाइन पूजा बुक करें। काशी विश्वनाथ, महाकालेश्वर, उज्जैन — नाम-गोत्र संकल्प, लाइव वीडियो दर्शन, प्रसाद डिलीवरी।',
+    path: '/',
+    keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
+  })
+}
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'

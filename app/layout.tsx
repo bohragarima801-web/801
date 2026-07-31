@@ -3,7 +3,9 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
+import { Suspense } from 'react'
 import { CustomInjector } from '@/components/custom-injector'
+import { PixelInjector } from '@/components/pixel-injector'
 import { TranslationProvider } from '@/components/translation-provider'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 
@@ -86,9 +88,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div id="__dvj_slot" />
           <Toaster position="top-right" richColors closeButton />
           <CustomInjector />
+          <Suspense fallback={null}>
+            <PixelInjector />
+          </Suspense>
           <TranslationProvider />
         </Providers>
       </body>
     </html>
   )
 }
+

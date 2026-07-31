@@ -3,7 +3,15 @@ import { Shield, Sparkles, Key, Heart, Mail, Phone, MapPin, EyeOff } from 'lucid
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { generatePageMeta } from '@/lib/seo'
 
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'Privacy Policy | DivyaYagyam',
+    description: 'DivyaYagyam privacy policy. How we collect, use, and protect your personal information.',
+    path: '/privacy',
+  })
+}
 export const revalidate = 30
 
 export default async function PrivacyPage() {

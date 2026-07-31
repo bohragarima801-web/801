@@ -56,6 +56,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },
   ]},
   { title: '🎥 Videos & Reels', slug: 'videos', icon: Video, href: '/admin/videos', permission: 'media.read' },
+  { title: '📱 Social Scheduler', slug: 'social', icon: Megaphone, href: '/admin/social' },
   { title: 'Gallery', slug: 'gallery', icon: ImageIcon, href: '/admin/gallery', permission: 'gallery.read' },
   { title: 'Testimonials', slug: 'testimonials', icon: Star, href: '/admin/testimonials', permission: 'testimonial.read' },
   { title: 'Events', slug: 'events', icon: CalendarDays, href: '/admin/events', permission: 'event.read' },

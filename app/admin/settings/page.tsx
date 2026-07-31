@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PageHeader } from '@/components/admin/page-header'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
@@ -60,6 +61,16 @@ export default function SettingsPage() {
   const [waApiKey, setWaApiKey] = useState('')
   const [waSenderNumber, setWaSenderNumber] = useState('')
   const [waEnabled, setWaEnabled] = useState(true)
+
+  // Pixel & Analytics states
+  const [fbPixelId, setFbPixelId] = useState('')
+  const [ga4Id, setGa4Id] = useState('')
+  const [gtmId, setGtmId] = useState('')
+  const [tiktokPixelId, setTiktokPixelId] = useState('')
+  const [pinterestTagId, setPinterestTagId] = useState('')
+  const [customHeadScripts, setCustomHeadScripts] = useState('')
+  const [customBodyScripts, setCustomBodyScripts] = useState('')
+  const [pixelEventsEnabled, setPixelEventsEnabled] = useState(true)
 
   const [uploadingLogo, setUploadingLogo] = useState(false)
 
@@ -128,6 +139,16 @@ export default function SettingsPage() {
         if (s['secret.whatsapp_api_key']) setWaApiKey(s['secret.whatsapp_api_key'])
         if (s['secret.whatsapp_sender_number']) setWaSenderNumber(s['secret.whatsapp_sender_number'])
         if (s['whatsapp.automation_enabled'] !== undefined) setWaEnabled(s['whatsapp.automation_enabled'] !== 'false')
+
+        // Pixels & Analytics
+        if (s['pixel.facebook_id']) setFbPixelId(s['pixel.facebook_id'])
+        if (s['pixel.google_analytics_id']) setGa4Id(s['pixel.google_analytics_id'])
+        if (s['pixel.google_tag_manager_id']) setGtmId(s['pixel.google_tag_manager_id'])
+        if (s['pixel.tiktok_id']) setTiktokPixelId(s['pixel.tiktok_id'])
+        if (s['pixel.pinterest_id']) setPinterestTagId(s['pixel.pinterest_id'])
+        if (s['pixel.custom_head_scripts']) setCustomHeadScripts(s['pixel.custom_head_scripts'])
+        if (s['pixel.custom_body_scripts']) setCustomBodyScripts(s['pixel.custom_body_scripts'])
+        if (s['pixel.events_enabled'] !== undefined) setPixelEventsEnabled(s['pixel.events_enabled'] !== 'false')
 
         // Secrets
         if (s['secret.supabase_url']) setSupabaseUrl(s['secret.supabase_url'])
@@ -206,6 +227,17 @@ export default function SettingsPage() {
         'secret.whatsapp_sender_number': waSenderNumber,
         'whatsapp.automation_enabled': waEnabled ? 'true' : 'false',
       }
+    } else if (group === 'pixels') {
+      payload = {
+        'pixel.facebook_id': fbPixelId,
+        'pixel.google_analytics_id': ga4Id,
+        'pixel.google_tag_manager_id': gtmId,
+        'pixel.tiktok_id': tiktokPixelId,
+        'pixel.pinterest_id': pinterestTagId,
+        'pixel.custom_head_scripts': customHeadScripts,
+        'pixel.custom_body_scripts': customBodyScripts,
+        'pixel.events_enabled': pixelEventsEnabled ? 'true' : 'false',
+      }
     } else if (group === 'theme') {
       payload = {
         'theme.primary': primaryColor,
@@ -272,6 +304,15 @@ export default function SettingsPage() {
       setWaApiKey(settings['secret.whatsapp_api_key'] || '')
       setWaSenderNumber(settings['secret.whatsapp_sender_number'] || '')
       setWaEnabled(settings['whatsapp.automation_enabled'] !== 'false')
+    } else if (group === 'pixels') {
+      setFbPixelId(settings['pixel.facebook_id'] || '')
+      setGa4Id(settings['pixel.google_analytics_id'] || '')
+      setGtmId(settings['pixel.google_tag_manager_id'] || '')
+      setTiktokPixelId(settings['pixel.tiktok_id'] || '')
+      setPinterestTagId(settings['pixel.pinterest_id'] || '')
+      setCustomHeadScripts(settings['pixel.custom_head_scripts'] || '')
+      setCustomBodyScripts(settings['pixel.custom_body_scripts'] || '')
+      setPixelEventsEnabled(settings['pixel.events_enabled'] !== 'false')
     } else if (group === 'theme') {
       setPrimaryColor(settings['theme.primary'] || '#FF8C21')
       setAccentColor(settings['theme.accent'] || '#B12D2D')
@@ -310,18 +351,20 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Website Settings"
-        description="Configure keys, secrets, branding, and check deployment health."
+        description="Configure keys, secrets, branding, pixels, and check deployment health."
         breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Settings' }]}
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:w-[750px]">
+        <TabsList className="grid w-full grid-cols-6 lg:w-[900px]">
           <TabsTrigger value="general">Branding & General</TabsTrigger>
           <TabsTrigger value="contact">Contact Details</TabsTrigger>
           <TabsTrigger value="whatsapp">WhatsApp Automation</TabsTrigger>
+          <TabsTrigger value="pixels">🎯 Pixels & Analytics</TabsTrigger>
           <TabsTrigger value="secrets">Secrets & API Keys</TabsTrigger>
           <TabsTrigger value="status">System Status</TabsTrigger>
         </TabsList>
+
 
         {/* GENERAL TAB */}
         <TabsContent value="general" className="space-y-6">
@@ -673,6 +716,99 @@ export default function SettingsPage() {
                 <Button type="button" onClick={() => handleSave('whatsapp')} disabled={saving} className="bg-green-600 hover:bg-green-700 text-white font-bold">
                   {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Save WhatsApp Automation Config
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* PIXELS & ANALYTICS TAB */}
+        <TabsContent value="pixels" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-indigo-700">
+                🎯 Meta, Google Pixel & Real-Time Tracking Manager
+              </CardTitle>
+              <CardDescription>
+                Configure tracking pixel IDs and custom scripts. Scripts will be automatically injected into the head & body of live website pages in real-time.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6 max-w-2xl">
+              <div className="flex items-center justify-between p-4 border rounded-xl bg-indigo-50/50">
+                <div>
+                  <h4 className="font-bold text-slate-800 text-sm">Enable Real-Time Event & Pixel Tracking</h4>
+                  <p className="text-xs text-slate-500">Track PageView, ViewContent, AddToCart, InitiateCheckout & Purchase events across Meta Pixel, GA4, GTM & database.</p>
+                </div>
+                <Switch checked={pixelEventsEnabled} onCheckedChange={setPixelEventsEnabled} />
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2 border p-4 rounded-xl bg-slate-50">
+                  <Label className="font-bold flex items-center justify-between text-xs">
+                    <span>Meta / Facebook Pixel ID</span>
+                    <Badge variant="outline">Meta Ads</Badge>
+                  </Label>
+                  <Input value={fbPixelId} onChange={(e) => setFbPixelId(e.target.value)} placeholder="e.g. 123456789012345" />
+                  <p className="text-[10px] text-slate-500">Paste your 15-digit Meta Pixel ID from Events Manager.</p>
+                </div>
+
+                <div className="space-y-2 border p-4 rounded-xl bg-slate-50">
+                  <Label className="font-bold flex items-center justify-between text-xs">
+                    <span>Google Analytics 4 (GA4) ID</span>
+                    <Badge variant="outline">GA4</Badge>
+                  </Label>
+                  <Input value={ga4Id} onChange={(e) => setGa4Id(e.target.value)} placeholder="e.g. G-XXXXXXXXXX" />
+                  <p className="text-[10px] text-slate-500">Paste your GA4 Measurement ID (starts with G-).</p>
+                </div>
+
+                <div className="space-y-2 border p-4 rounded-xl bg-slate-50">
+                  <Label className="font-bold flex items-center justify-between text-xs">
+                    <span>Google Tag Manager (GTM) ID</span>
+                    <Badge variant="outline">GTM</Badge>
+                  </Label>
+                  <Input value={gtmId} onChange={(e) => setGtmId(e.target.value)} placeholder="e.g. GTM-XXXXXXX" />
+                  <p className="text-[10px] text-slate-500">Paste your GTM Container ID.</p>
+                </div>
+
+                <div className="space-y-2 border p-4 rounded-xl bg-slate-50">
+                  <Label className="font-bold flex items-center justify-between text-xs">
+                    <span>TikTok Pixel ID / Pinterest Tag ID</span>
+                    <Badge variant="outline">Social Ads</Badge>
+                  </Label>
+                  <Input value={tiktokPixelId} onChange={(e) => setTiktokPixelId(e.target.value)} placeholder="e.g. CXXXXXXXXXXXXXX" />
+                  <p className="text-[10px] text-slate-500">Paste TikTok Pixel or Pinterest Tag ID.</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 border p-4 rounded-xl bg-slate-50">
+                <div className="space-y-2">
+                  <Label className="font-bold">Custom &lt;head&gt; Tracking Scripts</Label>
+                  <Textarea
+                    value={customHeadScripts}
+                    onChange={(e) => setCustomHeadScripts(e.target.value)}
+                    placeholder="<!-- Paste custom script tags to be injected into <head> -->"
+                    rows={4}
+                    className="font-mono text-xs"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-bold">Custom &lt;body&gt; Tracking Scripts</Label>
+                  <Textarea
+                    value={customBodyScripts}
+                    onChange={(e) => setCustomBodyScripts(e.target.value)}
+                    placeholder="<!-- Paste custom noscript tags to be injected into <body> -->"
+                    rows={4}
+                    className="font-mono text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t">
+                <Button variant="outline" type="button" onClick={() => handleUndo('pixels')}>Undo Changes</Button>
+                <Button type="button" onClick={() => handleSave('pixels')} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700 font-bold">
+                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Save Pixel & Analytics Settings
                 </Button>
               </div>
             </CardContent>

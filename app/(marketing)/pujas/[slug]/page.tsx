@@ -3,6 +3,7 @@ import { PujaClientView } from '@/components/puja-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Script from 'next/script'
+import { generateServiceSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -97,30 +98,47 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Event",
-    "name": puja.name,
-    "description": (puja.shortDescription || puja.description || '').replace(/<[^>]*>?/gm, ''),
-    "image": puja.coverImage ? [puja.coverImage] : [],
-    "startDate": puja.pujaDate ? new Date(puja.pujaDate).toISOString() : new Date().toISOString(),
-    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-    "eventStatus": "https://schema.org/EventScheduled",
-    "location": {
-      "@type": "VirtualLocation",
-      "url": `https://divyayagyam.com/pujas/${puja.slug}`
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": Number(puja.price),
-      "priceCurrency": "INR",
-      "url": `https://divyayagyam.com/pujas/${puja.slug}`,
-      "availability": "https://schema.org/InStock",
-      "validFrom": new Date().toISOString()
-    },
-    "organizer": {
-      "@type": "Organization",
-      "name": "DivyaYagyam",
-      "url": "https://divyayagyam.com"
-    }
+    "@graph": [
+      {
+        "@type": "Event",
+        "name": puja.name,
+        "description": (puja.shortDescription || puja.description || '').replace(/<[^>]*>?/gm, ''),
+        "image": puja.coverImage ? [puja.coverImage] : [],
+        "startDate": puja.pujaDate ? new Date(puja.pujaDate).toISOString() : new Date().toISOString(),
+        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "VirtualLocation",
+          "url": `https://divyayagyam.com/pujas/${puja.slug}`
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": Number(puja.price),
+          "priceCurrency": "INR",
+          "url": `https://divyayagyam.com/pujas/${puja.slug}`,
+          "availability": "https://schema.org/InStock",
+          "validFrom": new Date().toISOString()
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "DivyaYagyam",
+          "url": "https://divyayagyam.com"
+        }
+      },
+      generateServiceSchema({
+        name: puja.name,
+        description: puja.shortDescription || puja.description?.substring(0, 200) || '',
+        image: puja.coverImage || '/logo.jpg',
+        price: Number(puja.price),
+        slug: puja.slug,
+        location: puja.temple?.location || undefined,
+      }),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Pujas', url: `${BASE_URL}/pujas` },
+        { name: puja.name, url: `${BASE_URL}/pujas/${puja.slug}` },
+      ]),
+    ]
   }
 
   return (

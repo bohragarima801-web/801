@@ -1,6 +1,14 @@
-
 import Link from 'next/link'
 import Image from 'next/image';
+import { generatePageMeta } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'आगामी पूजा कार्यक्रम — Upcoming Events | DivyaYagyam',
+    description: 'आगामी पूजा, अनुष्ठान और धार्मिक कार्यक्रम। शिवरात्रि, नवरात्रि, एकादशी — सभी आयोजनों की जानकारी।',
+    path: '/events',
+  })
+}
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

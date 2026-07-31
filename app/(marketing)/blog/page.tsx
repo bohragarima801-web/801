@@ -3,6 +3,15 @@
 import { prisma } from '@/lib/prisma'
 import Image from 'next/image';
 import Link from 'next/link'
+import { generatePageMeta } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'सनातन धर्म ब्लॉग — पूजा विधि, मंत्र, ज्योतिष | DivyaYagyam',
+    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
+    path: '/blog',
+  })
+}
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

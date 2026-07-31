@@ -3,7 +3,15 @@ import { ShieldCheck, UserCheck, Sparkles, BookOpen, AlertCircle, Eye, ShieldAle
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { generatePageMeta } from '@/lib/seo'
 
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'Terms & Conditions | DivyaYagyam',
+    description: 'DivyaYagyam terms and conditions for online puja booking, product purchases, and service usage.',
+    path: '/terms',
+  })
+}
 export const revalidate = 30
 
 export default async function TermsPage() {

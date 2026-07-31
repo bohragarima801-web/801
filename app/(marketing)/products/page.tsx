@@ -1,6 +1,15 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
+import { generatePageMeta } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'वैदिक पूजा सामग्री — रुद्राक्ष, यंत्र, माला | DivyaYagyam',
+    description: '100% अभिमंत्रित वैदिक सामग्री। रुद्राक्ष, यंत्र, पूजा थाली, माला — मंदिर से सीधे आपके घर। Free delivery on ₹999+.',
+    path: '/products',
+  })
+}
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
