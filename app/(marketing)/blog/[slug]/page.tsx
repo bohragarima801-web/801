@@ -162,7 +162,37 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
           prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50"
         >
-          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]} 
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              a: ({ href, children, ...props }) => {
+                if (!href) return <span className="font-semibold text-amber-700">{children}</span>
+                const isExternal = href.startsWith('http://') || href.startsWith('https://')
+                if (isExternal) {
+                  return (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
+                      {...props}
+                    >
+                      {children} ↗
+                    </a>
+                  )
+                }
+                return (
+                  <Link
+                    href={href}
+                    className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
+                  >
+                    {children}
+                  </Link>
+                )
+              }
+            }}
+          >
             {post.content}
           </ReactMarkdown>
         </div>

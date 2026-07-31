@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { Loader2, Video, Search, Cloud, Upload, Plus, Trash2 } from 'lucide-react'
+import { Loader2, Video, Search, Cloud, Upload, Plus, Trash2, Link as LinkIcon, Sparkles } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
 import dynamic from 'next/dynamic'
@@ -48,11 +48,68 @@ function BlogForm() {
   const [driveUrl, setDriveUrl] = useState('')
   const [faqs, setFaqs] = useState<{ question: string, answer: string }[]>([])
 
+  // Quick Link System state
+  const [pujas, setPujas] = useState<{ id: string; title: string; slug: string }[]>([])
+  const [products, setProducts] = useState<{ id: string; name: string; slug: string }[]>([])
+  const [linkText, setLinkText] = useState('')
+  const [linkType, setLinkType] = useState<'puja' | 'product' | 'page' | 'custom'>('puja')
+  const [selectedPujaSlug, setSelectedPujaSlug] = useState('')
+  const [selectedProductSlug, setSelectedProductSlug] = useState('')
+  const [selectedPageUrl, setSelectedPageUrl] = useState('/pujas')
+  const [customUrl, setCustomUrl] = useState('')
+
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
+
+    // Fetch Pujas for Quick Link tool
+    fetch('/api/admin/pujas')
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok && Array.isArray(data.pujas)) {
+          setPujas(data.pujas)
+          if (data.pujas.length > 0) setSelectedPujaSlug(data.pujas[0].slug)
+        }
+      })
+      .catch(() => {})
+
+    // Fetch Products for Quick Link tool
+    fetch('/api/admin/products')
+      .then(res => res.json())
+      .then(data => {
+        const prodList = data.ok && Array.isArray(data.data) ? data.data : (Array.isArray(data.products) ? data.products : [])
+        if (prodList.length > 0) {
+          setProducts(prodList)
+          setSelectedProductSlug(prodList[0].slug)
+        }
+      })
+      .catch(() => {})
   }, [])
+
+  function getFormattedLinkUrl() {
+    if (linkType === 'puja') {
+      return `/pujas/${selectedPujaSlug || ''}`
+    } else if (linkType === 'product') {
+      return `/products/${selectedProductSlug || ''}`
+    } else if (linkType === 'page') {
+      return selectedPageUrl
+    } else {
+      return customUrl || '/'
+    }
+  }
+
+  function getFormattedLinkMarkdown() {
+    const text = linkText.trim() || 'online puja booking'
+    const url = getFormattedLinkUrl()
+    return `[${text}](${url})`
+  }
+
+  function handleInsertLink() {
+    const markdownLink = getFormattedLinkMarkdown()
+    setContent(prev => (prev ? `${prev}\n\n${markdownLink}` : markdownLink))
+    toast.success(`Inserted link "${markdownLink}" into blog!`)
+  }
 
   useEffect(() => {
     if (editId) {
@@ -228,6 +285,117 @@ function BlogForm() {
               <Label>Excerpt</Label>
               <Textarea rows={2} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} />
             </div>
+            {/* Quick Keyword Link Inserter Tool */}
+            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-amber-500 text-white rounded-xl shadow-sm">
+                    <LinkIcon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-slate-900 flex items-center gap-1.5">
+                      Keyword Direct Link Tool <Sparkles className="h-3.5 w-3.5 text-amber-600 fill-amber-600" />
+                    </h4>
+                    <p className="text-xs text-slate-600">
+                      ब्लॉग पोस्ट में किसी भी शब्द (जैसे "online puja booking") पर डायरेक्ट लिंक लगाने का आसान टूल।
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 pt-1">
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-slate-700">1. Link Word/Text (शब्द)</Label>
+                  <Input 
+                    placeholder="e.g. online puja booking" 
+                    value={linkText} 
+                    onChange={(e) => setLinkText(e.target.value)}
+                    className="bg-white text-xs h-9 rounded-xl border-amber-200"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-slate-700">2. Type</Label>
+                  <Select value={linkType} onValueChange={(val: any) => setLinkType(val)}>
+                    <SelectTrigger className="bg-white text-xs h-9 rounded-xl border-amber-200"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="puja">Puja Page</SelectItem>
+                      <SelectItem value="product">Product</SelectItem>
+                      <SelectItem value="page">Main Section / Page</SelectItem>
+                      <SelectItem value="custom">Custom URL</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1 sm:col-span-2 lg:col-span-2">
+                  <Label className="text-xs font-bold text-slate-700">3. Destination Page (कहाँ लिंक खुले)</Label>
+                  {linkType === 'puja' && (
+                    <Select value={selectedPujaSlug} onValueChange={setSelectedPujaSlug}>
+                      <SelectTrigger className="bg-white text-xs h-9 rounded-xl border-amber-200"><SelectValue placeholder="Select Puja" /></SelectTrigger>
+                      <SelectContent>
+                        {pujas.map((p) => (
+                          <SelectItem key={p.id} value={p.slug}>
+                            {p.title} (/pujas/{p.slug})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+
+                  {linkType === 'product' && (
+                    <Select value={selectedProductSlug} onValueChange={setSelectedProductSlug}>
+                      <SelectTrigger className="bg-white text-xs h-9 rounded-xl border-amber-200"><SelectValue placeholder="Select Product" /></SelectTrigger>
+                      <SelectContent>
+                        {products.map((p) => (
+                          <SelectItem key={p.id} value={p.slug}>
+                            {p.name} (/products/{p.slug})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+
+                  {linkType === 'page' && (
+                    <Select value={selectedPageUrl} onValueChange={setSelectedPageUrl}>
+                      <SelectTrigger className="bg-white text-xs h-9 rounded-xl border-amber-200"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="/pujas">Online Puja Booking (/pujas)</SelectItem>
+                        <SelectItem value="/products">Pooja Samagri Store (/products)</SelectItem>
+                        <SelectItem value="/bhaktiseva">Bhakti Seva (/bhaktiseva)</SelectItem>
+                        <SelectItem value="/ask-a-pandit">Ask a Pandit (/ask-a-pandit)</SelectItem>
+                        <SelectItem value="/astro">Astrology Services (/astro)</SelectItem>
+                        <SelectItem value="/events">Upcoming Events (/events)</SelectItem>
+                        <SelectItem value="/contact">Contact Us (/contact)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+
+                  {linkType === 'custom' && (
+                    <Input 
+                      placeholder="https://... or /path" 
+                      value={customUrl} 
+                      onChange={(e) => setCustomUrl(e.target.value)}
+                      className="bg-white text-xs h-9 rounded-xl border-amber-200"
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-amber-200/60">
+                <div className="text-xs text-slate-600 font-medium">
+                  Generated code: <code className="bg-white px-2 py-0.5 rounded-lg text-amber-800 font-mono border border-amber-200 text-xs">{getFormattedLinkMarkdown()}</code>
+                </div>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  onClick={handleInsertLink} 
+                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold h-8 text-xs rounded-xl shadow-sm gap-1"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Insert Link into Blog Content
+                </Button>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label>Content (Rich Text)</Label>
               <div data-color-mode="light" className="bg-white text-slate-900 rounded-md">
