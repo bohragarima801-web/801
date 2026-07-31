@@ -131,7 +131,7 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
         image: puja.coverImage || '/logo.jpg',
         price: Number(puja.price),
         slug: puja.slug,
-        location: puja.temple?.name || puja.city || undefined,
+        location: puja.temple?.name || puja.temple?.city || undefined,
       }),
       generateBreadcrumbSchema([
         { name: 'Home', url: BASE_URL },
