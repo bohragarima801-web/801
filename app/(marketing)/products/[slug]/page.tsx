@@ -3,7 +3,7 @@ import { ProductClientView } from '@/components/product-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Script from 'next/script'
-import { generateProductSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -55,44 +55,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlugOrFallback(slug);
   
-  if (!product) return { title: 'Product Not Found | DivyaYagyam' }
+  if (!product) return generatePageMeta({ title: 'Product Not Found | DivyaYagyam', description: 'The requested product is unavailable.', path: `/products/${slug}` })
   
-  const pageUrl = `https://divyayagyam.com/products/${product.slug}`
-  const title = product.seoTitle || `${product.name} — Order Sacred Prasad & Essentials | DivyaYagyam`
-  const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '').slice(0, 160)
+  const title = product.seoTitle || `${product.name} — Order Sacred Prasad | DivyaYagyam`
+  const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '')
 
-  return {
+  return generatePageMeta({
     title,
     description,
-    keywords: product.seoKeywords || `${product.name}, Sacred Prasad, Puja Essentials, DivyaYagyam, ${product.category?.name || 'Sanatan Product'}`,
-    alternates: {
-      canonical: pageUrl,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-image-preview': 'large',
-      }
-    },
-    openGraph: {
-      title,
-      description,
-      url: pageUrl,
-      siteName: 'DivyaYagyam',
-      locale: 'hi_IN',
-      type: 'website',
-      images: product.coverImage ? [{ url: product.coverImage, width: 1200, height: 630, alt: product.name }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: product.coverImage ? [product.coverImage] : [],
-    }
-  }
+    path: `/products/${product.slug}`,
+    image: product.coverImage || undefined,
+  })
 }
 
 export default async function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -138,4 +111,3 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     </>
   )
 }
-

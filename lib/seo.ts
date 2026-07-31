@@ -5,6 +5,15 @@ const SITE_NAME = 'DivyaYagyam'
 const DEFAULT_OG_IMAGE = `${BASE_URL}/logo.jpg`
 
 // ─────────────────────────────────────────────
+// Permanent Canonical URL Helper
+// ─────────────────────────────────────────────
+export function getCanonicalUrl(path: string = '/'): string {
+  if (!path || path === '/') return BASE_URL
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+  return `${BASE_URL}${cleanPath.replace(/\/+$/, '')}`
+}
+
+// ─────────────────────────────────────────────
 // Reusable page metadata generator
 // ─────────────────────────────────────────────
 export function generatePageMeta({
@@ -22,12 +31,14 @@ export function generatePageMeta({
   keywords?: string[]
   noIndex?: boolean
 }): Metadata {
-  const url = `${BASE_URL}${path}`
+  const url = getCanonicalUrl(path)
   const ogImage = image || DEFAULT_OG_IMAGE
+  // Auto-truncate title if exceeds 70 characters to comply with search engine guidelines
+  const cleanTitle = title && title.length > 70 ? `${title.substring(0, 67)}...` : title
 
   return {
-    title,
-    description,
+    title: cleanTitle,
+    description: description?.substring(0, 160) || '',
     keywords: keywords || [
       'online puja booking', 'ऑनलाइन पूजा', 'divyayagyam', 'vedic puja',
       'kashi vishwanath puja', 'mahakaleshwar puja', 'rudraksha', 'puja samagri',
@@ -41,18 +52,18 @@ export function generatePageMeta({
       },
     },
     openGraph: {
-      title,
-      description,
+      title: cleanTitle,
+      description: description?.substring(0, 200) || '',
       url,
       siteName: SITE_NAME,
       locale: 'hi_IN',
       type: 'website',
-      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: cleanTitle }],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description,
+      title: cleanTitle,
+      description: description?.substring(0, 200) || '',
       images: [ogImage],
     },
     robots: noIndex ? { index: false, follow: false } : undefined,

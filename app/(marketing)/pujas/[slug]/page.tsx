@@ -3,7 +3,7 @@ import { PujaClientView } from '@/components/puja-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Script from 'next/script'
-import { generateServiceSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { generateServiceSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -43,44 +43,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja) return { title: 'Puja Not Found | DivyaYagyam' };
+  if (!puja) return generatePageMeta({ title: 'Puja Not Found | DivyaYagyam', description: 'The requested puja service is unavailable.', path: `/pujas/${slug}` });
 
-  const pageUrl = `https://divyayagyam.com/pujas/${puja.slug}`
-  const title = puja.seoTitle || `${puja.name} — Book Online Puja & Darshan | DivyaYagyam`
-  const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '').slice(0, 160)
+  const title = puja.seoTitle || `${puja.name} — Book Online Puja | DivyaYagyam`
+  const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
 
-  return {
+  return generatePageMeta({
     title,
     description,
-    keywords: puja.seoKeywords || `${puja.name}, Online Puja, ${puja.temple?.name || 'Temple Puja'}, DivyaYagyam, Sanatan Seva`,
-    alternates: {
-      canonical: pageUrl,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-image-preview': 'large',
-      }
-    },
-    openGraph: {
-      title,
-      description,
-      url: pageUrl,
-      siteName: 'DivyaYagyam',
-      locale: 'hi_IN',
-      type: 'website',
-      images: puja.coverImage ? [{ url: puja.coverImage, width: 1200, height: 630, alt: puja.name }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: puja.coverImage ? [puja.coverImage] : [],
-    }
-  };
+    path: `/pujas/${puja.slug}`,
+    image: puja.coverImage || undefined,
+  })
 }
 
 export default async function PujaDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -152,4 +125,3 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
     </>
   )
 }
-
