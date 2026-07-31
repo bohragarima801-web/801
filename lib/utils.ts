@@ -64,16 +64,31 @@ export function truncate(str: string, len = 100) {
   return str.length > len ? str.slice(0, len).trimEnd() + '…' : str
 }
 
-export const DEFAULT_PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=400'
+export const DEFAULT_PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=800'
 
 export function convertGoogleDriveUrl(url: string) {
-  if (!url) return url
-  // Match standard share links e.g. process.env.NEXT_PUBLIC_URL_4730 || ''
-  const match = url.match(/\/file\/d\/([^\/]+)/)
-  if (match && match[1]) {
-    return `https://drive.google.com/uc?id=${match[1]}&export=view`
+  if (!url || typeof url !== 'string') return url
+  let id = ''
+  const fileDMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (fileDMatch && fileDMatch[1]) {
+    id = fileDMatch[1]
+  } else {
+    const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idMatch && idMatch[1]) {
+      id = idMatch[1]
+    }
+  }
+
+  if (id) {
+    return `https://lh3.googleusercontent.com/d/${id}`
   }
   return url
+}
+
+export function getSafeImageUrl(url?: string | null, fallback = DEFAULT_PLACEHOLDER_IMAGE): string {
+  if (!url || typeof url !== 'string' || !url.trim()) return fallback
+  const converted = convertGoogleDriveUrl(url.trim())
+  return converted || fallback
 }
 
 export async function compressImage(file: File, options?: any): Promise<File> {

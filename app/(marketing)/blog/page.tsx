@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -71,11 +72,18 @@ export default async function BlogListPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map(post => (
           <Card key={post.id} className="group hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden border">
-            {post.coverImage && (
-              <div className="aspect-video relative overflow-hidden bg-slate-100">
-                <img loading="lazy" src={post.coverImage} alt={post.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
-              </div>
-            )}
+            <div className="aspect-video relative overflow-hidden bg-slate-100">
+              <img 
+                loading="lazy" 
+                src={getSafeImageUrl(post.coverImage)} 
+                alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`} 
+                title={post.title}
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
+                }}
+                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+              />
+            </div>
             <CardContent className="p-6 flex flex-col justify-between h-[300px]">
               <div className="space-y-3">
                 <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200">

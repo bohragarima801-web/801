@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, User, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
+import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -160,10 +161,13 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               <img 
                 loading="lazy" 
                 decoding="async" 
-                src={post.coverImage} 
+                src={getSafeImageUrl(post.coverImage)} 
                 alt={coverAlt} 
                 title={post.title} 
                 itemProp="image" 
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
+                }}
                 className="w-full h-full object-cover" 
               />
             </div>
@@ -215,17 +219,21 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               },
               img: ({ src, alt, title, ...props }) => {
                 if (!src) return null
+                const safeSrc = getSafeImageUrl(src)
                 const imageAltText = alt || `${post.title} - Online Puja Booking & Spiritual Guide DivyaYagyam`
                 const imageTitleText = title || imageAltText
                 return (
                   <figure className="my-8 text-center bg-slate-50 border border-amber-100 rounded-3xl p-3 shadow-md">
                     <img
-                      src={src}
+                      src={safeSrc}
                       alt={imageAltText}
                       title={imageTitleText}
                       loading="lazy"
                       decoding="async"
                       itemProp="image"
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
+                      }}
                       className="max-h-[500px] w-auto mx-auto object-contain rounded-2xl shadow-sm border border-amber-50"
                       {...props}
                     />

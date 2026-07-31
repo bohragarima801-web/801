@@ -227,6 +227,11 @@ function BlogForm() {
 
     setLoading(true)
     try {
+      const cleanCoverImage = convertGoogleDriveUrl(coverImage)
+      const cleanContent = content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText, src) => {
+        return `![${altText}](${convertGoogleDriveUrl(src)})`
+      })
+
       const res = await fetch(`/api/admin/blog${editId ? `?id=${editId}` : ''}`, {
         method: editId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -234,12 +239,12 @@ function BlogForm() {
           title,
           slug,
           excerpt,
-          content,
+          content: cleanContent,
           categoryId,
           seoTitle,
           seoDescription,
           seoKeywords,
-          coverImage,
+          coverImage: cleanCoverImage,
           videoUrl,
           isVideoEnabled,
           faqs,
@@ -417,6 +422,10 @@ function BlogForm() {
                   className="bg-amber-600 hover:bg-amber-700 text-white font-bold h-8 text-xs rounded-xl shadow-sm gap-1"
                 >
                   <Plus className="h-3.5 w-3.5" /> Insert Link into Blog Content
+                </Button>
+              </div>
+            </div>
+
             {/* Image SEO & Alt Text Tool */}
             <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 space-y-3">
               <div className="flex items-center justify-between">
