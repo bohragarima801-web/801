@@ -47,12 +47,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const title = puja.seoTitle || `${puja.name} — Book Online Puja | DivyaYagyam`
   const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
+  const keywords = puja.seoKeywords ? puja.seoKeywords.split(',').map(k => k.trim()) : undefined
 
   return generatePageMeta({
     title,
     description,
     path: `/pujas/${puja.slug}`,
     image: puja.coverImage || undefined,
+    keywords,
   })
 }
 

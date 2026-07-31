@@ -43,6 +43,7 @@ function BlogForm() {
   const [isPublished, setIsPublished] = useState(true)
   const [publishedAt, setPublishedAt] = useState('')
   const [coverImage, setCoverImage] = useState('')
+  const [coverImageAlt, setCoverImageAlt] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [driveUrl, setDriveUrl] = useState('')
@@ -158,6 +159,7 @@ function BlogForm() {
             setIsPublished(post.status === 'PUBLISHED')
             setPublishedAt(post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '')
             setCoverImage(post.coverImage || '')
+            setCoverImageAlt(post.coverImageAlt || '')
             setVideoUrl(post.videoUrl || '')
             setIsVideoEnabled(post.isVideoEnabled !== undefined ? !!post.isVideoEnabled : true)
             setCategoryId(post.categoryId || '')
@@ -245,6 +247,7 @@ function BlogForm() {
           seoDescription,
           seoKeywords,
           coverImage: cleanCoverImage,
+          coverImageAlt: coverImageAlt.trim() || (title ? `${title} - Online Puja Booking & Spiritual Guide DivyaYagyam` : ''),
           videoUrl,
           isVideoEnabled,
           faqs,
@@ -632,6 +635,32 @@ function BlogForm() {
                   <Button type="button" size="sm" onClick={handleDriveAdd} disabled={!driveUrl} className="bg-blue-600 hover:bg-blue-700">
                     <Cloud className="h-4 w-4 mr-1" /> Use
                   </Button>
+                </div>
+
+                {/* Dedicated Cover Image Alt Text Field */}
+                <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-800">Cover Image Alt Text (गूगल ऑल्ट टैग)</Label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const catName = categories.find(c => c.id === categoryId)?.name || 'Spirituality'
+                        const autoText = title ? `${title} - ${catName} | Online Puja Booking DivyaYagyam` : 'Online Puja Booking DivyaYagyam'
+                        setCoverImageAlt(autoText)
+                        toast.success('Generated Cover Image Alt Text!')
+                      }}
+                      className="text-[10px] text-blue-600 font-bold hover:underline flex items-center gap-0.5"
+                    >
+                      <Sparkles className="h-3 w-3 text-blue-600 fill-blue-600" /> Auto-Generate
+                    </button>
+                  </div>
+                  <Input
+                    placeholder="e.g. Maha Mrityunjaya Puja Vidhi & Benefits - DivyaYagyam"
+                    value={coverImageAlt}
+                    onChange={(e) => setCoverImageAlt(e.target.value)}
+                    className="text-xs h-9 bg-slate-50 border-blue-200 rounded-xl"
+                  />
+                  <p className="text-[10px] text-slate-500">Google Image Search और Live Page पर दिखने वाला ऑल्ट टेक्स्ट।</p>
                 </div>
               </div>
             </div>

@@ -59,12 +59,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   const title = product.seoTitle || `${product.name} — Order Sacred Prasad | DivyaYagyam`
   const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '')
+  const keywords = product.seoKeywords ? product.seoKeywords.split(',').map(k => k.trim()) : undefined
 
   return generatePageMeta({
     title,
     description,
     path: `/products/${product.slug}`,
     image: product.coverImage || undefined,
+    keywords,
   })
 }
 

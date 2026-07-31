@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image';
 import Script from 'next/script'
-import { generateArticleSchema, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { generateArticleSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User, Eye } from 'lucide-react'
@@ -29,34 +29,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await prisma.blog.findUnique({
     where: { slug: slug },
-    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true }
+    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true, coverImageAlt: true }
   });
 
-  if (!post) return { title: 'Blog Post Not Found | DivyaYagyam' };
+  if (!post) return generatePageMeta({ title: 'Blog Post Not Found | DivyaYagyam', description: 'The requested article could not be found.', path: `/blog/${slug}` });
 
-  const canonicalUrl = `${BASE_URL}/blog/${slug}`
-  const coverAlt = `${post.seoTitle || post.title} - ${post.seoKeywords || 'Online Puja Booking & Spiritual Guide'}`
+  const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
 
-  return {
+  return generatePageMeta({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt || '',
-    keywords: post.seoKeywords || undefined,
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title: post.seoTitle || post.title,
-      description: post.seoDescription || post.excerpt || '',
-      url: canonicalUrl,
-      images: post.coverImage ? [{ url: post.coverImage, alt: coverAlt, width: 1200, height: 630 }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.seoTitle || post.title,
-      description: post.seoDescription || post.excerpt || '',
-      images: post.coverImage ? [post.coverImage] : [],
-    }
-  };
+    path: `/blog/${slug}`,
+    image: post.coverImage || undefined,
+    keywords,
+  });
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -85,7 +71,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }).catch(() => {})
 
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
-  const coverAlt = `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
+  const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
   return (
     <>
