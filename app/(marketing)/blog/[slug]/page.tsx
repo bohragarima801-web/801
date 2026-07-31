@@ -1,5 +1,3 @@
-
-
 import { notFound } from 'next/navigation'
 import Image from 'next/image';
 import Script from 'next/script'
@@ -33,15 +31,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true }
   });
 
-  if (!post) return { title: 'Not Found' };
+  if (!post) return { title: 'Blog Post Not Found | DivyaYagyam' };
+
+  const canonicalUrl = `${BASE_URL}/blog/${slug}`
 
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt || '',
     keywords: post.seoKeywords || undefined,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt || '',
+      url: canonicalUrl,
       images: post.coverImage ? [post.coverImage] : [],
     }
   };

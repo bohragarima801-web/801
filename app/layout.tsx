@@ -24,12 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords: dynamicConfig.keywords,
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: baseUrl,
-      languages: {
-        'hi-IN': baseUrl,
-        'en-IN': baseUrl,
-        'x-default': baseUrl,
-      },
+      canonical: './',
     },
     robots: {
       index: true,
@@ -118,4 +113,3 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     </html>
   )
 }
-
