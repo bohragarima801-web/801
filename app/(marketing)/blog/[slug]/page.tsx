@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) return { title: 'Blog Post Not Found | DivyaYagyam' };
 
   const canonicalUrl = `${BASE_URL}/blog/${slug}`
+  const coverAlt = `${post.seoTitle || post.title} - ${post.seoKeywords || 'Online Puja Booking & Spiritual Guide'}`
 
   return {
     title: post.seoTitle || post.title,
@@ -46,6 +47,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt || '',
       url: canonicalUrl,
+      images: post.coverImage ? [{ url: post.coverImage, alt: coverAlt, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || '',
       images: post.coverImage ? [post.coverImage] : [],
     }
   };
@@ -77,6 +84,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }).catch(() => {})
 
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
+  const coverAlt = `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
   return (
     <>
@@ -91,6 +99,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 title: post.title,
                 description: post.excerpt || post.content?.substring(0, 200) || '',
                 image: post.coverImage || '/logo.jpg',
+                imageAlt: coverAlt,
                 slug: post.slug,
                 datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
                 dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
@@ -146,9 +155,22 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage ? (
-          <div className="my-8 aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50">
-            <img loading="lazy" src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
-          </div>
+          <figure className="my-8 rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50 bg-slate-900">
+            <div className="aspect-video w-full relative overflow-hidden">
+              <img 
+                loading="lazy" 
+                decoding="async" 
+                src={post.coverImage} 
+                alt={coverAlt} 
+                title={post.title} 
+                itemProp="image" 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900 bg-amber-50/70 border-t border-amber-100 italic">
+              📷 {coverAlt}
+            </figcaption>
+          </figure>
         ) : null}
 
         <div 
@@ -189,6 +211,28 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                   >
                     {children}
                   </Link>
+                )
+              },
+              img: ({ src, alt, title, ...props }) => {
+                if (!src) return null
+                const imageAltText = alt || `${post.title} - Online Puja Booking & Spiritual Guide DivyaYagyam`
+                const imageTitleText = title || imageAltText
+                return (
+                  <figure className="my-8 text-center bg-slate-50 border border-amber-100 rounded-3xl p-3 shadow-md">
+                    <img
+                      src={src}
+                      alt={imageAltText}
+                      title={imageTitleText}
+                      loading="lazy"
+                      decoding="async"
+                      itemProp="image"
+                      className="max-h-[500px] w-auto mx-auto object-contain rounded-2xl shadow-sm border border-amber-50"
+                      {...props}
+                    />
+                    <figcaption className="text-center text-xs font-bold text-amber-900 mt-2.5 px-2">
+                      📷 {imageAltText}
+                    </figcaption>
+                  </figure>
                 )
               }
             }}

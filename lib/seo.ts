@@ -228,6 +228,7 @@ export function generateArticleSchema({
   datePublished,
   dateModified,
   authorName,
+  imageAlt,
 }: {
   title: string
   description: string
@@ -236,13 +237,24 @@ export function generateArticleSchema({
   datePublished: string
   dateModified?: string
   authorName?: string
+  imageAlt?: string
 }) {
+  const altText = imageAlt || `${title} - ${SITE_NAME} Online Puja Booking & Spiritual Guide`
+  const imageObj = {
+    '@type': 'ImageObject',
+    url: image || DEFAULT_OG_IMAGE,
+    caption: altText,
+    description: altText,
+    width: 1200,
+    height: 630,
+  }
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description: description?.substring(0, 300),
-    image,
+    image: [imageObj],
     url: `${BASE_URL}/blog/${slug}`,
     datePublished,
     dateModified: dateModified || datePublished,

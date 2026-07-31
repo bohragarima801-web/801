@@ -58,7 +58,32 @@ function BlogForm() {
   const [selectedPageUrl, setSelectedPageUrl] = useState('/pujas')
   const [customUrl, setCustomUrl] = useState('')
 
+  // Image SEO Alt Text state
+  const [seoImageUrl, setSeoImageUrl] = useState('')
+  const [seoImageAlt, setSeoImageAlt] = useState('')
+
   const [isMounted, setIsMounted] = useState(false)
+
+  function generateAutoAltText() {
+    const baseTitle = title || 'Vedic Rituals & Spiritual Puja'
+    const categoryName = categories.find(c => c.id === categoryId)?.name || 'Spirituality'
+    const keyWordsText = seoKeywords ? ` - ${seoKeywords}` : ''
+    const generated = `${baseTitle} - ${categoryName}${keyWordsText} | Online Puja Booking DivyaYagyam`
+    setSeoImageAlt(generated)
+    toast.success('Generated SEO Alt Text!')
+  }
+
+  function handleInsertSeoImage() {
+    if (!seoImageUrl) {
+      toast.error('Please enter an image URL')
+      return
+    }
+    const altText = seoImageAlt.trim() || (title ? `${title} - DivyaYagyam` : 'Blog Image DivyaYagyam')
+    const markdownImg = `\n\n![${altText}](${seoImageUrl})\n\n`
+    setContent(prev => (prev ? `${prev}${markdownImg}` : markdownImg))
+    toast.success(`Inserted SEO optimized image into blog!`)
+    setSeoImageUrl('')
+  }
 
   useEffect(() => {
     setIsMounted(true)
@@ -392,6 +417,66 @@ function BlogForm() {
                   className="bg-amber-600 hover:bg-amber-700 text-white font-bold h-8 text-xs rounded-xl shadow-sm gap-1"
                 >
                   <Plus className="h-3.5 w-3.5" /> Insert Link into Blog Content
+            {/* Image SEO & Alt Text Tool */}
+            <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-blue-600 text-white rounded-xl shadow-sm">
+                    <Upload className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-slate-900 flex items-center gap-1.5">
+                      Image SEO & Alt Text Tool (गूगल इमेज सर्च के लिए) <Sparkles className="h-3.5 w-3.5 text-blue-600 fill-blue-600" />
+                    </h4>
+                    <p className="text-xs text-slate-600">
+                      गूगल इमेज सर्च पर रैंक करने के लिए हर इमेज का कीवर्ड-रिच Descriptive Alt Text बनाएं और ब्लॉग में जोड़ें।
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 pt-1">
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-slate-700">Image URL (इमेज लिंक)</Label>
+                  <Input 
+                    placeholder="https://... image url" 
+                    value={seoImageUrl} 
+                    onChange={(e) => setSeoImageUrl(e.target.value)}
+                    className="bg-white text-xs h-9 rounded-xl border-blue-200"
+                  />
+                </div>
+
+                <div className="space-y-1 lg:col-span-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-700">Image Descriptive Alt Text (गूगल के लिए ऑल्ट टेक्स्ट)</Label>
+                    <button
+                      type="button"
+                      onClick={generateAutoAltText}
+                      className="text-xs text-blue-600 font-bold hover:underline flex items-center gap-1"
+                    >
+                      <Sparkles className="h-3 w-3" /> Auto-Generate Alt Text
+                    </button>
+                  </div>
+                  <Input 
+                    placeholder="e.g. Maha Mrityunjaya Puja Vidhi - Online Puja Booking DivyaYagyam" 
+                    value={seoImageAlt} 
+                    onChange={(e) => setSeoImageAlt(e.target.value)}
+                    className="bg-white text-xs h-9 rounded-xl border-blue-200"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-blue-200/60">
+                <div className="text-xs text-slate-600 font-medium">
+                  SEO Tag: <code className="bg-white px-2 py-0.5 rounded-lg text-blue-900 font-mono border border-blue-200 text-xs">![{seoImageAlt || 'Alt Text'}]({seoImageUrl || 'Image URL'})</code>
+                </div>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  onClick={handleInsertSeoImage} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-8 text-xs rounded-xl shadow-sm gap-1"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Insert SEO Image into Blog Content
                 </Button>
               </div>
             </div>
