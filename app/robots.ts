@@ -14,7 +14,12 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
       },
       {
-        userAgent: ['Googlebot', 'Bingbot', 'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Bytespider'],
+        userAgent: [
+          'Googlebot', 'Bingbot', 'GPTBot', 'ChatGPT-User', 'OAI-SearchBot',
+          'ClaudeBot', 'Claude-User', 'Claude-SearchBot',
+          'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Bytespider',
+          'Applebot', 'Applebot-Extended', 'Meta-ExternalAgent'
+        ],
         allow: '/',
         disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
       },
