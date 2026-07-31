@@ -24,9 +24,11 @@ import { MediaCarousel } from '@/components/ui/media-carousel'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { FadeIn } from '@/components/ui/fade-in'
-import { SacredVideoGallery, getYouTubeId, getYouTubeThumbnail } from '@/components/sacred-video-gallery'
+import { SacredVideoGallery } from '@/components/sacred-video-gallery'
+import { getYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
 import { getDynamicSiteConfig } from '@/lib/settings'
+import { SafeImage } from '@/components/ui/safe-image'
 
 function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean; thumbUrl: string | null } {
   if (!url) return { isVideo: false, thumbUrl: null }
@@ -281,14 +283,10 @@ export default async function HomePage() {
                     }
                     const imgSrc = mediaInfo.thumbUrl || p.coverImage
                     return (
-                      <img
+                      <SafeImage
                         src={imgSrc}
                         alt={p.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.style.display = 'none'
-                        }}
                       />
                     )
                   })()
@@ -589,14 +587,10 @@ export default async function HomePage() {
                   {mediaInfo.isVideo && !getYouTubeId(media.url) ? (
                     <video src={media.url} className="w-full h-full object-cover" muted loop autoPlay playsInline />
                   ) : displaySrc ? (
-                    <img
+                    <SafeImage
                       src={displaySrc}
                       alt={media.filename || 'Past Puja'}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.style.display = 'none'
-                      }}
                     />
                   ) : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 z-10" />
