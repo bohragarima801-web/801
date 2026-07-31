@@ -6,7 +6,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'VIP पूजा अनुष्ठान — विशिष्ट व्यक्तिगत वैदिक पूजा | DivyaYagyam',
+    title: 'VIP पूजा अनुष्ठान — Special Personalised Vedic Rituals',
     description: 'विशिष्ट VIP पूजा एवं महा-अनुष्ठान। आपके नाम व गोत्र से व्यक्तिगत संकल्प, 1-on-1 लाइव वीडियो स्ट्रीमिंग एवं विशेष महाप्रसाद डिलीवरी।',
     path: '/vip-pujas',
   })

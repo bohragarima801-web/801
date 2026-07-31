@@ -7,8 +7,8 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'संपर्क करें (Contact Us) | DivyaYagyam',
-    description: 'दिव्य यज्ञम सहायता केंद्र। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प या ज्योतिष परामर्श हेतु संपर्क करें। Email: seva@divyayagyam.com, Phone: +91-95871-71984.',
+    title: 'संपर्क करें (Contact Us) — Pandit Guidance & Support Desk',
+    description: 'DivyaYagyam संपर्क केंद्र। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प या ज्योतिष परामर्श हेतु संपर्क करें। WhatsApp: +91-95871-71984, Email: Seva@divyayagyam.com.',
     path: '/contact',
   })
 }

@@ -8,8 +8,8 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Terms & Conditions | DivyaYagyam',
-    description: 'DivyaYagyam terms and conditions for online puja booking, product purchases, and service usage.',
+    title: 'नियम एवं शर्तें (Terms & Conditions) — Service Rules & Policies',
+    description: 'DivyaYagyam नियम एवं शर्तें। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प, प्रसाद डिलीवरी, एवं सेवा उपयोग से जुड़ी संपूर्ण नियम व शर्तें।',
     path: '/terms',
   })
 }

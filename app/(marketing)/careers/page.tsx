@@ -7,8 +7,8 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Careers at DivyaYagyam | Join Our Sanatan Seva Mission',
-    description: 'Explore career opportunities at DivyaYagyam. Join our team of Vedic acharyas, developers, and support specialists preserving Sanatan traditions.',
+    title: 'करियर (Careers) — Join Our Sanatan Seva Mission',
+    description: 'DivyaYagyam में करियर के अवसर। सनातन वैदिक संस्कृति के प्रसार और तकनीकी विकास हेतु हमारी टीम से जुड़ें।',
     path: '/careers',
   })
 }

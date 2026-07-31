@@ -23,6 +23,7 @@ export function generatePageMeta({
   image,
   keywords,
   noIndex = false,
+  isAbsoluteTitle = false,
 }: {
   title: string
   description: string
@@ -30,18 +31,45 @@ export function generatePageMeta({
   image?: string
   keywords?: string[]
   noIndex?: boolean
+  isAbsoluteTitle?: boolean
 }): Metadata {
   const url = getCanonicalUrl(path)
   const ogImage = image || DEFAULT_OG_IMAGE
-  // Auto-truncate title if exceeds 70 characters to comply with search engine guidelines
-  const cleanTitle = title && title.length > 70 ? `${title.substring(0, 67)}...` : title
+
+  // Strip any trailing site name to prevent duplication when layout title template '%s | DivyaYagyam' is applied
+  let cleanTitle = title
+    ? title.replace(/\s*[|\-—]\s*DivyaYagyam(\.com)?$/i, '').trim()
+    : 'Online Puja Booking & Sanatan Seva'
+
+  // Truncate clean title if necessary (aiming under 65 chars for standard search snippets)
+  if (cleanTitle.length > 65) {
+    cleanTitle = cleanTitle.substring(0, 62).trim() + '...'
+  }
+
+  // Clean and truncate description to 155-160 chars
+  let cleanDesc = (description || '')
+    .replace(/<[^>]*>?/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  if (cleanDesc.length > 160) {
+    const truncated = cleanDesc.substring(0, 155)
+    cleanDesc = truncated.substring(0, Math.max(truncated.lastIndexOf(' '), 140)) + '...'
+  }
+
+  const metaTitle = (isAbsoluteTitle || path === '/')
+    ? { absolute: title.includes('DivyaYagyam') ? title : `${title} | ${SITE_NAME}` }
+    : cleanTitle
+
+  const ogTitle = (isAbsoluteTitle || path === '/') ? title : `${cleanTitle} | ${SITE_NAME}`
 
   return {
-    title: cleanTitle,
-    description: description?.substring(0, 160) || '',
+    title: metaTitle,
+    description: cleanDesc,
     keywords: keywords || [
       'online puja booking', 'ऑनलाइन पूजा', 'divyayagyam', 'vedic puja',
       'kashi vishwanath puja', 'mahakaleshwar puja', 'rudraksha', 'puja samagri',
+      'astrology online', 'jyotish', 'sanatan seva',
     ],
     alternates: {
       canonical: url,
@@ -52,18 +80,18 @@ export function generatePageMeta({
       },
     },
     openGraph: {
-      title: cleanTitle,
-      description: description?.substring(0, 200) || '',
+      title: ogTitle,
+      description: cleanDesc,
       url,
       siteName: SITE_NAME,
       locale: 'hi_IN',
       type: 'website',
-      images: [{ url: ogImage, width: 1200, height: 630, alt: cleanTitle }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: cleanTitle,
-      description: description?.substring(0, 200) || '',
+      title: ogTitle,
+      description: cleanDesc,
       images: [ogImage],
     },
     robots: noIndex ? { index: false, follow: false } : undefined,

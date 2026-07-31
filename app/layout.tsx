@@ -17,11 +17,20 @@ export async function generateMetadata(): Promise<Metadata> {
   const dynamicConfig = await getDynamicSiteConfig()
   const googleVerification = await getSetting('seo.google_verification')
   const baseUrl = dynamicConfig.url || 'https://divyayagyam.com'
+  const siteName = dynamicConfig.name || 'DivyaYagyam'
+  const defaultDescription = 'Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar & heritage temples. Verified Pandits, name-gotra sankalp, live video proof on WhatsApp & sacred prasad home delivery.'
 
   return {
-    title: { default: `${dynamicConfig.name} — ${dynamicConfig.tagline}`, template: `%s | ${dynamicConfig.name}` },
-    description: dynamicConfig.description,
-    keywords: dynamicConfig.keywords,
+    title: {
+      default: `${siteName} — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      template: `%s | ${siteName}`
+    },
+    description: dynamicConfig.description || defaultDescription,
+    keywords: dynamicConfig.keywords || [
+      'online puja booking', 'ऑनलाइन पूजा', 'divyayagyam', 'vedic puja',
+      'kashi vishwanath puja', 'mahakaleshwar puja', 'rudraksha', 'puja samagri',
+      'astrology online', 'jyotish', 'sanatan seva'
+    ],
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: './',
@@ -38,23 +47,23 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: `${dynamicConfig.name} — ${dynamicConfig.tagline}`,
-      description: dynamicConfig.description,
+      title: `${siteName} — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      description: dynamicConfig.description || defaultDescription,
       url: baseUrl,
-      siteName: dynamicConfig.name,
+      siteName: siteName,
       locale: 'hi_IN',
       type: 'website',
       images: [{
         url: dynamicConfig.logo || dynamicConfig.ogImage || `${baseUrl}/logo.jpg`,
         width: 1200,
         height: 630,
-        alt: `${dynamicConfig.name} Logo`,
+        alt: `${siteName} Logo`,
       }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${dynamicConfig.name} — ${dynamicConfig.tagline}`,
-      description: dynamicConfig.description,
+      title: `${siteName} — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      description: dynamicConfig.description || defaultDescription,
       images: [dynamicConfig.logo || dynamicConfig.ogImage || `${baseUrl}/logo.jpg`],
     },
     verification: {
@@ -66,7 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: dynamicConfig.logo || '/logo.jpg',
       apple: dynamicConfig.logo || '/apple-touch-icon.png'
     },
-    appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: dynamicConfig.name },
+    appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: siteName },
   }
 }
 

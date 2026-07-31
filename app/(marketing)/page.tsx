@@ -8,6 +8,7 @@ export function generateMetadata() {
     title: 'DivyaYagyam — ऑनलाइन पूजा बुकिंग | Online Puja Booking India',
     description: 'भारत के पवित्र मंदिरों से ऑनलाइन पूजा बुक करें। काशी विश्वनाथ, महाकालेश्वर, उज्जैन — नाम-गोत्र संकल्प, लाइव वीडियो दर्शन, प्रसाद डिलीवरी।',
     path: '/',
+    isAbsoluteTitle: true,
     keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
   })
 }

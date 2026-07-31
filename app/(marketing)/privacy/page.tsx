@@ -8,8 +8,8 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Privacy Policy | DivyaYagyam',
-    description: 'DivyaYagyam privacy policy. How we collect, use, and protect your personal information.',
+    title: 'गोपनीयता नीति (Privacy Policy) — Data & Sankalp Protection',
+    description: 'DivyaYagyam गोपनीयता नीति। जानें कि हम आपके नाम-गोत्र संकल्प, पूजा बुकिंग डेटा और व्यक्तिगत जानकारी की सुरक्षा कैसे करते हैं।',
     path: '/privacy',
   })
 }
@@ -59,7 +59,7 @@ export default async function PrivacyPage() {
                   <Shield className="h-5 w-5 text-[var(--primary-color)]" /> Overview
                 </h2>
                 <p>
-                  Welcome to <strong>DivyaYagyam</strong> (<Link href={process.env.NEXT_PUBLIC_URL_4529 || ''} className="text-[var(--primary-color)] hover:underline text-xs md:text-sm font-semibold">{process.env.NEXT_PUBLIC_URL_4530 || ''}</Link>). Protecting your privacy and the security of your personal information is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you engage with our spiritual and Vedic ritual services.
+                  Welcome to <strong>DivyaYagyam</strong> (<Link href={BASE_URL} className="text-[var(--primary-color)] hover:underline text-xs md:text-sm font-semibold">divyayagyam.com</Link>). Protecting your privacy and the security of your personal information is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you engage with our spiritual and Vedic ritual services.
                 </p>
                 <p>
                   By using our services, you consent to the data practices described in this policy. If you do not agree with these terms, please do not use our platform.

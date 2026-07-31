@@ -8,8 +8,8 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Refund & Cancellation Policy | DivyaYagyam',
-    description: 'DivyaYagyam refund and cancellation policy for online puja bookings and spiritual services.',
+    title: 'रिफंड एवं निरस्तीकरण नीति (Refund & Cancellation Policy)',
+    description: 'DivyaYagyam रिफंड एवं निरस्तीकरण नीति। 100% रिफंड गारंटी, पूजा निरस्तीकरण नियम, एवं रीशेड्यूलिंग प्रक्रिया की पूरी जानकारी।',
     path: '/refunds',
   })
 }
@@ -60,7 +60,7 @@ export default async function RefundsPage() {
               <ShieldCheck className="h-5 w-5 text-[var(--primary-color)]" /> Overview
             </h2>
             <p>
-              Welcome to <strong>DivyaYagyam</strong>. We are dedicated to providing authentic Vedic spiritual services with transparency and devotion. This policy outlines the terms regarding cancellations, refunds, and rescheduling for all services booked through our platform (<Link href={process.env.NEXT_PUBLIC_URL_4536 || ''} className="text-[var(--primary-color)] hover:underline">{process.env.NEXT_PUBLIC_URL_4537 || ''}</Link>). By booking a service, you agree to these terms.
+              Welcome to <strong>DivyaYagyam</strong>. We are dedicated to providing authentic Vedic spiritual services with transparency and devotion. This policy outlines the terms regarding cancellations, refunds, and rescheduling for all services booked through our platform (<Link href={BASE_URL} className="text-[var(--primary-color)] hover:underline">divyayagyam.com</Link>). By booking a service, you agree to these terms.
             </p>
           </section>
 

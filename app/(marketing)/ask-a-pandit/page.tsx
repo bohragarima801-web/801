@@ -6,8 +6,8 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'आस्क अ पंडित जी — वर्चुअल ज्योतिष मार्गदर्शन | DivyaYagyam',
-    description: 'वर्चुअल पंडित जी से पूछें। कुंडली विश्लेषण, शुभ मुहूर्त, व्रत-त्योहार विधि और वैदिक ज्योतिष मार्गदर्शन ऑनलाइन प्राप्त करें।',
+    title: 'AI पंडित जी — 24x7 निःशुल्क वैदिक ज्योतिष व समाधान',
+    description: 'AI पंडित जी से पूछें अपने सभी आध्यात्मिक और ज्योतिषीय प्रश्न। कुण्डली विश्लेषण, शुभ मुहूर्त, व्रत विधि एवं वैदिक उपाय तुरंत प्राप्त करें।',
     path: '/ask-a-pandit',
   })
 }

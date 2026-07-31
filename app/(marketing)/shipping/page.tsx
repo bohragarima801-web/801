@@ -7,8 +7,8 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Shipping & Prasad Delivery Policy | DivyaYagyam',
-    description: 'DivyaYagyam shipping policy. Abhimantrit prasad & spiritual products delivered safely across India (3-7 days) and worldwide.',
+    title: 'प्रसाद शिपिंग एवं डिलीवरी नीति (Prasad Delivery Policy)',
+    description: 'DivyaYagyam शिपिंग नीति। काशी, महाकाल एवं सिद्ध मंदिरों का अभिमंत्रित प्रसाद भारत भर में 3-5 दिनों में सुरक्षित होम डिलीवरी।',
     path: '/shipping',
   })
 }

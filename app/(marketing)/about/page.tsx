@@ -10,7 +10,7 @@ export const revalidate = 3600; // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'हमारे बारे में (About Us) — दिव्य यज्ञम | DivyaYagyam',
+    title: 'हमारे बारे में (About Us) — Sanatan Seva & Authentic Pujas',
     description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (35+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
     path: '/about',
   })
@@ -173,7 +173,7 @@ export default async function AboutPage() {
                 <Globe className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
                 <div>
                   <p className="font-semibold text-slate-800">Website</p>
-                  <a href={process.env.NEXT_PUBLIC_URL_4480 || ''} className="hover:underline">{process.env.NEXT_PUBLIC_URL_4481 || ''}</a>
+                  <a href={BASE_URL} className="hover:underline text-[var(--primary-color)]">divyayagyam.com</a>
                 </div>
               </div>
             </div>

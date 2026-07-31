@@ -7,8 +7,8 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'HTML Sitemap | DivyaYagyam',
-    description: 'Explore all public pages, pujas, products, astrology tools, and help sections of DivyaYagyam.com.',
+    title: 'साइटमैप (HTML Sitemap) — All Services & Pages',
+    description: 'DivyaYagyam का संपूर्ण साइटमैप। सभी ऑनलाइन पूजा सेवाएं, अभिमंत्रित प्रसाद उत्पाद, ज्योतिष टूल व सहायता अनुभाग खोजें।',
     path: '/sitemap',
   })
 }

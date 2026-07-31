@@ -4,8 +4,8 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'ज्योतिष परामर्श — Vedic Astrology Consultation | DivyaYagyam',
-    description: 'वैदिक ज्योतिष परामर्श — कुंडली विश्लेषण, ग्रह दोष निवारण, शुभ मुहूर्त। विद्वान ज्योतिषियों से ऑनलाइन परामर्श।',
+    title: 'ज्योतिष परामर्श (Vedic Astrology) — Horoscope Guidance',
+    description: 'वैदिक ज्योतिष परामर्श — कुण्डली विश्लेषण, ग्रह दोष निवारण, शुभ मुहूर्त एवं रत्न परामर्श। विद्वान ज्योतिषियों द्वारा ऑनलाइन मार्गदर्शन।',
     path: '/astro',
   })
 }

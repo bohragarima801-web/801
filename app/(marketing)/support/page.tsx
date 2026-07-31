@@ -7,8 +7,8 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Support Center & Help Desk | DivyaYagyam',
-    description: 'DivyaYagyam support center. Get help with online puja bookings, Sankalp updates, video proof, and prasad tracking.',
+    title: 'सहायता केंद्र (Support Center) — Devotee Help Desk',
+    description: 'DivyaYagyam सहायता केंद्र। पूजा बुकिंग सहायता, संकल्प अपडेट, वीडियो प्रूफ डाउनलोड एवं प्रसाद ट्रैकिंग हेतु 24x7 मदद प्राप्त करें।',
     path: '/support',
   })
 }
