@@ -34,6 +34,11 @@ export function generatePageMeta({
     ],
     alternates: {
       canonical: url,
+      languages: {
+        'hi-IN': url,
+        'en-IN': url,
+        'x-default': url,
+      },
     },
     openGraph: {
       title,
@@ -249,6 +254,52 @@ export function generateLocalBusinessSchema() {
       opens: '00:00',
       closes: '23:59',
     },
+  }
+}
+
+export function generateOrganizationSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: BASE_URL,
+    logo: DEFAULT_OG_IMAGE,
+    email: 'seva@divyayagyam.com',
+    telephone: '+91-95871-71984',
+    sameAs: [
+      'https://facebook.com/divyayagyam',
+      'https://instagram.com/divyayagyam',
+      'https://youtube.com/@divyayagyam',
+    ],
+  }
+}
+
+export function generateWebSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: BASE_URL,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${BASE_URL}/pujas?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  }
+}
+
+export function generateFaqSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer.replace(/<[^>]*>?/gm, ''),
+      },
+    })),
   }
 }
 

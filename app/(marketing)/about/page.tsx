@@ -3,7 +3,18 @@ import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+
 export const revalidate = 3600; // ISR: Revalidate every 3600s
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'हमारे बारे में (About Us) — दिव्य यज्ञम | DivyaYagyam',
+    description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (35+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
+    path: '/about',
+  })
+}
 
 export default async function AboutPage() {
   const setting = await prisma.websiteSetting.findUnique({
@@ -11,8 +22,41 @@ export default async function AboutPage() {
   })
   const customContent = setting?.value || ''
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'AboutPage',
+        name: 'About DivyaYagyam',
+        description: 'Preserving and promoting the sacred traditions of Sanatan Dharma with complete authenticity and devotion.',
+        url: `${BASE_URL}/about`,
+      },
+      {
+        '@type': 'Person',
+        name: 'Pandit Mukesh Bohra',
+        jobTitle: 'Vedic Priest & Astrologer',
+        description: 'Vedic Priest & Astrologer with over 35 years of experience in conducting Sanatan Vedic rituals and ceremonies.',
+        worksFor: {
+          '@type': 'Organization',
+          name: 'DivyaYagyam',
+          url: BASE_URL,
+        },
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'About', url: `${BASE_URL}/about` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="bg-slate-50/50 min-h-screen py-16">
+    <>
+      <Script
+        id="schema-about-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="bg-slate-50/50 min-h-screen py-16">
       <div className="container max-w-4xl mx-auto space-y-12 px-4">
         
         {/* Page Header */}
@@ -140,6 +184,7 @@ export default async function AboutPage() {
 
       </div>
     </div>
+    </>
   )
 }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { autoGenerateBlogSeo } from '@/lib/seo-auto'
 
 export const dynamic = 'force-dynamic'
 
@@ -81,6 +82,15 @@ export async function POST(req: NextRequest) {
       calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
     }
 
+    const autoSeo = autoGenerateBlogSeo({
+      title,
+      excerpt,
+      content,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+    })
+
     const post = await prisma.blog.create({
       data: {
         title,
@@ -92,9 +102,9 @@ export async function POST(req: NextRequest) {
         coverImage: coverImage || null,
         status: status || 'DRAFT',
         publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
-        seoTitle,
-        seoDescription,
-        seoKeywords,
+        seoTitle: autoSeo.seoTitle,
+        seoDescription: autoSeo.seoDescription,
+        seoKeywords: autoSeo.seoKeywords,
         videoUrl,
         isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true
       }

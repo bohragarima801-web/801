@@ -1,6 +1,17 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'VIP पूजा अनुष्ठान — विशिष्ट व्यक्तिगत वैदिक पूजा | DivyaYagyam',
+    description: 'विशिष्ट VIP पूजा एवं महा-अनुष्ठान। आपके नाम व गोत्र से व्यक्तिगत संकल्प, 1-on-1 लाइव वीडियो स्ट्रीमिंग एवं विशेष महाप्रसाद डिलीवरी।',
+    path: '/vip-pujas',
+  })
+}
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,10 +34,24 @@ export default async function VipPujasPage() {
     orderBy: { createdAt: 'desc' }
   }).catch(() => [])
 
-
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'VIP Pujas', url: `${BASE_URL}/vip-pujas` },
+      ]),
+    ],
+  }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-50/40 via-background to-background py-16">
+    <>
+      <Script
+        id="schema-vip-pujas-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-50/40 via-background to-background py-16">
       <div className="container max-w-6xl space-y-12">
         
         {/* DEVOTIONAL HEADER */}
@@ -161,5 +186,6 @@ export default async function VipPujasPage() {
 
       </div>
     </div>
+    </>
   )
 }

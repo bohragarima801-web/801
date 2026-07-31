@@ -86,6 +86,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.6,
         })
       })
+
+      // 5. Events
+      const events = await prisma.event.findMany({
+        where: { isActive: true },
+        select: { id: true, startsAt: true }
+      })
+      events.forEach(e => {
+        sitemapEntries.push({
+          url: `${baseUrl}/events`,
+          lastModified: e.startsAt,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        })
+      })
     } catch (error) {
       console.error('Error generating dynamic sitemap:', error)
     }

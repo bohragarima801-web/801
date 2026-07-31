@@ -1,15 +1,36 @@
 import { Badge } from '@/components/ui/badge'
 import { AiChat } from '@/components/ai-chat'
 import { Sparkles, Star } from 'lucide-react'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Ask a Pandit Ji | Virtual Astrologer & Guide',
-  description: 'Consult our Virtual Pandit Ji for astrology, pujas, dosh nivaran, and spiritual guidance.'
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'आस्क अ पंडित जी — वर्चुअल ज्योतिष मार्गदर्शन | DivyaYagyam',
+    description: 'वर्चुअल पंडित जी से पूछें। कुंडली विश्लेषण, शुभ मुहूर्त, व्रत-त्योहार विधि और वैदिक ज्योतिष मार्गदर्शन ऑनलाइन प्राप्त करें।',
+    path: '/ask-a-pandit',
+  })
 }
 
 export default function AskPanditPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Ask a Pandit', url: `${BASE_URL}/ask-a-pandit` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="flex flex-col bg-slate-50 min-h-screen">
+    <>
+      <Script
+        id="schema-ask-pandit-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="flex flex-col bg-slate-50 min-h-screen">
       <section className="bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-transparent pt-12 pb-8 border-b border-orange-500/10">
         <div className="container max-w-4xl text-center">
           <Badge className="bg-orange-600/10 text-orange-600 border-none hover:bg-orange-600/20 mb-4 px-3 py-1 text-xs">
@@ -59,5 +80,6 @@ export default function AskPanditPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

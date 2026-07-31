@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image';
-import { generatePageMeta } from '@/lib/seo'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -33,8 +34,34 @@ export default async function EventsPage() {
     orderBy: { startsAt: 'asc' }
   }).catch(() => [])
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      ...events.map(e => ({
+        '@type': 'Event',
+        name: e.title,
+        description: e.description || '',
+        startDate: e.startsAt.toISOString(),
+        location: {
+          '@type': 'Place',
+          name: e.location || 'DivyaYagyam Sanctuary',
+        },
+      })),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Events', url: `${BASE_URL}/events` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="container py-14 space-y-12">
+    <>
+      <Script
+        id="schema-events-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-14 space-y-12">
       {/* HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Spiritual Events & Festivals</h1>
@@ -101,6 +128,7 @@ export default async function EventsPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
 

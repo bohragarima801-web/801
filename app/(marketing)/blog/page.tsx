@@ -3,7 +3,8 @@
 import { prisma } from '@/lib/prisma'
 import Image from 'next/image';
 import Link from 'next/link'
-import { generatePageMeta } from '@/lib/seo'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -35,8 +36,30 @@ export default async function BlogListPage() {
     orderBy: { publishedAt: 'desc' }
   })
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        name: 'DivyaYagyam Spiritual Blog',
+        description: 'Articles on dharma, mantras, festivals, and spiritual guidance.',
+        url: `${BASE_URL}/blog`,
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Blog', url: `${BASE_URL}/blog` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="container py-12 space-y-10">
+    <>
+      <Script
+        id="schema-blog-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-12 space-y-10">
       <div className="text-center max-w-2xl mx-auto">
         <Badge variant="secondary" className="mb-3">✍️ Spiritual Insights</Badge>
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Divine Wisdom Blog</h1>
@@ -83,6 +106,7 @@ export default async function BlogListPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
 

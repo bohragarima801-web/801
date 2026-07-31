@@ -4,6 +4,7 @@ import { ensureDefaultCategoriesAndTemples } from '@/lib/data-defaults'
 import { DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
 import { getAdminSession } from '@/lib/admin-session'
 import { revalidateTag, revalidatePath } from 'next/cache'
+import { autoGeneratePujaSeo } from '@/lib/seo-auto'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,6 +78,18 @@ export async function POST(req: NextRequest) {
     const finalPrice = Number(price) || 0
     const finalVipPrice = vipPrice ? Number(vipPrice) : null
 
+    const autoSeo = autoGeneratePujaSeo({
+      name,
+      shortDescription,
+      description,
+      location,
+      price: finalPrice,
+      isVip,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+    })
+
     const payload: any = {
       name,
       slug: calculatedSlug,
@@ -96,9 +109,9 @@ export async function POST(req: NextRequest) {
       status: status || 'DRAFT',
       publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
       pujaDate: pujaDate ? new Date(pujaDate) : null,
-      seoTitle: seoTitle || null,
-      seoDescription: seoDescription || null,
-      seoKeywords: seoKeywords || null,
+      seoTitle: autoSeo.seoTitle,
+      seoDescription: autoSeo.seoDescription,
+      seoKeywords: autoSeo.seoKeywords,
       customHtml: customHtml || null,
       coverImage: coverImage || DEFAULT_PLACEHOLDER_IMAGE,
       category: { connect: { id: categoryId } }

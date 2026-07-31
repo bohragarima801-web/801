@@ -4,10 +4,12 @@ import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { CustomInjector } from '@/components/custom-injector'
 import { PixelInjector } from '@/components/pixel-injector'
 import { TranslationProvider } from '@/components/translation-provider'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
+import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusinessSchema } from '@/lib/seo'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter' })
 
@@ -23,6 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: baseUrl,
+      languages: {
+        'hi-IN': baseUrl,
+        'en-IN': baseUrl,
+        'x-default': baseUrl,
+      },
     },
     robots: {
       index: true,
@@ -40,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: dynamicConfig.description,
       url: baseUrl,
       siteName: dynamicConfig.name,
-      locale: 'en_IN',
+      locale: 'hi_IN',
       type: 'website',
       images: [{
         url: dynamicConfig.logo || dynamicConfig.ogImage || `${baseUrl}/logo.jpg`,
@@ -80,9 +87,23 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const globalSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateOrganizationSchema(),
+      generateWebSiteSchema(),
+      generateLocalBusinessSchema(),
+    ],
+  }
+
   return (
     <html lang="hi" suppressHydrationWarning>
       <body className={`${inter.className} ${inter.variable} font-sans bg-watermark overflow-x-hidden`} suppressHydrationWarning>
+        <Script
+          id="schema-global-organization"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(globalSchema) }}
+        />
         <Providers>
           {children}
           <div id="__dvj_slot" />

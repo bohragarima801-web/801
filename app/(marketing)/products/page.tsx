@@ -1,7 +1,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
-import { generatePageMeta } from '@/lib/seo'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -16,7 +17,6 @@ import { Button } from '@/components/ui/button'
 import { Sparkles } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { AddToCartButton } from '@/components/add-to-cart-button'
-
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 
 export const revalidate = 30
@@ -39,8 +39,34 @@ export default async function ProductsPage() {
     }).catch(() => [])
   ])
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        name: 'Sacred Spiritual Products & Samagri',
+        itemListElement: products.map((p, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          name: p.name,
+          url: `${BASE_URL}/products/${p.slug}`,
+        })),
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Products', url: `${BASE_URL}/products` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="space-y-10">
+    <>
+      <Script
+        id="schema-products-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="space-y-10">
       <HeroPujaSlider slides={heroSlides} />
       <div className="container py-4 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -117,6 +143,7 @@ export default async function ProductsPage() {
       )}
     </div>
     </div>
+    </>
   )
 }
 

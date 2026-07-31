@@ -3,7 +3,8 @@ import { Shield, Sparkles, Key, Heart, Mail, Phone, MapPin, EyeOff } from 'lucid
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { generatePageMeta } from '@/lib/seo'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -20,8 +21,24 @@ export default async function PrivacyPage() {
   })
   const customContent = setting?.value || ''
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Privacy Policy', url: `${BASE_URL}/privacy` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="bg-slate-50/50 min-h-screen py-12">
+    <>
+      <Script
+        id="schema-privacy-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="bg-slate-50/50 min-h-screen py-12">
       <div className="container max-w-4xl mx-auto space-y-8 px-4">
         
         {/* Page Header */}
@@ -159,6 +176,7 @@ export default async function PrivacyPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
