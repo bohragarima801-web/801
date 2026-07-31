@@ -1,6 +1,6 @@
 import Script from 'next/script'
 import Link from 'next/link'
-import Image from 'next/image';
+import Image from 'next/image'
 import { generatePageMeta } from '@/lib/seo'
 
 export function generateMetadata() {
@@ -15,20 +15,22 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
-  Flame, HandCoins, Sparkles, ShoppingBag, Star, ArrowRight,
-  MapPin, Calendar, ShieldCheck, Video, Play, BookOpen, User,
-  Truck, Lock, Heart, Sun, Sparkle, CalendarDays
+  Sparkles, Star, ArrowRight, MapPin, Calendar, ShieldCheck, Video, Truck, Lock
 } from 'lucide-react'
-import { prisma } from '@/lib/prisma'
 import { MediaCarousel } from '@/components/ui/media-carousel'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
-import { FadeIn } from '@/components/ui/fade-in'
 import { SacredVideoGallery } from '@/components/sacred-video-gallery'
 import { getYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
 import { getDynamicSiteConfig } from '@/lib/settings'
 import { SafeImage } from '@/components/ui/safe-image'
+import {
+  getCachedPujas,
+  getCachedProducts,
+  getCachedTestimonials,
+  getCachedHeroSlides,
+  getCachedHomePageMedia
+} from '@/lib/cache'
 
 function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean; thumbUrl: string | null } {
   if (!url) return { isVideo: false, thumbUrl: null }
@@ -43,15 +45,6 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
   return { isVideo: false, thumbUrl: url }
 }
 
-const upcomingPujasFallback = [
-  { name: 'महा रुद्राभिषेक (Maha Rudrabhishek)', temple: 'काशी विश्वनाथ मंदिर, वाराणसी', date: 'श्रावण सोमवार Special', img: process.env.NEXT_PUBLIC_URL_4496 || '', price: 1100, vip: false },
-  { name: 'गुरु पूर्णिमा महाआरती (Guru Purnima)', temple: 'सोमनाथ ज्योतिर्लिंग मंदिर', date: '21 July', img: process.env.NEXT_PUBLIC_URL_4497 || '', price: 2100, vip: false },
-  { name: 'कालसर्प दोष निवारण पूजा (Kalsarp Dosh)', temple: 'महाकालेश्वर मंदिर, उज्जैन', date: 'Every Sunday', img: process.env.NEXT_PUBLIC_URL_4498 || '', price: 1251, vip: true },
-  { name: 'महामृत्युंजय जाप (Maha Mrityunjay Jap)', temple: 'त्र्यंबकेश्वर ज्योतिर्लिंग', date: 'Instant Booking', img: process.env.NEXT_PUBLIC_URL_4525 || '', price: 1500, vip: true },
-]
-
-
-
 const fallbackTestimonials = [
   { name: 'रविंद्र दीक्षित (Ravindra Dixit)', location: 'लखनऊ', rating: 5, message: 'काशी विश्वनाथ मंदिर में की गई पूजा का अनुभव अत्यंत दिव्य था। प्रसाद भी 4 दिनों में घर मिल गया।' },
   { name: 'दीपक चौरसिया (Deepak Chaurasia)', location: 'भोपाल', rating: 5, message: 'लाइव स्ट्रीमिंग की क्वालिटी बहुत अच्छी थी। घर बैठे लग रहा था कि हम मंदिर के गर्भगृह में ही बैठे हैं।' },
@@ -62,51 +55,16 @@ export const revalidate = 30
 
 export default async function HomePage() {
   const siteData = await getDynamicSiteConfig()
-  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries] = await Promise.all([
-    prisma.product.findMany({
-      take: 4,
-      include: { category: true }
-    }).catch(() => []),
-    prisma.puja.findMany({
-      where: { 
-        status: 'PUBLISHED',
-        OR: [
-          { publishedAt: null },
-          { publishedAt: { lte: new Date() } }
-        ]
-      },
-      take: 50,
-      include: { category: true, temple: true },
-      orderBy: { createdAt: 'desc' }
-    }).catch(() => []),
-    prisma.testimonial.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' },
-      take: 6
-    }),
-    prisma.heroSlider.findMany({
-      where: { isActive: true },
-      orderBy: { order: 'asc' }
-    }),
-    prisma.mediaLibrary.findMany({ where: { folder: 'Past Puja' }, orderBy: { createdAt: 'desc' }, take: 10 }).catch(() => []),
-    prisma.mediaLibrary.findMany({ where: { folder: 'Customer Review' }, orderBy: { createdAt: 'desc' }, take: 12 }).catch(() => []),
-    prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
-    prisma.mediaLibrary.findMany({
-      where: {
-        OR: [
-          { type: 'VIDEO' },
-          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
-        ]
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    }).catch(() => []),
-    prisma.gallery.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' },
-      take: 20
-    }).catch(() => [])
+  
+  const [products, dbPujas, dbTestimonials, heroSlides, mediaData] = await Promise.all([
+    getCachedProducts(),
+    getCachedPujas(),
+    getCachedTestimonials(),
+    getCachedHeroSlides(),
+    getCachedHomePageMedia()
   ])
+
+  const { pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries } = mediaData
 
   // Filter all uploaded items that are videos or contain video links
   const allMediaVideos = dbVideosRaw.filter((m: any) => {
@@ -155,7 +113,7 @@ export default async function HomePage() {
   }))
   const allHeroSlides = [...heroSlides, ...mediaHeroSlides].sort((a: any, b: any) => a.order - b.order)
 
-  // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets (Page 1 Google SEO)
+  // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -234,30 +192,8 @@ export default async function HomePage() {
     ]
   }
 
-  // Categorize Pujas
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  
-  const todayPujas = dbPujas.filter((p: any) => {
-    if (p.pujaDate) {
-      const pDate = new Date(p.pujaDate)
-      pDate.setHours(0, 0, 0, 0)
-      return pDate.getTime() === today.getTime()
-    }
-    return false
-  })
-  
-  const upcomingPujas = dbPujas.filter((p: any) => {
-    if (p.pujaDate) {
-      const pDate = new Date(p.pujaDate)
-      pDate.setHours(0, 0, 0, 0)
-      return pDate.getTime() > today.getTime()
-    }
-    return false
-  })
-
-  const evergreenPujas = dbPujas.filter((p: any) => p.isEvergreen)
-  const festivalPujas = dbPujas.filter((p: any) => p.isFestival)
 
   const renderPujaCards = (pujas: any[]) => {
     if (pujas.length === 0) {
@@ -300,30 +236,22 @@ export default async function HomePage() {
               {/* Content Section */}
               <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3 text-center">
-                  {/* Orange Subtitle */}
                   <p className="text-[#e26e25] font-bold text-sm tracking-wide">
                     {p.category?.name || 'Auspicious Puja'}
                   </p>
-                  
-                  {/* Title */}
                   <h3 className="font-heading font-bold text-lg md:text-xl text-slate-800 line-clamp-2 leading-tight">
                     {p.name}
                   </h3>
-                  
-                  {/* Description */}
                   <p className="text-xs md:text-sm text-slate-500 line-clamp-2 leading-relaxed">
                     {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                   </p>
                 </div>
                 
                 <div className="space-y-2.5 pt-4 border-t border-slate-100">
-                  {/* Location */}
                   <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
                     <MapPin className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
                     <span className="line-clamp-1">{p.location || 'Any Holy Temple'}</span>
                   </p>
-                  
-                  {/* Date */}
                   <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
                     <Calendar className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
                     <span className="line-clamp-1">
@@ -334,7 +262,6 @@ export default async function HomePage() {
                   </p>
                 </div>
                 
-                {/* Book Button */}
                 <div className="pt-2">
                   <div className="w-full h-11 flex items-center justify-center bg-[#249b49] hover:bg-[#1e853e] text-white font-bold rounded-lg transition-colors shadow-sm">
                     Book Puja &rarr;
@@ -359,8 +286,6 @@ export default async function HomePage() {
       <section className="w-full bg-card py-8 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col gap-6">
-            
-            {/* Title Section */}
             <div className="text-center md:text-left">
               <span className="sacred-subtitle inline-block mb-3 text-primary">🕉️ Sanatan Dharma, Simplified</span>
               <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground leading-tight tracking-wide">
@@ -372,7 +297,6 @@ export default async function HomePage() {
               </p>
             </div>
 
-            {/* Trust Bar (Ultra-Clean Mobile 2-Column Cards / Desktop Flex Row) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 max-w-3xl">
               <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
                 <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
@@ -411,12 +335,10 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Banner Slider */}
             <div className="w-full">
               <HeroPujaSlider slides={allHeroSlides} />
             </div>
 
-            {/* Quick Action Links (Desktop mainly) */}
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-none font-semibold px-8" asChild>
                 <Link href="/pujas">Book a Puja (पूजा बुक करें) <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -425,16 +347,9 @@ export default async function HomePage() {
                 <Link href="/tools"><Sparkles className="mr-2 h-4 w-4 text-secondary" /> Astro Tools</Link>
               </Button>
             </div>
-
-            {/* Trust Badges - (Removed since we have Trust Bar now) */}
-            
           </div>
         </div>
       </section>
-
-
-
-
 
       {/* UPCOMING PUJAS */}
       <section className="container py-16 md:py-24">
@@ -457,8 +372,8 @@ export default async function HomePage() {
               pDate.setHours(0, 0, 0, 0);
               return pDate.getTime() >= today.getTime();
             }
-            return true; // Show if no specific date is set to prevent hiding all pujas
-          })
+            return true;
+          }).slice(0, 12)
         )}
       </section>
 
@@ -524,7 +439,7 @@ export default async function HomePage() {
           <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Hundreds of families have received the Lord's blessings through our services.</p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((t, i) => (
+          {testimonials.map((t: any, i: number) => (
             <Card key={i} className="border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-card shadow-sm">
               <CardContent className="p-6 md:p-8 space-y-5">
                 <div className="flex gap-0.5">
