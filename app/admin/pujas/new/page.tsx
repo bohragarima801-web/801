@@ -14,13 +14,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner'
 import { Loader2, Plus, Trash2, Cloud, Upload } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
+import { convertGoogleDriveUrl, compressImage, getSafeImageUrl } from '@/lib/utils'
 import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 interface ItemRef {
   id: string
   name: string
 }
+
+const DEFAULT_PACKAGES = [
+  {
+    id: 'default-1',
+    name: "1 Member",
+    price: "991",
+    description: "एक व्यक्ति के नाम और गोत्र से संकल्प एवं पूजा अर्चन की जाएगी।",
+    image: "/package-1.jpg"
+  },
+  {
+    id: 'default-2',
+    name: "2 Member",
+    price: "1501",
+    description: "दो व्यक्तियों (पति-पत्नी या परिवार के सदस्य) के नाम और गोत्र से संकल्प एवं पूजा।",
+    image: "/package-2.jpg"
+  },
+  {
+    id: 'default-4',
+    name: "4 Member",
+    price: "2499",
+    description: "पूरे परिवार (अधिकतम 4 सदस्य) के नाम और गोत्र से विशेष महासंकल्प एवं पूजन।",
+    image: "/package-4.jpg"
+  },
+  {
+    id: 'default-6',
+    name: "6 Member",
+    price: "3499",
+    description: "पूरे परिवार (अधिकतम 6 सदस्य) के नाम और गोत्र से विशेष महासंकल्प एवं पूजन।",
+    image: "/package-6.jpg"
+  }
+]
 
 function checkIsVideo(u: string) {
   if (!u) return false
@@ -34,7 +65,6 @@ function checkIsVideo(u: string) {
     lower.includes('youtube.com') ||
     lower.includes('youtu.be') ||
     lower.includes('vimeo.com') ||
-    lower.includes('drive.google.com') ||
     lower.startsWith('data:video/')
   )
 }
@@ -74,7 +104,7 @@ function NewPujaPage_Content() {
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [uploadingVideo, setUploadingVideo] = useState(false)
-  const [packages, setPackages] = useState<any[]>([])
+  const [packages, setPackages] = useState<any[]>(DEFAULT_PACKAGES)
   const [saving, setSaving] = useState(false)
   const [loadingPuja, setLoadingPuja] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -498,7 +528,7 @@ function NewPujaPage_Content() {
                         <div className="flex items-center gap-3 pt-2 border-t border-slate-200">
                           {pkg.image && (
                             <div className="h-10 w-10 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs">
-                              <img src={pkg.image} alt={pkg.name} className="h-full w-full object-cover" />
+                              <img src={getSafeImageUrl(pkg.image)} alt={pkg.name} className="h-full w-full object-cover" />
                             </div>
                           )}
                           <div className="flex-1 space-y-1">

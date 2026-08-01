@@ -10,7 +10,7 @@ import {
   ChevronLeft, ChevronRight 
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { cn } from '@/lib/utils'
+import { cn, getSafeImageUrl } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
@@ -82,7 +82,6 @@ export function PujaClientView({ puja }: { puja: any }) {
       lower.includes('youtube.com') ||
       lower.includes('youtu.be') ||
       lower.includes('vimeo.com') ||
-      lower.includes('drive.google.com') ||
       lower.startsWith('data:video/')
     )
   }
@@ -233,7 +232,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                   )
                 ) : (
                   <img 
-                    src={currentMedia} 
+                    src={getSafeImageUrl(currentMedia)} 
                     alt={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
                     title={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
@@ -292,7 +291,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                           <Play className="w-4 h-4 text-amber-400 fill-amber-400" />
                         </div>
                       ) : (
-                        <img src={mediaUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover rounded-xs" />
+                        <img src={getSafeImageUrl(mediaUrl)} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover rounded-xs" />
                       )}
                     </button>
                   ))}
@@ -393,7 +392,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                     {/* Package Specific Custom Image */}
                     {pkg.image && (
                       <div className="aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-100 mb-3 shadow-xs">
-                        <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
+                        <img src={getSafeImageUrl(pkg.image)} alt={pkg.name} className="w-full h-full object-cover" />
                       </div>
                     )}
 

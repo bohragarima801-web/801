@@ -5,6 +5,8 @@ import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { getAutoSeoAlt } from '@/lib/seo-auto'
 
+import { getSafeImageUrl } from '@/lib/utils'
+
 export function generateMetadata() {
   return generatePageMeta({
     title: 'ऑनलाइन पूजा बुकिंग — काशी, महाकाल, उज्जैन | DivyaYagyam',
@@ -74,7 +76,7 @@ export default async function PujasPage() {
             <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between">
               <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
                 {p.coverImage ? (
-                  <Image src={p.coverImage}
+                  <Image src={getSafeImageUrl(p.coverImage)}
                     alt={getAutoSeoAlt(p.name, 'puja')}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform group-hover:scale-105"
