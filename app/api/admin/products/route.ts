@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
 import { autoGenerateProductSeo } from '@/lib/seo-auto'
+import { revalidateTag, revalidatePath } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,6 +74,12 @@ export async function DELETE(req: NextRequest) {
     await prisma.product.delete({
       where: { id },
     })
+
+    try {
+      revalidateTag('products')
+      revalidatePath('/products')
+      revalidatePath('/')
+    } catch {}
 
     return NextResponse.json({ ok: true });
   } catch (err: any) {
@@ -201,6 +208,12 @@ export async function POST(req: NextRequest) {
         })
       }
     }
+
+    try {
+      revalidateTag('products')
+      revalidatePath('/products')
+      revalidatePath('/')
+    } catch {}
 
     return NextResponse.json({ ok: true, data: product });
   } catch (err: any) {
