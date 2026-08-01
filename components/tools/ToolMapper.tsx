@@ -53,6 +53,20 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
     )
   }
 
+  if (slug === 'muhurat' || slug === 'shubh-muhurat') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/muhurat'
+    }
+    return (
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Shubh Muhurat Finder...</p>
+        <a href="/muhurat" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Shubh Muhurat Finder Now ➔
+        </a>
+      </div>
+    )
+  }
+
 
   const Component = TOOL_REGISTRY[tool.slug]
 

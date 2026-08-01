@@ -34,9 +34,9 @@ const STATIC_TOOLS = [
     slug: 'muhurat',
     description: 'Find the most auspicious time (Shubh Muhurat) for marriage, vehicle purchase, and events.',
     isActive: true,
-    isFree: false,
-    price: 99,
-    trialDays: 1,
+    isFree: true,
+    price: 0,
+    trialDays: 0,
   },
   {
     name: 'Numerology Calculator (अंक ज्योतिष)',
