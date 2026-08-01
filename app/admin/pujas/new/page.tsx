@@ -528,7 +528,14 @@ function NewPujaPage_Content() {
                         <div className="flex items-center gap-3 pt-2 border-t border-slate-200">
                           {pkg.image && (
                             <div className="h-10 w-10 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs">
-                              <img src={getSafeImageUrl(pkg.image)} alt={pkg.name} className="h-full w-full object-cover" />
+                              <img 
+                                src={getSafeImageUrl(pkg.image)} 
+                                alt={pkg.name} 
+                                className="h-full w-full object-cover" 
+                                onError={(e) => {
+                                  e.currentTarget.src = '/package-1.jpg';
+                                }}
+                              />
                             </div>
                           )}
                           <div className="flex-1 space-y-1">
@@ -633,7 +640,14 @@ function NewPujaPage_Content() {
                 <Label className="text-xs font-bold text-slate-700">Main Puja Cover Image (मुख्य फ़ोटो)</Label>
                 {coverImage && (
                   <div className="aspect-[4/3] rounded-xl overflow-hidden border bg-slate-100 flex items-center justify-center shadow-xs">
-                    <img src={getSafeImageUrl(coverImage)} className="h-full w-full object-cover" alt="Cover Preview" />
+                    <img 
+                      src={getSafeImageUrl(coverImage)} 
+                      className="h-full w-full object-cover" 
+                      alt="Cover Preview" 
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=800';
+                      }}
+                    />
                   </div>
                 )}
                 
@@ -658,7 +672,14 @@ function NewPujaPage_Content() {
                   <div className="grid grid-cols-3 gap-2">
                     {galleryImages.map((imgUrl, idx) => (
                       <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-50 group shadow-xs">
-                        <img src={getSafeImageUrl(imgUrl)} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
+                        <img 
+                          src={getSafeImageUrl(imgUrl)} 
+                          className="h-full w-full object-cover" 
+                          alt={`Gallery ${idx + 1}`} 
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=800';
+                          }}
+                        />
                         <button 
                           type="button"
                           onClick={() => removeGalleryImage(idx)}

@@ -87,7 +87,11 @@ export function convertGoogleDriveUrl(url: string) {
 
 export function getSafeImageUrl(url?: string | null, fallback = DEFAULT_PLACEHOLDER_IMAGE): string {
   if (!url || typeof url !== 'string' || !url.trim()) return fallback
-  const converted = convertGoogleDriveUrl(url.trim())
+  const trimmed = url.trim()
+  if (trimmed.includes('/drive/folders/')) {
+    return fallback
+  }
+  const converted = convertGoogleDriveUrl(trimmed)
   return converted || fallback
 }
 
