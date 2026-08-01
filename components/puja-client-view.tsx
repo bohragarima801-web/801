@@ -389,10 +389,17 @@ export function PujaClientView({ puja }: { puja: any }) {
                   )}
 
                   <div className="space-y-5">
-                    {/* Package Specific Custom Image */}
+                    {/* Package Specific Custom Image - Fits 100% inside box without cropping */}
                     {pkg.image && (
-                      <div className="aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-100 mb-3 shadow-xs">
-                        <img src={getSafeImageUrl(pkg.image)} alt={pkg.name} className="w-full h-full object-cover" />
+                      <div className="aspect-[4/3] w-full rounded-xl overflow-hidden border border-amber-200/60 bg-gradient-to-b from-amber-50/50 via-white to-orange-50/30 mb-3 shadow-xs flex items-center justify-center p-1.5">
+                        <img 
+                          src={getSafeImageUrl(pkg.image)} 
+                          alt={pkg.name} 
+                          className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-105" 
+                          onError={(e) => {
+                            e.currentTarget.src = '/package-1.jpg';
+                          }}
+                        />
                       </div>
                     )}
 

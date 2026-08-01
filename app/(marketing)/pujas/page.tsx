@@ -79,7 +79,7 @@ export default async function PujasPage() {
                   <Image src={getSafeImageUrl(p.coverImage)}
                     alt={getAutoSeoAlt(p.name, 'puja')}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform group-hover:scale-105"
+                    className="object-cover object-top transition-transform group-hover:scale-105"
                   />
                 ) : (
                   <div className="h-full w-full flex items-center justify-center text-primary bg-[var(--secondary-color)]/10">
