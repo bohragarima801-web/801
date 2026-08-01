@@ -74,7 +74,7 @@ export default async function PujasPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pujas.map((p) => (
             <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between">
-              <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
+              <Link href={`/pujas/${p.slug}`} className="relative aspect-[16/10] bg-slate-100 overflow-hidden block">
                 {p.coverImage ? (
                   <Image src={getSafeImageUrl(p.coverImage)}
                     alt={getAutoSeoAlt(p.name, 'puja')}
@@ -91,7 +91,7 @@ export default async function PujasPage() {
                     ⭐ VIP
                   </Badge>
                 )}
-              </div>
+              </Link>
               <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-2">
                   <Badge variant="outline" className="text-xs">

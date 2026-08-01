@@ -633,7 +633,7 @@ function NewPujaPage_Content() {
                 <Label className="text-xs font-bold text-slate-700">Main Puja Cover Image (मुख्य फ़ोटो)</Label>
                 {coverImage && (
                   <div className="aspect-[4/3] rounded-xl overflow-hidden border bg-slate-100 flex items-center justify-center shadow-xs">
-                    <img src={coverImage} className="h-full w-full object-cover" alt="Cover Preview" />
+                    <img src={getSafeImageUrl(coverImage)} className="h-full w-full object-cover" alt="Cover Preview" />
                   </div>
                 )}
                 
@@ -658,7 +658,7 @@ function NewPujaPage_Content() {
                   <div className="grid grid-cols-3 gap-2">
                     {galleryImages.map((imgUrl, idx) => (
                       <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-50 group shadow-xs">
-                        <img src={imgUrl} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
+                        <img src={getSafeImageUrl(imgUrl)} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
                         <button 
                           type="button"
                           onClick={() => removeGalleryImage(idx)}
