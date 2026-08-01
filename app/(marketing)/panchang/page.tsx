@@ -12,11 +12,10 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  Compass,
   Flame,
   ShieldCheck,
   Share2,
-  Award,
+  Sparkle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -56,8 +55,8 @@ export default function PublicPanchangPage() {
 
   const t = {
     hi: {
-      title: '🕉️ आज का सम्पूर्ण पंचांग',
-      subTitle: 'दिव्ययज्ञम् - सनातन वैदिक पंचांग, तिथि, नक्षत्र एवं शुभ-अशुभ मुहूर्त',
+      title: '🕉️ आज का सम्पूर्ण वैदिक पंचांग',
+      subTitle: 'दिव्ययज्ञम् - तिथि, नक्षत्र, सूर्योदय एवं शुभ-अशुभ मुहूर्त',
       today: 'आज',
       prevDay: 'पिछला दिन',
       nextDay: 'अगला दिन',
@@ -84,7 +83,7 @@ export default function PublicPanchangPage() {
     },
     en: {
       title: "🕉️ Daily Vedic Panchang",
-      subTitle: 'Divyayagyam - Sanatan Almanac, Tithi, Nakshatra & Auspicious Timings',
+      subTitle: 'Divyayagyam - Tithi, Nakshatra, Sunrise & Auspicious Timings',
       today: 'Today',
       prevDay: 'Previous Day',
       nextDay: 'Next Day',
@@ -133,124 +132,122 @@ export default function PublicPanchangPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-amber-950/20 to-black text-slate-100 py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
-      {/* Background Decorative Gold Radial Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/10 blur-[140px] rounded-full pointer-events-none"></div>
-      <div className="absolute top-1/3 left-0 w-96 h-96 bg-orange-600/10 blur-[120px] rounded-full pointer-events-none"></div>
-
+    <div className="min-h-screen bg-gradient-to-b from-yellow-300 via-amber-100 to-amber-200 text-slate-900 py-8 px-4 sm:px-6 lg:px-8 relative font-sans">
+      
       <div className="max-w-4xl mx-auto space-y-6 relative z-10">
         
-        {/* --- Top Glass Header & Controls --- */}
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl shadow-amber-950/20 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* --- Top Bright Yellow & Sacred Red Header --- */}
+        <div className="bg-gradient-to-r from-red-700 via-red-600 to-orange-600 border-4 border-amber-400 rounded-3xl p-6 shadow-2xl text-white flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-400 rounded-full text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              दिव्ययज्ञम् | Divyayagyam Panchang
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-yellow-400 text-red-950 border border-yellow-300 rounded-full text-xs font-black mb-2 shadow">
+              <Sparkles className="w-4 h-4 text-red-700 animate-bounce" />
+              दिव्ययज्ञम् | BRIGHT VEDIC PANCHANG
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-black text-yellow-300 tracking-tight drop-shadow-md">
               {t.title}
             </h1>
-            <p className="text-xs md:text-sm text-slate-400 font-medium mt-0.5">{t.subTitle}</p>
+            <p className="text-xs md:text-sm text-yellow-100 font-bold mt-0.5">{t.subTitle}</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
-            <Button
+            {/* 3D Tactile Today Button */}
+            <button
               onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
-              variant="outline"
-              className="border-amber-500/40 bg-amber-950/30 text-amber-300 hover:bg-amber-900/50 font-semibold text-xs rounded-xl h-9"
+              className="bg-gradient-to-b from-yellow-300 to-amber-400 hover:from-yellow-200 hover:to-amber-300 text-red-950 font-black text-xs px-4 py-2 rounded-xl border-b-4 border-amber-600 shadow-lg active:border-b-0 active:translate-y-1 transition-all flex items-center gap-1.5"
             >
-              <CalendarIcon className="w-3.5 h-3.5 mr-1.5 text-amber-400" />
+              <CalendarIcon className="w-4 h-4 text-red-800" />
               {t.today}
-            </Button>
+            </button>
 
-            <div className="flex items-center gap-1.5 bg-slate-950/90 border border-amber-500/40 rounded-xl px-3 py-1.5 shadow-inner">
+            {/* 3D Tactile Date Selector */}
+            <div className="flex items-center gap-1.5 bg-white border-2 border-amber-500 rounded-xl px-3 py-1.5 shadow-inner">
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-xs font-bold text-amber-300 focus:outline-none cursor-pointer"
+                className="bg-transparent text-xs font-black text-red-900 focus:outline-none cursor-pointer"
               />
             </div>
 
+            {/* 3D Tactile Language Switcher */}
             <button
               onClick={() => setLang(lang === 'hi' ? 'en' : 'hi')}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-amber-900/30"
+              className="bg-gradient-to-b from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-red-950 font-black px-4 py-2 rounded-xl border-b-4 border-amber-700 shadow-lg active:border-b-0 active:translate-y-1 transition-all flex items-center gap-1.5 text-xs"
             >
-              <Globe className="w-3.5 h-3.5" />
+              <Globe className="w-4 h-4 text-red-900" />
               {lang === 'hi' ? 'English' : 'हिंदी'}
             </button>
 
+            {/* 3D Share Button */}
             <button
               onClick={handleShare}
-              className="p-2.5 bg-amber-950/40 border border-amber-500/30 text-amber-300 hover:bg-amber-900/50 rounded-xl transition shadow-sm"
+              className="bg-gradient-to-b from-yellow-300 to-amber-400 text-red-950 p-2.5 rounded-xl border-b-4 border-amber-600 shadow-lg active:border-b-0 active:translate-y-1 transition-all"
               title={t.share}
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="w-4 h-4 text-red-900" />
             </button>
           </div>
         </div>
 
-        {/* --- Date Navigation Bar --- */}
-        <div className="flex items-center justify-between bg-slate-900/90 border border-amber-500/20 rounded-xl px-4 py-2.5 text-xs font-bold text-amber-300 shadow-md">
+        {/* --- 3D Date Navigation Bar --- */}
+        <div className="flex items-center justify-between bg-white border-3 border-amber-400 rounded-2xl px-5 py-3 text-xs font-black text-red-900 shadow-xl">
           <button
             onClick={() => changeDateByDays(-1)}
-            className="flex items-center gap-1 hover:text-amber-200 transition"
+            className="bg-gradient-to-b from-amber-400 to-amber-500 text-red-950 px-3 py-1.5 rounded-xl border-b-3 border-amber-700 shadow active:translate-y-0.5 transition flex items-center gap-1 font-extrabold"
           >
             <ChevronLeft className="w-4 h-4" /> {t.prevDay}
           </button>
-          <span className="font-mono text-amber-200 text-sm tracking-wide">
+          <span className="font-mono text-red-800 text-sm md:text-base font-black tracking-wide bg-amber-100 px-4 py-1 rounded-xl border border-amber-300">
             {selectedDate} ({getVal('dayHi', 'day')})
           </span>
           <button
             onClick={() => changeDateByDays(1)}
-            className="flex items-center gap-1 hover:text-amber-200 transition"
+            className="bg-gradient-to-b from-amber-400 to-amber-500 text-red-950 px-3 py-1.5 rounded-xl border-b-3 border-amber-700 shadow active:translate-y-0.5 transition flex items-center gap-1 font-extrabold"
           >
             {t.nextDay} <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        {/* --- Luxurious Special Festival Banner --- */}
-        <div className="bg-gradient-to-r from-amber-950/90 via-orange-950/90 to-slate-900 rounded-2xl p-6 md:p-8 border-2 border-amber-500/40 shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 -translate-y-8 translate-x-8 w-60 h-60 bg-amber-500/20 rounded-full blur-3xl pointer-events-none group-hover:scale-125 transition duration-700"></div>
-
+        {/* --- Bright Yellow & Red Special Festival Hero Card --- */}
+        <div className="bg-gradient-to-r from-red-600 via-red-700 to-orange-600 rounded-3xl p-6 md:p-8 border-4 border-yellow-400 shadow-2xl text-white relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <div className="text-amber-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+              <div className="text-yellow-300 text-xs font-black uppercase tracking-widest flex items-center gap-2">
                 <span>{getVal('dayHi', 'day')}</span>
                 <span>•</span>
                 <span>{selectedDate}</span>
               </div>
-              <h2 className="text-2xl md:text-4xl font-extrabold mt-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-200 tracking-tight">
+              <h2 className="text-2xl md:text-4xl font-black mt-1 text-yellow-300 tracking-tight drop-shadow-md">
                 {getVal('hinduMonthHi', 'hinduMonth')} — {getVal('pakshaHi', 'paksha')}
               </h2>
 
-              {/* Highlighted Festival Pill */}
-              <div className="mt-4 inline-flex items-center gap-2.5 bg-amber-500/20 border border-amber-500/50 px-5 py-2.5 rounded-full text-xs md:text-sm font-extrabold text-amber-200 shadow-lg shadow-amber-950/40">
-                <Flame className="w-4 h-4 text-amber-400 animate-pulse" />
-                <span className="text-amber-400">{t.festival}:</span>
-                <span className="text-amber-100 font-black">{getVal('specialFestivalHi', 'specialFestival')}</span>
+              {/* 3D Highlighted Festival Badge */}
+              <div className="mt-4 inline-flex items-center gap-2.5 bg-yellow-400 text-red-950 border-b-4 border-yellow-600 px-5 py-2.5 rounded-2xl text-xs md:text-sm font-black shadow-xl">
+                <Flame className="w-5 h-5 text-red-700 animate-pulse" />
+                <span className="text-red-900 uppercase font-black">{t.festival}:</span>
+                <span className="text-red-950 font-black text-sm md:text-base">{getVal('specialFestivalHi', 'specialFestival')}</span>
               </div>
             </div>
 
-            {/* Sun & Moon Times Banner */}
-            <div className="bg-slate-950/80 backdrop-blur-md border border-amber-500/30 rounded-2xl p-4 flex items-center gap-5 w-full md:w-auto shadow-inner">
+            {/* Sun & Moon Times 3D Box */}
+            <div className="bg-white text-red-950 border-3 border-amber-400 rounded-2xl p-4 flex items-center gap-5 w-full md:w-auto shadow-xl">
               <div className="flex items-center gap-3">
-                <Sun className="w-8 h-8 text-amber-400 animate-spin-slow" />
+                <Sun className="w-8 h-8 text-amber-500 animate-spin-slow" />
                 <div>
-                  <div className="text-[10px] uppercase font-bold text-amber-400/80">{t.sunrise} / {t.sunset}</div>
-                  <div className="text-xs md:text-sm font-mono font-bold text-amber-100">
+                  <div className="text-[10px] uppercase font-black text-red-800">{t.sunrise} / {t.sunset}</div>
+                  <div className="text-xs md:text-sm font-mono font-black text-red-950">
                     {panchang?.sunrise || '--'} - {panchang?.sunset || '--'}
                   </div>
                 </div>
               </div>
 
-              <div className="h-8 w-px bg-amber-500/30"></div>
+              <div className="h-8 w-1 bg-amber-300 rounded"></div>
 
               <div className="flex items-center gap-3">
-                <Moon className="w-7 h-7 text-amber-200" />
+                <Moon className="w-7 h-7 text-indigo-600" />
                 <div>
-                  <div className="text-[10px] uppercase font-bold text-amber-400/80">{t.moonrise} / {t.moonset}</div>
-                  <div className="text-xs md:text-sm font-mono font-bold text-amber-100">
+                  <div className="text-[10px] uppercase font-black text-red-800">{t.moonrise} / {t.moonset}</div>
+                  <div className="text-xs md:text-sm font-mono font-black text-red-950">
                     {panchang?.moonrise || '--'} - {panchang?.moonset || '--'}
                   </div>
                 </div>
@@ -259,48 +256,48 @@ export default function PublicPanchangPage() {
           </div>
         </div>
 
-        {/* --- Panchang 5 Main Anga Cards Grid --- */}
+        {/* --- Panchang 5 Main Anga 3D Cards Grid --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Tithi */}
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-5 border border-amber-500/30 shadow-xl hover:border-amber-500/60 transition group">
+          <div className="bg-white border-3 border-amber-400 rounded-2xl p-5 shadow-xl hover:shadow-2xl transition hover:-translate-y-1">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">📜 {t.tithi}</span>
-              <div className="w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-500/50 group-hover:scale-150 transition"></div>
+              <span className="text-xs font-black text-red-800 uppercase tracking-wider">📜 {t.tithi}</span>
+              <div className="w-3 h-3 rounded-full bg-red-600 shadow-md"></div>
             </div>
-            <div className="text-base font-bold text-amber-100 leading-snug">
+            <div className="text-base font-black text-red-950 leading-snug">
               {getVal('tithiHi', 'tithi')}
             </div>
           </div>
 
           {/* Nakshatra */}
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-5 border border-amber-500/30 shadow-xl hover:border-amber-500/60 transition group">
+          <div className="bg-white border-3 border-amber-400 rounded-2xl p-5 shadow-xl hover:shadow-2xl transition hover:-translate-y-1">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">⭐ {t.nakshatra}</span>
-              <div className="w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-500/50 group-hover:scale-150 transition"></div>
+              <span className="text-xs font-black text-red-800 uppercase tracking-wider">⭐ {t.nakshatra}</span>
+              <div className="w-3 h-3 rounded-full bg-red-600 shadow-md"></div>
             </div>
-            <div className="text-base font-bold text-amber-100 leading-snug">
+            <div className="text-base font-black text-red-950 leading-snug">
               {getVal('nakshatraHi', 'nakshatra')}
             </div>
           </div>
 
           {/* Yog */}
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-5 border border-amber-500/30 shadow-xl hover:border-amber-500/60 transition group">
+          <div className="bg-white border-3 border-amber-400 rounded-2xl p-5 shadow-xl hover:shadow-2xl transition hover:-translate-y-1">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">🕉️ {t.yog}</span>
-              <div className="w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-500/50 group-hover:scale-150 transition"></div>
+              <span className="text-xs font-black text-red-800 uppercase tracking-wider">🕉️ {t.yog}</span>
+              <div className="w-3 h-3 rounded-full bg-red-600 shadow-md"></div>
             </div>
-            <div className="text-base font-bold text-amber-100 leading-snug">
+            <div className="text-base font-black text-red-950 leading-snug">
               {getVal('yogHi', 'yog')}
             </div>
           </div>
 
           {/* Karan */}
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-5 border border-amber-500/30 shadow-xl hover:border-amber-500/60 transition group">
+          <div className="bg-white border-3 border-amber-400 rounded-2xl p-5 shadow-xl hover:shadow-2xl transition hover:-translate-y-1">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">⚖️ {t.karan}</span>
-              <div className="w-2 h-2 rounded-full bg-amber-400 shadow-lg shadow-amber-500/50 group-hover:scale-150 transition"></div>
+              <span className="text-xs font-black text-red-800 uppercase tracking-wider">⚖️ {t.karan}</span>
+              <div className="w-3 h-3 rounded-full bg-red-600 shadow-md"></div>
             </div>
-            <div className="text-base font-bold text-amber-100 leading-snug">
+            <div className="text-base font-black text-red-950 leading-snug">
               {getVal('karanHi', 'karan')}
             </div>
           </div>
@@ -308,53 +305,53 @@ export default function PublicPanchangPage() {
 
         {/* --- Shubh & Ashubh Muhurat Timings Section --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Shubh Muhurat Card (Emerald Gold) */}
-          <div className="bg-emerald-950/40 backdrop-blur-xl border border-emerald-500/40 rounded-2xl p-6 shadow-xl space-y-4">
-            <div className="flex items-center gap-2 text-emerald-300 font-bold text-base md:text-lg">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+          {/* Shubh Muhurat Card (Emerald Green 3D Box) */}
+          <div className="bg-gradient-to-b from-emerald-500 to-emerald-700 border-4 border-emerald-300 rounded-3xl p-6 shadow-2xl text-white space-y-4">
+            <div className="flex items-center gap-2 font-black text-lg text-yellow-300">
+              <CheckCircle2 className="w-6 h-6 text-yellow-300" />
               {t.shubhMuhurat}
             </div>
 
-            <div className="bg-slate-950/80 rounded-xl p-4 border border-emerald-500/30 flex justify-between items-center shadow-inner">
+            <div className="bg-white text-slate-900 rounded-2xl p-4 border-2 border-emerald-400 flex justify-between items-center shadow-lg">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span className="font-bold text-emerald-200 text-xs md:text-sm">{t.abhijit}</span>
+                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                <span className="font-black text-emerald-950 text-xs md:text-sm">{t.abhijit}</span>
               </div>
-              <span className="font-mono font-bold text-emerald-400 text-xs md:text-sm">
+              <span className="font-mono font-black text-emerald-700 text-xs md:text-sm bg-emerald-100 px-3 py-1 rounded-xl">
                 {panchang?.abhijitMuhurat || '--'}
               </span>
             </div>
           </div>
 
-          {/* Ashubh Timings Card (Soft Red Gold) */}
-          <div className="bg-rose-950/40 backdrop-blur-xl border border-rose-500/40 rounded-2xl p-6 shadow-xl space-y-4">
-            <div className="flex items-center gap-2 text-rose-300 font-bold text-base md:text-lg">
-              <AlertTriangle className="w-5 h-5 text-rose-400" />
+          {/* Ashubh Timings Card (Red 3D Box) */}
+          <div className="bg-gradient-to-b from-red-600 to-rose-700 border-4 border-red-400 rounded-3xl p-6 shadow-2xl text-white space-y-4">
+            <div className="flex items-center gap-2 font-black text-lg text-yellow-300">
+              <AlertTriangle className="w-6 h-6 text-yellow-300" />
               {t.ashubhMuhurat}
             </div>
 
             <div className="space-y-2">
-              <div className="bg-slate-950/80 rounded-xl p-3 border border-rose-500/30 flex justify-between items-center shadow-inner">
-                <span className="font-bold text-rose-200 text-xs">{t.rahuKaal}</span>
-                <span className="font-mono font-bold text-rose-400 text-xs">{panchang?.rahuKaal || '--'}</span>
+              <div className="bg-white text-slate-900 rounded-2xl p-3 border-2 border-red-300 flex justify-between items-center shadow-lg">
+                <span className="font-black text-red-950 text-xs">{t.rahuKaal}</span>
+                <span className="font-mono font-black text-red-700 text-xs bg-red-100 px-3 py-1 rounded-xl">{panchang?.rahuKaal || '--'}</span>
               </div>
 
-              <div className="bg-slate-950/80 rounded-xl p-3 border border-rose-500/30 flex justify-between items-center shadow-inner">
-                <span className="font-bold text-rose-200 text-xs">{t.yamaganda}</span>
-                <span className="font-mono font-bold text-rose-400 text-xs">{panchang?.yamagandaKaal || '--'}</span>
+              <div className="bg-white text-slate-900 rounded-2xl p-3 border-2 border-red-300 flex justify-between items-center shadow-lg">
+                <span className="font-black text-red-950 text-xs">{t.yamaganda}</span>
+                <span className="font-mono font-black text-red-700 text-xs bg-red-100 px-3 py-1 rounded-xl">{panchang?.yamagandaKaal || '--'}</span>
               </div>
 
-              <div className="bg-slate-950/80 rounded-xl p-3 border border-rose-500/30 flex justify-between items-center shadow-inner">
-                <span className="font-bold text-rose-200 text-xs">{t.gulika}</span>
-                <span className="font-mono font-bold text-rose-400 text-xs">{panchang?.gulikaKaal || '--'}</span>
+              <div className="bg-white text-slate-900 rounded-2xl p-3 border-2 border-red-300 flex justify-between items-center shadow-lg">
+                <span className="font-black text-red-950 text-xs">{t.gulika}</span>
+                <span className="font-mono font-black text-red-700 text-xs bg-red-100 px-3 py-1 rounded-xl">{panchang?.gulikaKaal || '--'}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Sacred Geometry Footer Motif */}
-        <div className="pt-8 pb-4 text-center text-xs text-amber-500/60 font-mono tracking-widest">
-          ❖ 🕉️ DIVYAYAGYAM SANATAN PANCHANG 🕉️ ❖
+        {/* Sacred Bright Yellow Footer */}
+        <div className="pt-6 pb-4 text-center text-xs text-red-900 font-black tracking-widest">
+          ❖ 🕉️ DIVYAYAGYAM BRIGHT VEDIC PANCHANG 🕉️ ❖
         </div>
 
       </div>

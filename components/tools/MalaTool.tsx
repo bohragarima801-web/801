@@ -68,14 +68,15 @@ export default function MalaTool() {
             {selectedMantra.name} ({selectedMantra.god})
           </div>
 
-          {/* Big Interactive Bead Button */}
+          {/* 3D Tactile Bead Counter Button */}
           <button
             onClick={handleBeadClick}
-            className="w-44 h-44 rounded-full bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 text-white flex flex-col items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition border-4 border-amber-200 cursor-pointer select-none"
+            className="w-48 h-48 rounded-full bg-gradient-to-b from-yellow-400 via-amber-500 to-orange-600 text-red-950 flex flex-col items-center justify-center shadow-2xl hover:scale-105 active:scale-95 active:translate-y-2 border-b-8 border-amber-800 transition cursor-pointer select-none border-4 border-yellow-200"
           >
-            <span className="text-5xl font-black font-mono tracking-tight">{count}</span>
-            <span className="text-xs text-amber-200 font-bold uppercase mt-1">/ 108 मनके</span>
+            <span className="text-6xl font-black font-mono tracking-tight text-red-950">{count}</span>
+            <span className="text-xs text-red-900 font-black uppercase mt-1">/ 108 मनके</span>
           </button>
+
 
           <p className="text-xs text-amber-800 font-semibold animate-pulse">
             👆 मनका गिनने के लिए बड़े गोले पर क्लिक करें

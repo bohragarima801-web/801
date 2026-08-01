@@ -97,43 +97,42 @@ export default function PublicFestivalsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-amber-950/20 to-black text-slate-100 py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-amber-600/10 blur-[140px] rounded-full pointer-events-none"></div>
-
+    <div className="min-h-screen bg-gradient-to-b from-yellow-300 via-amber-100 to-amber-200 text-slate-900 py-8 px-4 sm:px-6 lg:px-8 relative font-sans">
       <div className="max-w-5xl mx-auto space-y-6 relative z-10">
         
-        {/* Top Glass Header */}
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-2xl shadow-amber-950/20 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Top Bright Yellow & Sacred Red Header */}
+        <div className="bg-gradient-to-r from-red-700 via-red-600 to-orange-600 border-4 border-amber-400 rounded-3xl p-6 shadow-2xl text-white flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-400 rounded-full text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              व्रत एवं पर्व तालिका | Divyayagyam Festival Directory
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-yellow-400 text-red-950 border border-yellow-300 rounded-full text-xs font-black mb-2 shadow">
+              <Sparkles className="w-4 h-4 text-red-700 animate-bounce" />
+              व्रत एवं पर्व तालिका | FESTIVAL DIRECTORY
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-black text-yellow-300 tracking-tight drop-shadow-md">
               {t.title}
             </h1>
-            <p className="text-xs md:text-sm text-slate-400 font-medium mt-0.5">{t.subTitle}</p>
+            <p className="text-xs md:text-sm text-yellow-100 font-bold mt-0.5">{t.subTitle}</p>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* 3D Tactile Language Switcher */}
             <button
               onClick={() => setLang(lang === 'hi' ? 'en' : 'hi')}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-amber-900/30"
+              className="bg-gradient-to-b from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-red-950 font-black px-4 py-2.5 rounded-xl border-b-4 border-amber-700 shadow-lg active:border-b-0 active:translate-y-1 transition-all flex items-center gap-1.5 text-xs"
             >
-              <Globe className="w-4 h-4" />
+              <Globe className="w-4 h-4 text-red-900" />
               {lang === 'hi' ? 'English' : 'हिंदी'}
             </button>
           </div>
         </div>
 
-        {/* Controls Bar: Month / Year / Category / Search */}
-        <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-5 border border-amber-500/30 shadow-xl space-y-4">
+        {/* Controls Bar with 3D Tactile Buttons: Month / Year / Category / Search */}
+        <div className="bg-white rounded-3xl p-5 border-4 border-amber-400 shadow-2xl space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                className="bg-slate-950 border border-amber-500/40 rounded-xl px-3.5 py-2 text-xs font-bold text-amber-300 focus:outline-none cursor-pointer"
+                className="bg-amber-50 border-2 border-amber-400 rounded-xl px-3.5 py-2 text-xs font-black text-red-950 focus:outline-none cursor-pointer shadow-inner"
               >
                 {(lang === 'hi' ? MONTHS_HI : MONTHS_EN).map((m, idx) => (
                   <option key={idx} value={idx + 1}>
@@ -145,7 +144,7 @@ export default function PublicFestivalsPage() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-2 text-xs font-bold text-amber-300 focus:outline-none cursor-pointer"
+                className="bg-amber-50 border-2 border-amber-400 rounded-xl px-3 py-2 text-xs font-black text-red-950 focus:outline-none cursor-pointer shadow-inner"
               >
                 {[2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031].map((y) => (
                   <option key={y} value={y}>
@@ -156,18 +155,18 @@ export default function PublicFestivalsPage() {
             </div>
 
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-amber-500/60" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-red-600" />
               <Input
                 placeholder={t.searchPlaceholder}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 bg-slate-950 border-amber-500/30 text-amber-200 text-xs rounded-xl focus:border-amber-500"
+                className="pl-9 bg-amber-50 border-2 border-amber-400 text-red-950 text-xs font-bold rounded-xl focus:border-red-600"
               />
             </div>
           </div>
 
-          {/* Category Filter Badges */}
-          <div className="flex flex-wrap gap-2 pt-2 border-t border-amber-500/20 text-xs">
+          {/* 3D Tactile Category Filter Badges */}
+          <div className="flex flex-wrap gap-2 pt-2 border-t-2 border-amber-200 text-xs">
             {[
               { id: 'ALL', label: t.all },
               { id: 'Major Festival', label: t.major },
@@ -178,10 +177,10 @@ export default function PublicFestivalsPage() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-full font-semibold transition ${
+                className={`px-4 py-2 rounded-xl font-black transition-all border-b-4 shadow-md active:border-b-0 active:translate-y-1 ${
                   selectedCategory === cat.id
-                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-900/40 font-bold'
-                    : 'bg-slate-950 text-amber-300 border border-amber-500/30 hover:bg-amber-950/40'
+                    ? 'bg-gradient-to-b from-red-600 to-red-800 text-yellow-300 border-red-950 shadow-red-900/30'
+                    : 'bg-gradient-to-b from-yellow-300 to-amber-400 text-red-950 border-amber-600 hover:brightness-105'
                 }`}
               >
                 {cat.label}
@@ -192,11 +191,11 @@ export default function PublicFestivalsPage() {
 
         {/* Festival Cards List */}
         {loading ? (
-          <div className="p-12 text-center text-amber-400 font-semibold animate-pulse">Loading Festivals...</div>
+          <div className="p-12 text-center text-red-800 font-black animate-bounce text-base">Loading Festivals...</div>
         ) : festivals.length === 0 ? (
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-12 text-center text-slate-400 space-y-2 border border-amber-500/30 shadow-xl">
-            <Info className="w-8 h-8 text-amber-400 mx-auto" />
-            <p className="font-bold text-amber-200">{t.noFestivals}</p>
+          <div className="bg-white rounded-3xl p-12 text-center text-slate-500 space-y-2 border-4 border-amber-400 shadow-2xl">
+            <Info className="w-8 h-8 text-amber-500 mx-auto" />
+            <p className="font-black text-red-950">{t.noFestivals}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -212,35 +211,36 @@ export default function PublicFestivalsPage() {
               return (
                 <div
                   key={fest.id}
-                  className="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-amber-500/30 hover:border-amber-500/60 transition space-y-4 relative overflow-hidden group"
+                  className="bg-white rounded-3xl p-6 shadow-2xl border-4 border-amber-400 hover:border-red-600 transition space-y-4 relative overflow-hidden group hover:-translate-y-1"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="bg-gradient-to-br from-amber-500 to-amber-700 text-slate-950 font-black px-3.5 py-2.5 rounded-xl text-center shadow-lg shrink-0">
-                        <div className="text-xl leading-none">{dateObj.getDate()}</div>
-                        <div className="text-[10px] uppercase tracking-wider mt-0.5 font-bold">
+                      {/* 3D Date Pill */}
+                      <div className="bg-gradient-to-b from-red-600 to-red-800 border-b-4 border-red-950 text-yellow-300 font-black px-4 py-2.5 rounded-2xl text-center shadow-lg shrink-0">
+                        <div className="text-2xl leading-none font-black">{dateObj.getDate()}</div>
+                        <div className="text-[10px] uppercase tracking-wider mt-0.5 font-black text-white">
                           {dateObj.toLocaleDateString('en-US', { month: 'short' })}
                         </div>
                       </div>
 
                       <div>
-                        <div className="text-xs text-amber-400 font-semibold">{formattedDate}</div>
-                        <h3 className="text-lg font-bold text-amber-100 mt-0.5 leading-snug">
+                        <div className="text-xs text-red-700 font-black">{formattedDate}</div>
+                        <h3 className="text-lg font-black text-red-950 mt-0.5 leading-snug">
                           {getVal(fest, 'festivalHi', 'festival')}
                         </h3>
                       </div>
                     </div>
 
-                    <Badge variant="outline" className="bg-amber-950/60 text-amber-300 border-amber-500/40 shrink-0 text-xs">
+                    <Badge variant="outline" className="bg-yellow-100 text-red-900 border-2 border-amber-400 shrink-0 font-black text-xs">
                       {getVal(fest, 'categoryHi', 'category')}
                     </Badge>
                   </div>
 
                   {/* Significance */}
                   {(fest.significanceHi || fest.significance) && (
-                    <div className="bg-slate-950/90 rounded-xl p-4 border border-amber-500/20 text-xs text-slate-300 leading-relaxed shadow-inner">
-                      <div className="font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
-                        <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                    <div className="bg-amber-50 rounded-2xl p-4 border-2 border-amber-300 text-xs text-slate-800 font-bold leading-relaxed shadow-inner">
+                      <div className="font-black text-red-900 mb-1.5 flex items-center gap-1.5">
+                        <BookOpen className="w-4 h-4 text-red-600" />
                         {t.significance}:
                       </div>
                       <p>{getVal(fest, 'significanceHi', 'significance')}</p>
@@ -252,8 +252,8 @@ export default function PublicFestivalsPage() {
           </div>
         )}
 
-        <div className="pt-8 pb-4 text-center text-xs text-amber-500/60 font-mono tracking-widest">
-          ❖ 🕉️ DIVYAYAGYAM FESTIVAL CALENDAR 🕉️ ❖
+        <div className="pt-6 pb-4 text-center text-xs text-red-900 font-black tracking-widest">
+          ❖ 🕉️ DIVYAYAGYAM BRIGHT FESTIVAL CALENDAR 🕉️ ❖
         </div>
 
       </div>

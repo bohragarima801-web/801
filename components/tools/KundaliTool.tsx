@@ -91,9 +91,10 @@ export default function KundaliTool() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl h-11 shadow">
+        <Button type="submit" className="w-full bg-gradient-to-b from-red-600 to-red-800 text-yellow-300 font-black border-b-4 border-red-950 shadow-xl active:border-b-0 active:translate-y-1 hover:brightness-110 rounded-2xl h-12 text-sm">
           कुंडली तैयार करें (Generate Kundali)
         </Button>
+
       </form>
 
       {result && (
