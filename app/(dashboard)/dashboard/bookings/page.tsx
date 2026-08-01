@@ -97,6 +97,13 @@ export default async function BookingsPage() {
                       </span>
                     </div>
                   )}
+                  {booking.sankalpPurpose && (
+                    <div className="flex items-center gap-2 text-muted-foreground col-span-full">
+                      <span className="font-medium text-xs bg-indigo-50 text-indigo-900 border border-indigo-100 px-2.5 py-1 rounded-lg">
+                        <strong>Sankalp Purpose (उद्देश्य):</strong> {booking.sankalpPurpose}
+                      </span>
+                    </div>
+                  )}
                   {booking.pdfUrl && (
                     <a
                       href={booking.pdfUrl}

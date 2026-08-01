@@ -6,6 +6,7 @@ import Script from 'next/script'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -35,6 +36,7 @@ function BookingForm() {
   const [devoteeName, setDevoteeName] = useState('')
   const [gotra, setGotra] = useState('Kashyap')
   const [fatherHusbandName, setFatherHusbandName] = useState('')
+  const [sankalpPurpose, setSankalpPurpose] = useState('')
   const [acceptTerms, setAcceptTerms] = useState(false)
   
   // Dynamic family members list (based on packageKey count)
@@ -175,6 +177,7 @@ function BookingForm() {
           devoteeName: devoteeName,
           fatherHusbandName: fatherHusbandName || 'N/A',
           gotra,
+          sankalpPurpose,
           members: membersList,
           selectedOfferingIds,
           addCourier,
@@ -443,6 +446,12 @@ function BookingForm() {
                     <span>Gotra:</span>
                     <span className="font-bold text-slate-800">{gotra}</span>
                   </div>
+                  {sankalpPurpose && (
+                    <div className="flex justify-between">
+                      <span>Sankalp Purpose:</span>
+                      <span className="font-bold text-slate-800 line-clamp-1 max-w-[150px]">{sankalpPurpose}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span>Puja Package Rate:</span>
                     <span className="font-bold text-slate-800">₹{packagePrice}</span>
@@ -527,6 +536,18 @@ function BookingForm() {
                     className="h-10"
                   />
                   <p className="text-[10px] text-slate-500">यदि गोत्र ज्ञात न हो तो 'Kashyap' ही रहने दें।</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold">Sankalp Purpose / Description (संकल्प का उद्देश्य / विवरण)</Label>
+                  <Textarea
+                    placeholder="उदा. उत्तम स्वास्थ्य, मनोकामना पूर्ति, व्यापार वृद्धि, कोर्ट केस सफलता या सुख-शांति..."
+                    value={sankalpPurpose}
+                    onChange={(e) => setSankalpPurpose(e.target.value)}
+                    rows={2}
+                    className="text-xs bg-white"
+                  />
+                  <p className="text-[10px] text-slate-500">अपनी विशेष मनोकामना या संकल्प का मुख्य उद्देश्य यहाँ लिखें।</p>
                 </div>
 
                 {/* Terms and Conditions Checkbox */}

@@ -36,6 +36,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     devoteeName, 
     fatherHusbandName, 
     gotra, 
+    sankalpPurpose,
     members = [], // Array of { name: string }
     selectedOfferingIds = [],
     addCourier = false,
@@ -128,8 +129,9 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       subtotal: total, // For now, total and subtotal are same, tax is 0
       total: total,
       gotra: gotra || 'Kashyap',
-      sankalpText: `Devotee: ${devoteeName}, Relation Name: ${fatherHusbandName}, Details: ${descriptionText}`,
-      specialInstructions: `Father/Husband: ${fatherHusbandName}`,
+      sankalpPurpose: sankalpPurpose || null,
+      sankalpText: `Devotee: ${devoteeName}, Relation: ${fatherHusbandName}, Purpose: ${sankalpPurpose || 'N/A'}, Details: ${descriptionText}`,
+      specialInstructions: `Father/Husband: ${fatherHusbandName}${sankalpPurpose ? ` | Purpose: ${sankalpPurpose}` : ''}`,
       status: 'PENDING',
       paymentStatus: 'PENDING',
       members: {
