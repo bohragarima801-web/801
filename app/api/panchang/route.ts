@@ -18,7 +18,8 @@ export async function GET(req: Request) {
     }
 
     // 1. Try to fetch from database if imported by admin
-    let dbPanchang = null
+    let dbPanchang: any = null
+
     try {
       dbPanchang = await prisma.panchang.findUnique({
         where: { date: targetDate },
