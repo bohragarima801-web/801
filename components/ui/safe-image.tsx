@@ -21,7 +21,7 @@ export function SafeImage({ fallbackSrc, hideOnError = true, onError, alt, title
     }
   }
 
-  const finalAlt = alt && alt.trim().length > 0 ? alt : getAutoSeoAlt(title || props.name || 'DivyaYagyam', seoCategory)
+  const finalAlt = alt && alt.trim().length > 0 ? alt : getAutoSeoAlt(title || (props as any).name || 'DivyaYagyam', seoCategory)
 
   // eslint-disable-next-line @next/next/no-img-element
   return <img {...props} alt={finalAlt} title={title || finalAlt} onError={handleError} />
