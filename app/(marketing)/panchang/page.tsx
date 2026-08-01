@@ -349,10 +349,46 @@ export default function PublicPanchangPage() {
           </div>
         </div>
 
+        {/* --- High-Density Google SEO Content & FAQ Section --- */}
+        <div className="bg-white rounded-3xl p-6 md:p-8 border-4 border-amber-400 shadow-2xl space-y-6 text-slate-800">
+          <div className="border-b-2 border-amber-200 pb-4">
+            <h2 className="text-xl md:text-2xl font-black text-red-950 flex items-center gap-2">
+              <Sparkle className="w-6 h-6 text-amber-500" />
+              आज का पंचांग (Aaj Ka Panchang) का महत्व एवं 5 मुख्य अंग
+            </h2>
+            <p className="text-xs md:text-sm text-slate-600 font-bold mt-1 leading-relaxed">
+              सनातन वैदिक संस्कृति में दैनिक पंचांग (Vedic Almanac) का विशेष महत्व है। किसी भी शुभ कार्य, पूजा-पाठ, विवाह, गृह प्रवेश व मुंडन संस्कार से पूर्व दैनिक पंचांग के 5 अंगों (तिथि, नक्षत्र, योग, करण और वार) का विचार किया जाता है।
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-bold text-slate-700 leading-relaxed">
+            <div className="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 space-y-1">
+              <div className="font-black text-red-900 text-sm">1. तिथि (Tithi):</div>
+              <p>सूर्य और चंद्रमा के बीच के कोणीय अंतर को तिथि कहते हैं। शुक्ल पक्ष व कृष्ण पक्ष में मिलाकर कुल 30 तिथियां होती हैं।</p>
+            </div>
+
+            <div className="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 space-y-1">
+              <div className="font-black text-red-900 text-sm">2. नक्षत्र (Nakshatra):</div>
+              <p>आकाशमंडल के 27 तारा समूहों को नक्षत्र कहते हैं। दैनिक नक्षत्र से व्यक्ति की मानसिक व आध्यात्मिक स्थिति प्रभावित होती है।</p>
+            </div>
+
+            <div className="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 space-y-1">
+              <div className="font-black text-red-900 text-sm">3. अभिजीत मुहूर्त (Abhijit Muhurat):</div>
+              <p>दिन का 8वाँ मुहूर्त सर्वसिद्ध शुभ मुहूर्त कहलाता है। इसमें किए गए सभी शुभ कार्य निर्विघ्न संपन्न होते हैं।</p>
+            </div>
+
+            <div className="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 space-y-1">
+              <div className="font-black text-red-900 text-sm">4. राहुकाल (Rahu Kaal):</div>
+              <p>दिन का वह समय जिसे अशुभ माना जाता है। राहुकाल के दौरान नया व्यवसाय या नया शुभ कार्य प्रारंभ नहीं करना चाहिए।</p>
+            </div>
+          </div>
+        </div>
+
         {/* Sacred Bright Yellow Footer */}
         <div className="pt-6 pb-4 text-center text-xs text-red-900 font-black tracking-widest">
           ❖ 🕉️ DIVYAYAGYAM BRIGHT VEDIC PANCHANG 🕉️ ❖
         </div>
+
 
       </div>
     </div>
