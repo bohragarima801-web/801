@@ -10,13 +10,17 @@ type ToolComponentProps = {
   isPremiumUnlocked: boolean
 }
 
-// 1. IMPORT YOUR CUSTOM REACT TOOLS HERE
-// import KundliMilanTool from './kundli-milan'
+import KundaliTool from './KundaliTool'
+import MalaTool from './MalaTool'
+import NumerologyTool from './NumerologyTool'
 
 // 2. MAP SLUGS TO COMPONENTS
 const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
-  // 'kundli-milan': KundliMilanTool,
+  kundali: KundaliTool,
+  mala: MalaTool,
+  numerology: NumerologyTool,
 }
+
 
 export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUnlocked: boolean }) {
   const slug = (tool?.slug || '').toLowerCase().trim()
