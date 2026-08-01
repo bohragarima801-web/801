@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { calculateRealPanchang } from '@/lib/real-panchang-engine'
 
 export async function GET(req: Request) {
   try {
@@ -16,80 +17,93 @@ export async function GET(req: Request) {
       targetDate = new Date()
     }
 
-    let panchang = null
-
+    // 1. Try to fetch from database if imported by admin
+    let dbPanchang = null
     try {
-      // Attempt exact match first
-      panchang = await prisma.panchang.findUnique({
+      dbPanchang = await prisma.panchang.findUnique({
         where: { date: targetDate },
       })
-
-      // Fallback: If exact date not found, get closest available entry
-      if (!panchang) {
-        panchang = await prisma.panchang.findFirst({
-          orderBy: { date: 'asc' },
-        })
-      }
     } catch (dbErr) {
-      console.warn('Database query for panchang failed, using fallback:', dbErr)
+      console.warn('Database query fallback:', dbErr)
     }
 
-    // Default Fallback Object if DB is empty or fails
-    if (!panchang) {
-      panchang = {
-        id: 'fallback-today',
-        date: targetDate,
-        day: 'Saturday',
-        dayHi: 'शनिवार',
-        hinduMonth: 'Shravana',
-        hinduMonthHi: 'श्रावण (भाद्रपद)',
-        paksha: 'Shukla Paksha',
-        pakshaHi: 'शुक्ल पक्ष',
-        tithi: 'Dwitiya (up to 18:17)',
-        tithiHi: 'द्वितीया (शाम 06:17 तक)',
-        nakshatra: 'Ardra',
-        nakshatraHi: 'आर्द्रा',
-        yog: 'Ganda',
-        yogHi: 'गण्ड',
-        karan: 'Bava',
-        karanHi: 'बव',
-        sunrise: '05:42 AM',
-        sunset: '07:15 PM',
-        moonrise: '08:05 AM',
-        moonset: '08:20 PM',
-        rahuKaal: '04:30 PM - 06:00 PM',
-        yamagandaKaal: '10:30 AM - 12:00 PM',
-        gulikaKaal: '01:30 PM - 03:00 PM',
-        abhijitMuhurat: '11:55 AM - 12:45 PM',
-        specialFestival: 'Normal Day',
-        specialFestivalHi: 'सामान्य दिन / शुभ दिन',
-      }
+    if (dbPanchang) {
+      return NextResponse.json({
+        success: true,
+        source: 'database',
+        panchang: dbPanchang,
+      })
+    }
+
+    // 2. Real-time Astronomical Calculation Engine (Drik Ganita)
+    const realCalc = calculateRealPanchang(dateStr)
+
+    const panchangObj = {
+      id: `real-${dateStr}`,
+      date: targetDate,
+      day: realCalc.dayEn,
+      dayHi: realCalc.dayHi,
+      hinduMonth: realCalc.hinduMonthEn,
+      hinduMonthHi: realCalc.hinduMonthHi,
+      paksha: realCalc.pakshaEn,
+      pakshaHi: realCalc.pakshaHi,
+      tithi: realCalc.tithiEn,
+      tithiHi: realCalc.tithiHi,
+      nakshatra: realCalc.nakshatraEn,
+      nakshatraHi: realCalc.nakshatraHi,
+      yog: realCalc.yogEn,
+      yogHi: realCalc.yogHi,
+      karan: realCalc.karanEn,
+      karanHi: realCalc.karanHi,
+      sunrise: realCalc.sunrise,
+      sunset: realCalc.sunset,
+      moonrise: realCalc.moonrise,
+      moonset: realCalc.moonset,
+      rahuKaal: realCalc.rahuKaal,
+      yamagandaKaal: realCalc.yamagandaKaal,
+      gulikaKaal: realCalc.gulikaKaal,
+      abhijitMuhurat: realCalc.abhijitMuhurat,
+      specialFestival: realCalc.specialFestivalEn,
+      specialFestivalHi: realCalc.specialFestivalHi,
     }
 
     return NextResponse.json({
       success: true,
-      panchang,
+      source: 'astronomical-engine',
+      panchang: panchangObj,
     })
   } catch (err: any) {
-    console.error('Error fetching public panchang:', err)
+    console.error('Error in panchang API:', err)
+    const fallback = calculateRealPanchang(new Date().toISOString().split('T')[0])
     return NextResponse.json({
       success: true,
+      source: 'realtime-fallback',
       panchang: {
         date: new Date(),
-        day: 'Saturday',
-        dayHi: 'शनिवार',
-        hinduMonth: 'Shravana',
-        hinduMonthHi: 'श्रावण',
-        paksha: 'Shukla Paksha',
-        pakshaHi: 'शुक्ल पक्ष',
-        tithi: 'Dwitiya',
-        tithiHi: 'द्वितीया',
-        nakshatra: 'Ardra',
-        nakshatraHi: 'आर्द्रा',
-        sunrise: '05:42 AM',
-        sunset: '07:15 PM',
-        rahuKaal: '04:30 PM - 06:00 PM',
-        abhijitMuhurat: '11:55 AM - 12:45 PM',
+        day: fallback.dayEn,
+        dayHi: fallback.dayHi,
+        hinduMonth: fallback.hinduMonthEn,
+        hinduMonthHi: fallback.hinduMonthHi,
+        paksha: fallback.pakshaEn,
+        pakshaHi: fallback.pakshaHi,
+        tithi: fallback.tithiEn,
+        tithiHi: fallback.tithiHi,
+        nakshatra: fallback.nakshatraEn,
+        nakshatraHi: fallback.nakshatraHi,
+        yog: fallback.yogEn,
+        yogHi: fallback.yogHi,
+        karan: fallback.karanEn,
+        karanHi: fallback.karanHi,
+        sunrise: fallback.sunrise,
+        sunset: fallback.sunset,
+        moonrise: fallback.moonrise,
+        moonset: fallback.moonset,
+        rahuKaal: fallback.rahuKaal,
+        yamagandaKaal: fallback.yamagandaKaal,
+        gulikaKaal: fallback.gulikaKaal,
+        abhijitMuhurat: fallback.abhijitMuhurat,
+        specialFestival: fallback.specialFestivalEn,
+        specialFestivalHi: fallback.specialFestivalHi,
       },
     })
   }
