@@ -22,9 +22,8 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 
 export default function AdminPanchangPage() {
-  const [sheetUrl, setSheetUrl] = useState(
-    'https://docs.google.com/spreadsheets/d/1bbi1hRZvv-ZeQYqzqSmSabMSr4_Gi8pM8BODqe7zywM/edit?gid=1857856167'
-  )
+  const [sheetUrl, setSheetUrl] = useState('/drik_panchang_5_years_2026_2031.csv')
+
   const [isImporting, setIsImporting] = useState(false)
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

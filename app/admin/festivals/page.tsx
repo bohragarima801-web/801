@@ -23,7 +23,8 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 
 export default function AdminFestivalsPage() {
-  const [sheetUrl, setSheetUrl] = useState('')
+  const [sheetUrl, setSheetUrl] = useState('/drik_festivals_5_years_2026_2031.csv')
+
   const [isImporting, setIsImporting] = useState(false)
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
