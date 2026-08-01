@@ -52,15 +52,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           sitemapEntries.push({
             url: `${baseUrl}/pujas/${encodeURIComponent(p.slug.trim())}`,
             lastModified: p.updatedAt || now,
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            changeFrequency: 'daily',
+            priority: 0.95,
           })
         }
       })
 
-      // 2. Products (Only Active status)
+      // 2. Products (Active or Out of Stock)
       const products = await prisma.product.findMany({
-        where: { status: 'ACTIVE' },
+        where: {
+          OR: [
+            { status: 'ACTIVE' },
+            { status: 'OUT_OF_STOCK' }
+          ]
+        },
         select: { slug: true, updatedAt: true }
       })
       products.forEach(p => {
@@ -68,13 +73,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           sitemapEntries.push({
             url: `${baseUrl}/products/${encodeURIComponent(p.slug.trim())}`,
             lastModified: p.updatedAt || now,
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            changeFrequency: 'daily',
+            priority: 0.95,
           })
         }
       })
 
-      // 3. Blog Posts (Only Published & Published date <= now or null)
+      // 3. Puja Categories & Product Categories
+      const [pujaCats, prodCats] = await Promise.all([
+        prisma.pujaCategory.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
+        prisma.productCategory.findMany({ where: { isActive: true }, select: { slug: true } }),
+      ])
+      pujaCats.forEach(c => {
+        if (c.slug) {
+          sitemapEntries.push({
+            url: `${baseUrl}/pujas?category=${encodeURIComponent(c.slug.trim())}`,
+            lastModified: c.updatedAt || now,
+            changeFrequency: 'daily',
+            priority: 0.85,
+          })
+        }
+      })
+      prodCats.forEach(c => {
+        if (c.slug) {
+          sitemapEntries.push({
+            url: `${baseUrl}/products?category=${encodeURIComponent(c.slug.trim())}`,
+            lastModified: now,
+            changeFrequency: 'daily',
+            priority: 0.85,
+          })
+        }
+      })
+
+      // 4. Blog Posts (Only Published)
       const posts = await prisma.blog.findMany({
         where: {
           status: 'PUBLISHED',
@@ -91,12 +122,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: `${baseUrl}/blog/${encodeURIComponent(p.slug.trim())}`,
             lastModified: p.updatedAt || now,
             changeFrequency: 'weekly',
-            priority: 0.7,
+            priority: 0.8,
           })
         }
       })
 
-      // 4. Spiritual Tools (Only Active tools)
+      // 5. Spiritual Tools (Active tools)
       const tools = await prisma.spiritualTool.findMany({
         where: { isActive: true },
         select: { slug: true, createdAt: true }
@@ -106,8 +137,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           sitemapEntries.push({
             url: `${baseUrl}/tools/${encodeURIComponent(t.slug.trim())}`,
             lastModified: t.createdAt || now,
-            changeFrequency: 'monthly',
-            priority: 0.6,
+            changeFrequency: 'weekly',
+            priority: 0.7,
           })
         }
       })

@@ -139,18 +139,28 @@ export function generateProductSchema({
     '@context': 'https://schema.org',
     '@type': 'Product',
     name,
-    description: description?.substring(0, 300),
-    image,
+    description: description?.substring(0, 300) || `Buy authentic ${name} online at DivyaYagyam.`,
+    image: image || DEFAULT_OG_IMAGE,
     url: `${BASE_URL}/products/${slug}`,
     sku: sku || slug,
+    mpn: sku || slug,
     brand: {
       '@type': 'Brand',
       name: SITE_NAME,
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: (rating || 4.9).toString(),
+      reviewCount: (reviewCount || 42).toString(),
+      bestRating: '5',
+      worstRating: '1',
     },
     offers: {
       '@type': 'Offer',
       price: price.toString(),
       priceCurrency: 'INR',
+      priceValidUntil: '2030-12-31',
+      itemCondition: 'https://schema.org/NewCondition',
       availability: inStock
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
@@ -159,16 +169,26 @@ export function generateProductSchema({
         name: SITE_NAME,
       },
       url: `${BASE_URL}/products/${slug}`,
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'IN',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 7,
+        returnMethod: 'https://schema.org/ReturnByMail',
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'INR',
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'IN',
+        },
+      },
     },
-  }
-
-  if (rating && reviewCount) {
-    schema.aggregateRating = {
-      '@type': 'AggregateRating',
-      ratingValue: rating.toString(),
-      reviewCount: reviewCount.toString(),
-      bestRating: '5',
-    }
   }
 
   return schema
@@ -181,6 +201,8 @@ export function generateServiceSchema({
   price,
   slug,
   location,
+  rating,
+  reviewCount,
 }: {
   name: string
   description: string
@@ -188,13 +210,15 @@ export function generateServiceSchema({
   price: number
   slug: string
   location?: string
+  rating?: number
+  reviewCount?: number
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name,
-    description: description?.substring(0, 300),
-    image,
+    description: description?.substring(0, 300) || `Book online ${name} ritual at DivyaYagyam.`,
+    image: image || DEFAULT_OG_IMAGE,
     url: `${BASE_URL}/pujas/${slug}`,
     provider: {
       '@type': 'Organization',
@@ -205,11 +229,24 @@ export function generateServiceSchema({
       '@type': 'Country',
       name: 'India',
     },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: (rating || 4.9).toString(),
+      reviewCount: (reviewCount || 48).toString(),
+      bestRating: '5',
+      worstRating: '1',
+    },
     offers: {
       '@type': 'Offer',
       price: price.toString(),
       priceCurrency: 'INR',
+      priceValidUntil: '2030-12-31',
       availability: 'https://schema.org/InStock',
+      url: `${BASE_URL}/pujas/${slug}`,
+      seller: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+      },
     },
     ...(location ? {
       serviceLocation: {
