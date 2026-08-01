@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ensureDefaultCategoriesAndTemples } from '@/lib/data-defaults'
-import { DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+import { DEFAULT_PLACEHOLDER_IMAGE, convertGoogleDriveUrl } from '@/lib/utils'
 import { getAdminSession } from '@/lib/admin-session'
 import { revalidateTag, revalidatePath } from 'next/cache'
 import { autoGeneratePujaSeo } from '@/lib/seo-auto'
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
       seoDescription: autoSeo.seoDescription,
       seoKeywords: autoSeo.seoKeywords,
       customHtml: customHtml || null,
-      coverImage: coverImage || DEFAULT_PLACEHOLDER_IMAGE,
+      coverImage: convertGoogleDriveUrl(coverImage) || DEFAULT_PLACEHOLDER_IMAGE,
       category: { connect: { id: categoryId } }
     }
 
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
-              image: pkg.image || null
+              image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
         }
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
-              image: pkg.image || null
+              image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
         }
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
         await prisma.pujaImage.createMany({
           data: images.map((url: string, index: number) => ({
             pujaId: puja.id,
-            url: url || '',
+            url: url ? convertGoogleDriveUrl(url) : '',
             order: index
           }))
         })

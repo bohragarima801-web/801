@@ -14,6 +14,7 @@ import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wal
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
+import { getSafeImageUrl } from '@/lib/utils'
 
 function BookingForm() {
   const searchParams = useSearchParams()
@@ -341,7 +342,7 @@ function BookingForm() {
         <Card className="border shadow-sm rounded-2xl overflow-hidden">
           <CardContent className="p-5 flex gap-4 items-center">
             {puja.coverImage && (
-              <img src={puja.coverImage} className="h-16 w-20 rounded-lg object-cover border" alt="Puja" />
+              <img src={getSafeImageUrl(puja.coverImage)} className="h-16 w-20 rounded-lg object-cover border" alt="Puja" />
             )}
             <div className="space-y-1">
               <h2 className="font-black text-slate-800 text-base">{puja.name}</h2>
