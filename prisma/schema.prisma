@@ -1618,3 +1618,69 @@ model AnalyticsEvent {
   @@map("analytics_events")
 }
 
+// ============================================================
+// PANCHANG MODULE
+// ============================================================
+
+model Panchang {
+  id                String   @id @default(uuid())
+  date              DateTime @unique
+  day               String?
+  dayHi             String?
+  hinduMonth        String?
+  hinduMonthHi      String?
+  paksha            String?
+  pakshaHi          String?
+  tithi             String?
+  tithiHi           String?
+  nakshatra         String?
+  nakshatraHi       String?
+  yog               String?
+  yogHi             String?
+  karan             String?
+  karanHi           String?
+  sunrise           String?
+  sunset            String?
+  moonrise          String?
+  moonset           String?
+  rahuKaal          String?
+  yamagandaKaal     String?
+  gulikaKaal        String?
+  abhijitMuhurat    String?
+  specialFestival   String?
+  specialFestivalHi String?
+  rashi             String?
+  rashiHi           String?
+  rawJson           Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([date])
+  @@map("panchang")
+}
+
+// ============================================================
+// FESTIVAL & VRAT MODULE
+// ============================================================
+
+model Festival {
+  id             String   @id @default(uuid())
+  date           DateTime
+  festival       String
+  festivalHi     String?
+  category       String?
+  categoryHi     String?
+  significance   String?  @db.Text
+  significanceHi String?  @db.Text
+  image          String?
+  rawJson        Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([date])
+  @@index([category])
+  @@map("festivals")
+}
+
+
+
