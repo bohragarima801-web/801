@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner'
 import { Loader2, Plus, Trash2, Cloud, Upload, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { convertGoogleDriveUrl, compressImage, getSafeImageUrl } from '@/lib/utils'
+import { convertGoogleDriveUrl, compressImage, getSafeImageUrl, generateShortSlug } from '@/lib/utils'
 import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 interface ItemRef {
@@ -136,10 +136,10 @@ function NewPujaPage_Content() {
     fetchRefs()
   }, [])
 
-  // Auto slugify name
+  // Auto slugify name with clean SEO short slug generator
   useEffect(() => {
-    if (!editId) {
-      setSlug(name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''))
+    if (!editId && name.trim()) {
+      setSlug(generateShortSlug(name))
     }
   }, [name, editId])
 

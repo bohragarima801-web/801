@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ensureDefaultCategoriesAndTemples } from '@/lib/data-defaults'
-import { DEFAULT_PLACEHOLDER_IMAGE, convertGoogleDriveUrl } from '@/lib/utils'
+import { DEFAULT_PLACEHOLDER_IMAGE, convertGoogleDriveUrl, generateShortSlug } from '@/lib/utils'
 import { getAdminSession } from '@/lib/admin-session'
 import { revalidateTag, revalidatePath } from 'next/cache'
 import { autoGeneratePujaSeo } from '@/lib/seo-auto'
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Category is required' }, { status: 400 });
     }
 
-    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = generateShortSlug(slug || name)
 
     // Auto-resolve slug conflicts
     const existing = await prisma.puja.findUnique({ where: { slug: calculatedSlug } })

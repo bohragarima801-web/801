@@ -34,12 +34,13 @@ export function slugify(str: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-export function generateShortSlug(str: string, maxLen = 35) {
+export function generateShortSlug(str: string, maxLen = 45) {
   if (!str) return '';
-  // Remove filler words to create concise, clean URLs
+  // Remove filler words and marketing slogan fluff to create concise, clean, SEO-friendly URLs
   const cleanStr = str
     .toLowerCase()
-    .replace(/\b(for|and|with|the|in|at|of|to|by|a|an|or|is|are|live|online|full|complete|special|divyayagyam)\b/gi, ' ')
+    .replace(/\b(ultimate|protection|victory|success|best|guaranteed|power|powerful|supreme|top|exclusive|special|complete|full|live|online|for|and|with|the|in|at|of|to|by|a|an|or|is|are|divyayagyam)\b/gi, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
   
   const fullSlug = slugify(cleanStr.length > 0 ? cleanStr : str);
