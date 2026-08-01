@@ -19,7 +19,34 @@ const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
 }
 
 export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUnlocked: boolean }) {
+  const slug = (tool?.slug || '').toLowerCase().trim()
+
+  if (slug === 'panchang') {
+    return (
+      <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[750px] overflow-hidden relative">
+        <iframe
+          src="/panchang"
+          className="w-full h-full min-h-[750px] border-0"
+          title="Vedic Panchang"
+        />
+      </div>
+    )
+  }
+
+  if (slug === 'festivals' || slug === 'festival-calendar') {
+    return (
+      <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[750px] overflow-hidden relative">
+        <iframe
+          src="/festivals"
+          className="w-full h-full min-h-[750px] border-0"
+          title="Festival Calendar"
+        />
+      </div>
+    )
+  }
+
   const Component = TOOL_REGISTRY[tool.slug]
+
 
   if (Component) {
     return <Component tool={tool} isPremiumUnlocked={isPremiumUnlocked} />
