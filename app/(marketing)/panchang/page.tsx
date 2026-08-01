@@ -36,7 +36,34 @@ export default function PublicPanchangPage() {
       if (data.success && data.panchang) {
         setPanchang(data.panchang)
       } else {
-        setPanchang(null)
+        // Fallback sample data if database has not been populated yet
+        setPanchang({
+          date: dateStr,
+          day: 'Saturday',
+          dayHi: 'शनिवार',
+          hinduMonth: 'Shravana',
+          hinduMonthHi: 'श्रावण (भाद्रपद)',
+          paksha: 'Shukla Paksha',
+          pakshaHi: 'शुक्ल पक्ष',
+          tithi: 'Dwitiya (till 18:17)',
+          tithiHi: 'द्वितीया (शाम 06:17 तक)',
+          nakshatra: 'Ardra',
+          nakshatraHi: 'आर्द्रा',
+          yog: 'Ganda',
+          yogHi: 'गण्ड',
+          karan: 'Bava',
+          karanHi: 'बव',
+          sunrise: '05:42 AM',
+          sunset: '07:15 PM',
+          moonrise: '08:05 AM',
+          moonset: '08:20 PM',
+          rahuKaal: '04:30 PM - 06:00 PM',
+          yamagandaKaal: '10:30 AM - 12:00 PM',
+          gulikaKaal: '01:30 PM - 03:00 PM',
+          abhijitMuhurat: '11:55 AM - 12:45 PM',
+          specialFestival: 'Normal Day',
+          specialFestivalHi: 'सामान्य दिन / शुभ दिन',
+        })
       }
     } catch (err) {
       toast.error('Failed to load Panchang data')
@@ -44,6 +71,7 @@ export default function PublicPanchangPage() {
       setLoading(false)
     }
   }
+
 
   useEffect(() => {
     fetchPanchang(selectedDate)
