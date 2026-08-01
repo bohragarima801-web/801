@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Loader2, Plus, Trash2, Cloud, Upload } from 'lucide-react'
+import { Loader2, Plus, Trash2, Cloud, Upload, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { convertGoogleDriveUrl, compressImage, getSafeImageUrl } from '@/lib/utils'
 import { getYouTubeEmbedUrl } from '@/lib/youtube'
@@ -314,6 +314,35 @@ function NewPujaPage_Content() {
     setPackages(newPkgs)
   }
 
+  const handlePackageImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    let file = e.target.files?.[0]
+    if (!file) return
+
+    toast.loading('Compressing & uploading package image...', { id: `pkg-upload-${index}` })
+    
+    try {
+      file = await compressImage(file)
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+      const data = await res.json()
+      if (data.ok && data.url) {
+        handlePackageChange(index, 'image', data.url)
+        toast.success('Package image uploaded!', { id: `pkg-upload-${index}` })
+      } else {
+        toast.error(data.error || 'Upload failed', { id: `pkg-upload-${index}` })
+      }
+    } catch {
+      toast.error('Network error uploading package image', { id: `pkg-upload-${index}` })
+    } finally {
+      e.target.value = ''
+    }
+  }
+
   // Submit handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -525,29 +554,48 @@ function NewPujaPage_Content() {
                         </div>
 
                         {/* Package Specific Image Section */}
-                        <div className="flex items-center gap-3 pt-2 border-t border-slate-200">
-                          {pkg.image && (
-                            <div className="h-10 w-10 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs">
-                              <img 
-                                src={getSafeImageUrl(pkg.image)} 
-                                alt={pkg.name} 
-                                className="h-full w-full object-cover" 
-                                onError={(e) => {
-                                  e.currentTarget.src = '/package-1.jpg';
-                                }}
-                              />
+                        <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-200">
+                          <div className="flex items-center gap-3">
+                            {pkg.image ? (
+                              <div className="relative h-12 w-12 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs group">
+                                <img 
+                                  src={getSafeImageUrl(pkg.image)} 
+                                  alt={pkg.name} 
+                                  className="h-full w-full object-cover" 
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/package-1.jpg';
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handlePackageChange(i, 'image', '')}
+                                  className="absolute top-0 right-0 bg-red-600 text-white text-[10px] p-0.5 rounded-bl hover:bg-red-700"
+                                  title="Remove photo"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="h-12 w-12 rounded-lg border border-dashed border-slate-300 bg-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                                <Upload className="h-5 w-5" />
+                              </div>
+                            )}
+                            <div>
+                              <Label className="text-xs font-bold text-slate-700 block">Package Photo (पैकेज फ़ोटो)</Label>
+                              <p className="text-[10px] text-slate-500">Upload custom image for this package</p>
                             </div>
-                          )}
-                          <div className="flex-1 space-y-1">
-                            <Label className="text-[11px] font-bold text-slate-700">Package Image URL (इस सेक्शन/पैकेज की अलग फोटो)</Label>
-                            <Input 
-                              type="text" 
-                              value={pkg.image || ''} 
-                              onChange={(e) => handlePackageChange(i, 'image', e.target.value)} 
-                              placeholder="Paste image URL for 1 member / 2 members package..." 
-                              className="text-xs bg-white" 
-                            />
                           </div>
+
+                          <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-orange-300 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 text-xs font-bold text-orange-800 gap-1.5 select-none transition-colors shrink-0">
+                            <Upload className="h-3.5 w-3.5" />
+                            {pkg.image ? 'Change Photo' : 'Upload Photo'}
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              className="hidden" 
+                              onChange={(e) => handlePackageImageUpload(i, e)} 
+                            />
+                          </label>
                         </div>
                       </div>
                     ))}
