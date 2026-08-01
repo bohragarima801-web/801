@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
+import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -70,14 +71,19 @@ export function PujaClientView({ puja }: { puja: any }) {
 
   const isVideoUrl = (url: string) => {
     if (!url) return false
-    return url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('youtube') || url.includes('youtu.be')
-  }
-
-  const getYouTubeEmbedUrl = (url: string) => {
-    if (!url) return null
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
-    const match = url.match(regExp)
-    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+    const lower = url.toLowerCase()
+    return (
+      lower.endsWith('.mp4') ||
+      lower.endsWith('.webm') ||
+      lower.endsWith('.mov') ||
+      lower.endsWith('.mkv') ||
+      lower.endsWith('.m3u8') ||
+      lower.includes('youtube.com') ||
+      lower.includes('youtu.be') ||
+      lower.includes('vimeo.com') ||
+      lower.includes('drive.google.com') ||
+      lower.startsWith('data:video/')
+    )
   }
 
   const handlePrevMedia = () => {

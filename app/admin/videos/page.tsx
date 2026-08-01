@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Loader2, Copy, Trash2, Upload, Link as LinkIcon, Video, Edit2, Check, X, Sparkles, Youtube, AlertCircle } from 'lucide-react'
+import { Loader2, Copy, Trash2, Upload, Link as LinkIcon, Video, Edit2, Check, X, Sparkles, Youtube } from 'lucide-react'
 import { convertGoogleDriveUrl } from '@/lib/utils'
+import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 export default function AdminVideosPage() {
   const [items, setItems] = useState<any[]>([])
@@ -23,6 +24,8 @@ export default function AdminVideosPage() {
   // Edit modal state
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState('')
+  const [editingUrl, setEditingUrl] = useState('')
+  const [editingUploading, setEditingUploading] = useState(false)
 
   async function loadVideos() {
     try {
@@ -43,17 +46,10 @@ export default function AdminVideosPage() {
     loadVideos()
   }, [])
 
-  const isMaxLimitReached = items.length >= 5
-
   // Upload MP4 video file
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-
-    if (isMaxLimitReached) {
-      toast.error('Maximum limit of 5 Divya Darshan videos reached. Please delete an existing video first.')
-      return
-    }
 
     if (!file.type.startsWith('video/') && !file.name.match(/\.(mp4|webm|mov|mkv)$/i)) {
       toast.error('Please select a valid video file (.mp4, .webm, .mov)')
@@ -65,7 +61,6 @@ export default function AdminVideosPage() {
     formData.append('file', file)
 
     try {
-      // 1. Upload file using /api/upload
       const uploadRes = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
@@ -85,7 +80,6 @@ export default function AdminVideosPage() {
 
       if (!uploadData.ok) throw new Error(uploadData.error || 'Upload failed')
 
-      // 2. Save video record in DB
       const saveRes = await fetch('/api/admin/videos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,11 +107,6 @@ export default function AdminVideosPage() {
   // Add YouTube / External Video Link
   async function handleAddLink(e: React.FormEvent) {
     e.preventDefault()
-
-    if (isMaxLimitReached) {
-      toast.error('Maximum limit of 5 Divya Darshan videos reached. Please delete an existing video first.')
-      return
-    }
 
     if (!videoUrlInput.trim()) {
       toast.error('Please enter a YouTube video or MP4 URL')
@@ -170,15 +159,28 @@ export default function AdminVideosPage() {
   }
 
   async function handleSaveEdit(id: string) {
+    if (!editingUrl.trim()) {
+      toast.error('Video URL cannot be empty')
+      return
+    }
+
+    const formattedUrl = convertGoogleDriveUrl(editingUrl.trim())
+
     try {
       const res = await fetch('/api/admin/videos', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, filename: editingTitle, folder: 'Home Video' })
+        body: JSON.stringify({
+          id,
+          filename: editingTitle,
+          url: formattedUrl,
+          folder: 'Home Video',
+          mimeType: formattedUrl.includes('youtube') || formattedUrl.includes('youtu.be') ? 'video/youtube' : 'video/mp4'
+        })
       })
       const data = await res.json()
       if (data.ok) {
-        toast.success('Video title updated')
+        toast.success('Video updated successfully')
         setEditingId(null)
         loadVideos()
       } else {
@@ -189,34 +191,45 @@ export default function AdminVideosPage() {
     }
   }
 
-  function getYouTubeEmbedUrl(url: string) {
-    if (!url) return null
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/
-    const match = url.match(regExp)
-    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+  async function handleEditFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setEditingUploading(true)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const uploadData = await uploadRes.json()
+      if (uploadData.ok && uploadData.url) {
+        setEditingUrl(uploadData.url)
+        toast.success('New video file uploaded! Click Save to apply.')
+      } else {
+        toast.error(uploadData.error || 'Upload failed')
+      }
+    } catch {
+      toast.error('Failed to upload replacement video')
+    } finally {
+      setEditingUploading(false)
+    }
   }
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="🎥 Divya Darshan Videos Manager (दिव्य दर्शन वीडियो प्रबंधन)"
-        description="Upload up to 5 videos for the homepage Divya Darshan section. Enter your custom heading for each video."
-        breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Divya Darshan Videos' }]}
+        title="🎥 Divya Darshan & Puja Videos Manager"
+        description="Add, edit, or delete videos for the homepage & Puja section. Supports YouTube, YouTube Shorts, Google Drive, and MP4 uploads."
+        breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Videos' }]}
       />
-
-      {/* Video Limit Warning Alert */}
-      {isMaxLimitReached && (
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-medium">
-          <AlertCircle className="h-5 w-5 text-amber-600 shrink-0" />
-          <span>
-            <strong>Maximum 5 Videos Limit Reached!</strong> You have already uploaded 5 Divya Darshan videos. Please delete an existing video below to add a new one.
-          </span>
-        </div>
-      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Add Video via Link (YouTube / MP4 URL) */}
-        <Card className={`shadow-sm border-amber-200/60 bg-gradient-to-br from-amber-50/30 via-background to-orange-50/20 ${isMaxLimitReached ? 'opacity-60' : ''}`}>
+        <Card className="shadow-sm border-amber-200/60 bg-gradient-to-br from-amber-50/30 via-background to-orange-50/20">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2 text-amber-900">
               <Youtube className="h-5 w-5 text-red-600" /> Paste Video Link (YouTube / MP4 URL)
@@ -234,7 +247,7 @@ export default function AdminVideosPage() {
                   placeholder="e.g. Puja Performance, Devotee Review, Mahakaleshwar Aarti..."
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  disabled={isMaxLimitReached || uploading}
+                  disabled={uploading}
                 />
               </div>
 
@@ -245,26 +258,26 @@ export default function AdminVideosPage() {
                   placeholder="https://www.youtube.com/watch?v=... or shorts URL"
                   value={videoUrlInput}
                   onChange={(e) => setVideoUrlInput(e.target.value)}
-                  disabled={isMaxLimitReached || uploading}
+                  disabled={uploading}
                 />
               </div>
 
-              <Button type="submit" disabled={uploading || isMaxLimitReached} className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold">
+              <Button type="submit" disabled={uploading} className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold">
                 {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <LinkIcon className="h-4 w-4 mr-2" />}
-                Add Video to Divya Darshan ({items.length}/5)
+                Add Video to List ({items.length} Videos Total)
               </Button>
             </form>
           </CardContent>
         </Card>
 
         {/* Card 2: Upload MP4 File */}
-        <Card className={`shadow-sm border-orange-200/60 bg-gradient-to-br from-orange-50/30 via-background to-amber-50/20 ${isMaxLimitReached ? 'opacity-60' : ''}`}>
+        <Card className="shadow-sm border-orange-200/60 bg-gradient-to-br from-orange-50/30 via-background to-amber-50/20">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2 text-orange-900">
               <Upload className="h-5 w-5 text-orange-600" /> Upload Local MP4 / WebM File
             </CardTitle>
             <CardDescription>
-              Directly upload high-definition video files from your computer.
+              Directly upload video files from your computer.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -275,16 +288,16 @@ export default function AdminVideosPage() {
                 placeholder="e.g. Puja Performance, Devotee Review..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                disabled={isMaxLimitReached || uploading}
+                disabled={uploading}
               />
             </div>
 
-            <div className={`relative border-2 border-dashed border-orange-300 rounded-xl p-6 text-center transition-colors bg-background ${isMaxLimitReached ? 'cursor-not-allowed opacity-60' : 'hover:bg-orange-50/50 cursor-pointer'}`}>
+            <div className="relative border-2 border-dashed border-orange-300 rounded-xl p-6 text-center transition-colors bg-background hover:bg-orange-50/50 cursor-pointer">
               <input
                 type="file"
                 accept="video/*"
                 onChange={handleFileUpload}
-                disabled={uploading || isMaxLimitReached}
+                disabled={uploading}
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full disabled:cursor-not-allowed"
               />
               <div className="flex flex-col items-center gap-2 text-muted-foreground">
@@ -311,9 +324,9 @@ export default function AdminVideosPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-xl font-bold flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-amber-500" /> Published Divya Darshan Videos ({items.length} / 5)
+              <Sparkles className="h-5 w-5 text-amber-500" /> Published Videos ({items.length})
             </CardTitle>
-            <CardDescription>Video items currently published on Divya Darshan section of the homepage.</CardDescription>
+            <CardDescription>All video items currently active on the site.</CardDescription>
           </div>
           <Button variant="outline" size="sm" onClick={loadVideos}>Refresh List</Button>
         </CardHeader>
@@ -325,10 +338,10 @@ export default function AdminVideosPage() {
             </div>
           ) : items.length === 0 ? (
             <div className="text-center py-16 border-2 border-dashed rounded-xl bg-slate-50 text-muted-foreground">
-              No Divya Darshan videos uploaded yet. Add up to 5 videos using the forms above!
+              No videos uploaded yet. Add videos using the forms above!
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {items.map((item) => {
                 const embedUrl = getYouTubeEmbedUrl(item.url)
                 const isEditing = editingId === item.id
@@ -358,71 +371,97 @@ export default function AdminVideosPage() {
                     {/* Content Section */}
                     <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                       {isEditing ? (
-                        <div className="space-y-2">
-                          <Label className="text-xs">Personal Heading</Label>
-                          <Input
-                            size={1}
-                            value={editingTitle}
-                            onChange={(e) => setEditingTitle(e.target.value)}
-                            placeholder="Video Heading"
-                            className="text-xs h-8"
-                          />
-                          <div className="flex gap-1 pt-1">
-                            <Button size="xs" variant="default" className="h-7 text-xs bg-green-600 hover:bg-green-700" onClick={() => handleSaveEdit(item.id)}>
-                              <Check className="h-3 w-3 mr-1" /> Save
+                        <div className="space-y-3 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                          <div className="space-y-1">
+                            <Label className="text-xs font-bold text-amber-900">Heading (वीडियो शीर्षक)</Label>
+                            <Input
+                              value={editingTitle}
+                              onChange={(e) => setEditingTitle(e.target.value)}
+                              placeholder="Video Heading"
+                              className="text-xs bg-white"
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <Label className="text-xs font-bold text-amber-900">Video Link (YouTube / MP4 URL)</Label>
+                            <Input
+                              value={editingUrl}
+                              onChange={(e) => setEditingUrl(e.target.value)}
+                              placeholder="Video URL"
+                              className="text-xs bg-white"
+                            />
+                          </div>
+
+                          <div className="pt-1">
+                            <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-amber-300 bg-white hover:bg-amber-100 px-3 py-1.5 text-xs font-medium gap-1.5 w-full select-none">
+                              {editingUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5 text-amber-700" />}
+                              {editingUploading ? 'Uploading file…' : 'Replace with MP4 File'}
+                              <input type="file" accept="video/*" className="hidden" onChange={handleEditFileUpload} disabled={editingUploading} />
+                            </label>
+                          </div>
+
+                          <div className="flex gap-2 pt-2 border-t border-amber-200">
+                            <Button size="sm" variant="default" className="flex-1 text-xs bg-green-600 hover:bg-green-700 text-white font-bold" onClick={() => handleSaveEdit(item.id)}>
+                              <Check className="h-3.5 w-3.5 mr-1" /> Save Edit
                             </Button>
-                            <Button size="xs" variant="ghost" className="h-7 text-xs" onClick={() => setEditingId(null)}>
-                              <X className="h-3 w-3 mr-1" /> Cancel
+                            <Button size="sm" variant="outline" className="text-xs" onClick={() => setEditingId(null)}>
+                              <X className="h-3.5 w-3.5 mr-1" /> Cancel
                             </Button>
                           </div>
                         </div>
                       ) : (
                         <div>
-                          <span className="text-[10px] text-muted-foreground block mb-1">
-                            {new Date(item.createdAt).toLocaleDateString('en-IN')}
+                          <span className="text-[10px] text-muted-foreground block mb-1 font-medium">
+                            Added: {new Date(item.createdAt).toLocaleDateString('en-IN')}
                           </span>
                           <h4 className="font-bold text-sm line-clamp-2 leading-snug text-foreground">
                             {item.filename || 'Divya Darshan Video'}
                           </h4>
+                          <p className="text-[11px] text-muted-foreground truncate mt-1">
+                            {item.url}
+                          </p>
                         </div>
                       )}
 
                       {/* Action buttons */}
-                      <div className="flex items-center justify-between pt-2 border-t border-border/50 gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
-                          onClick={() => {
-                            navigator.clipboard.writeText(item.url)
-                            toast.success('Video link copied!')
-                          }}
-                        >
-                          <Copy className="h-3.5 w-3.5 mr-1" /> Copy
-                        </Button>
-
-                        <div className="flex items-center gap-1">
+                      {!isEditing && (
+                        <div className="flex items-center justify-between pt-2 border-t border-border/50 gap-2">
                           <Button
                             variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-blue-600 hover:bg-blue-50"
+                            size="sm"
+                            className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
                             onClick={() => {
-                              setEditingId(item.id)
-                              setEditingTitle(item.filename || '')
+                              navigator.clipboard.writeText(item.url)
+                              toast.success('Video link copied!')
                             }}
                           >
-                            <Edit2 className="h-3.5 w-3.5" />
+                            <Copy className="h-3.5 w-3.5 mr-1" /> Copy
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-red-600 hover:bg-red-50"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
+
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-blue-600 hover:bg-blue-50"
+                              onClick={() => {
+                                setEditingId(item.id)
+                                setEditingTitle(item.filename || '')
+                                setEditingUrl(item.url || '')
+                              }}
+                            >
+                              <Edit2 className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-red-600 hover:bg-red-50"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 )
@@ -434,3 +473,4 @@ export default function AdminVideosPage() {
     </div>
   )
 }
+

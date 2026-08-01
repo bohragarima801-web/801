@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,19 +44,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const count = await prisma.mediaLibrary.count({
-      where: {
-        OR: [
-          { type: 'VIDEO' },
-          { folder: { in: ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'] } }
-        ]
-      }
-    })
-
-    if (count >= 5) {
-      return NextResponse.json({ ok: false, error: 'Maximum limit of 5 videos reached. Please delete an existing video first.' }, { status: 400 })
-    }
-
     const { url, filename, folder, mimeType } = await req.json()
 
     if (!url) {
@@ -76,6 +64,12 @@ export async function POST(req: NextRequest) {
       }
     })
 
+    try {
+      revalidatePath('/')
+      revalidatePath('/pujas')
+      revalidateTag('pujas')
+    } catch {}
+
     return NextResponse.json({ ok: true, data: video })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save video' }, { status: 500 })
@@ -89,19 +83,28 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id, filename, folder } = await req.json()
+    const { id, filename, folder, url, mimeType } = await req.json()
 
     if (!id) {
       return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 })
     }
 
+    const dataToUpdate: any = {}
+    if (filename !== undefined) dataToUpdate.filename = filename
+    if (folder !== undefined) dataToUpdate.folder = folder
+    if (url !== undefined) dataToUpdate.url = url
+    if (mimeType !== undefined) dataToUpdate.mimeType = mimeType
+
     const updated = await prisma.mediaLibrary.update({
       where: { id },
-      data: {
-        filename,
-        folder
-      }
+      data: dataToUpdate
     })
+
+    try {
+      revalidatePath('/')
+      revalidatePath('/pujas')
+      revalidateTag('pujas')
+    } catch {}
 
     return NextResponse.json({ ok: true, data: updated })
   } catch (err: any) {
@@ -125,8 +128,15 @@ export async function DELETE(req: NextRequest) {
 
     await prisma.mediaLibrary.delete({ where: { id } })
 
+    try {
+      revalidatePath('/')
+      revalidatePath('/pujas')
+      revalidateTag('pujas')
+    } catch {}
+
     return NextResponse.json({ ok: true })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Delete failed' }, { status: 500 })
   }
 }
+

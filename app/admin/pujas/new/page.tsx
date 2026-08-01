@@ -15,10 +15,28 @@ import { toast } from 'sonner'
 import { Loader2, Plus, Trash2, Cloud, Upload } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
+import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 interface ItemRef {
   id: string
   name: string
+}
+
+function checkIsVideo(u: string) {
+  if (!u) return false
+  const lower = u.toLowerCase()
+  return (
+    lower.endsWith('.mp4') ||
+    lower.endsWith('.webm') ||
+    lower.endsWith('.mov') ||
+    lower.endsWith('.mkv') ||
+    lower.endsWith('.m3u8') ||
+    lower.includes('youtube.com') ||
+    lower.includes('youtu.be') ||
+    lower.includes('vimeo.com') ||
+    lower.includes('drive.google.com') ||
+    lower.startsWith('data:video/')
+  )
 }
 
 function NewPujaPage_Content() {
@@ -130,9 +148,9 @@ function NewPujaPage_Content() {
           setCustomHtml(p.customHtml || '')
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
-            const allUrls = p.images.map((img: any) => img.url)
-            const photos = allUrls.filter((u: string) => !u.endsWith('.mp4') && !u.endsWith('.webm') && !u.includes('youtube') && !u.includes('youtu.be'))
-            const vid = allUrls.find((u: string) => u.endsWith('.mp4') || u.endsWith('.webm') || u.includes('youtube') || u.includes('youtu.be'))
+            const allUrls = p.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean)
+            const photos = allUrls.filter((u: string) => !checkIsVideo(u))
+            const vid = allUrls.find((u: string) => checkIsVideo(u))
             setGalleryImages(photos)
             if (vid) setVideoUrl(vid)
           }
@@ -242,12 +260,7 @@ function NewPujaPage_Content() {
     }
   }
 
-  const getYouTubeEmbedUrl = (url: string) => {
-    if (!url) return null
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
-    const match = url.match(regExp)
-    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
-  }
+
 
   function handleDriveAdd() {
     if (!driveUrl) return
