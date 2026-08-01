@@ -125,10 +125,14 @@
    BASE ELEMENTS
    ============================================================ */
 @layer base {
-  * { @apply border-border; }
+  * { 
+    @apply border-border;
+    box-sizing: border-box;
+  }
   html, body {
-    overflow-x: hidden;
-    width: 100%;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
   }
   body {
     background-color: hsl(var(--background));
@@ -138,6 +142,7 @@
     padding: 0;
     -webkit-font-smoothing: antialiased;
   }
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', 'Georgia', serif;
