@@ -111,6 +111,53 @@ export default function ToolsPage() {
             </CardContent>
           </Card>
 
+          {/* Real Panchang Tool Card */}
+          <Card id="panchang" className="group hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden border-2 border-amber-500/40 bg-gradient-to-b from-amber-50/60 to-white">
+            <CardContent className="p-8 space-y-5 flex flex-col h-full">
+              <div className="flex items-start justify-between">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-200">
+                  <Calendar className="h-7 w-7 text-white" />
+                </div>
+                <Badge className="bg-amber-100 text-amber-900 font-bold border-amber-300">FREE PANCHANG</Badge>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-xl text-slate-900">आज का पंचांग (Vedic Panchang) 📅</h3>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed font-medium">
+                  5-year daily Panchang with Tithi, Nakshatra, Yoga, Karana, Abhijit Muhurat, Rahu Kaal, Sunrise/Sunset in Hindi & English.
+                </p>
+              </div>
+              <Button asChild className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl h-12 shadow-md">
+                <Link href="/panchang">
+                  View Panchang Now <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Real Festivals & Vrat Tool Card */}
+          <Card id="festivals" className="group hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden border-2 border-orange-500/40 bg-gradient-to-b from-orange-50/60 to-white">
+            <CardContent className="p-8 space-y-5 flex flex-col h-full">
+              <div className="flex items-start justify-between">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-200">
+                  <Sparkle className="h-7 w-7 text-white" />
+                </div>
+                <Badge className="bg-orange-100 text-orange-900 font-bold border-orange-300">FESTIVAL CALENDAR</Badge>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-xl text-slate-900">व्रत व त्योहार (Festivals & Vrat) 🎉</h3>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed font-medium">
+                  Complete Hindu festival calendar with monthly filters, Ekadashi, Vrat, Jayanti dates, and religious significance.
+                </p>
+              </div>
+              <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl h-12 shadow-md">
+                <Link href="/festivals">
+                  Explore Festivals <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+
           {/* Real Active Database Tools */}
           {tools
             .filter((t) => t.isActive)
