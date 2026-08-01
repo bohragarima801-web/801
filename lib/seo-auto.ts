@@ -167,3 +167,31 @@ export function autoGenerateToolSeo(data: {
     seoKeywords,
   }
 }
+
+export function getAutoSeoAlt(
+  title?: string | null,
+  type: 'puja' | 'product' | 'bhaktiseva' | 'temple' | 'general' = 'general',
+  index?: number
+): string {
+  const cleanTitle = (title || '').replace(/<[^>]*>?/gm, '').trim()
+  const suffix = index !== undefined && index > 0 ? ` (फ़ोटो ${index + 1})` : ''
+
+  if (!cleanTitle) {
+    if (type === 'puja') return 'ऑनलाइन पूजा बुकिंग - नाम व गोत्र संकल्प | DivyaYagyam'
+    if (type === 'product') return '100% अभिमंत्रित सिद्ध पूजन सामग्री | DivyaYagyam Store'
+    if (type === 'bhaktiseva') return 'पवित्र मंदिर चढ़ावा एवं भक्ति सेवा | DivyaYagyam'
+    return 'दिव्य यज्ञम - वैदिक पूजा एवं धर्म सेवा'
+  }
+
+  if (type === 'puja') {
+    return `${cleanTitle} — ऑनलाइन पूजा बुकिंग व संकल्प${suffix} | DivyaYagyam`
+  }
+  if (type === 'product') {
+    return `${cleanTitle} — 100% अभिमंत्रित वैदिक सामग्री${suffix} | DivyaYagyam`
+  }
+  if (type === 'bhaktiseva') {
+    return `${cleanTitle} — पवित्र मंदिर चढ़ावा एवं भक्ति सेवा${suffix} | DivyaYagyam`
+  }
+  return `${cleanTitle}${suffix} | DivyaYagyam`
+}
+

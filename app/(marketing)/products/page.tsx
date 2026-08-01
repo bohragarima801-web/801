@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -96,7 +97,7 @@ export default async function ProductsPage() {
                 <div className="relative aspect-square bg-slate-100 overflow-hidden pointer-events-none">
                   {p.coverImage ? (
                     <Image src={p.coverImage}
-                      alt={p.name}
+                      alt={getAutoSeoAlt(p.name, 'product')}
                       fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform group-hover:scale-105"
                     />

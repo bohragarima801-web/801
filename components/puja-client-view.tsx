@@ -15,6 +15,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { getYouTubeEmbedUrl } from '@/lib/youtube'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -142,7 +143,8 @@ export function PujaClientView({ puja }: { puja: any }) {
           {activeImage && (
             <img 
               src={activeImage} 
-              alt={puja.name} 
+              alt={getAutoSeoAlt(puja.name, 'puja')} 
+              title={getAutoSeoAlt(puja.name, 'puja')}
               className="w-full h-full object-cover object-center scale-105 filter blur-sm transition-opacity duration-1000" 
             />
           )}
@@ -232,7 +234,8 @@ export function PujaClientView({ puja }: { puja: any }) {
                 ) : (
                   <img 
                     src={currentMedia} 
-                    alt={puja.name} 
+                    alt={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
+                    title={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                   />
                 )}

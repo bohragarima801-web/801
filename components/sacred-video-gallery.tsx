@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Play, Sparkles, Flame, ArrowRight, Video as VideoIcon } from 'lucide-react'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 export interface VideoItem {
   id: string
@@ -72,7 +73,8 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                 {thumb ? (
                   <img
                     src={thumb}
-                    alt={video.filename || 'Divya Darshan Video'}
+                    alt={getAutoSeoAlt(video.filename, 'puja')}
+                    title={getAutoSeoAlt(video.filename, 'puja')}
                     className="relative z-10 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                     loading="lazy"
                     onError={(e) => {

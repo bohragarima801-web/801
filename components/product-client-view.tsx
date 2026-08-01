@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart-context'
 import { cn } from '@/lib/utils'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
@@ -104,7 +105,7 @@ export function ProductClientView({ product }: { product: any }) {
                 {isVideo(img.url) ? (
                   <div className="w-full h-full bg-slate-800 text-white flex items-center justify-center text-[9px] font-bold">VIDEO</div>
                 ) : (
-                  <img src={img.url} alt={img.alt} className="w-full h-full object-contain mix-blend-multiply" />
+                  <img src={img.url} alt={getAutoSeoAlt(product.name, 'product', idx)} title={getAutoSeoAlt(product.name, 'product', idx)} className="w-full h-full object-contain mix-blend-multiply" />
                 )}
               </button>
             ))}
@@ -117,7 +118,8 @@ export function ProductClientView({ product }: { product: any }) {
              ) : (
                <img 
                  src={selectedMedia} 
-                 alt={product.name} 
+                 alt={getAutoSeoAlt(product.name, 'product')} 
+                 title={getAutoSeoAlt(product.name, 'product')} 
                  className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500" 
                />
              )}
