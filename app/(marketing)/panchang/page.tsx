@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { ShubhMuhuratFinder } from '@/components/shubh-muhurat-finder'
 
 export default function PublicPanchangPage() {
   const [lang, setLang] = useState<'hi' | 'en'>('hi')
@@ -349,6 +350,9 @@ export default function PublicPanchangPage() {
             </div>
           </div>
         </div>
+
+        {/* --- Interactive Shubh Muhurat Search & Explorer Section --- */}
+        <ShubhMuhuratFinder />
 
         {/* --- High-Density Google SEO Content & FAQ Section --- */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border-4 border-amber-400 shadow-2xl space-y-6 text-slate-800">
