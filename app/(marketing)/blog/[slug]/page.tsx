@@ -151,9 +151,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 alt={coverAlt} 
                 title={post.title} 
                 itemProp="image" 
-                onError={(e) => {
-                  e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
-                }}
                 className="w-full h-full object-cover" 
               />
             </div>
@@ -217,9 +214,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                       loading="lazy"
                       decoding="async"
                       itemProp="image"
-                      onError={(e) => {
-                        e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
-                      }}
                       className="max-h-[500px] w-auto mx-auto object-contain rounded-2xl shadow-sm border border-amber-50"
                       {...props}
                     />

@@ -78,11 +78,9 @@ export default async function BlogListPage() {
                 src={getSafeImageUrl(post.coverImage)} 
                 alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`} 
                 title={post.title}
-                onError={(e) => {
-                  e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE
-                }}
                 className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
               />
+
             </div>
             <CardContent className="p-6 flex flex-col justify-between h-[300px]">
               <div className="space-y-3">
