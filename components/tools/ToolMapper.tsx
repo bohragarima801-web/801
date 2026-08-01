@@ -26,28 +26,33 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
   const slug = (tool?.slug || '').toLowerCase().trim()
 
   if (slug === 'panchang') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/panchang'
+    }
     return (
-      <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[750px] overflow-hidden relative">
-        <iframe
-          src="/panchang"
-          className="w-full h-full min-h-[750px] border-0"
-          title="Vedic Panchang"
-        />
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Vedic Panchang...</p>
+        <a href="/panchang" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Panchang Page Now ➔
+        </a>
       </div>
     )
   }
 
   if (slug === 'festivals' || slug === 'festival-calendar') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/festivals'
+    }
     return (
-      <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[750px] overflow-hidden relative">
-        <iframe
-          src="/festivals"
-          className="w-full h-full min-h-[750px] border-0"
-          title="Festival Calendar"
-        />
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Festival Calendar...</p>
+        <a href="/festivals" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Festival Calendar Now ➔
+        </a>
       </div>
     )
   }
+
 
   const Component = TOOL_REGISTRY[tool.slug]
 

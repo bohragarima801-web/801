@@ -132,9 +132,10 @@ export default function PublicPanchangPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-yellow-300 via-amber-100 to-amber-200 text-slate-900 py-8 px-4 sm:px-6 lg:px-8 relative font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-yellow-300 via-amber-100 to-amber-200 text-slate-900 py-6 px-3 sm:px-6 lg:px-8 relative font-sans max-w-full overflow-x-hidden">
       
-      <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-6 relative z-10 w-full">
+
         
         {/* --- Top Bright Yellow & Sacred Red Header --- */}
         <div className="bg-gradient-to-r from-red-700 via-red-600 to-orange-600 border-4 border-amber-400 rounded-3xl p-6 shadow-2xl text-white flex flex-col md:flex-row items-center justify-between gap-4">
