@@ -810,63 +810,124 @@ function NewPujaPage_Content() {
             </CardContent>
           </Card>
 
-          {/* 🎥 PUJA SACRED VIDEO MANAGEMENT (SEPARATE FROM PHOTOS) */}
-          <Card className="border-blue-200">
-            <CardHeader className="bg-blue-50/50 pb-3">
-              <CardTitle className="text-base flex items-center gap-2 text-blue-950">
-                🎥 Sacred Ritual Video & Live Stream (पूजा वीडियो - Photo से अलग)
+          {/* 🎥 PUJA SACRED VIDEO MANAGEMENT (PASTE LINK + FILE UPLOAD + REMOVE SYSTEM) */}
+          <Card className="border-blue-200 shadow-xs">
+            <CardHeader className="bg-blue-50/60 pb-3 border-b border-blue-100">
+              <CardTitle className="text-base flex items-center justify-between text-blue-950">
+                <span className="flex items-center gap-2">
+                  🎥 Sacred Ritual Video & Live Stream (पूजा वीडियो एडिट/अपलोड)
+                </span>
+                <Badge variant={videoUrl ? "default" : "outline"} className={videoUrl ? "bg-emerald-600 text-white" : "text-slate-500"}>
+                  {videoUrl ? '✓ Video Active' : 'No Video'}
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
-              <div className="space-y-2">
-                <Label className="text-xs font-bold text-slate-700">YouTube Video Link / MP4 Live Recording</Label>
-                <Input 
-                  type="text" 
-                  value={videoUrl} 
-                  onChange={(e) => setVideoUrl(e.target.value)} 
-                  placeholder="https://www.youtube.com/watch?v=... or https://...video.mp4" 
-                  className="text-xs"
-                />
+              
+              {/* Option A: Paste Video Link */}
+              <div className="space-y-1.5 p-3 rounded-lg border border-slate-200 bg-slate-50/50">
+                <Label className="text-xs font-bold text-slate-800 flex items-center justify-between">
+                  <span>1️⃣ Paste Video Link (YouTube / MP4 / Drive / Vimeo Link)</span>
+                  {videoUrl && (
+                    <button 
+                      type="button" 
+                      onClick={() => { setVideoUrl(''); toast.info('Video link cleared'); }}
+                      className="text-[11px] text-red-600 hover:underline font-semibold"
+                    >
+                      Clear Link (लिंक हटाएं)
+                    </button>
+                  )}
+                </Label>
+                <div className="flex gap-2">
+                  <Input 
+                    type="text" 
+                    value={videoUrl} 
+                    onChange={(e) => setVideoUrl(e.target.value)} 
+                    placeholder="e.g. https://www.youtube.com/watch?v=... or https://site.com/video.mp4" 
+                    className="text-xs bg-white"
+                  />
+                  {videoUrl && (
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setVideoUrl('')}
+                      className="text-xs text-red-600 border-red-200 hover:bg-red-50 shrink-0"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+                </div>
                 <p className="text-[10px] text-slate-500">
-                  यह वीडियो फ़ोटो से पूरी तरह अलग रहेगा और पूजा पेज के वीडियो सेक्शन में प्ले होगा।
+                  YouTube links, Vimeo, or direct MP4 video URLs paste कर सकते हैं।
                 </p>
               </div>
 
-              <label className="cursor-pointer inline-flex items-center justify-center rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-xs font-semibold gap-2 w-full select-none">
-                {uploadingVideo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4 text-blue-600" />}
-                {uploadingVideo ? 'Uploading Video…' : 'Upload Video File (MP4/WebM)'}
-                <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} disabled={uploadingVideo} />
-              </label>
+              {/* Option B: Upload Video File */}
+              <div className="space-y-1.5 p-3 rounded-lg border border-slate-200 bg-slate-50/50">
+                <Label className="text-xs font-bold text-slate-800 block">
+                  2️⃣ Upload Video File directly from device (डिवाइस से वीडियो फ़ाइल अपलोड करें)
+                </Label>
+                <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-900 px-4 py-2.5 text-xs font-bold gap-2 w-full select-none transition-all active:scale-[0.99]">
+                  {uploadingVideo ? <Loader2 className="h-4 w-4 animate-spin text-blue-700" /> : <Upload className="h-4 w-4 text-blue-700" />}
+                  {uploadingVideo ? 'Uploading Video File to Server…' : '📁 Choose Video File (MP4 / WebM / MOV)'}
+                  <input 
+                    type="file" 
+                    accept="video/*" 
+                    className="hidden" 
+                    onChange={handleVideoUpload} 
+                    disabled={uploadingVideo} 
+                  />
+                </label>
+              </div>
 
-              {/* Video Live Preview */}
-              {videoUrl && (
-                <div className="space-y-1.5 pt-2 border-t">
-                  <Label className="text-xs font-bold text-emerald-700">Live Video Preview:</Label>
-                  <div className="aspect-video rounded-xl overflow-hidden border border-slate-300 bg-black relative shadow-xs">
+              {/* Video Live Preview & Permanent Removal */}
+              {videoUrl ? (
+                <div className="space-y-2 pt-2 border-t border-slate-200">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                      Live Video Preview Player (संलग्न वीडियो प्रीव्यू):
+                    </Label>
+                    <Button 
+                      type="button" 
+                      variant="destructive" 
+                      size="sm" 
+                      onClick={() => {
+                        setVideoUrl('')
+                        toast.success('Video removed from puja')
+                      }} 
+                      className="text-xs h-7 px-2.5 font-bold shadow-2xs"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1" /> Video Hataen (Remove Video)
+                    </Button>
+                  </div>
+
+                  <div className="aspect-video rounded-xl overflow-hidden border border-slate-300 bg-black relative shadow-md">
                     {getYouTubeEmbedUrl(videoUrl) ? (
                       <iframe 
                         src={getYouTubeEmbedUrl(videoUrl)!} 
                         className="w-full h-full" 
                         title="YouTube Puja Video Preview" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen 
                       />
                     ) : (
-                      <video src={videoUrl} controls className="w-full h-full object-contain" />
+                      <video src={getYouTubeEmbedUrl(videoUrl) || videoUrl} controls className="w-full h-full object-contain" />
                     )}
                   </div>
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setVideoUrl('')} 
-                    className="text-red-600 hover:text-red-700 text-xs h-7 px-2"
-                  >
-                    <Trash2 className="h-3 w-3 mr-1" /> Remove Video
-                  </Button>
+                </div>
+              ) : (
+                <div className="text-center py-4 border border-dashed rounded-lg bg-slate-50 text-slate-400 space-y-1">
+                  <Video className="h-6 w-6 mx-auto text-slate-300" />
+                  <p className="text-xs font-medium text-slate-500">कोई वीडियो संलग्न नहीं है (No video attached)</p>
+                  <p className="text-[10px] text-slate-400">ऊपर दिए लिंक इनपुट या फाइल अपलोड से वीडियो जोड़ें।</p>
                 </div>
               )}
+
             </CardContent>
           </Card>
+
         </div>
       </form>
     </div>
