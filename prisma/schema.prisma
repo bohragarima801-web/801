@@ -1050,7 +1050,9 @@ model Blog {
   excerpt        String?
   content        String     @db.Text
   coverImage     String?
+  coverImageAlt  String?
   videoUrl       String?
+
   isVideoEnabled Boolean    @default(true)
   status         BlogStatus @default(DRAFT)
   views          Int        @default(0)
