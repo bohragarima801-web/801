@@ -46,60 +46,8 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
   return { isVideo: false, thumbUrl: url }
 }
 
-const fallbackTestimonials = [
-  { name: 'रविंद्र दीक्षित (Ravindra Dixit)', location: 'लखनऊ', rating: 5, message: 'काशी विश्वनाथ मंदिर में की गई पूजा का अनुभव अत्यंत दिव्य था। प्रसाद भी 4 दिनों में घर मिल गया।' },
-  { name: 'दीपक चौरसिया (Deepak Chaurasia)', location: 'भोपाल', rating: 5, message: 'लाइव स्ट्रीमिंग की क्वालिटी बहुत अच्छी थी। घर बैठे लग रहा था कि हम मंदिर के गर्भगृह में ही बैठे हैं।' },
-  { name: 'अंजली मेनन (Anjali Menon)', location: 'बैंगलोर', rating: 5, message: 'पंडित जी ने मंत्रोच्चारण के साथ मेरा नाम और गोत्र स्पष्ट रूप से बोला। बहुत संतुष्ट हूँ।' },
-]
+  const testimonials = dbTestimonials
 
-export const revalidate = 30
-
-export default async function HomePage() {
-  const siteData = await getDynamicSiteConfig()
-  
-  const [products, dbPujas, dbTestimonials, heroSlides, mediaData] = await Promise.all([
-    getCachedProducts(),
-    getCachedPujas(),
-    getCachedTestimonials(),
-    getCachedHeroSlides(),
-    getCachedHomePageMedia()
-  ])
-
-  const { pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries } = mediaData
-
-  // Filter all uploaded items that are videos or contain video links
-  const allMediaVideos = dbVideosRaw.filter((m: any) => {
-    if (!m.url) return false
-    const url = m.url.toLowerCase()
-    return m.type === 'VIDEO' || 
-      url.includes('youtube.com') || 
-      url.includes('youtu.be') || 
-      url.includes('vimeo.com') || 
-      url.endsWith('.mp4') || 
-      url.endsWith('.webm') || 
-      url.endsWith('.mov') ||
-      ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'].includes(m.folder || '')
-  })
-
-  const galleryVideos = dbGalleries.filter((g: any) => {
-    if (!g.coverImage) return false
-    const url = g.coverImage.toLowerCase()
-    return g.type === 'VIDEO' || url.includes('youtube.com') || url.includes('youtu.be') || url.endsWith('.mp4')
-  }).map((g: any) => ({
-    id: g.id,
-    url: g.coverImage,
-    filename: g.title,
-    folder: 'Live Darshan',
-    type: 'VIDEO',
-    createdAt: g.createdAt
-  }))
-
-  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 5)
-
-  let testimonials = dbTestimonials
-  if (testimonials.length === 0) {
-    testimonials = fallbackTestimonials as any
-  }
 
   // Inject Media Library Festival Events into Hero Slider
   const mediaHeroSlides = festivalEvents.map((m: any, i: number) => ({
@@ -433,40 +381,43 @@ export default async function HomePage() {
       <SacredAstroTools />
 
       {/* TESTIMONIALS */}
-      <section className="container pb-16">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <span className="sacred-subtitle text-primary">Devotee Voices</span>
-          <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Blessings Shared by Our Devotees</h2>
-          <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Hundreds of families have received the Lord's blessings through our services.</p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((t: any, i: number) => (
-            <Card key={i} className="border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-card shadow-sm">
-              <CardContent className="p-6 md:p-8 space-y-5">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
-                  ))}
-                </div>
-                <p className="text-sm text-foreground/80 leading-relaxed italic">“{t.message}”</p>
-                <div className="flex items-center gap-4 pt-4 border-t border-border/50">
-                  <div className="relative h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-border">
-                    {t.avatar ? (
-                      <Image src={t.avatar} alt={t.name} fill sizes="40px" className="object-cover" />
-                    ) : (
-                      t.name[0]
-                    )}
+      {testimonials && testimonials.length > 0 && (
+        <section className="container pb-16">
+          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+            <span className="sacred-subtitle text-primary">Devotee Voices</span>
+            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Blessings Shared by Our Devotees</h2>
+            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Hundreds of families have received the Lord's blessings through our services.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {testimonials.map((t: any, i: number) => (
+              <Card key={i} className="border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-card shadow-sm">
+                <CardContent className="p-6 md:p-8 space-y-5">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
+                    ))}
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-foreground leading-tight">{t.name}</p>
-                    <p className="text-xs text-muted-foreground font-medium mt-0.5">{t.location}</p>
+                  <p className="text-sm text-foreground/80 leading-relaxed italic">“{t.message}”</p>
+                  <div className="flex items-center gap-4 pt-4 border-t border-border/50">
+                    <div className="relative h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-border">
+                      {t.avatar ? (
+                        <Image src={t.avatar} alt={t.name} fill sizes="40px" className="object-cover" />
+                      ) : (
+                        t.name[0]
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-foreground leading-tight">{t.name}</p>
+                      <p className="text-xs text-muted-foreground font-medium mt-0.5">{t.location}</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+      )}
+
 
       {/* LIVE DEVOTEE REVIEWS (FROM MEDIA LIBRARY) */}
       {customerReviews.length > 0 && (
