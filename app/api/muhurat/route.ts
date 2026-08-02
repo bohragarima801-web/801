@@ -1,4 +1,4 @@
-import { NextResponse } from 'next'
+import { NextResponse } from 'next/server'
 import { SHUBH_MUHURAT_DATA } from '@/lib/shubh-muhurat-data'
 import fs from 'fs'
 import path from 'path'
