@@ -319,8 +319,9 @@ export function generateArticleSchema({
 export function generateLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'ReligiousOrganization',
+    '@type': ['LocalBusiness', 'PlaceOfWorship'],
     name: SITE_NAME,
+
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
     image: DEFAULT_OG_IMAGE,
