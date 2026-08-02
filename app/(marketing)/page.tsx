@@ -46,7 +46,53 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
   return { isVideo: false, thumbUrl: url }
 }
 
+export const revalidate = 30
+
+export default async function HomePage() {
+
+  const siteData = await getDynamicSiteConfig()
+  
+  const [products, dbPujas, dbTestimonials, heroSlides, mediaData] = await Promise.all([
+    getCachedProducts(),
+    getCachedPujas(),
+    getCachedTestimonials(),
+    getCachedHeroSlides(),
+    getCachedHomePageMedia()
+  ])
+
+  const { pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries } = mediaData
+
+  // Filter all uploaded items that are videos or contain video links
+  const allMediaVideos = dbVideosRaw.filter((m: any) => {
+    if (!m.url) return false
+    const url = m.url.toLowerCase()
+    return m.type === 'VIDEO' || 
+      url.includes('youtube.com') || 
+      url.includes('youtu.be') || 
+      url.includes('vimeo.com') || 
+      url.endsWith('.mp4') || 
+      url.endsWith('.webm') || 
+      url.endsWith('.mov') ||
+      ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'].includes(m.folder || '')
+  })
+
+  const galleryVideos = dbGalleries.filter((g: any) => {
+    if (!g.coverImage) return false
+    const url = g.coverImage.toLowerCase()
+    return g.type === 'VIDEO' || url.includes('youtube.com') || url.includes('youtu.be') || url.endsWith('.mp4')
+  }).map((g: any) => ({
+    id: g.id,
+    url: g.coverImage,
+    filename: g.title,
+    folder: 'Live Darshan',
+    type: 'VIDEO',
+    createdAt: g.createdAt
+  }))
+
+  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 5)
+
   const testimonials = dbTestimonials
+
 
 
   // Inject Media Library Festival Events into Hero Slider
