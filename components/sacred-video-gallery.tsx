@@ -22,43 +22,16 @@ interface SacredVideoGalleryProps {
   videos?: VideoItem[]
 }
 
-const fallbackVideos: VideoItem[] = [
-  {
-    id: 'fb-1',
-    url: 'https://www.youtube.com/watch?v=1V_y_J1bO7M',
-    filename: 'काशी विश्वनाथ महाआरती एवं भव्य दर्शन (Kashi Vishwanath Live)',
-    folder: 'Live Darshan',
-  },
-  {
-    id: 'fb-2',
-    url: 'https://www.youtube.com/watch?v=0k5G6o9-nVs',
-    filename: 'श्री महाकालेश्वर भस्म आरती उज्जैन (Mahakaleshwar Bhasma Aarti)',
-    folder: 'Past Puja',
-  },
-  {
-    id: 'fb-3',
-    url: 'https://www.youtube.com/watch?v=A32m12yX-8s',
-    filename: 'श्री केदारनाथ धाम आरती एवं पावन दर्शन (Kedarnath Dham Aarti)',
-    folder: 'Aarti & Bhajan',
-  },
-  {
-    id: 'fb-4',
-    url: 'https://www.youtube.com/watch?v=uK1X_aJ-nVs',
-    filename: 'भक्तों का दिव्य अनुभव एवं संतोष (Devotee Review Highlight)',
-    folder: 'Customer Review',
-  },
-]
+const fallbackVideos: VideoItem[] = []
 
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
-  // Deduplicate and prioritize uploaded admin videos over fallback samples
-  const allCombined = [...(videos || []), ...fallbackVideos]
-  const uniqueMap = new Map()
-  allCombined.forEach(v => {
-    if (v.url && !uniqueMap.has(v.url)) {
-      uniqueMap.set(v.url, v)
-    }
-  })
-  const displayVideos = Array.from(uniqueMap.values())
+  // Use authentic uploaded videos from DB
+  const displayVideos = (videos && videos.length > 0) ? videos : []
+
+  if (displayVideos.length === 0) {
+    return null
+  }
+
 
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
