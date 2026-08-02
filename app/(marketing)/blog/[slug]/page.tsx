@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image';
 import Script from 'next/script'
-import { generateArticleSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
+import { generateArticleSchema, generateBreadcrumbSchema, generateFaqSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User, Eye } from 'lucide-react'
@@ -73,6 +73,27 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
   const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
+  const graphElements: any[] = [
+    generateArticleSchema({
+      title: post.title,
+      description: post.excerpt || post.content?.substring(0, 200) || '',
+      image: post.coverImage || '/logo.jpg',
+      imageAlt: coverAlt,
+      slug: post.slug,
+      datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
+      dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
+    }),
+    generateBreadcrumbSchema([
+      { name: 'Home', url: BASE_URL },
+      { name: 'Blog', url: `${BASE_URL}/blog` },
+      { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
+    ]),
+  ]
+
+  if (faqs && faqs.length > 0) {
+    graphElements.push(generateFaqSchema(faqs.map(f => ({ question: f.question, answer: f.answer }))))
+  }
+
   return (
     <>
       <Script
@@ -81,22 +102,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@graph": [
-              generateArticleSchema({
-                title: post.title,
-                description: post.excerpt || post.content?.substring(0, 200) || '',
-                image: post.coverImage || '/logo.jpg',
-                imageAlt: coverAlt,
-                slug: post.slug,
-                datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
-                dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
-              }),
-              generateBreadcrumbSchema([
-                { name: 'Home', url: BASE_URL },
-                { name: 'Blog', url: `${BASE_URL}/blog` },
-                { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
-              ]),
-            ]
+            "@graph": graphElements
           })
         }}
       />

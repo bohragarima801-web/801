@@ -1,5 +1,6 @@
-import { generatePageMeta } from '@/lib/seo'
+import { generatePageMeta, BASE_URL } from '@/lib/seo'
 import { Metadata } from 'next'
+import Script from 'next/script'
 
 export const metadata: Metadata = generatePageMeta({
   title: 'निःशुल्क वैदिक ज्योतिष टूल — Spiritual & Astro Tools',
@@ -8,5 +9,27 @@ export const metadata: Metadata = generatePageMeta({
 })
 
 export default function ToolsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Spiritual & Astro Tools | DivyaYagyam',
+    description: 'Vedic Kundali Matching, Panchang, Shubh Muhurat, Rudraksha Suggestion & AI Astro Guidance.',
+    url: `${BASE_URL}/tools`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'DivyaYagyam',
+      url: BASE_URL,
+    },
+  }
+
+  return (
+    <>
+      <Script
+        id="schema-tools-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {children}
+    </>
+  )
 }

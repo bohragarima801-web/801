@@ -1,12 +1,16 @@
 import { Metadata } from 'next'
+import { generatePageMeta, generateFaqSchema, BASE_URL } from '@/lib/seo'
+import Script from 'next/script'
 import { ShubhMuhuratFinder } from '@/components/shubh-muhurat-finder'
 import { Sparkles, Calendar, ShieldCheck, HeartHandshake, Home, Car, Baby, Building2 } from 'lucide-react'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generatePageMeta({
   title: 'शुभ मुहूर्त 2026 - 2030 (Shubh Muhurat Finder) | विवाह, गृह प्रवेश, वाहन खरीदी तिथि',
   description:
     'वर्ष 2026 से 2030 तक के सभी शुभ मुहूर्त - विवाह मुहूर्त, गृह प्रवेश, वाहन खरीदी, मुंडन, नामकरण एवं प्रॉपर्टी खरीदी हेतु सटीक तिथि, नक्षत्र, शुभ समय एवं तिथियां।',
+  path: '/muhurat',
+  isAbsoluteTitle: true,
   keywords: [
     'Shubh Muhurat 2026',
     'Vivah Muhurat 2026',
@@ -20,26 +24,49 @@ export const metadata: Metadata = {
     'Shubh Muhurat 2029',
     'Shubh Muhurat 2030',
   ],
-  openGraph: {
-    title: 'शुभ मुहूर्त 2026 - 2030 | Shubh Muhurat Search & Calendar',
-    description: 'सटीक तिथि, नक्षत्र एवं समय के साथ 2026-2030 के प्रमाणित शुभ मुहूर्त खोजें।',
-    type: 'website',
-  },
-}
+})
 
 export default function ShubhMuhuratPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'Shubh Muhurat 2026 - 2030 Finder',
-    description:
-      'Verified Hindu Shubh Muhurat for Vivah, Griha Pravesh, Vahan Khareedi, Mundan, Naamkaran & Property purchase from 2026 to 2030.',
-    url: 'https://divyayagyam.com/muhurat',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: 'Shubh Muhurat 2026 - 2030 Finder | DivyaYagyam',
+        description:
+          'Verified Hindu Shubh Muhurat for Vivah, Griha Pravesh, Vahan Khareedi, Mundan, Naamkaran & Property purchase from 2026 to 2030.',
+        url: `${BASE_URL}/muhurat`,
+        inLanguage: ['hi', 'en'],
+        publisher: {
+          '@type': 'Organization',
+          name: 'DivyaYagyam',
+          url: BASE_URL,
+        },
+      },
+      generateFaqSchema([
+        {
+          question: 'वर्ष 2026 के लिए विवाह मुहूर्त की गणना कैसे की जाती है?',
+          answer:
+            'विवाह मुहूर्त की गणना वर-वधू के सूर्य, चंद्रमा और गुरु (बृहस्पति) बल के साथ-साथ नक्षत्र, तिथि व करण की शुद्धता के आधार पर की जाती है।',
+        },
+        {
+          question: 'गृह प्रवेश हेतु कौन से महीने शुभ माने जाते हैं?',
+          answer:
+            'वैशाख, ज्येष्ठ, माघ और फाल्गुन महीने गृह प्रवेश के लिए विशेष रूप से अत्यंत शुभ माने जाते हैं।',
+        },
+        {
+          question: 'क्या राहुकाल में वाहन या संपत्ति की खरीदारी की जा सकती है?',
+          answer:
+            'नहीं, राहुकाल को अशुभ समय माना जाता है। किसी भी नए वाहन, संपत्ति या मूल्यवान वस्तु की खरीदारी शुभ मुहूर्त में ही करनी चाहिए।',
+        },
+      ]),
+    ],
   }
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
-      <script
+      <Script
+        id="schema-muhurat-page"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
