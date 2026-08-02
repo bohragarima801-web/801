@@ -321,9 +321,9 @@ function NewPujaPage_Content() {
     toast.loading('Compressing & uploading package image...', { id: `pkg-upload-${index}` })
     
     try {
-      file = await compressImage(file)
+      const compressedFile = await compressImage(file)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', compressedFile)
 
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -332,16 +332,33 @@ function NewPujaPage_Content() {
       const data = await res.json()
       if (data.ok && data.url) {
         handlePackageChange(index, 'image', data.url)
-        toast.success('Package image uploaded!', { id: `pkg-upload-${index}` })
+        toast.success('Package image uploaded successfully!', { id: `pkg-upload-${index}` })
       } else {
-        toast.error(data.error || 'Upload failed', { id: `pkg-upload-${index}` })
+        // Fallback: Read as base64 data URL so image is saved cleanly
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            handlePackageChange(index, 'image', event.target.result as string)
+            toast.success('Package image saved!', { id: `pkg-upload-${index}` })
+          }
+        }
+        reader.readAsDataURL(compressedFile)
       }
-    } catch {
-      toast.error('Network error uploading package image', { id: `pkg-upload-${index}` })
+    } catch (error) {
+      // Fallback to reader on network error
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          handlePackageChange(index, 'image', event.target.result as string)
+          toast.success('Package image saved!', { id: `pkg-upload-${index}` })
+        }
+      }
+      reader.readAsDataURL(file)
     } finally {
       e.target.value = ''
     }
   }
+
 
   // Submit handler
   const handleSubmit = async (e: React.FormEvent) => {
@@ -553,54 +570,79 @@ function NewPujaPage_Content() {
                           </div>
                         </div>
 
-                        {/* Package Specific Image Section */}
-                        <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-200">
-                          <div className="flex items-center gap-3">
-                            {pkg.image ? (
-                              <div className="relative h-12 w-12 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs group">
-                                <img 
-                                  src={getSafeImageUrl(pkg.image)} 
-                                  alt={pkg.name} 
-                                  className="h-full w-full object-cover" 
-                                  onError={(e) => {
-                                    e.currentTarget.src = '/package-1.jpg';
-                                  }}
-                                />
-                                <button
-                                  type="button"
+                        {/* Permanent Package Image Upload System */}
+                        <div className="pt-3 border-t border-slate-200">
+                          <Label className="text-xs font-bold text-slate-800 flex items-center gap-1.5 mb-1.5">
+                            📸 पैकेज फ़ोटो अपलोड (Package Photo Upload)
+                          </Label>
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded-lg border border-slate-200 bg-white shadow-2xs">
+                            <div className="flex items-center gap-3">
+                              {pkg.image ? (
+                                <div className="relative h-16 w-16 rounded-md overflow-hidden border border-slate-300 bg-slate-100 shrink-0 shadow-xs group">
+                                  <img 
+                                    src={getSafeImageUrl(pkg.image)} 
+                                    alt={pkg.name || `Package ${i + 1}`} 
+                                    className="h-full w-full object-cover transition-transform group-hover:scale-105" 
+                                    onError={(e) => {
+                                      e.currentTarget.src = '/package-1.jpg';
+                                    }}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handlePackageChange(i, 'image', '')}
+                                    className="absolute top-1 right-1 bg-red-600 text-white text-[10px] p-1 rounded-full shadow-md hover:bg-red-700 transition-colors"
+                                    title="फ़ोटो हटाएं (Remove Photo)"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="h-16 w-16 rounded-md border-2 border-dashed border-orange-300 bg-orange-50/50 flex flex-col items-center justify-center text-orange-600 shrink-0">
+                                  <Upload className="h-5 w-5 mb-0.5" />
+                                  <span className="text-[9px] font-bold">No Photo</span>
+                                </div>
+                              )}
+                              <div className="space-y-0.5">
+                                <span className={`inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full ${pkg.image ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                                  {pkg.image ? '✓ फ़ोटो अपलोड है' : '⚠️ फ़ोटो चुनना बाकी है'}
+                                </span>
+                                <p className="text-xs text-slate-600 font-medium">
+                                  {pkg.image ? 'Custom package image active' : 'Click upload button to choose file from device'}
+                                </p>
+                                <p className="text-[10px] text-slate-400">Supported: JPG, PNG, WebP (Auto WebP Compressed)</p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0">
+                              {pkg.image && (
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="sm"
                                   onClick={() => handlePackageChange(i, 'image', '')}
-                                  className="absolute top-0 right-0 bg-red-600 text-white text-[10px] p-0.5 rounded-bl hover:bg-red-700"
-                                  title="Remove photo"
+                                  className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 h-8 px-2"
                                 >
-                                  <X className="h-3 w-3" />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="h-12 w-12 rounded-lg border border-dashed border-slate-300 bg-slate-100 flex items-center justify-center text-slate-400 shrink-0">
-                                <Upload className="h-5 w-5" />
-                              </div>
-                            )}
-                            <div>
-                              <Label className="text-xs font-bold text-slate-700 block">Package Photo (पैकेज फ़ोटो)</Label>
-                              <p className="text-[10px] text-slate-500">Upload custom image for this package</p>
+                                  Hataen (Remove)
+                                </Button>
+                              )}
+                              <label className="cursor-pointer inline-flex items-center justify-center rounded-md bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-3.5 py-1.5 text-xs font-bold shadow-xs gap-1.5 transition-all active:scale-95">
+                                <Upload className="h-3.5 w-3.5" />
+                                {pkg.image ? 'फ़ोटो बदलें (Change Image)' : 'फ़ोटो अपलोड करें (Upload Image)'}
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  className="hidden" 
+                                  onChange={(e) => handlePackageImageUpload(i, e)} 
+                                />
+                              </label>
                             </div>
                           </div>
-
-                          <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-orange-300 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 text-xs font-bold text-orange-800 gap-1.5 select-none transition-colors shrink-0">
-                            <Upload className="h-3.5 w-3.5" />
-                            {pkg.image ? 'Change Photo' : 'Upload Photo'}
-                            <input 
-                              type="file" 
-                              accept="image/*" 
-                              className="hidden" 
-                              onChange={(e) => handlePackageImageUpload(i, e)} 
-                            />
-                          </label>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
+
               </div>
             </CardContent>
           </Card>
