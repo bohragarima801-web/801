@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/panchang`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/festivals`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${baseUrl}/muhurat`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/pujas`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
 
     { url: `${baseUrl}/products`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
@@ -82,31 +83,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
-      // 3. Puja Categories & Product Categories
-      const [pujaCats, prodCats] = await Promise.all([
-        prisma.pujaCategory.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
-        prisma.productCategory.findMany({ where: { isActive: true }, select: { slug: true } }),
-      ])
-      pujaCats.forEach(c => {
-        if (c.slug) {
-          sitemapEntries.push({
-            url: `${baseUrl}/pujas?category=${encodeURIComponent(c.slug.trim())}`,
-            lastModified: c.updatedAt || now,
-            changeFrequency: 'daily',
-            priority: 0.85,
-          })
-        }
-      })
-      prodCats.forEach(c => {
-        if (c.slug) {
-          sitemapEntries.push({
-            url: `${baseUrl}/products?category=${encodeURIComponent(c.slug.trim())}`,
-            lastModified: now,
-            changeFrequency: 'daily',
-            priority: 0.85,
-          })
-        }
-      })
 
       // 4. Blog Posts (Only Published)
       const posts = await prisma.blog.findMany({
