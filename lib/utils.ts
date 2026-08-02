@@ -99,15 +99,11 @@ export function getSafeImageUrl(url?: string | null, fallback = DEFAULT_PLACEHOL
 export async function compressImage(file: File, options?: any): Promise<File> {
   if (!file.type.startsWith('image/')) return file
   
-  // Fast native canvas-based compression client-side
+  // High-performance client-side WebP compression & box-fitting canvas pipeline
   try {
-    const maxWidthOrHeight = options?.maxWidthOrHeight || 1200
-    const quality = options?.quality || 0.75
-
-    // If file is already small (e.g. less than 150KB), just return it
-    if (file.size < 150 * 1024) {
-      return file
-    }
+    const maxWidthOrHeight = options?.maxWidthOrHeight || 1400
+    const quality = options?.quality || 0.80
+    const outputType = 'image/webp'
 
     return await new Promise((resolve) => {
       const reader = new FileReader()
@@ -120,6 +116,7 @@ export async function compressImage(file: File, options?: any): Promise<File> {
           let width = img.width
           let height = img.height
 
+          // Fit dimensions proportionally within box limits
           if (width > maxWidthOrHeight || height > maxWidthOrHeight) {
             if (width > height) {
               height = Math.round((height * maxWidthOrHeight) / width)
@@ -139,25 +136,19 @@ export async function compressImage(file: File, options?: any): Promise<File> {
             return
           }
 
+          ctx.imageSmoothingEnabled = true
+          ctx.imageSmoothingQuality = 'high'
           ctx.drawImage(img, 0, 0, width, height)
-          
-          const outputType = options?.fileType || 'image/webp'
           
           canvas.toBlob(
             (blob) => {
               if (blob) {
-                const ext = outputType === 'image/webp' ? '.webp' : '.jpg'
-                const newName = file.name.replace(/\.[^/.]+$/, "") + ext
+                const newName = file.name.replace(/\.[^/.]+$/, "") + ".webp"
                 const compressedFile = new File([blob], newName, {
                   type: outputType,
                   lastModified: Date.now(),
                 })
-                // If compressed file is actually larger than original, return original
-                if (compressedFile.size >= file.size) {
-                  resolve(file)
-                } else {
-                  resolve(compressedFile)
-                }
+                resolve(compressedFile)
               } else {
                 resolve(file)
               }
@@ -170,33 +161,10 @@ export async function compressImage(file: File, options?: any): Promise<File> {
       }
       reader.onerror = () => resolve(file)
     })
-  } catch (error) {
-    console.warn('Fast canvas image compression failed, falling back to browser-image-compression', error)
-  }
-
-  try {
-    const defaultOptions = {
-      maxSizeMB: 0.3, // Compress to ~300KB
-      maxWidthOrHeight: 1200,
-      useWebWorker: true,
-      fileType: 'image/webp', // Force WebP conversion
-      ...options,
-    }
-    const compressedBlob = await imageCompression(file, defaultOptions)
-    
-    // Ensure the filename has a .webp extension
-    const newName = file.name.replace(/\.[^/.]+$/, "") + ".webp"
-    
-    return new File([compressedBlob], newName, {
-      type: 'image/webp',
-      lastModified: Date.now(),
-    })
-  } catch (error) {
-    console.warn('Image compression fallback failed', error)
-    if (file.size > 4 * 1024 * 1024) {
-      throw new Error('Image is too large and compression failed. Please choose a smaller image (under 4MB).')
-    }
-    return file // Fallback to original
+  } catch (err) {
+    console.warn('Native canvas WebP compression failed:', err)
+    return file
   }
 }
+
 
