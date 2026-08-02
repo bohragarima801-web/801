@@ -146,9 +146,7 @@ export function AiChat({
                       {m.content}
                       {!isUser && m.content && (
                         <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(m.content).then(() => toast.success('Copied!')).catch(() => {})
-                          }}
+                          onClick={() => {}}
                           className="ml-2 opacity-40 hover:opacity-100 transition-opacity"
                           title="Copy"
                         >

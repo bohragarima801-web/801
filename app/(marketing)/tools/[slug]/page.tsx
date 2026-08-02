@@ -7,8 +7,8 @@ import { AlertCircle, Lock, Sparkles, Wrench } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
+
 import { Metadata } from 'next'
-import { BASE_URL } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -17,44 +17,40 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const normalizedSlug = decodeURIComponent(slug).toLowerCase().trim()
 
-  const tool = await prisma.spiritualTool.findFirst({
+  let tool = await prisma.spiritualTool.findFirst({
     where: {
       OR: [
         { slug: slug },
         { slug: normalizedSlug },
         { id: slug }
       ]
-    },
-    select: { name: true, description: true, slug: true }
+    }
   })
 
-  if (!tool) return { title: 'Spiritual Tool | DivyaYagyam' }
+  if (!tool) {
+    tool = await prisma.spiritualTool.findFirst({
+      where: {
+        slug: { equals: normalizedSlug, mode: 'insensitive' }
+      }
+    })
+  }
 
-  const canonicalUrl = `${BASE_URL}/tools/${tool.slug}`
-  const title = `${tool.name} — Free Vedic Astro Tool | DivyaYagyam`
-  const description = tool.description || `Calculate ${tool.name} online with accurate Vedic astrology algorithms at DivyaYagyam.`
+  if (!tool) return { title: 'Spiritual Tool' }
+
+  const seoTitle = `${tool.name} — Free Online Vedic Tool`
+  const seoDescription = tool.description || `Use our free online ${tool.name} tool on DivyaYagyam to get authentic Vedic astrology reports and spiritual guidance.`
 
   return {
-    title,
-    description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title: seoTitle,
+    description: seoDescription,
     openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
-      siteName: 'DivyaYagyam',
-      locale: 'hi_IN',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
+      title: seoTitle,
+      description: seoDescription,
+      images: tool.thumbnail ? [tool.thumbnail] : []
     }
   }
 }
+
 
 export default async function ToolViewPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

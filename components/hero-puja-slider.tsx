@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, Pause, Play, Sparkles } from 'lucide-react'
-import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 interface HeroSlide {
   id: string
@@ -75,7 +74,7 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
           <div className="relative w-full h-full">
             <Image
               src={slide.image}
-              alt={getAutoSeoAlt(slide.title, 'puja')}
+              alt={slide.title || 'Sacred Banner'}
               fill
               priority={idx === 0}
               quality={90}

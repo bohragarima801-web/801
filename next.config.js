@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  compress: true,
   reactStrictMode: true,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
@@ -22,12 +21,6 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }
         ]
-      },
-      {
-        source: '/_next/static/(.*)',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }
-        ]
       }
     ]
   },
@@ -43,8 +36,14 @@ const nextConfig = {
         destination: '/products',
         permanent: true,
       },
+      {
+        source: '/tools/Kunadali-milan',
+        destination: '/tools/kundali-milan',
+        permanent: true,
+      },
     ]
   },
+
   serverExternalPackages: ['sharp'],
 }
 

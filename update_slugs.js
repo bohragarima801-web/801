@@ -1,58 +1,47 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-function slugify(str) {
-  return str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-function generateShortSlug(str, maxLen = 45) {
-  if (!str) return '';
-  const cleanStr = str
-    .toLowerCase()
-    .replace(/\b(ultimate|protection|victory|success|best|guaranteed|power|powerful|supreme|top|exclusive|special|complete|full|live|online|for|and|with|the|in|at|of|to|by|a|an|or|is|are|divyayagyam)\b/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  
-  const fullSlug = slugify(cleanStr.length > 0 ? cleanStr : str);
-  if (fullSlug.length <= maxLen) return fullSlug;
-  
-  const parts = fullSlug.split('-');
-  let shortSlug = '';
-  for (const part of parts) {
-    if ((shortSlug ? shortSlug + '-' + part : part).length <= maxLen) {
-      shortSlug = shortSlug ? shortSlug + '-' + part : part;
-    } else {
-      break;
-    }
-  }
-  return shortSlug || fullSlug.slice(0, maxLen);
-}
-
 async function updateSlugs() {
   console.log("Updating Puja and Product Slugs...");
 
+  // Update Puja Slugs
   const pujas = await prisma.puja.findMany();
   for (const p of pujas) {
-    let newSlug = generateShortSlug(p.name);
-    if (p.slug.includes('baglamukhi')) {
-      newSlug = 'maa-baglamukhi-mahayagya-mirchi-havan-ujjain';
+    let newSlug = p.slug;
+    if (p.slug.includes('11000-maha-mrityunjay')) {
+      newSlug = 'maha-mrityunjay-jaap';
+    } else if (p.slug.length > 35) {
+      newSlug = p.slug.split('-').slice(0, 4).join('-');
     }
-    
     if (newSlug !== p.slug) {
-      // Check if newSlug already exists
-      const existing = await prisma.puja.findUnique({ where: { slug: newSlug } });
-      if (!existing || existing.id === p.id) {
-        await prisma.puja.update({
-          where: { id: p.id },
-          data: { slug: newSlug }
-        });
-        console.log(`Updated Puja [${p.name}] slug: ${p.slug} -> ${newSlug}`);
-      }
+      await prisma.puja.update({
+        where: { id: p.id },
+        data: { slug: newSlug }
+      });
+      console.log(`Updated Puja [${p.name}] slug: ${p.slug} -> ${newSlug}`);
+    }
+  }
+
+  // Update Product Slugs
+  const products = await prisma.product.findMany();
+  for (const p of products) {
+    let newSlug = p.slug;
+    if (p.slug.includes('bagla-mukhi')) {
+      newSlug = 'baglamukhi-kawach-potli';
+    } else if (p.slug.includes('divya-dhan')) {
+      newSlug = 'divya-dhan-potli';
+    } else if (p.slug.includes('divya-navgrah')) {
+      newSlug = 'navgrah-shanti-dhoop';
+    } else if (p.slug.length > 35) {
+      newSlug = p.slug.split('-').slice(0, 4).join('-');
+    }
+
+    if (newSlug !== p.slug) {
+      await prisma.product.update({
+        where: { id: p.id },
+        data: { slug: newSlug }
+      });
+      console.log(`Updated Product [${p.name}] slug: ${p.slug} -> ${newSlug}`);
     }
   }
 }

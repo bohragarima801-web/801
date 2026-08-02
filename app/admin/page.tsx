@@ -40,24 +40,16 @@ function StatCard({ title, value, sub, icon: Icon, iconClass, trend }: any) {
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState<any>(null)
-  const [realtime, setRealtime] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [period, setPeriod] = useState(30)
 
   const loadAnalytics = async () => {
     setLoading(true)
     try {
-      const [res, rtRes] = await Promise.all([
-        fetch(`/api/admin/analytics?period=${period}`),
-        fetch(`/api/admin/analytics/realtime`),
-      ])
+      const res = await fetch(`/api/admin/analytics?period=${period}`)
       const json = await res.json()
-      const rtJson = await rtRes.json()
-
       if (json.ok) setData(json.data)
       else toast.error('Analytics load failed: ' + json.error)
-
-      if (rtJson.ok) setRealtime(rtJson.data)
     } catch (e) {
       toast.error('Could not load analytics')
     } finally {
@@ -69,15 +61,15 @@ export default function AdminDashboardPage() {
     loadAnalytics()
     const interval = setInterval(() => {
       loadAnalytics()
-    }, 10000)
+    }, 30000)
     return () => clearInterval(interval)
   }, [period])
 
   const quickActions = [
     { label: 'Add Puja', href: '/admin/pujas', icon: Flame },
     { label: 'Add Product', href: '/admin/products', icon: ShoppingBag },
-    { label: 'Social Hub', href: '/admin/social', icon: Zap },
-    { label: 'Pixels Config', href: '/admin/settings?tab=pixels', icon: Star },
+    { label: 'Add Tool', href: '/admin/tools', icon: Star },
+    { label: 'Add Coupon', href: '/admin/marketing', icon: Plus },
     { label: 'Send Notif', href: '/admin/notifications', icon: Zap },
   ]
 
@@ -97,7 +89,7 @@ export default function AdminDashboardPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            LIVE • Auto-Sync 10s
+            LIVE • Auto-Sync 30s
           </div>
           {[7, 30, 90].map(d => (
             <Button
@@ -116,63 +108,6 @@ export default function AdminDashboardPage() {
           </Button>
         </div>
       </div>
-
-      {/* REAL-TIME PIXEL & VISITOR LIVE WIDGET */}
-      {realtime && (
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card className="md:col-span-1 rounded-2xl border bg-gradient-to-br from-indigo-900 to-slate-900 text-white p-5 shadow-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold tracking-wider text-indigo-200 uppercase">🎯 Live Active Visitors</span>
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-              </span>
-            </div>
-            <div className="text-4xl font-black mt-3 text-white">
-              {realtime.liveActiveVisitors ?? 0} <span className="text-sm font-normal text-indigo-200">online right now</span>
-            </div>
-            <p className="text-xs text-indigo-300 mt-2">Active site visitors in last 5 minutes</p>
-
-            <div className="mt-4 pt-3 border-t border-indigo-800/80 flex items-center justify-between text-xs">
-              <span>Pixel Tracking Status:</span>
-              <div className="flex gap-1.5">
-                <Badge variant={realtime.pixelStatus?.facebook ? 'success' : 'secondary'} className="text-[9px]">META</Badge>
-                <Badge variant={realtime.pixelStatus?.googleAnalytics ? 'success' : 'secondary'} className="text-[9px]">GA4</Badge>
-                <Badge variant={realtime.pixelStatus?.googleTagManager ? 'success' : 'secondary'} className="text-[9px]">GTM</Badge>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="md:col-span-2 rounded-2xl border bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold text-xs text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                <Activity className="h-4 w-4 text-emerald-600 animate-pulse" /> Real-Time Visitor Event Stream (Live Feed)
-              </h3>
-              <Link href="/admin/settings?tab=pixels" className="text-xs text-indigo-600 font-bold hover:underline">
-                Configure Pixels &rarr;
-              </Link>
-            </div>
-            <div className="h-28 overflow-y-auto space-y-1.5 pr-2 scrollbar-thin text-xs">
-              {(!realtime.recentEvents || realtime.recentEvents.length === 0) ? (
-                <p className="text-xs text-slate-400 italic py-4 text-center">Waiting for visitor events… (Browse site to see live events fire here)</p>
-              ) : (
-                realtime.recentEvents.map((evt: any) => (
-                  <div key={evt.id} className="p-2 border rounded-xl bg-slate-50 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2 truncate">
-                      <Badge className={`text-[9px] font-bold ${evt.eventName === 'Purchase' ? 'bg-green-600' : evt.eventName === 'AddToCart' ? 'bg-orange-600' : 'bg-slate-200 text-slate-800'}`}>
-                        {evt.eventName}
-                      </Badge>
-                      <span className="font-mono text-slate-700 truncate">{evt.pageUrl}</span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 shrink-0 ml-2">{new Date(evt.createdAt).toLocaleTimeString()}</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </Card>
-        </div>
-      )}
-
 
       {loading && !data ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

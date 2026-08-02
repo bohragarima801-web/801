@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button'
 import { Loader2, Sparkles, Video } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 function getEmbedUrl(url: string) {
   if (!url) return '';
@@ -77,7 +76,7 @@ export default function Page() {
                      }}>
                   {offering.image ? (
                     <Image src={offering.image}
-                      alt={getAutoSeoAlt(offering.name, 'bhaktiseva')}
+                      alt={offering.name}
                       fill sizes="220px"
                       className="absolute inset-0 object-contain p-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
                     />

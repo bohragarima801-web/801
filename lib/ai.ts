@@ -1,45 +1,30 @@
 import OpenAI from 'openai'
 
+// Emergent's universal LLM proxy is OpenAI-compatible and routes to Gemini / Claude / GPT
+// based on the requested `model'string.
+let _client: OpenAI | null = null
+
 import { getSetting } from '@/lib/settings'
 
-// Track when the client was created so we can refresh it periodically
-let _client: OpenAI | null = null
-let _clientCreatedAt = 0
-const CLIENT_TTL_MS = 5 * 60 * 1000 // Refresh client every 5 minutes to pick up key changes
-
 export async function getLLM(): Promise<OpenAI> {
-  const now = Date.now()
+  if (_client) return _client
 
-  // Return cached client if still fresh
-  if (_client && (now - _clientCreatedAt) < CLIENT_TTL_MS) {
-    return _client
-  }
-
-  // Always try env variable first, then database setting
   let apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
+  let baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/'
 
   if (!apiKey) {
     apiKey = await getSetting('secret.gemini_api_key')
   }
 
-  if (!apiKey) {
-    // Clear stale client before throwing
-    _client = null
-    _clientCreatedAt = 0
-    throw new Error('AI API key is not configured. Go to Admin → Settings → Secrets and add your Gemini API Key.')
-  }
-
-  const baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/'
-
+  if (!apiKey) throw new Error('AI API key is not configured (Gemini)')
   _client = new OpenAI({ apiKey, baseURL })
-  _clientCreatedAt = now
   return _client
 }
 
 
 export const MODELS = {
-  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-2.0-flash',
-  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-2.5-flash',
+  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-1.5-flash',
+  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-1.5-pro',
 }
 
 export type ChatMessage = {
@@ -67,9 +52,9 @@ export const SYSTEM_PROMPTS = {
 
 नियम:
 1. हमेशा प्रेमपूर्वक और आदर से बात करें (जैसे: "हरि ओम्! 🙏 मैं पंडित दिव्ययज्ञम् जी हूँ...")।
-2. अगर कोई बुकिंग या ऑर्डर से जुड़ा सवाल पूछे, तो उन्हें 'My Account' या '/dashboard/support' पर जाने की सलाह दें।
+2. अगर कोई बुकिंग या ऑर्डर से जुड़ा सवाल पूछे, तो उन्हें 'My Account' या '/dashboard/support' पर जाने की सलाह दें।
 3. जवाब छोटे, स्पष्ट और Hinglish (Hindi+English) में हों।
-4. आप सनातन धर्म और पूजा-पाठ के भी जानकार हैं, इसलिए आध्यात्मिक सवालों का भी ख़ुशी-ख़ुशी जवाब दें।`,
+4. आप सनातन धर्म और पूजा-पाठ के भी जानकार हैं, इसलिए आध्यात्मिक सवालों का भी ख़ुशी-ख़ुशी जवाब दें।`,
 
   gargi: `आप "गार्गी" (Gargi) हैं - Divyayagyam की एक अत्यंत विदुषी, विनम्र और पेशेवर Customer Support Assistant।
 आपका कार्य केवल हमारे Customer Portal, Products (उत्पादों), Pujas (पूजाओं), और सेवाओं से संबंधित प्रश्नों का ही उत्तर देना है।

@@ -3,17 +3,6 @@ import { Sparkles, Calendar, Heart, ShieldCheck, Mail, Phone, MapPin, AlertCircl
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import Script from 'next/script'
-import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-
-export function generateMetadata() {
-  return generatePageMeta({
-    title: 'रिफंड एवं निरस्तीकरण नीति (Refund & Cancellation Policy)',
-    description: 'DivyaYagyam रिफंड एवं निरस्तीकरण नीति। 100% रिफंड गारंटी, पूजा निरस्तीकरण नियम, एवं रीशेड्यूलिंग प्रक्रिया की पूरी जानकारी।',
-    path: '/refunds',
-  })
-}
-
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
 export default async function RefundsPage() {
@@ -22,24 +11,8 @@ export default async function RefundsPage() {
   })
   const customContent = setting?.value || ''
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      generateBreadcrumbSchema([
-        { name: 'Home', url: BASE_URL },
-        { name: 'Refund Policy', url: `${BASE_URL}/refunds` },
-      ]),
-    ],
-  }
-
   return (
-    <>
-      <Script
-        id="schema-refunds-page"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="bg-slate-50/50 min-h-screen py-12">
+    <div className="bg-slate-50/50 min-h-screen py-12">
       <div className="container max-w-4xl mx-auto space-y-8 px-4">
         
         {/* Page Header */}
@@ -60,7 +33,7 @@ export default async function RefundsPage() {
               <ShieldCheck className="h-5 w-5 text-[var(--primary-color)]" /> Overview
             </h2>
             <p>
-              Welcome to <strong>DivyaYagyam</strong>. We are dedicated to providing authentic Vedic spiritual services with transparency and devotion. This policy outlines the terms regarding cancellations, refunds, and rescheduling for all services booked through our platform (<Link href={BASE_URL} className="text-[var(--primary-color)] hover:underline">divyayagyam.com</Link>). By booking a service, you agree to these terms.
+              Welcome to <strong>DivyaYagyam</strong>. We are dedicated to providing authentic Vedic spiritual services with transparency and devotion. This policy outlines the terms regarding cancellations, refunds, and rescheduling for all services booked through our platform (<Link href={process.env.NEXT_PUBLIC_URL_4536 || ''} className="text-[var(--primary-color)] hover:underline">{process.env.NEXT_PUBLIC_URL_4537 || ''}</Link>). By booking a service, you agree to these terms.
             </p>
           </section>
 
@@ -172,7 +145,6 @@ export default async function RefundsPage() {
         </div>
       </div>
     </div>
-    </>
   )
 }
 

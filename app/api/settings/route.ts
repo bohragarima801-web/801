@@ -38,9 +38,9 @@ export async function GET() {
     }
 
     // 2. Supabase check
-    let sbUrl = getSetting('secret.supabase_url', 'NEXT_PUBLIC_SUPABASE_URL')
+    const sbUrl = getSetting('secret.supabase_url', 'NEXT_PUBLIC_SUPABASE_URL')
     const sbKey = getSetting('secret.supabase_anon_key', 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
-    if (sbUrl && (sbUrl.startsWith('http://') || sbUrl.startsWith('https://')) && sbKey) {
+    if (sbUrl && sbKey) {
       try {
         const response = await fetch(`${sbUrl}/auth/v1/settings`, {
           headers: { apiKey: sbKey }
@@ -54,7 +54,7 @@ export async function GET() {
         status.supabase = { configured: true, healthy: false, details: e?.message || 'Error connecting to Supabase' }
       }
     } else {
-      status.supabase = { configured: false, healthy: false, details: 'Supabase URL or Anon Key is missing or invalid.' }
+      status.supabase = { configured: false, healthy: false, details: 'Supabase URL or Anon Key is missing.' }
     }
 
     // 3. Razorpay check

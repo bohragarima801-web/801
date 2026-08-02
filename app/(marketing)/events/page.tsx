@@ -1,15 +1,6 @@
+
 import Link from 'next/link'
 import Image from 'next/image';
-import Script from 'next/script'
-import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-
-export function generateMetadata() {
-  return generatePageMeta({
-    title: 'आगामी पूजा कार्यक्रम — Upcoming Events | DivyaYagyam',
-    description: 'आगामी पूजा, अनुष्ठान और धार्मिक कार्यक्रम। शिवरात्रि, नवरात्रि, एकादशी — सभी आयोजनों की जानकारी।',
-    path: '/events',
-  })
-}
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -34,34 +25,8 @@ export default async function EventsPage() {
     orderBy: { startsAt: 'asc' }
   }).catch(() => [])
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      ...events.map(e => ({
-        '@type': 'Event',
-        name: e.title,
-        description: e.description || '',
-        startDate: e.startsAt.toISOString(),
-        location: {
-          '@type': 'Place',
-          name: e.location || 'DivyaYagyam Sanctuary',
-        },
-      })),
-      generateBreadcrumbSchema([
-        { name: 'Home', url: BASE_URL },
-        { name: 'Events', url: `${BASE_URL}/events` },
-      ]),
-    ],
-  }
-
   return (
-    <>
-      <Script
-        id="schema-events-page"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="container py-14 space-y-12">
+    <div className="container py-14 space-y-12">
       {/* HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Spiritual Events & Festivals</h1>
@@ -128,7 +93,6 @@ export default async function EventsPage() {
         )}
       </div>
     </div>
-    </>
   )
 }
 

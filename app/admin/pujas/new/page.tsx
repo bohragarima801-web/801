@@ -12,61 +12,13 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Loader2, Plus, Trash2, Cloud, Upload, X } from 'lucide-react'
+import { Loader2, Plus, Trash2, Cloud, Upload } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { convertGoogleDriveUrl, compressImage, getSafeImageUrl, generateShortSlug } from '@/lib/utils'
-import { getYouTubeEmbedUrl } from '@/lib/youtube'
+import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
 
 interface ItemRef {
   id: string
   name: string
-}
-
-const DEFAULT_PACKAGES = [
-  {
-    id: 'default-1',
-    name: "1 Member",
-    price: "991",
-    description: "एक व्यक्ति के नाम और गोत्र से संकल्प एवं पूजा अर्चन की जाएगी।",
-    image: "/package-1.jpg"
-  },
-  {
-    id: 'default-2',
-    name: "2 Member",
-    price: "1501",
-    description: "दो व्यक्तियों (पति-पत्नी या परिवार के सदस्य) के नाम और गोत्र से संकल्प एवं पूजा।",
-    image: "/package-2.jpg"
-  },
-  {
-    id: 'default-4',
-    name: "4 Member",
-    price: "2499",
-    description: "पूरे परिवार (अधिकतम 4 सदस्य) के नाम और गोत्र से विशेष महासंकल्प एवं पूजन।",
-    image: "/package-4.jpg"
-  },
-  {
-    id: 'default-6',
-    name: "6 Member",
-    price: "3499",
-    description: "पूरे परिवार (अधिकतम 6 सदस्य) के नाम और गोत्र से विशेष महासंकल्प एवं पूजन।",
-    image: "/package-6.jpg"
-  }
-]
-
-function checkIsVideo(u: string) {
-  if (!u) return false
-  const lower = u.toLowerCase()
-  return (
-    lower.endsWith('.mp4') ||
-    lower.endsWith('.webm') ||
-    lower.endsWith('.mov') ||
-    lower.endsWith('.mkv') ||
-    lower.endsWith('.m3u8') ||
-    lower.includes('youtube.com') ||
-    lower.includes('youtu.be') ||
-    lower.includes('vimeo.com') ||
-    lower.startsWith('data:video/')
-  )
 }
 
 function NewPujaPage_Content() {
@@ -104,7 +56,10 @@ function NewPujaPage_Content() {
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [uploadingVideo, setUploadingVideo] = useState(false)
-  const [packages, setPackages] = useState<any[]>(DEFAULT_PACKAGES)
+  const [packages, setPackages] = useState<any[]>([])
+  const [videos, setVideos] = useState<any[]>([])
+  const [newVideoTitle, setNewVideoTitle] = useState('')
+  const [newVideoUrl, setNewVideoUrl] = useState('')
   const [saving, setSaving] = useState(false)
   const [loadingPuja, setLoadingPuja] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -136,10 +91,10 @@ function NewPujaPage_Content() {
     fetchRefs()
   }, [])
 
-  // Auto slugify name with clean SEO short slug generator
+  // Auto slugify name
   useEffect(() => {
-    if (!editId && name.trim()) {
-      setSlug(generateShortSlug(name))
+    if (!editId) {
+      setSlug(name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''))
     }
   }, [name, editId])
 
@@ -178,12 +133,13 @@ function NewPujaPage_Content() {
           setCustomHtml(p.customHtml || '')
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
-            const allUrls = p.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean)
-            const photos = allUrls.filter((u: string) => !checkIsVideo(u))
-            const vid = allUrls.find((u: string) => checkIsVideo(u))
+            const allUrls = p.images.map((img: any) => img.url)
+            const photos = allUrls.filter((u: string) => !u.endsWith('.mp4') && !u.endsWith('.webm') && !u.includes('youtube') && !u.includes('youtu.be'))
+            const vid = allUrls.find((u: string) => u.endsWith('.mp4') || u.endsWith('.webm') || u.includes('youtube') || u.includes('youtu.be'))
             setGalleryImages(photos)
             if (vid) setVideoUrl(vid)
           }
+          setVideos(p.videos || [])
           setPackages(p.packages ? p.packages.map((pkg: any) => ({ ...pkg, image: pkg.image || '' })) : [])
         } else {
           toast.error('Failed to find puja details')
@@ -290,7 +246,12 @@ function NewPujaPage_Content() {
     }
   }
 
-
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
+  }
 
   function handleDriveAdd() {
     if (!driveUrl) return
@@ -312,35 +273,6 @@ function NewPujaPage_Content() {
     const newPkgs = [...packages]
     newPkgs[index] = { ...newPkgs[index], [field]: value }
     setPackages(newPkgs)
-  }
-
-  const handlePackageImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    let file = e.target.files?.[0]
-    if (!file) return
-
-    toast.loading('Compressing & uploading package image...', { id: `pkg-upload-${index}` })
-    
-    try {
-      file = await compressImage(file)
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      })
-      const data = await res.json()
-      if (data.ok && data.url) {
-        handlePackageChange(index, 'image', data.url)
-        toast.success('Package image uploaded!', { id: `pkg-upload-${index}` })
-      } else {
-        toast.error(data.error || 'Upload failed', { id: `pkg-upload-${index}` })
-      }
-    } catch {
-      toast.error('Network error uploading package image', { id: `pkg-upload-${index}` })
-    } finally {
-      e.target.value = ''
-    }
   }
 
   // Submit handler
@@ -385,6 +317,7 @@ function NewPujaPage_Content() {
         customHtml,
         coverImage,
         packages,
+        videos,
         images: [
           ...galleryImages.filter(u => u && u.trim()),
           ...(videoUrl.trim() ? [videoUrl.trim()] : [])
@@ -554,48 +487,22 @@ function NewPujaPage_Content() {
                         </div>
 
                         {/* Package Specific Image Section */}
-                        <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-200">
-                          <div className="flex items-center gap-3">
-                            {pkg.image ? (
-                              <div className="relative h-12 w-12 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs group">
-                                <img 
-                                  src={getSafeImageUrl(pkg.image)} 
-                                  alt={pkg.name} 
-                                  className="h-full w-full object-cover" 
-                                  onError={(e) => {
-                                    e.currentTarget.src = '/package-1.jpg';
-                                  }}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => handlePackageChange(i, 'image', '')}
-                                  className="absolute top-0 right-0 bg-red-600 text-white text-[10px] p-0.5 rounded-bl hover:bg-red-700"
-                                  title="Remove photo"
-                                >
-                                  <X className="h-3 w-3" />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="h-12 w-12 rounded-lg border border-dashed border-slate-300 bg-slate-100 flex items-center justify-center text-slate-400 shrink-0">
-                                <Upload className="h-5 w-5" />
-                              </div>
-                            )}
-                            <div>
-                              <Label className="text-xs font-bold text-slate-700 block">Package Photo (पैकेज फ़ोटो)</Label>
-                              <p className="text-[10px] text-slate-500">Upload custom image for this package</p>
+                        <div className="flex items-center gap-3 pt-2 border-t border-slate-200">
+                          {pkg.image && (
+                            <div className="h-10 w-10 rounded-lg overflow-hidden border bg-white shrink-0 shadow-xs">
+                              <img src={pkg.image} alt={pkg.name} className="h-full w-full object-cover" />
                             </div>
-                          </div>
-
-                          <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-orange-300 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 text-xs font-bold text-orange-800 gap-1.5 select-none transition-colors shrink-0">
-                            <Upload className="h-3.5 w-3.5" />
-                            {pkg.image ? 'Change Photo' : 'Upload Photo'}
-                            <input 
-                              type="file" 
-                              accept="image/*" 
-                              className="hidden" 
-                              onChange={(e) => handlePackageImageUpload(i, e)} 
+                          )}
+                          <div className="flex-1 space-y-1">
+                            <Label className="text-[11px] font-bold text-slate-700">Package Image URL (इस सेक्शन/पैकेज की अलग फोटो)</Label>
+                            <Input 
+                              type="text" 
+                              value={pkg.image || ''} 
+                              onChange={(e) => handlePackageChange(i, 'image', e.target.value)} 
+                              placeholder="Paste image URL for 1 member / 2 members package..." 
+                              className="text-xs bg-white" 
                             />
-                          </label>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -688,14 +595,7 @@ function NewPujaPage_Content() {
                 <Label className="text-xs font-bold text-slate-700">Main Puja Cover Image (मुख्य फ़ोटो)</Label>
                 {coverImage && (
                   <div className="aspect-[4/3] rounded-xl overflow-hidden border bg-slate-100 flex items-center justify-center shadow-xs">
-                    <img 
-                      src={getSafeImageUrl(coverImage)} 
-                      className="h-full w-full object-cover" 
-                      alt="Cover Preview" 
-                      onError={(e) => {
-                        e.currentTarget.src = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=800';
-                      }}
-                    />
+                    <img src={coverImage} className="h-full w-full object-cover" alt="Cover Preview" />
                   </div>
                 )}
                 
@@ -720,14 +620,7 @@ function NewPujaPage_Content() {
                   <div className="grid grid-cols-3 gap-2">
                     {galleryImages.map((imgUrl, idx) => (
                       <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border bg-slate-50 group shadow-xs">
-                        <img 
-                          src={getSafeImageUrl(imgUrl)} 
-                          className="h-full w-full object-cover" 
-                          alt={`Gallery ${idx + 1}`} 
-                          onError={(e) => {
-                            e.currentTarget.src = 'https://images.unsplash.com/photo-1609766418204-94aae0ecfdfc?w=800';
-                          }}
-                        />
+                        <img src={imgUrl} className="h-full w-full object-cover" alt={`Gallery ${idx + 1}`} />
                         <button 
                           type="button"
                           onClick={() => removeGalleryImage(idx)}
@@ -803,6 +696,120 @@ function NewPujaPage_Content() {
                     <Trash2 className="h-3 w-3 mr-1" /> Remove Video
                   </Button>
                 </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* 🎥 PUJA DIVINE GLIMPSES VIDEOS (प्रत्यक्ष प्रमाण - पूजा एवं हवन की दिव्य झलकियां) */}
+          <Card className="border-amber-200">
+            <CardHeader className="bg-amber-50/50 pb-3">
+              <CardTitle className="text-base flex items-center gap-2 text-amber-950">
+                ✨ पूजा एवं हवन की दिव्य झलकियां (प्रत्यक्ष प्रमाण)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-2 border p-3 rounded-lg bg-slate-50">
+                <p className="text-xs font-bold text-slate-800">नया वीडियो जोड़ें (Add Video)</p>
+                <div className="grid gap-2">
+                  <div>
+                    <Label className="text-[10px] text-slate-500">वीडियो शीर्षक (Title)</Label>
+                    <Input 
+                      type="text" 
+                      value={newVideoTitle} 
+                      onChange={(e) => setNewVideoTitle(e.target.value)} 
+                      placeholder="उदा. पूजा एवं हवन की दिव्य झलकियां" 
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-slate-500">YouTube URL / Video URL</Label>
+                    <Input 
+                      type="text" 
+                      value={newVideoUrl} 
+                      onChange={(e) => setNewVideoUrl(e.target.value)} 
+                      placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..." 
+                      className="text-xs"
+                    />
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      if (!newVideoUrl.trim()) {
+                        toast.error('वीडियो URL आवश्यक है');
+                        return;
+                      }
+                      setVideos([...videos, { title: newVideoTitle.trim() || 'पूजा एवं हवन की दिव्य झलकियां', url: newVideoUrl.trim() }]);
+                      setNewVideoTitle('');
+                      setNewVideoUrl('');
+                    }}
+                    className="border-amber-500 text-amber-700 hover:bg-amber-50 text-xs font-bold"
+                  >
+                    + वीडियो सूची में जोड़ें (Add to List)
+                  </Button>
+                </div>
+              </div>
+
+              {videos.length > 0 ? (
+                <div className="space-y-3 pt-2">
+                  <Label className="text-xs font-bold text-slate-700">वीडियो सूची ({videos.length}):</Label>
+                  <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                    {videos.map((v, idx) => (
+                      <div key={idx} className="p-3 rounded-lg border bg-white flex flex-col gap-2 relative">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-bold text-slate-700">वीडियो #{idx + 1}</span>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setVideos(videos.filter((_, i) => i !== idx))}
+                            className="h-6 w-6 text-red-500 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                        <div className="grid gap-2">
+                          <Input 
+                            type="text" 
+                            value={v.title || ''} 
+                            onChange={(e) => {
+                              const updated = [...videos];
+                              updated[idx].title = e.target.value;
+                              setVideos(updated);
+                            }} 
+                            placeholder="शीर्षक" 
+                            className="text-xs h-8"
+                          />
+                          <Input 
+                            type="text" 
+                            value={v.url || ''} 
+                            onChange={(e) => {
+                              const updated = [...videos];
+                              updated[idx].url = e.target.value;
+                              setVideos(updated);
+                            }} 
+                            placeholder="URL" 
+                            className="text-xs h-8"
+                          />
+                        </div>
+                        {v.url && getYouTubeEmbedUrl(v.url) && (
+                          <div className="aspect-video w-full max-w-[200px] mt-1 rounded border overflow-hidden">
+                            <iframe 
+                              src={getYouTubeEmbedUrl(v.url)!} 
+                              className="w-full h-full" 
+                              allowFullScreen 
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 text-center py-4 border border-dashed rounded-lg">
+                  कोई वीडियो नहीं जोड़ा गया है। डिफ़ॉल्ट वीडियो दिखाए जाएंगे।
+                </p>
               )}
             </CardContent>
           </Card>

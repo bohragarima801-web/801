@@ -1,50 +1,33 @@
 import Script from 'next/script'
 import Link from 'next/link'
-import Image from 'next/image'
-import { generatePageMeta } from '@/lib/seo'
+import Image from 'next/image';
+import { buildGraph } from '@/lib/seo/schema'
+import JsonLd from '@/components/JsonLd'
 
-export function generateMetadata() {
-  return generatePageMeta({
-    title: 'DivyaYagyam — ऑनलाइन पूजा बुकिंग | Online Puja Booking India',
-    description: 'भारत के पवित्र मंदिरों से ऑनलाइन पूजा बुक करें। काशी विश्वनाथ, महाकालेश्वर, उज्जैन — नाम-गोत्र संकल्प, लाइव वीडियो दर्शन, प्रसाद डिलीवरी।',
-    path: '/',
-    isAbsoluteTitle: true,
-    keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
-  })
-}
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
-  Sparkles, Star, ArrowRight, MapPin, Calendar, ShieldCheck, Video, Truck, Lock
+  Flame, HandCoins, Sparkles, ShoppingBag, Star, ArrowRight,
+  MapPin, Calendar, ShieldCheck, Video, Play, BookOpen, User,
+  Truck, Lock, Heart, Sun, Sparkle, CalendarDays
 } from 'lucide-react'
+import { prisma } from '@/lib/prisma'
 import { MediaCarousel } from '@/components/ui/media-carousel'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
+import { FadeIn } from '@/components/ui/fade-in'
 import { SacredVideoGallery } from '@/components/sacred-video-gallery'
-import { getYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
-import { getDynamicSiteConfig } from '@/lib/settings'
-import { SafeImage } from '@/components/ui/safe-image'
-import {
-  getCachedPujas,
-  getCachedProducts,
-  getCachedTestimonials,
-  getCachedHeroSlides,
-  getCachedHomePageMedia
-} from '@/lib/cache'
 
-function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean; thumbUrl: string | null } {
-  if (!url) return { isVideo: false, thumbUrl: null }
-  const ytId = getYouTubeId(url)
-  if (ytId) {
-    return { isVideo: true, thumbUrl: getYouTubeThumbnail(url) }
-  }
-  const lower = url.toLowerCase()
-  if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.mov') || lower.startsWith('data:video/')) {
-    return { isVideo: true, thumbUrl: url }
-  }
-  return { isVideo: false, thumbUrl: url }
-}
+const upcomingPujasFallback = [
+  { name: 'महा रुद्राभिषेक (Maha Rudrabhishek)', temple: 'काशी विश्वनाथ मंदिर, वाराणसी', date: 'श्रावण सोमवार Special', img: process.env.NEXT_PUBLIC_URL_4496 || '', price: 1100, vip: false },
+  { name: 'गुरु पूर्णिमा महाआरती (Guru Purnima)', temple: 'सोमनाथ ज्योतिर्लिंग मंदिर', date: '21 July', img: process.env.NEXT_PUBLIC_URL_4497 || '', price: 2100, vip: false },
+  { name: 'कालसर्प दोष निवारण पूजा (Kalsarp Dosh)', temple: 'महाकालेश्वर मंदिर, उज्जैन', date: 'Every Sunday', img: process.env.NEXT_PUBLIC_URL_4498 || '', price: 1251, vip: true },
+  { name: 'महामृत्युंजय जाप (Maha Mrityunjay Jap)', temple: 'त्र्यंबकेश्वर ज्योतिर्लिंग', date: 'Instant Booking', img: process.env.NEXT_PUBLIC_URL_4525 || '', price: 1500, vip: true },
+]
+
+
 
 const fallbackTestimonials = [
   { name: 'रविंद्र दीक्षित (Ravindra Dixit)', location: 'लखनऊ', rating: 5, message: 'काशी विश्वनाथ मंदिर में की गई पूजा का अनुभव अत्यंत दिव्य था। प्रसाद भी 4 दिनों में घर मिल गया।' },
@@ -55,17 +38,45 @@ const fallbackTestimonials = [
 export const revalidate = 30
 
 export default async function HomePage() {
-  const siteData = await getDynamicSiteConfig()
-  
-  const [products, dbPujas, dbTestimonials, heroSlides, mediaData] = await Promise.all([
-    getCachedProducts(),
-    getCachedPujas(),
-    getCachedTestimonials(),
-    getCachedHeroSlides(),
-    getCachedHomePageMedia()
+  let [products, dbPujas, dbTestimonials, heroSlides, pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries] = await Promise.all([
+    prisma.product.findMany({
+      take: 4,
+      include: { category: true }
+    }).catch(() => []),
+    prisma.puja.findMany({
+      where: { 
+        status: 'PUBLISHED',
+        OR: [
+          { publishedAt: null },
+          { publishedAt: { lte: new Date() } }
+        ]
+      },
+      take: 50,
+      include: { category: true, temple: true },
+      orderBy: { createdAt: 'desc' }
+    }).catch(() => []),
+    prisma.testimonial.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+      take: 6
+    }),
+    prisma.heroSlider.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' }
+    }),
+    prisma.mediaLibrary.findMany({ where: { folder: 'Past Puja' }, orderBy: { createdAt: 'desc' }, take: 10 }).catch(() => []),
+    prisma.mediaLibrary.findMany({ where: { folder: 'Customer Review' }, orderBy: { createdAt: 'desc' }, take: 12 }).catch(() => []),
+    prisma.mediaLibrary.findMany({ where: { folder: 'Festival Event' }, orderBy: { createdAt: 'desc' }, take: 5 }).catch(() => []),
+    prisma.mediaLibrary.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 30
+    }).catch(() => []),
+    prisma.gallery.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    }).catch(() => [])
   ])
-
-  const { pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries } = mediaData
 
   // Filter all uploaded items that are videos or contain video links
   const allMediaVideos = dbVideosRaw.filter((m: any) => {
@@ -94,7 +105,7 @@ export default async function HomePage() {
     createdAt: g.createdAt
   }))
 
-  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 5)
+  const dbVideos = [...allMediaVideos, ...galleryVideos]
 
   let testimonials = dbTestimonials
   if (testimonials.length === 0) {
@@ -109,92 +120,46 @@ export default async function HomePage() {
     subtitle: 'DivyaYagyam Special',
     link: '/pujas',
     buttonText: 'Participate Now',
-    order: 100 + i,
     isActive: true
   }))
   const allHeroSlides = [...heroSlides, ...mediaHeroSlides].sort((a: any, b: any) => a.order - b.order)
 
-  // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://divyayagyam.com/#organization",
-        "name": "DivyaYagyam",
-        "url": "https://divyayagyam.com",
-        "logo": siteData.logo || "https://divyayagyam.com/logo.jpg",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+91-95871-71984",
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": ["en", "hi"]
-        },
-        "sameAs": [
-          "https://www.facebook.com/divyayagyam",
-          "https://www.instagram.com/divyayagyam",
-          "https://www.youtube.com/@divyayagyam"
-        ]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://divyayagyam.com/#website",
-        "url": "https://divyayagyam.com",
-        "name": "DivyaYagyam",
-        "description": "Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar, Somnath with video proof on WhatsApp & home delivery of sacred prasad.",
-        "publisher": {
-          "@id": "https://divyayagyam.com/#organization"
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://divyayagyam.com/pujas?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://divyayagyam.com/#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "काशी विश्वनाथ और महाकालेश्वर में ऑनलाइन पूजा कैसे बुक करें?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "DivyaYagyam पर आप सीधे प्रसिद्ध ज्योतिर्लिंगों जैसे काशी विश्वनाथ, महाकालेश्वर उज्जैन, सोमनाथ, त्र्यंबकेश्वर आदि में ऑनलाइन पूजा व रुद्राभिषेक बुक कर सकते हैं। पूजा के बाद आपको व्हाट्सएप पर वीडियो प्रूफ एवं घर पर पावन प्रसाद भेजा जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "क्या ऑनलाइन पूजा का वीडियो प्रूफ व्हाट्सएप पर मिलता है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "हां, DivyaYagyam द्वारा कराई जाने वाली प्रत्येक ऑनलाइन पूजा में संकल्प के समय आपका नाम और गोत्र स्पष्ट रूप से बोला जाता है और पूरा वीडियो प्रूफ आपके व्हाट्सएप नंबर पर भेजा जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "क्या मंदिर का सिद्ध प्रसाद घर पर डिलीवर होता है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "जी हां, पूजा संपन्न होने के बाद मंदिर का पवित्र प्रसाद सुरक्षित पैकिंग के साथ आपके दिए गए पते पर 3-5 दिनों के भीतर होम डिलीवर किया जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "DivyaYagyam पर ऑनलाइन पूजा की फीस क्या है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "DivyaYagyam पर पूजा शुल्क ₹1,100 से शुरू होता है जिसमें पंडित दक्षिणा, पूजन सामग्री, नाम-गोत्र संकल्प, वीडियो रिकॉर्डिंग और प्रसाद होम डिलीवरी शामिल है।"
-            }
-          }
-        ]
-      }
-    ]
-  }
 
+  const graph = buildGraph({
+    path: '/',
+    type: 'WebPage',
+    title: 'DivyaYagyam — Online Puja Booking & Vedic Rituals',
+    description: 'Book authentic online pujas, offer Bhakti Seva, order sacred prasad, and access expert astrology services on our trusted platform.',
+    includeLocalBusiness: true,
+  })
+
+
+
+
+  // Categorize Pujas
   const today = new Date()
   today.setHours(0, 0, 0, 0)
+  
+  const todayPujas = dbPujas.filter((p: any) => {
+    if (p.pujaDate) {
+      const pDate = new Date(p.pujaDate)
+      pDate.setHours(0, 0, 0, 0)
+      return pDate.getTime() === today.getTime()
+    }
+    return false
+  })
+  
+  const upcomingPujas = dbPujas.filter((p: any) => {
+    if (p.pujaDate) {
+      const pDate = new Date(p.pujaDate)
+      pDate.setHours(0, 0, 0, 0)
+      return pDate.getTime() > today.getTime()
+    }
+    return false
+  })
+
+  const evergreenPujas = dbPujas.filter((p: any) => p.isEvergreen)
+  const festivalPujas = dbPujas.filter((p: any) => p.isFestival)
 
   const renderPujaCards = (pujas: any[]) => {
     if (pujas.length === 0) {
@@ -213,20 +178,11 @@ export default async function HomePage() {
               {/* Top Image Section */}
               <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-t-2xl">
                 {p.coverImage ? (
-                  (() => {
-                    const mediaInfo = getMediaDisplaySrc(p.coverImage)
-                    if (mediaInfo.isVideo && !getYouTubeId(p.coverImage)) {
-                      return <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
-                    }
-                    const imgSrc = mediaInfo.thumbUrl || p.coverImage
-                    return (
-                      <SafeImage
-                        src={imgSrc}
-                        alt={p.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                    )
-                  })()
+                  p.coverImage.endsWith('.mp4') || p.coverImage.endsWith('.webm') || p.coverImage.startsWith('data:video/') ? (
+                    <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
+                  ) : (
+                    <Image src={p.coverImage} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  )
                 ) : (
                   <div className="h-full w-full flex items-center justify-center text-muted-foreground/30 bg-muted/50">
                     <Sparkles className="h-8 w-8 opacity-40" />
@@ -237,22 +193,30 @@ export default async function HomePage() {
               {/* Content Section */}
               <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3 text-center">
+                  {/* Orange Subtitle */}
                   <p className="text-[#e26e25] font-bold text-sm tracking-wide">
                     {p.category?.name || 'Auspicious Puja'}
                   </p>
+                  
+                  {/* Title */}
                   <h3 className="font-heading font-bold text-lg md:text-xl text-slate-800 line-clamp-2 leading-tight">
                     {p.name}
                   </h3>
+                  
+                  {/* Description */}
                   <p className="text-xs md:text-sm text-slate-500 line-clamp-2 leading-relaxed">
                     {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                   </p>
                 </div>
                 
                 <div className="space-y-2.5 pt-4 border-t border-slate-100">
+                  {/* Location */}
                   <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
                     <MapPin className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
                     <span className="line-clamp-1">{p.location || 'Any Holy Temple'}</span>
                   </p>
+                  
+                  {/* Date */}
                   <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
                     <Calendar className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
                     <span className="line-clamp-1">
@@ -263,6 +227,7 @@ export default async function HomePage() {
                   </p>
                 </div>
                 
+                {/* Book Button */}
                 <div className="pt-2">
                   <div className="w-full h-11 flex items-center justify-center bg-[#249b49] hover:bg-[#1e853e] text-white font-bold rounded-lg transition-colors shadow-sm">
                     Book Puja &rarr;
@@ -278,15 +243,14 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-0">
-      <Script
-        id="schema-organization"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={graph} />
+
       {/* HERO SECTION - SRI MANDIR STYLE */}
       <section className="w-full bg-card py-8 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col gap-6">
+            
+            {/* Title Section */}
             <div className="text-center md:text-left">
               <span className="sacred-subtitle inline-block mb-3 text-primary">🕉️ Sanatan Dharma, Simplified</span>
               <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground leading-tight tracking-wide">
@@ -298,48 +262,28 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 max-w-3xl">
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  Verified Pandits
-                </span>
+            {/* Trust Bar (New) */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+              <div className="stat-badge">
+                <span className="icon"><ShieldCheck className="h-3.5 w-3.5" /></span> Verified Pandits
               </div>
-
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Video className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  WhatsApp Video
-                </span>
+              <div className="stat-badge">
+                <span className="icon"><Video className="h-3.5 w-3.5" /></span> Video Proof on WhatsApp
               </div>
-
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Truck className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  Prasad Delivery
-                </span>
+              <div className="stat-badge">
+                <span className="icon"><Truck className="h-3.5 w-3.5" /></span> Prasad Delivered Home
               </div>
-
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Lock className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  100% Secure
-                </span>
+              <div className="stat-badge">
+                <span className="icon"><Lock className="h-3.5 w-3.5" /></span> 100% Secure Payments
               </div>
             </div>
 
+            {/* Banner Slider */}
             <div className="w-full">
               <HeroPujaSlider slides={allHeroSlides} />
             </div>
 
+            {/* Quick Action Links (Desktop mainly) */}
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-none font-semibold px-8" asChild>
                 <Link href="/pujas">Book a Puja (पूजा बुक करें) <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -348,9 +292,16 @@ export default async function HomePage() {
                 <Link href="/tools"><Sparkles className="mr-2 h-4 w-4 text-secondary" /> Astro Tools</Link>
               </Button>
             </div>
+
+            {/* Trust Badges - (Removed since we have Trust Bar now) */}
+            
           </div>
         </div>
       </section>
+
+
+
+
 
       {/* UPCOMING PUJAS */}
       <section className="container py-16 md:py-24">
@@ -373,8 +324,8 @@ export default async function HomePage() {
               pDate.setHours(0, 0, 0, 0);
               return pDate.getTime() >= today.getTime();
             }
-            return true;
-          }).slice(0, 12)
+            return true; // Show if no specific date is set to prevent hiding all pujas
+          })
         )}
       </section>
 
@@ -440,7 +391,7 @@ export default async function HomePage() {
           <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Hundreds of families have received the Lord's blessings through our services.</p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((t: any, i: number) => (
+          {testimonials.map((t, i) => (
             <Card key={i} className="border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-card shadow-sm">
               <CardContent className="p-6 md:p-8 space-y-5">
                 <div className="flex gap-0.5">
@@ -494,31 +445,15 @@ export default async function HomePage() {
             <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Divine moments captured during our successfully completed rituals.</p>
           </div>
           <MediaCarousel>
-            {pastPujas.map((media: any) => {
-              const mediaInfo = getMediaDisplaySrc(media.url)
-              const displaySrc = mediaInfo.thumbUrl || media.url
-
-              return (
-                <div key={media.id} className="relative aspect-video rounded-2xl overflow-hidden border border-amber-200/50 shadow-sm group mx-2 bg-slate-900 flex items-center justify-center">
-                  {mediaInfo.isVideo && !getYouTubeId(media.url) ? (
-                    <video src={media.url} className="w-full h-full object-cover" muted loop autoPlay playsInline />
-                  ) : displaySrc ? (
-                    <SafeImage
-                      src={displaySrc}
-                      alt={media.filename || 'Past Puja'}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 z-10" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white font-bold text-sm z-20 flex items-center justify-between">
-                    <span className="line-clamp-1">{media.filename || 'Sacred Ritual'}</span>
-                    {mediaInfo.isVideo && (
-                      <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black uppercase">Video</span>
-                    )}
-                  </div>
+            {pastPujas.map((media: any) => (
+              <div key={media.id} className="relative aspect-video rounded-2xl overflow-hidden border shadow-sm group mx-2">
+                <Image src={media.url} alt={media.filename || 'Past Puja'} fill sizes="50vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80" />
+                <div className="absolute bottom-4 left-4 text-white font-bold text-sm">
+                  {media.filename || 'Sacred Ritual'}
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </MediaCarousel>
         </section>
       )}

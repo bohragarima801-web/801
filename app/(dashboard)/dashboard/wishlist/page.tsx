@@ -3,7 +3,6 @@ import { getCurrentUser } from '@/lib/auth'
 import Link from 'next/link'
 import { Heart, ShoppingCart } from 'lucide-react'
 import { WishlistActions } from './actions'
-import { SafeImage } from '@/components/ui/safe-image'
 export const dynamic = 'force-dynamic'
 
 export default async function WishlistPage() {
@@ -62,11 +61,11 @@ export default async function WishlistPage() {
                 {/* Product Image */}
                 <Link href={`/products/${product.slug}`} className="block">
                   <div className="aspect-square bg-slate-50 overflow-hidden">
-                    <SafeImage
+                    <img
                       src={image}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      fallbackSrc="https://placehold.co/300x300?text=Product"
+                      onError={(e: any) => { e.target.src = 'https://placehold.co/300x300?text=Product' }}
                     />
                   </div>
                 </Link>

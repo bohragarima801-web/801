@@ -1,14 +1,15 @@
+
+
 import { notFound } from 'next/navigation'
 import Image from 'next/image';
-import Script from 'next/script'
-import { generateArticleSchema, generateBreadcrumbSchema, generateFaqSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
-import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+import { buildGraph, articleNode, faqNode } from '@/lib/seo/schema'
+import JsonLd from '@/components/JsonLd'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -29,20 +30,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await prisma.blog.findUnique({
     where: { slug: slug },
-    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true, coverImageAlt: true }
+    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true }
   });
 
-  if (!post) return generatePageMeta({ title: 'Blog Post Not Found | DivyaYagyam', description: 'The requested article could not be found.', path: `/blog/${slug}` });
+  if (!post) return { title: 'Not Found' };
 
-  const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
+  const cleanTitle = (post.seoTitle || post.title).replace(/\s*\|\s*DivyaYagyam/gi, '')
 
-  return generatePageMeta({
-    title: post.seoTitle || post.title,
+  return {
+    title: cleanTitle,
     description: post.seoDescription || post.excerpt || '',
-    path: `/blog/${slug}`,
-    image: post.coverImage || undefined,
-    keywords,
-  });
+    keywords: post.seoKeywords || undefined,
+    openGraph: {
+      title: cleanTitle,
+      description: post.seoDescription || post.excerpt || '',
+      images: post.coverImage ? [post.coverImage] : [],
+    }
+  };
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -71,43 +75,48 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }).catch(() => {})
 
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
-  const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
-  const graphElements: any[] = [
-    generateArticleSchema({
-      title: post.title,
-      description: post.excerpt || post.content?.substring(0, 200) || '',
-      image: post.coverImage || '/logo.jpg',
-      imageAlt: coverAlt,
-      slug: post.slug,
-      datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
-      dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
-    }),
-    generateBreadcrumbSchema([
-      { name: 'Home', url: BASE_URL },
-      { name: 'Blog', url: `${BASE_URL}/blog` },
-      { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
-    ]),
-  ]
+  const graph = buildGraph({
+    path: `/blog/${post.slug}`,
+    type: 'ItemPage',
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt || '',
+    image: post.coverImage || undefined,
+    datePublished: (post.publishedAt || post.createdAt).toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    crumbs: [
+      { name: 'ब्लॉग', path: '/blog' },
+      { name: post.title, path: `/blog/${post.slug}` },
+    ],
+    entities: [
+      articleNode({
+        slug: post.slug,
+        headline: post.title,
+        description: post.excerpt || post.seoDescription || post.title,
+        image: post.coverImage || 'https://divyayagyam.com/logo.jpg',
+        datePublished: (post.publishedAt || post.createdAt).toISOString(),
+        dateModified: post.updatedAt.toISOString(),
+        authorName: post.author?.fullName || 'पं. मुकेश बोहरा',
+        section: post.category?.name,
+      }),
 
-  if (faqs && faqs.length > 0) {
-    graphElements.push(generateFaqSchema(faqs.map(f => ({ question: f.question, answer: f.answer }))))
-  }
+      ...(faqs.length > 0
+        ? [
+            faqNode(
+              `/blog/${post.slug}`,
+              faqs.map(f => ({ question: f.question, answer: f.answer }))
+            )
+          ]
+        : [])
+    ]
+  })
 
   return (
-    <>
-      <Script
-        id={`schema-blog-${post.id}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": graphElements
-          })
-        }}
-      />
-      <div className="container max-w-4xl py-12 px-4">
-        <Button variant="ghost" size="sm" asChild className="mb-8 hover:text-primary rounded-xl">
+    <div className="container max-w-4xl py-12 px-4">
+      <JsonLd data={graph} />
+
+      <Button variant="ghost" size="sm" asChild className="mb-8 hover:text-primary rounded-xl">
+
         <Link href="/blog" className="inline-flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" /> Back to Blog
         </Link>
@@ -148,22 +157,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage ? (
-          <figure className="my-8 rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50 bg-slate-900">
-            <div className="aspect-video w-full relative overflow-hidden">
-              <img 
-                loading="lazy" 
-                decoding="async" 
-                src={getSafeImageUrl(post.coverImage)} 
-                alt={coverAlt} 
-                title={post.title} 
-                itemProp="image" 
-                className="w-full h-full object-cover" 
-              />
-            </div>
-            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900 bg-amber-50/70 border-t border-amber-100 italic">
-              📷 {coverAlt}
-            </figcaption>
-          </figure>
+          <div className="my-8 aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50">
+            <img loading="lazy" src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
+          </div>
         ) : null}
 
         <div 
@@ -177,60 +173,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
           prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50"
         >
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]} 
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              a: ({ href, children, ...props }) => {
-                if (!href) return <span className="font-semibold text-amber-700">{children}</span>
-                const isExternal = href.startsWith('http://') || href.startsWith('https://')
-                if (isExternal) {
-                  return (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
-                      {...props}
-                    >
-                      {children} ↗
-                    </a>
-                  )
-                }
-                return (
-                  <Link
-                    href={href}
-                    className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
-                  >
-                    {children}
-                  </Link>
-                )
-              },
-              img: ({ src, alt, title, ...props }) => {
-                if (!src) return null
-                const safeSrc = getSafeImageUrl(src)
-                const imageAltText = alt || `${post.title} - Online Puja Booking & Spiritual Guide DivyaYagyam`
-                const imageTitleText = title || imageAltText
-                return (
-                  <figure className="my-8 text-center bg-slate-50 border border-amber-100 rounded-3xl p-3 shadow-md">
-                    <img
-                      src={safeSrc}
-                      alt={imageAltText}
-                      title={imageTitleText}
-                      loading="lazy"
-                      decoding="async"
-                      itemProp="image"
-                      className="max-h-[500px] w-auto mx-auto object-contain rounded-2xl shadow-sm border border-amber-50"
-                      {...props}
-                    />
-                    <figcaption className="text-center text-xs font-bold text-amber-900 mt-2.5 px-2">
-                      📷 {imageAltText}
-                    </figcaption>
-                  </figure>
-                )
-              }
-            }}
-          >
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {post.content}
           </ReactMarkdown>
         </div>
@@ -254,6 +197,5 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         )}
       </article>
     </div>
-    </>
   )
 }

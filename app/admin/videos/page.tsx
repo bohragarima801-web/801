@@ -6,11 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Loader2, Copy, Trash2, Upload, Link as LinkIcon, Video, Edit2, Check, X, Sparkles, Youtube } from 'lucide-react'
+import { Loader2, Copy, Trash2, Upload, Link as LinkIcon, Video, Play, Edit2, Check, X, Sparkles, Youtube } from 'lucide-react'
 import { convertGoogleDriveUrl } from '@/lib/utils'
-import { getYouTubeEmbedUrl } from '@/lib/youtube'
 
 export default function AdminVideosPage() {
   const [items, setItems] = useState<any[]>([])
@@ -20,12 +20,12 @@ export default function AdminVideosPage() {
   // Form states
   const [title, setTitle] = useState('')
   const [videoUrlInput, setVideoUrlInput] = useState('')
+  const [category, setCategory] = useState('Home Video')
 
   // Edit modal state
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState('')
-  const [editingUrl, setEditingUrl] = useState('')
-  const [editingUploading, setEditingUploading] = useState(false)
+  const [editingCategory, setEditingCategory] = useState('Home Video')
 
   async function loadVideos() {
     try {
@@ -61,6 +61,7 @@ export default function AdminVideosPage() {
     formData.append('file', file)
 
     try {
+      // 1. Upload file using /api/upload
       const uploadRes = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
@@ -80,13 +81,14 @@ export default function AdminVideosPage() {
 
       if (!uploadData.ok) throw new Error(uploadData.error || 'Upload failed')
 
+      // 2. Save video record in DB
       const saveRes = await fetch('/api/admin/videos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: uploadData.url,
           filename: title || file.name.replace(/\.[^/.]+$/, ""),
-          folder: 'Home Video',
+          folder: category,
           mimeType: file.type || 'video/mp4',
         }),
       })
@@ -107,7 +109,6 @@ export default function AdminVideosPage() {
   // Add YouTube / External Video Link
   async function handleAddLink(e: React.FormEvent) {
     e.preventDefault()
-
     if (!videoUrlInput.trim()) {
       toast.error('Please enter a YouTube video or MP4 URL')
       return
@@ -123,7 +124,7 @@ export default function AdminVideosPage() {
         body: JSON.stringify({
           url: formattedUrl,
           filename: title || 'Sacred Video Link',
-          folder: 'Home Video',
+          folder: category,
           mimeType: formattedUrl.includes('youtube') || formattedUrl.includes('youtu.be') ? 'video/youtube' : 'video/mp4',
         }),
       })
@@ -159,28 +160,15 @@ export default function AdminVideosPage() {
   }
 
   async function handleSaveEdit(id: string) {
-    if (!editingUrl.trim()) {
-      toast.error('Video URL cannot be empty')
-      return
-    }
-
-    const formattedUrl = convertGoogleDriveUrl(editingUrl.trim())
-
     try {
       const res = await fetch('/api/admin/videos', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id,
-          filename: editingTitle,
-          url: formattedUrl,
-          folder: 'Home Video',
-          mimeType: formattedUrl.includes('youtube') || formattedUrl.includes('youtu.be') ? 'video/youtube' : 'video/mp4'
-        })
+        body: JSON.stringify({ id, filename: editingTitle, folder: editingCategory })
       })
       const data = await res.json()
       if (data.ok) {
-        toast.success('Video updated successfully')
+        toast.success('Video updated')
         setEditingId(null)
         loadVideos()
       } else {
@@ -191,39 +179,18 @@ export default function AdminVideosPage() {
     }
   }
 
-  async function handleEditFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    setEditingUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-
-    try {
-      const uploadRes = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const uploadData = await uploadRes.json()
-      if (uploadData.ok && uploadData.url) {
-        setEditingUrl(uploadData.url)
-        toast.success('New video file uploaded! Click Save to apply.')
-      } else {
-        toast.error(uploadData.error || 'Upload failed')
-      }
-    } catch {
-      toast.error('Failed to upload replacement video')
-    } finally {
-      setEditingUploading(false)
-    }
+  function getYouTubeEmbedUrl(url: string) {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
   }
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="🎥 Divya Darshan & Puja Videos Manager"
-        description="Add, edit, or delete videos for the homepage & Puja section. Supports YouTube, YouTube Shorts, Google Drive, and MP4 uploads."
+        title="🎥 Sacred Videos & Reels Manager (वीडियो प्रबंधन)"
+        description="Upload MP4 videos or paste YouTube / Drive video links. All added videos will automatically display in proper layout on the website homepage!"
         breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Videos' }]}
       />
 
@@ -241,13 +208,12 @@ export default function AdminVideosPage() {
           <CardContent>
             <form onSubmit={handleAddLink} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="vidTitle">Video Personal Heading (वीडियो हेडिंग)</Label>
+                <Label htmlFor="vidTitle">Video Title (शीर्षक)</Label>
                 <Input
                   id="vidTitle"
-                  placeholder="e.g. Puja Performance, Devotee Review, Mahakaleshwar Aarti..."
+                  placeholder="e.g. महाकालेश्वर भस्म आरती लाइव दर्शन"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  disabled={uploading}
                 />
               </div>
 
@@ -258,13 +224,28 @@ export default function AdminVideosPage() {
                   placeholder="https://www.youtube.com/watch?v=... or shorts URL"
                   value={videoUrlInput}
                   onChange={(e) => setVideoUrlInput(e.target.value)}
-                  disabled={uploading}
                 />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label>Display Category (श्रेणी)</Label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Home Video">🏠 Homepage Video (मुख्य पेज)</SelectItem>
+                    <SelectItem value="Live Darshan">🎥 Live Darshan (लाइव दर्शन)</SelectItem>
+                    <SelectItem value="Past Puja">🕉️ Past Puja Highlights (पूजा वीडियो)</SelectItem>
+                    <SelectItem value="Aarti & Bhajan">🎵 Aarti & Bhajan (आरती व भजन)</SelectItem>
+                    <SelectItem value="Customer Review">⭐ Devotee Review (भक्तों का अनुभव)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button type="submit" disabled={uploading} className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold">
                 {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <LinkIcon className="h-4 w-4 mr-2" />}
-                Add Video to List ({items.length} Videos Total)
+                Add Video Link to Home Page
               </Button>
             </form>
           </CardContent>
@@ -277,28 +258,43 @@ export default function AdminVideosPage() {
               <Upload className="h-5 w-5 text-orange-600" /> Upload Local MP4 / WebM File
             </CardTitle>
             <CardDescription>
-              Directly upload video files from your computer.
+              Directly upload high-definition video files from your computer.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="uploadVidTitle">Video Personal Heading (वीडियो हेडिंग)</Label>
+              <Label htmlFor="uploadVidTitle">Video Title (ऑप्शनल)</Label>
               <Input
                 id="uploadVidTitle"
-                placeholder="e.g. Puja Performance, Devotee Review..."
+                placeholder="e.g. काशी विश्वनाथ महापूजा वीडियो"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                disabled={uploading}
               />
             </div>
 
-            <div className="relative border-2 border-dashed border-orange-300 rounded-xl p-6 text-center transition-colors bg-background hover:bg-orange-50/50 cursor-pointer">
+            <div className="space-y-1.5">
+              <Label>Display Category (श्रेणी)</Label>
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Home Video">🏠 Homepage Video (मुख्य पेज)</SelectItem>
+                  <SelectItem value="Live Darshan">🎥 Live Darshan (लाइव दर्शन)</SelectItem>
+                  <SelectItem value="Past Puja">🕉️ Past Puja Highlights (पूजा वीडियो)</SelectItem>
+                  <SelectItem value="Aarti & Bhajan">🎵 Aarti & Bhajan (आरती व भजन)</SelectItem>
+                  <SelectItem value="Customer Review">⭐ Devotee Review (भक्तों का अनुभव)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="relative border-2 border-dashed border-orange-300 rounded-xl p-6 text-center hover:bg-orange-50/50 transition-colors cursor-pointer bg-background">
               <input
                 type="file"
                 accept="video/*"
                 onChange={handleFileUpload}
                 disabled={uploading}
-                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full disabled:cursor-not-allowed"
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
               <div className="flex flex-col items-center gap-2 text-muted-foreground">
                 {uploading ? (
@@ -326,7 +322,7 @@ export default function AdminVideosPage() {
             <CardTitle className="text-xl font-bold flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-amber-500" /> Published Videos ({items.length})
             </CardTitle>
-            <CardDescription>All video items currently active on the site.</CardDescription>
+            <CardDescription>All video items currently configured to show on the site.</CardDescription>
           </div>
           <Button variant="outline" size="sm" onClick={loadVideos}>Refresh List</Button>
         </CardHeader>
@@ -334,14 +330,14 @@ export default function AdminVideosPage() {
         <CardContent>
           {loading ? (
             <div className="flex items-center justify-center py-16 text-muted-foreground">
-              <Loader2 className="h-8 w-8 animate-spin text-amber-600 mr-3" /> Loading videos…
+              <Loader2 className="h-8 w-8 animate-spin text-amber-600 mr-3" /> Loading video gallery…
             </div>
           ) : items.length === 0 ? (
             <div className="text-center py-16 border-2 border-dashed rounded-xl bg-slate-50 text-muted-foreground">
-              No videos uploaded yet. Add videos using the forms above!
+              No videos added yet. Upload an MP4 video file or add a YouTube link above!
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {items.map((item) => {
                 const embedUrl = getYouTubeEmbedUrl(item.url)
                 const isEditing = editingId === item.id
@@ -371,97 +367,88 @@ export default function AdminVideosPage() {
                     {/* Content Section */}
                     <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                       {isEditing ? (
-                        <div className="space-y-3 bg-amber-50/50 p-3 rounded-xl border border-amber-200">
-                          <div className="space-y-1">
-                            <Label className="text-xs font-bold text-amber-900">Heading (वीडियो शीर्षक)</Label>
-                            <Input
-                              value={editingTitle}
-                              onChange={(e) => setEditingTitle(e.target.value)}
-                              placeholder="Video Heading"
-                              className="text-xs bg-white"
-                            />
-                          </div>
-
-                          <div className="space-y-1">
-                            <Label className="text-xs font-bold text-amber-900">Video Link (YouTube / MP4 URL)</Label>
-                            <Input
-                              value={editingUrl}
-                              onChange={(e) => setEditingUrl(e.target.value)}
-                              placeholder="Video URL"
-                              className="text-xs bg-white"
-                            />
-                          </div>
-
-                          <div className="pt-1">
-                            <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-amber-300 bg-white hover:bg-amber-100 px-3 py-1.5 text-xs font-medium gap-1.5 w-full select-none">
-                              {editingUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5 text-amber-700" />}
-                              {editingUploading ? 'Uploading file…' : 'Replace with MP4 File'}
-                              <input type="file" accept="video/*" className="hidden" onChange={handleEditFileUpload} disabled={editingUploading} />
-                            </label>
-                          </div>
-
-                          <div className="flex gap-2 pt-2 border-t border-amber-200">
-                            <Button size="sm" variant="default" className="flex-1 text-xs bg-green-600 hover:bg-green-700 text-white font-bold" onClick={() => handleSaveEdit(item.id)}>
-                              <Check className="h-3.5 w-3.5 mr-1" /> Save Edit
+                        <div className="space-y-2">
+                          <Input
+                            size={1}
+                            value={editingTitle}
+                            onChange={(e) => setEditingTitle(e.target.value)}
+                            placeholder="Video Title"
+                            className="text-xs h-8"
+                          />
+                          <Select value={editingCategory} onValueChange={setEditingCategory}>
+                            <SelectTrigger className="h-8 text-xs">
+                              <SelectValue placeholder="Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Home Video">Home Video</SelectItem>
+                              <SelectItem value="Live Darshan">Live Darshan</SelectItem>
+                              <SelectItem value="Past Puja">Past Puja</SelectItem>
+                              <SelectItem value="Aarti & Bhajan">Aarti & Bhajan</SelectItem>
+                              <SelectItem value="Customer Review">Customer Review</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <div className="flex gap-1 pt-1">
+                            <Button size="xs" variant="default" className="h-7 text-xs bg-green-600 hover:bg-green-700" onClick={() => handleSaveEdit(item.id)}>
+                              <Check className="h-3 w-3 mr-1" /> Save
                             </Button>
-                            <Button size="sm" variant="outline" className="text-xs" onClick={() => setEditingId(null)}>
-                              <X className="h-3.5 w-3.5 mr-1" /> Cancel
+                            <Button size="xs" variant="ghost" className="h-7 text-xs" onClick={() => setEditingId(null)}>
+                              <X className="h-3 w-3 mr-1" /> Cancel
                             </Button>
                           </div>
                         </div>
                       ) : (
                         <div>
-                          <span className="text-[10px] text-muted-foreground block mb-1 font-medium">
-                            Added: {new Date(item.createdAt).toLocaleDateString('en-IN')}
-                          </span>
-                          <h4 className="font-bold text-sm line-clamp-2 leading-snug text-foreground">
-                            {item.filename || 'Divya Darshan Video'}
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-[10px] font-semibold">
+                              {item.folder || 'Home Video'}
+                            </Badge>
+                            <span className="text-[10px] text-muted-foreground">
+                              {new Date(item.createdAt).toLocaleDateString('en-IN')}
+                            </span>
+                          </div>
+                          <h4 className="font-semibold text-sm line-clamp-2 leading-snug text-foreground">
+                            {item.filename || 'Sacred Video'}
                           </h4>
-                          <p className="text-[11px] text-muted-foreground truncate mt-1">
-                            {item.url}
-                          </p>
                         </div>
                       )}
 
                       {/* Action buttons */}
-                      {!isEditing && (
-                        <div className="flex items-center justify-between pt-2 border-t border-border/50 gap-2">
+                      <div className="flex items-center justify-between pt-2 border-t border-border/50 gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.url)
+                            toast.success('Video link copied!')
+                          }}
+                        >
+                          <Copy className="h-3.5 w-3.5 mr-1" /> Copy Link
+                        </Button>
+
+                        <div className="flex items-center gap-1">
                           <Button
                             variant="ghost"
-                            size="sm"
-                            className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
+                            size="icon"
+                            className="h-8 w-8 text-blue-600 hover:bg-blue-50"
                             onClick={() => {
-                              navigator.clipboard.writeText(item.url)
-                              toast.success('Video link copied!')
+                              setEditingId(item.id)
+                              setEditingTitle(item.filename || '')
+                              setEditingCategory(item.folder || 'Home Video')
                             }}
                           >
-                            <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                            <Edit2 className="h-3.5 w-3.5" />
                           </Button>
-
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-blue-600 hover:bg-blue-50"
-                              onClick={() => {
-                                setEditingId(item.id)
-                                setEditingTitle(item.filename || '')
-                                setEditingUrl(item.url || '')
-                              }}
-                            >
-                              <Edit2 className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-red-600 hover:bg-red-50"
-                              onClick={() => handleDelete(item.id)}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-600 hover:bg-red-50"
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 )
@@ -473,4 +460,3 @@ export default function AdminVideosPage() {
     </div>
   )
 }
-

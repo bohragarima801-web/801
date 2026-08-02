@@ -514,6 +514,7 @@ model Puja {
   packages  PujaPackage[]
   bookings  Booking[]
   reviews   Review[]
+  videos    PujaVideo[]
 
   @@index([slug])
   @@index([status])
@@ -547,6 +548,18 @@ model PujaImage {
   puja Puja @relation(fields: [pujaId], references: [id], onDelete: Cascade)
 
   @@map("puja_images")
+}
+
+model PujaVideo {
+  id        String   @id @default(uuid())
+  pujaId    String
+  title     String?
+  url       String
+  createdAt DateTime @default(now())
+
+  puja Puja @relation(fields: [pujaId], references: [id], onDelete: Cascade)
+
+  @@map("puja_videos")
 }
 
 model PujaTimeSlot {
@@ -583,7 +596,6 @@ model Booking {
   paymentStatus       PaymentStatus @default(PENDING)
   sankalpText         String?
   gotra               String?
-  sankalpPurpose      String?
   specialInstructions String?
   photoUrl            String?
   pdfUrl              String?
@@ -1038,7 +1050,6 @@ model Blog {
   excerpt        String?
   content        String     @db.Text
   coverImage     String?
-  coverImageAlt  String?
   videoUrl       String?
   isVideoEnabled Boolean    @default(true)
   status         BlogStatus @default(DRAFT)
@@ -1543,145 +1554,3 @@ model ConsultationBooking {
 
   @@map("consultation_bookings")
 }
-
-// ============================================================
-// SOCIAL MEDIA SCHEDULER & ANALYTICS MODULE
-// ============================================================
-
-model SocialAccount {
-  id           String   @id @default(uuid())
-  platform     String   // FACEBOOK, INSTAGRAM, TWITTER, YOUTUBE, LINKEDIN, TELEGRAM, WEBHOOK
-  accountName  String
-  accountId    String?  // Page ID, Channel ID, Chat ID
-  accessToken  String?  @db.Text
-  refreshToken String?  @db.Text
-  apiSecret    String?  @db.Text
-  webhookUrl   String?  @db.Text
-  isActive     Boolean  @default(true)
-  metadata     Json?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([platform])
-  @@map("social_accounts")
-}
-
-model SocialPost {
-  id          String    @id @default(uuid())
-  title       String?
-  caption     String    @db.Text
-  hashtags    String?   @db.Text
-  mediaType   String    @default("IMAGE") // IMAGE, VIDEO, TEXT, MULTI_MEDIA
-  mediaUrls   String[]
-  platforms   String[]  // Array of target platforms e.g. ["facebook", "telegram"]
-  status      String    @default("DRAFT") // DRAFT, SCHEDULED, PUBLISHING, PUBLISHED, FAILED, PARTIAL
-  scheduledAt DateTime?
-  publishedAt DateTime?
-  seoMetadata Json?
-  postResults Json?
-  createdById String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  logs SocialPostLog[]
-
-  @@index([status])
-  @@index([scheduledAt])
-  @@map("social_posts")
-}
-
-model SocialPostLog {
-  id           String   @id @default(uuid())
-  postId       String
-  platform     String
-  status       String   // SUCCESS, FAILED
-  response     Json?
-  errorMessage String?  @db.Text
-  postedAt     DateTime @default(now())
-
-  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@index([postId])
-  @@map("social_post_logs")
-}
-
-model AnalyticsEvent {
-  id        String   @id @default(uuid())
-  eventName String   // PageView, ViewContent, AddToCart, InitiateCheckout, Purchase, Lead
-  pageUrl   String
-  userIp    String?
-  userAgent String?
-  metadata  Json?
-  createdAt DateTime @default(now())
-
-  @@index([eventName])
-  @@index([createdAt])
-  @@map("analytics_events")
-}
-
-// ============================================================
-// PANCHANG MODULE
-// ============================================================
-
-model Panchang {
-  id                String   @id @default(uuid())
-  date              DateTime @unique
-  day               String?
-  dayHi             String?
-  hinduMonth        String?
-  hinduMonthHi      String?
-  paksha            String?
-  pakshaHi          String?
-  tithi             String?
-  tithiHi           String?
-  nakshatra         String?
-  nakshatraHi       String?
-  yog               String?
-  yogHi             String?
-  karan             String?
-  karanHi           String?
-  sunrise           String?
-  sunset            String?
-  moonrise          String?
-  moonset           String?
-  rahuKaal          String?
-  yamagandaKaal     String?
-  gulikaKaal        String?
-  abhijitMuhurat    String?
-  specialFestival   String?
-  specialFestivalHi String?
-  rashi             String?
-  rashiHi           String?
-  rawJson           Json?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@index([date])
-  @@map("panchang")
-}
-
-// ============================================================
-// FESTIVAL & VRAT MODULE
-// ============================================================
-
-model Festival {
-  id             String   @id @default(uuid())
-  date           DateTime
-  festival       String
-  festivalHi     String?
-  category       String?
-  categoryHi     String?
-  significance   String?  @db.Text
-  significanceHi String?  @db.Text
-  image          String?
-  rawJson        Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@index([date])
-  @@index([category])
-  @@map("festivals")
-}
-
-
-

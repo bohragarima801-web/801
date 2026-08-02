@@ -218,19 +218,6 @@ function BookingsManager() {
               )
             },
             {
-              key: 'sankalpPurpose', label: 'Sankalp Purpose (उद्देश्य)',
-              render: (r) => (
-                <div className="flex flex-col text-xs max-w-[200px]">
-                  <span className="font-bold text-indigo-950 bg-indigo-50/80 p-1.5 rounded border border-indigo-100 text-[11px] leading-snug line-clamp-3">
-                    {r.sankalpPurpose || r.sankalpText || '—'}
-                  </span>
-                  {r.specialInstructions && (
-                    <span className="text-[9px] text-slate-500 line-clamp-1 mt-0.5">{r.specialInstructions}</span>
-                  )}
-                </div>
-              )
-            },
-            {
               key: 'total', label: 'Amount',
               render: (r) => (
                 <div className="text-right">

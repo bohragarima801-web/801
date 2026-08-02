@@ -10,12 +10,10 @@ import {
   ChevronLeft, ChevronRight 
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { cn, getSafeImageUrl } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
-import { getYouTubeEmbedUrl } from '@/lib/youtube'
-import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -72,18 +70,14 @@ export function PujaClientView({ puja }: { puja: any }) {
 
   const isVideoUrl = (url: string) => {
     if (!url) return false
-    const lower = url.toLowerCase()
-    return (
-      lower.endsWith('.mp4') ||
-      lower.endsWith('.webm') ||
-      lower.endsWith('.mov') ||
-      lower.endsWith('.mkv') ||
-      lower.endsWith('.m3u8') ||
-      lower.includes('youtube.com') ||
-      lower.includes('youtu.be') ||
-      lower.includes('vimeo.com') ||
-      lower.startsWith('data:video/')
-    )
+    return url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('youtube') || url.includes('youtu.be')
+  }
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null
   }
 
   const handlePrevMedia = () => {
@@ -142,8 +136,7 @@ export function PujaClientView({ puja }: { puja: any }) {
           {activeImage && (
             <img 
               src={activeImage} 
-              alt={getAutoSeoAlt(puja.name, 'puja')} 
-              title={getAutoSeoAlt(puja.name, 'puja')}
+              alt={puja.name} 
               className="w-full h-full object-cover object-center scale-105 filter blur-sm transition-opacity duration-1000" 
             />
           )}
@@ -232,9 +225,8 @@ export function PujaClientView({ puja }: { puja: any }) {
                   )
                 ) : (
                   <img 
-                    src={getSafeImageUrl(currentMedia)} 
-                    alt={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
-                    title={getAutoSeoAlt(puja.name, 'puja', activeMediaIndex)} 
+                    src={currentMedia} 
+                    alt={puja.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                   />
                 )}
@@ -291,7 +283,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                           <Play className="w-4 h-4 text-amber-400 fill-amber-400" />
                         </div>
                       ) : (
-                        <img src={getSafeImageUrl(mediaUrl)} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover rounded-xs" />
+                        <img src={mediaUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover rounded-xs" />
                       )}
                     </button>
                   ))}
@@ -389,17 +381,10 @@ export function PujaClientView({ puja }: { puja: any }) {
                   )}
 
                   <div className="space-y-5">
-                    {/* Package Specific Custom Image - Fits 100% inside box without cropping */}
+                    {/* Package Specific Custom Image */}
                     {pkg.image && (
-                      <div className="aspect-[4/3] w-full rounded-xl overflow-hidden border border-amber-200/60 bg-gradient-to-b from-amber-50/50 via-white to-orange-50/30 mb-3 shadow-xs flex items-center justify-center p-1.5">
-                        <img 
-                          src={getSafeImageUrl(pkg.image)} 
-                          alt={pkg.name} 
-                          className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-105" 
-                          onError={(e) => {
-                            e.currentTarget.src = '/package-1.jpg';
-                          }}
-                        />
+                      <div className="aspect-[16/9] w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-100 mb-3 shadow-xs">
+                        <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
                       </div>
                     )}
 
@@ -593,22 +578,40 @@ export function PujaClientView({ puja }: { puja: any }) {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
-              <iframe 
-                src="https://www.youtube.com/embed/IbDU-s95iBA" 
-                className="w-full h-full" 
-                title="Divine Puja Havan Video 1"
-                allowFullScreen
-              />
-            </div>
-            <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
-              <iframe 
-                src="https://www.youtube.com/embed/IbDU-s95iBA" 
-                className="w-full h-full" 
-                title="Divine Puja Havan Video 2"
-                allowFullScreen
-              />
-            </div>
+            {puja.videos && puja.videos.length > 0 ? (
+              puja.videos.map((vid: any, idx: number) => {
+                const embedUrl = getYouTubeEmbedUrl(vid.url) || vid.url;
+                return (
+                  <div key={vid.id || idx} className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
+                    <iframe 
+                      src={embedUrl} 
+                      className="w-full h-full" 
+                      title={vid.title || `Divine Puja Havan Video ${idx + 1}`}
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <>
+                <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
+                  <iframe 
+                    src="https://www.youtube.com/embed/IbDU-s95iBA" 
+                    className="w-full h-full" 
+                    title="Divine Puja Havan Video 1"
+                    allowFullScreen
+                  />
+                </div>
+                <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
+                  <iframe 
+                    src="https://www.youtube.com/embed/IbDU-s95iBA" 
+                    className="w-full h-full" 
+                    title="Divine Puja Havan Video 2"
+                    allowFullScreen
+                  />
+                </div>
+              </>
+            )}
           </div>
         </section>
 
