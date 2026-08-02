@@ -152,11 +152,15 @@ export async function PUT(req: NextRequest) {
       data.slug = data.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
     }
     
-    if (data.status === 'PUBLISHED') {
-      data.publishedAt = data.publishedAt ? new Date(data.publishedAt) : new Date()
+    if (data.publishedAt) {
+      data.publishedAt = new Date(data.publishedAt)
+      data.status = 'PUBLISHED'
+    } else if (data.status === 'PUBLISHED') {
+      data.publishedAt = new Date()
     } else {
       data.publishedAt = null
     }
+
     
     if (data.categoryId === 'none' || data.categoryId === '') {
       delete data.categoryId;

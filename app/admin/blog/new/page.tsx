@@ -251,10 +251,11 @@ function BlogForm() {
           videoUrl,
           isVideoEnabled,
           faqs,
-          status: isPublished ? 'PUBLISHED' : 'DRAFT',
-          publishedAt: isPublished && publishedAt ? new Date(publishedAt).toISOString() : null
+          status: (isPublished || (publishedAt && new Date(publishedAt) > new Date())) ? 'PUBLISHED' : 'DRAFT',
+          publishedAt: publishedAt ? new Date(publishedAt).toISOString() : (isPublished ? new Date().toISOString() : null)
         })
       })
+
 
       const data = await res.json()
       if (data.ok) {
@@ -577,26 +578,58 @@ function BlogForm() {
       </div>
       
       <div className="space-y-6">
-        <Card>
-          <CardHeader><CardTitle className="text-base">Publishing</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
+        <Card className="border-amber-200">
+          <CardHeader className="bg-amber-50/50 pb-3">
+            <CardTitle className="text-base flex items-center justify-between text-slate-900">
+              <span>Publishing & Real-Time Schedule</span>
+              {publishedAt && new Date(publishedAt) > new Date() && (
+                <Badge className="bg-amber-600 text-white text-[10px]">⏰ Scheduled</Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4">
             <div className="flex items-center justify-between p-3 bg-muted/20 rounded-md">
-              <Label>Publish (Live)</Label>
+              <div>
+                <Label className="text-xs font-bold block">Publish Status</Label>
+                <p className="text-[10px] text-slate-500">Toggle ON to enable live site visibility</p>
+              </div>
               <Switch checked={isPublished} onCheckedChange={setIsPublished} />
             </div>
-            {isPublished && (
-              <div className="space-y-2">
-                <Label>Schedule Publish Date/Time</Label>
-                <Input type="datetime-local" value={publishedAt} onChange={(e) => setPublishedAt(e.target.value)} />
-                <p className="text-[10px] text-muted-foreground">Leave blank to publish immediately.</p>
-              </div>
-            )}
-            <Button className="w-full" type="submit" disabled={loading || uploadingImage}>
+
+            <div className="space-y-1.5 p-3 rounded-lg border border-amber-200 bg-amber-50/40">
+              <Label className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                ⏰ Real-Time Schedule Date & Time (शेड्यूल समय)
+              </Label>
+              <Input 
+                type="datetime-local" 
+                value={publishedAt} 
+                onChange={(e) => {
+                  setPublishedAt(e.target.value)
+                  if (e.target.value) setIsPublished(true)
+                }} 
+                className="text-xs bg-white border-amber-300"
+              />
+              <p className="text-[10px] text-amber-800">
+                तारीख व समय सेट करें। पोस्ट उसी समय रीयल-टाइम में लाइव होगी। खाली छोड़ने पर तुरंत लाइव होगी।
+              </p>
+              {publishedAt && (
+                <button 
+                  type="button" 
+                  onClick={() => setPublishedAt('')}
+                  className="text-[10px] text-red-600 hover:underline font-semibold block pt-1"
+                >
+                  Clear Schedule (शेड्यूल हटाएं)
+                </button>
+              )}
+            </div>
+
+            <Button className="w-full font-bold" type="submit" disabled={loading || uploadingImage}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              {editId ? 'Update Post' : (isPublished ? (publishedAt && new Date(publishedAt) > new Date() ? 'Schedule Post' : 'Publish Now') : 'Save Draft')}
+              {editId ? 'Update Blog Post' : (publishedAt && new Date(publishedAt) > new Date() ? '⏰ Schedule Post for Future' : (isPublished ? '🚀 Publish Live Now' : '💾 Save as Draft'))}
             </Button>
           </CardContent>
         </Card>
+
         
         <Card>
           <CardHeader><CardTitle className="text-base">Media</CardTitle></CardHeader>
