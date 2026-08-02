@@ -601,7 +601,8 @@ function NewPujaPage_Content() {
                                   <img 
                                     src={getSafeImageUrl(pkg.image)} 
                                     alt={pkg.name || `Package ${i + 1}`} 
-                                    className="h-full w-full object-cover transition-transform group-hover:scale-105" 
+                                    className="h-full w-full object-contain p-0.5 bg-slate-50 transition-transform group-hover:scale-105" 
+
                                     onError={(e) => {
                                       e.currentTarget.src = '/package-1.jpg';
                                     }}
