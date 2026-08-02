@@ -55,7 +55,12 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Tools Manager', slug: 'tools', icon: Wrench, items: [
     { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },
   ]},
+  { title: '📅 Panchang Manager', slug: 'panchang', icon: CalendarDays, href: '/admin/panchang' },
+  { title: '🎉 Festival & Vrat Manager', slug: 'festivals', icon: Sparkles, href: '/admin/festivals' },
+
+
   { title: '🎥 Videos & Reels', slug: 'videos', icon: Video, href: '/admin/videos', permission: 'media.read' },
+  { title: '📱 Social Scheduler', slug: 'social', icon: Megaphone, href: '/admin/social' },
   { title: 'Gallery', slug: 'gallery', icon: ImageIcon, href: '/admin/gallery', permission: 'gallery.read' },
   { title: 'Testimonials', slug: 'testimonials', icon: Star, href: '/admin/testimonials', permission: 'testimonial.read' },
   { title: 'Events', slug: 'events', icon: CalendarDays, href: '/admin/events', permission: 'event.read' },

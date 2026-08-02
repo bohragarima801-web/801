@@ -46,9 +46,13 @@ export async function initSecrets(force = false) {
           process.env['NEXT_PUBLIC_' + 'RAZORPAY_KEY_ID'] = cleanVal
           break
         case 'secret_supabase_url':
-          process.env['NEXT_PUBLIC_' + 'SUPABASE_URL'] = cleanVal
+        case 'secret.supabase_url':
+          if (cleanVal.startsWith('http://') || cleanVal.startsWith('https://')) {
+            process.env['NEXT_PUBLIC_' + 'SUPABASE_URL'] = cleanVal
+          }
           break
         case 'secret_supabase_anon_key':
+        case 'secret.supabase_anon_key':
           process.env['NEXT_PUBLIC_' + 'SUPABASE_ANON_KEY'] = cleanVal
           break
         case 'secret_admin_email':

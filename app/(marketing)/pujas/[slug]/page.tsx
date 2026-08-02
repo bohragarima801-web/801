@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import { PujaClientView } from '@/components/puja-client-view'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
+import Script from 'next/script'
+import { generateServiceSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
@@ -13,9 +15,6 @@ async function getPujaBySlugOrFallback(slug: string) {
       category: true,
       temple: true,
       packages: true,
-      videos: {
-        orderBy: { createdAt: 'asc' }
-      }
     }
   });
 
@@ -33,9 +32,6 @@ async function getPujaBySlugOrFallback(slug: string) {
         category: true,
         temple: true,
         packages: true,
-        videos: {
-          orderBy: { createdAt: 'asc' }
-        }
       }
     });
   }
@@ -47,22 +43,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja) return { title: 'Not Found' };
+  if (!puja) return generatePageMeta({ title: 'Puja Not Found | DivyaYagyam', description: 'The requested puja service is unavailable.', path: `/pujas/${slug}` });
 
-  return {
-    title: puja.seoTitle || puja.name,
-    description: puja.seoDescription || puja.shortDescription || '',
-    keywords: puja.seoKeywords || undefined,
-    openGraph: {
-      title: puja.seoTitle || puja.name,
-      description: puja.seoDescription || puja.shortDescription || '',
-      images: puja.coverImage ? [puja.coverImage] : [],
-    }
-  };
+  const title = puja.seoTitle || `${puja.name} — Book Online Puja | DivyaYagyam`
+  const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
+  const keywords = puja.seoKeywords ? puja.seoKeywords.split(',').map(k => k.trim()) : undefined
+
+  return generatePageMeta({
+    title,
+    description,
+    path: `/pujas/${puja.slug}`,
+    image: puja.coverImage || undefined,
+    keywords,
+  })
 }
-
-import { buildGraph, pujaNode } from '@/lib/seo/schema'
-import JsonLd from '@/components/JsonLd'
 
 export default async function PujaDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -77,44 +71,59 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
     redirect(`/pujas/${puja.slug}`);
   }
 
-  const images = puja.coverImage ? [puja.coverImage] : []
-
-  const graph = buildGraph({
-    path: `/pujas/${puja.slug}`,
-    type: 'ItemPage',
-    title: puja.seoTitle || puja.name,
-    description: puja.seoDescription || puja.shortDescription || '',
-    image: images[0],
-    crumbs: [
-      { name: 'ऑनलाइन पूजा', path: '/pujas' },
-      { name: puja.name, path: `/pujas/${puja.slug}` },
-    ],
-    entities: [
-      pujaNode({
-        slug: puja.slug,
-        name: puja.name,
-        description: puja.shortDescription || puja.description || '',
-        images: images,
-        price: Number(puja.price),
-        priceRange: puja.vipPrice ? { min: Number(puja.price), max: Number(puja.vipPrice) } : undefined,
-        temple: puja.temple?.name || puja.location || 'Maa Katyayni Durga Shaktipeeth',
-        templeAddress: {
-          locality: puja.temple?.city || 'Jodhpur',
-          region: puja.temple?.state || 'Rajasthan',
-          country: 'IN'
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Event",
+        "name": puja.name,
+        "description": (puja.shortDescription || puja.description || '').replace(/<[^>]*>?/gm, ''),
+        "image": puja.coverImage ? [puja.coverImage] : [],
+        "startDate": puja.pujaDate ? new Date(puja.pujaDate).toISOString() : new Date().toISOString(),
+        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "VirtualLocation",
+          "url": `https://divyayagyam.com/pujas/${puja.slug}`
         },
-        durationMinutes: puja.duration || 60,
-        asProduct: true,
-      })
+        "offers": {
+          "@type": "Offer",
+          "price": Number(puja.price),
+          "priceCurrency": "INR",
+          "url": `https://divyayagyam.com/pujas/${puja.slug}`,
+          "availability": "https://schema.org/InStock",
+          "validFrom": new Date().toISOString()
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "DivyaYagyam",
+          "url": "https://divyayagyam.com"
+        }
+      },
+      generateServiceSchema({
+        name: puja.name,
+        description: puja.shortDescription || puja.description?.substring(0, 200) || '',
+        image: puja.coverImage || '/logo.jpg',
+        price: Number(puja.price),
+        slug: puja.slug,
+        location: puja.temple?.name || puja.temple?.city || undefined,
+      }),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Pujas', url: `${BASE_URL}/pujas` },
+        { name: puja.name, url: `${BASE_URL}/pujas/${puja.slug}` },
+      ]),
     ]
-  })
+  }
 
   return (
     <>
-      <JsonLd data={graph} />
+      <Script
+        id={`schema-puja-${puja.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PujaClientView puja={puja} />
     </>
   )
 }
-
-

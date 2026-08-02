@@ -3,6 +3,17 @@
 import { prisma } from '@/lib/prisma'
 import Image from 'next/image';
 import Link from 'next/link'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'सनातन धर्म ब्लॉग — पूजा विधि, मंत्र, ज्योतिष | DivyaYagyam',
+    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
+    path: '/blog',
+  })
+}
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -26,8 +37,30 @@ export default async function BlogListPage() {
     orderBy: { publishedAt: 'desc' }
   })
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        name: 'DivyaYagyam Spiritual Blog',
+        description: 'Articles on dharma, mantras, festivals, and spiritual guidance.',
+        url: `${BASE_URL}/blog`,
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Blog', url: `${BASE_URL}/blog` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="container py-12 space-y-10">
+    <>
+      <Script
+        id="schema-blog-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-12 space-y-10">
       <div className="text-center max-w-2xl mx-auto">
         <Badge variant="secondary" className="mb-3">✍️ Spiritual Insights</Badge>
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Divine Wisdom Blog</h1>
@@ -39,11 +72,16 @@ export default async function BlogListPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map(post => (
           <Card key={post.id} className="group hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden border">
-            {post.coverImage && (
-              <div className="aspect-video relative overflow-hidden bg-slate-100">
-                <img loading="lazy" src={post.coverImage} alt={post.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
-              </div>
-            )}
+            <div className="aspect-video relative overflow-hidden bg-slate-100">
+              <img 
+                loading="lazy" 
+                src={getSafeImageUrl(post.coverImage)} 
+                alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`} 
+                title={post.title}
+                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+              />
+
+            </div>
             <CardContent className="p-6 flex flex-col justify-between h-[300px]">
               <div className="space-y-3">
                 <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200">
@@ -74,6 +112,7 @@ export default async function BlogListPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
 

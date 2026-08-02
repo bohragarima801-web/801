@@ -1,8 +1,18 @@
 import { getSetting } from '@/lib/settings'
 import { prisma } from '@/lib/prisma'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { Badge } from '@/components/ui/badge'
 import { Camera, Sparkles, Video, Lock } from 'lucide-react'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'दिव्य दर्शन व गैलरी — Sacred Temple Photos & Videos',
+    description: 'काशी विश्वनाथ, महाकालेश्वर एवं सिद्ध मंदिरों के पावन पूजा अनुष्ठानों, आरती एवं धार्मिक कार्यक्रमों के लाइव फोटो व वीडियो दर्शन।',
+    path: '/gallery',
+  })
+}
 
 export const revalidate = 30
 
@@ -11,10 +21,24 @@ export default async function GalleryPublicPage() {
     orderBy: { order: 'asc' }
   })
 
-
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Gallery', url: `${BASE_URL}/gallery` },
+      ]),
+    ],
+  }
 
   return (
-    <div className="container py-16 space-y-12">
+    <>
+      <Script
+        id="schema-gallery-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-16 space-y-12">
       <div className="text-center max-w-2xl mx-auto">
         <Badge variant="secondary" className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-200">🖼️ Sacred Gallery</Badge>
         <h1 className="text-4xl md:text-5xl font-black text-slate-900">
@@ -59,5 +83,6 @@ export default async function GalleryPublicPage() {
         </div>
       )}
     </div>
+    </>
   )
 }

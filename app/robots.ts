@@ -3,32 +3,27 @@ import { getDynamicSiteConfig } from '@/lib/settings'
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const config = await getDynamicSiteConfig()
-  const baseUrl = config.url || 'https://divyayagyam.com'
+  const rawBaseUrl = config.url || 'https://divyayagyam.com'
+  const baseUrl = rawBaseUrl.includes('localhost') ? 'https://divyayagyam.com' : rawBaseUrl
 
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/', '/*?category=*'],
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
       },
       {
-        userAgent: 'GPTBot',
+        userAgent: [
+          'Googlebot', 'Bingbot', 'GPTBot', 'ChatGPT-User', 'OAI-SearchBot',
+          'ClaudeBot', 'Claude-User', 'Claude-SearchBot',
+          'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Bytespider',
+          'Applebot', 'Applebot-Extended', 'Meta-ExternalAgent'
+        ],
         allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/'],
-      },
-      {
-        userAgent: 'PerplexityBot',
-        allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/'],
-      },
-      {
-        userAgent: 'ClaudeBot',
-        allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/'],
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }
 }
-

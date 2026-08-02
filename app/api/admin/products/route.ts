@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { autoGenerateProductSeo } from '@/lib/seo-auto'
+import { revalidateTag, revalidatePath } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,6 +75,12 @@ export async function DELETE(req: NextRequest) {
       where: { id },
     })
 
+    try {
+      revalidateTag('products')
+      revalidatePath('/products')
+      revalidatePath('/')
+    } catch {}
+
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     if (err.code === 'P2003') {
@@ -123,6 +131,16 @@ export async function POST(req: NextRequest) {
       calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
     }
 
+    const autoSeo = autoGenerateProductSeo({
+      name,
+      shortDescription,
+      description,
+      isAbhimantrit: !!isAbhimantrit,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+    })
+
     const payload: any = {
       name,
       slug: calculatedSlug,
@@ -139,9 +157,9 @@ export async function POST(req: NextRequest) {
       status: status || 'DRAFT',
       tags: tags || null,
       customHtml: customHtml || null,
-      seoTitle: seoTitle || null,
-      seoDescription: seoDescription || null,
-      seoKeywords: seoKeywords || null
+      seoTitle: autoSeo.seoTitle,
+      seoDescription: autoSeo.seoDescription,
+      seoKeywords: autoSeo.seoKeywords,
     }
 
     let product
@@ -190,6 +208,12 @@ export async function POST(req: NextRequest) {
         })
       }
     }
+
+    try {
+      revalidateTag('products')
+      revalidatePath('/products')
+      revalidatePath('/')
+    } catch {}
 
     return NextResponse.json({ ok: true, data: product });
   } catch (err: any) {

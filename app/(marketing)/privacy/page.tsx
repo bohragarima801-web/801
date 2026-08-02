@@ -3,7 +3,16 @@ import { Shield, Sparkles, Key, Heart, Mail, Phone, MapPin, EyeOff } from 'lucid
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'गोपनीयता नीति (Privacy Policy) — Data & Sankalp Protection',
+    description: 'DivyaYagyam गोपनीयता नीति। जानें कि हम आपके नाम-गोत्र संकल्प, पूजा बुकिंग डेटा और व्यक्तिगत जानकारी की सुरक्षा कैसे करते हैं।',
+    path: '/privacy',
+  })
+}
 export const revalidate = 30
 
 export default async function PrivacyPage() {
@@ -12,8 +21,24 @@ export default async function PrivacyPage() {
   })
   const customContent = setting?.value || ''
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Privacy Policy', url: `${BASE_URL}/privacy` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="bg-slate-50/50 min-h-screen py-12">
+    <>
+      <Script
+        id="schema-privacy-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="bg-slate-50/50 min-h-screen py-12">
       <div className="container max-w-4xl mx-auto space-y-8 px-4">
         
         {/* Page Header */}
@@ -34,7 +59,7 @@ export default async function PrivacyPage() {
                   <Shield className="h-5 w-5 text-[var(--primary-color)]" /> Overview
                 </h2>
                 <p>
-                  Welcome to <strong>DivyaYagyam</strong> (<Link href={process.env.NEXT_PUBLIC_URL_4529 || ''} className="text-[var(--primary-color)] hover:underline text-xs md:text-sm font-semibold">{process.env.NEXT_PUBLIC_URL_4530 || ''}</Link>). Protecting your privacy and the security of your personal information is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you engage with our spiritual and Vedic ritual services.
+                  Welcome to <strong>DivyaYagyam</strong> (<Link href={BASE_URL} className="text-[var(--primary-color)] hover:underline text-xs md:text-sm font-semibold">divyayagyam.com</Link>). Protecting your privacy and the security of your personal information is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you engage with our spiritual and Vedic ritual services.
                 </p>
                 <p>
                   By using our services, you consent to the data practices described in this policy. If you do not agree with these terms, please do not use our platform.
@@ -151,6 +176,7 @@ export default async function PrivacyPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

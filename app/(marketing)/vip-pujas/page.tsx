@@ -1,6 +1,17 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'VIP पूजा अनुष्ठान — Special Personalised Vedic Rituals',
+    description: 'विशिष्ट VIP पूजा एवं महा-अनुष्ठान। आपके नाम व गोत्र से व्यक्तिगत संकल्प, 1-on-1 लाइव वीडियो स्ट्रीमिंग एवं विशेष महाप्रसाद डिलीवरी।',
+    path: '/vip-pujas',
+  })
+}
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,10 +34,24 @@ export default async function VipPujasPage() {
     orderBy: { createdAt: 'desc' }
   }).catch(() => [])
 
-
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'VIP Pujas', url: `${BASE_URL}/vip-pujas` },
+      ]),
+    ],
+  }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-50/40 via-background to-background py-16">
+    <>
+      <Script
+        id="schema-vip-pujas-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-50/40 via-background to-background py-16">
       <div className="container max-w-6xl space-y-12">
         
         {/* DEVOTIONAL HEADER */}
@@ -54,7 +79,7 @@ export default async function VipPujasPage() {
                 <Card key={p.id} className="overflow-hidden group hover:shadow-2xl hover:border-amber-500/40 transition-all duration-300 border border-slate-100 flex flex-col justify-between bg-white relative">
                   
                   {/* Image/Video section */}
-                  <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
+                  <Link href={`/pujas/${p.slug}`} className="relative aspect-[16/10] bg-slate-950 overflow-hidden block">
                     {p.coverImage ? (
                       p.coverImage.endsWith('.mp4') || p.coverImage.endsWith('.webm') || p.coverImage.startsWith('data:video/') ? (
                         <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
@@ -72,7 +97,7 @@ export default async function VipPujasPage() {
                     <div className="absolute top-3 left-3 bg-amber-500 text-white font-black px-2.5 py-1 rounded-md text-[10px] tracking-wider uppercase border border-amber-400 shadow-md">
                       ⭐ EXCLUSIVE
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Details section */}
                   <CardContent className="p-6 flex-1 flex flex-col justify-between space-y-4">
@@ -81,7 +106,7 @@ export default async function VipPujasPage() {
                         {p.category?.name || 'Exclusive Ritual'}
                       </Badge>
                       <h3 className="font-extrabold text-xl text-slate-800 line-clamp-1 group-hover:text-amber-600 transition-colors leading-snug">
-                        {p.name}
+                        <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
                       </h3>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <MapPin className="h-4 w-4 text-amber-600 shrink-0" />
@@ -161,5 +186,6 @@ export default async function VipPujasPage() {
 
       </div>
     </div>
+    </>
   )
 }

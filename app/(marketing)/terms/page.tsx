@@ -3,7 +3,16 @@ import { ShieldCheck, UserCheck, Sparkles, BookOpen, AlertCircle, Eye, ShieldAle
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'नियम एवं शर्तें (Terms & Conditions) — Service Rules & Policies',
+    description: 'DivyaYagyam नियम एवं शर्तें। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प, प्रसाद डिलीवरी, एवं सेवा उपयोग से जुड़ी संपूर्ण नियम व शर्तें।',
+    path: '/terms',
+  })
+}
 export const revalidate = 30
 
 export default async function TermsPage() {
@@ -12,8 +21,24 @@ export default async function TermsPage() {
   })
   const customContent = setting?.value || ''
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Terms & Conditions', url: `${BASE_URL}/terms` },
+      ]),
+    ],
+  }
+
   return (
-    <div className="bg-slate-50/50 min-h-screen py-12">
+    <>
+      <Script
+        id="schema-terms-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="bg-slate-50/50 min-h-screen py-12">
       <div className="container max-w-4xl mx-auto space-y-8 px-4">
         
         {/* Page Header */}
@@ -161,6 +186,7 @@ export default async function TermsPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

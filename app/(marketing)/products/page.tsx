@@ -1,17 +1,24 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'वैदिक पूजा सामग्री — रुद्राक्ष, यंत्र, माला | DivyaYagyam',
+    description: '100% अभिमंत्रित वैदिक सामग्री। रुद्राक्ष, यंत्र, पूजा थाली, माला — मंदिर से सीधे आपके घर। Free delivery on ₹999+.',
+    path: '/products',
+  })
+}
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Sparkles } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { AddToCartButton } from '@/components/add-to-cart-button'
-
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
-
-import { buildGraph, itemListNode } from '@/lib/seo/schema'
-import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 30
 
@@ -33,27 +40,35 @@ export default async function ProductsPage() {
     }).catch(() => [])
   ])
 
-  const graph = buildGraph({
-    path: '/products',
-    type: 'CollectionPage',
-    title: 'पूजा सामग्री व अभिमंत्रित प्रसाद (Store)',
-    description: 'गंगाजल से अभिमंत्रित सिद्ध रुद्राक्ष माला, धूप-दीप, पूजन सामग्री और सिद्ध यंत्र।',
-    crumbs: [{ name: 'पूजा सामग्री', path: '/products' }],
-    entities: [
-      itemListNode('/products', products.map(p => ({
-        name: p.name,
-        url: `/products/${p.slug}`,
-        image: p.coverImage || undefined,
-        price: Number(p.salePrice || p.price)
-      })))
-    ]
-  })
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        name: 'Sacred Spiritual Products & Samagri',
+        itemListElement: products.map((p, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          name: p.name,
+          url: `${BASE_URL}/products/${p.slug}`,
+        })),
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Products', url: `${BASE_URL}/products` },
+      ]),
+    ],
+  }
 
   return (
-    <div className="space-y-10">
-      <JsonLd data={graph} />
+    <>
+      <Script
+        id="schema-products-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="space-y-10">
       <HeroPujaSlider slides={heroSlides} />
-
       <div className="container py-4 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <Badge variant="secondary" className="mb-3">🛍️ Store</Badge>
@@ -82,7 +97,7 @@ export default async function ProductsPage() {
                 <div className="relative aspect-square bg-slate-100 overflow-hidden pointer-events-none">
                   {p.coverImage ? (
                     <Image src={p.coverImage}
-                      alt={p.name}
+                      alt={getAutoSeoAlt(p.name, 'product')}
                       fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform group-hover:scale-105"
                     />
@@ -129,6 +144,7 @@ export default async function ProductsPage() {
       )}
     </div>
     </div>
+    </>
   )
 }
 

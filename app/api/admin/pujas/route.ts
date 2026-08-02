@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ensureDefaultCategoriesAndTemples } from '@/lib/data-defaults'
-import { DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+import { DEFAULT_PLACEHOLDER_IMAGE, convertGoogleDriveUrl, generateShortSlug } from '@/lib/utils'
 import { getAdminSession } from '@/lib/admin-session'
 import { revalidateTag, revalidatePath } from 'next/cache'
+import { autoGeneratePujaSeo } from '@/lib/seo-auto'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,9 +26,6 @@ export async function GET(req: NextRequest) {
           packages: true,
           images: {
             orderBy: { order: 'asc' }
-          },
-          videos: {
-            orderBy: { createdAt: 'asc' }
           }
         }
       })
@@ -60,7 +58,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     
     await ensureDefaultCategoriesAndTemples()
-    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, videos, publishedAt, pujaDate, isEvergreen, isFestival, seoTitle, seoDescription, seoKeywords, customHtml } = await req.json()
+    const { id, name, slug, categoryId, location, shortDescription, description, benefits, price, vipPrice, duration, maxMembers, isVip, isOnline, isFeatured, status, coverImage, packages, images, publishedAt, pujaDate, isEvergreen, isFestival, seoTitle, seoDescription, seoKeywords, customHtml } = await req.json()
 
     if (!name) {
       return NextResponse.json({ ok: false, error: 'Puja Name is required' }, { status: 400 });
@@ -69,7 +67,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Category is required' }, { status: 400 });
     }
 
-    let calculatedSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = generateShortSlug(slug || name)
 
     // Auto-resolve slug conflicts
     const existing = await prisma.puja.findUnique({ where: { slug: calculatedSlug } })
@@ -79,6 +77,18 @@ export async function POST(req: NextRequest) {
 
     const finalPrice = Number(price) || 0
     const finalVipPrice = vipPrice ? Number(vipPrice) : null
+
+    const autoSeo = autoGeneratePujaSeo({
+      name,
+      shortDescription,
+      description,
+      location,
+      price: finalPrice,
+      isVip,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+    })
 
     const payload: any = {
       name,
@@ -99,11 +109,11 @@ export async function POST(req: NextRequest) {
       status: status || 'DRAFT',
       publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
       pujaDate: pujaDate ? new Date(pujaDate) : null,
-      seoTitle: seoTitle || null,
-      seoDescription: seoDescription || null,
-      seoKeywords: seoKeywords || null,
+      seoTitle: autoSeo.seoTitle,
+      seoDescription: autoSeo.seoDescription,
+      seoKeywords: autoSeo.seoKeywords,
       customHtml: customHtml || null,
-      coverImage: coverImage || DEFAULT_PLACEHOLDER_IMAGE,
+      coverImage: convertGoogleDriveUrl(coverImage) || DEFAULT_PLACEHOLDER_IMAGE,
       category: { connect: { id: categoryId } }
     }
 
@@ -123,7 +133,7 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
-              image: pkg.image || null
+              image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
         }
@@ -138,7 +148,7 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
-              image: pkg.image || null
+              image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
         }
@@ -154,24 +164,8 @@ export async function POST(req: NextRequest) {
         await prisma.pujaImage.createMany({
           data: images.map((url: string, index: number) => ({
             pujaId: puja.id,
-            url: url || '',
+            url: url ? convertGoogleDriveUrl(url) : '',
             order: index
-          }))
-        })
-      }
-    }
-
-    // Sync videos
-    if (videos && Array.isArray(videos)) {
-      await prisma.pujaVideo.deleteMany({
-        where: { pujaId: puja.id }
-      })
-      if (videos.length > 0) {
-        await prisma.pujaVideo.createMany({
-          data: videos.map((v: any) => ({
-            pujaId: puja.id,
-            title: v.title || null,
-            url: v.url || ''
           }))
         })
       }

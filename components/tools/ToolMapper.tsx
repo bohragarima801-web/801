@@ -10,16 +10,66 @@ type ToolComponentProps = {
   isPremiumUnlocked: boolean
 }
 
-// 1. IMPORT YOUR CUSTOM REACT TOOLS HERE
-// import KundliMilanTool from './kundli-milan'
+import KundaliTool from './KundaliTool'
+import MalaTool from './MalaTool'
+import NumerologyTool from './NumerologyTool'
 
 // 2. MAP SLUGS TO COMPONENTS
 const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
-  // 'kundli-milan': KundliMilanTool,
+  kundali: KundaliTool,
+  mala: MalaTool,
+  numerology: NumerologyTool,
 }
 
+
 export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUnlocked: boolean }) {
+  const slug = (tool?.slug || '').toLowerCase().trim()
+
+  if (slug === 'panchang') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/panchang'
+    }
+    return (
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Vedic Panchang...</p>
+        <a href="/panchang" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Panchang Page Now ➔
+        </a>
+      </div>
+    )
+  }
+
+  if (slug === 'festivals' || slug === 'festival-calendar') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/festivals'
+    }
+    return (
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Festival Calendar...</p>
+        <a href="/festivals" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Festival Calendar Now ➔
+        </a>
+      </div>
+    )
+  }
+
+  if (slug === 'muhurat' || slug === 'shubh-muhurat') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/muhurat'
+    }
+    return (
+      <div className="p-8 text-center bg-yellow-100 border-4 border-amber-400 rounded-3xl text-red-950 font-black">
+        <p className="text-lg">Redirecting to Shubh Muhurat Finder...</p>
+        <a href="/muhurat" className="inline-block mt-4 px-6 py-3 bg-red-600 text-yellow-300 rounded-2xl font-black border-b-4 border-red-900">
+          Open Shubh Muhurat Finder Now ➔
+        </a>
+      </div>
+    )
+  }
+
+
   const Component = TOOL_REGISTRY[tool.slug]
+
 
   if (Component) {
     return <Component tool={tool} isPremiumUnlocked={isPremiumUnlocked} />

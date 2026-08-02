@@ -1,40 +1,58 @@
 
 import Link from 'next/link'
 import Image from 'next/image';
+import Script from 'next/script'
+import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
+import { getAutoSeoAlt } from '@/lib/seo-auto'
+
+import { getSafeImageUrl } from '@/lib/utils'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'ऑनलाइन पूजा बुकिंग — काशी, महाकाल, उज्जैन | DivyaYagyam',
+    description: '100+ वैदिक पूजा अनुष्ठान ऑनलाइन बुक करें। रुद्राभिषेक, कालसर्प दोष निवारण, नवग्रह शांति — विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प।',
+    path: '/pujas',
+  })
+}
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, MapPin, Sparkles } from 'lucide-react'
 import { getCachedPujas } from '@/lib/cache'
 
-import { buildGraph, itemListNode } from '@/lib/seo/schema'
-import JsonLd from '@/components/JsonLd'
-
 export const revalidate = 3600 // Cache public route on CDN Edge for up to 1 hour (revalidated on-demand)
 
 export default async function PujasPage() {
   const pujas = await getCachedPujas()
 
-  const graph = buildGraph({
-    path: '/pujas',
-    type: 'CollectionPage',
-    title: 'ऑनलाइन पूजा अनुष्ठान (Sacred Pujas)',
-    description: 'भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे लाइव-स्ट्रीम पूजा। अपने नाम व गोत्र से संकल्प करवाएं।',
-    crumbs: [{ name: 'ऑनलाइन पूजा', path: '/pujas' }],
-    entities: [
-      itemListNode('/pujas', pujas.map(p => ({
-        name: p.name,
-        url: `/pujas/${p.slug}`,
-        image: p.coverImage || undefined,
-        price: Number(p.price)
-      })))
-    ]
-  })
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        name: 'Sacred Online Vedic Pujas',
+        itemListElement: pujas.map((p, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          name: p.name,
+          url: `${BASE_URL}/pujas/${p.slug}`,
+        })),
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Pujas', url: `${BASE_URL}/pujas` },
+      ]),
+    ],
+  }
 
   return (
-    <div className="container py-14 space-y-10">
-      <JsonLd data={graph} />
-
+    <>
+      <Script
+        id="schema-pujas-page"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-14 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <Badge variant="secondary" className="mb-3">🔥 Pujas</Badge>
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Sacred Pujas (पूजा अनुष्ठान)</h1>
@@ -56,12 +74,12 @@ export default async function PujasPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pujas.map((p) => (
             <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between">
-              <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
+              <Link href={`/pujas/${p.slug}`} className="relative aspect-[16/10] bg-slate-100 overflow-hidden block">
                 {p.coverImage ? (
-                  <Image src={p.coverImage}
-                    alt={p.name}
+                  <Image src={getSafeImageUrl(p.coverImage)}
+                    alt={getAutoSeoAlt(p.name, 'puja')}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform group-hover:scale-105"
+                    className="object-cover object-top transition-transform group-hover:scale-105"
                   />
                 ) : (
                   <div className="h-full w-full flex items-center justify-center text-primary bg-[var(--secondary-color)]/10">
@@ -73,7 +91,7 @@ export default async function PujasPage() {
                     ⭐ VIP
                   </Badge>
                 )}
-              </div>
+              </Link>
               <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-2">
                   <Badge variant="outline" className="text-xs">
@@ -109,6 +127,7 @@ export default async function PujasPage() {
         </div>
       )}
     </div>
+    </>
   )
 }
 

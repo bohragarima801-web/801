@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { autoGenerateBlogSeo } from '@/lib/seo-auto'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
     const data = await req.json()
-    const { title, slug, excerpt, content, categoryId, coverImage, status, publishedAt, seoTitle, seoDescription, seoKeywords, videoUrl, isVideoEnabled, faqs } = data
+    const { title, slug, excerpt, content, categoryId, coverImage, coverImageAlt, status, publishedAt, seoTitle, seoDescription, seoKeywords, videoUrl, isVideoEnabled, faqs } = data
 
     if (!title || !categoryId) {
       return NextResponse.json({ ok: false, error: 'Title and Category are required' }, { status: 400 });
@@ -81,6 +82,17 @@ export async function POST(req: NextRequest) {
       calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
     }
 
+    const autoSeo = autoGenerateBlogSeo({
+      title,
+      excerpt,
+      content,
+      seoTitle,
+      seoDescription,
+      seoKeywords,
+    })
+
+    const finalCoverAlt = coverImageAlt || `${title} - Online Puja Booking & Spiritual Guide DivyaYagyam`
+
     const post = await prisma.blog.create({
       data: {
         title,
@@ -90,11 +102,12 @@ export async function POST(req: NextRequest) {
         categoryId,
         authorId: data.authorId || (await prisma.user.findUnique({ where: { email: session.email } }))?.id || null,
         coverImage: coverImage || null,
+        coverImageAlt: finalCoverAlt,
         status: status || 'DRAFT',
         publishedAt: publishedAt ? new Date(publishedAt) : (status === 'PUBLISHED' ? new Date() : null),
-        seoTitle,
-        seoDescription,
-        seoKeywords,
+        seoTitle: autoSeo.seoTitle,
+        seoDescription: autoSeo.seoDescription,
+        seoKeywords: autoSeo.seoKeywords,
         videoUrl,
         isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true
       }
@@ -150,6 +163,10 @@ export async function PUT(req: NextRequest) {
     }
 
     const { faqs, ...restData } = data;
+
+    if (restData.coverImage && (!restData.coverImageAlt || !restData.coverImageAlt.trim())) {
+      restData.coverImageAlt = restData.title ? `${restData.title} - Online Puja Booking & Spiritual Guide DivyaYagyam` : 'DivyaYagyam Spiritual Guide'
+    }
 
     const post = await prisma.blog.update({
       where: { id },
