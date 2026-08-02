@@ -22,6 +22,8 @@ interface ItemRef {
   name: string
 }
 
+const DEFAULT_PACKAGE_IMAGES = ['/package-1.jpg', '/package-2.jpg', '/package-4.jpg', '/package-6.jpg']
+
 const DEFAULT_PACKAGES = [
   {
     id: 'default-1',
@@ -52,6 +54,7 @@ const DEFAULT_PACKAGES = [
     image: "/package-6.jpg"
   }
 ]
+
 
 function checkIsVideo(u: string) {
   if (!u) return false
@@ -184,7 +187,12 @@ function NewPujaPage_Content() {
             setGalleryImages(photos)
             if (vid) setVideoUrl(vid)
           }
-          setPackages(p.packages ? p.packages.map((pkg: any) => ({ ...pkg, image: pkg.image || '' })) : [])
+          setPackages(
+            p.packages && p.packages.length > 0 
+              ? p.packages.map((pkg: any, idx: number) => ({ ...pkg, image: pkg.image || DEFAULT_PACKAGE_IMAGES[idx % DEFAULT_PACKAGE_IMAGES.length] })) 
+              : DEFAULT_PACKAGES
+          )
+
         } else {
           toast.error('Failed to find puja details')
         }
@@ -301,8 +309,19 @@ function NewPujaPage_Content() {
   }
 
   const handleAddPackage = () => {
-    setPackages([...packages, { id: Date.now().toString(), name: '', price: '', description: '' }])
+    const defaultImg = DEFAULT_PACKAGE_IMAGES[packages.length % DEFAULT_PACKAGE_IMAGES.length]
+    setPackages([
+      ...packages, 
+      { 
+        id: Date.now().toString(), 
+        name: '', 
+        price: '', 
+        description: '',
+        image: defaultImg
+      }
+    ])
   }
+
 
   const handleRemovePackage = (index: number) => {
     setPackages(packages.filter((_, i) => i !== index))

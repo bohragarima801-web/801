@@ -25,6 +25,7 @@ export function PujaClientView({ puja }: { puja: any }) {
       name: 'Single Member (1 नाम)', 
       price: basePrice, 
       popular: false,
+      image: '/package-1.jpg',
       desc: 'संकल्प में 1 व्यक्ति का नाम व गोत्र पुकारा जाएगा. विशेष हवन आहुति एवं मन्त्र जप. व्हाट्सएप/ईमेल पर पूजा वीडियो प्राप्त करें. शुद्ध शक्तिपीठ प्रसाद आपके घर पर delivered.' 
     },
     { 
@@ -32,6 +33,7 @@ export function PujaClientView({ puja }: { puja: any }) {
       name: 'Couple (2 नाम)', 
       price: basePrice + 550, 
       popular: false,
+      image: '/package-2.jpg',
       desc: 'संकल्प में पति-पत्नी या 2 सदस्यों का नाम व गोत्र पुकारा जाएगा. सुख-समृद्धि एवं दांपत्य शांति हेतु special havan. सम्पूर्ण वीडियो रिकॉर्डिंग. पवित्र प्रसाद डिलीवरी.' 
     },
     { 
@@ -39,6 +41,7 @@ export function PujaClientView({ puja }: { puja: any }) {
       name: 'Family Package (4 नाम)', 
       price: basePrice + 1550, 
       popular: true,
+      image: '/package-4.jpg',
       desc: 'परिवार के 4 सदस्यों के नाम व गोत्र से विशेष संकल्प. परिवार कल्याण एवं संकट निवारण महायज्ञ. WhatsApp पर वीडियो लिंक. शुद्ध मंदिर प्रसाद घर तक.' 
     },
     { 
@@ -46,9 +49,11 @@ export function PujaClientView({ puja }: { puja: any }) {
       name: 'Joint Family / Maha Yagya (6 नाम)', 
       price: basePrice + 2550, 
       popular: false,
+      image: '/package-6.jpg',
       desc: 'समस्त परिवार (6 नाम व गोत्र) के लिए महा संकल्प. विशेष मंत्र जप एवं 108 हवन आहुति. HD Video recording. विशेष सिद्ध प्रसाद एवं रक्षा सूत्र डिलीवरी.' 
     }
   ]
+
 
   const packages = puja?.packages?.length ? puja.packages : defaultPackages
 
