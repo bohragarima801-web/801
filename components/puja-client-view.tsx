@@ -175,11 +175,11 @@ export function PujaClientView({ puja }: { puja: any }) {
   return (
     <div className="relative bg-[#FAF8F5] pb-28 sm:pb-32 font-sans antialiased text-slate-800">
       
-      {/* 1. Hero Section (Ultra-Pro Luxury Vedic Dark Gold Theme) */}
-      <section className="relative w-full py-12 sm:py-20 lg:py-24 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#120704] via-[#1E0C07] to-[#0A0302] text-white">
+      {/* 1. Hero Section (Vibrant Luxury Sanatan Saffron-Crimson & Royal Gold Theme) */}
+      <section className="relative w-full py-12 sm:py-16 lg:py-20 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#4A0D08] via-[#7B180F] to-[#360804] text-white">
         
-        {/* Background Atmosphere Image with Ambient Blur & Dark Vignette */}
-        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none overflow-hidden">
+        {/* Background Atmosphere Image with Warm Vignette & Ambient Glow */}
+        <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
           {activeImage && (
             <img 
               src={activeImage} 
@@ -187,40 +187,43 @@ export function PujaClientView({ puja }: { puja: any }) {
               className="w-full h-full object-cover object-center scale-105 filter blur-sm transition-opacity duration-1000" 
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0302] via-[#120704]/80 to-[#1E0C07]/90"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,158,11,0.12),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#360804] via-[#4A0D08]/85 to-[#7B180F]/90"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(251,191,36,0.28),transparent_70%)]"></div>
         </div>
         
-        {/* Ambient Gold Particle / Radial Glow */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+        {/* Ambient Luminous Gold Particles Glow */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-amber-400/25 rounded-full blur-3xl pointer-events-none z-0"></div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14">
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           
           {/* Main Title & Details */}
-          <div className="flex-1 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 border border-amber-400/30 bg-amber-500/10 backdrop-blur-xl px-4 py-1.5 rounded-full shadow-[0_4px_20px_rgba(245,158,11,0.15)]">
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span className="text-amber-300 font-bold text-xs sm:text-sm tracking-widest uppercase">
+          <div className="flex-1 space-y-5 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 border border-amber-400/40 bg-amber-500/20 backdrop-blur-xl px-4 py-1.5 rounded-full shadow-[0_4px_25px_rgba(245,158,11,0.25)]">
+              <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+              <span className="text-amber-200 font-bold text-xs sm:text-sm tracking-widest uppercase">
                 {puja.category?.name || 'दिव्य अनुष्ठान एवं महायज्ञ'}
               </span>
             </div>
             
-            <h1 className="flex flex-col space-y-2">
-              <span className="text-amber-200/90 text-lg sm:text-2xl font-serif tracking-wide italic">
-                सर्व कार्य सिद्धि हेतु
-              </span>
-              <span className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-200 to-amber-400 pb-1">
+            <div className="space-y-2">
+              <p className="text-amber-300/90 text-sm sm:text-base md:text-lg font-bold font-devanagari tracking-wide italic">
+                ✨ सर्व कार्य सिद्धि हेतु
+              </p>
+              <h1 className={cn(
+                "font-extrabold text-amber-100 tracking-tight leading-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] font-devanagari py-1",
+                puja.name.length > 50 ? "text-2xl sm:text-3xl lg:text-4xl" : "text-3xl sm:text-4xl lg:text-5xl"
+              )}>
                 {puja.name}
-              </span>
-            </h1>
+              </h1>
+            </div>
 
             {/* Location & Date Details */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 text-amber-100/90 font-medium text-xs sm:text-sm pt-1">
-              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/20 shadow-inner">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-amber-100/90 font-medium text-xs sm:text-sm pt-1">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/30 shadow-inner">
                 <MapPin className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>{puja.location || 'विशेष सिद्ध शक्तिपीठ / उज्जैन धाम'}</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/20 shadow-inner">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/30 shadow-inner">
                 <Calendar className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>
                   {puja.pujaDate 
@@ -231,21 +234,21 @@ export function PujaClientView({ puja }: { puja: any }) {
             </div>
 
             {/* Key Assurance Feature Chips */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 text-center">
-              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-3 text-center">
+              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
                   <Video className="w-5 h-5" />
                 </div>
                 <p className="text-[11px] sm:text-xs font-bold text-amber-100">लाइव वीडियो रिकॉर्डिंग</p>
               </div>
-              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
                   <Gift className="w-5 h-5" />
                 </div>
                 <p className="text-[11px] sm:text-xs font-bold text-amber-100">घर पर शुद्ध प्रसाद</p>
               </div>
-              <div className="bg-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/20 hover:border-amber-400/40 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform">
+              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <p className="text-[11px] sm:text-xs font-bold text-amber-100">नाम व गोत्र संकल्प</p>
