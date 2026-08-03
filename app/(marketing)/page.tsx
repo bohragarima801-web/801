@@ -101,6 +101,8 @@ export default async function HomePage() {
     image: m.url,
     title: m.filename || 'Special Event',
     subtitle: 'DivyaYagyam Special',
+    ctaUrl: '/pujas',
+    ctaText: 'Participate Now',
     link: '/pujas',
     buttonText: 'Participate Now',
     order: 100 + i,

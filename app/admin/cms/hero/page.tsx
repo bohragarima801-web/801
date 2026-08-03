@@ -69,7 +69,7 @@ export default function HeroSliderPage() {
       if (file.type.startsWith('image/')) {
         toast.info('Compressing image...');
         const { compressImage } = await import('@/lib/utils');
-        fileToUpload = await compressImage(file, { maxSizeMB: 0.8 });
+        fileToUpload = await compressImage(file, { maxWidthOrHeight: 2560, quality: 0.92, maxSizeMB: 3.5 });
       }
 
       if (fileToUpload.size > 4 * 1024 * 1024) {
