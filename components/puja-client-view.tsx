@@ -14,6 +14,7 @@ import { cn, getSafeImageUrl } from '@/lib/utils'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
+import { FAQAccordion } from '@/components/ui/FAQAccordion'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -390,7 +391,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                     {pkg.image && (
                       <div className="relative w-full rounded-xl overflow-hidden border border-amber-200/70 bg-gradient-to-b from-amber-50/50 to-slate-100/50 mb-3 shadow-xs p-2 flex items-center justify-center min-h-[140px] max-h-[220px]">
                         <img 
-                          src={getSafeImageUrl(pkg.image)} 
+                          src={pkg.image || '/package-1.jpg'} 
                           alt={pkg.name} 
                           className="w-full max-h-[200px] h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]" 
                           onError={(e) => {
@@ -630,33 +631,18 @@ export function PujaClientView({ puja }: { puja: any }) {
 
         {/* 9. FAQs */}
         <section id="faqs" className="scroll-mt-32 mb-16">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="text-amber-700 font-bold text-xs tracking-widest uppercase bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
-              जिज्ञासा समाधान
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-rose-950 uppercase tracking-wide mt-2">
-              अक्सर पूछे जाने वाले प्रश्न (FAQs)
-            </h2>
-            <div className="w-16 h-1 bg-amber-500 mx-auto mt-3 rounded-full"></div>
-          </div>
-          
-          <Accordion type="single" collapsible className="w-full space-y-3">
-            {[
-              { q: 'क्या मैं पूजा का वीडियो देख सकूँगा/सकूँगी?', a: 'हाँ, पूजा सम्पन्न होने के पश्चात 24 से 48 घंटे के भीतर आपके नाम एवं गोत्र उच्चारण का मुख्य संकल्प वीडियो आपके दिए गए WhatsApp एवं Email पर प्रेषित कर दिया जाएगा।' },
-              { q: 'प्रसाद घर पहुँचने में कितना समय लगता है?', a: 'पूजा सम्पन्न होने के अगले कार्यदिवस पर प्रसाद कूरियर द्वारा प्रेषित किया जाता है। भारत में आमतौर पर 4 से 6 दिनों में प्रसाद आपके पते पर सुरक्षित पहुँच जाता है।' },
-              { q: 'क्या पूजा के समय मेरा व्यक्तिगत रूप से उपस्थित होना आवश्यक है?', a: 'नहीं, शास्त्रानुसार संकल्प यजमान के नाम व गोत्र से लिया जाता है। आपकी अनुपस्थिति में भी आचार्यगण पूर्ण विधि-विधान से अनुष्ठान सम्पादित करते हैं।' },
-              { q: 'क्या बुकिंग राशि सुरक्षित है और रसीद मिलेगी?', a: 'जी हाँ, आपकी बुकिंग 100% सुरक्षित है। भुगतान के तुरंत पश्चात आपको डिजिटल रसीद एवं बुकिंग कन्फर्मेशन WhatsApp व Email द्वारा प्राप्त हो जाएगी।' }
-            ].map((faq, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="border border-slate-200 bg-white rounded-xl px-5 shadow-sm overflow-hidden">
-                <AccordionTrigger className="text-left font-bold text-slate-800 text-sm sm:text-base hover:no-underline py-4">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed text-xs sm:text-sm pb-4 font-medium">
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <FAQAccordion 
+            faqs={
+              puja?.faqs && Array.isArray(puja.faqs) && puja.faqs.length > 0
+                ? puja.faqs
+                : [
+                    { question: 'क्या मैं पूजा का वीडियो देख सकूँगा/सकूँगी?', answer: 'हाँ, पूजा सम्पन्न होने के पश्चात 24 से 48 घंटे के भीतर आपके नाम एवं गोत्र उच्चारण का मुख्य संकल्प वीडियो आपके दिए गए WhatsApp एवं Email पर प्रेषित कर दिया जाएगा।' },
+                    { question: 'प्रसाद घर पहुँचने में कितना समय लगता है?', answer: 'पूजा सम्पन्न होने के अगले कार्यदिवस पर प्रसाद कूरियर द्वारा प्रेषित किया जाता है। भारत में आमतौर पर 4 से 6 दिनों में प्रसाद आपके पते पर सुरक्षित पहुँच जाता है।' },
+                    { question: 'क्या पूजा के समय मेरा व्यक्तिगत रूप से उपस्थित होना आवश्यक है?', answer: 'नहीं, शास्त्रानुसार संकल्प यजमान के नाम व गोत्र से लिया जाता है। आपकी अनुपस्थिति में भी आचार्यगण पूर्ण विधि-विधान से अनुष्ठान सम्पादित करते हैं।' },
+                    { question: 'क्या बुकिंग राशि सुरक्षित है और रसीद मिलेगी?', answer: 'जी हाँ, आपकी बुकिंग 100% सुरक्षित है। भुगतान के तुरंत पश्चात आपको डिजिटल रसीद एवं बुकिंग कन्फर्मेशन WhatsApp व Email द्वारा प्राप्त हो जाएगी।' }
+                  ]
+            }
+          />
         </section>
 
         {/* Custom HTML / JS Embed Code Section (Rendered clean & instant) */}

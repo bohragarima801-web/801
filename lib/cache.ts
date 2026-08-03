@@ -42,10 +42,10 @@ export const getCachedPujas = unstable_cache(
         orderBy: { createdAt: 'desc' }
       })
       
-      return pujas.map(p => ({
+      return JSON.parse(JSON.stringify(pujas.map(p => ({
         ...p,
         price: Number(p.price)
-      }))
+      }))))
     } catch (err) {
       return []
     }

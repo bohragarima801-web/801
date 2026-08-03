@@ -14,14 +14,14 @@ export const GET = withSafeApi(async (req: NextRequest) => {
 
   const puja = await prisma.puja.findUnique({
     where: { id: pujaId },
-    include: { temple: true },
+    include: { temple: true, packages: true },
   })
 
   if (!puja) {
     return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });
   }
 
-  return NextResponse.json({ ok: true, data: puja });
+  return NextResponse.json({ ok: true, data: JSON.parse(JSON.stringify(puja)) });
 })
 
 export const POST = withSafeApi(async (req: NextRequest) => {
@@ -50,6 +50,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
 
   const puja = await prisma.puja.findUnique({
     where: { id: pujaId },
+    include: { packages: true },
   })
 
   if (!puja) {
@@ -58,9 +59,18 @@ export const POST = withSafeApi(async (req: NextRequest) => {
 
   // 1. SECURE PRICE CALCULATION
   const basePrice = Number(puja.price) || 0
-  const packageUpgrades: Record<string, number> = { '1': 0, '2': 550, '4': 1550, '6': 2550 }
   const memberCount = Number(packageKey) || 1
-  const packagePrice = basePrice + (packageUpgrades[packageKey] ?? 0)
+
+  let packagePrice = basePrice
+  if (packageKey) {
+    const matchedPkg = puja.packages?.find((p: any) => p.id === packageKey)
+    if (matchedPkg) {
+      packagePrice = Number(matchedPkg.price)
+    } else {
+      const packageUpgrades: Record<string, number> = { '1': 0, '2': 550, '3': 1550, '4': 2550, '6': 2550 }
+      packagePrice = basePrice + (packageUpgrades[packageKey] ?? 0)
+    }
+  }
 
   let addOnsTotal = 0
   if (addCourier) addOnsTotal += 99

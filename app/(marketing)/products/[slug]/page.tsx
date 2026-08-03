@@ -8,32 +8,10 @@ import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
 async function getProductBySlugOrFallback(slug: string) {
-  // 1. Try exact slug match
-  let product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      category: true,
-      inventory: true,
-      images: {
-        orderBy: { order: 'asc' }
-      },
-      reviews: {
-        orderBy: { createdAt: 'desc' },
-        include: { user: { select: { firstName: true, lastName: true } } }
-      }
-    }
-  });
-
-  // 2. Fallback: Check if slug is partial or old long slug
-  if (!product) {
-    product = await prisma.product.findFirst({
-      where: {
-        OR: [
-          { id: slug },
-          { slug: { contains: slug.slice(0, 15) } },
-          { name: { contains: slug.replace(/-/g, ' '), mode: 'insensitive' } }
-        ]
-      },
+  try {
+    // 1. Try exact slug match
+    let product = await prisma.product.findUnique({
+      where: { slug },
       include: {
         category: true,
         inventory: true,
@@ -46,9 +24,38 @@ async function getProductBySlugOrFallback(slug: string) {
         }
       }
     });
-  }
 
-  return product;
+    // 2. Fallback: Check if slug is partial or old long slug
+    if (!product) {
+      product = await prisma.product.findFirst({
+        where: {
+          OR: [
+            { id: slug },
+            { slug: { contains: slug.slice(0, 15) } },
+            { name: { contains: slug.replace(/-/g, ' '), mode: 'insensitive' } }
+          ]
+        },
+        include: {
+          category: true,
+          inventory: true,
+          images: {
+            orderBy: { order: 'asc' }
+          },
+          reviews: {
+            orderBy: { createdAt: 'desc' },
+            include: { user: { select: { firstName: true, lastName: true } } }
+          }
+        }
+      });
+    }
+
+    if (!product) return null;
+
+    return JSON.parse(JSON.stringify(product));
+  } catch (err) {
+    console.error("Error fetching product by slug:", err);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

@@ -392,4 +392,73 @@ export function generateFaqSchema(faqs: { question: string; answer: string }[]) 
   }
 }
 
+export function generatePujaGraphSchema({
+  puja,
+  faqs,
+}: {
+  puja: {
+    name: string
+    slug: string
+    shortDescription?: string | null
+    description?: string | null
+    coverImage?: string | null
+    price: number | string
+    pujaDate?: string | Date | null
+    temple?: { name?: string | null; city?: string | null } | null
+    location?: string | null
+  }
+  faqs: { question: string; answer: string }[]
+}) {
+  const pujaUrl = `${BASE_URL}/pujas/${puja.slug}`
+  const descriptionText = (puja.shortDescription || puja.description || '').replace(/<[^>]*>?/gm, '')
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Event',
+        name: puja.name,
+        description: descriptionText,
+        image: puja.coverImage ? [puja.coverImage] : [DEFAULT_OG_IMAGE],
+        startDate: puja.pujaDate ? new Date(puja.pujaDate).toISOString() : new Date().toISOString(),
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: {
+          '@type': 'VirtualLocation',
+          url: pujaUrl,
+        },
+        offers: {
+          '@type': 'Offer',
+          price: Number(puja.price),
+          priceCurrency: 'INR',
+          url: pujaUrl,
+          availability: 'https://schema.org/InStock',
+          validFrom: new Date().toISOString(),
+        },
+        organizer: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          url: BASE_URL,
+        },
+      },
+      generateServiceSchema({
+        name: puja.name,
+        description: descriptionText.substring(0, 300),
+        image: puja.coverImage || DEFAULT_OG_IMAGE,
+        price: Number(puja.price),
+        slug: puja.slug,
+        location: puja.temple?.name || puja.location || 'Jodhpur, Rajasthan',
+      }),
+      generateLocalBusinessSchema(),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: BASE_URL },
+        { name: 'Pujas', url: `${BASE_URL}/pujas` },
+        { name: puja.name, url: pujaUrl },
+      ]),
+      generateFaqSchema(faqs),
+    ],
+  }
+}
+
 export { BASE_URL, SITE_NAME, DEFAULT_OG_IMAGE }
+
