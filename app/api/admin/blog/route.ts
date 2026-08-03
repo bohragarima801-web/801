@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
 
     const data = await req.json()
-    const { title, slug, excerpt, content, categoryId, coverImage, coverImageAlt, status, publishedAt, seoTitle, seoDescription, seoKeywords, videoUrl, isVideoEnabled, faqs } = data
+    const { title, slug, excerpt, content, categoryId, coverImage, coverImageAlt, status, publishedAt, seoTitle, seoDescription, seoKeywords, videoUrl, isVideoEnabled, pdfUrl, pdfTitle, faqs } = data
 
     if (!title || !categoryId) {
       return NextResponse.json({ ok: false, error: 'Title and Category are required' }, { status: 400 });
@@ -109,7 +109,9 @@ export async function POST(req: NextRequest) {
         seoDescription: autoSeo.seoDescription,
         seoKeywords: autoSeo.seoKeywords,
         videoUrl,
-        isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true
+        isVideoEnabled: isVideoEnabled !== undefined ? !!isVideoEnabled : true,
+        pdfUrl: pdfUrl || null,
+        pdfTitle: pdfTitle || null
       }
     })
 

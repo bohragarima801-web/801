@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Loader2, Video, Search, Cloud, Upload, Plus, Trash2, Link as LinkIcon, Sparkles } from 'lucide-react'
+import { Loader2, Video, Search, Cloud, Upload, Plus, Trash2, Link as LinkIcon, Sparkles, FileText, Download } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
 import dynamic from 'next/dynamic'
@@ -47,6 +47,8 @@ function BlogForm() {
   const [coverImageAlt, setCoverImageAlt] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
+  const [pdfUrl, setPdfUrl] = useState('')
+  const [pdfTitle, setPdfTitle] = useState('')
   const [driveUrl, setDriveUrl] = useState('')
   const [faqs, setFaqs] = useState<{ question: string, answer: string }[]>([])
 
@@ -163,6 +165,8 @@ function BlogForm() {
             setCoverImageAlt(post.coverImageAlt || '')
             setVideoUrl(post.videoUrl || '')
             setIsVideoEnabled(post.isVideoEnabled !== undefined ? !!post.isVideoEnabled : true)
+            setPdfUrl(post.pdfUrl || '')
+            setPdfTitle(post.pdfTitle || '')
             setCategoryId(post.categoryId || '')
             if (post.faqs && Array.isArray(post.faqs)) {
               setFaqs(post.faqs)
@@ -231,6 +235,7 @@ function BlogForm() {
     setLoading(true)
     try {
       const cleanCoverImage = convertGoogleDriveUrl(coverImage)
+      const cleanPdfUrl = convertGoogleDriveUrl(pdfUrl) || pdfUrl
       const cleanContent = content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText, src) => {
         return `![${altText}](${convertGoogleDriveUrl(src)})`
       })
@@ -251,6 +256,8 @@ function BlogForm() {
           coverImageAlt: coverImageAlt.trim() || (title ? `${title} - Online Puja Booking & Spiritual Guide DivyaYagyam` : ''),
           videoUrl,
           isVideoEnabled,
+          pdfUrl: cleanPdfUrl.trim(),
+          pdfTitle: pdfTitle.trim(),
           faqs,
           status: (isPublished || (publishedAt && new Date(publishedAt) > new Date())) ? 'PUBLISHED' : 'DRAFT',
           publishedAt: publishedAt ? new Date(publishedAt).toISOString() : (isPublished ? new Date().toISOString() : null)
@@ -491,6 +498,66 @@ function BlogForm() {
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-8 text-xs rounded-xl shadow-sm gap-1"
                 >
                   <Plus className="h-3.5 w-3.5" /> Insert SEO Image into Blog Content
+                </Button>
+              </div>
+            </div>
+
+            {/* PDF Material & Download Link Section */}
+            <div className="p-4 rounded-2xl border border-emerald-300/80 bg-emerald-50/50 space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-extrabold text-emerald-900 flex items-center gap-1.5">
+                  <FileText className="h-4 w-4 text-emerald-600" /> PDF Material & Book Download Link (पीडीएफ डाउनलोड लिंक)
+                </Label>
+                <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 text-[10px] font-bold">Drive / Mega / Custom PDF Link</Badge>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-slate-700">PDF Title / Description (पीडीएफ का नाम)</Label>
+                  <Input
+                    placeholder="e.g. दुर्गा सप्तशती पाठ PDF (निःशुल्क डाउनलोड)"
+                    value={pdfTitle}
+                    onChange={(e) => setPdfTitle(e.target.value)}
+                    className="bg-white text-xs h-9 rounded-xl border-emerald-200"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-slate-700">PDF Download URL (Drive / Mega / Custom Link)</Label>
+                  <Input
+                    placeholder="https://drive.google.com/file/d/... or Mega / Direct Link"
+                    value={pdfUrl}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      const cleanUrl = convertGoogleDriveUrl(val) || val
+                      setPdfUrl(cleanUrl)
+                    }}
+                    className="bg-white text-xs h-9 rounded-xl border-emerald-200"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-emerald-200/80">
+                <p className="text-[11px] text-slate-600 font-medium">
+                  💡 यह PDF आपके ब्लॉग में **"📥 Download PDF"** डाउनलोड बॉक्स के रूप में दिखेगा।
+                </p>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (!pdfUrl) {
+                      toast.error('कृपया पहले PDF Download URL दर्ज करें')
+                      return
+                    }
+                    const text = pdfTitle || 'Download PDF'
+                    const markdownPdf = `\n\n[📥 Download ${text}](${pdfUrl})\n\n`
+                    setContent(prev => (prev ? `${prev}${markdownPdf}` : markdownPdf))
+                    toast.success('Inserted PDF link into blog content!')
+                  }}
+                  className="border-emerald-500 text-emerald-800 hover:bg-emerald-100 font-bold h-8 text-xs rounded-xl shadow-xs gap-1"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Quick Insert PDF into Blog Content
                 </Button>
               </div>
             </div>

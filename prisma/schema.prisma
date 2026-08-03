@@ -1052,8 +1052,9 @@ model Blog {
   coverImage     String?
   coverImageAlt  String?
   videoUrl       String?
-
   isVideoEnabled Boolean    @default(true)
+  pdfUrl         String?
+  pdfTitle       String?
   status         BlogStatus @default(DRAFT)
   views          Int        @default(0)
   seoTitle       String?
