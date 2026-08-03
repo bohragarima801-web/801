@@ -403,7 +403,7 @@ export function PujaClientView({ puja }: { puja: any }) {
             { id: 'benefits', label: 'लाभ (Benefits)' },
             { id: 'process', label: 'प्रक्रिया (Process)' },
             { id: 'temple', label: 'मंदिर एवं धाम (Temple)' },
-            { id: 'media', label: 'वीडियो एवं झलकियां (Videos)' },
+            ...(puja?.videos && puja.videos.length > 0 ? [{ id: 'media', label: 'वीडियो एवं झलकियां (Videos)' }] : []),
             { id: 'faqs', label: 'सामान्य प्रश्न (FAQs)' }
           ].map(tab => (
             <button
@@ -654,21 +654,21 @@ export function PujaClientView({ puja }: { puja: any }) {
           </div>
         </section>
 
-        {/* 8. Live Videos & Glimpses */}
-        <section id="media" className="scroll-mt-32">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="text-rose-900 font-bold text-xs tracking-widest uppercase bg-rose-100 px-3 py-1 rounded-full border border-rose-200">
-              प्रत्यक्ष प्रमाण
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-rose-950 uppercase tracking-wide mt-2">
-              पूजा एवं हवन की दिव्य झलकियां
-            </h2>
-            <div className="w-16 h-1 bg-amber-500 mx-auto mt-3 rounded-full"></div>
-          </div>
+        {/* 8. Live Videos & Glimpses (Rendered dynamically if videos are attached) */}
+        {puja.videos && puja.videos.length > 0 && (
+          <section id="media" className="scroll-mt-32">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <span className="text-rose-900 font-bold text-xs tracking-widest uppercase bg-rose-100 px-3 py-1 rounded-full border border-rose-200">
+                प्रत्यक्ष प्रमाण
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-rose-950 uppercase tracking-wide mt-2">
+                पूजा एवं हवन की दिव्य झलकियां
+              </h2>
+              <div className="w-16 h-1 bg-amber-500 mx-auto mt-3 rounded-full"></div>
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {puja.videos && puja.videos.length > 0 ? (
-              puja.videos.map((vid: any, idx: number) => {
+            <div className="grid md:grid-cols-2 gap-6">
+              {puja.videos.map((vid: any, idx: number) => {
                 const embedUrl = getYouTubeEmbedUrl(vid.url) || vid.url;
                 return (
                   <div key={vid.id || idx} className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
@@ -680,29 +680,10 @@ export function PujaClientView({ puja }: { puja: any }) {
                     />
                   </div>
                 );
-              })
-            ) : (
-              <>
-                <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
-                  <iframe 
-                    src="https://www.youtube.com/embed/IbDU-s95iBA" 
-                    className="w-full h-full" 
-                    title="Divine Puja Havan Video 1"
-                    allowFullScreen
-                  />
-                </div>
-                <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-rose-950/10 bg-slate-900 relative">
-                  <iframe 
-                    src="https://www.youtube.com/embed/IbDU-s95iBA" 
-                    className="w-full h-full" 
-                    title="Divine Puja Havan Video 2"
-                    allowFullScreen
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        </section>
+              })}
+            </div>
+          </section>
+        )}
 
         {/* 9. FAQs */}
         <section id="faqs" className="scroll-mt-32 mb-16">
