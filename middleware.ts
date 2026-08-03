@@ -5,6 +5,28 @@ import { verifyAdminToken, ADMIN_COOKIE_NAME } from '@/lib/admin-session'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // ---- Legacy/Corrupted Blog URL Redirect Guard ----
+  if (pathname.startsWith('/blog/')) {
+    const rawSlug = pathname.replace(/^\/blog\//, '')
+    if (rawSlug.includes('divyayagyam.com') || rawSlug.includes('/') || rawSlug.includes('http') || rawSlug.includes('%2F')) {
+      const decodedSlug = decodeURIComponent(rawSlug)
+      const cleanSlug = decodedSlug
+        .replace(/^https?:\/\//i, '')
+        .replace(/^(?:[a-z0-9-]+\.)+[a-z]{2,}(?::\d+)?\/?/i, '')
+        .replace(/^\/?blog\//i, '')
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase()
+
+      if (cleanSlug && `/blog/${cleanSlug}` !== pathname) {
+        const url = request.nextUrl.clone()
+        url.pathname = `/blog/${cleanSlug}`
+        return NextResponse.redirect(url, 301)
+      }
+    }
+  }
+
   // ---- Admin auth guard ----
   const isAdminRoute = pathname.startsWith('/admin')
   const isAdminLogin = pathname === '/admin/login' || pathname.startsWith('/admin/login/')

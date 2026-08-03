@@ -14,9 +14,10 @@ export async function GET() {
     startOfToday.setHours(0, 0, 0, 0)
 
     // 1. Live Active Visitors (unique IPs in last 5 minutes)
-    const activeVisitorsRaw = await prisma.analyticsEvent.groupBy({
-      by: ['userIp'],
+    const activeVisitorsRaw = await prisma.auditLog.groupBy({
+      by: ['ipAddress'],
       where: {
+        resource: 'AnalyticsEvent',
         createdAt: {
           gte: fiveMinsAgo,
         },
@@ -25,8 +26,9 @@ export async function GET() {
     const liveActiveVisitors = activeVisitorsRaw.length
 
     // 2. Today's Total PageViews & Events
-    const totalTodayEvents = await prisma.analyticsEvent.count({
+    const totalTodayEvents = await prisma.auditLog.count({
       where: {
+        resource: 'AnalyticsEvent',
         createdAt: {
           gte: startOfToday,
         },
@@ -34,10 +36,11 @@ export async function GET() {
     })
 
     // 3. Event Counts by Type Today
-    const eventsBreakdown = await prisma.analyticsEvent.groupBy({
-      by: ['eventName'],
+    const eventsBreakdown = await prisma.auditLog.groupBy({
+      by: ['action'],
       _count: { id: true },
       where: {
+        resource: 'AnalyticsEvent',
         createdAt: {
           gte: startOfToday,
         },
@@ -45,7 +48,8 @@ export async function GET() {
     })
 
     // 4. Live Recent Event Stream (last 20 events)
-    const recentEvents = await prisma.analyticsEvent.findMany({
+    const recentEvents = await prisma.auditLog.findMany({
+      where: { resource: 'AnalyticsEvent' },
       orderBy: { createdAt: 'desc' },
       take: 20,
     })
