@@ -15,6 +15,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { FAQAccordion } from '@/components/ui/FAQAccordion'
+import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
@@ -701,15 +702,14 @@ export function PujaClientView({ puja }: { puja: any }) {
           />
         </section>
 
-        {/* Custom HTML / JS Embed Code Section (Rendered clean & instant) */}
+        {/* Custom HTML / JS / Embed Code Section (Supports scripts, iFrames, widgets) */}
         {puja.customHtml && puja.customHtml.trim() && (
           <section className="my-8">
-            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-              <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">विशेष जानकारी एवं लाइव विजेट</h3>
-              <div 
-                className="w-full overflow-x-auto leading-relaxed text-slate-800"
-                dangerouslySetInnerHTML={{ __html: puja.customHtml }} 
-              />
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-amber-200/80 shadow-sm space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 border-b border-amber-100 pb-3 flex items-center gap-2">
+                <span>⚡ विशेष जानकारी एवं लाइव विजेट (Custom Embed)</span>
+              </h3>
+              <CustomHtmlViewer html={puja.customHtml} />
             </div>
           </section>
         )}
