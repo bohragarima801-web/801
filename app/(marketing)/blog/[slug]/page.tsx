@@ -8,7 +8,7 @@ import { ArrowLeft, Calendar, User, Eye, FileText, Download, Sparkles } from 'lu
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
-import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE, sanitizeSlug } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -27,19 +27,20 @@ function getEmbedUrl(url: string | null): string | null {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const cleanSlug = sanitizeSlug(slug) || slug;
   const post = await prisma.blog.findUnique({
-    where: { slug: slug },
+    where: { slug: cleanSlug },
     select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true, coverImageAlt: true }
   });
 
-  if (!post) return generatePageMeta({ title: 'Blog Post Not Found | DivyaYagyam', description: 'The requested article could not be found.', path: `/blog/${slug}` });
+  if (!post) return generatePageMeta({ title: 'Blog Post Not Found | DivyaYagyam', description: 'The requested article could not be found.', path: `/blog/${cleanSlug}` });
 
   const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
 
   return generatePageMeta({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt || '',
-    path: `/blog/${slug}`,
+    path: `/blog/${cleanSlug}`,
     image: post.coverImage || undefined,
     keywords,
   });
@@ -47,8 +48,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const cleanSlug = sanitizeSlug(slug) || slug;
   const post = await prisma.blog.findUnique({
-    where: { slug: slug },
+    where: { slug: cleanSlug },
     include: {
       category: { select: { name: true } },
       author: { select: { fullName: true } }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
 import { autoGenerateBlogSeo } from '@/lib/seo-auto'
+import { sanitizeSlug } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,7 +75,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Title and Category are required' }, { status: 400 });
     }
 
-    let calculatedSlug = slug || title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    let calculatedSlug = sanitizeSlug(slug || title)
+    if (!calculatedSlug) {
+      calculatedSlug = `post-${Date.now()}`
+    }
     
     // Ensure uniqueness
     const existing = await prisma.blog.findUnique({ where: { slug: calculatedSlug } })
@@ -149,10 +153,23 @@ export async function PUT(req: NextRequest) {
 
     const data = await req.json()
     
-    // Auto generate slug if missing
-    if (data.title && !data.slug) {
-      data.slug = data.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+    // Always sanitize slug if provided or generated from title
+    let calculatedSlug = sanitizeSlug(data.slug || data.title || '')
+    if (!calculatedSlug) {
+      calculatedSlug = `post-${id.slice(0, 8)}`
     }
+
+    // Check if slug is used by another post
+    const existing = await prisma.blog.findFirst({
+      where: {
+        slug: calculatedSlug,
+        NOT: { id }
+      }
+    })
+    if (existing) {
+      calculatedSlug = `${calculatedSlug}-${Date.now().toString().slice(-4)}`
+    }
+    data.slug = calculatedSlug
     
     if (data.publishedAt) {
       data.publishedAt = new Date(data.publishedAt)
@@ -217,6 +234,11 @@ export async function DELETE(req: NextRequest) {
 
     if (!id) return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
 
+    // Clean up associated FAQs first
+    await prisma.fAQ.deleteMany({
+      where: { category: `blog-${id}` }
+    })
+
     await prisma.blog.delete({
       where: { id }
     })
@@ -229,3 +251,4 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete post' }, { status: 500 });
   }
 }
+

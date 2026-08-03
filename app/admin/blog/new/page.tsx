@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { Loader2, Video, Search, Cloud, Upload, Plus, Trash2, Link as LinkIcon, Sparkles, FileText, Download } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { convertGoogleDriveUrl, compressImage } from '@/lib/utils'
+import { convertGoogleDriveUrl, compressImage, sanitizeSlug } from '@/lib/utils'
 import dynamic from 'next/dynamic'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
@@ -227,8 +227,14 @@ function BlogForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!title || !slug || !content || !categoryId) {
-      toast.error('Title, Slug, Category, and Content are required')
+    if (!title || !content || !categoryId) {
+      toast.error('Title, Category, and Content are required')
+      return
+    }
+
+    const cleanSlug = sanitizeSlug(slug || title)
+    if (!cleanSlug) {
+      toast.error('Invalid title or slug')
       return
     }
 
@@ -245,7 +251,7 @@ function BlogForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
-          slug,
+          slug: cleanSlug,
           excerpt,
           content: cleanContent,
           categoryId,
@@ -300,7 +306,7 @@ function BlogForm() {
                 onChange={(e) => {
                   setTitle(e.target.value)
                   if (!editId && !slug) {
-                    setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))
+                    setSlug(sanitizeSlug(e.target.value))
                   }
                 }} 
                 required 
@@ -309,7 +315,13 @@ function BlogForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>Slug</Label>
-                <Input placeholder="post-slug" value={slug} onChange={(e) => setSlug(e.target.value)} required />
+                <Input 
+                  placeholder="post-slug" 
+                  value={slug} 
+                  onChange={(e) => setSlug(e.target.value)} 
+                  onBlur={() => setSlug(sanitizeSlug(slug))}
+                  required 
+                />
               </div>
               <div className="space-y-2">
                 <Label>Category</Label>

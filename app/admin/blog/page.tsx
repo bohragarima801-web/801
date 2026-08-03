@@ -140,13 +140,18 @@ function BlogManager() {
               key: 'actions',
               label: 'Actions',
               render: (r) => (
-                <div className="flex gap-1.5">
-                  <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-600" asChild>
+                <div className="flex gap-1">
+                  <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50" title="View Live Post" asChild>
+                    <Link href={`/blog/${r.slug}`} target="_blank">
+                      <Eye className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50" title="Edit Post" asChild>
                     <Link href={`/admin/blog/new?id=${r.id}`}>
                       <Edit2 className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button size="icon" variant="ghost" className="h-8 w-8 text-red-600" onClick={() => handleDelete(r.id)}>
+                  <Button size="icon" variant="ghost" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50" title="Delete Post" onClick={() => handleDelete(r.id)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

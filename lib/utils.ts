@@ -34,6 +34,20 @@ export function slugify(str: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+export function sanitizeSlug(input: string): string {
+  if (!input || typeof input !== 'string') return ''
+  let str = input.trim()
+  // Remove protocol e.g. http:// or https://
+  str = str.replace(/^https?:\/\//i, '')
+  // Remove domain names e.g. divyayagyam.com, www.divyayagyam.com, localhost:3000, etc.
+  str = str.replace(/^(?:[a-z0-9-]+\.)+[a-z]{2,}(?::\d+)?\/?/i, '')
+  // Remove leading blog/ or /blog/
+  str = str.replace(/^\/?blog\//i, '')
+  // Perform standard slugify
+  return slugify(str)
+}
+
+
 export function generateShortSlug(str: string, maxLen = 45) {
   if (!str) return '';
   // Remove filler words and marketing slogan fluff to create concise, clean, SEO-friendly URLs
