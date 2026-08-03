@@ -52,13 +52,19 @@ export default async function PujasPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container py-14 space-y-10">
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <Badge variant="secondary" className="mb-3">🔥 Pujas</Badge>
-        <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Sacred Pujas (पूजा अनुष्ठान)</h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
+      <div className="container py-12 sm:py-16 space-y-12">
+      <div className="text-center max-w-3xl mx-auto space-y-4">
+        <Badge variant="secondary" className="px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-amber-100/90 text-rose-900 border border-amber-300 shadow-xs rounded-full">
+          🔥 Sacred Seva & Rituals
+        </Badge>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-normal text-slate-900 py-1">
+          <span className="font-serif text-rose-900 mr-2">Sacred Pujas</span>
+          <span className="text-amber-600 font-devanagari">(पूजा अनुष्ठान)</span>
+        </h1>
+        <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
           भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे लाइव-स्ट्रीम पूजा। अपने नाम व गोत्र से संकल्प करवाएं।
         </p>
+        <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-rose-700 to-amber-500 mx-auto rounded-full mt-2"></div>
       </div>
 
       {pujas.length === 0 ? (

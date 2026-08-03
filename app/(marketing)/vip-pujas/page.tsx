@@ -59,9 +59,9 @@ export default async function VipPujasPage() {
           <Badge className="bg-amber-500/10 border border-amber-500/30 text-amber-700 hover:bg-amber-500/20 px-3 py-1 text-xs font-bold rounded-full gap-1.5 mx-auto">
             <Award className="h-3.5 w-3.5 text-amber-600" /> विशिष्ट सेवाएँ • Premium & Exclusive
           </Badge>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-            <span className="text-om-gradient">VIP Puja Anusthan</span> <br />
-            <span className="text-slate-900 text-3xl md:text-4xl font-bold">(विशिष्ट पूजा एवं महा-अनुष्ठान)</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-normal py-1">
+            <span className="text-om-gradient font-serif mr-2">VIP Puja Anusthan</span>
+            <span className="text-slate-900 font-devanagari block mt-1 text-2xl sm:text-3xl md:text-4xl font-bold">(विशिष्ट पूजा एवं महा-अनुष्ठान)</span>
           </h1>
           <div className="h-1 w-24 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto mt-2" />
           <p className="text-lg text-slate-600 leading-relaxed">

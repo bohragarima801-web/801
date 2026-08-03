@@ -24,9 +24,10 @@ module.exports = {
       },
       extend: {
         fontFamily: {
-          sans: ['Inter', 'system-ui', 'sans-serif'],
-          heading: ['Cormorant Garamond', 'serif'],
-          hero: ['Cinzel', 'serif'],
+          sans: ['Mukta', 'Outfit', 'Inter', 'system-ui', 'sans-serif'],
+          heading: ['Noto Serif Devanagari', 'Cormorant Garamond', 'serif'],
+          hero: ['Rozha One', 'Cinzel', 'Noto Serif Devanagari', 'serif'],
+          devanagari: ['Noto Serif Devanagari', 'Mukta', 'serif'],
         },
         boxShadow: {
           'golden-glow': '0 0 40px -8px rgba(212, 175, 55, 0.4), 0 0 80px -20px rgba(230, 81, 0, 0.2)',

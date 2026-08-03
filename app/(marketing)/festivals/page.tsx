@@ -108,7 +108,7 @@ export default function PublicFestivalsPage() {
               <Sparkles className="w-4 h-4 text-red-700 animate-bounce" />
               व्रत एवं पर्व तालिका | FESTIVAL DIRECTORY
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-yellow-300 tracking-tight drop-shadow-md">
+            <h1 className="text-2xl md:text-3xl font-black text-yellow-300 tracking-tight drop-shadow-md leading-normal py-0.5">
               {t.title}
             </h1>
             <p className="text-xs md:text-sm text-yellow-100 font-bold mt-0.5">{t.subTitle}</p>

@@ -70,12 +70,18 @@ export default async function ProductsPage() {
       <div className="space-y-10">
       <HeroPujaSlider slides={heroSlides} />
       <div className="container py-4 space-y-10">
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <Badge variant="secondary" className="mb-3">🛍️ Store</Badge>
-        <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Abhimantrit Prasad & Store</h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
+      <div className="text-center max-w-3xl mx-auto space-y-4">
+        <Badge variant="secondary" className="px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-amber-100/90 text-rose-900 border border-amber-300 shadow-xs rounded-full">
+          🛍️ Abhimantrit Store & Samagri
+        </Badge>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-normal text-slate-900 py-1">
+          <span className="font-serif text-rose-900 mr-2">Abhimantrit Prasad</span>
+          <span className="text-amber-600 font-devanagari">(अभिमंत्रित सामग्री)</span>
+        </h1>
+        <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
           गंगाजल से अभिमंत्रित सिद्ध रुद्राक्ष माला, धूप-दीप, पूजन सामग्री और सिद्ध यंत्र।
         </p>
+        <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-rose-700 to-amber-500 mx-auto rounded-full mt-2"></div>
       </div>
 
       {products.length === 0 ? (

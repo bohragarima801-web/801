@@ -55,8 +55,9 @@ export default function ShubhMuhuratPage() {
               <span>प्रमाणित सनातन वैदिक मुहूर्त खोजकर्ता</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-serif leading-tight">
-              शुभ मुहूर्त 2026 – 2030 (Shubh Muhurat Finder)
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-normal py-1">
+              <span className="font-devanagari mr-2">शुभ मुहूर्त 2026 – 2030</span>
+              <span className="text-amber-200 font-serif text-2xl sm:text-4xl font-bold">(Shubh Muhurat Finder)</span>
             </h1>
 
             <p className="text-amber-100 text-sm sm:text-base leading-relaxed">
