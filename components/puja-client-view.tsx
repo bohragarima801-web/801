@@ -63,16 +63,23 @@ export function PujaClientView({ puja }: { puja: any }) {
   
   if (!puja) return <div className="py-20 text-center text-slate-600 font-bold">Puja details loading or not found...</div>
 
-  const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || ''
+  const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || '/package-1.jpg'
   const rawImages = [
     ...(puja?.coverImage ? [puja.coverImage] : []),
-    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img.url)
+    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img.url),
+    ...(puja?.packages || []).map((pkg: any) => pkg.image).filter(Boolean),
+    ...(puja?.temple?.coverImage ? [puja.temple.coverImage] : [])
   ].filter(Boolean)
   
   const mediaList = Array.from(new Set(rawImages.length > 0 ? rawImages : [fallbackImage]))
   const [activeMediaIndex, setActiveMediaIndex] = useState(0)
   const currentMedia = mediaList[activeMediaIndex] || fallbackImage
   const activeImage = currentMedia
+
+  // Touch Swipe Gesture State for Mobile/Desktop sliding
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const minSwipeDistance = 40
 
   const isVideoUrl = (url: string) => {
     if (!url) return false
@@ -93,6 +100,40 @@ export function PujaClientView({ puja }: { puja: any }) {
   const handleNextMedia = () => {
     setActiveMediaIndex(prev => (prev === mediaList.length - 1 ? 0 : prev + 1))
   }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      handleNextMedia()
+    } else if (isRightSwipe) {
+      handlePrevMedia()
+    }
+  }
+
+  // Auto slide images every 4 seconds if not video
+  useEffect(() => {
+    if (mediaList.length <= 1) return
+    if (isVideoUrl(currentMedia)) return
+
+    const interval = setInterval(() => {
+      setActiveMediaIndex(prev => (prev === mediaList.length - 1 ? 0 : prev + 1))
+    }, 4500)
+
+    return () => clearInterval(interval)
+  }, [mediaList.length, currentMedia])
 
   const handleBookNow = (overridePkgId?: string) => {
     const pkgId = overridePkgId || selectedPackage
@@ -216,8 +257,13 @@ export function PujaClientView({ puja }: { puja: any }) {
           <div className="w-full lg:w-[430px] shrink-0">
             <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(245,158,11,0.18)] border border-amber-400/30 bg-[#1A0A06]/95 backdrop-blur-xl group">
               
-              {/* Main Media Viewer */}
-              <div className="aspect-[4/3] relative overflow-hidden bg-black flex items-center justify-center">
+              {/* Main Media Viewer with Touch Swipe Support */}
+              <div 
+                className="aspect-[4/3] relative overflow-hidden bg-black flex items-center justify-center select-none cursor-grab active:cursor-grabbing"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
                 {isVideoUrl(currentMedia) ? (
                   getYouTubeEmbedUrl(currentMedia) ? (
                     <iframe 
@@ -277,6 +323,23 @@ export function PujaClientView({ puja }: { puja: any }) {
                       <ChevronRight className="w-5 h-5" />
                     </button>
                   </>
+                )}
+
+                {/* Interactive Bullet Dots Indicator Overlay */}
+                {mediaList.length > 1 && (
+                  <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 bg-black/60 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/10">
+                    {mediaList.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveMediaIndex(idx)}
+                        className={cn(
+                          "h-2 rounded-full transition-all cursor-pointer",
+                          activeMediaIndex === idx ? "w-5 bg-amber-400" : "w-2 bg-white/40 hover:bg-white/70"
+                        )}
+                        aria-label={`Go to slide ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
 
