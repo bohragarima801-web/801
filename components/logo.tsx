@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
-export function Logo({ className, showText = true }: { className?: string; showText?: boolean }) {
+export function Logo({ className, showText = true, size = "md" }: { className?: string; showText?: boolean; size?: "sm" | "md" | "lg" }) {
   const [logoUrl, setLogoUrl] = useState('/logo.jpg')
   const [siteName, setSiteName] = useState('दिव्ययज्ञम्')
 
@@ -21,24 +21,32 @@ export function Logo({ className, showText = true }: { className?: string; showT
       .catch(() => {})
   }, [])
 
+  const sizeClasses = {
+    sm: 'h-8 w-auto min-w-[32px]',
+    md: 'h-11 w-auto min-w-[40px]',
+    lg: 'h-14 w-auto min-w-[50px]',
+  }[size]
+
   return (
-    <Link href="/" className={cn('flex items-center gap-2 group', className)}>
-      {logoUrl ? (
-        <div className="hidden sm:flex relative h-11 min-w-[44px] max-w-[140px] items-center justify-center overflow-hidden rounded-xl bg-transparent group-hover:scale-105 transition-transform shrink-0">
-          <img src={logoUrl} alt="DivyaYagyam Logo" className="h-full w-full object-contain object-center" />
-        </div>
-      ) : (
-        <div className="hidden sm:flex relative h-11 w-11 items-center justify-center rounded-xl om-gradient shadow-md group-hover:scale-105 transition-transform">
-          <span className="text-white text-2xl font-bold" style={{ fontFamily: 'Cinzel, serif' }}>ॐ</span>
-        </div>
-      )}
+    <Link href="/" className={cn('flex items-center gap-2.5 group shrink-0', className)}>
+      <div className={cn("relative flex items-center justify-center overflow-hidden rounded-xl bg-transparent group-hover:scale-105 transition-transform shrink-0 shadow-sm border border-amber-500/10", sizeClasses)}>
+        <img 
+          src={logoUrl || '/logo.jpg'} 
+          alt="DivyaYagyam Logo" 
+          className="h-full w-full object-contain object-center rounded-xl"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/logo.jpg'
+          }}
+        />
+      </div>
+
       {showText && (
         <div className="flex flex-col justify-center">
-          <span className="text-[18px] font-black sacred-gradient-text tracking-wide leading-tight py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
+          <span className="text-[17px] sm:text-[19px] font-black sacred-gradient-text tracking-wide leading-tight py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
-          <span className="text-[9px] text-slate-500 font-semibold tracking-widest uppercase mt-[-2px]">
-            Sanatan Seva
+          <span className="text-[8.5px] sm:text-[9.5px] text-amber-700/80 dark:text-amber-400/80 font-bold tracking-widest uppercase mt-[-2px]">
+            SANATAN SEVA
           </span>
         </div>
       )}

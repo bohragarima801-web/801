@@ -4,7 +4,7 @@ export const siteConfig = {
   description:
     'Experience divine blessings with DivyaYagyam — India\'s most trusted portal for authentic online pujas, VIP temple darshan, Kashi Vishwanath Rudrabhishek, Mahakaleshwar Bhasma Aarti, Kalsarp Dosh Nivaran, sacred prasad home delivery, and verified pandit ji services.',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://divyayagyam.com',
-  ogImage: '/og.jpg',
+  ogImage: '/logo.jpg',
   keywords: [
     'Divyayagyam', 'Divya Yagyam', 'Online Puja', 'Online Puja Booking', 'VIP Puja Booking',
     'Temple Booking', 'Sanatan Seva', 'Kashi Vishwanath Puja', 'Mahakaleshwar Bhasma Aarti',

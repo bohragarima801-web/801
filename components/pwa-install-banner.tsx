@@ -77,8 +77,8 @@ export function PwaInstallBanner() {
         <div className="container max-w-5xl mx-auto flex items-center justify-between gap-2">
           {/* App Icon + Title */}
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-red-600 p-0.5 shadow-md shrink-0 flex items-center justify-center font-bold text-white text-lg">
-              🕉️
+            <div className="h-10 w-10 rounded-xl bg-white p-0.5 shadow-md shrink-0 flex items-center justify-center overflow-hidden border border-amber-400/50">
+              <img src="/logo.jpg" alt="DivyaYagyam Logo" className="h-full w-full object-contain rounded-lg" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
