@@ -19,6 +19,7 @@ import { Sparkles } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { AddToCartButton } from '@/components/add-to-cart-button'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
+import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export const revalidate = 30
 
@@ -100,25 +101,20 @@ export default async function ProductsPage() {
             return (
               <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between relative">
                 <Link href={`/products/${p.slug}`} className="absolute inset-0 z-0" aria-label={`View ${p.name}`} />
-                <div className="relative aspect-square bg-slate-100 overflow-hidden pointer-events-none">
-                  {p.coverImage ? (
-                    <Image src={p.coverImage}
-                      alt={getAutoSeoAlt(p.name, 'product')}
-                      fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center text-primary bg-[var(--secondary-color)]/10">
-                      <Sparkles className="h-12 w-12 opacity-40" />
-                    </div>
-                  )}
+                <div className="relative pointer-events-none">
+                  <SacredImageFrame
+                    src={p.coverImage}
+                    alt={p.name}
+                    aspectRatio="square"
+                    seoCategory="product"
+                  />
                   {p.isAbhimantrit && (
-                    <Badge className="absolute top-3 left-3 bg-[var(--primary-color)] text-white font-bold border-none text-[10px]">
+                    <Badge className="absolute top-3 left-3 bg-rose-900 text-white font-bold border-none text-[10px] z-20">
                       🔥 अभिमंत्रित
                     </Badge>
                   )}
                   {!hasStock && (
-                    <Badge className="absolute top-3 right-3 bg-slate-600 text-white font-bold border-none text-[10px]">
+                    <Badge className="absolute top-3 right-3 bg-slate-600 text-white font-bold border-none text-[10px] z-20">
                       OUT OF STOCK
                     </Badge>
                   )}

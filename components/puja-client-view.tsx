@@ -230,11 +230,19 @@ export function PujaClientView({ puja }: { puja: any }) {
                     <video src={currentMedia} controls autoPlay muted loop className="w-full h-full object-contain" />
                   )
                 ) : (
-                  <img 
-                    src={currentMedia} 
-                    alt={puja.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                  />
+                  <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#0A0302]">
+                    <img 
+                      src={currentMedia} 
+                      alt="" 
+                      aria-hidden="true" 
+                      className="absolute inset-0 w-full h-full object-cover filter blur-lg opacity-40 scale-110 pointer-events-none" 
+                    />
+                    <img 
+                      src={currentMedia} 
+                      alt={puja.name} 
+                      className="relative z-10 max-h-full max-w-full object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-[1.03]" 
+                    />
+                  </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A0A06] via-transparent to-transparent pointer-events-none"></div>
                 
@@ -465,8 +473,9 @@ export function PujaClientView({ puja }: { puja: any }) {
 
             <div className="grid lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-5 relative">
-                <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-lg border-2 border-amber-500/20">
-                  <img src={activeImage} alt={puja.name} className="w-full h-full object-cover" />
+                <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-lg border-2 border-amber-500/20 relative bg-[#1E0C07] flex items-center justify-center">
+                  <img src={activeImage} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover filter blur-lg opacity-40 scale-110 pointer-events-none" />
+                  <img src={activeImage} alt={puja.name} className="relative z-10 max-h-full max-w-full object-contain drop-shadow-md" />
                 </div>
                 <div className="absolute -bottom-4 -right-4 bg-rose-900 text-white p-4 rounded-xl shadow-xl hidden sm:block">
                   <p className="text-2xl font-black">100%</p>

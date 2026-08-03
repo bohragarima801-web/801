@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, MapPin, Sparkles } from 'lucide-react'
 import { getCachedPujas } from '@/lib/cache'
+import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export const revalidate = 3600 // Cache public route on CDN Edge for up to 1 hour (revalidated on-demand)
 
@@ -80,18 +81,13 @@ export default async function PujasPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pujas.map((p) => (
             <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between">
-              <Link href={`/pujas/${p.slug}`} className="relative aspect-[16/10] bg-slate-100 overflow-hidden block">
-                {p.coverImage ? (
-                  <Image src={getSafeImageUrl(p.coverImage)}
-                    alt={getAutoSeoAlt(p.name, 'puja')}
-                    fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-top transition-transform group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center text-primary bg-[var(--secondary-color)]/10">
-                    <Sparkles className="h-12 w-12 opacity-40" />
-                  </div>
-                )}
+              <Link href={`/pujas/${p.slug}`} className="relative block">
+                <SacredImageFrame
+                  src={p.coverImage}
+                  alt={p.name}
+                  aspectRatio="16/10"
+                  seoCategory="puja"
+                />
                 {p.isVip && (
                   <Badge className="absolute top-3 left-3 bg-red-600 text-white font-bold border-none">
                     ⭐ VIP
