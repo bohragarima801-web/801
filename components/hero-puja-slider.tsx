@@ -24,24 +24,8 @@ export function HeroPujaSlider({ slides, children }: { slides?: HeroSlide[], chi
   const touchStartX = useRef<number | null>(null)
   const touchEndX = useRef<number | null>(null)
 
-  const slideList: HeroSlide[] = slides && slides.length > 0 ? slides : [
-    {
-      id: 'default-1',
-      title: 'सावन महा रुद्राभिषेक पूजा - काशी विश्वनाथ मंदिर',
-      subtitle: 'घर बैठे अपनी नाम और गोत्र से पवित्र मंदिर में करवाएं पूजा',
-      image: 'https://srimandirweb.s3.ap-south-1.amazonaws.com/Hero_banner_4dd7f4c5aa.webp',
-      ctaText: 'पूजा में भाग लें',
-      ctaUrl: '/pujas',
-    },
-    {
-      id: 'default-2',
-      title: 'महाकालेश्वर भस्म आरती एवं विशेष जाप',
-      subtitle: 'उज्जैन ज्योतिर्लिंग से लाइव संकल्प और वीडियो प्रसाद सेवा',
-      image: 'https://srimandirweb.s3.ap-south-1.amazonaws.com/Web_Hero_3_88abdf752f.webp',
-      ctaText: 'विशेष सेवा देखें',
-      ctaUrl: '/pujas',
-    },
-  ]
+  const slideList: HeroSlide[] = slides && slides.length > 0 ? slides : []
+
 
   useEffect(() => {
     if (slideList.length <= 1 || isPaused) return

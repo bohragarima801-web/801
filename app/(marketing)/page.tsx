@@ -332,9 +332,12 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="w-full">
-              <HeroPujaSlider slides={allHeroSlides} />
-            </div>
+            {allHeroSlides.length > 0 && (
+              <div className="w-full">
+                <HeroPujaSlider slides={allHeroSlides} />
+              </div>
+            )}
+
 
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-none font-semibold px-8" asChild>
