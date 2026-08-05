@@ -241,7 +241,8 @@ function BlogForm() {
     setLoading(true)
     try {
       const cleanCoverImage = convertGoogleDriveUrl(coverImage)
-      const cleanPdfUrl = convertGoogleDriveUrl(pdfUrl) || pdfUrl
+      // Keep original Drive URL for pdfUrl — frontend converts to privacy-safe embed on display
+      const cleanPdfUrl = pdfUrl.trim() || ''
       const cleanContent = content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText, src) => {
         return `![${altText}](${convertGoogleDriveUrl(src)})`
       })

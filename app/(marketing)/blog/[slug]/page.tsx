@@ -8,7 +8,7 @@ import { ArrowLeft, Calendar, User, Eye, FileText, Download, Sparkles } from 'lu
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
-import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE, sanitizeSlug } from '@/lib/utils'
+import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE, sanitizeSlug, convertGoogleDrivePdfUrl } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -163,34 +163,41 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         ) : null}
 
         {/* PDF Material Download Section Banner */}
-        {post.pdfUrl && (
-          <div className="my-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white shadow-xl border border-emerald-500/30 relative overflow-hidden group">
-            <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 backdrop-blur-md">
-                  <FileText className="h-3.5 w-3.5 text-emerald-400" /> Free PDF Download
+        {post.pdfUrl && (() => {
+          const safePdfUrl = post.pdfUrl.includes('drive.google.com')
+            ? convertGoogleDrivePdfUrl(post.pdfUrl)
+            : post.pdfUrl
+          const isDriveEmbed = safePdfUrl.includes('/preview')
+          return (
+            <div className="my-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white shadow-xl border border-emerald-500/30 relative overflow-hidden group">
+              <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 backdrop-blur-md">
+                    <FileText className="h-3.5 w-3.5 text-emerald-400" /> Free PDF Download
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                    {post.pdfTitle || 'निःशुल्क पीडीएफ पुस्तक / सामग्री डाउनलोड करें'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-emerald-100/80 font-medium">
+                    सुरक्षित डायरेक्ट लिंक से मुफ्त पीडीएफ प्राप्त करें।
+                  </p>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
-                  {post.pdfTitle || 'निःशुल्क पीडीएफ पुस्तक / सामग्री डाउनलोड करें'}
-                </h3>
-                <p className="text-xs sm:text-sm text-emerald-100/80 font-medium">
-                  सुरक्षित डायरेक्ट लिंक (Google Drive / Mega / Direct PDF) से मुफ्त पीडीएफ प्राप्त करें।
-                </p>
-              </div>
 
-              <a
-                href={post.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                download={!post.pdfUrl.includes('drive.google.com') && !post.pdfUrl.includes('mega.nz')}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-sm md:text-base shadow-lg hover:shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 w-full sm:w-auto text-center no-underline"
-              >
-                <Download className="h-5 w-5" /> Download PDF Now
-              </a>
+                <a
+                  href={safePdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download={!isDriveEmbed && !safePdfUrl.includes('mega.nz')}
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-sm md:text-base shadow-lg hover:shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 w-full sm:w-auto text-center no-underline"
+                >
+                  <Download className="h-5 w-5" /> {isDriveEmbed ? 'View / Download PDF' : 'Download PDF Now'}
+                </a>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
+
 
         <div 
           className="prose prose-amber prose-lg md:prose-xl max-w-none 
@@ -210,13 +217,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               a: ({ href, children, ...props }) => {
                 if (!href) return <span className="font-semibold text-amber-700">{children}</span>
                 const lowerHref = href.toLowerCase()
-                const isPdf = lowerHref.includes('.pdf') || lowerHref.includes('drive.google.com') || lowerHref.includes('mega.nz') || lowerHref.includes('dropbox.com')
+                const isDriveLink = lowerHref.includes('drive.google.com')
+                const isPdf = lowerHref.includes('.pdf') || isDriveLink || lowerHref.includes('mega.nz') || lowerHref.includes('dropbox.com')
                 const isExternal = href.startsWith('http://') || href.startsWith('https://')
-                
+                const safeHref = isDriveLink ? convertGoogleDrivePdfUrl(href) : href
+
                 if (isPdf) {
                   return (
                     <a
-                      href={href}
+                      href={safeHref}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 my-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm md:text-base shadow-md hover:shadow-lg transition-all duration-300 no-underline"
@@ -228,6 +237,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                     </a>
                   )
                 }
+
 
                 if (isExternal) {
                   return (

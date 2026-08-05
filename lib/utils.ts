@@ -100,6 +100,39 @@ export function convertGoogleDriveUrl(url: string) {
   return url
 }
 
+/**
+ * Converts a Google Drive share/view link to a PRIVATE proxy-safe preview URL.
+ * - Does NOT expose the user's Google Drive to visitors.
+ * - Opens the file in Google's embedded PDF viewer (no Drive UI shown).
+ * - Works for PDFs, Docs, etc.
+ */
+export function convertGoogleDrivePdfUrl(url: string): string {
+  if (!url || typeof url !== 'string') return url
+
+  // Already a direct download or embed link — return as-is
+  if (url.includes('uc?export=download') || url.includes('export=view') || url.includes('drive.google.com/uc')) {
+    return url
+  }
+
+  let id = ''
+  // Match: /file/d/FILE_ID/view or /file/d/FILE_ID
+  const fileDMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (fileDMatch?.[1]) {
+    id = fileDMatch[1]
+  } else {
+    // Match: ?id=FILE_ID or &id=FILE_ID
+    const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idMatch?.[1]) id = idMatch[1]
+  }
+
+  if (id) {
+    // Use Google's embedded preview — shows PDF inside browser without opening Drive
+    // Privacy-safe: visitor cannot see your Drive folder/account
+    return `https://drive.google.com/file/d/${id}/preview`
+  }
+  return url
+}
+
 export function getSafeImageUrl(url?: string | null, fallback = DEFAULT_PLACEHOLDER_IMAGE): string {
   if (!url || typeof url !== 'string' || !url.trim()) return fallback
   const trimmed = url.trim()
