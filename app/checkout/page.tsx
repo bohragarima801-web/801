@@ -477,8 +477,8 @@ export default function CheckoutPage() {
             <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
               <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
                 <div className="font-bold text-gray-900">
-                  <p className="text-xs text-gray-500 font-medium">To Pay</p>
-                  <p className="text-lg text-green-600">₹ {cartTotal}</p>
+                  <p className="text-xs text-gray-500 font-medium">Total Amount</p>
+                  <p className="text-lg text-green-600">₹ {finalTotal}</p>
                 </div>
                 <button 
                   onClick={() => setStep('details')} 
