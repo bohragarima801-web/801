@@ -1,7 +1,4 @@
-import { unstable_cache } from 'next/cache'
-import { prisma } from './prisma'
-
-// Cache public published pujas list
+// Cache public published pujas list (5-min revalidation)
 export const getCachedPujas = unstable_cache(
   async () => {
     try {
@@ -50,9 +47,9 @@ export const getCachedPujas = unstable_cache(
       return []
     }
   },
-  ['public-pujas-list'],
+  ['public-pujas-list-v2'],
   {
-    revalidate: 3600,
+    revalidate: 300,
     tags: ['pujas']
   }
 )
@@ -91,9 +88,9 @@ export const getCachedProducts = unstable_cache(
       return []
     }
   },
-  ['home-products-list'],
+  ['home-products-list-v2'],
   {
-    revalidate: 3600,
+    revalidate: 300,
     tags: ['products']
   }
 )
@@ -119,9 +116,9 @@ export const getCachedTestimonials = unstable_cache(
       return []
     }
   },
-  ['home-testimonials-list'],
+  ['home-testimonials-list-v2'],
   {
-    revalidate: 3600,
+    revalidate: 300,
     tags: ['testimonials']
   }
 )
@@ -206,9 +203,9 @@ export const getCachedHomePageMedia = unstable_cache(
       return { pastPujas: [], customerReviews: [], festivalEvents: [], dbVideosRaw: [], dbGalleries: [] }
     }
   },
-  ['home-page-media-v1'],
+  ['home-page-media-v2'],
   {
-    revalidate: 3600,
+    revalidate: 300,
     tags: ['media']
   }
 )
