@@ -66,6 +66,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Events', slug: 'events', icon: CalendarDays, href: '/admin/events', permission: 'event.read' },
   { title: 'Media Library', slug: 'media', icon: Layers, href: '/admin/media', permission: 'media.read' },
   { title: 'Support', slug: 'support', icon: MessageSquare, href: '/admin/support', permission: 'support.read' },
+  { title: '💬 WhatsApp Management', slug: 'whatsapp', icon: MessageSquare, href: '/admin/whatsapp' },
   { title: 'Notifications', slug: 'notifications', icon: Bell, href: '/admin/notifications', permission: 'notification.read' },
   { title: 'CMS', slug: 'cms', icon: ClipboardList, permission: 'cms.read', items: [
     { title: 'Homepage', href: '/admin/cms' }, { title: 'Hero Slider', href: '/admin/cms/hero' },

@@ -90,6 +90,8 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+import { WhatsAppFloatingWidget } from '@/components/whatsapp-floating-widget'
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const globalSchema = {
     '@context': 'https://schema.org',
@@ -117,6 +119,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <PixelInjector />
           </Suspense>
           <TranslationProvider />
+          <WhatsAppFloatingWidget />
         </Providers>
       </body>
     </html>

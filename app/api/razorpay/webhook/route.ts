@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
-
-// Razorpay webhook receiver. Configure this URL in Dashboard → Settings → Webhooks.
-// Set `RAZORPAY_WEBHOOK_SECRET'env var to the secret you defined there.
+import { getSetting } from '@/lib/settings'
 
 export async function POST(req: NextRequest) {
   try {
-    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || '';
+    let secret = (process.env.RAZORPAY_WEBHOOK_SECRET || '').trim()
     if (!secret) {
-      // Refuse to process events if the webhook secret isn't configured.
-      // Accepting unsigned events here would let anyone fake a "payment successful" call.
+      secret = (await getSetting('secret.razorpay_webhook_secret', 'RAZORPAY_WEBHOOK_SECRET')).replace(/^["']|["']$/g, '').trim()
+    }
+    if (!secret) {
       return NextResponse.json({ ok: false, error: 'Webhook not configured' }, { status: 500 });
     }
 

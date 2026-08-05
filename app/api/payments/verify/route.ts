@@ -114,6 +114,25 @@ export async function POST(req: NextRequest) {
                 amount: Number(updatedBk.total)
               }
             }).catch(() => {})
+
+            // Trigger Real-Time Meta CAPI Server-Side Purchase Event
+            const { sendMetaCapiEvent } = await import('@/lib/meta-capi')
+            sendMetaCapiEvent({
+              eventName: 'Purchase',
+              eventId: `bk_${updatedBk.id}_${Date.now()}`,
+              eventSourceUrl: `https://divyayagyam.com/pujas/${updatedBk.puja?.slug || ''}`,
+              userData: {
+                email: updatedBk.user?.email,
+                phone: updatedBk.user?.phone,
+                fullName: updatedBk.user?.fullName,
+              },
+              customData: {
+                currency: 'INR',
+                value: Number(updatedBk.total),
+                content_name: updatedBk.puja?.name || 'Puja Booking',
+                booking_number: updatedBk.bookingNumber,
+              }
+            }).catch(() => {})
           }
         }
       }

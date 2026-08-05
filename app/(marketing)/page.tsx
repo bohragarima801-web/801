@@ -95,20 +95,8 @@ export default async function HomePage() {
 
 
 
-  // Inject Media Library Festival Events into Hero Slider
-  const mediaHeroSlides = festivalEvents.map((m: any, i: number) => ({
-    id: m.id,
-    image: m.url,
-    title: m.filename || 'Special Event',
-    subtitle: 'DivyaYagyam Special',
-    ctaUrl: '/pujas',
-    ctaText: 'Participate Now',
-    link: '/pujas',
-    buttonText: 'Participate Now',
-    order: 100 + i,
-    isActive: true
-  }))
-  const allHeroSlides = [...heroSlides, ...mediaHeroSlides].sort((a: any, b: any) => a.order - b.order)
+  // Only show slides created explicitly in Hero Slider Admin Panel
+  const allHeroSlides = heroSlides || []
 
   // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets
   const jsonLd = {
