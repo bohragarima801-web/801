@@ -1,3 +1,6 @@
+import { unstable_cache } from 'next/cache'
+import { prisma } from './prisma'
+
 // Cache public published pujas list (5-min revalidation)
 export const getCachedPujas = unstable_cache(
   async () => {
