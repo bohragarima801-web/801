@@ -706,3 +706,6 @@ export function PujaClientView({ puja }: { puja: any }) {
     </div>
   )
 }
+
+// Alias export for product page import compatibility
+export { PujaClientView as ProductClientView }
