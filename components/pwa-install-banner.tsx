@@ -30,7 +30,14 @@ export function PwaInstallBanner() {
       setShowBanner(true)
     }
 
+    const handleAppInstalled = () => {
+      setShowBanner(false)
+      setDeferredPrompt(null)
+      sessionStorage.setItem('dy_pwa_dismissed', 'true')
+    }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('appinstalled', handleAppInstalled)
 
     // For iOS Safari or Android browsers where prompt fires early
     if (isIosDevice && !isStandalone) {
@@ -39,8 +46,10 @@ export function PwaInstallBanner() {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', handleAppInstalled)
     }
   }, [])
+
 
   const handleInstallClick = async () => {
     if (isIos) {
