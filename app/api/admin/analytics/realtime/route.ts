@@ -54,13 +54,17 @@ export async function GET() {
       take: 20,
     })
 
-    // 5. Website Pixel Config Status
+    // 5. Website Pixel & Meta CAPI Config Status
     const pixelSettings = await prisma.websiteSetting.findMany({
       where: {
         key: {
           in: [
             'pixel.facebook_id',
+            'marketing.metaPixelId',
+            'pixel.meta_capi_token',
+            'marketing.metaCapiToken',
             'pixel.google_analytics_id',
+            'marketing.googleAnalyticsId',
             'pixel.google_tag_manager_id',
             'pixel.custom_head_scripts',
           ],
@@ -68,11 +72,19 @@ export async function GET() {
       },
     })
 
+    const hasValue = (key: string) => {
+      const s = pixelSettings.find((item) => item.key === key)
+      if (!s) return false
+      const val = typeof s.value === 'string' ? s.value.trim() : JSON.stringify(s.value || '')
+      return val.replace(/^["']|["']$/g, '').length > 0
+    }
+
     const pixelStatus = {
-      facebook: pixelSettings.some((s) => s.key === 'pixel.facebook_id' && (s.value as any)?.length > 0),
-      googleAnalytics: pixelSettings.some((s) => s.key === 'pixel.google_analytics_id' && (s.value as any)?.length > 0),
-      googleTagManager: pixelSettings.some((s) => s.key === 'pixel.google_tag_manager_id' && (s.value as any)?.length > 0),
-      customScripts: pixelSettings.some((s) => s.key === 'pixel.custom_head_scripts' && (s.value as any)?.length > 0),
+      facebook: hasValue('pixel.facebook_id') || hasValue('marketing.metaPixelId'),
+      metaCapi: hasValue('pixel.meta_capi_token') || hasValue('marketing.metaCapiToken'),
+      googleAnalytics: hasValue('pixel.google_analytics_id') || hasValue('marketing.googleAnalyticsId'),
+      googleTagManager: hasValue('pixel.google_tag_manager_id'),
+      customScripts: hasValue('pixel.custom_head_scripts'),
     }
 
     return NextResponse.json({
@@ -80,7 +92,10 @@ export async function GET() {
       data: {
         liveActiveVisitors,
         totalTodayEvents,
-        eventsBreakdown: eventsBreakdown.map((e) => ({ event: e.eventName, count: e._count.id })),
+        eventsBreakdown: eventsBreakdown.map((e) => ({
+          event: String(e.action || '').replace(/^ANALYTICS_/, ''),
+          count: e._count.id,
+        })),
         recentEvents,
         pixelStatus,
         timestamp: new Date().toISOString(),
