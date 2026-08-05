@@ -155,7 +155,7 @@ export const getCachedHeroSlides = unstable_cache(
   },
   ['home-hero-slides-v2'],
   {
-    revalidate: 0,
+    revalidate: false,
     tags: ['hero-slides']
   }
 )
