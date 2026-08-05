@@ -51,9 +51,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
 
   useEffect(() => {
     fetch('/api/profile')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          // 401 = not logged in — silently set no user, no error
+          setUserLoaded(true)
+          return null
+        }
+        return res.json()
+      })
       .then(data => {
-        if (data.ok && data.user) {
+        if (data?.ok && data.user) {
           setUser(data.user)
         }
         setUserLoaded(true)
