@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -58,18 +59,21 @@ export async function POST(req: NextRequest) {
       placement: placement || 'HOME'
     }
 
+    let slide
     if (id) {
-      const slide = await prisma.heroSlider.update({
+      slide = await prisma.heroSlider.update({
         where: { id },
         data: payload
       })
-      return NextResponse.json({ ok: true, data: slide })
     } else {
-      const slide = await prisma.heroSlider.create({
+      slide = await prisma.heroSlider.create({
         data: payload
       })
-      return NextResponse.json({ ok: true, data: slide })
     }
+
+    revalidatePath('/')
+    revalidateTag('hero-slides')
+    return NextResponse.json({ ok: true, data: slide })
   } catch (err: any) {
     if (err.code === 'P2003') {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
@@ -89,7 +93,6 @@ export async function PUT(req: NextRequest) {
 
     const data = await req.json()
 
-    // If order is passed as string, parse it
     if (data.order !== undefined) {
       data.order = parseInt(data.order) || 0
     }
@@ -99,6 +102,8 @@ export async function PUT(req: NextRequest) {
       data
     })
 
+    revalidatePath('/')
+    revalidateTag('hero-slides')
     return NextResponse.json({ ok: true, data: slide });
   } catch (err: any) {
     if (err.code === 'P2003') {
@@ -121,6 +126,8 @@ export async function DELETE(req: NextRequest) {
       where: { id }
     })
 
+    revalidatePath('/')
+    revalidateTag('hero-slides')
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     if (err.code === 'P2003') {

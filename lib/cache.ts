@@ -126,7 +126,7 @@ export const getCachedTestimonials = unstable_cache(
   }
 )
 
-// Cache hero sliders
+// Cache hero sliders (real-time revalidation)
 export const getCachedHeroSlides = unstable_cache(
   async () => {
     try {
@@ -153,9 +153,9 @@ export const getCachedHeroSlides = unstable_cache(
       return []
     }
   },
-  ['home-hero-slides'],
+  ['home-hero-slides-v2'],
   {
-    revalidate: 3600,
+    revalidate: 0,
     tags: ['hero-slides']
   }
 )
