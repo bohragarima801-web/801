@@ -25,7 +25,7 @@ interface SacredVideoGalleryProps {
 const fallbackVideos: VideoItem[] = [
   {
     id: 'demo-1',
-    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    url: 'https://www.youtube.com/watch?v=1_S1W3KSt0A',
     filename: 'Kashi Vishwanath Mangala Aarti & Sankalp',
     folder: 'Live Darshan',
     type: 'VIDEO',
@@ -33,7 +33,7 @@ const fallbackVideos: VideoItem[] = [
   },
   {
     id: 'demo-2',
-    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    url: 'https://www.youtube.com/watch?v=77lM5cHQE20',
     filename: 'Mahakaleshwar Bhasma Aarti Ujjain',
     folder: 'Past Puja',
     type: 'VIDEO',
@@ -41,7 +41,7 @@ const fallbackVideos: VideoItem[] = [
   },
   {
     id: 'demo-3',
-    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    url: 'https://www.youtube.com/watch?v=1_S1W3KSt0A',
     filename: 'Navgrah Homa Live Stream & Vedic Chanting',
     folder: 'Aarti & Bhajan',
     type: 'VIDEO',
