@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { 
   Sparkles, Award, UserCheck, Calendar, Clock, Video, Truck, ShieldCheck, 
   Heart, CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, ChevronRight,
-  Flame, Lock, Compass, HelpCircle, X, Check
+  Flame, Lock, Compass, HelpCircle, X, Check, User
 } from 'lucide-react'
 
 export interface VipPackageItem {
@@ -162,7 +162,6 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
   const [gotra, setGotra] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('default')
-  const [selectedPanditId, setSelectedPanditId] = useState('any')
   const [sankalpWish, setSankalpWish] = useState('')
 
   const handleOpenBooking = (pkg: VipPackageItem) => {
@@ -177,13 +176,11 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
       return
     }
 
-    const panditObj = panditsList.find(p => p.id === selectedPanditId)
-    const panditName = panditObj ? panditObj.name : 'DivyaYagyam Verified Vedic Pandit'
     const slotObj = timeSlotOptions.find(s => s.id === selectedTimeSlot)
     const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
 
-    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book a VIP Puja:*%0A- *Puja:* ${selectedPackage?.name}%0A- *Price:* ₹${selectedPackage?.price}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Preferred Priest:* ${panditName}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Prosperity & Health'}`
+    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book a VIP Puja:*%0A- *Puja:* ${selectedPackage?.name}%0A- *Price:* ₹${selectedPackage?.price}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Priest Allocation:* Admin Assigned Certified Veda Acharya%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Prosperity & Health'}`
 
     window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
     setBookingDialogOpen(false)
@@ -217,12 +214,12 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
               </h1>
 
               <p className="text-base sm:text-lg md:text-xl text-amber-100/90 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Experience priority scheduling, dedicated Veda-certified priests, extended rituals, detailed sankalp with your name and gotra, and personalized HD video & prasad delivery to your doorstep.
+                Experience priority scheduling, dedicated Veda-certified priests assigned by DivyaYagyam admin, extended rituals, detailed sankalp with your name and gotra, and personalized HD video & prasad delivery to your doorstep.
               </p>
 
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start pt-1">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/10 border border-white/20 text-white backdrop-blur-md">
-                  <UserCheck className="h-3.5 w-3.5 text-amber-400" /> Dedicated Priest
+                  <UserCheck className="h-3.5 w-3.5 text-amber-400" /> Admin Assigned Priest
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/10 border border-white/20 text-white backdrop-blur-md">
                   <Calendar className="h-3.5 w-3.5 text-amber-400" /> Custom Calendar & Slot
@@ -244,7 +241,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
 
                 <Button size="lg" variant="outline" className="border-amber-400/50 bg-white/10 text-white hover:bg-white/20 font-bold px-6 py-6 rounded-xl text-base shadow-xs backdrop-blur-md" asChild>
                   <a href="#vedic-pandits">
-                    Meet Vedic Pandits
+                    Meet Certified Acharyas
                   </a>
                 </Button>
               </div>
@@ -268,7 +265,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 text-left">
                     <span className="text-xs font-bold text-amber-300 uppercase tracking-widest">👑 Sacred Concierge</span>
                     <h3 className="text-lg font-extrabold text-white leading-tight">Personalized 1-on-1 Vedic Homa</h3>
-                    <p className="text-xs text-slate-200 mt-0.5">Custom Gotra Sankalp & Dedicated Priest</p>
+                    <p className="text-xs text-slate-200 mt-0.5">Custom Gotra Sankalp & Admin Assigned Priest</p>
                   </div>
                 </div>
 
@@ -290,18 +287,18 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
 
 
       {/* ============================================================
-          NEW FEATURE: VERIFIED VEDIC PANDITS SECTION (हमारे सिद्ध वैदिक विद्वान)
+          SHOWCASE: VERIFIED VEDIC PANDITS SECTION (हमारे सिद्ध वैदिक विद्वान)
           ============================================================ */}
       <section id="vedic-pandits" className="container mx-auto px-4 md:px-6 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200/80 shadow-xs">
-            <ShieldCheck className="h-3.5 w-3.5 text-amber-600" /> Veda Certified Acharyas
+            <ShieldCheck className="h-3.5 w-3.5 text-amber-600" /> DivyaYagyam Official Panelists
           </span>
           <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
             हमारे सिद्ध वैदिक विद्वान एवं आचार्य <span className="text-amber-700 dark:text-amber-400 font-normal block text-xl md:text-2xl mt-1">/ Verified Vedic Pandits</span>
           </h2>
           <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">
-            20+ वर्षों से तीर्थ क्षेत्रों में सेवारत, शास्त्र-पारंगत एवं वैदिक गुरु परंपरा से दीक्षित आचार्यों से अपनी पूजा संपन्न कराएं।
+            20+ वर्षों से तीर्थ क्षेत्रों में सेवारत, शास्त्र-पारंगत एवं दिव्य यज्ञम संस्थान द्वारा अधिकृत प्रामाणिक आचार्य मंडल।
           </p>
         </div>
 
@@ -349,9 +346,9 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                     ))}
                   </div>
 
-                  <Button size="sm" variant="outline" className="w-full border-amber-300 dark:border-slate-700 font-bold text-xs rounded-xl" onClick={() => setSelectedPanditId(pandit.id)}>
-                    {selectedPanditId === pandit.id ? '✓ Priest Selected' : 'Select Pandit'}
-                  </Button>
+                  <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-amber-50/50 p-2 rounded-xl border border-amber-200/60 text-center">
+                    🛡️ Admin Managed & Assigned Priest
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -379,9 +376,9 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
               <div className="h-12 w-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center border border-amber-200">
                 <UserCheck className="h-6 w-6" />
               </div>
-              <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Personalized Attention</h3>
+              <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Admin Assigned Priest</h3>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                Dedicated priest performing the entire ritual solely for you and your family with zero shared queues.
+                Our team selects the best Veda-certified Acharya for your specific Gotra and Puja requirement.
               </p>
             </CardContent>
           </Card>
@@ -505,7 +502,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 {selectedPackage.name}
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-600 font-medium">
-                Choose your preferred date, time slot, and Vedic Pandit, or let us assign the default auspicious timing.
+                Choose your preferred date & time slot, or let DivyaYagyam assign the default auspicious Muhurat & verified Acharya.
               </DialogDescription>
             </DialogHeader>
 
@@ -552,21 +549,14 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 </div>
               </div>
 
-              {/* 3. Pandit Preference */}
-              <div className="space-y-2">
-                <Label className="font-bold text-xs text-slate-800 dark:text-slate-200">
-                  👳 Prefer Specific Veda Pandit? (पंडित जी का चयन)
-                </Label>
-                <select
-                  value={selectedPanditId}
-                  onChange={(e) => setSelectedPanditId(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-amber-200 text-xs font-semibold bg-white dark:bg-slate-900"
-                >
-                  <option value="any">⚡ DivyaYagyam Assigned Veda Pandit (अनुभवी विद्वान आचार्य)</option>
-                  {panditsList.map(p => (
-                    <option key={p.id} value={p.id}>{p.name} ({p.location})</option>
-                  ))}
-                </select>
+              {/* 3. Priest Allocation Notice (Admin Controlled) */}
+              <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 dark:bg-slate-800/80 space-y-1">
+                <div className="flex items-center gap-2 font-bold text-xs text-amber-900 dark:text-amber-300">
+                  <ShieldCheck className="h-4 w-4 text-amber-600" /> Assigned Priest (संस्थान द्वारा नियुक्त आचार्य)
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+                  आपके गोत्र एवं मुहूर्त के अनुसार दिव्य यज्ञम संस्थान द्वारा सर्वोत्तम सिद्ध वैदिक ब्राह्मण/आचार्य नियुक्त किए जाएंगे।
+                </p>
               </div>
 
               {/* 4. Devotee Details */}
