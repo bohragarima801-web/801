@@ -115,9 +115,8 @@ const timeSlotOptions = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
-  const packagesToDisplay = dbPackages.length > 0 ? dbPackages : defaultVipPackages
+  const packagesToDisplay = dbPackages
   const [activePackageIndex, setActivePackageIndex] = useState(0)
-  const currentPackage = packagesToDisplay[activePackageIndex] || packagesToDisplay[0]
 
   // Booking Modal State
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false)
@@ -127,6 +126,27 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('default')
   const [sankalpWish, setSankalpWish] = useState('')
+
+  if (packagesToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans py-24 px-4 text-center flex flex-col items-center justify-center space-y-6">
+        <div className="h-20 w-20 rounded-full bg-amber-500/20 border-2 border-amber-400/50 text-amber-400 flex items-center justify-center text-4xl shadow-xl">👑</div>
+        <div className="space-y-2 max-w-md">
+          <h2 className="text-3xl font-bold font-heading text-white">VIP Pujas — Admin Configured</h2>
+          <p className="text-slate-300 text-sm font-medium leading-relaxed">
+            अभी वेबसाइट पर कोई VIP पूजा एक्टिव नहीं है। कृपया Admin Panel पर जाकर अपनी असली VIP पूजा, फ़ोटो, प्राइस एवं आचार्य विवरण जोड़ें।
+          </p>
+        </div>
+        <Button size="lg" className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl shadow-xl text-sm py-6 px-8" asChild>
+          <Link href="/admin/pujas/new?isVip=true">
+            👑 Add Real VIP Puja in Admin Panel &rarr;
+          </Link>
+        </Button>
+      </div>
+    )
+  }
+
+  const currentPackage = packagesToDisplay[activePackageIndex] || packagesToDisplay[0]
 
   const handleConfirmBooking = (e: React.FormEvent) => {
     e.preventDefault()
