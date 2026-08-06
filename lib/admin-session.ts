@@ -39,6 +39,9 @@ async function hmacSign(secret: string, data: string): Promise<string> {
 function getSecret(): string {
   const secret = process.env.ADMIN_SESSION_SECRET || process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
   if (!secret) {
+    if (process.env.NODE_ENV !== 'production') {
+      return 'dev-admin-session-secret-change-in-prod-108'
+    }
     throw new Error('FATAL: ADMIN_SESSION_SECRET environment variable is missing. Refusing to sign or verify admin tokens.')
   }
   return secret

@@ -23,9 +23,9 @@ const RASHIS = [
 
 export default function KundaliTool() {
   const [name, setName] = useState('')
-  const [dob, setDob] = useState('1995-05-15')
-  const [tob, setTob] = useState('10:30')
-  const [place, setPlace] = useState('New Delhi')
+  const [dob, setDob] = useState('')
+  const [tob, setTob] = useState('')
+  const [place, setPlace] = useState('')
   const [result, setResult] = useState<any>(null)
 
   const handleCalculate = (e: React.FormEvent) => {

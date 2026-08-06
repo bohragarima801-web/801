@@ -63,6 +63,8 @@ export async function GET() {
   }
 }
 
+import { clearSettingCache } from '@/lib/settings'
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getAdminSession()
@@ -72,13 +74,19 @@ export async function POST(req: NextRequest) {
 
     // 1. Handle CAPI Connection Test Trigger
     if (body.action === 'test_capi') {
+      const forwardedFor = req.headers.get('x-forwarded-for') || ''
+      const clientIp = forwardedFor.split(',')[0].trim() || req.headers.get('x-real-ip') || '127.0.0.1'
+      const userAgent = req.headers.get('user-agent') || 'DivyaYagyam Admin CAPI Tester'
+
       const testRes = await sendMetaCapiEvent({
         eventName: 'PageView',
         eventId: `test_capi_${Date.now()}`,
         eventSourceUrl: 'https://divyayagyam.com/admin/marketing',
         userData: {
           email: session.email || 'admin@divyayagyam.com',
-          fullName: session.name || 'DivyaYagyam Admin',
+          fullName: (session as any)?.name || (session as any)?.fullName || 'DivyaYagyam Admin',
+          clientIp,
+          userAgent,
         },
         customData: {
           test_note: 'Realtime Admin Meta CAPI Health Verification',
@@ -86,7 +94,7 @@ export async function POST(req: NextRequest) {
       })
 
       if (!testRes.success) {
-        return NextResponse.json({ ok: false, error: testRes.error || 'Meta CAPI test failed' }, { status: 400 })
+        return NextResponse.json({ ok: false, error: testRes.error || 'Meta CAPI test failed', result: testRes.result }, { status: 400 })
       }
 
       return NextResponse.json({
@@ -139,11 +147,13 @@ export async function POST(req: NextRequest) {
 
     await prisma.$transaction(upsertPromises)
 
+    clearSettingCache()
     revalidatePath('/')
     revalidatePath('/pujas')
     revalidateTag('pixel-config')
 
     return NextResponse.json({ ok: true, message: 'Marketing & Meta CAPI configurations saved live!' });
+
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save settings' }, { status: 500 });
   }

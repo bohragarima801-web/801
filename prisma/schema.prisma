@@ -1557,3 +1557,120 @@ model ConsultationBooking {
 
   @@map("consultation_bookings")
 }
+
+// ============================================================
+// FESTIVALS & PANCHANG
+// ============================================================
+
+model Festival {
+  id             String   @id @default(uuid())
+  date           DateTime
+  festival       String
+  festivalHi     String?
+  category       String?
+  categoryHi     String?
+  significance   String?
+  significanceHi String?
+  rawJson        Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([date])
+  @@index([festival])
+  @@map("festivals")
+}
+
+model Panchang {
+  id                String   @id @default(uuid())
+  date              DateTime @unique
+  day               String?
+  dayHi             String?
+  hinduMonth        String?
+  hinduMonthHi      String?
+  paksha            String?
+  pakshaHi          String?
+  tithi             String?
+  tithiHi           String?
+  nakshatra         String?
+  nakshatraHi       String?
+  yog               String?
+  yogHi             String?
+  karan             String?
+  karanHi           String?
+  sunrise           String?
+  sunset            String?
+  moonrise          String?
+  moonset           String?
+  rahukaal          String?
+  rahuKaal          String?
+  gulikakal         String?
+  gulikaKaal        String?
+  yamaganda         String?
+  yamagandaKaal     String?
+  abhijitMuhurat    String?
+  specialFestival   String?
+  specialFestivalHi String?
+  rawJson           Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([date])
+  @@map("panchang")
+}
+
+// ============================================================
+// SOCIAL AUTOMATION MODULE
+// ============================================================
+
+model SocialAccount {
+  id           String   @id @default(uuid())
+  platform     String
+  accountName  String
+  accountId    String?
+  accessToken  String?  @db.Text
+  refreshToken String?  @db.Text
+  apiSecret    String?  @db.Text
+  webhookUrl   String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("social_accounts")
+}
+
+model SocialPost {
+  id          String   @id @default(uuid())
+  title       String?
+  caption     String   @db.Text
+  hashtags    String?
+  mediaType   String   @default("TEXT")
+  mediaUrls   String[]
+  platforms   String[]
+  status      String   @default("SCHEDULED")
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  postResults Json?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  logs SocialPostLog[]
+
+  @@map("social_posts")
+}
+
+model SocialPostLog {
+  id           String   @id @default(uuid())
+  postId       String
+  platform     String
+  status       String
+  response     Json?
+  errorMessage String?  @db.Text
+  postedAt     DateTime @default(now())
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("social_post_logs")
+}
+

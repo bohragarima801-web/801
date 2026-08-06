@@ -1,11 +1,11 @@
 
 import Link from 'next/link'
-import Image from 'next/image';
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-import { getAutoSeoAlt } from '@/lib/seo-auto'
-
 import { getSafeImageUrl } from '@/lib/utils'
+import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react'
+import { getCachedPujas } from '@/lib/cache'
+import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -14,14 +14,8 @@ export function generateMetadata() {
     path: '/pujas',
   })
 }
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar, MapPin, Sparkles } from 'lucide-react'
-import { getCachedPujas } from '@/lib/cache'
-import { SacredImageFrame } from '@/components/ui/safe-image'
 
-export const revalidate = 3600 // Cache public route on CDN Edge for up to 1 hour (revalidated on-demand)
+export const revalidate = 3600
 
 export default async function PujasPage() {
   const pujas = await getCachedPujas()
@@ -53,84 +47,145 @@ export default async function PujasPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container py-12 sm:py-16 space-y-12">
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <Badge variant="secondary" className="px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-amber-100/90 text-rose-900 border border-amber-300 shadow-xs rounded-full">
-          🔥 Sacred Seva & Rituals
-        </Badge>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-normal text-slate-900 py-1">
-          <span className="font-serif text-rose-900 mr-2">Sacred Pujas</span>
-          <span className="text-amber-600 font-devanagari">(पूजा अनुष्ठान)</span>
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
-          भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे लाइव-स्ट्रीम पूजा। अपने नाम व गोत्र से संकल्प करवाएं।
-        </p>
-        <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-rose-700 to-amber-500 mx-auto rounded-full mt-2"></div>
-      </div>
 
-      {pujas.length === 0 ? (
-        <Card className="border-dashed max-w-md mx-auto">
-          <CardContent className="p-8 text-center space-y-4">
-            <Sparkles className="h-12 w-12 text-muted-foreground/60 mx-auto" />
-            <h3 className="text-lg font-semibold">No Pujas Scheduled</h3>
-            <p className="text-sm text-muted-foreground">Check back soon for available online Puja services or ask our AI Pandit.</p>
-            
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {pujas.map((p) => (
-            <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between">
-              <Link href={`/pujas/${p.slug}`} className="relative block">
-                <SacredImageFrame
-                  src={p.coverImage}
-                  alt={p.name}
-                  aspectRatio="16/10"
-                  seoCategory="puja"
-                />
-                {p.isVip && (
-                  <Badge className="absolute top-3 left-3 bg-red-600 text-white font-bold border-none">
-                    ⭐ VIP
-                  </Badge>
-                )}
+      {/* ── Hero Banner */}
+      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#16070A] to-[#0C0402] py-16 md:py-24 overflow-hidden">
+        {/* Om watermark */}
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(168,124,40,0.04)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        {/* Gold gradient overlay bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+
+        <div className="container relative z-10 text-center max-w-4xl mx-auto px-4">
+          {/* Label */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-6">
+            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em] font-display">🔥 Sacred Vedic Rituals</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[1.15] mb-4">
+            Sacred Pujas &{' '}
+            <span className="gold-gradient-text">Vedic Anushthans</span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-[rgba(245,235,220,0.65)] max-w-2xl mx-auto leading-relaxed font-light">
+            भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे लाइव-स्ट्रीम पूजा। अपने नाम व गोत्र से संकल्प करवाएं — प्रसाद घर द्वार।
+          </p>
+
+          {/* Trust chips */}
+          <div className="flex flex-wrap gap-3 justify-center mt-8">
+            {['Verified Pandits', 'Name-Gotra Sankalp', 'WhatsApp Video Proof', 'Prasad Home Delivery'].map((t) => (
+              <span key={t} className="stat-badge stat-badge-dark text-xs">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#D4A843] shrink-0" />
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Puja Cards Grid */}
+      <section className="bg-[#FFFBF5] dark:bg-[#0C0402] py-14 md:py-20">
+        <div className="container px-4 md:px-6">
+          {pujas.length === 0 ? (
+            <div className="max-w-md mx-auto text-center py-20">
+              <div className="w-20 h-20 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-5">
+                <Sparkles className="h-9 w-9 text-[#8B1A21]" />
+              </div>
+              <h3 className="text-2xl font-heading font-bold text-[#1E120A] dark:text-[#F5EBDC] mb-2">
+                Pujas Coming Soon
+              </h3>
+              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.55)] text-sm leading-relaxed">
+                Our team is preparing sacred puja schedules. Check back soon or contact us for a custom ritual.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]"
+              >
+                Contact for Custom Puja <ArrowRight className="h-4 w-4" />
               </Link>
-              <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                <div className="space-y-2">
-                  <Badge variant="outline" className="text-xs">
-                    {p.category?.name || 'Sanatan Seva'}
-                  </Badge>
-                  <h3 className="font-bold text-lg text-slate-800 line-clamp-1 group-hover:text-[var(--primary-color)] transition-colors">
-                    <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
-                  </h3>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                    <MapPin className="h-4 w-4 text-[var(--primary-color)] shrink-0" />
-                    {p.location || 'Any Holy Temple'}
-                  </p>
-                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mt-2">
-                    {(p.shortDescription || 'Participate in this sacred puja for peace, health, and spiritual growth.').replace(/<[^>]*>?/gm, '')}
-                  </p>
-                </div>
-                <div className="pt-3 border-t flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-muted-foreground">संकल्प मूल्य</span>
-                      <span className="text-lg font-black text-[var(--primary-color)]">₹{p.price}</span>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {pujas.map((p, idx) => (
+                <article
+                  key={p.id}
+                  className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
+                >
+                  {/* Image */}
+                  <Link href={`/pujas/${p.slug}`} className="relative block aspect-[4/3] overflow-hidden">
+                    <SacredImageFrame
+                      src={p.coverImage}
+                      alt={p.name}
+                      aspectRatio="4/3"
+                      seoCategory="puja"
+                    />
+                    {/* Dark gradient over image */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-[rgba(12,4,2,0.10)] to-transparent pointer-events-none" />
+
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
+                      {p.isVip && (
+                        <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md">
+                          ⭐ VIP
+                        </span>
+                      )}
+                      {p.badge && (
+                        <span className="px-2.5 py-1 rounded-full bg-[rgba(168,124,40,0.85)] text-white text-[10px] font-bold backdrop-blur-sm">
+                          {p.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Category on image bottom */}
+                    {p.category?.name && (
+                      <div className="absolute bottom-3 left-3">
+                        <span className="px-2.5 py-1 rounded-md bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold border border-[rgba(245,235,220,0.12)]">
+                          {p.category.name}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Card Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                    <div className="space-y-2">
+                      <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug group-hover:text-[#8B1A21] transition-colors">
+                        <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
+                      </h3>
+
+                      {p.location && (
+                        <p className="text-xs text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-[#A87C28] shrink-0" />
+                          {p.location}
+                        </p>
+                      )}
+
+                      <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-2 leading-relaxed">
+                        {(p.shortDescription || 'Participate in this sacred puja for peace, health, and prosperity.').replace(/<[^>]*>?/gm, '')}
+                      </p>
+                    </div>
+
+                    {/* Price + CTA */}
+                    <div className="pt-3 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] text-[#8B7355] dark:text-[rgba(245,235,220,0.40)] font-medium">Starting from</p>
+                        <p className="text-xl font-black text-[#8B1A21] dark:text-[#E06070]">
+                          ₹{(p.price || 0).toLocaleString('en-IN')}
+                        </p>
+                      </div>
+                      <Link
+                        href={`/pujas/${p.slug}`}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+                      >
+                        Book Now <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Button size="sm" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold shadow-sm" asChild>
-                      <Link href={`/pujas/${p.slug}`}>View Details & Book</Link>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </article>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </section>
     </>
   )
 }
-
-

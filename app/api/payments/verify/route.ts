@@ -17,6 +17,12 @@ export async function OPTIONS() {
 
 export async function POST(req: NextRequest) {
   try {
+    const forwardedFor = req.headers.get('x-forwarded-for') || ''
+    const clientIp = forwardedFor.split(',')[0].trim() || req.headers.get('x-real-ip') || undefined
+    const userAgent = req.headers.get('user-agent') || undefined
+    const fbp = req.cookies.get('_fbp')?.value || undefined
+    const fbc = req.cookies.get('_fbc')?.value || undefined
+
     const body = await req.json()
     const {
       paymentId,
@@ -75,22 +81,70 @@ export async function POST(req: NextRequest) {
         const linkedOrderId = paymentRecord?.orderId || meta.orderId
         const linkedBookingId = paymentRecord?.bookingId || meta.bookingId
 
+        const { sendMetaCapiEvent } = await import('@/lib/meta-capi')
+
         if (linkedOrderId) {
-          await prisma.order.update({
+          const updatedOrder = await prisma.order.update({
             where: { id: linkedOrderId },
             data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
-          }).catch(() => {})
+            include: { items: true, user: true, shippingAddress: true }
+          }).catch(() => null)
+
+          if (updatedOrder) {
+            sendMetaCapiEvent({
+              eventName: 'Purchase',
+              eventId: `ord_${updatedOrder.id}_${Date.now()}`,
+              eventSourceUrl: 'https://divyayagyam.com/checkout/success',
+              userData: {
+                email: updatedOrder.user?.email || (updatedOrder as any).shippingAddress?.email,
+                phone: updatedOrder.user?.phone || updatedOrder.shippingAddress?.phone,
+                fullName: updatedOrder.user?.fullName || updatedOrder.shippingAddress?.fullName,
+                clientIp,
+                userAgent,
+                fbp,
+                fbc,
+              },
+              customData: {
+                currency: 'INR',
+                value: Number(updatedOrder.total),
+                order_id: updatedOrder.orderNumber || updatedOrder.id,
+                content_type: 'product',
+                content_ids: updatedOrder.items?.map((i: any) => i.productId).filter(Boolean) || [],
+              }
+            }).catch(() => {})
+          }
         } else {
           // Last resort: find order via Razorpay order ID in payment metadata
           const orderViaGateway = await prisma.order.findFirst({
             where: {
               payments: { some: { gatewayOrderId: razorpay_order_id } }
-            }
+            },
+            include: { items: true, user: true, shippingAddress: true }
           }).catch(() => null)
           if (orderViaGateway) {
             await prisma.order.update({
               where: { id: orderViaGateway.id },
               data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
+            }).catch(() => {})
+
+            sendMetaCapiEvent({
+              eventName: 'Purchase',
+              eventId: `ord_${orderViaGateway.id}_${Date.now()}`,
+              eventSourceUrl: 'https://divyayagyam.com/checkout/success',
+              userData: {
+                email: orderViaGateway.user?.email,
+                phone: orderViaGateway.user?.phone,
+                fullName: orderViaGateway.user?.fullName,
+                clientIp,
+                userAgent,
+                fbp,
+                fbc,
+              },
+              customData: {
+                currency: 'INR',
+                value: Number(orderViaGateway.total),
+                order_id: orderViaGateway.orderNumber || orderViaGateway.id,
+              }
             }).catch(() => {})
           }
         }
@@ -116,7 +170,6 @@ export async function POST(req: NextRequest) {
             }).catch(() => {})
 
             // Trigger Real-Time Meta CAPI Server-Side Purchase Event
-            const { sendMetaCapiEvent } = await import('@/lib/meta-capi')
             sendMetaCapiEvent({
               eventName: 'Purchase',
               eventId: `bk_${updatedBk.id}_${Date.now()}`,
@@ -125,12 +178,17 @@ export async function POST(req: NextRequest) {
                 email: updatedBk.user?.email,
                 phone: updatedBk.user?.phone,
                 fullName: updatedBk.user?.fullName,
+                clientIp,
+                userAgent,
+                fbp,
+                fbc,
               },
               customData: {
                 currency: 'INR',
                 value: Number(updatedBk.total),
                 content_name: updatedBk.puja?.name || 'Puja Booking',
                 booking_number: updatedBk.bookingNumber,
+                content_ids: updatedBk.pujaId ? [updatedBk.pujaId] : [],
               }
             }).catch(() => {})
           }

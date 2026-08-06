@@ -33,6 +33,14 @@ export async function getSetting(key: string, envFallback?: string): Promise<str
   return ''
 }
 
+export function clearSettingCache(key?: string) {
+  if (key) {
+    delete cache[key]
+  } else {
+    Object.keys(cache).forEach((k) => delete cache[k])
+  }
+}
+
 
 import { unstable_cache } from 'next/cache'
 import { siteConfig as staticSiteConfig } from './site-config'

@@ -9,6 +9,9 @@ export interface MetaCapiUserData {
   fullName?: string | null
   clientIp?: string | null
   userAgent?: string | null
+  fbp?: string | null
+  fbc?: string | null
+  externalId?: string | null
 }
 
 export interface MetaCapiCustomData {
@@ -77,7 +80,7 @@ export async function sendMetaCapiEvent(payload: MetaCapiEventPayload): Promise<
     }
 
     // 3. Format Hashed User Data
-    const { email, phone, firstName, lastName, fullName, clientIp, userAgent } = payload.userData || {}
+    const { email, phone, firstName, lastName, fullName, clientIp, userAgent, fbp, fbc, externalId } = payload.userData || {}
 
     let fn = firstName ? hashMetaUserData(firstName) : undefined
     let ln = lastName ? hashMetaUserData(lastName) : undefined
@@ -87,13 +90,19 @@ export async function sendMetaCapiEvent(payload: MetaCapiEventPayload): Promise<
       if (parts.length > 1) ln = hashMetaUserData(parts.slice(1).join(' '))
     }
 
+    // Phone numbers should contain numbers only before hashing
+    const cleanedPhone = phone ? phone.replace(/\D/g, '') : null
+
     const formattedUserData: Record<string, any> = {
       em: email ? [hashMetaUserData(email)] : undefined,
-      ph: phone ? [hashMetaUserData(phone)] : undefined,
+      ph: cleanedPhone ? [hashMetaUserData(cleanedPhone)] : undefined,
       fn: fn ? [fn] : undefined,
       ln: ln ? [ln] : undefined,
+      external_id: externalId ? [hashMetaUserData(externalId)] : undefined,
       client_ip_address: clientIp || undefined,
       client_user_agent: userAgent || undefined,
+      fbp: fbp || undefined,
+      fbc: fbc || undefined,
     }
 
     // Remove undefined fields

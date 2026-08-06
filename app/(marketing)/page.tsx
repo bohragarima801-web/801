@@ -211,7 +211,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF7EB]/40 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200">
+    <div className="min-h-screen bg-[#FFFBF5] dark:bg-[#0A0302] text-[#1E120A] dark:text-[#F5EBDC]">
       <Script
         id="schema-organization"
         type="application/ld+json"
@@ -356,47 +356,52 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION C: "BOOK DIVINE PUJAS" – SERVICE CARDS GRID
+          SECTION C: UPCOMING PUJAS GRID
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-16 md:py-24">
-        {/* Section Title Header */}
+        {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200/80 shadow-xs">
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Upcoming Sacred Pujas
-            </span>
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-              आगामी एवं दिव्य पूजाएँ <span className="text-amber-600 dark:text-amber-400 font-normal">/ Upcoming Divine Pujas</span>
+            <div className="premium-badge">
+              <Sparkles className="h-3.5 w-3.5" /> Upcoming Sacred Pujas
+            </div>
+            <h2 className="text-3xl md:text-5xl font-heading font-bold text-[#1E120A] dark:text-white tracking-tight">
+              आगामी दिव्य पूजाएँ{' '}
+              <span className="sacred-gradient-text font-normal">& Anushthans</span>
             </h2>
-            <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium max-w-2xl">
+            <p className="text-sm md:text-base text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] font-medium max-w-2xl">
               Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by experienced priests.
             </p>
           </div>
 
-          <Button variant="outline" className="border-amber-300 dark:border-slate-700 font-bold shadow-xs rounded-xl text-slate-800 dark:text-slate-200 shrink-0" asChild>
-            <Link href="/pujas">
-              View All Pujas (सभी पूजाएँ देखें) <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <Link
+            href="/pujas"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[rgba(139,26,33,0.25)] text-[#8B1A21] dark:text-[#E06070] hover:bg-[rgba(139,26,33,0.05)] font-bold text-sm transition-colors shrink-0"
+          >
+            View All Pujas <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
         {/* Responsive Grid of Puja Cards */}
         {displayPujas.length === 0 ? (
-          <div className="text-center py-16 px-6 bg-gradient-to-b from-amber-50/80 to-orange-50/50 dark:from-slate-900 dark:to-slate-950 rounded-3xl border border-amber-200/80 dark:border-slate-800 space-y-5 max-w-2xl mx-auto shadow-sm">
-            <div className="h-16 w-16 mx-auto rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center text-3xl shadow-inner">🪔</div>
-            <h3 className="text-2xl md:text-3xl font-extrabold font-heading text-slate-900 dark:text-white">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
-            <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium leading-relaxed">
-              संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं। अपनी किसी भी मनोकामना या पूजा परामर्श हेतु हमसे संपर्क करें।
+          <div className="text-center py-16 px-6 bg-gradient-to-b from-[rgba(139,26,33,0.04)] to-[rgba(168,124,40,0.03)] dark:from-[rgba(139,26,33,0.08)] dark:to-transparent rounded-3xl border border-[rgba(139,26,33,0.10)] dark:border-[rgba(139,26,33,0.20)] space-y-5 max-w-2xl mx-auto">
+            <div className="h-16 w-16 mx-auto rounded-full bg-[rgba(139,26,33,0.08)] text-[#8B1A21] flex items-center justify-center text-3xl">🪔</div>
+            <h3 className="text-2xl md:text-3xl font-heading font-bold text-[#1E120A] dark:text-white">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
+            <p className="text-sm md:text-base text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] max-w-lg mx-auto font-medium leading-relaxed">
+              संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं।
             </p>
-            <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm" asChild>
-              <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals" target="_blank" rel="noopener noreferrer">
-                💬 व्हाट्सएप द्वारा पूजा परामर्श प्राप्त करें &rarr;
-              </a>
-            </Button>
+            <a
+              href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all"
+            >
+              💬 WhatsApp par Puja Paraamarsh →
+            </a>
           </div>
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {displayPujas.map((p: any) => {
+          {displayPujas.map((p: any, idx: number) => {
             const mediaInfo = getMediaDisplaySrc(p.coverImage)
             const isFallback = p.id.startsWith('fp-')
             const pujaHref = isFallback ? '/pujas' : `/pujas/${p.slug}`
@@ -404,10 +409,10 @@ export default async function HomePage() {
             const badgeTag = p.badge || (p.isEvergreen ? 'Evergreen' : 'Popular')
 
             return (
-              <Card key={p.id} className="overflow-hidden group border border-amber-200/70 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between bg-white dark:bg-slate-900">
-                
-                {/* Image Section */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
+              <article key={p.id} className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+
+                {/* Image */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-[rgba(168,124,40,0.06)] rounded-t-[18px]">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
@@ -419,73 +424,59 @@ export default async function HomePage() {
                       />
                     )
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-amber-50 text-amber-500">
-                      <Sparkles className="h-10 w-10 opacity-40" />
+                    <div className="h-full w-full flex items-center justify-center bg-[rgba(139,26,33,0.05)] text-[#8B1A21]">
+                      <Sparkles className="h-10 w-10 opacity-30" />
                     </div>
                   )}
+                  {/* Dark gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-transparent to-transparent pointer-events-none" />
 
-                  {/* Badge Overlay */}
-                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-                    <Badge className="bg-amber-600 text-white font-extrabold text-[10px] uppercase px-2.5 py-0.5 shadow-sm border-none">
-                      {badgeTag}
-                    </Badge>
+                  {/* Badge */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md">{badgeTag}</span>
                   </div>
 
-                  {/* Category Pill */}
-                  <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                    {categoryName}
+                  {/* Category */}
+                  <div className="absolute bottom-3 left-3">
+                    <span className="bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[rgba(255,255,255,0.10)]">{categoryName}</span>
                   </div>
                 </div>
 
-                {/* Card Content Section */}
-                <CardContent className="p-5 md:p-6 flex-1 flex flex-col justify-between space-y-4">
+                {/* Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <h3 className="font-heading font-bold text-lg md:text-xl text-slate-900 dark:text-slate-100 group-hover:text-amber-700 transition-colors line-clamp-2 leading-tight">
-                      {p.name}
+                    <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug">
+                      <Link href={pujaHref}>{p.name}</Link>
                     </h3>
-                    <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium">
+                    {p.location && (
+                      <p className="text-xs text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5 text-[#A87C28] shrink-0" />
+                        {p.location}
+                      </p>
+                    )}
+                    <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-2 leading-relaxed">
                       {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                     </p>
                   </div>
 
-                  {/* Details Row: Location & Price */}
-                  <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
-                    <div className="flex items-center gap-2 font-medium">
-                      <MapPin className="h-4 w-4 text-amber-600 shrink-0" />
-                      <span className="truncate">{p.location || 'Holy Temple, India'}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <div>
-                        <span className="text-[11px] text-slate-500 font-semibold block">Booking Amount</span>
-                        <span className="text-base font-extrabold text-amber-700 dark:text-amber-400">
-                          ₹{Number(p.price || 1100).toLocaleString('en-IN')}
-                        </span>
-                      </div>
-
-                      <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        ✓ Prasad Included
+                  {/* Price + CTA */}
+                  <div className="pt-3 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-[#8B7355] font-medium block">Booking Amount</span>
+                      <span className="text-xl font-black text-[#8B1A21] dark:text-[#E06070]">
+                        ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
+                    <Link
+                      href={pujaHref}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+                    >
+                      Book Now <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
+                </div>
 
-                  {/* Dual Action Buttons */}
-                  <div className="grid grid-cols-2 gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="w-full border-amber-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-lg" asChild>
-                      <Link href={pujaHref}>
-                        View Details
-                      </Link>
-                    </Button>
-
-                    <Button size="sm" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-xs rounded-lg shadow-xs" asChild>
-                      <Link href={pujaHref}>
-                        Book Now &rarr;
-                      </Link>
-                    </Button>
-                  </div>
-
-                </CardContent>
-              </Card>
+              </article>
             )
           })}
         </div>
@@ -493,16 +484,16 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION D: "DIVYA DARSHAN & PUJA VIDEOS"
+          SECTION D: DIVYA DARSHAN VIDEO GALLERY
           ============================================================ */}
-      <section className="w-full bg-gradient-to-b from-white via-amber-50/30 to-white dark:from-slate-950 dark:to-slate-900 py-4 border-t border-amber-100/60 dark:border-slate-800">
+      <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4 border-t border-[rgba(168,124,40,0.10)]">
         <SacredVideoGallery videos={dbVideos} />
       </section>
 
       {/* ============================================================
-          SECTION E: "PAVAN VEDIC & JYOTISH TOOLS"
+          SECTION E: JYOTISH & VEDIC TOOLS
           ============================================================ */}
-      <section className="w-full bg-white dark:bg-slate-950 py-4">
+      <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4">
         <SacredAstroTools />
       </section>
 

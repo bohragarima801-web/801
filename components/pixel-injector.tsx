@@ -40,7 +40,6 @@ export function PixelInjector() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${fbId}');
-            fbq('track', 'PageView');
           `
           document.head.appendChild(fbScript)
         }
