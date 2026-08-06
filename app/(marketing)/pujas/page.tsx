@@ -153,7 +153,7 @@ export default async function PujasPage() {
 
           {/* Trust chips */}
           <div className="flex flex-wrap gap-3 justify-center mt-8">
-            {['Verified Pandits', 'Name-Gotra Sankalp', 'WhatsApp Video Proof', 'Prasad Home Delivery'].map((t) => (
+            {['Experienced Pandits (अनुभवी वेदाचार्य)', 'Name-Gotra Sankalp', 'WhatsApp Video Proof', 'Prasad Home Delivery'].map((t) => (
               <span key={t} className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white rounded-full border border-[#F0D695] text-xs font-bold text-[#2A1508] shadow-xs">
                 <ShieldCheck className="h-3.5 w-3.5 text-[#8B1A21] shrink-0" />
                 {t}

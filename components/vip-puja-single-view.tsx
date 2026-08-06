@@ -295,7 +295,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
               <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">3</div>
               <h5 className="font-bold text-sm text-amber-200">Admin Assigns</h5>
-              <p className="text-[11px] text-slate-400">Admin allocates certified Veda Acharya for your puja.</p>
+              <p className="text-[11px] text-slate-400">Admin allocates experienced Lead Acharya for your puja.</p>
             </div>
 
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">

@@ -257,7 +257,7 @@ export default async function HomePage() {
               {/* 4 trust features */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 max-w-2xl mx-auto lg:mx-0">
                 {[
-                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'Verified Priests' },
+                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'अनुभवी वेदाचार्य' },
                   { icon: <MapPin className="h-3.5 w-3.5" />, label: 'Pan-India Temples' },
                   { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video' },
                   { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent' },

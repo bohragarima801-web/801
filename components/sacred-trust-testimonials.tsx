@@ -62,8 +62,8 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
             <div className="h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
               <ShieldCheck className="h-6 w-6" />
             </div>
-            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Verified Priests</h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">Vedic certified pandits from sacred Dham temples</p>
+            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Experienced Pandits</h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">Traditional Veda parangat pandits from sacred Dham temples</p>
           </div>
 
           <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50/50 dark:from-slate-800/80 dark:to-slate-900 rounded-2xl border border-amber-200/60 dark:border-slate-700/60 flex flex-col items-center text-center space-y-2.5 hover:shadow-md transition-shadow">
