@@ -173,6 +173,8 @@ export async function POST(req: NextRequest) {
 
     revalidateTag('pujas')
     revalidatePath('/pujas')
+    revalidatePath('/vip-pujas')
+    if (puja?.slug) revalidatePath(`/pujas/${puja.slug}`)
     revalidatePath('/')
 
     return NextResponse.json({ ok: true, puja });

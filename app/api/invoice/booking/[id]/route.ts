@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 
+function esc(s: unknown): string {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
@@ -156,8 +160,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <!-- Puja Name Hero -->
   <div class="puja-hero">
     <div style="font-size:28px;margin-bottom:6px;">🪔</div>
-    <h2>${booking.puja?.name || 'Sacred Puja'}</h2>
-    ${booking.temple ? `<p>📍 ${booking.temple.name}, ${booking.temple.city}, ${booking.temple.state}</p>` : ''}
+    <h2>${esc(booking.puja?.name || 'Sacred Puja')}</h2>
+    ${booking.temple ? `<p>📍 ${esc(booking.temple.name)}, ${esc(booking.temple.city)}, ${esc(booking.temple.state)}</p>` : ''}
     ${booking.scheduledAt ? `<p style="margin-top:6px;font-weight:700;color:#4c1d95">📅 Scheduled: ${new Date(booking.scheduledAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>` : ''}
   </div>
 
@@ -166,18 +170,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="info-box">
       <h3>Devotee Details</h3>
       <p>
-        <strong>${devoteeName}</strong><br>
-        ${booking.user?.email ? `${booking.user.email}<br>` : ''}
-        ${booking.user?.phone ? `${booking.user.phone}<br>` : ''}
-        ${booking.gotra ? `<strong>Gotra:</strong> ${booking.gotra}<br>` : ''}
-        ${booking.sankalpText ? `<strong>Sankalp:</strong> ${booking.sankalpText}` : ''}
+        <strong>${esc(devoteeName)}</strong><br>
+        ${booking.user?.email ? `${esc(booking.user.email)}<br>` : ''}
+        ${booking.user?.phone ? `${esc(booking.user.phone)}<br>` : ''}
+        ${booking.gotra ? `<strong>Gotra:</strong> ${esc(booking.gotra)}<br>` : ''}
+        ${booking.sankalpText ? `<strong>Sankalp:</strong> ${esc(booking.sankalpText)}` : ''}
       </p>
     </div>
     <div class="info-box" style="text-align:right">
       <h3>Booking Details</h3>
       <p>
         <strong>Booking Date:</strong> ${new Date(booking.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
-        <strong>Status:</strong> ${booking.status}<br>
+        <strong>Status:</strong> ${esc(booking.status)}<br>
         <strong>Members:</strong> ${booking.memberCount || 1}
       </p>
     </div>
@@ -191,8 +195,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       ${booking.members.map((m: any) => `
       <div class="sankalp-item">
         <label>Name</label>
-        <value>${m.fullName}</value>
-        ${m.gotra ? `<label style="display:block;margin-top:4px">Gotra</label><value>${m.gotra}</value>` : ''}
+        <value>${esc(m.fullName)}</value>
+        ${m.gotra ? `<label style="display:block;margin-top:4px">Gotra</label><value>${esc(m.gotra)}</value>` : ''}
       </div>`).join('')}
     </div>
   </div>` : ''}

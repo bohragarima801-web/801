@@ -81,16 +81,13 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });
   }
 
-  if (!puja) {
-    return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });
-  }
-
   // 1. SECURE PRICE CALCULATION
-  const basePrice = Number(puja.price) || 0
+  const isVipBooking = Boolean(body.isVipBooking || puja.isVip)
+  const basePrice = (isVipBooking && puja.vipPrice) ? Number(puja.vipPrice) : Number(puja.price) || 0
   const memberCount = Number(packageKey) || 1
 
   let packagePrice = basePrice
-  if (packageKey) {
+  if (packageKey && !isVipBooking) {
     const matchedPkg = puja.packages?.find((p: any) => p.id === packageKey)
     if (matchedPkg) {
       packagePrice = Number(matchedPkg.price)

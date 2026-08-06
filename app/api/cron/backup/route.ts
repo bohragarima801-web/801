@@ -9,9 +9,10 @@ const BUCKET_NAME = 'backups'
 
 export async function GET(req: NextRequest) {
   try {
-    // Basic authorization check - Vercel sends an authorization header for cron jobs
+    // Strictly enforce authorization check for cron execution
     const authHeader = req.headers.get('authorization')
-    if (process.env.CRON_SECRET && authHeader !== 'Bearer ${}') {
+    const secret = process.env.CRON_SECRET
+    if (!secret || authHeader !== `Bearer ${secret}`) {
       return new Response('Unauthorized', { status: 401 })
     }
 

@@ -20,11 +20,6 @@ import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
-  
-  if (puja?.isVip) {
-    return <VipPujaSingleView puja={puja} />
-  }
-  
   const basePrice = Number(puja?.price || 951)
   const defaultPackages = [
     { 
@@ -61,13 +56,17 @@ export function PujaClientView({ puja }: { puja: any }) {
     }
   ]
 
-
   const packages = puja?.packages?.length ? puja.packages : defaultPackages
-
   const [selectedPackage, setSelectedPackage] = useState<string>(packages[2]?.id || packages[0]?.id || '1')
   const [activeTab, setActiveTab] = useState('packages')
-  
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
   if (!puja) return <div className="py-20 text-center text-slate-600 font-bold">Puja details loading or not found...</div>
+  if (puja.isVip) {
+    return <VipPujaSingleView puja={puja} />
+  }
 
   const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || '/package-1.jpg'
   const rawImages = [
@@ -78,13 +77,8 @@ export function PujaClientView({ puja }: { puja: any }) {
   ].filter(Boolean)
   
   const mediaList = Array.from(new Set(rawImages.length > 0 ? rawImages : [fallbackImage]))
-  const [activeMediaIndex, setActiveMediaIndex] = useState(0)
   const currentMedia = mediaList[activeMediaIndex] || fallbackImage
   const activeImage = currentMedia
-
-  // Touch Swipe Gesture State for Mobile/Desktop sliding
-  const [touchStart, setTouchStart] = useState<number | null>(null)
-  const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const minSwipeDistance = 40
 
   const isVideoUrl = (url: string) => {

@@ -13,8 +13,6 @@ export async function GET(req: NextRequest) {
           select: {
             fullName: true,
             avatar: true,
-            phone: true,
-            email: true,
           }
         }
       },

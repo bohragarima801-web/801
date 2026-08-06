@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 
+function esc(s: unknown): string {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
@@ -161,22 +165,22 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="info-box">
       <h3>Billed To</h3>
       <p>
-        <strong>${customerName}</strong><br>
+        <strong>${esc(customerName)}</strong><br>
         ${addr ? `
-          ${addr.line1 ? `${addr.line1}<br>` : ''}
-          ${addr.line2 ? `${addr.line2}<br>` : ''}
-          ${addr.city ? `${addr.city}, ` : ''}${addr.state ? `${addr.state} - ` : ''}${addr.pincode ? `${addr.pincode}<br>` : ''}
-          ${addr.phone ? `Phone: ${addr.phone}` : ''}
-        ` : (order.user?.email || '')}
+          ${addr.line1 ? `${esc(addr.line1)}<br>` : ''}
+          ${addr.line2 ? `${esc(addr.line2)}<br>` : ''}
+          ${addr.city ? `${esc(addr.city)}, ` : ''}${addr.state ? `${esc(addr.state)} - ` : ''}${addr.pincode ? `${esc(addr.pincode)}<br>` : ''}
+          ${addr.phone ? `Phone: ${esc(addr.phone)}` : ''}
+        ` : (esc(order.user?.email || ''))}
       </p>
     </div>
     <div class="info-box" style="text-align:right">
       <h3>Invoice Details</h3>
       <p>
         <strong>Invoice Date:</strong> ${new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
-        <strong>Order Status:</strong> ${order.status}<br>
-        ${order.coupon?.code ? `<strong>Coupon Code:</strong> ${order.coupon.code}<br>` : ''}
-        ${order.notes ? `<strong>Notes:</strong> ${order.notes}` : ''}
+        <strong>Order Status:</strong> ${esc(order.status)}<br>
+        ${order.coupon?.code ? `<strong>Coupon Code:</strong> ${esc(order.coupon.code)}<br>` : ''}
+        ${order.notes ? `<strong>Notes:</strong> ${esc(order.notes)}` : ''}
       </p>
     </div>
   </div>
@@ -195,7 +199,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       ${order.items.map(item => `
       <tr>
         <td>
-          <div class="item-name">${item.name}</div>
+          <div class="item-name">${esc(item.name)}</div>
         </td>
         <td style="text-align:center;font-weight:600">${item.quantity}</td>
         <td style="text-align:right">₹${Number(item.price).toLocaleString('en-IN')}</td>

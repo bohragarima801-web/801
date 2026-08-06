@@ -105,16 +105,14 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         })
       })
 
-      const data = await res.json()
-      const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
-      const invoiceUrl = data?.data?.id ? `${window.location.origin}/api/invoice/booking/${data.data.id}` : ''
-
-      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${bookingNo}%0A- *Puja:* ${puja.name}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp Phone:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${assignedPandit.name}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Health'}%0A%0A🔒 *Note:* Official Bill & Tax Receipt will be issued automatically AFTER payment confirmation.`
+      const enc = encodeURIComponent
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${enc(bookingNo)}%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}%0A%0A🔒 *Note:* Official Bill & Tax Receipt will be issued automatically AFTER payment confirmation.`
 
       window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
     } catch (err) {
       // Fallback direct WhatsApp
-      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Puja:* ${puja.name}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp Phone:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${assignedPandit.name}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Health'}`
+      const enc = encodeURIComponent
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}`
       window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
     } finally {
       setBookingDialogOpen(false)

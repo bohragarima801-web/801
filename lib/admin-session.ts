@@ -36,8 +36,16 @@ async function hmacSign(secret: string, data: string): Promise<string> {
   return b64urlEncode(sig)
 }
 
+function getSecret(): string {
+  const secret = process.env.ADMIN_SESSION_SECRET || process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
+  if (!secret) {
+    throw new Error('FATAL: ADMIN_SESSION_SECRET environment variable is missing. Refusing to sign or verify admin tokens.')
+  }
+  return secret
+}
+
 export async function signAdminToken(email: string): Promise<string> {
-  const secret = process.env.ADMIN_SESSION_SECRET || 'random-fallback-if-missing'
+  const secret = getSecret()
   const payload = JSON.stringify({ email, exp: Date.now() + SESSION_TTL_MS })
   const b64 = b64urlEncode(utf8Encode(payload))
   const sig = await hmacSign(secret, b64)
@@ -48,10 +56,19 @@ export async function verifyAdminToken(token: string | undefined | null): Promis
   if (!token) return null
   const [b64, sig] = token.split('.')
   if (!b64 || !sig) return null
-  const secret = process.env.ADMIN_SESSION_SECRET || 'random-fallback-if-missing'
-  const expected = await hmacSign(secret, b64)
-  if (expected !== sig) return null
+  
   try {
+    const secret = getSecret()
+    const expected = await hmacSign(secret, b64)
+    if (expected.length !== sig.length) return null
+
+    // Timing-safe constant time string comparison
+    let mismatch = 0
+    for (let i = 0; i < expected.length; i++) {
+      mismatch |= expected.charCodeAt(i) ^ sig.charCodeAt(i)
+    }
+    if (mismatch !== 0) return null
+
     const payload = JSON.parse(b64urlDecodeStr(b64)) as { email: string; exp: number }
     if (Date.now() > payload.exp) return null
     return { email: payload.email }
