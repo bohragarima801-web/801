@@ -4,7 +4,7 @@ import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { getSafeImageUrl } from '@/lib/utils'
 import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react'
-import { getCachedPujas } from '@/lib/cache'
+import { getCachedNormalPujas } from '@/lib/cache'
 import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
@@ -18,7 +18,7 @@ export function generateMetadata() {
 export const revalidate = 10
 
 export default async function PujasPage() {
-  const pujas = await getCachedPujas()
+  const pujas = await getCachedNormalPujas()
 
   const jsonLd = {
     '@context': 'https://schema.org',

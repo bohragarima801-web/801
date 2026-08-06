@@ -19,6 +19,7 @@ export const getCachedPujas = unstable_cache(
           slug: true,
           coverImage: true,
           price: true,
+          vipPrice: true,
           isVip: true,
           isOnline: true,
           isEvergreen: true,
@@ -44,18 +45,29 @@ export const getCachedPujas = unstable_cache(
       
       return JSON.parse(JSON.stringify(pujas.map(p => ({
         ...p,
-        price: Number(p.price)
+        price: Number(p.price),
+        vipPrice: p.vipPrice ? Number(p.vipPrice) : null
       }))))
     } catch (err) {
       return []
     }
   },
-  ['public-pujas-list-v3'],
+  ['public-pujas-list-v4'],
   {
     revalidate: 10,
     tags: ['pujas']
   }
 )
+
+export const getCachedNormalPujas = async () => {
+  const allPujas = await getCachedPujas()
+  return allPujas.filter((p: any) => !p.isVip)
+}
+
+export const getCachedVipPujas = async () => {
+  const allPujas = await getCachedPujas()
+  return allPujas.filter((p: any) => !!p.isVip)
+}
 
 // Cache home page products list
 export const getCachedProducts = unstable_cache(

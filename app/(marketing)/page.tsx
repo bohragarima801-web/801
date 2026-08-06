@@ -169,8 +169,9 @@ export default async function HomePage() {
 
   const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 6)
 
-  // Pujas to render: strictly DB pujas created via Admin Panel
+  // Pujas to render: strictly normal DB pujas (non-VIP) created via Admin Panel
   const activeDbPujas = dbPujas.filter((p: any) => {
+    if (p.isVip) return false
     if (p.isEvergreen) return true
     if (p.pujaDate) {
       const pDate = new Date(p.pujaDate)
