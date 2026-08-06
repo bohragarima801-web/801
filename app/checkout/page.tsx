@@ -200,7 +200,7 @@ export default function CheckoutPage() {
         toast.success('🎉 Order placed successfully!')
         const params = new URLSearchParams()
         if (data.orderNumber) params.set('order', data.orderNumber)
-        router.push(`/checkout/thank-you?${params.toString()}`)
+        window.location.href = `/checkout/thank-you?${params.toString()}`
         return
       }
 
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
               if (orderNumber) params.set('order', orderNumber)
               const pid = verifyData.razorpay_payment_id || response.razorpay_payment_id
               if (pid) params.set('payment', pid)
-              router.push(`/checkout/thank-you?${params.toString()}`)
+              window.location.href = `/checkout/thank-you?${params.toString()}`
             } else {
               // Verification failed — but payment may have been deducted
               const pid = response.razorpay_payment_id || ''

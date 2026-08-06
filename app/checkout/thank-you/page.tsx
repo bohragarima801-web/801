@@ -28,24 +28,39 @@ function ThankYouContent() {
     setShow(true)
   }, [])
 
-  // Fetch live order data from API
+  const [detectedType, setDetectedType] = useState<string>(type)
+
+  // Fetch live order/booking summary from API
   useEffect(() => {
-    if (!orderNumber) return
+    if (!orderNumber && !paymentId) return
     setLoadingOrder(true)
-    fetch('/api/orders?limit=5')
+    const qp = new URLSearchParams()
+    if (orderNumber) qp.set('order', orderNumber)
+    if (paymentId) qp.set('payment', paymentId)
+
+    fetch(`/api/checkout/summary?${qp.toString()}`)
       .then(r => r.json())
       .then(data => {
-        if (data.ok && Array.isArray(data.data)) {
-          const found = data.data.find((o: any) => o.orderNumber === orderNumber)
-          if (found) setOrderData(found)
+        if (data.ok) {
+          setOrderData({
+            orderNumber: data.orderNumber || orderNumber,
+            total: data.total || 0,
+            subtotal: data.subtotal || data.total || 0,
+            status: data.status || 'CONFIRMED',
+            paymentStatus: data.paymentStatus || 'SUCCESS',
+            createdAt: data.createdAt || new Date().toISOString(),
+            items: data.items || []
+          })
+          if (data.type) setDetectedType(data.type)
         }
       })
       .catch(() => {})
       .finally(() => setLoadingOrder(false))
-  }, [orderNumber])
+  }, [orderNumber, paymentId])
 
-  const isBooking = type === 'booking'
-  const isTool = type === 'tool'
+  const activeType = detectedType || type
+  const isBooking = activeType === 'booking'
+  const isTool = activeType === 'tool'
 
   const titleEmoji = isBooking ? '🙏' : isTool ? '🛠️' : '🎉'
   const title = isBooking ? 'पूजा बुकिंग सफल!' : isTool ? 'Tool Access Unlocked!' : 'भुगतान सफल!'
