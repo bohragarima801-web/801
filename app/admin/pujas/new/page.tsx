@@ -93,7 +93,8 @@ function NewPujaPage_Content() {
   const [vipPrice, setVipPrice] = useState('5100')
   const [duration, setDuration] = useState('60')
   const [maxMembers, setMaxMembers] = useState('5')
-  const [isVip, setIsVip] = useState(false)
+  const isVipQuery = searchParams.get('isVip') === 'true'
+  const [isVip, setIsVip] = useState(isVipQuery)
   const [isOnline, setIsOnline] = useState(true)
   const [isFeatured, setIsFeatured] = useState(false)
   const [isEvergreen, setIsEvergreen] = useState(false)

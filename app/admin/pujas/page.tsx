@@ -93,14 +93,27 @@ function PujasManager() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Puja Management"
-        description="Manage all pujas, categories, slots, media & pricing."
-        breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Pujas' }]}
-        action={{ label: 'Add Puja', href: '/admin/pujas/new', icon: Plus }}
-        secondaryAction={{ label: 'Manage Categories', href: '/admin/pujas/categories' }}
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <PageHeader
+          title="Puja Management"
+          description="Manage all pujas, VIP rituals, categories, slots, media & pricing."
+          breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Pujas' }]}
+        />
+
+        <div className="flex flex-wrap gap-2 shrink-0">
+          <Button size="sm" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-extrabold shadow-md rounded-xl" asChild>
+            <Link href="/admin/pujas/new?isVip=true">
+              👑 Add VIP Puja (VIP पूजा बनाएँ)
+            </Link>
+          </Button>
+
+          <Button size="sm" variant="outline" className="border-slate-300 font-bold rounded-xl" asChild>
+            <Link href="/admin/pujas/new">
+              <Plus className="mr-1 h-4 w-4" /> Add Normal Puja
+            </Link>
+          </Button>
+        </div>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KpiCard title="Total Pujas" value={pujas.length.toString()} icon={Flame} />
