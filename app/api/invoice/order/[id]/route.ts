@@ -234,6 +234,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     </table>
   </div>
 
+  <!-- Caution & Return/Refund Policy Section -->
+  <div style="margin: 20px 40px; padding: 18px 22px; background: #fffbeb; border: 2px stroke #f59e0b; border: 2px solid #f59e0b; border-radius: 12px; font-size: 12px; color: #78350f; line-height: 1.6;">
+    <div style="font-weight: 800; font-size: 13px; color: #b45309; text-transform: uppercase; margin-bottom: 8px;">
+      ⚠️ आवश्यक सावधानी एवं 7-दिवसीय रिटर्न नीति (Important Caution & 7-Day Return Policy)
+    </div>
+    <ul style="padding-left: 18px; margin-top: 4px;">
+      <li style="margin-bottom: 4px;"><strong>1. क्षतिग्रस्त/टूटा-फूटा सामान (No Damaged/Tampered Returns):</strong> ग्राहक द्वारा स्वयं तोड़ा गया, क्षतिग्रस्त, उपयोग किया गया या छेड़छाड़ (tampered) किया गया प्रोडक्ट वापस (return) या रिप्लेस नहीं किया जाएगा।</li>
+      <li style="margin-bottom: 4px;"><strong>2. 7-दिवसीय रिफंड समय-सीमा (Strict 7-Day Window):</strong> किसी भी खराबी या रिफंड/रिप्लेसमेंट की क्लेम रिक्वेस्ट पार्सल डिलीवरी के <strong>केवल 7 दिनों (7 Days)</strong> के भीतर ही support@divyayagyam.com या WhatsApp पर दर्ज करानी होगी। 7 दिन के बाद कोई भी दावा स्वीकार नहीं किया जाएगा।</li>
+      <li><strong>3. अनबॉक्सिंग वीडियो अनिवार्य (Mandatory Unboxing Video):</strong> पार्सल खोलते समय का 360° निरंतर Unboxing Video अनिवार्य है। बिना वीडियो के क्षति या मिसिंग आइटम का क्लेम मान्य नहीं होगा।</li>
+    </ul>
+  </div>
+
   <!-- Footer -->
   <div class="footer">
     <div>
