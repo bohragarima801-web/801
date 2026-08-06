@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         htmlCode,
         cssCode,
         jsCode,
-        isActive
+        isActive: isActive !== undefined ? !!isActive : true
       }
     })
 
