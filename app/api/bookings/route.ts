@@ -111,7 +111,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     })
   }
 
-  const total = packagePrice + addOnsTotal
+  const total = Math.max(0, Math.round((packagePrice + addOnsTotal) * 100) / 100)
 
   // 2. CREATE BOOKING WITH NESTED MEMBERS
   const bookingNumber = 'DY-' + Math.floor(100000 + Math.random() * 900000)
