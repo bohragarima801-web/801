@@ -11,10 +11,25 @@ export default async function OrdersPage() {
   const user = await getCurrentUser()
   if (!user) return null
 
+  // Resolve the actual DB user ID (handles Supabase JWT ID vs DB UUID mismatch)
+  let dbUserId = user.id
+  if (!dbUserId || dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    const dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { supabaseId: user.supabaseId }] }
+    }).catch(() => null)
+    if (!dbUser) dbUserId = user.id
+    else dbUserId = dbUser.id
+  }
+
   const orders = await prisma.order.findMany({
-    where: { userId: user.id },
+    where: { userId: dbUserId },
     include: {
       items: true,
+      payments: {
+        select: { status: true, gatewayRef: true, paidAt: true },
+        orderBy: { createdAt: 'desc' },
+        take: 1,
+      },
     },
     orderBy: { createdAt: 'desc' },
   })
@@ -72,6 +87,11 @@ export default async function OrdersPage() {
                   <div className="space-y-1 md:text-right">
                     <p className="text-xs text-muted-foreground">Order Total</p>
                     <p className="text-lg font-extrabold text-primary">₹{Number(order.total).toLocaleString('en-IN')}</p>
+                    {order.payments[0]?.gatewayRef && (
+                      <p className="text-[11px] text-muted-foreground font-mono">
+                        Txn: {order.payments[0].gatewayRef}
+                      </p>
+                    )}
                   </div>
                 </div>
 

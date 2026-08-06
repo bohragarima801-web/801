@@ -1,23 +1,39 @@
-import { FileText, Download, Clock, CheckCircle, ExternalLink } from 'lucide-react'
+import { FileText, Download, ExternalLink } from 'lucide-react'
 import { RealtimeRefresher } from '@/components/realtime-refresher'
 import { getCurrentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 
+async function resolveDbUserId(user: { id: string; email: string; supabaseId?: string | null }) {
+  let dbUserId = user.id
+  if (!dbUserId || dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    const dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { supabaseId: user.supabaseId ?? '' }] }
+    }).catch(() => null)
+    if (dbUser) dbUserId = dbUser.id
+  }
+  return dbUserId
+}
+
 export default async function InvoicesPage() {
   const user = await getCurrentUser()
   if (!user?.id) return null
 
+  const dbUserId = await resolveDbUserId(user)
+
   const [bookings, orders] = await Promise.all([
     prisma.booking.findMany({
-      where: { userId: user.id },
+      where: { userId: dbUserId },
       include: { puja: { select: { name: true } } },
       orderBy: { createdAt: 'desc' }
     }),
     prisma.order.findMany({
-      where: { userId: user.id },
-      include: { items: { take: 3, select: { name: true } } },
+      where: { userId: dbUserId },
+      include: {
+        items: { take: 3, select: { name: true } },
+        payments: { select: { gatewayRef: true }, orderBy: { createdAt: 'desc' }, take: 1 }
+      },
       orderBy: { createdAt: 'desc' }
     })
   ])
@@ -34,6 +50,7 @@ export default async function InvoicesPage() {
       type: 'BOOKING' as const,
       icon: '📿',
       invoiceUrl: `/api/invoice/booking/${b.id}`,
+      paymentRef: null as string | null,
     })),
     ...orders.map(o => ({
       id: o.id,
@@ -46,12 +63,15 @@ export default async function InvoicesPage() {
       type: 'ORDER' as const,
       icon: '📦',
       invoiceUrl: `/api/invoice/order/${o.id}`,
+      paymentRef: o.payments[0]?.gatewayRef || null,
     }))
   ].sort((a, b) => b.date.getTime() - a.date.getTime())
 
   const totalPaid = allTx
     .filter(t => t.status === 'SUCCESS')
     .reduce((sum, t) => sum + Number(t.amount), 0)
+
+  const pendingCount = allTx.filter(t => t.status === 'PENDING').length
 
   return (
     <div className="space-y-6">
@@ -66,7 +86,7 @@ export default async function InvoicesPage() {
         {[
           { label: 'Total Transactions', value: allTx.length, color: 'text-slate-800' },
           { label: 'Total Paid', value: `₹${totalPaid.toLocaleString('en-IN')}`, color: 'text-green-700' },
-          { label: 'Pending', value: allTx.filter(t => t.status === 'PENDING').length, color: 'text-yellow-700' },
+          { label: 'Pending', value: pendingCount, color: 'text-yellow-700' },
         ].map(s => (
           <div key={s.label} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
             <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
@@ -107,11 +127,16 @@ export default async function InvoicesPage() {
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                         tx.status === 'SUCCESS' ? 'bg-green-100 text-green-700' :
                         tx.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                        tx.status === 'FAILED' ? 'bg-red-100 text-red-700' :
                         'bg-slate-100 text-slate-600'
                       }`}>
-                        {tx.status === 'SUCCESS' ? '✅ Paid' : tx.status === 'PENDING' ? '⏳ Pending' : tx.status}
+                        {tx.status === 'SUCCESS' ? '✅ Paid' : tx.status === 'PENDING' ? '⏳ Pending' : tx.status === 'FAILED' ? '❌ Failed' : tx.status}
                       </span>
                     </div>
+                    {/* Payment reference */}
+                    {tx.paymentRef && (
+                      <p className="text-[11px] text-slate-400 font-mono mt-1">Txn: {tx.paymentRef}</p>
+                    )}
                   </div>
                 </div>
 
@@ -130,7 +155,7 @@ export default async function InvoicesPage() {
                     </a>
                   ) : tx.status === 'PENDING' ? (
                     <Link
-                      href={`/checkout?retry=${tx.id}`}
+                      href={`/checkout`}
                       className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-colors"
                     >
                       Pay Now
@@ -155,7 +180,7 @@ export default async function InvoicesPage() {
       {/* Note */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
         <p className="text-sm text-blue-700">
-          💡 <strong>Invoice Download करने के लिए:</strong> "Download" button दबाएं → नया tab खुलेगा → <kbd className="bg-white border px-1.5 py-0.5 rounded text-xs">Ctrl+P</kbd> → "Save as PDF" चुनें
+          💡 <strong>Invoice Download करने के लिए:</strong> &quot;Download&quot; button दबाएं → नया tab खुलेगा → <kbd className="bg-white border px-1.5 py-0.5 rounded text-xs">Ctrl+P</kbd> → &quot;Save as PDF&quot; चुनें
         </p>
       </div>
     </div>

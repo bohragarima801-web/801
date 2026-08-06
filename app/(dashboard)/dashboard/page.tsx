@@ -6,6 +6,17 @@ import Link from 'next/link'
 import { RealtimeRefresher } from '@/components/realtime-refresher'
 export const dynamic = 'force-dynamic'
 
+async function resolveDbUserId(user: { id: string; email: string; supabaseId?: string | null }) {
+  let dbUserId = user.id
+  if (!dbUserId || dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    const dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { supabaseId: user.supabaseId ?? '' }] }
+    }).catch(() => null)
+    if (dbUser) dbUserId = dbUser.id
+  }
+  return dbUserId
+}
+
 const statusColors: Record<string, string> = {
   CONFIRMED: 'text-green-600 bg-green-50',
   PROCESSING: 'text-blue-600 bg-blue-50',
@@ -22,17 +33,19 @@ export default async function DashboardPage() {
   const user = await getCurrentUser()
   if (!user?.id) return null
 
+  const dbUserId = await resolveDbUserId(user)
+
   const [bookingsCount, ordersCount, wishlistCount, ticketsCount, totalPayments, recentBookings, recentOrders, recentTickets, upcomingBookings] = await Promise.all([
-    prisma.booking.count({ where: { userId: user.id } }),
-    prisma.order.count({ where: { userId: user.id } }),
-    prisma.wishlist.count({ where: { userId: user.id } }),
-    prisma.supportTicket.count({ where: { userId: user.id } }),
-    prisma.payment.aggregate({ where: { userId: user.id, status: 'SUCCESS' }, _sum: { amount: true } }),
-    prisma.booking.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' }, take: 3, include: { puja: { select: { name: true } } } }),
-    prisma.order.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' }, take: 3 }),
-    prisma.supportTicket.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' }, take: 2 }),
+    prisma.booking.count({ where: { userId: dbUserId } }),
+    prisma.order.count({ where: { userId: dbUserId } }),
+    prisma.wishlist.count({ where: { userId: dbUserId } }),
+    prisma.supportTicket.count({ where: { userId: dbUserId } }),
+    prisma.payment.aggregate({ where: { userId: dbUserId, status: 'SUCCESS' }, _sum: { amount: true } }),
+    prisma.booking.findMany({ where: { userId: dbUserId }, orderBy: { createdAt: 'desc' }, take: 3, include: { puja: { select: { name: true } } } }),
+    prisma.order.findMany({ where: { userId: dbUserId }, orderBy: { createdAt: 'desc' }, take: 3 }),
+    prisma.supportTicket.findMany({ where: { userId: dbUserId }, orderBy: { createdAt: 'desc' }, take: 2 }),
     prisma.booking.findMany({
-      where: { userId: user.id, scheduledAt: { gte: new Date() } },
+      where: { userId: dbUserId, scheduledAt: { gte: new Date() } },
       orderBy: { scheduledAt: 'asc' }, take: 2,
       include: { puja: { select: { name: true } } }
     })

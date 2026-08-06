@@ -4,17 +4,45 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
+interface OrderData {
+  orderNumber: string
+  total: number
+  subtotal: number
+  status: string
+  paymentStatus: string
+  createdAt: string
+  items: { name: string; quantity: number; price: number; total: number }[]
+}
+
 function ThankYouContent() {
   const searchParams = useSearchParams()
   const orderNumber = searchParams.get('order') || ''
   const paymentId = searchParams.get('payment') || ''
-  const type = searchParams.get('type') || 'order' // 'booking' | 'order' | 'tool'
+  const type = searchParams.get('type') || 'order'
   const [show, setShow] = useState(false)
+  const [orderData, setOrderData] = useState<OrderData | null>(null)
+  const [loadingOrder, setLoadingOrder] = useState(false)
   const now = new Date()
 
   useEffect(() => {
     setShow(true)
   }, [])
+
+  // Fetch live order data from API
+  useEffect(() => {
+    if (!orderNumber) return
+    setLoadingOrder(true)
+    fetch('/api/orders?limit=5')
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok && Array.isArray(data.data)) {
+          const found = data.data.find((o: any) => o.orderNumber === orderNumber)
+          if (found) setOrderData(found)
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingOrder(false))
+  }, [orderNumber])
 
   const isBooking = type === 'booking'
   const isTool = type === 'tool'
@@ -42,6 +70,9 @@ function ThankYouContent() {
       hour: '2-digit', minute: '2-digit', hour12: true
     })
 
+  const formatCurrency = (amt: number) =>
+    '₹' + amt.toLocaleString('en-IN', { maximumFractionDigits: 0 })
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -53,7 +84,7 @@ function ThankYouContent() {
       fontFamily: "'Segoe UI', 'Noto Sans Devanagari', sans-serif"
     }}>
       <div style={{
-        maxWidth: '540px',
+        maxWidth: '560px',
         width: '100%',
         transition: 'all 0.6s ease',
         opacity: show ? 1 : 0,
@@ -120,6 +151,7 @@ function ThankYouContent() {
               ...(orderNumber ? [{ label: `📋 ${orderLabel}`, value: orderNumber }] : []),
               ...(paymentId ? [{ label: '💳 Payment ID', value: paymentId }] : []),
               { label: '🏦 Gateway', value: 'Razorpay' },
+              ...(orderData ? [{ label: '💰 Total Amount', value: formatCurrency(orderData.total) }] : []),
               { label: '📍 Status', value: 'SUCCESS ✅' },
             ].map((row, i) => (
               <div key={i} style={{
@@ -136,6 +168,36 @@ function ThankYouContent() {
                 </span>
               </div>
             ))}
+
+            {/* Live Order Items */}
+            {orderData && orderData.items && orderData.items.length > 0 && (
+              <div style={{ marginTop: '0.75rem' }}>
+                <p style={{ color: '#6b7280', fontSize: '0.78rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  🛒 Items Ordered
+                </p>
+                {orderData.items.map((item, i) => (
+                  <div key={i} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '0.4rem 0',
+                    borderBottom: '1px solid rgba(255,255,255,0.04)',
+                  }}>
+                    <span style={{ color: '#d1d5db', fontSize: '0.82rem' }}>
+                      {item.name} <span style={{ color: '#6b7280' }}>×{item.quantity}</span>
+                    </span>
+                    <span style={{ color: '#fbbf24', fontSize: '0.82rem', fontWeight: 600 }}>
+                      {formatCurrency(item.total)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {loadingOrder && (
+              <p style={{ color: '#6b7280', fontSize: '0.78rem', textAlign: 'center', padding: '0.5rem 0' }}>
+                ⏳ Order details load हो रहे हैं...
+              </p>
+            )}
           </div>
 
           {/* Footer Note */}
@@ -148,29 +210,6 @@ function ThankYouContent() {
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-          {orderNumber && (
-            <a 
-              href={isBooking ? `/api/invoice/booking/${orderNumber}` : `/api/invoice/order/${orderNumber}`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{
-                background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#fff',
-                padding: '0.85rem 1.8rem',
-                borderRadius: '50px',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '0.95rem',
-                boxShadow: '0 4px 20px rgba(16,185,129,0.4)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem'
-              }}
-            >
-              📄 Download Realtime Bill / Invoice
-            </a>
-          )}
-
           <Link href={viewHref} style={{
             background: 'linear-gradient(135deg, #f97316, #ea580c)',
             color: '#fff',

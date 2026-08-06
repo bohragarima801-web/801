@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Wallet, CheckCircle2, Clock, XCircle, RefreshCw } from 'lucide-react'
+import { Wallet } from 'lucide-react'
 import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 
@@ -32,12 +32,25 @@ function paymentType(payment: any) {
   return '💳 Payment'
 }
 
+async function resolveDbUserId(user: { id: string; email: string; supabaseId?: string | null }) {
+  let dbUserId = user.id
+  if (!dbUserId || dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    const dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { supabaseId: user.supabaseId ?? '' }] }
+    }).catch(() => null)
+    if (dbUser) dbUserId = dbUser.id
+  }
+  return dbUserId
+}
+
 export default async function PaymentsPage() {
   const user = await getCurrentUser()
   if (!user) return null
 
+  const dbUserId = await resolveDbUserId(user)
+
   const payments = await prisma.payment.findMany({
-    where: { userId: user.id },
+    where: { userId: dbUserId },
     include: {
       order: { select: { orderNumber: true } },
       booking: { select: { bookingNumber: true, puja: { select: { name: true } } } },
@@ -78,7 +91,6 @@ export default async function PaymentsPage() {
                       <span className="font-semibold text-sm text-slate-800">{paymentType(payment)}</span>
                       {statusBadge(payment.status)}
                     </div>
-                    {/* Reference number */}
                     {payment.order?.orderNumber && (
                       <p className="text-xs text-muted-foreground">
                         Order: <span className="font-mono font-medium text-orange-600">{payment.order.orderNumber}</span>
@@ -92,13 +104,11 @@ export default async function PaymentsPage() {
                         )}
                       </p>
                     )}
-                    {/* Gateway reference */}
                     {payment.gatewayRef && (
                       <p className="text-xs text-muted-foreground mt-0.5">
                         Payment ID: <span className="font-mono text-slate-600">{payment.gatewayRef}</span>
                       </p>
                     )}
-                    {/* Date */}
                     <p className="text-xs text-muted-foreground mt-1">
                       {payment.paidAt
                         ? new Date(payment.paidAt).toLocaleString('hi-IN', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })

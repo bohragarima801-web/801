@@ -99,28 +99,6 @@ export default function CheckoutPage() {
     checkAuth()
   }, [router])
 
-  useEffect(() => {
-    try {
-      const storedSankalp = window.localStorage.getItem('dy_sankalp')
-      if (storedSankalp) {
-        const parsed = JSON.parse(storedSankalp)
-        if (parsed.gotra || parsed.purpose) {
-          setSankalp(prev => ({
-            gotra: parsed.gotra || prev.gotra,
-            purpose: parsed.purpose ? `${parsed.purpose}${parsed.date ? ` (Date: ${parsed.date})` : ''}` : prev.purpose
-          }))
-        }
-        if (parsed.devoteeName || parsed.whatsappPhone) {
-          setAddress(prev => ({
-            ...prev,
-            name: parsed.devoteeName || prev.name,
-            phone: parsed.whatsappPhone || prev.phone
-          }))
-        }
-      }
-    } catch (e) {}
-  }, [])
-
   // Fetch BhaktiSeva Offerings
   useEffect(() => {
     const fetchOfferings = async () => {
@@ -186,7 +164,6 @@ export default function CheckoutPage() {
   }
 
   const handlePayment = async () => {
-
     setProcessing(true)
     try {
       const sankalpNotes = sankalp.gotra || sankalp.purpose ? `[Sankalp] Gotra: ${sankalp.gotra} | Purpose: ${sankalp.purpose}` : '';
@@ -227,6 +204,16 @@ export default function CheckoutPage() {
         return
       }
 
+      if (!(window as any).Razorpay) {
+        toast.error('Payment system is still loading. Please try again in a moment.')
+        setProcessing(false)
+        return
+      }
+
+      // Stop the processing spinner before opening Razorpay popup
+      // (Razorpay popup is async — it stays open until user acts)
+      setProcessing(false)
+
       const options = {
         key: razorpayKeyId,
         amount,
@@ -234,7 +221,13 @@ export default function CheckoutPage() {
         name: 'Divya Yagyam',
         description: 'Store Purchase',
         order_id: orderId,
+        modal: {
+          ondismiss: () => {
+            setProcessing(false)
+          }
+        },
         handler: async function (response: any) {
+          setProcessing(true)
           try {
             const verifyRes = await fetch('/api/payments/verify', {
               method: 'POST',
@@ -247,19 +240,34 @@ export default function CheckoutPage() {
               })
             })
             const verifyData = await verifyRes.json()
+
             if (verifyRes.ok && verifyData.ok && verifyData.verified) {
               clearCart()
-              toast.success('🎉 Payment Successful! Order placed.')
+              toast.success('🎉 भुगतान सफल! ऑर्डर दर्ज हो गया।')
               const params = new URLSearchParams()
               if (orderNumber) params.set('order', orderNumber)
-              if (verifyData.razorpay_payment_id) params.set('payment', verifyData.razorpay_payment_id)
+              const pid = verifyData.razorpay_payment_id || response.razorpay_payment_id
+              if (pid) params.set('payment', pid)
               router.push(`/checkout/thank-you?${params.toString()}`)
             } else {
-              toast.error('Payment verification failed. If money was deducted, please contact support with your payment ID.')
+              // Verification failed — but payment may have been deducted
+              const pid = response.razorpay_payment_id || ''
+              toast.error(
+                pid
+                  ? `Payment verification failed. Payment ID: ${pid} — कृपया इसे note करें और support से contact करें।`
+                  : 'Payment verification failed. अगर पैसे कट गए हों तो support से contact करें।',
+                { duration: 10000 }
+              )
+              setProcessing(false)
             }
-          } catch (e) {
-            toast.error('Could not confirm payment. If money was deducted, please contact support.')
-          } finally {
+          } catch (verifyErr: any) {
+            const pid = response?.razorpay_payment_id || ''
+            toast.error(
+              pid
+                ? `Payment confirm नहीं हो सका। Payment ID: ${pid} — support से contact करें।`
+                : 'Payment confirm नहीं हो सका। Support से contact करें।',
+              { duration: 10000 }
+            )
             setProcessing(false)
           }
         },
@@ -271,21 +279,16 @@ export default function CheckoutPage() {
         theme: { color: '#ea580c' }
       }
 
-      if (!(window as any).Razorpay) {
-        toast.error('Payment system is still loading. Please try again in a moment.')
-        setProcessing(false)
-        return
-      }
-
       const rzp = new (window as any).Razorpay(options)
       rzp.on('payment.failed', function (response: any) {
-        toast.error(response.error.description || 'Payment Failed')
+        const desc = response?.error?.description || response?.error?.reason || 'Payment Failed'
+        toast.error(`Payment failed: ${desc}`, { duration: 6000 })
+        setProcessing(false)
       })
       rzp.open()
 
-    } catch (err) {
-      toast.error('Error processing order')
-    } finally {
+    } catch (err: any) {
+      toast.error(err?.message || 'Order process करने में error आई। Please try again.')
       setProcessing(false)
     }
   }
@@ -409,54 +412,41 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Sacred Bhakti Seva Offerings Section */}
+                {/* Sacred Offerings Section */}
                 {bhaktiSevaOfferings.length > 0 && (
-                  <div className="bg-gradient-to-br from-amber-50/80 to-orange-50/50 border border-amber-200/80 rounded-xl p-5 shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🌸</span>
-                        <div>
-                          <h2 className="text-base font-bold text-gray-900">अतिरिक्त पुण्य एवं भक्ति सेवा (Sacred Offerings)</h2>
-                          <p className="text-xs text-amber-800">पूजा के साथ गो-सेवा, साधु भोजन व दीपदान जोड़ें (Optional)</p>
-                        </div>
-                      </div>
-                      <span className="text-[11px] font-extrabold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-full border border-amber-300">
-                        {bhaktiSevaOfferings.length} सेवाएं उपलब्ध
-                      </span>
-                    </div>
+                  <div className="space-y-4">
+                    <h2 className="text-lg font-bold text-gray-900">Sacred offerings</h2>
                     
                     <div className="grid md:grid-cols-2 gap-4">
-                      {bhaktiSevaOfferings.map((offering) => {
-                        const inCart = isItemInCart(`addon-bhaktiSeva-${offering.id}`)
-                        return (
-                        <div key={offering.id} className={`bg-white border rounded-xl p-4 flex gap-4 shadow-sm relative transition-all ${inCart ? 'border-amber-500 ring-1 ring-amber-400 bg-amber-50/30' : 'border-gray-200 hover:border-amber-300'}`}>
-                          <div className="space-y-1.5 flex-1">
-                            <span className="text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md border border-amber-200">
-                              🪔 भक्ति सेवा
+                      {bhaktiSevaOfferings.map((offering) => (
+                        <div key={offering.id} className="bg-white border border-gray-200 rounded-xl p-4 flex gap-4 shadow-sm relative">
+                          <div className="space-y-2 flex-1">
+                            <span className="text-[10px] font-semibold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-md">
+                              Sacred BhaktiSeva
                             </span>
                             <h3 className="font-bold text-sm text-gray-900 mt-1">{offering.name}</h3>
-                            <p className="text-xs text-gray-600 line-clamp-2">
+                            <p className="text-xs text-gray-500 line-clamp-2">
                               {offering.description || `Offer ${offering.name} for divine blessings.`}
                             </p>
-                            <p className="font-black text-sm text-amber-900 pt-1">₹ {Number(offering.price).toLocaleString('en-IN')}</p>
+                            <p className="font-bold text-sm text-gray-900 pt-1">₹ {offering.price}</p>
                           </div>
                           <div className="relative flex flex-col items-center justify-center w-24">
                             <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
                               {offering.image ? (
-                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover" />
+                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover fallback-bg-orange-100" />
                               ) : (
                                 <span className="text-xs text-gray-400">No Img</span>
                               )}
                             </div>
                             <button 
                               onClick={() => toggleAddonToCart(`bhaktiSeva-${offering.id}`, Number(offering.price), offering.name, offering.image)} 
-                              className={`absolute -bottom-2 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md transition-all ${inCart ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
+                              className={`absolute -bottom-2 text-white text-xs font-bold px-4 py-1 rounded-md shadow-md ${isItemInCart(`addon-bhaktiSeva-${offering.id}`) ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'}`}
                             >
-                              {inCart ? '✓ Selected' : '+ Add Seva'}
+                              {isItemInCart(`addon-bhaktiSeva-${offering.id}`) ? 'Remove' : 'Add'}
                             </button>
                           </div>
                         </div>
-                      )})}
+                      ))}
                     </div>
                   </div>
                 )}
