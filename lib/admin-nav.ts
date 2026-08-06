@@ -82,9 +82,13 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'SEO', slug: 'seo', icon: Search, href: '/admin/seo', permission: 'seo.read' },
   { title: 'Payment Settings', slug: 'payments', icon: CreditCard, href: '/admin/payments', permission: 'payment.read' },
   { title: 'Storage', slug: 'storage', icon: HardDrive, href: '/admin/storage', permission: 'storage.read' },
+  { title: '📢 Marketing & Meta CAPI', slug: 'marketing', icon: Megaphone, href: '/admin/marketing' },
+  { title: '🎯 Pixels & Analytics', slug: 'pixels', icon: BarChart3, href: '/admin/settings?tab=pixels' },
   { title: 'Website Settings', slug: 'settings', icon: Palette, permission: 'settings.read', items: [
     { title: 'Branding & General', href: '/admin/settings?tab=general' },
     { title: 'Contact Details', href: '/admin/settings?tab=contact' },
+    { title: '🎯 Pixels & Analytics', href: '/admin/settings?tab=pixels' },
+    { title: '📢 Marketing & Meta CAPI', href: '/admin/marketing' },
     { title: '💬 WhatsApp Automation', href: '/admin/settings?tab=whatsapp' },
     { title: '📥 Meta WhatsApp Downloads', href: '/admin/settings?tab=whatsapp' },
     { title: 'Secrets & API Keys', href: '/admin/settings?tab=secrets' },

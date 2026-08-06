@@ -34,6 +34,9 @@ export async function GET(req: NextRequest) {
   }
 }
 
+import { clearSettingCache } from '@/lib/settings'
+import { revalidatePath, revalidateTag } from 'next/cache'
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getAdminSession()
@@ -61,7 +64,16 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({ ok: true, setting });
+    // Immediately clear in-memory setting cache & revalidate Next.js cache so changes take effect LIVE!
+    clearSettingCache(key)
+    clearSettingCache()
+    try {
+      revalidateTag('pixel-config')
+      revalidateTag('settings')
+      revalidatePath('/', 'layout')
+    } catch {}
+
+    return NextResponse.json({ ok: true, setting, message: 'Setting updated live!' });
   } catch (err: any) {
 // console.error('Settings POST Error:', err) (removed for production)
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save setting' }, { status: 500 });
