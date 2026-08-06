@@ -169,7 +169,7 @@ export default async function HomePage() {
 
   const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 6)
 
-  // Pujas to render: prioritize DB pujas, supplement with fallback pujas if count < 6
+  // Pujas to render: strictly DB pujas created via Admin Panel
   const activeDbPujas = dbPujas.filter((p: any) => {
     if (p.isEvergreen) return true
     if (p.pujaDate) {
@@ -180,9 +180,7 @@ export default async function HomePage() {
     return true
   })
 
-  const displayPujas = activeDbPujas.length >= 3 
-    ? activeDbPujas 
-    : [...activeDbPujas, ...fallbackPujas.slice(0, 6 - activeDbPujas.length)]
+  const displayPujas = activeDbPujas
 
   // Structured Data (JSON-LD)
   const jsonLd = {
@@ -383,6 +381,20 @@ export default async function HomePage() {
         </div>
 
         {/* Responsive Grid of Puja Cards */}
+        {displayPujas.length === 0 ? (
+          <div className="text-center py-16 px-4 bg-amber-50/60 dark:bg-slate-900 rounded-3xl border border-amber-200/80 dark:border-slate-800 space-y-4">
+            <div className="h-16 w-16 mx-auto rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center text-3xl">🪔</div>
+            <h3 className="text-2xl font-bold font-heading text-slate-900 dark:text-white">सभी सिद्ध पूजाएँ एवं अनुष्ठान</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+              Admin Panel से अपनी नई सिद्ध पूजा एवं दिव्य अनुष्ठान जोड़ें।
+            </p>
+            <Button className="bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl" asChild>
+              <Link href="/admin/pujas/new">
+                ➕ Add Puja in Admin Panel
+              </Link>
+            </Button>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {displayPujas.map((p: any) => {
             const mediaInfo = getMediaDisplaySrc(p.coverImage)
@@ -477,6 +489,7 @@ export default async function HomePage() {
             )
           })}
         </div>
+        )}
       </section>
 
       {/* ============================================================
