@@ -66,8 +66,12 @@ export async function sendMetaCapiEvent(payload: MetaCapiEventPayload): Promise<
       accessToken = (process.env.META_CAPI_ACCESS_TOKEN || process.env.META_CAPI_TOKEN || '').replace(/^["']|["']$/g, '').trim()
     }
 
-    if (!pixelId || !accessToken) {
-      return { success: false, error: 'Meta Pixel ID or CAPI Access Token missing in settings' }
+    if (!pixelId) {
+      return { success: false, error: 'Meta Pixel ID is missing in settings' }
+    }
+
+    if (!accessToken) {
+      return { success: false, error: 'Meta CAPI Access Token is missing (Browser Pixel is active, Server CAPI requires token)' }
     }
 
     // 2. Fetch Optional Test Event Code
