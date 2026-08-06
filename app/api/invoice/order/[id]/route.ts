@@ -61,6 +61,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
       })
     }
+    const paid = order.payments[0]
+    const paymentDate = paid?.paidAt || order.updatedAt
     const discount = order.discount ? Number(order.discount) : 0
     const subtotal = Number(order.subtotal)
     const tax = order.tax ? Number(order.tax) : 0

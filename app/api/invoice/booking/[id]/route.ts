@@ -62,6 +62,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       })
     }
 
+    const paid = booking.payments[0]
+    const paymentDate = paid?.paidAt || booking.updatedAt
+    const devoteeName = booking.user?.fullName || user.fullName || 'Valued Devotee'
+
     const html = `<!DOCTYPE html>
 <html lang="hi">
 <head>
