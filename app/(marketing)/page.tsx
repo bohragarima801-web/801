@@ -382,16 +382,16 @@ export default async function HomePage() {
 
         {/* Responsive Grid of Puja Cards */}
         {displayPujas.length === 0 ? (
-          <div className="text-center py-16 px-4 bg-amber-50/60 dark:bg-slate-900 rounded-3xl border border-amber-200/80 dark:border-slate-800 space-y-4">
-            <div className="h-16 w-16 mx-auto rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center text-3xl">🪔</div>
-            <h3 className="text-2xl font-bold font-heading text-slate-900 dark:text-white">सभी सिद्ध पूजाएँ एवं अनुष्ठान</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-              Admin Panel से अपनी नई सिद्ध पूजा एवं दिव्य अनुष्ठान जोड़ें।
+          <div className="text-center py-16 px-6 bg-gradient-to-b from-amber-50/80 to-orange-50/50 dark:from-slate-900 dark:to-slate-950 rounded-3xl border border-amber-200/80 dark:border-slate-800 space-y-5 max-w-2xl mx-auto shadow-sm">
+            <div className="h-16 w-16 mx-auto rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center text-3xl shadow-inner">🪔</div>
+            <h3 className="text-2xl md:text-3xl font-extrabold font-heading text-slate-900 dark:text-white">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
+            <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-lg mx-auto font-medium leading-relaxed">
+              संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं। अपनी किसी भी मनोकामना या पूजा परामर्श हेतु हमसे संपर्क करें।
             </p>
-            <Button className="bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl" asChild>
-              <Link href="/admin/pujas/new">
-                ➕ Add Puja in Admin Panel
-              </Link>
+            <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-sm" asChild>
+              <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals" target="_blank" rel="noopener noreferrer">
+                💬 व्हाट्सएप द्वारा पूजा परामर्श प्राप्त करें &rarr;
+              </a>
             </Button>
           </div>
         ) : (
