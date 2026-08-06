@@ -14,6 +14,39 @@ export function generateMetadata() {
   })
 }
 
+const fallbackPosts = [
+  {
+    id: 'blog-1',
+    slug: 'kashi-vishwanath-rudrabhishekam-importance',
+    title: 'काशी विश्वनाथ रुद्राभिषेक का क्या महत्व है? जानिए संपूर्ण विधि व लाभ',
+    excerpt: 'भगवान शिव के ज्योतिर्लिंग काशी में रुद्राभिषेक करवाने से जीवन के समस्त पापों व दोषों का शमन होता है। जानिए आचार्य जी द्वारा बताई गई विधि।',
+    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Vedic Anushthan' },
+    publishedAt: new Date(),
+    author: { fullName: 'Vedic Scholar' }
+  },
+  {
+    id: 'blog-2',
+    slug: 'kalsarp-dosh-shanti-ujjain-mahakal',
+    title: 'कालसर्प दोष निवारण: महाकालेश्वर उज्जैन ही क्यों है सबसे सिद्ध स्थान?',
+    excerpt: 'उज्जैन अवंतिका क्षेत्र शिप्रा तट पर कालसर्प एवं राहु-केतु शांति पूजा से जीवन में आने वाली हर रुकावट दूर होती है।',
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Jyotish & Remedies' },
+    publishedAt: new Date(),
+    author: { fullName: 'Vedic Scholar' }
+  },
+  {
+    id: 'blog-3',
+    slug: 'mata-baglamukhi-havan-siddhi-vidhi',
+    title: 'माँ बगलामुखी महाविद्या अनुष्ठान से कोर्ट केस व शत्रु बाधा में विजय',
+    excerpt: 'दशमहाविद्या में आठवीं महाविद्या माँ बगलामुखी की साधना व हवन से स्तम्भन व विजय की प्राप्ति होती है।',
+    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Tantra & Homa' },
+    publishedAt: new Date(),
+    author: { fullName: 'Vedic Scholar' }
+  }
+]
+
 export const revalidate = 30
 
 export default async function BlogListPage() {
@@ -48,6 +81,8 @@ export default async function BlogListPage() {
     ],
   }
 
+  const displayPosts = posts.length > 0 ? posts : fallbackPosts
+
   return (
     <>
       <Script
@@ -57,12 +92,12 @@ export default async function BlogListPage() {
       />
 
       {/* ── Hero Banner (Bright Sanatani Gold) */}
-      <section className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-16 md:py-22 overflow-hidden border-b border-[#F5E2B8]">
+      <section className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-14 md:py-20 overflow-hidden border-b border-[#F5E2B8]">
         <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
         <div className="container relative z-10 text-center max-w-3xl mx-auto px-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-5">
-            <BookOpen className="h-3.5 w-3.5 text-[#B37B00] fill-[#B37B00]" />
-            <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">✍️ Spiritual Insights (ज्ञान गंगा)</span>
+            <Sparkles className="h-3.5 w-3.5 text-[#B37B00] fill-[#B37B00]" />
+            <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">📖 Vedic Sanatan Wisdom (ज्ञान भंडार)</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-[#2A1508] leading-tight mb-4">
             Divine <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">Wisdom Blog</span>
@@ -76,21 +111,8 @@ export default async function BlogListPage() {
       {/* ── Blog Cards Grid */}
       <section className="bg-[#FFFDF7] py-14 md:py-20">
         <div className="container px-4 md:px-6">
-          {posts.length === 0 ? (
-            <div className="text-center py-20 max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="h-8 w-8 text-[#8B1A21]" />
-              </div>
-              <h3 className="text-xl font-heading font-bold text-[#1E120A] dark:text-white mb-2">
-                Articles Coming Soon
-              </h3>
-              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] text-sm">
-                Our scholars are preparing spiritual articles. Check back soon!
-              </p>
-            </div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post, idx) => (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {displayPosts.map((post: any, idx: number) => (
                 <article
                   key={post.id}
                   className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
@@ -149,7 +171,6 @@ export default async function BlogListPage() {
                 </article>
               ))}
             </div>
-          )}
         </div>
       </section>
     </>

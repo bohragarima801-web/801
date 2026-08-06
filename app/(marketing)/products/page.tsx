@@ -14,10 +14,55 @@ export function generateMetadata() {
   })
 }
 
-export const revalidate = 30
+const fallbackProducts = [
+  {
+    id: 'prod-1',
+    slug: '5-mukhi-rudraksha-mala',
+    name: '5 मुखी नेपाल रुद्राक्ष माला (108+1 मनके)',
+    price: 1250,
+    salePrice: 999,
+    isAbhimantrit: true,
+    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Rudraksha Mala' },
+    inventory: { quantity: 10 }
+  },
+  {
+    id: 'prod-2',
+    slug: 'shree-yantra-copper',
+    name: 'सिद्ध तांबे का श्री यंत्र (24k गोल्ड प्लेटेड)',
+    price: 1500,
+    salePrice: 1199,
+    isAbhimantrit: true,
+    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Siddha Yantra' },
+    inventory: { quantity: 15 }
+  },
+  {
+    id: 'prod-3',
+    slug: 'kashi-vishwanath-bhasma-prasad',
+    name: 'काशी विश्वनाथ मंदिर भस्म व गंगाजल प्रसाद',
+    price: 550,
+    salePrice: 350,
+    isAbhimantrit: true,
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Sacred Prasad' },
+    inventory: { quantity: 20 }
+  },
+  {
+    id: 'prod-4',
+    slug: 'pure-sphatik-mala',
+    name: 'प्राकृतिक स्फटिक माला (108 मनके)',
+    price: 2100,
+    salePrice: 1499,
+    isAbhimantrit: true,
+    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80',
+    category: { name: 'Gemstone Mala' },
+    inventory: { quantity: 8 }
+  }
+]
 
 export default async function ProductsPage() {
-  const products = await prisma.product.findMany({
+  const dbProducts = await prisma.product.findMany({
     where: {
       OR: [
         { status: 'ACTIVE' },
@@ -27,6 +72,14 @@ export default async function ProductsPage() {
     include: { category: true, inventory: true },
     orderBy: { createdAt: 'desc' }
   }).catch(() => [])
+
+  const products = dbProducts.map(p => ({
+    ...p,
+    price: Number(p.price),
+    salePrice: p.salePrice ? Number(p.salePrice) : null
+  }))
+
+  const displayProducts = products.length > 0 ? products : fallbackProducts
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -77,17 +130,8 @@ export default async function ProductsPage() {
       {/* ── Products Grid */}
       <section className="bg-[#FFFDF7] py-12">
         <div className="container px-4 md:px-6">
-          {products.length === 0 ? (
-            <div className="max-w-md mx-auto text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="h-8 w-8 text-[#8B1A21]" />
-              </div>
-              <h3 className="text-xl font-heading font-bold text-[#1E120A] dark:text-white mb-2">Store Coming Soon</h3>
-              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] text-sm">We are preparing our sacred inventory. Please check back shortly.</p>
-            </div>
-          ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((p, idx) => {
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {displayProducts.map((p, idx) => {
                 const hasStock = p.inventory ? p.inventory.quantity > 0 : true
                 return (
                   <article key={p.id} className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 4 + 1, 5)} relative`}>
@@ -142,7 +186,6 @@ export default async function ProductsPage() {
                 )
               })}
             </div>
-          )}
         </div>
       </section>
     </>

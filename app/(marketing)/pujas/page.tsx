@@ -17,8 +17,90 @@ export function generateMetadata() {
 
 export const revalidate = 10
 
+const fallbackNormalPujas = [
+  {
+    id: 'fp-1',
+    slug: 'kashi-vishwanath-rudrabhishekam',
+    name: 'काशी विश्वनाथ महादेव रुद्राभिषेक (Kashi Vishwanath Rudrabhishekam)',
+    shortDescription: 'भगवान शिव के पावन ज्योतिर्लिंग काशी में सुख-शांति, समृद्धि एवं आरोग्यता हेतु विशेष रुद्राभिषेक।',
+    location: 'Kashi Vishwanath Temple, Varanasi',
+    price: 1100,
+    badge: 'Most booked',
+    category: { name: 'ज्योतिर्लिंग पूजा' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-2',
+    slug: 'mahakaleshwar-kalsarp-dosh-shanti',
+    name: 'महाकालेश्वर कालसर्प दोष शांति पूजा (Mahakaleshwar Kalsarp Shanti)',
+    shortDescription: 'उज्जैन महाकाल धाम में वैदिक विधि द्वारा कालसर्प एवं राहु-केतु दोष निवारण महापूजा।',
+    location: 'Mahakaleshwar Temple, Ujjain',
+    price: 2100,
+    badge: 'Recommended',
+    category: { name: 'दोष निवारण' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-3',
+    slug: 'trimbakeshwar-pitra-dosh-nivaran',
+    name: 'त्र्यंबकेश्वर नारायण नागबली व पितृदोष (Pitra Dosh Nivaran Homa)',
+    shortDescription: 'पितृ शांति एवं वंश वृद्धि हेतु नासिक त्र्यंबकेश्वर में सर्व दोष शांति यज्ञ एवं पूजा।',
+    location: 'Trimbakeshwar Temple, Nashik',
+    price: 2500,
+    badge: 'Popular',
+    category: { name: 'पितृ दोष शांति' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-4',
+    slug: 'maa-baglamukhi-shatru-badha-homa',
+    name: 'माँ बगलामुखी शत्रु बाधा एवं तंत्र निवारण अनुष्ठान',
+    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु शांति एवं व्यापार वृद्धि हेतु सिद्ध पीठ बगलामुखी महायज्ञ।',
+    location: 'Baglamukhi Peeth, Datia / Nalkheda',
+    price: 3100,
+    badge: 'Special',
+    category: { name: 'महाविद्या अनुष्ठान' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-5',
+    slug: 'maha-mrityunjaya-jaap-yagya',
+    name: 'महामृत्युंजय मंत्र जाप एवं दीर्घायु होम',
+    shortDescription: 'असाध्य रोगों से मुक्ति, दुर्घटना सुरक्षा एवं उत्तम स्वास्थ्य हेतु 1,25,000 मंत्र जाप अनुष्ठान।',
+    location: 'Haridwar / Rishikesh Holy Ghats',
+    price: 5100,
+    badge: 'Recommended',
+    category: { name: 'आरोग्य पूजा' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-6',
+    slug: 'siddhivinayak-ganpati-puja',
+    name: 'सिद्धिविनायक गणपति पूजन एवं मोदक अर्पण',
+    shortDescription: 'कार्य सिद्धि, बुद्धि, नया व्यापार प्रारंभ एवं विघ्न विनाश हेतु प्रथम पूज्य श्री गणेश पूजा।',
+    location: 'Siddhivinayak Temple, Mumbai',
+    price: 1500,
+    badge: 'New',
+    category: { name: 'गणेश पूजा' },
+    isEvergreen: true,
+    isVip: false,
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+  }
+]
+
 export default async function PujasPage() {
   const pujas = await getCachedNormalPujas()
+  const displayPujas = pujas.length > 0 ? pujas : fallbackNormalPujas
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -83,27 +165,8 @@ export default async function PujasPage() {
       {/* ── Puja Cards Grid */}
       <section className="bg-[#FFFBF5] dark:bg-[#0C0402] py-14 md:py-20">
         <div className="container px-4 md:px-6">
-          {pujas.length === 0 ? (
-            <div className="max-w-md mx-auto text-center py-20">
-              <div className="w-20 h-20 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-5">
-                <Sparkles className="h-9 w-9 text-[#8B1A21]" />
-              </div>
-              <h3 className="text-2xl font-heading font-bold text-[#1E120A] dark:text-[#F5EBDC] mb-2">
-                Pujas Coming Soon
-              </h3>
-              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.55)] text-sm leading-relaxed">
-                Our team is preparing sacred puja schedules. Check back soon or contact us for a custom ritual.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]"
-              >
-                Contact for Custom Puja <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {pujas.map((p, idx) => (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {displayPujas.map((p, idx) => (
                 <article
                   key={p.id}
                   className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
@@ -181,7 +244,6 @@ export default async function PujasPage() {
                 </article>
               ))}
             </div>
-          )}
         </div>
       </section>
     </>

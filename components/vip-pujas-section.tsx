@@ -115,7 +115,7 @@ const timeSlotOptions = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
-  const packagesToDisplay = dbPackages
+  const packagesToDisplay = dbPackages.length > 0 ? dbPackages : defaultVipPackages
   const [activePackageIndex, setActivePackageIndex] = useState(0)
 
   // Booking Modal State
@@ -126,25 +126,6 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('default')
   const [sankalpWish, setSankalpWish] = useState('')
-
-  if (packagesToDisplay.length === 0) {
-    return (
-      <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans py-24 px-4 text-center flex flex-col items-center justify-center space-y-6">
-        <div className="h-20 w-20 rounded-full bg-amber-500/20 border-2 border-amber-400/50 text-amber-400 flex items-center justify-center text-4xl shadow-xl">👑</div>
-        <div className="space-y-3 max-w-lg">
-          <h2 className="text-3xl font-extrabold font-heading text-white">शीघ्र उपलब्ध होंगी दिव्य VIP पूजाएँ एवं महायज्ञ</h2>
-          <p className="text-slate-300 text-sm font-medium leading-relaxed">
-            संस्थान के मुख्य आचार्यों द्वारा सिद्ध शक्तिपीठों पर विशेष VIP अनुष्ठानों की तारीखें घोषित की जा रही हैं। किसी भी विशेष VIP पूजा संकल्प हेतु आचार्य जी से परामर्श लें।
-          </p>
-        </div>
-        <Button size="lg" className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl shadow-xl text-sm py-6 px-8" asChild>
-          <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20consult%20regarding%20special%20VIP%20Puja%20booking" target="_blank" rel="noopener noreferrer">
-            💬 आचार्य जी से VIP पूजा परामर्श लें &rarr;
-          </a>
-        </Button>
-      </div>
-    )
-  }
 
   const currentPackage = packagesToDisplay[activePackageIndex] || packagesToDisplay[0]
 
