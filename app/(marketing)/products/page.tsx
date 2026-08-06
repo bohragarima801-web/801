@@ -1,9 +1,10 @@
-
 import Link from 'next/link'
-import Image from 'next/image';
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-import { getAutoSeoAlt } from '@/lib/seo-auto'
+import { Sparkles, ArrowRight } from 'lucide-react'
+import { prisma } from '@/lib/prisma'
+import { AddToCartButton } from '@/components/add-to-cart-button'
+import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -12,34 +13,20 @@ export function generateMetadata() {
     path: '/products',
   })
 }
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Sparkles } from 'lucide-react'
-import { prisma } from '@/lib/prisma'
-import { AddToCartButton } from '@/components/add-to-cart-button'
-import { HeroPujaSlider } from '@/components/hero-puja-slider'
-import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export const revalidate = 30
 
 export default async function ProductsPage() {
-  const [products, heroSlides] = await Promise.all([
-    prisma.product.findMany({
-      where: {
-        OR: [
-          { status: 'ACTIVE' },
-          { status: 'OUT_OF_STOCK' }
-        ]
-      },
-      include: { category: true, inventory: true },
-      orderBy: { createdAt: 'desc' }
-    }).catch(() => []),
-    prisma.heroSlider.findMany({
-      where: { isActive: true, placement: 'PRODUCT' },
-      orderBy: { order: 'asc' }
-    }).catch(() => [])
-  ])
+  const products = await prisma.product.findMany({
+    where: {
+      OR: [
+        { status: 'ACTIVE' },
+        { status: 'OUT_OF_STOCK' }
+      ]
+    },
+    include: { category: true, inventory: true },
+    orderBy: { createdAt: 'desc' }
+  }).catch(() => [])
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -68,86 +55,97 @@ export default async function ProductsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="space-y-10">
-      <HeroPujaSlider slides={heroSlides} />
-      <div className="container py-4 space-y-10">
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <Badge variant="secondary" className="px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-amber-100/90 text-rose-900 border border-amber-300 shadow-xs rounded-full">
-          🛍️ Abhimantrit Store & Samagri
-        </Badge>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-normal text-slate-900 py-1">
-          <span className="font-serif text-rose-900 mr-2">Abhimantrit Prasad</span>
-          <span className="text-amber-600 font-devanagari">(अभिमंत्रित सामग्री)</span>
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
-          गंगाजल से अभिमंत्रित सिद्ध रुद्राक्ष माला, धूप-दीप, पूजन सामग्री और सिद्ध यंत्र।
-        </p>
-        <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-rose-700 to-amber-500 mx-auto rounded-full mt-2"></div>
-      </div>
 
-      {products.length === 0 ? (
-        <Card className="border-dashed max-w-md mx-auto">
-          <CardContent className="p-8 text-center space-y-4">
-            <Sparkles className="h-12 w-12 text-muted-foreground/60 mx-auto" />
-            <h3 className="text-lg font-semibold">Store Coming Soon</h3>
-            <p className="text-sm text-muted-foreground">We are preparing our sacred inventory. Please check back shortly or ask AI Pandit.</p>
-            
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((p) => {
-            const hasStock = p.inventory ? p.inventory.quantity > 0 : true
-            return (
-              <Card key={p.id} className="overflow-hidden group hover:shadow-xl transition-all border border-primary/10 flex flex-col justify-between relative">
-                <Link href={`/products/${p.slug}`} className="absolute inset-0 z-0" aria-label={`View ${p.name}`} />
-                <div className="relative pointer-events-none">
-                  <SacredImageFrame
-                    src={p.coverImage}
-                    alt={p.name}
-                    aspectRatio="square"
-                    seoCategory="product"
-                  />
-                  {p.isAbhimantrit && (
-                    <Badge className="absolute top-3 left-3 bg-rose-900 text-white font-bold border-none text-[10px] z-20">
-                      🔥 अभिमंत्रित
-                    </Badge>
-                  )}
-                  {!hasStock && (
-                    <Badge className="absolute top-3 right-3 bg-slate-600 text-white font-bold border-none text-[10px] z-20">
-                      OUT OF STOCK
-                    </Badge>
-                  )}
-                </div>
-                <CardContent className="p-4 flex-1 flex flex-col justify-between space-y-3 relative z-10 pointer-events-none">
-                  <div className="space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
-                      {p.category?.name || 'Spiritual'}
-                    </span>
-                    <h3 className="font-bold text-base text-slate-800 line-clamp-2 leading-tight group-hover:text-[var(--primary-color)] transition-colors pointer-events-auto">
-                      <Link href={`/products/${p.slug}`}>{p.name}</Link>
-                    </h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-snug">
-                      {p.shortDescription || 'Blessed spiritual item prepared with Vedic rituals.'}
-                    </p>
-                  </div>
-                  <div className="pt-2 border-t flex items-center justify-between pointer-events-auto">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-muted-foreground">मूल्य</span>
-                      <span className="text-base font-black text-[var(--primary-color)]">₹{Number(p.price)}</span>
-                    </div>
-                    <AddToCartButton product={{ id: p.id, name: p.name, price: Number(p.price), coverImage: p.coverImage }} hasStock={hasStock} />
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
+      {/* ── Hero Banner */}
+      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-14 md:py-20 overflow-hidden">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-3xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-5">
+            <Sparkles className="h-3.5 w-3.5 text-[#D4A843]" />
+            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em]">🛕 Abhimantrit Store & Samagri</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-tight mb-4">
+            Abhimantrit <span className="gold-gradient-text">Prasad</span>
+            <span className="block text-2xl md:text-3xl mt-2 text-[rgba(245,235,220,0.55)] font-normal">अभिमंत्रित सामग्री</span>
+          </h1>
+          <p className="text-[rgba(245,235,220,0.60)] text-base font-light max-w-xl mx-auto">
+            गंगाजल से अभिमंत्रित सिद्ध रुद्राक्ष माला, धूप-दीप, पूजन सामग्री और सिद्ध यंत्र।
+          </p>
         </div>
-      )}
-    </div>
-    </div>
+      </section>
+
+      {/* ── Products Grid */}
+      <section className="bg-[#FFFBF5] dark:bg-[#0A0302] py-12">
+        <div className="container px-4 md:px-6">
+          {products.length === 0 ? (
+            <div className="max-w-md mx-auto text-center py-16">
+              <div className="w-16 h-16 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="h-8 w-8 text-[#8B1A21]" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-[#1E120A] dark:text-white mb-2">Store Coming Soon</h3>
+              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] text-sm">We are preparing our sacred inventory. Please check back shortly.</p>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {products.map((p, idx) => {
+                const hasStock = p.inventory ? p.inventory.quantity > 0 : true
+                return (
+                  <article key={p.id} className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 4 + 1, 5)} relative`}>
+                    <Link href={`/products/${p.slug}`} className="absolute inset-0 z-0" aria-label={`View ${p.name}`} />
+
+                    {/* Image */}
+                    <div className="relative pointer-events-none aspect-square overflow-hidden">
+                      <SacredImageFrame
+                        src={p.coverImage}
+                        alt={p.name}
+                        aspectRatio="square"
+                        seoCategory="product"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.40)] via-transparent to-transparent pointer-events-none" />
+                      {p.isAbhimantrit && (
+                        <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md z-10">
+                          🔥 अभिमंत्रित
+                        </span>
+                      )}
+                      {!hasStock && (
+                        <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[rgba(12,4,2,0.75)] text-[rgba(245,235,220,0.70)] text-[10px] font-bold z-10">
+                          OUT OF STOCK
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 flex-1 flex flex-col justify-between gap-3 relative z-10 pointer-events-none">
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase font-bold text-[#A87C28] dark:text-[#D4A843] tracking-wider">
+                          {p.category?.name || 'Spiritual'}
+                        </span>
+                        <h3 className="font-heading font-bold text-base text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-tight hover:text-[#8B1A21] transition-colors pointer-events-auto">
+                          <Link href={`/products/${p.slug}`}>{p.name}</Link>
+                        </h3>
+                        <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.50)] line-clamp-2 mt-1 leading-snug">
+                          {p.shortDescription || 'Blessed spiritual item prepared with Vedic rituals.'}
+                        </p>
+                      </div>
+                      <div className="pt-2 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between pointer-events-auto">
+                        <div>
+                          <span className="text-[10px] text-[#8B7355] dark:text-[rgba(245,235,220,0.40)]">Price</span>
+                          <span className="block text-base font-black text-[#8B1A21] dark:text-[#E06070]">₹{Number(p.price).toLocaleString('en-IN')}</span>
+                        </div>
+                        <AddToCartButton
+                          product={{ id: p.id, name: p.name, price: Number(p.price), coverImage: p.coverImage }}
+                          hasStock={hasStock}
+                        />
+                      </div>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      </section>
     </>
   )
 }
-
-

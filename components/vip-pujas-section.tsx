@@ -170,9 +170,9 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
     <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans">
       
       {/* Top Banner Navigation Selector if multiple packages */}
-      <div className="bg-[#2A0A10] border-b border-amber-900/40 py-3 sticky top-[64px] z-40">
+      <div className="bg-[#1A0608] border-b border-[rgba(168,124,40,0.25)] py-3 sticky top-[64px] z-40">
         <div className="container mx-auto px-4 flex items-center justify-between gap-4 overflow-x-auto">
-          <span className="text-xs font-extrabold text-amber-400 shrink-0 flex items-center gap-1.5">
+          <span className="text-xs font-bold text-[#D4A843] shrink-0 flex items-center gap-1.5 tracking-wider">
             <Sparkles className="h-3.5 w-3.5" /> SELECT VIP PUJA:
           </span>
           <div className="flex gap-2 shrink-0">
@@ -182,7 +182,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 onClick={() => setActivePackageIndex(idx)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                   activePackageIndex === idx
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md'
+                    ? 'bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white shadow-md'
                     : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                 }`}
               >

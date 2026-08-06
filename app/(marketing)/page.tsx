@@ -219,133 +219,118 @@ export default async function HomePage() {
       />
 
       {/* ============================================================
-          SECTION B: HERO SECTION (ABOVE THE FOLD)
+          SECTION B: HERO SECTION — DARK LUXURY
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#FFF7EB] via-amber-50/50 to-white dark:from-slate-900 dark:to-slate-950 py-12 md:py-20 overflow-hidden border-b border-amber-100/60 dark:border-slate-800">
-        {/* Background Subtle Mandala / Glow Accent */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -right-24 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative w-full bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-14 md:py-24 overflow-hidden">
+        {/* Om watermark */}
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        {/* Gold radial glows */}
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[rgba(139,26,33,0.10)] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-[rgba(168,124,40,0.08)] rounded-full blur-3xl pointer-events-none" />
+        {/* Bottom fade to ivory */}
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            
-            {/* Left Content Side */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              
-              {/* Category Pill Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300/80 dark:border-amber-700/60 text-amber-900 dark:text-amber-300 text-xs md:text-sm font-extrabold tracking-wide shadow-xs">
-                <Sparkles className="h-4 w-4 text-amber-600 dark:text-amber-400 fill-amber-400" />
-                <span>Verified Temples & Puja Booking</span>
+
+            {/* Left Content */}
+            <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
+
+              {/* Label badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)]">
+                <Sparkles className="h-4 w-4 text-[#D4A843]" />
+                <span className="text-[#D4A843] text-xs font-bold uppercase tracking-[0.12em]">Verified Temples & Puja Booking</span>
               </div>
 
-              {/* Main Headline H1 */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
-                India’s Most Trusted Temples.{' '}
-                <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
+              {/* H1 */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] font-heading font-bold text-white leading-[1.12] tracking-tight">
+                India's Most Trusted Temples.{' '}
+                <span className="gold-gradient-text block sm:inline mt-1 sm:mt-0">
                   One Sacred Booking Away.
                 </span>
               </h1>
 
-              {/* Subheading (1-2 lines) */}
-              <p className="text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              {/* Subheading */}
+              <p className="text-base sm:text-lg text-[rgba(245,235,220,0.65)] font-light leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Book authentic Vedic pujas and temple offerings from verified priests across India, with transparent pricing, live WhatsApp video proof, and home-delivered sacred prasad.
               </p>
 
-              {/* 4 Benefit Pills / Bullets */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 max-w-2xl mx-auto lg:mx-0">
-                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
-                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
-                    <ShieldCheck className="h-3.5 w-3.5" />
+              {/* 4 trust features */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 max-w-2xl mx-auto lg:mx-0">
+                {[
+                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'Verified Priests' },
+                  { icon: <MapPin className="h-3.5 w-3.5" />, label: 'Pan-India Temples' },
+                  { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video' },
+                  { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent' },
+                ].map((f) => (
+                  <div key={f.label} className="flex items-center gap-2 p-2.5 bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl border border-[rgba(168,124,40,0.18)]">
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#B84430] text-white flex items-center justify-center shrink-0">{f.icon}</div>
+                    <span className="text-xs font-semibold text-[rgba(245,235,220,0.85)]">{f.label}</span>
                   </div>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Verified Priests</span>
-                </div>
-
-                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
-                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
-                    <MapPin className="h-3.5 w-3.5" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Pan-India Temples</span>
-                </div>
-
-                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
-                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
-                    <Video className="h-3.5 w-3.5" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">WhatsApp Video</span>
-                </div>
-
-                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
-                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">100% Transparent</span>
-                </div>
+                ))}
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
-                <Button size="lg" className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-base" asChild>
-                  <Link href="/pujas">
-                    Book a Divine Puja (पूजा बुक करें) <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-
-                <Button size="lg" variant="outline" className="border-amber-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-amber-50/60 font-bold px-6 py-6 rounded-xl text-base shadow-xs" asChild>
-                  <a href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-2 h-5 w-5 text-emerald-600" /> Chat on WhatsApp
-                  </a>
-                </Button>
+              <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
+                <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-7 py-3.5">
+                  Book a Divine Puja <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gold-outline-dark text-sm md:text-base px-7 py-3.5"
+                >
+                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                </a>
               </div>
 
-              {/* Thin Trust Strip Metrics */}
-              <div className="pt-6 border-t border-amber-200/60 dark:border-slate-800 grid grid-cols-3 gap-4 text-center lg:text-left max-w-xl">
-                <div>
-                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">10,000+</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Devotee Bookings</p>
-                </div>
-                <div>
-                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">100+</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Verified Temples</p>
-                </div>
-                <div>
-                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">24/7</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Devotee Assistance</p>
-                </div>
+              {/* Stats row */}
+              <div className="pt-6 border-t border-[rgba(168,124,40,0.18)] grid grid-cols-3 gap-6 text-center lg:text-left max-w-sm">
+                {[
+                  { val: '10,000+', label: 'Devotee Bookings' },
+                  { val: '100+', label: 'Verified Temples' },
+                  { val: '24/7', label: 'Seva Support' },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <p className="text-xl md:text-2xl font-black gold-gradient-text">{s.val}</p>
+                    <p className="text-[11px] text-[rgba(245,235,220,0.45)] font-medium mt-0.5">{s.label}</p>
+                  </div>
+                ))}
               </div>
-
             </div>
 
-            {/* Right Visual Card Side */}
+            {/* Right — Puja Slider / Image */}
             <div className="lg:col-span-5 w-full">
               {heroSlides.length > 0 ? (
-                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-amber-200/70 dark:border-slate-800 bg-white">
+                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-[rgba(168,124,40,0.20)] ring-1 ring-black/20">
                   <HeroPujaSlider slides={heroSlides} />
                 </div>
               ) : (
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-200 dark:border-slate-800 bg-gradient-to-br from-amber-50 to-orange-100/60 dark:from-slate-900 dark:to-slate-800 p-6 md:p-8 text-center space-y-6">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
-                    <Image 
-                      src="https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80" 
-                      alt="Kashi Vishwanath Temple Puja" 
-                      fill 
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[rgba(168,124,40,0.22)] bg-[rgba(26,10,5,0.80)] backdrop-blur-sm p-5 space-y-4">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+                    <Image
+                      src="https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80"
+                      alt="Kashi Vishwanath Temple Puja"
+                      fill
                       priority
-                      className="object-cover hover:scale-105 transition-transform duration-700" 
+                      className="object-cover hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4 text-left">
-                      <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider">🌟 Featured Sacred Puja</span>
-                      <h3 className="text-lg font-bold text-white leading-tight">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
-                      <p className="text-xs text-slate-200 mt-0.5">Live Video Sankalp & Temple Prasad</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.80)] via-[rgba(12,4,2,0.20)] to-transparent flex flex-col justify-end p-4 text-left">
+                      <span className="text-[10px] font-bold text-[#D4A843] uppercase tracking-widest">🌟 Featured Sacred Puja</span>
+                      <h3 className="text-base font-heading font-bold text-white leading-tight mt-1">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
+                      <p className="text-xs text-[rgba(245,235,220,0.65)] mt-0.5">Live Video Sankalp & Temple Prasad</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-left bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200/80 shadow-xs">
+                  <div className="flex items-center justify-between bg-[rgba(168,124,40,0.06)] border border-[rgba(168,124,40,0.16)] p-4 rounded-xl">
                     <div>
-                      <p className="text-xs text-slate-500 font-semibold">Starting Price</p>
-                      <p className="text-lg font-extrabold text-amber-700 dark:text-amber-400">₹1,100 <span className="text-xs font-normal text-slate-500">(All inclusive)</span></p>
+                      <p className="text-[10px] text-[rgba(245,235,220,0.45)] font-semibold">Starting Price</p>
+                      <p className="text-lg font-black sacred-gradient-text">₹1,100 <span className="text-xs font-normal text-[rgba(245,235,220,0.40)]">(All inclusive)</span></p>
                     </div>
-                    <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg" asChild>
-                      <Link href="/pujas">Book Now &rarr;</Link>
-                    </Button>
+                    <Link href="/pujas" className="px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
+                      Book Now →
+                    </Link>
                   </div>
                 </div>
               )}

@@ -1,11 +1,10 @@
 
-
 import { prisma } from '@/lib/prisma'
-import Image from 'next/image';
 import Link from 'next/link'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-import { getSafeImageUrl, DEFAULT_PLACEHOLDER_IMAGE } from '@/lib/utils'
+import { getSafeImageUrl } from '@/lib/utils'
+import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
 
 export function generateMetadata() {
   return generatePageMeta({
@@ -14,16 +13,12 @@ export function generateMetadata() {
     path: '/blog',
   })
 }
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { ArrowRight, Calendar, User } from 'lucide-react'
 
 export const revalidate = 30
 
 export default async function BlogListPage() {
   const posts = await prisma.blog.findMany({
-    where: { 
+    where: {
       status: 'PUBLISHED',
       OR: [
         { publishedAt: null },
@@ -60,59 +55,104 @@ export default async function BlogListPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container py-12 space-y-10">
-      <div className="text-center max-w-2xl mx-auto">
-        <Badge variant="secondary" className="mb-3">✍️ Spiritual Insights</Badge>
-        <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Divine Wisdom Blog</h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Articles on dharma, mantras, festivals, and spiritual guidance.
-        </p>
-      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map(post => (
-          <Card key={post.id} className="group hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden border">
-            <div className="aspect-video relative overflow-hidden bg-slate-100">
-              <img 
-                loading="lazy" 
-                src={getSafeImageUrl(post.coverImage)} 
-                alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`} 
-                title={post.title}
-                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-              />
-
-            </div>
-            <CardContent className="p-6 flex flex-col justify-between h-[300px]">
-              <div className="space-y-3">
-                <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200">
-                  {post.category?.name || 'Spirituality'}
-                </Badge>
-                <h3 className="font-bold text-xl line-clamp-2 group-hover:text-[var(--primary-color)] transition-colors">
-                  <Link href={`/blog/${post.slug}`}>
-                    {post.title}
-                  </Link>
-                </h3>
-                <p className="text-muted-foreground text-sm line-clamp-3">
-                  {post.excerpt || post.content.substring(0, 150).replace(/[#*`]/g, '') + '...'}
-                </p>
-              </div>
-              <div className="pt-4 border-t flex items-center justify-between text-xs text-slate-500 mt-auto">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1"><User className="h-3 w-3" /> {post.author?.fullName || 'Admin'}</span>
-                  <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {post.publishedAt?.toLocaleDateString('en-IN') || ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {posts.length === 0 && (
-          <div className="col-span-full py-12 text-center text-slate-500 border-2 border-dashed rounded-xl">
-            No published articles found. Check back later!
+      {/* ── Hero Banner */}
+      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-16 md:py-22 overflow-hidden">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+        <div className="container relative z-10 text-center max-w-3xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-5">
+            <BookOpen className="h-3.5 w-3.5 text-[#D4A843]" />
+            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em]">Spiritual Insights</span>
           </div>
-        )}
-      </div>
-    </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-tight mb-4">
+            Divine <span className="gold-gradient-text">Wisdom Blog</span>
+          </h1>
+          <p className="text-[rgba(245,235,220,0.60)] text-base font-light max-w-xl mx-auto">
+            Articles on dharma, mantras, festivals, and spiritual guidance by our Vedic scholars.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Blog Cards Grid */}
+      <section className="bg-[#FFFBF5] dark:bg-[#0A0302] py-14 md:py-20">
+        <div className="container px-4 md:px-6">
+          {posts.length === 0 ? (
+            <div className="text-center py-20 max-w-md mx-auto">
+              <div className="w-16 h-16 rounded-full bg-[rgba(139,26,33,0.08)] flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="h-8 w-8 text-[#8B1A21]" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-[#1E120A] dark:text-white mb-2">
+                Articles Coming Soon
+              </h3>
+              <p className="text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] text-sm">
+                Our scholars are preparing spiritual articles. Check back soon!
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post, idx) => (
+                <article
+                  key={post.id}
+                  className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
+                >
+                  {/* Image */}
+                  <Link href={`/blog/${post.slug}`} className="relative block aspect-video overflow-hidden">
+                    <img
+                      loading="lazy"
+                      src={getSafeImageUrl(post.coverImage)}
+                      alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`}
+                      title={post.title}
+                      className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.55)] via-transparent to-transparent pointer-events-none" />
+                    {post.category?.name && (
+                      <div className="absolute bottom-3 left-3">
+                        <span className="px-2.5 py-1 rounded-md bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold border border-[rgba(255,255,255,0.10)]">
+                          {post.category.name}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Content */}
+                  <div className="p-5 flex flex-col justify-between flex-1 gap-3">
+                    <div className="space-y-2">
+                      <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug hover:text-[#8B1A21] transition-colors">
+                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                      </h3>
+                      <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-3 leading-relaxed">
+                        {post.excerpt || post.content.substring(0, 140).replace(/[#*`]/g, '') + '…'}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between">
+                      <div className="flex items-center gap-3 text-xs text-[#8B7355] dark:text-[rgba(245,235,220,0.40)]">
+                        <span className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          {post.author?.fullName || 'Admin'}
+                        </span>
+                        {post.publishedAt && (
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {post.publishedAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                          </span>
+                        )}
+                      </div>
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="inline-flex items-center gap-1 text-[#8B1A21] dark:text-[#E06070] text-xs font-bold hover:gap-2 transition-all"
+                      >
+                        Read <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </>
   )
 }
-
