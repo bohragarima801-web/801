@@ -409,41 +409,54 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Sacred Offerings Section */}
+                {/* Sacred Bhakti Seva Offerings Section */}
                 {bhaktiSevaOfferings.length > 0 && (
-                  <div className="space-y-4">
-                    <h2 className="text-lg font-bold text-gray-900">Sacred offerings</h2>
+                  <div className="bg-gradient-to-br from-amber-50/80 to-orange-50/50 border border-amber-200/80 rounded-xl p-5 shadow-sm space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">🌸</span>
+                        <div>
+                          <h2 className="text-base font-bold text-gray-900">अतिरिक्त पुण्य एवं भक्ति सेवा (Sacred Offerings)</h2>
+                          <p className="text-xs text-amber-800">पूजा के साथ गो-सेवा, साधु भोजन व दीपदान जोड़ें (Optional)</p>
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-extrabold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-full border border-amber-300">
+                        {bhaktiSevaOfferings.length} सेवाएं उपलब्ध
+                      </span>
+                    </div>
                     
                     <div className="grid md:grid-cols-2 gap-4">
-                      {bhaktiSevaOfferings.map((offering) => (
-                        <div key={offering.id} className="bg-white border border-gray-200 rounded-xl p-4 flex gap-4 shadow-sm relative">
-                          <div className="space-y-2 flex-1">
-                            <span className="text-[10px] font-semibold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-md">
-                              Sacred BhaktiSeva
+                      {bhaktiSevaOfferings.map((offering) => {
+                        const inCart = isItemInCart(`addon-bhaktiSeva-${offering.id}`)
+                        return (
+                        <div key={offering.id} className={`bg-white border rounded-xl p-4 flex gap-4 shadow-sm relative transition-all ${inCart ? 'border-amber-500 ring-1 ring-amber-400 bg-amber-50/30' : 'border-gray-200 hover:border-amber-300'}`}>
+                          <div className="space-y-1.5 flex-1">
+                            <span className="text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md border border-amber-200">
+                              🪔 भक्ति सेवा
                             </span>
                             <h3 className="font-bold text-sm text-gray-900 mt-1">{offering.name}</h3>
-                            <p className="text-xs text-gray-500 line-clamp-2">
+                            <p className="text-xs text-gray-600 line-clamp-2">
                               {offering.description || `Offer ${offering.name} for divine blessings.`}
                             </p>
-                            <p className="font-bold text-sm text-gray-900 pt-1">₹ {offering.price}</p>
+                            <p className="font-black text-sm text-amber-900 pt-1">₹ {Number(offering.price).toLocaleString('en-IN')}</p>
                           </div>
                           <div className="relative flex flex-col items-center justify-center w-24">
                             <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
                               {offering.image ? (
-                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover fallback-bg-orange-100" />
+                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover" />
                               ) : (
                                 <span className="text-xs text-gray-400">No Img</span>
                               )}
                             </div>
                             <button 
                               onClick={() => toggleAddonToCart(`bhaktiSeva-${offering.id}`, Number(offering.price), offering.name, offering.image)} 
-                              className={`absolute -bottom-2 text-white text-xs font-bold px-4 py-1 rounded-md shadow-md ${isItemInCart(`addon-bhaktiSeva-${offering.id}`) ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'}`}
+                              className={`absolute -bottom-2 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md transition-all ${inCart ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
                             >
-                              {isItemInCart(`addon-bhaktiSeva-${offering.id}`) ? 'Remove' : 'Add'}
+                              {inCart ? '✓ Selected' : '+ Add Seva'}
                             </button>
                           </div>
                         </div>
-                      ))}
+                      )})}
                     </div>
                   </div>
                 )}
