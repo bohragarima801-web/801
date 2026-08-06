@@ -99,6 +99,28 @@ export default function CheckoutPage() {
     checkAuth()
   }, [router])
 
+  useEffect(() => {
+    try {
+      const storedSankalp = window.localStorage.getItem('dy_sankalp')
+      if (storedSankalp) {
+        const parsed = JSON.parse(storedSankalp)
+        if (parsed.gotra || parsed.purpose) {
+          setSankalp(prev => ({
+            gotra: parsed.gotra || prev.gotra,
+            purpose: parsed.purpose ? `${parsed.purpose}${parsed.date ? ` (Date: ${parsed.date})` : ''}` : prev.purpose
+          }))
+        }
+        if (parsed.devoteeName || parsed.whatsappPhone) {
+          setAddress(prev => ({
+            ...prev,
+            name: parsed.devoteeName || prev.name,
+            phone: parsed.whatsappPhone || prev.phone
+          }))
+        }
+      }
+    } catch (e) {}
+  }, [])
+
   // Fetch BhaktiSeva Offerings
   useEffect(() => {
     const fetchOfferings = async () => {

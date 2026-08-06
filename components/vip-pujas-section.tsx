@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCart } from '@/lib/cart-context'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -115,6 +117,8 @@ const timeSlotOptions = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
+  const router = useRouter()
+  const { addToCart, clearCart } = useCart()
   const packagesToDisplay = dbPackages.length > 0 ? dbPackages : defaultVipPackages
   const [activePackageIndex, setActivePackageIndex] = useState(0)
 
@@ -139,12 +143,28 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
     const slotObj = timeSlotOptions.find(s => s.id === selectedTimeSlot)
     const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
-    const panditName = currentPackage.assignedPandit?.name || 'DivyaYagyam Admin Assigned Acharya'
 
-    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book a VIP Puja:*%0A- *Puja:* ${currentPackage.name}%0A- *Price:* ₹${currentPackage.price}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${panditName}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Prosperity'}`
+    try {
+      window.localStorage.setItem('dy_sankalp', JSON.stringify({
+        gotra: gotra || 'Kashyap',
+        purpose: sankalpWish || 'Overall Victory & Prosperity',
+        date: dateText,
+        timeSlot: slotText,
+        devoteeName,
+        whatsappPhone
+      }))
+    } catch {}
 
-    window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
+    clearCart()
+    addToCart({
+      id: `puja-${currentPackage.id}`,
+      name: `👑 ${currentPackage.name} (VIP Ritual)`,
+      price: currentPackage.price,
+      image: currentPackage.coverImage || ''
+    }, 1)
+
     setBookingDialogOpen(false)
+    router.push('/checkout')
   }
 
   return (
@@ -577,7 +597,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
             {/* Submit Button */}
             <div className="pt-3">
               <Button type="submit" size="lg" className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-xl py-6">
-                Confirm VIP Booking via WhatsApp &rarr;
+                Confirm VIP Booking & Pay via Razorpay &rarr;
               </Button>
             </div>
 
