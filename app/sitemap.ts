@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   if (process.env.DATABASE_URL) {
     try {
-      // 1. Pujas (Only Published & Published date <= now or null)
+      // 1. Pujas & VIP Pujas
       const pujas = await prisma.puja.findMany({
         where: {
           status: 'PUBLISHED',
@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             { publishedAt: { lte: now } }
           ]
         },
-        select: { slug: true, updatedAt: true }
+        select: { slug: true, isVip: true, updatedAt: true }
       })
       pujas.forEach(p => {
         if (p.slug && p.slug.trim()) {
@@ -57,8 +57,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: `${baseUrl}/pujas/${encodeURIComponent(p.slug.trim())}`,
             lastModified: p.updatedAt || now,
             changeFrequency: 'daily',
-            priority: 0.95,
+            priority: p.isVip ? 0.98 : 0.95,
           })
+          if (p.isVip) {
+            sitemapEntries.push({
+              url: `${baseUrl}/vip-pujas/${encodeURIComponent(p.slug.trim())}`,
+              lastModified: p.updatedAt || now,
+              changeFrequency: 'daily',
+              priority: 0.95,
+            })
+          }
         }
       })
 
@@ -83,6 +91,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
+      // 3. Puja & Product Categories
+      const [pujaCats, prodCats] = await Promise.all([
+        prisma.pujaCategory.findMany({ select: { slug: true } }).catch(() => []),
+        prisma.productCategory.findMany({ select: { slug: true } }).catch(() => [])
+      ])
+      pujaCats.forEach(c => {
+        if (c.slug) sitemapEntries.push({ url: `${baseUrl}/pujas/category/${encodeURIComponent(c.slug)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 })
+      })
+      prodCats.forEach(c => {
+        if (c.slug) sitemapEntries.push({ url: `${baseUrl}/products/category/${encodeURIComponent(c.slug)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 })
+      })
 
       // 4. Blog Posts (Only Published)
       const posts = await prisma.blog.findMany({
