@@ -335,34 +335,6 @@ export default async function HomePage() {
 
           </div>
         </div>
-      </section>b9dfd1?auto=format&fit=crop&w=800&q=80"
-                      alt="Kashi Vishwanath Temple Puja"
-                      fill
-                      priority
-                      className="object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.80)] via-[rgba(12,4,2,0.20)] to-transparent flex flex-col justify-end p-4 text-left">
-                      <span className="text-[10px] font-bold text-[#D4A843] uppercase tracking-widest">🌟 Featured Sacred Puja</span>
-                      <h3 className="text-base font-heading font-bold text-white leading-tight mt-1">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
-                      <p className="text-xs text-[rgba(245,235,220,0.65)] mt-0.5">Live Video Sankalp & Temple Prasad</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-[rgba(168,124,40,0.06)] border border-[rgba(168,124,40,0.16)] p-4 rounded-xl">
-                    <div>
-                      <p className="text-[10px] text-[rgba(245,235,220,0.45)] font-semibold">Starting Price</p>
-                      <p className="text-lg font-black sacred-gradient-text">₹1,100 <span className="text-xs font-normal text-[rgba(245,235,220,0.40)]">(All inclusive)</span></p>
-                    </div>
-                    <Link href="/pujas" className="px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
-                      Book Now →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-          </div>
-        </div>
       </section>
 
       {/* ============================================================
