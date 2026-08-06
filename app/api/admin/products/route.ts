@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
       isFeatured: !!isFeatured,
       coverImage: coverImage || null,
       weight: weight ? Number(weight) : null,
-      status: status || 'ACTIVE',
+      status: status || 'DRAFT',
       tags: tags || null,
       customHtml: customHtml || null,
       seoTitle: autoSeo.seoTitle,

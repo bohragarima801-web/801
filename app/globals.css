@@ -549,9 +549,9 @@
    FOOTER
    ============================================================ */
 .footer-spiritual {
-  background: #FFFDF8;
-  color: #2C1810;
-  border-top: 1px solid #E0CE95;
+  background: #0A0302;
+  color: rgba(245, 235, 220, 0.85);
+  border-top: 1px solid rgba(168, 124, 40, 0.20);
   position: relative;
 }
 .footer-spiritual::before {
@@ -560,8 +560,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #8B1A21, #D49B00, #8B1A21, transparent);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.60), transparent);
 }
 
 /* ============================================================

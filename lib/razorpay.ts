@@ -5,15 +5,16 @@ let _instance: Razorpay | null = null
 import { getSetting } from '@/lib/settings'
 
 export async function getRazorpayKeys(): Promise<{ key_id: string; key_secret: string }> {
-  // DB Setting from Admin Panel has 1st priority, followed by env variables
-  let key_id = (await getSetting('secret.razorpay_key_id', 'RAZORPAY_KEY_ID')).replace(/^["']|["']$/g, '').trim()
+  // ENV Variables have 1st priority (set in .env or Vercel dashboard)
+  // DB (Admin Settings) is used as fallback only if env vars are not set
+  let key_id = (process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '').replace(/^["']|["']$/g, '').trim()
   if (!key_id) {
-    key_id = (process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '').replace(/^["']|["']$/g, '').trim()
+    key_id = (await getSetting('secret.razorpay_key_id')).replace(/^["']|["']$/g, '').trim()
   }
 
-  let key_secret = (await getSetting('secret.razorpay_key_secret', 'RAZORPAY_KEY_SECRET')).replace(/^["']|["']$/g, '').trim()
+  let key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^["']|["']$/g, '').trim()
   if (!key_secret) {
-    key_secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^["']|["']$/g, '').trim()
+    key_secret = (await getSetting('secret.razorpay_key_secret')).replace(/^["']|["']$/g, '').trim()
   }
 
   return { key_id, key_secret }

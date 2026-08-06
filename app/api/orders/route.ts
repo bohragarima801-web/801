@@ -217,14 +217,11 @@ export async function POST(req: NextRequest) {
             discountAmount = val
           }
           if (discountAmount > subtotal) discountAmount = subtotal
-          discountAmount = Math.round(discountAmount * 100) / 100
         }
       }
     }
 
-    subtotal = Math.round(subtotal * 100) / 100
-    shipping = Math.round(shipping * 100) / 100
-    const total = Math.max(0, Math.round((subtotal - discountAmount + shipping) * 100) / 100)
+    const total = Math.max(0, subtotal - discountAmount + shipping)
 
 
     // 2. Resolve or Upsert DB User Record

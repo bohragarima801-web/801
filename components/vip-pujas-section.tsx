@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useCart } from '@/lib/cart-context'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -48,7 +46,7 @@ const defaultVipPackages: VipPackageItem[] = [
     shortDesc: 'Victory in legal disputes, protection from severe negativity, enemy destruction & business triumph.',
     location: 'Mata Baglamukhi Dham, Nalkheda / Datia',
     duration: 'Full-Day Intensive Homa',
-    priestsCount: '5 अनुभवी वेदाचार्य (5 Senior Veda Acharyas)',
+    priestsCount: '5 Veda Certified Acharyas',
     price: 15100,
     categoryTag: 'Tantra & Victory Homa',
     badgeTag: 'Most Popular VIP',
@@ -117,9 +115,7 @@ const timeSlotOptions = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
-  const router = useRouter()
-  const { addToCart, clearCart } = useCart()
-  const packagesToDisplay = dbPackages.length > 0 ? dbPackages : defaultVipPackages
+  const packagesToDisplay = dbPackages
   const [activePackageIndex, setActivePackageIndex] = useState(0)
 
   // Booking Modal State
@@ -130,6 +126,25 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('default')
   const [sankalpWish, setSankalpWish] = useState('')
+
+  if (packagesToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans py-24 px-4 text-center flex flex-col items-center justify-center space-y-6">
+        <div className="h-20 w-20 rounded-full bg-amber-500/20 border-2 border-amber-400/50 text-amber-400 flex items-center justify-center text-4xl shadow-xl">👑</div>
+        <div className="space-y-3 max-w-lg">
+          <h2 className="text-3xl font-extrabold font-heading text-white">शीघ्र उपलब्ध होंगी दिव्य VIP पूजाएँ एवं महायज्ञ</h2>
+          <p className="text-slate-300 text-sm font-medium leading-relaxed">
+            संस्थान के मुख्य आचार्यों द्वारा सिद्ध शक्तिपीठों पर विशेष VIP अनुष्ठानों की तारीखें घोषित की जा रही हैं। किसी भी विशेष VIP पूजा संकल्प हेतु आचार्य जी से परामर्श लें।
+          </p>
+        </div>
+        <Button size="lg" className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl shadow-xl text-sm py-6 px-8" asChild>
+          <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20consult%20regarding%20special%20VIP%20Puja%20booking" target="_blank" rel="noopener noreferrer">
+            💬 आचार्य जी से VIP पूजा परामर्श लें &rarr;
+          </a>
+        </Button>
+      </div>
+    )
+  }
 
   const currentPackage = packagesToDisplay[activePackageIndex] || packagesToDisplay[0]
 
@@ -143,48 +158,32 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
     const slotObj = timeSlotOptions.find(s => s.id === selectedTimeSlot)
     const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
+    const panditName = currentPackage.assignedPandit?.name || 'DivyaYagyam Admin Assigned Acharya'
 
-    try {
-      window.localStorage.setItem('dy_sankalp', JSON.stringify({
-        gotra: gotra || 'Kashyap',
-        purpose: sankalpWish || 'Overall Victory & Prosperity',
-        date: dateText,
-        timeSlot: slotText,
-        devoteeName,
-        whatsappPhone
-      }))
-    } catch {}
+    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book a VIP Puja:*%0A- *Puja:* ${currentPackage.name}%0A- *Price:* ₹${currentPackage.price}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${panditName}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Prosperity'}`
 
-    clearCart()
-    addToCart({
-      id: `puja-${currentPackage.id}`,
-      name: `👑 ${currentPackage.name} (VIP Ritual)`,
-      price: currentPackage.price,
-      image: currentPackage.coverImage || ''
-    }, 1)
-
+    window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
     setBookingDialogOpen(false)
-    router.push('/checkout')
   }
 
   return (
     <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans">
       
       {/* Top Banner Navigation Selector if multiple packages */}
-      <div className="bg-[#FFF9EE] border-b border-[#F5E2B8] py-3 sticky top-[64px] z-40">
+      <div className="bg-[#1A0608] border-b border-[rgba(168,124,40,0.25)] py-3 sticky top-[64px] z-40">
         <div className="container mx-auto px-4 flex items-center justify-between gap-4 overflow-x-auto">
-          <span className="text-xs font-bold text-[#8B1A21] shrink-0 flex items-center gap-1.5 tracking-wider">
-            <Sparkles className="h-3.5 w-3.5 text-[#D49B00]" /> SELECT VIP PUJA:
+          <span className="text-xs font-bold text-[#D4A843] shrink-0 flex items-center gap-1.5 tracking-wider">
+            <Sparkles className="h-3.5 w-3.5" /> SELECT VIP PUJA:
           </span>
           <div className="flex gap-2 shrink-0">
             {packagesToDisplay.map((pkg, idx) => (
               <button
                 key={pkg.id}
                 onClick={() => setActivePackageIndex(idx)}
-                className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                   activePackageIndex === idx
-                    ? 'bg-gradient-to-r from-[#8B1A21] to-[#D49B00] text-white shadow-md'
-                    : 'bg-white hover:bg-[#FFF3D6] text-[#2A1508] border border-[#F0D695]'
+                    ? 'bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white shadow-md'
+                    : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                 }`}
               >
                 {pkg.badgeTag || `VIP ${idx + 1}`}
@@ -398,7 +397,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
               <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">3</div>
               <h5 className="font-bold text-sm text-amber-200">Admin Assigns</h5>
-              <p className="text-[11px] text-slate-400">Admin allocates experienced Lead Acharya for your puja.</p>
+              <p className="text-[11px] text-slate-400">Admin allocates certified Veda Acharya for your puja.</p>
             </div>
 
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
@@ -597,7 +596,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
             {/* Submit Button */}
             <div className="pt-3">
               <Button type="submit" size="lg" className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-xl py-6">
-                Confirm VIP Booking & Pay via Razorpay &rarr;
+                Confirm VIP Booking via WhatsApp &rarr;
               </Button>
             </div>
 

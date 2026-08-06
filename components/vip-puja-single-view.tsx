@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useCart } from '@/lib/cart-context'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -49,9 +47,6 @@ const timeSlotOptions = [
 ]
 
 export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
-  const router = useRouter()
-  const { addToCart, clearCart } = useCart()
-  
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false)
   const [devoteeName, setDevoteeName] = useState('')
   const [whatsappPhone, setWhatsappPhone] = useState('')
@@ -83,7 +78,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80'
   }
 
-  const handleConfirmBooking = (e: React.FormEvent) => {
+  const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!devoteeName || !whatsappPhone) {
       alert('कृपया अपना नाम एवं व्हाट्सएप नंबर दर्ज करें।')
@@ -95,26 +90,35 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
 
     try {
-      window.localStorage.setItem('dy_sankalp', JSON.stringify({
-        gotra: gotra || 'Kashyap',
-        purpose: sankalpWish || 'Overall Prosperity & Victory',
-        date: dateText,
-        timeSlot: slotText,
-        devoteeName,
-        whatsappPhone
-      }))
-    } catch {}
+      // Save VIP booking in Realtime Database via /api/bookings API
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pujaId: puja.id,
+          devoteeName,
+          phone: whatsappPhone,
+          gotra: gotra || 'Kashyap',
+          sankalpPurpose: sankalpWish || 'Overall Prosperity & Victory',
+          amount: displayPrice,
+          isVipBooking: true
+        })
+      })
 
-    clearCart()
-    addToCart({
-      id: `puja-${puja.id}`,
-      name: `👑 ${puja.name} (VIP Ritual)`,
-      price: Number(displayPrice),
-      image: coverImg || ''
-    }, 1)
+      const data = await res.json()
+      const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
+      const enc = encodeURIComponent
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${enc(bookingNo)}%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}%0A%0A🔒 *Note:* Official Bill & Tax Receipt will be issued automatically AFTER payment confirmation.`
 
-    setBookingDialogOpen(false)
-    router.push('/checkout')
+      window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
+    } catch (err) {
+      // Fallback direct WhatsApp
+      const enc = encodeURIComponent
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}`
+      window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
+    } finally {
+      setBookingDialogOpen(false)
+    }
   }
 
   return (
@@ -291,7 +295,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
               <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">3</div>
               <h5 className="font-bold text-sm text-amber-200">Admin Assigns</h5>
-              <p className="text-[11px] text-slate-400">Admin allocates experienced Lead Acharya for your puja.</p>
+              <p className="text-[11px] text-slate-400">Admin allocates certified Veda Acharya for your puja.</p>
             </div>
 
             <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
@@ -448,7 +452,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
             <div className="pt-3">
               <Button type="submit" size="lg" className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-xl py-6">
-                Confirm VIP Booking & Pay via Razorpay &rarr;
+                Confirm VIP Booking via WhatsApp &rarr;
               </Button>
             </div>
           </form>

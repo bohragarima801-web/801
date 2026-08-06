@@ -144,15 +144,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
-  const cartTotal = Math.round(items.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100) / 100
+  const cartTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
   
   // Product-only subtotal (excludes pujas, addons, tools)
-  const productSubtotal = Math.round(items
+  const productSubtotal = items
     .filter(item => !item.id.startsWith('puja-') && !item.id.startsWith('addon-') && !item.id.startsWith('tool-'))
-    .reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100) / 100
+    .reduce((sum, item) => sum + (item.price * item.quantity), 0)
 
   const hasProducts = productSubtotal > 0
-  const discountAmount = appliedCoupon ? Math.round(appliedCoupon.discountAmount * 100) / 100 : 0
+  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0
   
   // Delivery Fee calculation (Applies ONLY to physical products! Pujas have 0 delivery fee):
   // If deliveryEnabled == false -> 0
@@ -165,7 +165,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   
   const shippingFee = (!deliveryEnabled || !hasProducts || productSubtotal > freeShippingThreshold) ? 0 : deliveryFee
   
-  const finalTotal = Math.max(0, Math.round((cartTotal - discountAmount + shippingFee) * 100) / 100)
+  const finalTotal = Math.max(0, cartTotal - discountAmount + shippingFee)
 
   return (
     <CartContext.Provider value={{

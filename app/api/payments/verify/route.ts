@@ -35,7 +35,11 @@ export async function POST(req: NextRequest) {
       return cors(NextResponse.json({ ok: false, error: 'Missing verification fields' }, { status: 400 }))
     }
 
-    const secret = await getSetting('secret.razorpay_key_secret', 'RAZORPAY_KEY_SECRET')
+    // ENV var has priority; DB/Admin Settings is fallback
+    let secret = (process.env.RAZORPAY_KEY_SECRET || '').replace(/^["']|["']$/g, '').trim()
+    if (!secret) {
+      secret = (await getSetting('secret.razorpay_key_secret')).replace(/^["']|["']$/g, '').trim()
+    }
     if (!secret) {
       return cors(NextResponse.json({ ok: false, error: 'RAZORPAY_KEY_SECRET not configured' }, { status: 500 }))
     }

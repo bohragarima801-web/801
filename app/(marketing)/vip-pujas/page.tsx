@@ -1,6 +1,6 @@
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
-import { getCachedVipPujas } from '@/lib/cache'
+import { prisma } from '@/lib/prisma'
 import { VipPujasSection, VipPackageItem } from '@/components/vip-pujas-section'
 
 export function generateMetadata() {
@@ -11,13 +11,23 @@ export function generateMetadata() {
   })
 }
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 30
 
 export default async function VipPujasPage() {
-  const dbPujas = await getCachedVipPujas()
+  const dbPujas = await prisma.puja.findMany({
+    where: { 
+      status: 'PUBLISHED', 
+      isVip: true,
+      OR: [
+        { publishedAt: null },
+        { publishedAt: { lte: new Date() } }
+      ]
+    },
+    include: { category: true, temple: true },
+    orderBy: { createdAt: 'desc' }
+  }).catch(() => [])
 
-  const mappedDbPackages: VipPackageItem[] = dbPujas.map((p: any) => ({
+  const mappedDbPackages: VipPackageItem[] = dbPujas.map((p) => ({
     id: p.id,
     name: p.name,
     shortDesc: p.shortDescription || p.description || 'Personalized VIP Vedic ritual.',
