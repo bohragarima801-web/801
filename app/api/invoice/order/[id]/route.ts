@@ -27,8 +27,40 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (!order) return new NextResponse('Order tax invoice not found', { status: 404 })
 
-    const paid = order.payments[0]
-    const paymentDate = paid?.paidAt || order.updatedAt
+    // ANTI-FRAUD SECURITY CHECK: Invoice/Bill is generated ONLY AFTER payment is SUCCESS or CONFIRMED
+    const isPaymentConfirmed = order.paymentStatus === 'SUCCESS' || order.status === 'CONFIRMED' || order.status === 'SHIPPED' || order.status === 'DELIVERED'
+    
+    if (!isPaymentConfirmed && !isAdmin) {
+      const pendingHtml = `<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Tax Invoice Locked - Payment Pending</title>
+<style>
+  body { font-family: sans-serif; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
+  .box { max-width: 480px; background: #1e293b; border: 2px solid #ea580c; border-radius: 20px; padding: 36px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .icon { font-size: 48px; margin-bottom: 12px; }
+  h2 { font-size: 20px; color: #f97316; margin-bottom: 12px; }
+  p { font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px; }
+  .btn { display: inline-block; background: #ea580c; color: white; text-decoration: none; padding: 12px 24px; border-radius: 10px; font-weight: bold; font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="icon">🔒</div>
+    <h2>टैक्स इनवॉइस बिल लॉक है (Tax Invoice Locked)</h2>
+    <p>सुरक्षा कारणों से टैक्स इनवॉइस बिल <strong>भुगतान (Payment) सफलता पूर्वक प्राप्त होने के बाद ही</strong> जेनरेट होता है।<br><br>Order ID: <strong>${order.orderNumber}</strong> का भुगतान अभी प्रक्रियाधीन/लंबित (Pending) है।</p>
+    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20complete%20payment%20for%20Order%20${order.orderNumber}" class="btn">
+      💬 Complete Payment via WhatsApp
+    </a>
+  </div>
+</body>
+</html>`
+
+      return new NextResponse(pendingHtml, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
+      })
+    }
     const discount = order.discount ? Number(order.discount) : 0
     const subtotal = Number(order.subtotal)
     const tax = order.tax ? Number(order.tax) : 0

@@ -27,9 +27,40 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (!booking) return new NextResponse('Booking receipt not found', { status: 404 })
 
-    const paid = booking.payments[0]
-    const paymentDate = paid?.paidAt || booking.updatedAt
-    const devoteeName = booking.user?.fullName || user.fullName || 'Valued Devotee'
+    // ANTI-FRAUD SECURITY CHECK: Invoice/Bill is generated ONLY AFTER payment is SUCCESS or CONFIRMED
+    const isPaymentConfirmed = booking.paymentStatus === 'SUCCESS' || booking.status === 'CONFIRMED' || booking.status === 'COMPLETED'
+    
+    if (!isPaymentConfirmed && !isAdmin) {
+      const pendingHtml = `<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Official Bill Locked - Payment Pending</title>
+<style>
+  body { font-family: sans-serif; background: #1a1a2e; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
+  .box { max-width: 480px; background: #252542; border: 2px solid #f59e0b; border-radius: 20px; padding: 36px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .icon { font-size: 48px; margin-bottom: 12px; }
+  h2 { font-size: 20px; color: #fbbf24; margin-bottom: 12px; }
+  p { font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px; }
+  .btn { display: inline-block; background: #d97706; color: white; text-decoration: none; padding: 12px 24px; border-radius: 10px; font-weight: bold; font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="icon">🔒</div>
+    <h2>आधिकारिक बिल रसीद लॉक है (Official Bill Locked)</h2>
+    <p>सुरक्षा कारणों से आधिकारिक बिल/इनवॉइस रसीद <strong>भुगतान (Payment) जमा होने के पश्चात</strong> ही जेनरेट होती है।<br><br>booking ID: <strong>${booking.bookingNumber}</strong> का भुगतान अभी लंबित (Pending) है।</p>
+    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20complete%20payment%20for%20Booking%20${booking.bookingNumber}" class="btn">
+      💬 Complete Payment via WhatsApp
+    </a>
+  </div>
+</body>
+</html>`
+
+      return new NextResponse(pendingHtml, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
+      })
+    }
 
     const html = `<!DOCTYPE html>
 <html lang="hi">
