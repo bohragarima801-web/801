@@ -33,13 +33,7 @@ const nextConfig = {
       }
     ]
   },
-  experimental: {
-    allowedDevOrigins: [
-      '*.preview.emergentagent.com',
-      '*.preview.emergentcf.cloud',
-      '*.cluster-12.preview.emergentcf.cloud',
-    ],
-  },
+
   async redirects() {
     return [
       {
