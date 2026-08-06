@@ -148,7 +148,12 @@ export async function POST(req: NextRequest) {
       results.push(result)
     }
 
-    return NextResponse.json({ ok: true, data: results });
+    const { initSecrets } = await import('@/lib/secrets')
+    const { clearSettingCache } = await import('@/lib/settings')
+    await initSecrets(true)
+    clearSettingCache()
+
+    return NextResponse.json({ ok: true, data: results, message: 'Settings & Secrets synchronized live!' });
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message }, { status: 500 });
   }

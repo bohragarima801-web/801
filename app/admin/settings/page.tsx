@@ -854,14 +854,20 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <Label>Supabase URL (NEXT_PUBLIC_SUPABASE_URL)</Label>
                     <Input value={supabaseUrl} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://xxx.supabase.co" />
+                    {supabaseUrl && !supabaseUrl.startsWith('http://') && !supabaseUrl.startsWith('https://') && (
+                      <p className="text-xs text-red-600 font-semibold">⚠️ URL Format Invalid: Must start with https:// (e.g., https://xyz.supabase.co)</p>
+                    )}
+                    <p className="text-[11px] text-slate-500">From Supabase Dashboard &gt; Settings &gt; API &gt; Project URL.</p>
                   </div>
                   <div className="space-y-2">
                     <Label>Supabase Anon Key (NEXT_PUBLIC_SUPABASE_ANON_KEY)</Label>
                     <Input type="password" value={supabaseAnonKey} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="sb_publishable_..." />
+                    <p className="text-[11px] text-slate-500">From Supabase Dashboard &gt; Settings &gt; API &gt; anon / public key.</p>
                   </div>
                   <div className="space-y-2">
                     <Label>Supabase Service Role Key (SUPABASE_SERVICE_ROLE_KEY)</Label>
                     <Input type="password" value={supabaseServiceRole} onChange={(e) => setSupabaseServiceRole(e.target.value)} placeholder="sb_secret_..." />
+                    <p className="text-[11px] text-slate-500">From Supabase Dashboard &gt; Settings &gt; API &gt; service_role key.</p>
                   </div>
                 </div>
 
@@ -873,14 +879,20 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <Label>Razorpay Key ID (RAZORPAY_KEY_ID)</Label>
                     <Input value={razorpayKeyId} onChange={(e) => setRazorpayKeyId(e.target.value)} placeholder="rzp_live_..." />
+                    {razorpayKeyId && !razorpayKeyId.startsWith('rzp_') && (
+                      <p className="text-xs text-red-600 font-semibold">⚠️ Key ID Warning: Razorpay keys typically start with rzp_live_ or rzp_test_</p>
+                    )}
+                    <p className="text-[11px] text-slate-500">From Razorpay Dashboard &gt; Account Settings &gt; API Keys.</p>
                   </div>
                   <div className="space-y-2">
                     <Label>Razorpay Key Secret (RAZORPAY_KEY_SECRET)</Label>
                     <Input type="password" value={razorpayKeySecret} onChange={(e) => setRazorpayKeySecret(e.target.value)} placeholder="Secret Key" />
+                    <p className="text-[11px] text-slate-500">Generated alongside Key ID in Razorpay Dashboard.</p>
                   </div>
                   <div className="space-y-2">
                     <Label>Razorpay Webhook Secret (RAZORPAY_WEBHOOK_SECRET)</Label>
                     <Input type="password" value={razorpayWebhookSecret} onChange={(e) => setRazorpayWebhookSecret(e.target.value)} placeholder="Paste Webhook Secret Key" />
+                    <p className="text-[11px] text-slate-500">Secret entered when creating Webhook at https://dashboard.razorpay.com/app/webhooks</p>
                   </div>
 
                   <h3 className="font-semibold text-lg border-b pb-2 pt-2 flex items-center justify-between">
@@ -890,6 +902,7 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <Label>Google Gemini API Key (GEMINI_API_KEY)</Label>
                     <Input type="password" value={geminiApiKey} onChange={(e) => setGeminiApiKey(e.target.value)} placeholder="AI Key" />
+                    <p className="text-[11px] text-slate-500">From Google AI Studio (https://aistudio.google.com/app/apikey).</p>
                   </div>
                 </div>
               </div>
