@@ -16,9 +16,14 @@ import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { FAQAccordion } from '@/components/ui/FAQAccordion'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
+import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
+  
+  if (puja?.isVip) {
+    return <VipPujaSingleView puja={puja} />
+  }
   
   const basePrice = Number(puja?.price || 951)
   const defaultPackages = [
