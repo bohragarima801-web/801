@@ -60,15 +60,25 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   const templeLocation = puja.location || puja.temple?.name || 'Sacred Dham, India'
   const coverImg = puja.coverImage || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
 
-  const assignedPandit = puja.assignedPandit || {
-    name: 'पं. रामेश्वर शास्त्री (Pt. Rameshwar Shastri)',
-    title: 'शुक्ल यजुर्वेद संहिता महाविद्वान',
-    experience: '25+ वर्ष अनुभव',
-    location: templeLocation,
-    photo: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80'
+  let parsedPandit = puja.assignedPandit
+  if (!parsedPandit && (puja as any).customHtml) {
+    try {
+      const parsed = JSON.parse((puja as any).customHtml)
+      if (parsed.assignedPandit && parsed.assignedPandit.name) {
+        parsedPandit = parsed.assignedPandit
+      }
+    } catch (e) {}
   }
 
-  const handleConfirmBooking = (e: React.FormEvent) => {
+  const assignedPandit = parsedPandit || {
+    name: 'पं. कन्हैया लाल दवे (Pt. Kanhaiya Lal Dave)',
+    title: 'अथर्ववेद एवं महाविद्या पीठाधीश्वर',
+    experience: '22+ वर्ष अनुभव',
+    location: templeLocation,
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80'
+  }
+
+  const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!devoteeName || !whatsappPhone) {
       alert('कृपया अपना नाम एवं व्हाट्सएप नंबर दर्ज करें।')
@@ -79,10 +89,36 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
 
-    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book VIP Puja:*%0A- *Puja:* ${puja.name}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${assignedPandit.name}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Health'}`
+    try {
+      // Save VIP booking in Realtime Database via /api/bookings API
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pujaId: puja.id,
+          devoteeName,
+          phone: whatsappPhone,
+          gotra: gotra || 'Kashyap',
+          sankalpPurpose: sankalpWish || 'Overall Prosperity & Victory',
+          amount: displayPrice,
+          isVipBooking: true
+        })
+      })
 
-    window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
-    setBookingDialogOpen(false)
+      const data = await res.json()
+      const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
+      const invoiceUrl = data?.data?.id ? `${window.location.origin}/api/invoice/booking/${data.data.id}` : ''
+
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${bookingNo}%0A- *Puja:* ${puja.name}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp Phone:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${assignedPandit.name}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Health'}${invoiceUrl ? `%0A%0A📄 *Invoice Receipt Link:* ${invoiceUrl}` : ''}`
+
+      window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
+    } catch (err) {
+      // Fallback direct WhatsApp
+      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Puja:* ${puja.name}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp Phone:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${assignedPandit.name}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Health'}`
+      window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
+    } finally {
+      setBookingDialogOpen(false)
+    }
   }
 
   return (

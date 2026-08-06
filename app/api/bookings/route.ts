@@ -25,33 +25,61 @@ export const GET = withSafeApi(async (req: NextRequest) => {
 })
 
 export const POST = withSafeApi(async (req: NextRequest) => {
-  const user = await getCurrentUser().catch(() => null)
-  if (!user) {
-    return NextResponse.json({ ok: false, error: 'You must be logged in to book a puja' }, { status: 401 });
-  }
-
   const body = await req.json()
   const { 
     pujaId, 
     devoteeName, 
-    fatherHusbandName, 
+    fatherHusbandName,
+    phone,
+    email,
     gotra, 
     sankalpPurpose,
     members = [], // Array of { name: string }
     selectedOfferingIds = [],
     addCourier = false,
     addDakshina = false,
-    packageKey = '1'
+    packageKey = '1',
+    isVipBooking = false,
+    amount: customAmount
   } = body
 
-  if (!pujaId || !devoteeName || !fatherHusbandName) {
-    return NextResponse.json({ ok: false, error: 'All mandatory fields must be filled' }, { status: 400 });
+  if (!pujaId || !devoteeName) {
+    return NextResponse.json({ ok: false, error: 'Mandatory fields missing: pujaId and devoteeName are required' }, { status: 400 });
+  }
+
+  // Resolve logged in user or guest user
+  let user = await getCurrentUser().catch(() => null)
+  
+  if (!user) {
+    const guestEmail = email || `devotee-${Date.now()}@divyayagyam.com`
+    const guestPhone = phone || `+91${Date.now().toString().slice(-10)}`
+    
+    let dbGuestUser = await prisma.user.findFirst({
+      where: { OR: [{ email: guestEmail }, { phone: guestPhone }] }
+    })
+
+    if (!dbGuestUser) {
+      const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
+      dbGuestUser = await prisma.user.create({
+        data: {
+          email: guestEmail,
+          phone: guestPhone,
+          fullName: devoteeName,
+          roleId: defaultRole?.id ?? null
+        }
+      })
+    }
+    user = { id: dbGuestUser.id, email: dbGuestUser.email, fullName: dbGuestUser.fullName } as any
   }
 
   const puja = await prisma.puja.findUnique({
     where: { id: pujaId },
     include: { packages: true },
   })
+
+  if (!puja) {
+    return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });
+  }
 
   if (!puja) {
     return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });

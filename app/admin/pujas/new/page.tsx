@@ -106,6 +106,11 @@ function NewPujaPage_Content() {
   const [seoDescription, setSeoDescription] = useState('')
   const [seoKeywords, setSeoKeywords] = useState('')
   const [customHtml, setCustomHtml] = useState('')
+  const [assignedPanditName, setAssignedPanditName] = useState('पं. कन्हैया लाल दवे (Pt. Kanhaiya Lal Dave)')
+  const [assignedPanditTitle, setAssignedPanditTitle] = useState('अथर्ववेद एवं महाविद्या पीठाधीश्वर')
+  const [assignedPanditExperience, setAssignedPanditExperience] = useState('22+ वर्ष अनुभव')
+  const [assignedPanditLocation, setAssignedPanditLocation] = useState('माँ बगलामुखी पीठ, दतिया')
+  const [assignedPanditPhoto, setAssignedPanditPhoto] = useState('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80')
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [uploadingVideo, setUploadingVideo] = useState(false)
@@ -181,6 +186,18 @@ function NewPujaPage_Content() {
           setSeoDescription(p.seoDescription || '')
           setSeoKeywords(p.seoKeywords || '')
           setCustomHtml(p.customHtml || '')
+          if (p.customHtml) {
+            try {
+              const parsed = JSON.parse(p.customHtml)
+              if (parsed.assignedPandit) {
+                setAssignedPanditName(parsed.assignedPandit.name || '')
+                setAssignedPanditTitle(parsed.assignedPandit.title || '')
+                setAssignedPanditExperience(parsed.assignedPandit.experience || '')
+                setAssignedPanditLocation(parsed.assignedPandit.location || '')
+                setAssignedPanditPhoto(parsed.assignedPandit.photo || '')
+              }
+            } catch (e) {}
+          }
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
             const allUrls = p.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean)
@@ -420,7 +437,15 @@ function NewPujaPage_Content() {
         seoTitle,
         seoDescription,
         seoKeywords,
-        customHtml,
+        customHtml: JSON.stringify({
+          assignedPandit: {
+            name: assignedPanditName,
+            title: assignedPanditTitle,
+            experience: assignedPanditExperience,
+            location: assignedPanditLocation,
+            photo: assignedPanditPhoto
+          }
+        }),
         coverImage,
         packages,
         images: [
@@ -519,6 +544,75 @@ function NewPujaPage_Content() {
               <div className="space-y-2">
                 <Label>Benefits (लाभ)</Label>
                 <Textarea value={benefits} onChange={(e) => setBenefits(e.target.value)} rows={3} placeholder="e.g. removes obstacles, brings prosperity…" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* VIP Puja & Assigned Pandit Card */}
+          <Card className="border-2 border-amber-400 bg-amber-50/20 dark:bg-amber-950/10">
+            <CardHeader className="bg-amber-100/50 dark:bg-amber-900/30 border-b border-amber-200">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base font-extrabold text-amber-900 dark:text-amber-300 flex items-center gap-2">
+                  👑 VIP Puja & Assigned Acharya (VIP पूजा सेटिंग्स एवं आचार्य विवरण)
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Label className="text-xs font-bold text-amber-900">Mark as VIP Puja</Label>
+                  <Switch checked={isVip} onCheckedChange={setIsVip} />
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-4 pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="font-bold text-xs">आचार्य का नाम (Assigned Pandit Name)</Label>
+                  <Input 
+                    value={assignedPanditName} 
+                    onChange={(e) => setAssignedPanditName(e.target.value)} 
+                    placeholder="e.g. पं. कन्हैया लाल दवे" 
+                    className="border-amber-300 bg-white"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="font-bold text-xs">पदवी / वेद शाखा (Pandit Title / Lineage)</Label>
+                  <Input 
+                    value={assignedPanditTitle} 
+                    onChange={(e) => setAssignedPanditTitle(e.target.value)} 
+                    placeholder="e.g. अथर्ववेद एवं महाविद्या पीठाधीश्वर" 
+                    className="border-amber-300 bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="font-bold text-xs">अनुभव (Experience)</Label>
+                  <Input 
+                    value={assignedPanditExperience} 
+                    onChange={(e) => setAssignedPanditExperience(e.target.value)} 
+                    placeholder="e.g. 22+ वर्ष अनुभव" 
+                    className="border-amber-300 bg-white"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="font-bold text-xs">धाम / संस्थान स्थान (Dham Location)</Label>
+                  <Input 
+                    value={assignedPanditLocation} 
+                    onChange={(e) => setAssignedPanditLocation(e.target.value)} 
+                    placeholder="e.g. माँ बगलामुखी पीठ, दतिया" 
+                    className="border-amber-300 bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="font-bold text-xs">आचार्य की फोटो URL (Pandit Photo URL)</Label>
+                <Input 
+                  value={assignedPanditPhoto} 
+                  onChange={(e) => setAssignedPanditPhoto(e.target.value)} 
+                  placeholder="https://..." 
+                  className="border-amber-300 bg-white text-xs"
+                />
               </div>
             </CardContent>
           </Card>
