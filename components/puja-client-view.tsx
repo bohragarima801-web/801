@@ -21,43 +21,38 @@ import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
   const basePrice = Number(puja?.price || 951)
-  const defaultPackages = [
-    { 
-      id: '1', 
-      name: 'Single Member (1 नाम)', 
-      price: basePrice, 
-      popular: false,
-      image: '/package-1.jpg',
-      desc: 'संकल्प में 1 व्यक्ति का नाम व गोत्र पुकारा जाएगा. विशेष हवन आहुति एवं मन्त्र जप. व्हाट्सएप/ईमेल पर पूजा वीडियो प्राप्त करें. शुद्ध शक्तिपीठ प्रसाद आपके घर पर delivered.' 
-    },
-    { 
-      id: '2', 
-      name: 'Couple (2 नाम)', 
-      price: basePrice + 550, 
-      popular: false,
-      image: '/package-2.jpg',
-      desc: 'संकल्प में पति-पत्नी या 2 सदस्यों का नाम व गोत्र पुकारा जाएगा. सुख-समृद्धि एवं दांपत्य शांति हेतु special havan. सम्पूर्ण वीडियो रिकॉर्डिंग. पवित्र प्रसाद डिलीवरी.' 
-    },
-    { 
-      id: '3', 
-      name: 'Family Package (4 नाम)', 
-      price: basePrice + 1550, 
-      popular: true,
-      image: '/package-4.jpg',
-      desc: 'परिवार के 4 सदस्यों के नाम व गोत्र से विशेष संकल्प. परिवार कल्याण एवं संकट निवारण महायज्ञ. WhatsApp पर वीडियो लिंक. शुद्ध मंदिर प्रसाद घर तक.' 
-    },
-    { 
-      id: '4', 
-      name: 'Joint Family / Maha Yagya (6 नाम)', 
-      price: basePrice + 2550, 
-      popular: false,
-      image: '/package-6.jpg',
-      desc: 'समस्त परिवार (6 नाम व गोत्र) के लिए महा संकल्प. विशेष मंत्र जप एवं 108 हवन आहुति. HD Video recording. विशेष सिद्ध प्रसाद एवं रक्षा सूत्र डिलीवरी.' 
-    }
-  ]
 
-  const packages = puja?.packages?.length ? puja.packages : defaultPackages
-  const [selectedPackage, setSelectedPackage] = useState<string>(packages[2]?.id || packages[0]?.id || '1')
+  const packages = (() => {
+    if (puja?.packages && Array.isArray(puja.packages) && puja.packages.length > 0) {
+      return puja.packages
+    }
+    // If Admin defined NO custom packages, build clean packages strictly from Admin's Base Price & VIP Price
+    const list: any[] = [
+      { 
+        id: '1', 
+        name: `${puja.name || 'पूजा संकल्प'} — 1 यजमान संकल्प`, 
+        price: basePrice, 
+        popular: true,
+        image: puja.coverImage || '/package-1.jpg',
+        desc: 'संकल्प में 1 मुख्य व्यक्ति/यजमान का नाम व गोत्र पुकारा जाएगा। विशेष हवन आहुति एवं मन्त्र जप। व्हाट्सएप पर पूजा संकल्प वीडियो प्राप्त करें। शुद्ध शक्तिपीठ प्रसाद आपके घर पर डिलीवरी।' 
+      }
+    ]
+
+    if (puja.vipPrice && Number(puja.vipPrice) > 0) {
+      list.push({ 
+        id: 'vip-pack', 
+        name: '👑 VIP विशेष अनुष्ठान संकल्प', 
+        price: Number(puja.vipPrice), 
+        popular: false,
+        image: '/package-4.jpg',
+        desc: 'मुख्य आचार्यों द्वारा VIP यजमान विशेष संकल्प, व्यक्तिगत 108 आहुति हवन, प्राथमिकता वीडियो रिकॉर्डिंग एवं सिद्ध प्रसाद डिलीवरी।' 
+      })
+    }
+
+    return list
+  })()
+
+  const [selectedPackage, setSelectedPackage] = useState<string>(packages[0]?.id || '1')
   const [activeTab, setActiveTab] = useState('packages')
   const [activeMediaIndex, setActiveMediaIndex] = useState(0)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -760,17 +755,35 @@ export function PujaClientView({ puja }: { puja: any }) {
           />
         </section>
 
-        {/* Custom HTML / JS / Embed Code Section (Supports scripts, iFrames, widgets) */}
-        {puja.customHtml && puja.customHtml.trim() && (
-          <section className="my-8">
-            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-amber-200/80 shadow-sm space-y-4">
-              <h3 className="text-lg font-bold text-slate-900 border-b border-amber-100 pb-3 flex items-center gap-2">
-                <span>⚡ विशेष जानकारी एवं लाइव विजेट (Custom Embed)</span>
-              </h3>
-              <CustomHtmlViewer html={puja.customHtml} />
-            </div>
-          </section>
-        )}
+        {/* Custom HTML / JS / Embed Code Section (Rendered ONLY if user provided actual HTML/Embed code, never for raw assignedPandit JSON) */}
+        {(() => {
+          if (!puja?.customHtml || !puja.customHtml.trim()) return null
+          const raw = puja.customHtml.trim()
+          let embedCode = raw
+          if (raw.startsWith('{') && raw.endsWith('}')) {
+            try {
+              const parsed = JSON.parse(raw)
+              if (parsed.assignedPandit && Object.keys(parsed).length === 1) {
+                return null
+              }
+              embedCode = parsed.customHtml || parsed.html || parsed.customCode || ''
+            } catch {
+              embedCode = raw
+            }
+          }
+          if (!embedCode || !embedCode.trim()) return null
+
+          return (
+            <section className="my-8">
+              <div className="bg-white rounded-2xl p-6 sm:p-8 border border-amber-200/80 shadow-sm space-y-4">
+                <h3 className="text-lg font-bold text-slate-900 border-b border-amber-100 pb-3 flex items-center gap-2">
+                  <span>⚡ विशेष जानकारी एवं लाइव विजेट (Custom Embed)</span>
+                </h3>
+                <CustomHtmlViewer html={embedCode} />
+              </div>
+            </section>
+          )
+        })()}
 
         {/* 100% Secure Payment Trust Badge */}
         <PaymentTrustBadge className="my-8" />

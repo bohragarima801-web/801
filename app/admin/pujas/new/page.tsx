@@ -114,7 +114,7 @@ function NewPujaPage_Content() {
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [uploadingVideo, setUploadingVideo] = useState(false)
-  const [packages, setPackages] = useState<any[]>(DEFAULT_PACKAGES)
+  const [packages, setPackages] = useState<any[]>([])
   const [saving, setSaving] = useState(false)
   const [loadingPuja, setLoadingPuja] = useState(false)
   const [uploading, setUploading] = useState(false)
