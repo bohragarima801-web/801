@@ -241,7 +241,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     </div>
     <ul style="padding-left: 18px; margin-top: 4px;">
       <li style="margin-bottom: 4px;"><strong>1. क्षतिग्रस्त/टूटा-फूटा सामान (No Damaged/Tampered Returns):</strong> ग्राहक द्वारा स्वयं तोड़ा गया, क्षतिग्रस्त, उपयोग किया गया या छेड़छाड़ (tampered) किया गया प्रोडक्ट वापस (return) या रिप्लेस नहीं किया जाएगा।</li>
-      <li style="margin-bottom: 4px;"><strong>2. 7-दिवसीय रिफंड समय-सीमा (Strict 7-Day Window):</strong> किसी भी खराबी या रिफंड/रिप्लेसमेंट की क्लेम रिक्वेस्ट पार्सल डिलीवरी के <strong>केवल 7 दिनों (7 Days)</strong> के भीतर ही support@divyayagyam.com या WhatsApp पर दर्ज करानी होगी। 7 दिन के बाद कोई भी दावा स्वीकार नहीं किया जाएगा।</li>
+      <li style="margin-bottom: 4px;"><strong>2. 7-दिवसीय रिफंड समय-सीमा (Strict 7-Day Window):</strong> किसी भी खराबी या रिफंड/रिप्लेसमेंट की क्लेम रिक्वेस्ट पार्सल डिलीवरी के <strong>केवल 7 दिनों (7 Days)</strong> के भीतर ही Seva@divyayagyam.com या WhatsApp पर दर्ज करानी होगी। 7 दिन के बाद कोई भी दावा स्वीकार नहीं किया जाएगा।</li>
       <li><strong>3. अनबॉक्सिंग वीडियो अनिवार्य (Mandatory Unboxing Video):</strong> पार्सल खोलते समय का 360° निरंतर Unboxing Video अनिवार्य है। बिना वीडियो के क्षति या मिसिंग आइटम का क्लेम मान्य नहीं होगा।</li>
     </ul>
   </div>
@@ -250,7 +250,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="footer">
     <div>
       <p style="font-size:14px;font-weight:700;color:#1e293b">Divyayagyam Spiritual Services</p>
-      <p style="margin-top:2px">Thank you for your order. For inquiries, contact support@divyayagyam.com</p>
+      <p style="margin-top:2px">Thank you for your order. For inquiries, contact Seva@divyayagyam.com</p>
     </div>
     <div style="text-align:right">
       <p>This is a computer-generated invoice.</p>

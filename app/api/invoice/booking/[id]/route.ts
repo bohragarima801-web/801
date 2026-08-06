@@ -214,7 +214,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="footer">
     <div>
       <p style="font-size:14px;font-weight:700;color:#4c1d95">🙏 जय श्री राम · भगवान आपको आशीर्वाद दें</p>
-      <p style="margin-top:4px">For support: support@divyayagyam.com</p>
+      <p style="margin-top:4px">For support: Seva@divyayagyam.com</p>
     </div>
     <div style="text-align:right">
       <p>Computer-generated receipt.</p>
