@@ -57,7 +57,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     }
   })
 
-  if (!post || post.status !== 'PUBLISHED' || (post.publishedAt && new Date(post.publishedAt) > new Date())) {
+  if (!post || post.status === 'ARCHIVED') {
     notFound()
   }
 

@@ -93,7 +93,7 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja || puja.status === 'DRAFT' || (puja.publishedAt && new Date(puja.publishedAt) > new Date())) {
+  if (!puja || puja.status === 'ARCHIVED') {
     notFound()
   }
 

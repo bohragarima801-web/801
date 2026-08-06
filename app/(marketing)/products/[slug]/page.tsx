@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import Script from 'next/script'
 import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
-export const revalidate = 3600; // ISR: Revalidate every 3600s
+export const revalidate = 10; // Revalidate every 10s for fast admin updates
 
 async function getProductBySlugOrFallback(slug: string) {
   try {
