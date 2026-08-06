@@ -138,19 +138,22 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }))
   ]
 
-  // Resolve or Upsert DB User Record to prevent foreign key errors
-  let dbUserId = user.id
-  if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+  // Ensure active user ID
+  let dbUserId = user?.id || 'guest-devotee-id'
+  const userEmail = user?.email || email || `devotee-${Date.now()}@divyayagyam.com`
+  const userFullName = devoteeName || user?.fullName || 'Devotee'
+
+  if (dbUserId === 'admin-system-id' || dbUserId.length > 36 || !user?.id) {
     let dbUser = await prisma.user.findFirst({
-      where: { OR: [{ email: user.email }, { id: user.id }] }
+      where: { OR: [{ email: userEmail }, { id: dbUserId }] }
     })
     if (!dbUser) {
       const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
       dbUser = await prisma.user.create({
         data: {
-          email: user.email,
-          fullName: user.fullName || 'Devotee',
-          supabaseId: user.supabaseId || user.id,
+          email: userEmail,
+          fullName: userFullName,
+          supabaseId: dbUserId,
           roleId: defaultRole?.id ?? null
         }
       })
@@ -167,9 +170,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       subtotal: total, // For now, total and subtotal are same, tax is 0
       total: total,
       gotra: gotra || 'Kashyap',
-      sankalpPurpose: sankalpPurpose || null,
-      sankalpText: `Devotee: ${devoteeName}, Relation: ${fatherHusbandName}, Purpose: ${sankalpPurpose || 'N/A'}, Details: ${descriptionText}`,
-      specialInstructions: `Father/Husband: ${fatherHusbandName}${sankalpPurpose ? ` | Purpose: ${sankalpPurpose}` : ''}`,
+      sankalpText: `Devotee: ${devoteeName}, Relation: ${fatherHusbandName || 'Self'}, Purpose: ${sankalpPurpose || 'N/A'}, Details: ${descriptionText}`,
+      specialInstructions: `Father/Husband: ${fatherHusbandName || 'Self'}${sankalpPurpose ? ` | Purpose: ${sankalpPurpose}` : ''}`,
       status: 'PENDING',
       paymentStatus: 'PENDING',
       members: {
@@ -186,8 +188,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
     sendWhatsAppNotification({
       type: 'PUJA_CONFIRMED',
-      phone: (user as any)?.phone || user.email,
-      name: devoteeName || user.fullName || 'Devotee',
+      phone: (user as any)?.phone || phone || userEmail,
+      name: devoteeName || userFullName,
       details: {
         bookingNumber: booking.bookingNumber,
         pujaName: puja.name,
