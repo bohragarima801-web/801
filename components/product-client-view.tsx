@@ -15,10 +15,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 
-export function PujaClientView({ puja }: { puja: any }) {
+export function ProductClientView({ product }: { product: any }) {
   const router = useRouter()
+  const puja = product
   
-  const basePrice = Number(puja?.price || 951)
+  const basePrice = Number(product?.price || 951)
   const defaultPackages = [
     { 
       id: '1', 
@@ -707,5 +708,5 @@ export function PujaClientView({ puja }: { puja: any }) {
   )
 }
 
-// Alias export for product page import compatibility
-export { PujaClientView as ProductClientView }
+// Alias export for backward compatibility
+export { ProductClientView as PujaClientView }

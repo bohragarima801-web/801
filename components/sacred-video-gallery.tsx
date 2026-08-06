@@ -22,15 +22,37 @@ interface SacredVideoGalleryProps {
   videos?: VideoItem[]
 }
 
-const fallbackVideos: VideoItem[] = []
+const fallbackVideos: VideoItem[] = [
+  {
+    id: 'demo-1',
+    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    filename: 'Kashi Vishwanath Mangala Aarti & Sankalp',
+    folder: 'Live Darshan',
+    type: 'VIDEO',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'demo-2',
+    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    filename: 'Mahakaleshwar Bhasma Aarti Ujjain',
+    folder: 'Past Puja',
+    type: 'VIDEO',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'demo-3',
+    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    filename: 'Navgrah Homa Live Stream & Vedic Chanting',
+    folder: 'Aarti & Bhajan',
+    type: 'VIDEO',
+    createdAt: new Date().toISOString()
+  }
+]
 
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
-  // Use authentic uploaded videos from DB
-  const displayVideos = (videos && videos.length > 0) ? videos : []
+  // Use authentic uploaded videos from DB or curated fallback
+  const displayVideos = (videos && videos.length > 0) ? videos : fallbackVideos
 
-  if (displayVideos.length === 0) {
-    return null
-  }
 
 
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')

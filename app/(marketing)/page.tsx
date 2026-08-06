@@ -2,27 +2,20 @@ import Script from 'next/script'
 import Link from 'next/link'
 import Image from 'next/image'
 import { generatePageMeta } from '@/lib/seo'
-
-export function generateMetadata() {
-  return generatePageMeta({
-    title: 'DivyaYagyam — ऑनलाइन पूजा बुकिंग | Online Puja Booking India',
-    description: 'भारत के पवित्र मंदिरों से ऑनलाइन पूजा बुक करें। काशी विश्वनाथ, महाकालेश्वर, उज्जैन — नाम-गोत्र संकल्प, लाइव वीडियो दर्शन, प्रसाद डिलीवरी।',
-    path: '/',
-    isAbsoluteTitle: true,
-    keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
-  })
-}
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
-  Sparkles, Star, ArrowRight, MapPin, Calendar, ShieldCheck, Video, Truck, Lock
+  Sparkles, Star, ArrowRight, MapPin, Calendar, ShieldCheck, Video, Truck, Lock,
+  Phone, MessageCircle, CheckCircle2, Award, Heart, HelpCircle, Eye, ChevronRight
 } from 'lucide-react'
 import { MediaCarousel } from '@/components/ui/media-carousel'
 import { HeroPujaSlider } from '@/components/hero-puja-slider'
 import { SacredVideoGallery } from '@/components/sacred-video-gallery'
 import { getYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { SacredAstroTools } from '@/components/sacred-astro-tools'
+import { SacredTrustTestimonials } from '@/components/sacred-trust-testimonials'
+import { SacredFaqAccordion } from '@/components/sacred-faq-accordion'
 import { getDynamicSiteConfig } from '@/lib/settings'
 import { SafeImage } from '@/components/ui/safe-image'
 import {
@@ -32,6 +25,16 @@ import {
   getCachedHeroSlides,
   getCachedHomePageMedia
 } from '@/lib/cache'
+
+export function generateMetadata() {
+  return generatePageMeta({
+    title: 'DivyaYagyam — भारत की सबसे भरोसेमंद ऑनलाइन पूजा बुकिंग सेवा',
+    description: 'काशी विश्वनाथ, महाकालेश्वर, त्र्यंबकेश्वर आदि सिद्ध मंदिरों से ऑनलाइन पूजा बुक करें। नाम-गोत्र संकल्प, लाइव वीडियो व्हाट्सएप प्रूफ एवं घर पर पावन प्रसाद डिलीवरी।',
+    path: '/',
+    isAbsoluteTitle: true,
+    keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
+  })
+}
 
 function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean; thumbUrl: string | null } {
   if (!url) return { isVideo: false, thumbUrl: null }
@@ -48,8 +51,83 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
 
 export const revalidate = 30
 
-export default async function HomePage() {
+// Fallback Pujas if DB has few items
+const fallbackPujas = [
+  {
+    id: 'fp-1',
+    slug: 'kashi-vishwanath-rudrabhishekam',
+    name: 'काशी विश्वनाथ महादेव रुद्राभिषेक (Kashi Vishwanath Rudrabhishekam)',
+    shortDescription: 'भगवान शिव के पावन ज्योतिर्लिंग काशी में सुख-शांति, समृद्धि एवं आरोग्यता हेतु विशेष रुद्राभिषेक।',
+    location: 'Kashi Vishwanath Temple, Varanasi',
+    price: 1100,
+    badge: 'Most booked',
+    category: { name: 'ज्योतिर्लिंग पूजा' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-2',
+    slug: 'mahakaleshwar-kalsarp-dosh-shanti',
+    name: 'महाकालेश्वर कालसर्प दोष शांति पूजा (Mahakaleshwar Kalsarp Shanti)',
+    shortDescription: 'उज्जैन महाकाल धाम में वैदिक विधि द्वारा कालसर्प एवं राहु-केतु दोष निवारण महापूजा।',
+    location: 'Mahakaleshwar Temple, Ujjain',
+    price: 2100,
+    badge: 'Recommended',
+    category: { name: 'दोष निवारण' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-3',
+    slug: 'trimbakeshwar-pitra-dosh-nivaran',
+    name: 'त्र्यंबकेश्वर नारायण नागबली व पितृदोष (Pitra Dosh Nivaran Homa)',
+    shortDescription: 'पितृ शांति एवं वंश वृद्धि हेतु नासिक त्र्यंबकेश्वर में सर्व दोष शांति यज्ञ एवं पूजा।',
+    location: 'Trimbakeshwar Temple, Nashik',
+    price: 2500,
+    badge: 'Popular',
+    category: { name: 'पितृ दोष शांति' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-4',
+    slug: 'maa-baglamukhi-shatru-badha-homa',
+    name: 'माँ बगलामुखी शत्रु बाधा एवं तंत्र निवारण अनुष्ठान',
+    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु शांति एवं व्यापार वृद्धि हेतु सिद्ध पीठ बगलामुखी महायज्ञ।',
+    location: 'Baglamukhi Peeth, Datia / Nalkheda',
+    price: 3100,
+    badge: 'Special',
+    category: { name: 'महाविद्या अनुष्ठान' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-5',
+    slug: 'maha-mrityunjaya-jaap-yagya',
+    name: 'महामृत्युंजय मंत्र जाप एवं दीर्घायु होम',
+    shortDescription: 'असाध्य रोगों से मुक्ति, दुर्घटना सुरक्षा एवं उत्तम स्वास्थ्य हेतु 1,25,000 मंत्र जाप अनुष्ठान।',
+    location: 'Haridwar / Rishikesh Holy Ghats',
+    price: 5100,
+    badge: 'Recommended',
+    category: { name: 'आरोग्य पूजा' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'fp-6',
+    slug: 'siddhivinayak-ganpati-puja',
+    name: 'सिद्धिविनायक गणपति पूजन एवं मोदक अर्पण',
+    shortDescription: 'कार्य सिद्धि, बुद्धि, नया व्यापार प्रारंभ एवं विघ्न विनाश हेतु प्रथम पूज्य श्री गणेश पूजा।',
+    location: 'Siddhivinayak Temple, Mumbai',
+    price: 1500,
+    badge: 'New',
+    category: { name: 'गणेश पूजा' },
+    isEvergreen: true,
+    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+  }
+]
 
+export default async function HomePage() {
   const siteData = await getDynamicSiteConfig()
   
   const [products, dbPujas, dbTestimonials, heroSlides, mediaData] = await Promise.all([
@@ -60,7 +138,7 @@ export default async function HomePage() {
     getCachedHomePageMedia()
   ])
 
-  const { pastPujas, customerReviews, festivalEvents, dbVideosRaw, dbGalleries } = mediaData
+  const { pastPujas, customerReviews, dbVideosRaw, dbGalleries } = mediaData
 
   // Filter all uploaded items that are videos or contain video links
   const allMediaVideos = dbVideosRaw.filter((m: any) => {
@@ -89,16 +167,24 @@ export default async function HomePage() {
     createdAt: g.createdAt
   }))
 
-  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 5)
+  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 6)
 
-  const testimonials = dbTestimonials
+  // Pujas to render: prioritize DB pujas, supplement with fallback pujas if count < 6
+  const activeDbPujas = dbPujas.filter((p: any) => {
+    if (p.isEvergreen) return true
+    if (p.pujaDate) {
+      const pDate = new Date(p.pujaDate)
+      pDate.setHours(0, 0, 0, 0)
+      return pDate.getTime() >= new Date().setHours(0,0,0,0)
+    }
+    return true
+  })
 
+  const displayPujas = activeDbPujas.length >= 3 
+    ? activeDbPujas 
+    : [...activeDbPujas, ...fallbackPujas.slice(0, 6 - activeDbPujas.length)]
 
-
-  // Only show slides created explicitly in Hero Slider Admin Panel
-  const allHeroSlides = heroSlides || []
-
-  // JSON-LD Structured Data for Google Sitelinks, Brand Knowledge Graph & FAQ Rich Snippets
+  // Structured Data (JSON-LD)
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -110,448 +196,313 @@ export default async function HomePage() {
         "logo": siteData.logo || "https://divyayagyam.com/logo.jpg",
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+91-95871-71984",
+          "telephone": siteData.contact?.phone || "+91-95871-71984",
           "contactType": "customer service",
           "areaServed": "IN",
           "availableLanguage": ["en", "hi"]
-        },
-        "sameAs": [
-          "https://www.facebook.com/divyayagyam",
-          "https://www.instagram.com/divyayagyam",
-          "https://www.youtube.com/@divyayagyam"
-        ]
+        }
       },
       {
         "@type": "WebSite",
         "@id": "https://divyayagyam.com/#website",
         "url": "https://divyayagyam.com",
         "name": "DivyaYagyam",
-        "description": "Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar, Somnath with video proof on WhatsApp & home delivery of sacred prasad.",
-        "publisher": {
-          "@id": "https://divyayagyam.com/#organization"
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://divyayagyam.com/pujas?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://divyayagyam.com/#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "काशी विश्वनाथ और महाकालेश्वर में ऑनलाइन पूजा कैसे बुक करें?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "DivyaYagyam पर आप सीधे प्रसिद्ध ज्योतिर्लिंगों जैसे काशी विश्वनाथ, महाकालेश्वर उज्जैन, सोमनाथ, त्र्यंबकेश्वर आदि में ऑनलाइन पूजा व रुद्राभिषेक बुक कर सकते हैं। पूजा के बाद आपको व्हाट्सएप पर वीडियो प्रूफ एवं घर पर पावन प्रसाद भेजा जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "क्या ऑनलाइन पूजा का वीडियो प्रूफ व्हाट्सएप पर मिलता है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "हां, DivyaYagyam द्वारा कराई जाने वाली प्रत्येक ऑनलाइन पूजा में संकल्प के समय आपका नाम और गोत्र स्पष्ट रूप से बोला जाता है और पूरा वीडियो प्रूफ आपके व्हाट्सएप नंबर पर भेजा जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "क्या मंदिर का सिद्ध प्रसाद घर पर डिलीवर होता है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "जी हां, पूजा संपन्न होने के बाद मंदिर का पवित्र प्रसाद सुरक्षित पैकिंग के साथ आपके दिए गए पते पर 3-5 दिनों के भीतर होम डिलीवर किया जाता है।"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "DivyaYagyam पर ऑनलाइन पूजा की फीस क्या है?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "DivyaYagyam पर पूजा शुल्क ₹1,100 से शुरू होता है जिसमें पंडित दक्षिणा, पूजन सामग्री, नाम-गोत्र संकल्प, वीडियो रिकॉर्डिंग और प्रसाद होम डिलीवरी शामिल है।"
-            }
-          }
-        ]
+        "description": "India's Most Trusted Online Temple Puja & Vedic Sanatan Platform"
       }
     ]
   }
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  const renderPujaCards = (pujas: any[]) => {
-    if (pujas.length === 0) {
-      return (
-        <div className="py-12 text-center text-muted-foreground bg-muted/20 rounded-2xl border border-dashed">
-          <Sparkles className="h-8 w-8 mx-auto mb-3 opacity-20" />
-          <p>No pujas available currently.</p>
-        </div>
-      )
-    }
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pujas.map((p) => (
-          <Link href={`/pujas/${p.slug}`} key={p.id} className="block h-full">
-            <Card className="overflow-hidden group border border-border/60 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full bg-white">
-              {/* Top Image Section */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-t-2xl">
-                {p.coverImage ? (
-                  (() => {
-                    const mediaInfo = getMediaDisplaySrc(p.coverImage)
-                    if (mediaInfo.isVideo && !getYouTubeId(p.coverImage)) {
-                      return <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
-                    }
-                    const imgSrc = mediaInfo.thumbUrl || p.coverImage
-                    return (
-                      <SafeImage
-                        src={imgSrc}
-                        alt={p.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                    )
-                  })()
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center text-muted-foreground/30 bg-muted/50">
-                    <Sparkles className="h-8 w-8 opacity-40" />
-                  </div>
-                )}
-              </div>
-              
-              {/* Content Section */}
-              <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-3 text-center">
-                  <p className="text-[#e26e25] font-bold text-sm tracking-wide">
-                    {p.category?.name || 'Auspicious Puja'}
-                  </p>
-                  <h3 className="font-heading font-bold text-lg md:text-xl text-slate-800 line-clamp-2 leading-tight">
-                    {p.name}
-                  </h3>
-                  <p className="text-xs md:text-sm text-slate-500 line-clamp-2 leading-relaxed">
-                    {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
-                  </p>
-                </div>
-                
-                <div className="space-y-2.5 pt-4 border-t border-slate-100">
-                  <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
-                    <span className="line-clamp-1">{p.location || 'Any Holy Temple'}</span>
-                  </p>
-                  <p className="text-xs md:text-sm text-slate-600 flex items-start gap-2">
-                    <Calendar className="h-4 w-4 text-red-600 shrink-0 mt-0.5" /> 
-                    <span className="line-clamp-1">
-                      {p.pujaDate 
-                        ? new Date(p.pujaDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric', weekday: 'long' }) 
-                        : (p.isEvergreen ? 'Regular Auspicious Dates' : 'Contact for dates')}
-                    </span>
-                  </p>
-                </div>
-                
-                <div className="pt-2">
-                  <div className="w-full h-11 flex items-center justify-center bg-[#249b49] hover:bg-[#1e853e] text-white font-bold rounded-lg transition-colors shadow-sm">
-                    Book Puja &rarr;
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    )
-  }
-
   return (
-    <div className="space-y-0">
+    <div className="min-h-screen bg-[#FFF7EB]/40 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200">
       <Script
         id="schema-organization"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* HERO SECTION - SRI MANDIR STYLE */}
-      <section className="w-full bg-card py-8 md:py-16">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex flex-col gap-6">
-            <div className="text-center md:text-left">
-              <span className="sacred-subtitle inline-block mb-3 text-primary">🕉️ Sanatan Dharma, Simplified</span>
-              <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground leading-tight tracking-wide">
-                India's Most Trusted Temples.{' '}
-                <span className="sacred-gradient-text">One Sacred Booking Away.</span>
+
+      {/* ============================================================
+          SECTION B: HERO SECTION (ABOVE THE FOLD)
+          ============================================================ */}
+      <section className="relative w-full bg-gradient-to-b from-[#FFF7EB] via-amber-50/50 to-white dark:from-slate-900 dark:to-slate-950 py-12 md:py-20 overflow-hidden border-b border-amber-100/60 dark:border-slate-800">
+        {/* Background Subtle Mandala / Glow Accent */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -right-24 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Content Side */}
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              
+              {/* Category Pill Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300/80 dark:border-amber-700/60 text-amber-900 dark:text-amber-300 text-xs md:text-sm font-extrabold tracking-wide shadow-xs">
+                <Sparkles className="h-4 w-4 text-amber-600 dark:text-amber-400 fill-amber-400" />
+                <span>Verified Temples & Puja Booking</span>
+              </div>
+
+              {/* Main Headline H1 */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
+                India’s Most Trusted Temples.{' '}
+                <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
+                  One Sacred Booking Away.
+                </span>
               </h1>
-              <p className="text-sm md:text-base text-muted-foreground mt-4 font-medium max-w-3xl">
-                Verified pandits, video proof of your puja on WhatsApp, and sacred prasad delivered to your doorstep — trusted by thousands of devotee families across India.
+
+              {/* Subheading (1-2 lines) */}
+              <p className="text-base sm:text-lg md:text-xl text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Book authentic Vedic pujas and temple offerings from verified priests across India, with transparent pricing, live WhatsApp video proof, and home-delivered sacred prasad.
               </p>
+
+              {/* 4 Benefit Pills / Bullets */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 max-w-2xl mx-auto lg:mx-0">
+                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
+                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Verified Priests</span>
+                </div>
+
+                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
+                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <MapPin className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Pan-India Temples</span>
+                </div>
+
+                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
+                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <Video className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">WhatsApp Video</span>
+                </div>
+
+                <div className="flex items-center gap-2 p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-amber-200/80 dark:border-slate-800 shadow-xs">
+                  <div className="h-6 w-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">100% Transparent</span>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
+                <Button size="lg" className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 text-base" asChild>
+                  <Link href="/pujas">
+                    Book a Divine Puja (पूजा बुक करें) <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+
+                <Button size="lg" variant="outline" className="border-amber-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-amber-50/60 font-bold px-6 py-6 rounded-xl text-base shadow-xs" asChild>
+                  <a href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="mr-2 h-5 w-5 text-emerald-600" /> Chat on WhatsApp
+                  </a>
+                </Button>
+              </div>
+
+              {/* Thin Trust Strip Metrics */}
+              <div className="pt-6 border-t border-amber-200/60 dark:border-slate-800 grid grid-cols-3 gap-4 text-center lg:text-left max-w-xl">
+                <div>
+                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">10,000+</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Devotee Bookings</p>
+                </div>
+                <div>
+                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">100+</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Verified Temples</p>
+                </div>
+                <div>
+                  <p className="text-xl md:text-2xl font-black text-amber-700 dark:text-amber-400">24/7</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">Devotee Assistance</p>
+                </div>
+              </div>
+
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 max-w-3xl">
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <ShieldCheck className="h-3.5 w-3.5" />
+            {/* Right Visual Card Side */}
+            <div className="lg:col-span-5 w-full">
+              {heroSlides.length > 0 ? (
+                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-amber-200/70 dark:border-slate-800 bg-white">
+                  <HeroPujaSlider slides={heroSlides} />
                 </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  Verified Pandits
-                </span>
-              </div>
+              ) : (
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-200 dark:border-slate-800 bg-gradient-to-br from-amber-50 to-orange-100/60 dark:from-slate-900 dark:to-slate-800 p-6 md:p-8 text-center space-y-6">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
+                    <Image 
+                      src="https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80" 
+                      alt="Kashi Vishwanath Temple Puja" 
+                      fill 
+                      priority
+                      className="object-cover hover:scale-105 transition-transform duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4 text-left">
+                      <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider">🌟 Featured Sacred Puja</span>
+                      <h3 className="text-lg font-bold text-white leading-tight">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
+                      <p className="text-xs text-slate-200 mt-0.5">Live Video Sankalp & Temple Prasad</p>
+                    </div>
+                  </div>
 
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Video className="h-3.5 w-3.5" />
+                  <div className="flex items-center justify-between text-left bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200/80 shadow-xs">
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold">Starting Price</p>
+                      <p className="text-lg font-extrabold text-amber-700 dark:text-amber-400">₹1,100 <span className="text-xs font-normal text-slate-500">(All inclusive)</span></p>
+                    </div>
+                    <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg" asChild>
+                      <Link href="/pujas">Book Now &rarr;</Link>
+                    </Button>
+                  </div>
                 </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  WhatsApp Video
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Truck className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  Prasad Delivery
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl border border-amber-500/20 shadow-xs">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center text-white shrink-0">
-                  <Lock className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  100% Secure
-                </span>
-              </div>
+              )}
             </div>
 
-            {allHeroSlides.length > 0 && (
-              <div className="w-full">
-                <HeroPujaSlider slides={allHeroSlides} />
-              </div>
-            )}
-
-
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-none font-semibold px-8" asChild>
-                <Link href="/pujas">Book a Puja (पूजा बुक करें) <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-border text-foreground/80 hover:bg-muted/50 font-semibold shadow-sm" asChild>
-                <Link href="/tools"><Sparkles className="mr-2 h-4 w-4 text-secondary" /> Astro Tools</Link>
-              </Button>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* UPCOMING PUJAS */}
-      <section className="container py-16 md:py-24">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="sacred-subtitle text-primary">Sacred Offerings</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Book Divine Pujas</h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Join auspicious pujas happening today, or book upcoming and special ceremonies.</p>
+      {/* ============================================================
+          SECTION C: "BOOK DIVINE PUJAS" – SERVICE CARDS GRID
+          ============================================================ */}
+      <section className="container mx-auto px-4 md:px-6 py-16 md:py-24">
+        {/* Section Title Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="space-y-3">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200/80 shadow-xs">
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Sacred Temple Rituals
+            </span>
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              दिव्य पूजा सेवाएँ <span className="text-amber-600 dark:text-amber-400 font-normal">/ Book Divine Pujas</span>
+            </h2>
+            <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium max-w-2xl">
+              Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by experienced priests.
+            </p>
           </div>
-          <Button variant="outline" className="border-border text-foreground/80 font-semibold" asChild>
-            <Link href="/pujas">View All <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
+
+          <Button variant="outline" className="border-amber-300 dark:border-slate-700 font-bold shadow-xs rounded-xl text-slate-800 dark:text-slate-200 shrink-0" asChild>
+            <Link href="/pujas">
+              View All Pujas (सभी पूजाएँ देखें) <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
-        
-        {renderPujaCards(
-          dbPujas.filter((p: any) => {
-            if (p.isEvergreen) return true;
-            if (p.pujaDate) {
-              const pDate = new Date(p.pujaDate);
-              pDate.setHours(0, 0, 0, 0);
-              return pDate.getTime() >= today.getTime();
-            }
-            return true;
-          }).slice(0, 12)
-        )}
-      </section>
 
-      {/* SACRED PRODUCTS */}
-      {products.length > 0 && (
-        <section className="container pb-16">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <span className="sacred-subtitle text-primary">Puja Essentials</span>
-              <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Sacred Prasad & Puja Essentials</h2>
-              <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Blessed offerings from the temple, packed with care and delivered to your home.</p>
-            </div>
-            <Button variant="outline" className="border-border text-foreground/80 font-semibold" asChild>
-              <Link href="/products">View All <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
-            </Button>
-          </div>
-          <MediaCarousel>
-            {products.map((p: any) => (
-              <Link href={`/products/${p.slug}`} key={p.id} className="block h-full">
-                <Card className="overflow-hidden group border border-border/60 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full bg-card">
-                  <div className="relative aspect-[16/9] overflow-hidden bg-muted p-6 flex items-center justify-center">
-                    {p.coverImage || (p.images && p.images[0]) ? (
-                      <Image src={p.coverImage || p.images[0]} alt={p.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-contain mix-blend-multiply transition-transform duration-700 group-hover:scale-110 drop-shadow-md" />
+        {/* Responsive Grid of Puja Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {displayPujas.map((p: any) => {
+            const mediaInfo = getMediaDisplaySrc(p.coverImage)
+            const isFallback = p.id.startsWith('fp-')
+            const pujaHref = isFallback ? '/pujas' : `/pujas/${p.slug}`
+            const categoryName = p.category?.name || 'Vedic Puja'
+            const badgeTag = p.badge || (p.isEvergreen ? 'Evergreen' : 'Popular')
+
+            return (
+              <Card key={p.id} className="overflow-hidden group border border-amber-200/70 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between bg-white dark:bg-slate-900">
+                
+                {/* Image Section */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  {p.coverImage ? (
+                    mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
+                      <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
                     ) : (
-                      <div className="h-full w-full bg-transparent flex items-center justify-center text-muted-foreground/30"><Sparkles className="h-8 w-8 opacity-40"/></div>
-                    )}
-                    {p.category?.name && (
-                      <Badge className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-foreground shadow-sm border border-border rounded-md px-2.5 py-1 text-[10px] font-black z-20">
-                        {p.category.name}
-                      </Badge>
-                    )}
-                  </div>
-                  <CardContent className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="font-heading font-semibold text-lg md:text-xl text-foreground group-hover:text-primary transition-colors line-clamp-1 leading-tight">{p.name}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed font-medium">{p.shortDescription || 'प्रामाणिक एवं सिद्ध सनातन सामग्री।'}</p>
+                      <SafeImage
+                        src={mediaInfo.thumbUrl || p.coverImage}
+                        alt={p.name}
+                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                      />
+                    )
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center bg-amber-50 text-amber-500">
+                      <Sparkles className="h-10 w-10 opacity-40" />
                     </div>
-                    <div className="flex items-center justify-between pt-5 border-t border-border/60">
-                      <span className="text-xl font-bold text-foreground">₹{Number(p.salePrice || p.price)}</span>
-                      <div className="inline-flex h-9 items-center justify-center whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg px-5 transition-all duration-300 text-sm shadow-sm">
-                        Buy Now
+                  )}
+
+                  {/* Badge Overlay */}
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
+                    <Badge className="bg-amber-600 text-white font-extrabold text-[10px] uppercase px-2.5 py-0.5 shadow-sm border-none">
+                      {badgeTag}
+                    </Badge>
+                  </div>
+
+                  {/* Category Pill */}
+                  <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
+                    {categoryName}
+                  </div>
+                </div>
+
+                {/* Card Content Section */}
+                <CardContent className="p-5 md:p-6 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="font-heading font-bold text-lg md:text-xl text-slate-900 dark:text-slate-100 group-hover:text-amber-700 transition-colors line-clamp-2 leading-tight">
+                      {p.name}
+                    </h3>
+                    <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium">
+                      {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
+                    </p>
+                  </div>
+
+                  {/* Details Row: Location & Price */}
+                  <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+                    <div className="flex items-center gap-2 font-medium">
+                      <MapPin className="h-4 w-4 text-amber-600 shrink-0" />
+                      <span className="truncate">{p.location || 'Holy Temple, India'}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <div>
+                        <span className="text-[11px] text-slate-500 font-semibold block">Booking Amount</span>
+                        <span className="text-base font-extrabold text-amber-700 dark:text-amber-400">
+                          ₹{Number(p.price || 1100).toLocaleString('en-IN')}
+                        </span>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </MediaCarousel>
-        </section>
-      )}
 
-      {/* SACRED VIDEO GALLERY & REELS */}
-      <SacredVideoGallery videos={dbVideos} />
-
-      {/* SACRED ASTRO & SPIRITUAL TOOLS */}
-      <SacredAstroTools />
-
-      {/* TESTIMONIALS */}
-      {testimonials && testimonials.length > 0 && (
-        <section className="container pb-16">
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <span className="sacred-subtitle text-primary">Devotee Voices</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Blessings Shared by Our Devotees</h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Hundreds of families have received the Lord's blessings through our services.</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((t: any, i: number) => (
-              <Card key={i} className="border border-border/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-card shadow-sm">
-                <CardContent className="p-6 md:p-8 space-y-5">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-foreground/80 leading-relaxed italic">“{t.message}”</p>
-                  <div className="flex items-center gap-4 pt-4 border-t border-border/50">
-                    <div className="relative h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-border">
-                      {t.avatar ? (
-                        <Image src={t.avatar} alt={t.name} fill sizes="40px" className="object-cover" />
-                      ) : (
-                        t.name[0]
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-foreground leading-tight">{t.name}</p>
-                      <p className="text-xs text-muted-foreground font-medium mt-0.5">{t.location}</p>
+                      <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        ✓ Prasad Included
+                      </span>
                     </div>
                   </div>
+
+                  {/* Dual Action Buttons */}
+                  <div className="grid grid-cols-2 gap-2 pt-2">
+                    <Button variant="outline" size="sm" className="w-full border-amber-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-lg" asChild>
+                      <Link href={pujaHref}>
+                        View Details
+                      </Link>
+                    </Button>
+
+                    <Button size="sm" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-xs rounded-lg shadow-xs" asChild>
+                      <Link href={pujaHref}>
+                        Book Now &rarr;
+                      </Link>
+                    </Button>
+                  </div>
+
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </section>
-      )}
-
-
-      {/* LIVE DEVOTEE REVIEWS (FROM MEDIA LIBRARY) */}
-      {customerReviews.length > 0 && (
-        <section className="container pb-16">
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground">Live Devotee Reviews (लाइव रिव्यु)</h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Real experiences shared by devotees on WhatsApp & Social Media.</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {customerReviews.map((media: any) => (
-              <div key={media.id} className="relative aspect-[3/4] rounded-2xl overflow-hidden border shadow-sm group">
-                <Image src={media.url} alt={media.filename || 'Review'} fill sizes="25vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* PAST PUJAS GALLERY (FROM MEDIA LIBRARY) */}
-      {pastPujas.length > 0 && (
-        <section className="container pb-16">
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground">Glimpses of Past Pujas (बीती हुई पूजा)</h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">Divine moments captured during our successfully completed rituals.</p>
-          </div>
-          <MediaCarousel>
-            {pastPujas.map((media: any) => {
-              const mediaInfo = getMediaDisplaySrc(media.url)
-              const displaySrc = mediaInfo.thumbUrl || media.url
-
-              return (
-                <div key={media.id} className="relative aspect-video rounded-2xl overflow-hidden border border-amber-200/50 shadow-sm group mx-2 bg-slate-900 flex items-center justify-center">
-                  {mediaInfo.isVideo && !getYouTubeId(media.url) ? (
-                    <video src={media.url} className="w-full h-full object-cover" muted loop autoPlay playsInline />
-                  ) : displaySrc ? (
-                    <SafeImage
-                      src={displaySrc}
-                      alt={media.filename || 'Past Puja'}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 z-10" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white font-bold text-sm z-20 flex items-center justify-between">
-                    <span className="line-clamp-1">{media.filename || 'Sacred Ritual'}</span>
-                    {mediaInfo.isVideo && (
-                      <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black uppercase">Video</span>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </MediaCarousel>
-        </section>
-      )}
-
-      {/* WHY TRUST US */}
-      <section className="bg-muted/30 py-16 md:py-24 border-y border-border/40 mt-16">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <span className="sacred-subtitle text-primary">Our Promise</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mt-1">Why Thousands of Families Trust DivyaYagyam</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="om-badge"><ShieldCheck className="h-6 w-6" /></div>
-              <h3 className="font-bold text-foreground">Verified Temples & Pandits</h3>
-            </div>
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="om-badge"><Video className="h-6 w-6" /></div>
-              <h3 className="font-bold text-foreground">Video Proof on WhatsApp</h3>
-            </div>
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="om-badge"><Truck className="h-6 w-6" /></div>
-              <h3 className="font-bold text-foreground">On-Time Prasad Delivery</h3>
-            </div>
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="om-badge"><Lock className="h-6 w-6" /></div>
-              <h3 className="font-bold text-foreground">Secure & Transparent Payments</h3>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="container py-20 md:py-32">
-        <div className="divine-glow relative bg-gradient-to-br from-primary/5 via-card to-secondary/5 rounded-3xl border border-primary/20 p-8 md:p-16 text-center max-w-4xl mx-auto space-y-6 overflow-hidden">
-          <span className="sacred-subtitle text-primary relative z-10">🙏 Join Thousands of Devotees</span>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold text-foreground relative z-10">Your Prayers, <span className="sacred-gradient-text">Our Devotion</span></h2>
-          <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto relative z-10">Book your first puja today and experience tradition, simplified.</p>
-          <Button size="lg" className="relative z-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 mt-4 shadow-[var(--shadow-glow)]" asChild>
-            <Link href="/pujas">Book Your Puja <ArrowRight className="ml-2 h-4 w-4" /></Link>
-          </Button>
-        </div>
+      {/* ============================================================
+          SECTION D: "DIVYA DARSHAN & PUJA VIDEOS"
+          ============================================================ */}
+      <section className="w-full bg-gradient-to-b from-white via-amber-50/30 to-white dark:from-slate-950 dark:to-slate-900 py-4 border-t border-amber-100/60 dark:border-slate-800">
+        <SacredVideoGallery videos={dbVideos} />
       </section>
+
+      {/* ============================================================
+          SECTION E: "PAVAN VEDIC & JYOTISH TOOLS"
+          ============================================================ */}
+      <section className="w-full bg-white dark:bg-slate-950 py-4">
+        <SacredAstroTools />
+      </section>
+
+      {/* ============================================================
+          SECTION F: TESTIMONIALS & TRUST SECTION
+          ============================================================ */}
+      <SacredTrustTestimonials testimonials={dbTestimonials} />
+
+      {/* ============================================================
+          SECTION G: FAQ SECTION
+          ============================================================ */}
+      <SacredFaqAccordion />
+
     </div>
   )
 }

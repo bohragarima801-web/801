@@ -218,29 +218,25 @@ export default function WhatsAppManagementPage() {
         <KpiCard
           title="Team WhatsApp Lines"
           value={teamMembers.length}
-          change="Configured"
-          changeType="neutral"
+          changeLabel="Configured"
           icon={Users}
         />
         <KpiCard
           title="Active WhatsApp Lines"
           value={activeCount}
-          change="Live on Site"
-          changeType="positive"
+          changeLabel="Live on Site"
           icon={CheckCircle2}
         />
         <KpiCard
           title="Primary Helpline"
           value={primaryMember ? `+${primaryMember.phone}` : 'Not Set'}
-          change={primaryMember ? primaryMember.name : ''}
-          changeType="neutral"
+          changeLabel={primaryMember ? primaryMember.name : ''}
           icon={Phone}
         />
         <KpiCard
           title="Floating Chat Widget"
           value={widgetEnabled ? 'ACTIVE ✅' : 'DISABLED ❌'}
-          change="Real-time Status"
-          changeType={widgetEnabled ? 'positive' : 'negative'}
+          changeLabel="Real-time Status"
           icon={MessageSquare}
         />
       </div>
