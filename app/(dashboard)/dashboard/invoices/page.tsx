@@ -22,7 +22,7 @@ export default async function InvoicesPage() {
 
   const dbUserId = await resolveDbUserId(user)
 
-  const [bookings, orders] = await Promise.all([
+  const [bookings, orders, payments] = await Promise.all([
     prisma.booking.findMany({
       where: { userId: dbUserId },
       include: { puja: { select: { name: true } } },
@@ -33,6 +33,14 @@ export default async function InvoicesPage() {
       include: {
         items: { take: 3, select: { name: true } },
         payments: { select: { gatewayRef: true }, orderBy: { createdAt: 'desc' }, take: 1 }
+      },
+      orderBy: { createdAt: 'desc' }
+    }),
+    prisma.payment.findMany({
+      where: { 
+        userId: dbUserId,
+        orderId: null,
+        bookingId: null,
       },
       orderBy: { createdAt: 'desc' }
     })
@@ -64,7 +72,25 @@ export default async function InvoicesPage() {
       icon: '📦',
       invoiceUrl: `/api/invoice/order/${o.id}`,
       paymentRef: o.payments[0]?.gatewayRef || null,
-    }))
+    })),
+    ...payments.map(p => {
+      const meta = p.metadata as Record<string, any> | null
+      const isTool = meta?.paymentType === 'tool_access'
+      const isBhaktiSeva = meta?.paymentType === 'bhaktiSeva'
+      return {
+        id: p.id,
+        number: p.id.slice(0, 8).toUpperCase(),
+        title: isTool ? 'Tool Access' : isBhaktiSeva ? 'Bhakti Seva' : 'Payment',
+        subtitle: isTool ? 'Digital Tool Access' : isBhaktiSeva ? 'Donation / Seva' : 'Miscellaneous Payment',
+        date: p.createdAt,
+        amount: p.amount,
+        status: p.status,
+        type: 'PAYMENT' as const,
+        icon: isTool ? '🛠️' : isBhaktiSeva ? '🪔' : '💳',
+        invoiceUrl: `/api/invoice/payment/${p.id}`,
+        paymentRef: p.gatewayRef || null,
+      }
+    })
   ].sort((a, b) => b.date.getTime() - a.date.getTime())
 
   const totalPaid = allTx

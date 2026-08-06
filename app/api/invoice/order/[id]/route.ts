@@ -6,17 +6,29 @@ function esc(s: unknown): string {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
 }
 
+async function resolveDbUserId(user: { id: string; email: string; supabaseId?: string | null }) {
+  let dbUserId = user.id
+  if (!dbUserId || dbUserId === 'admin-system-id' || dbUserId.length > 36) {
+    const dbUser = await prisma.user.findFirst({
+      where: { OR: [{ email: user.email }, { supabaseId: user.supabaseId ?? '' }] }
+    }).catch(() => null)
+    if (dbUser) dbUserId = dbUser.id
+  }
+  return dbUserId
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
     if (!user) return new NextResponse('Unauthorized', { status: 401 })
 
+    const dbUserId = await resolveDbUserId(user)
     const { id } = await params
     const isAdmin = user.role === 'super_admin' || user.role === 'store_manager'
 
     const whereCondition = isAdmin
       ? { OR: [{ id }, { orderNumber: id }] }
-      : { OR: [{ id }, { orderNumber: id }], userId: user.id }
+      : { OR: [{ id }, { orderNumber: id }], userId: dbUserId }
 
     const order = await prisma.order.findFirst({
       where: whereCondition,
