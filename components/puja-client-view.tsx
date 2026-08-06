@@ -634,6 +634,65 @@ export function PujaClientView({ puja }: { puja: any }) {
               </Badge>
             </div>
 
+            {/* Assigned Pandit Details Showcase Card with Uploaded Photo */}
+            {(() => {
+              let assignedPandit: any = null
+              if (puja?.customHtml) {
+                try {
+                  const parsed = JSON.parse(puja.customHtml)
+                  if (parsed.assignedPandit) assignedPandit = parsed.assignedPandit
+                } catch (e) {}
+              }
+              if (!assignedPandit && puja.assignedPandit) assignedPandit = puja.assignedPandit
+
+              if (!assignedPandit || (!assignedPandit.name && !assignedPandit.photo)) return null
+
+              return (
+                <div className="p-5 rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50/80 via-orange-50/50 to-amber-50/80 flex flex-col sm:flex-row items-center gap-5 shadow-sm">
+                  <div className="relative h-24 w-24 rounded-full overflow-hidden border-2 border-amber-500 bg-amber-100 shrink-0 shadow-md">
+                    <img 
+                      src={getSafeImageUrl(assignedPandit.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80')} 
+                      alt={assignedPandit.name || 'मुख्य आचार्य'} 
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                      }}
+                    />
+                  </div>
+
+                  <div className="space-y-1 text-center sm:text-left flex-1">
+                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-900 bg-amber-200/80 px-2.5 py-0.5 rounded-full border border-amber-300">
+                        मुख्य पीठाधीश्वर / आचार्य
+                      </span>
+                      {assignedPandit.experience && (
+                        <span className="text-[10px] font-bold text-rose-900 bg-rose-100 px-2.5 py-0.5 rounded-full border border-rose-200">
+                          {assignedPandit.experience}
+                        </span>
+                      )}
+                    </div>
+
+                    <h4 className="text-lg sm:text-xl font-black text-slate-900 pt-0.5">
+                      {assignedPandit.name || 'पं. कन्हैया लाल दवे'}
+                    </h4>
+
+                    {assignedPandit.title && (
+                      <p className="text-xs font-bold text-amber-800 font-serif">
+                        {assignedPandit.title}
+                      </p>
+                    )}
+
+                    {assignedPandit.location && (
+                      <p className="text-xs text-slate-600 flex items-center justify-center sm:justify-start gap-1 pt-1 font-medium">
+                        <MapPin className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                        <span>{assignedPandit.location}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )
+            })()}
+
             <div className="grid sm:grid-cols-3 gap-4 text-center">
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <ShieldCheck className="w-6 h-6 text-rose-900 mx-auto mb-2" />

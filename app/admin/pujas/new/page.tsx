@@ -121,6 +121,7 @@ function NewPujaPage_Content() {
   const [driveUrl, setDriveUrl] = useState('')
   const [galleryImages, setGalleryImages] = useState<string[]>([])
   const [uploadingGallery, setUploadingGallery] = useState(false)
+  const [uploadingPanditPhoto, setUploadingPanditPhoto] = useState(false)
 
   // Fetch references
   useEffect(() => {
@@ -314,6 +315,35 @@ function NewPujaPage_Content() {
       toast.error('Error uploading video file')
     } finally {
       setUploadingVideo(false)
+    }
+  }
+
+  const handlePanditPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingPanditPhoto(true)
+    try {
+      file = await compressImage(file)
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+      const data = await res.json()
+      if (data.ok && data.url) {
+        setAssignedPanditPhoto(data.url)
+        toast.success('Pandit photo uploaded successfully!')
+      } else {
+        toast.error(data.error || 'Upload failed')
+      }
+    } catch {
+      toast.error('Network error uploading pandit photo')
+    } finally {
+      setUploadingPanditPhoto(false)
+      e.target.value = ''
     }
   }
 
@@ -605,14 +635,73 @@ function NewPujaPage_Content() {
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="font-bold text-xs">आचार्य की फोटो URL (Pandit Photo URL)</Label>
-                <Input 
-                  value={assignedPanditPhoto} 
-                  onChange={(e) => setAssignedPanditPhoto(e.target.value)} 
-                  placeholder="https://..." 
-                  className="border-amber-300 bg-white text-xs"
-                />
+              <div className="space-y-2 pt-2 border-t border-amber-200">
+                <Label className="font-bold text-xs text-amber-950 flex items-center justify-between">
+                  <span>📸 आचार्य / पंडित की फ़ोटो (Pandit Photo Upload & Preview)</span>
+                  {assignedPanditPhoto && (
+                    <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">
+                      ✓ Photo Active
+                    </span>
+                  )}
+                </Label>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-3 rounded-xl border border-amber-200 bg-white shadow-2xs">
+                  <div className="relative h-20 w-20 rounded-full overflow-hidden border-2 border-amber-400 bg-amber-50 shrink-0 shadow-sm group">
+                    {assignedPanditPhoto ? (
+                      <img 
+                        src={getSafeImageUrl(assignedPanditPhoto)} 
+                        alt={assignedPanditName || 'Pandit Photo'} 
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                        }}
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-amber-600 text-[10px] font-bold text-center p-1">
+                        No Photo
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 space-y-2 w-full sm:w-auto">
+                    <div className="flex items-center gap-2">
+                      <label className="cursor-pointer inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-3 py-1.5 text-xs font-bold shadow-xs gap-1.5 transition-all">
+                        {uploadingPanditPhoto ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Upload className="h-3.5 w-3.5" />
+                        )}
+                        {uploadingPanditPhoto ? 'Uploading Photo…' : (assignedPanditPhoto ? 'Change Pandit Photo' : 'Upload Pandit Photo')}
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={handlePanditPhotoUpload} 
+                          disabled={uploadingPanditPhoto} 
+                        />
+                      </label>
+
+                      {assignedPanditPhoto && (
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => setAssignedPanditPhoto('')}
+                          className="text-xs text-red-600 hover:bg-red-50 h-8 px-2"
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+
+                    <Input 
+                      value={assignedPanditPhoto} 
+                      onChange={(e) => setAssignedPanditPhoto(e.target.value)} 
+                      placeholder="Or paste Pandit image URL (https://...)" 
+                      className="border-amber-300 bg-white text-xs"
+                    />
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
