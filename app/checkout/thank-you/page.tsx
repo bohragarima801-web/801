@@ -148,6 +148,29 @@ function ThankYouContent() {
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+          {orderNumber && (
+            <a 
+              href={isBooking ? `/api/invoice/booking/${orderNumber}` : `/api/invoice/order/${orderNumber}`}
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                color: '#fff',
+                padding: '0.85rem 1.8rem',
+                borderRadius: '50px',
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                boxShadow: '0 4px 20px rgba(16,185,129,0.4)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              📄 Download Realtime Bill / Invoice
+            </a>
+          )}
+
           <Link href={viewHref} style={{
             background: 'linear-gradient(135deg, #f97316, #ea580c)',
             color: '#fff',
