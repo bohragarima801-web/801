@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { getSafeImageUrl } from '@/lib/utils'
-import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
+import { ArrowRight, Calendar, User, BookOpen, Sparkles } from 'lucide-react'
 
 export function generateMetadata() {
   return generatePageMeta({
