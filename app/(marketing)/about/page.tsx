@@ -74,13 +74,7 @@ export default async function AboutPage() {
         </div>
       <div className="container max-w-4xl mx-auto space-y-12 px-4 py-12">
         
-        {/* Page Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl md:text-5xl font-black text-om-gradient">About DivyaYagyam</h1>
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
-            Preserving and promoting the sacred traditions of Sanatan Dharma with complete authenticity and devotion.
-          </p>
-        </div>
+
 
         {customContent ? (
           <div className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6 text-xs md:text-sm text-slate-700 leading-relaxed prose max-w-none prose-orange">

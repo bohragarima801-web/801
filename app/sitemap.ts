@@ -40,13 +40,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   if (process.env.DATABASE_URL) {
     try {
-      // 1. Pujas (Only Published & Published date <= now or null)
+      // 1. Pujas
       const pujas = await prisma.puja.findMany({
         where: {
-          status: 'PUBLISHED',
           OR: [
-            { publishedAt: null },
-            { publishedAt: { lte: now } }
+            { status: 'PUBLISHED' },
+            { status: 'DRAFT' }
           ]
         },
         select: { slug: true, updatedAt: true }
@@ -62,12 +61,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
-      // 2. Products (Active or Out of Stock)
+      // 2. Products
       const products = await prisma.product.findMany({
         where: {
           OR: [
             { status: 'ACTIVE' },
-            { status: 'OUT_OF_STOCK' }
+            { status: 'OUT_OF_STOCK' },
+            { status: 'DRAFT' }
           ]
         },
         select: { slug: true, updatedAt: true }
@@ -83,14 +83,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
-
-      // 4. Blog Posts (Only Published)
+      // 4. Blog Posts
       const posts = await prisma.blog.findMany({
         where: {
-          status: 'PUBLISHED',
           OR: [
-            { publishedAt: null },
-            { publishedAt: { lte: now } }
+            { status: 'PUBLISHED' },
+            { status: 'DRAFT' }
           ]
         },
         select: { slug: true, updatedAt: true }
