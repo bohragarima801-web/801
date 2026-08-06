@@ -27,15 +27,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (!order) return new NextResponse('Order tax invoice not found', { status: 404 })
 
-    // ANTI-FRAUD SECURITY CHECK: Invoice/Bill is generated ONLY AFTER payment is SUCCESS or CONFIRMED
-    const isPaymentConfirmed = order.paymentStatus === 'SUCCESS' || order.status === 'CONFIRMED' || order.status === 'SHIPPED' || order.status === 'DELIVERED'
+    // ANTI-FRAUD SECURITY CHECK: Products allow Cash on Delivery (COD) or Online Paid Orders
+    const isCodOrder = order.status === 'CONFIRMED' || order.status === 'SHIPPED' || order.status === 'DELIVERED'
+    const isPaymentConfirmed = order.paymentStatus === 'SUCCESS' || isCodOrder
     
     if (!isPaymentConfirmed && !isAdmin) {
       const pendingHtml = `<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>Tax Invoice Locked - Payment Pending</title>
+<title>Tax Invoice Locked - Order Pending</title>
 <style>
   body { font-family: sans-serif; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
   .box { max-width: 480px; background: #1e293b; border: 2px solid #ea580c; border-radius: 20px; padding: 36px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -49,9 +50,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="box">
     <div class="icon">🔒</div>
     <h2>टैक्स इनवॉइस बिल लॉक है (Tax Invoice Locked)</h2>
-    <p>सुरक्षा कारणों से टैक्स इनवॉइस बिल <strong>भुगतान (Payment) सफलता पूर्वक प्राप्त होने के बाद ही</strong> जेनरेट होता है।<br><br>Order ID: <strong>${order.orderNumber}</strong> का भुगतान अभी प्रक्रियाधीन/लंबित (Pending) है।</p>
-    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20complete%20payment%20for%20Order%20${order.orderNumber}" class="btn">
-      💬 Complete Payment via WhatsApp
+    <p>सुरक्षा कारणों से टैक्स इनवॉइस बिल <strong>ऑनलाइन भुगतान या कूरियर कैश ऑन डिलीवरी (COD) कन्फर्मेशन के बाद ही</strong> जारी किया जाता है।<br><br>Order ID: <strong>${order.orderNumber}</strong> अभी लंबित (Pending) है।</p>
+    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20confirm%20Order%20${order.orderNumber}" class="btn">
+      💬 Order Support via WhatsApp
     </a>
   </div>
 </body>
@@ -136,23 +137,23 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="header">
     <div class="brand">
       <h1>🪔 Divyayagyam</h1>
-      <p>divyayagyam.com · Tax Invoice</p>
+      <p>divyayagyam.com · Product Tax Invoice</p>
     </div>
     <div class="invoice-meta">
-      <div class="inv-label">Tax Invoice</div>
+      <div class="inv-label">Product Invoice</div>
       <div class="inv-num">${order.orderNumber}</div>
-      <div class="inv-badge">${order.paymentStatus === 'SUCCESS' ? '✅ PAID' : '⏳ PENDING'}</div>
+      <div class="inv-badge">${order.paymentStatus === 'SUCCESS' ? '✅ PAID ONLINE' : '📦 CASH ON DELIVERY'}</div>
     </div>
   </div>
 
   <!-- Status Banner -->
-  <div class="status-banner ${order.paymentStatus !== 'SUCCESS' ? 'pending' : ''}">
-    <span style="font-size:12px;font-weight:600;color:${order.paymentStatus === 'SUCCESS' ? '#065f46' : '#92400e'}">
+  <div class="status-banner">
+    <span style="font-size:12px;font-weight:600;color:#065f46">
       ${order.paymentStatus === 'SUCCESS'
-        ? `✅ Payment Confirmed · Paid on ${new Date(paymentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`
-        : '⏳ Payment Pending'}
+        ? `✅ Payment Confirmed · Paid Online on ${new Date(paymentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`
+        : `📦 Cash On Delivery (COD) · Collectable at Delivery (₹${total.toLocaleString('en-IN')})`}
     </span>
-    ${paid?.gatewayRef ? `<span style="font-size:11px;color:#6b7280;">Payment Ref: ${paid.gatewayRef}</span>` : ''}
+    ${paid?.gatewayRef ? `<span style="font-size:11px;color:#6b7280;">Ref: ${paid.gatewayRef}</span>` : ''}
   </div>
 
   <!-- Customer & Invoice Info -->
