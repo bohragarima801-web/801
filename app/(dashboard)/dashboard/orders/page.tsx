@@ -102,7 +102,7 @@ export default async function OrdersPage() {
                       <div key={item.id} className="flex justify-between py-2 text-sm">
                         <div className="flex items-center gap-2">
                           <Package className="h-4 w-4 text-muted-foreground" />
-                          <span>{item.name} <span className="text-muted-foreground text-xs">x{item.quantity}</span></span>
+                          <span>{(!item.name || item.name === 'Unknown Item') ? '🪔 Sacred Puja Booking / Item' : item.name} <span className="text-muted-foreground text-xs">x{item.quantity}</span></span>
                         </div>
                         <span className="font-medium">₹{Number(item.total).toLocaleString('en-IN')}</span>
                       </div>

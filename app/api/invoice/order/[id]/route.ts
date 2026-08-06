@@ -86,23 +86,37 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const shipping = order.shipping ? Number(order.shipping) : 0
     const total = Number(order.total)
     const addr = order.shippingAddress
-    const customerName = addr?.fullName || order.user?.fullName || user.fullName || 'Valued Customer'
+    const customerName = addr?.fullName || order.user?.fullName || user.fullName || 'Valued Devotee'
+
+    // Extract Sankalp & Puja details from order.notes if present
+    let sankalpGotra = ''
+    let sankalpPurpose = ''
+    if (order.notes && order.notes.includes('[Sankalp]')) {
+      const gotraMatch = order.notes.match(/Gotra:\s*([^|]+)/i)
+      const purposeMatch = order.notes.match(/Purpose:\s*(.*)/i)
+      if (gotraMatch) sankalpGotra = gotraMatch[1].trim()
+      if (purposeMatch) sankalpPurpose = purposeMatch[1].trim()
+    }
+
+    const hasPujaItem = order.items.some(i => i.name.includes('Puja') || i.name.includes('🪔') || i.name.includes('Dakshina')) || Boolean(sankalpGotra)
+    const invoiceTitle = hasPujaItem ? 'Sacred Order & Tax Invoice' : 'Product Tax Invoice'
+    const brandLabel = hasPujaItem ? 'Official Puja & Order Invoice' : 'Product Invoice'
 
     const html = `<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tax Invoice - ${order.orderNumber}</title>
+<title>${invoiceTitle} - ${order.orderNumber}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; background: #f8f8f8; color: #1a1a2e; font-size: 13px; }
+  body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; background: #f8f8f8; color: #1a1a2e; font-size: 13px; }
   .invoice { max-width: 750px; margin: 20px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
 
   .header { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 32px 40px; display: flex; justify-content: space-between; align-items: flex-start; }
   .brand h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-  .brand p { font-size: 11px; opacity: 0.75; margin-top: 4px; }
+  .brand p { font-size: 11px; opacity: 0.85; margin-top: 4px; }
   .invoice-meta { text-align: right; }
   .invoice-meta .inv-num { font-size: 22px; font-weight: 800; }
   .invoice-meta .inv-label { font-size: 10px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; }
@@ -116,7 +130,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   .info-box p { font-size: 13px; color: #374151; line-height: 1.7; }
   .info-box strong { font-weight: 700; color: #111827; }
 
-  .items-table { width: 100%; border-collapse: collapse; }
+  .sankalp-box { margin: 20px 40px 0 40px; padding: 16px 20px; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; }
+  .sankalp-box h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #7c3aed; font-weight: 800; margin-bottom: 8px; }
+  .sankalp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; }
+  .sankalp-grid div { background: white; padding: 8px 12px; border-radius: 6px; border: 1px solid #f3e8ff; }
+
+  .items-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
   .items-table th { background: #f9fafb; padding: 12px 40px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #6b7280; text-align: left; border-bottom: 1px solid #e5e7eb; }
   .items-table th:last-child { text-align: right; }
   .items-table td { padding: 16px 40px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
@@ -153,10 +172,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   <div class="header">
     <div class="brand">
       <h1>🪔 Divyayagyam</h1>
-      <p>divyayagyam.com · Product Tax Invoice</p>
+      <p>divyayagyam.com · ${esc(invoiceTitle)}</p>
     </div>
     <div class="invoice-meta">
-      <div class="inv-label">Product Invoice</div>
+      <div class="inv-label">${esc(brandLabel)}</div>
       <div class="inv-num">${order.orderNumber}</div>
       <div class="inv-badge">${order.paymentStatus === 'SUCCESS' ? '✅ PAID ONLINE' : '📦 CASH ON DELIVERY'}</div>
     </div>
@@ -192,10 +211,20 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         <strong>Invoice Date:</strong> ${new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
         <strong>Order Status:</strong> ${esc(order.status)}<br>
         ${order.coupon?.code ? `<strong>Coupon Code:</strong> ${esc(order.coupon.code)}<br>` : ''}
-        ${order.notes ? `<strong>Notes:</strong> ${esc(order.notes)}` : ''}
       </p>
     </div>
   </div>
+
+  <!-- Sankalp Box if available -->
+  ${sankalpGotra || sankalpPurpose ? `
+  <div class="sankalp-box">
+    <h4>🙏 Sankalp & Sacred Intention (संकल्प विवरण)</h4>
+    <div class="sankalp-grid">
+      ${sankalpGotra ? `<div><span style="color:#6b7280;font-size:10px;text-transform:uppercase">Gotra (गोत्र):</span><br><strong>${esc(sankalpGotra)}</strong></div>` : ''}
+      ${sankalpPurpose ? `<div><span style="color:#6b7280;font-size:10px;text-transform:uppercase">Puja Wish / Purpose (उद्देश्य):</span><br><strong>${esc(sankalpPurpose)}</strong></div>` : ''}
+    </div>
+  </div>
+  ` : ''}
 
   <!-- Items Table -->
   <table class="items-table">
@@ -208,16 +237,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       </tr>
     </thead>
     <tbody>
-      ${order.items.map(item => `
+      ${order.items.map(item => {
+        let cleanName = item.name
+        if (!cleanName || cleanName === 'Unknown Item') {
+          cleanName = '🪔 Sacred Puja Booking / Item'
+        }
+        return `
       <tr>
         <td>
-          <div class="item-name">${esc(item.name)}</div>
+          <div class="item-name">${esc(cleanName)}</div>
         </td>
         <td style="text-align:center;font-weight:600">${item.quantity}</td>
         <td style="text-align:right">₹${Number(item.price).toLocaleString('en-IN')}</td>
         <td>₹${Number(item.total).toLocaleString('en-IN')}</td>
       </tr>
-      `).join('')}
+      `}).join('')}
     </tbody>
   </table>
 

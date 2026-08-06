@@ -107,42 +107,69 @@ export async function POST(req: NextRequest) {
 
     for (const item of items) {
        let price = 0
-       let name = item.name || 'Unknown Item'
+       let name = (item.name && item.name !== 'Unknown Item') ? item.name : ''
        let productId: string | null = null
 
        if (item.id.startsWith('puja-')) {
           const parts = item.id.split('-')
-          const pujaId = parts.slice(1, parts.length - 1).join('-') // Handle dashes in uuid
-          const pkgId = parts[parts.length - 1]
+          let pujaId = parts.slice(1, parts.length - 1).join('-')
+          let pkgId = parts[parts.length - 1]
           
-          if (pujaId && pkgId) {
-             const puja = await prisma.puja.findUnique({ where: { id: pujaId }, include: { packages: true } })
-             if (puja) {
-                const pkg = puja.packages.find(p => p.id === pkgId)
-                if (pkg) { price = Number(pkg.price) }
-                else if (pkgId === '1' || pkgId.includes('base')) price = Number(puja.price)
-                else if (pkgId === '2') price = Number(puja.price) * 1.5
-                else if (pkgId === '3') price = Number(puja.price) * 2.5
-                else price = Number(item.price) // fallback
-             } else { price = Number(item.price) }
-          } else { price = Number(item.price) }
+          if (!pujaId) {
+             pujaId = parts.slice(1).join('-')
+             pkgId = '1'
+          }
+
+          const puja = await prisma.puja.findUnique({ 
+             where: { id: pujaId }, 
+             include: { packages: true, temple: true } 
+          })
+
+          if (puja) {
+             const pkg = puja.packages.find(p => p.id === pkgId)
+             if (pkg) { 
+                price = Number(pkg.price)
+                const pkgTitle = (pkg as any).name || (pkg as any).title || 'Package'
+                name = `🪔 ${puja.name} (${pkgTitle})`
+             } else if (pkgId === '1' || pkgId.includes('base')) { 
+                price = Number(puja.price)
+                name = `🪔 ${puja.name}`
+             } else if (pkgId === '2') { 
+                price = Number(puja.price) * 1.5
+                name = `🪔 ${puja.name} (Family Package)`
+             } else if (pkgId === '3') { 
+                price = Number(puja.price) * 2.5
+                name = `🪔 ${puja.name} (VIP Package)`
+             } else { 
+                price = Math.max(0, Number(item.price) || Number(puja.price) || 0)
+                name = name || `🪔 ${puja.name}`
+             }
+          } else { 
+             price = Math.max(0, Number(item.price) || 0)
+             name = name || '🪔 Sacred Puja Booking'
+          }
        } 
        else if (item.id.startsWith('addon-')) {
-          const addonPrices: Record<string, number> = {
-             'addon-courier': 99
-          }
           if (item.id === 'addon-dakshina') {
-             price = Math.max(1, Number(item.price) || 0) // Dynamic dakshina
+             price = Math.max(1, Number(item.price) || 0)
+             name = '🙏 Pandit Dakshina (पंडित दक्षिणा)'
+          } else if (item.id === 'addon-courier') {
+             price = 99
+             name = '📦 Prasad Courier / Delivery Fee (प्रसाद कूरियर शुल्क)'
           } else if (item.id.startsWith('addon-bhaktiSeva-')) {
              const offeringId = item.id.replace('addon-bhaktiSeva-', '')
              const offering = bhaktiSevaOfferings.find(o => o.id === offeringId)
              if (offering && Number(offering.price) > 0) {
                 price = Number(offering.price)
+                name = `🪔 BhaktiSeva: ${offering.name}`
              } else {
-                price = Math.max(1, Number(item.price) || 0) // fallback to item price
+                price = Math.max(1, Number(item.price) || 0)
+                name = name || '🪔 Sacred BhaktiSeva Offering'
              }
           } else {
+             const addonPrices: Record<string, number> = { 'addon-courier': 99 }
              price = addonPrices[item.id] || Number(item.price) || 0
+             name = name || 'Sacred Add-on Service'
           }
        }
        else if (item.id.startsWith('tool-')) {
@@ -150,18 +177,26 @@ export async function POST(req: NextRequest) {
           const spiritualTool = await prisma.spiritualTool.findUnique({ where: { id: toolId } })
           if (spiritualTool && Number(spiritualTool.price) > 0) {
              price = Number(spiritualTool.price)
-             name = `Premium Tool: ${spiritualTool.name}`
+             name = `🔮 Premium Tool: ${spiritualTool.name}`
           } else {
              price = Math.max(1, Number(item.price) || 0)
-             name = item.name || 'Spiritual Tool Access'
+             name = name || 'Spiritual Tool Access'
           }
        }
        else {
           const product = products.find((p: any) => p.id === item.id)
-          if (!product) throw new Error('Product mismatch')
-          price = Number((product as any).salePrice || product.price) || 0
-          name = product.name
-          productId = product.id
+          if (product) {
+             price = Number((product as any).salePrice || product.price) || 0
+             name = product.name
+             productId = product.id
+          } else {
+             price = Number(item.price) || 0
+             name = name || 'Spiritual Product'
+          }
+       }
+
+       if (!name || name === 'Unknown Item') {
+          name = '🪔 Sacred Puja Booking / Item'
        }
 
        const quantity = Number(item.quantity)

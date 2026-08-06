@@ -45,6 +45,10 @@ export default function CheckoutPage() {
 
   const isItemInCart = (id: string) => items.some(i => i.id === id)
   const dakshinaItem = items.find(i => i.id === 'addon-dakshina')
+  const hasProducts = items.some(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
+  const productSubtotal = items
+    .filter(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
+    .reduce((sum, i) => sum + i.price * i.quantity, 0)
 
   const handleDakshinaSelect = (amt: number) => {
     if (dakshinaItem && dakshinaItem.price === amt) {
@@ -172,7 +176,12 @@ export default function CheckoutPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          items: items.map(i => ({ id: i.id, quantity: i.quantity })),
+          items: items.map(i => ({ 
+            id: i.id, 
+            quantity: i.quantity,
+            name: i.name,
+            price: i.price 
+          })),
           shippingAddress: address,
           notes: sankalpNotes,
           couponCode: appliedCoupon?.code
@@ -412,10 +421,14 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Sacred Offerings Section */}
-                {bhaktiSevaOfferings.length > 0 && (
+                {/* Sacred Offerings / BhaktiSeva — ONLY shown when a Puja is in cart */}
+                {bhaktiSevaOfferings.length > 0 && items.some(i => i.id.startsWith('puja-')) && (
                   <div className="space-y-4">
-                    <h2 className="text-lg font-bold text-gray-900">Sacred offerings</h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-lg font-bold text-gray-900">🪔 BhaktiSeva — Sacred Offerings</h2>
+                      <span className="text-[10px] font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full border border-amber-200">Optional</span>
+                    </div>
+                    <p className="text-xs text-gray-500 -mt-2">अपनी पूजा के साथ पवित्र सेवा जोड़ें — आपकी इच्छानुसार।</p>
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       {bhaktiSevaOfferings.map((offering) => (
@@ -433,7 +446,7 @@ export default function CheckoutPage() {
                           <div className="relative flex flex-col items-center justify-center w-24">
                             <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
                               {offering.image ? (
-                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover fallback-bg-orange-100" />
+                                <img src={offering.image} alt={offering.name} className="w-full h-full object-cover" />
                               ) : (
                                 <span className="text-xs text-gray-400">No Img</span>
                               )}
@@ -596,18 +609,49 @@ export default function CheckoutPage() {
                        ))}
                      </div>
      
-                     <div className="pt-4 border-t space-y-3 text-sm text-slate-600">
+                     {/* ── Bill Summary ── */}
+                     <div className="pt-4 border-t space-y-2.5 text-sm text-slate-600">
                        <div className="flex justify-between">
-                         <span>Total Items</span>
-                         <span>{totalItems}</span>
+                         <span>Subtotal ({totalItems} items)</span>
+                         <span className="font-semibold text-slate-800">₹{cartTotal}</span>
                        </div>
-                       <div className="flex justify-between">
-                         <span>Shipping</span>
-                         <span className="text-green-600 font-semibold">FREE</span>
-                       </div>
-                       <div className="pt-4 border-t flex justify-between font-black text-xl text-slate-900">
+
+                       {/* Delivery Charge */}
+                       {hasProducts && (
+                         <div className="flex justify-between">
+                           <span>
+                             Delivery Charge
+                             {shippingFee === 0 && productSubtotal > 0 && (
+                               <span className="ml-1 text-[10px] text-green-600 font-semibold">FREE on ₹{freeShippingThreshold}+</span>
+                             )}
+                           </span>
+                           {shippingFee > 0 ? (
+                             <span className="font-semibold text-orange-600">₹{shippingFee}</span>
+                           ) : (
+                             <span className="text-green-600 font-semibold">FREE</span>
+                           )}
+                         </div>
+                       )}
+
+                       {/* Discount */}
+                       {discountAmount > 0 && (
+                         <div className="flex justify-between text-green-600">
+                           <span>Discount {appliedCoupon?.code && <span className="font-mono text-[10px] bg-green-100 px-1 rounded">{appliedCoupon.code}</span>}</span>
+                           <span className="font-semibold">−₹{discountAmount}</span>
+                         </div>
+                       )}
+
+                       {/* Puja / BhaktiSeva note */}
+                       {!hasProducts && (
+                         <div className="flex justify-between text-purple-600 text-xs">
+                           <span>🪔 Puja/Seva (No delivery charge)</span>
+                           <span>—</span>
+                         </div>
+                       )}
+
+                       <div className="pt-3 border-t flex justify-between font-black text-xl text-slate-900">
                          <span>To Pay</span>
-                         <span className="text-orange-600">₹{cartTotal}</span>
+                         <span className="text-orange-600">₹{finalTotal}</span>
                        </div>
                      </div>
      
@@ -617,7 +661,7 @@ export default function CheckoutPage() {
                        className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-lg shadow-lg shadow-orange-200"
                      >
                        {processing ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : null}
-                       {processing ? 'Processing Securely...' : `Pay ₹${cartTotal} Securely`}
+                       {processing ? 'Processing Securely...' : `Pay ₹${finalTotal} Securely`}
                        {!processing && <ArrowRight className="ml-2 h-5 w-5" />}
                      </Button>
                      <p className="text-center text-xs text-slate-400">100% Secure & Encrypted Payments</p>

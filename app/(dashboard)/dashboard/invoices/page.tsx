@@ -60,19 +60,24 @@ export default async function InvoicesPage() {
       invoiceUrl: `/api/invoice/booking/${b.id}`,
       paymentRef: null as string | null,
     })),
-    ...orders.map(o => ({
-      id: o.id,
-      number: o.orderNumber,
-      title: `Store Order`,
-      subtitle: o.items.map(i => i.name).join(', '),
-      date: o.createdAt,
-      amount: o.total,
-      status: o.paymentStatus,
-      type: 'ORDER' as const,
-      icon: '📦',
-      invoiceUrl: `/api/invoice/order/${o.id}`,
-      paymentRef: o.payments[0]?.gatewayRef || null,
-    })),
+    ...orders.map(o => {
+      const cleanItems = o.items.map(i => (!i.name || i.name === 'Unknown Item') ? '🪔 Sacred Puja Booking / Item' : i.name)
+      const firstItem = cleanItems[0] || 'Spiritual Purchase'
+      const isPujaOrder = o.items.some(i => i.name.includes('Puja') || i.name.includes('🪔') || i.name.includes('Dakshina')) || (o.notes && o.notes.includes('[Sankalp]'))
+      return {
+        id: o.id,
+        number: o.orderNumber,
+        title: isPujaOrder ? (firstItem.startsWith('🪔') || firstItem.startsWith('🙏') ? firstItem : `🪔 ${firstItem}`) : firstItem,
+        subtitle: cleanItems.join(', '),
+        date: o.createdAt,
+        amount: o.total,
+        status: o.paymentStatus,
+        type: 'ORDER' as const,
+        icon: isPujaOrder ? '📿' : '📦',
+        invoiceUrl: `/api/invoice/order/${o.id}`,
+        paymentRef: o.payments[0]?.gatewayRef || null,
+      }
+    }),
     ...payments.map(p => {
       const meta = p.metadata as Record<string, any> | null
       const isTool = meta?.paymentType === 'tool_access'
