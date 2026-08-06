@@ -13,12 +13,24 @@ type ToolComponentProps = {
 import KundaliTool from './KundaliTool'
 import MalaTool from './MalaTool'
 import NumerologyTool from './NumerologyTool'
+import MilanTool from './MilanTool'
+import RatnaTool from './RatnaTool'
+import ShubhSamayTool from './ShubhSamayTool'
 
 // 2. MAP SLUGS TO COMPONENTS
 const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
   kundali: KundaliTool,
+  'free-kundali': KundaliTool,
   mala: MalaTool,
+  'japa-mala-counter': MalaTool,
   numerology: NumerologyTool,
+  'numerology-calculator': NumerologyTool,
+  milan: MilanTool,
+  'kundali-milan': MilanTool,
+  ratna: RatnaTool,
+  'gemstone-suggestion': RatnaTool,
+  'dainik-shubh-samay-calculator': ShubhSamayTool,
+  'shubh-samay': ShubhSamayTool,
 }
 
 
