@@ -1,16 +1,16 @@
 import { unstable_cache } from 'next/cache'
 import { prisma } from './prisma'
 
-// Cache public published pujas list (5-min revalidation)
+// Cache public pujas list (10-sec revalidation for instant admin updates)
 export const getCachedPujas = unstable_cache(
   async () => {
     try {
       const pujas = await prisma.puja.findMany({
         where: { 
-          status: 'PUBLISHED',
           OR: [
-            { publishedAt: null },
-            { publishedAt: { lte: new Date() } }
+            { status: 'PUBLISHED' },
+            { status: 'DRAFT' },
+            { status: null as any }
           ]
         },
         select: {
@@ -50,9 +50,9 @@ export const getCachedPujas = unstable_cache(
       return []
     }
   },
-  ['public-pujas-list-v2'],
+  ['public-pujas-list-v3'],
   {
-    revalidate: 300,
+    revalidate: 10,
     tags: ['pujas']
   }
 )
