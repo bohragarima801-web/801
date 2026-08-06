@@ -48,33 +48,31 @@ export default async function PujasPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Hero Banner */}
-      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#16070A] to-[#0C0402] py-16 md:py-24 overflow-hidden">
+      {/* ── Hero Banner (Bright Sanatani Gold) */}
+      <section className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-16 md:py-24 overflow-hidden border-b border-[#F5E2B8]">
         {/* Om watermark */}
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(168,124,40,0.04)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
-        {/* Gold gradient overlay bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
 
         <div className="container relative z-10 text-center max-w-4xl mx-auto px-4">
           {/* Label */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-6">
-            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em] font-display">🔥 Sacred Vedic Rituals</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-6">
+            <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">🪔 Sacred Vedic Rituals (वैदिक अनुष्ठान)</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[1.15] mb-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-[#2A1508] leading-[1.15] mb-4">
             Sacred Pujas &{' '}
-            <span className="gold-gradient-text">Vedic Anushthans</span>
+            <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">Vedic Anushthans</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[rgba(245,235,220,0.65)] max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-base sm:text-lg text-[#4A2D1B] max-w-2xl mx-auto leading-relaxed font-medium">
             भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे लाइव-स्ट्रीम पूजा। अपने नाम व गोत्र से संकल्प करवाएं — प्रसाद घर द्वार।
           </p>
 
           {/* Trust chips */}
           <div className="flex flex-wrap gap-3 justify-center mt-8">
             {['Verified Pandits', 'Name-Gotra Sankalp', 'WhatsApp Video Proof', 'Prasad Home Delivery'].map((t) => (
-              <span key={t} className="stat-badge stat-badge-dark text-xs">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#D4A843] shrink-0" />
+              <span key={t} className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white rounded-full border border-[#F0D695] text-xs font-bold text-[#2A1508] shadow-xs">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#8B1A21] shrink-0" />
                 {t}
               </span>
             ))}

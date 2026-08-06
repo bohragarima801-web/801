@@ -56,26 +56,25 @@ export default async function BlogListPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Hero Banner */}
-      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-16 md:py-22 overflow-hidden">
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+      {/* ── Hero Banner (Bright Sanatani Gold) */}
+      <section className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-16 md:py-22 overflow-hidden border-b border-[#F5E2B8]">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
         <div className="container relative z-10 text-center max-w-3xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-5">
-            <BookOpen className="h-3.5 w-3.5 text-[#D4A843]" />
-            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em]">Spiritual Insights</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-5">
+            <BookOpen className="h-3.5 w-3.5 text-[#B37B00] fill-[#B37B00]" />
+            <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">✍️ Spiritual Insights (ज्ञान गंगा)</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-tight mb-4">
-            Divine <span className="gold-gradient-text">Wisdom Blog</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-[#2A1508] leading-tight mb-4">
+            Divine <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">Wisdom Blog</span>
           </h1>
-          <p className="text-[rgba(245,235,220,0.60)] text-base font-light max-w-xl mx-auto">
+          <p className="text-[#4A2D1B] text-base font-medium max-w-xl mx-auto">
             Articles on dharma, mantras, festivals, and spiritual guidance by our Vedic scholars.
           </p>
         </div>
       </section>
 
       {/* ── Blog Cards Grid */}
-      <section className="bg-[#FFFBF5] dark:bg-[#0A0302] py-14 md:py-20">
+      <section className="bg-[#FFFDF7] py-14 md:py-20">
         <div className="container px-4 md:px-6">
           {posts.length === 0 ? (
             <div className="text-center py-20 max-w-md mx-auto">

@@ -56,27 +56,26 @@ export default async function ProductsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Hero Banner */}
-      <section className="relative bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-14 md:py-20 overflow-hidden">
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+      {/* ── Hero Banner (Bright Sanatani Gold) */}
+      <section className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-14 md:py-20 overflow-hidden border-b border-[#F5E2B8]">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
         <div className="container relative z-10 text-center max-w-3xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-5">
-            <Sparkles className="h-3.5 w-3.5 text-[#D4A843]" />
-            <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em]">🛕 Abhimantrit Store & Samagri</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-5">
+            <Sparkles className="h-3.5 w-3.5 text-[#B37B00] fill-[#B37B00]" />
+            <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">🛍️ Abhimantrit Store & Samagri</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-tight mb-4">
-            Abhimantrit <span className="gold-gradient-text">Prasad</span>
-            <span className="block text-2xl md:text-3xl mt-2 text-[rgba(245,235,220,0.55)] font-normal">अभिमंत्रित सामग्री</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-[#2A1508] leading-tight mb-4">
+            Abhimantrit <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">Prasad</span>
+            <span className="block text-2xl md:text-3xl mt-2 text-[#8B1A21] font-semibold">(अभिमंत्रित सामग्री)</span>
           </h1>
-          <p className="text-[rgba(245,235,220,0.60)] text-base font-light max-w-xl mx-auto">
+          <p className="text-[#4A2D1B] text-base font-medium max-w-xl mx-auto">
             गंगाजल से अभिमंत्रित सिद्ध रुद्राक्ष माला, धूप-दीप, पूजन सामग्री और सिद्ध यंत्र।
           </p>
         </div>
       </section>
 
       {/* ── Products Grid */}
-      <section className="bg-[#FFFBF5] dark:bg-[#0A0302] py-12">
+      <section className="bg-[#FFFDF7] py-12">
         <div className="container px-4 md:px-6">
           {products.length === 0 ? (
             <div className="max-w-md mx-auto text-center py-16">

@@ -51,45 +51,39 @@
     --sidebar-ring: 356 70% 30%;
 
     /* ── Legacy hex aliases ── */
-    --primary-color: #8B1A21;     /* Sindoor maroon — deepened */
-    --secondary-color: #A87C28;   /* Antique Mughal gold */
-    --bg-light: #FFFBF5;
+    --primary-color: #8B1A21;     /* Sindoor maroon */
+    --secondary-color: #D49B00;   /* Vibrant Sanatani Gold */
+    --bg-light: #FFFDF7;
     --text-dark: #1E120A;
     --card-bg: #FFFFFF;
 
     /* ── Sacred Palette (decorative) ── */
-    --saffron: #8B1A21;
-    --saffron-light: #B84430;
-    --sindoor: #6E1219;           /* Deepest maroon hover */
-    --gold: #A87C28;
-    --gold-light: #D4A843;
-    --gold-pale: #FDF6E8;
-    --cream: #FFFBF5;
-    --ivory: #FFF9F0;
+    --saffron: #D9531E;
+    --saffron-light: #F27A30;
+    --sindoor: #8B1A21;           /* Deep maroon */
+    --gold: #D49B00;
+    --gold-light: #F5C842;
+    --gold-pale: #FFF7E6;
+    --cream: #FFFDF7;
+    --ivory: #FFF8EA;
     --charcoal: #1E120A;
     --warm-brown: #2A1508;
-    --divine-gold: #A87C28;
+    --divine-gold: #B37B00;
 
-    /* ── Luxury Dark (hero backgrounds) ── */
-    --dark-hero: #0C0402;
-    --dark-panel: #160804;
-    --dark-card: #1A0B05;
-
-    /* ── Gradients ── */
-    --gradient-primary: linear-gradient(135deg, #8B1A21 0%, #B84430 45%, #A87C28 100%);
-    --gradient-gold: linear-gradient(90deg, #8B6914 0%, #D4A843 30%, #FFE29F 55%, #D4A843 75%, #8B6914 100%);
-    --gradient-dark-hero: linear-gradient(160deg, #0C0402 0%, #1C0806 40%, #0F0607 70%, #08040A 100%);
-    --gradient-hero-light: linear-gradient(180deg, #FFF9F0 0%, #FFF5E6 60%, #FFFBF5 100%);
-    --gradient-card: linear-gradient(145deg, rgba(255,251,245,0.97), rgba(255,255,255,0.99));
-    --gradient-maroon-fade: linear-gradient(180deg, rgba(139,26,33,0.08) 0%, transparent 100%);
+    /* ── Sanatani Light Theme Gradients ── */
+    --gradient-primary: linear-gradient(135deg, #8B1A21 0%, #B84430 45%, #D49B00 100%);
+    --gradient-gold: linear-gradient(90deg, #996B00 0%, #D49B00 35%, #F5C842 60%, #B37B00 100%);
+    --gradient-sanatani-light: linear-gradient(165deg, #FFFDF7 0%, #FFF5E0 45%, #FFF0D1 80%, #FFFDF7 100%);
+    --gradient-hero-light: linear-gradient(180deg, #FFF8EB 0%, #FFF2D6 55%, #FFFDF7 100%);
+    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFFDF7 100%);
 
     /* ── Shadows ── */
-    --shadow-soft: 0 4px 24px rgba(30, 18, 10, 0.06);
-    --shadow-medium: 0 8px 40px rgba(30, 18, 10, 0.10);
-    --shadow-heavy: 0 16px 64px rgba(30, 18, 10, 0.14);
-    --shadow-glow: 0 6px 32px rgba(139, 26, 33, 0.20);
-    --shadow-gold: 0 6px 32px rgba(168, 124, 40, 0.22);
-    --shadow-card: 0 2px 16px rgba(30, 18, 10, 0.07), 0 1px 4px rgba(30, 18, 10, 0.04);
+    --shadow-soft: 0 4px 24px rgba(42, 21, 8, 0.05);
+    --shadow-medium: 0 8px 40px rgba(42, 21, 8, 0.08);
+    --shadow-heavy: 0 16px 64px rgba(42, 21, 8, 0.12);
+    --shadow-glow: 0 6px 32px rgba(212, 155, 0, 0.22);
+    --shadow-gold: 0 6px 32px rgba(245, 200, 66, 0.30);
+    --shadow-card: 0 4px 20px rgba(180, 130, 20, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
   }
 
   .dark {
@@ -258,7 +252,17 @@
 }
 
 .gold-gradient-text {
-  background: var(--gradient-gold);
+  background: linear-gradient(135deg, #8B1A21 0%, #C47F00 50%, #8B1A21 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  line-height: 1.30;
+}
+
+.sanatani-gold-text {
+  background: linear-gradient(90deg, #996B00 0%, #D49B00 40%, #E6A100 70%, #996B00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

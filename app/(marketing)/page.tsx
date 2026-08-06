@@ -211,7 +211,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] dark:bg-[#0A0302] text-[#1E120A] dark:text-[#F5EBDC]">
+    <div className="min-h-screen bg-[#FFFDF7] text-[#1E120A]">
       <Script
         id="schema-organization"
         type="application/ld+json"
@@ -219,16 +219,14 @@ export default async function HomePage() {
       />
 
       {/* ============================================================
-          SECTION B: HERO SECTION — DARK LUXURY
+          SECTION B: HERO SECTION — BRIGHT SANATANI LIGHT GOLD
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#0C0402] via-[#160A07] to-[#0C0402] py-14 md:py-24 overflow-hidden">
+      <section className="relative w-full bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-14 md:py-24 overflow-hidden border-b border-[#F5E2B8]">
         {/* Om watermark */}
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(168,124,40,0.035)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
-        {/* Gold radial glows */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[rgba(139,26,33,0.10)] rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-[rgba(168,124,40,0.08)] rounded-full blur-3xl pointer-events-none" />
-        {/* Bottom fade to ivory */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        {/* Warm golden radial glows */}
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[rgba(242,169,0,0.12)] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-[rgba(139,26,33,0.08)] rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
@@ -237,21 +235,21 @@ export default async function HomePage() {
             <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
 
               {/* Label badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)]">
-                <Sparkles className="h-4 w-4 text-[#D4A843]" />
-                <span className="text-[#D4A843] text-xs font-bold uppercase tracking-[0.12em]">Verified Temples & Puja Booking</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs">
+                <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
+                <span className="text-[#8B5A00] text-xs font-extrabold uppercase tracking-[0.12em]">Verified Temples & Puja Booking</span>
               </div>
 
               {/* H1 */}
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] font-heading font-bold text-white leading-[1.12] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.8rem] font-heading font-extrabold text-[#2A1508] leading-[1.14] tracking-tight">
                 India's Most Trusted Temples.{' '}
-                <span className="gold-gradient-text block sm:inline mt-1 sm:mt-0">
+                <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
                   One Sacred Booking Away.
                 </span>
               </h1>
 
               {/* Subheading */}
-              <p className="text-base sm:text-lg text-[rgba(245,235,220,0.65)] font-light leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="text-base sm:text-lg text-[#4A2D1B] font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Book authentic Vedic pujas and temple offerings from verified priests across India, with transparent pricing, live WhatsApp video proof, and home-delivered sacred prasad.
               </p>
 
@@ -263,38 +261,38 @@ export default async function HomePage() {
                   { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video' },
                   { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent' },
                 ].map((f) => (
-                  <div key={f.label} className="flex items-center gap-2 p-2.5 bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl border border-[rgba(168,124,40,0.18)]">
-                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#B84430] text-white flex items-center justify-center shrink-0">{f.icon}</div>
-                    <span className="text-xs font-semibold text-[rgba(245,235,220,0.85)]">{f.label}</span>
+                  <div key={f.label} className="flex items-center gap-2 p-2.5 bg-white/90 backdrop-blur-sm rounded-xl border border-[#F0D695] shadow-xs">
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white flex items-center justify-center shrink-0">{f.icon}</div>
+                    <span className="text-xs font-bold text-[#2A1508]">{f.label}</span>
                   </div>
                 ))}
               </div>
 
               {/* CTAs */}
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
-                <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-7 py-3.5">
-                  Book a Divine Puja <ArrowRight className="h-4 w-4" />
+                <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-8 py-4 shadow-lg hover:shadow-xl">
+                  Book a Divine Puja (पूजा बुक करें) <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-gold-outline-dark text-sm md:text-base px-7 py-3.5"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white border-2 border-[#D49B00] text-[#8B1A21] font-bold text-sm md:text-base shadow-sm hover:bg-[#FFF8EA] hover:border-[#8B1A21] transition-all"
                 >
-                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                  <MessageCircle className="h-4 w-4 text-emerald-600" /> Chat on WhatsApp
                 </a>
               </div>
 
               {/* Stats row */}
-              <div className="pt-6 border-t border-[rgba(168,124,40,0.18)] grid grid-cols-3 gap-6 text-center lg:text-left max-w-sm">
+              <div className="pt-6 border-t border-[#F5E2B8] grid grid-cols-3 gap-6 text-center lg:text-left max-w-sm">
                 {[
                   { val: '10,000+', label: 'Devotee Bookings' },
                   { val: '100+', label: 'Verified Temples' },
                   { val: '24/7', label: 'Seva Support' },
                 ].map((s) => (
                   <div key={s.label}>
-                    <p className="text-xl md:text-2xl font-black gold-gradient-text">{s.val}</p>
-                    <p className="text-[11px] text-[rgba(245,235,220,0.45)] font-medium mt-0.5">{s.label}</p>
+                    <p className="text-xl md:text-2xl font-black text-[#8B1A21]">{s.val}</p>
+                    <p className="text-[11px] text-[#6A4D3B] font-bold mt-0.5">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -303,14 +301,41 @@ export default async function HomePage() {
             {/* Right — Puja Slider / Image */}
             <div className="lg:col-span-5 w-full">
               {heroSlides.length > 0 ? (
-                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-[rgba(168,124,40,0.20)] ring-1 ring-black/20">
+                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-[#F2C94C] ring-1 ring-amber-200">
                   <HeroPujaSlider slides={heroSlides} />
                 </div>
               ) : (
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[rgba(168,124,40,0.22)] bg-[rgba(26,10,5,0.80)] backdrop-blur-sm p-5 space-y-4">
+                <div className="relative rounded-3xl overflow-hidden shadow-xl border-2 border-[#F2C94C] bg-white p-5 space-y-4">
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md">
                     <Image
                       src="https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80"
+                      alt="Kashi Vishwanath Temple Puja"
+                      fill
+                      priority
+                      className="object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(42,21,8,0.85)] via-[rgba(42,21,8,0.25)] to-transparent flex flex-col justify-end p-4 text-left">
+                      <span className="text-[10px] font-bold text-[#F2C94C] uppercase tracking-widest">🌟 Featured Sacred Puja</span>
+                      <h3 className="text-base font-heading font-bold text-white leading-tight mt-1">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
+                      <p className="text-xs text-[#FFF3D6] mt-0.5">Live Video Sankalp & Temple Prasad</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-[#FFF9EE] border border-[#F5E2B8] p-4 rounded-xl">
+                    <div>
+                      <p className="text-[10px] text-[#6A4D3B] font-bold">Starting Price</p>
+                      <p className="text-lg font-black text-[#8B1A21]">₹1,100 <span className="text-xs font-normal text-[#6A4D3B]">(All inclusive)</span></p>
+                    </div>
+                    <Link href="/pujas" className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#D49B00] text-white text-xs font-extrabold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
+                      Book Now →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </section>b9dfd1?auto=format&fit=crop&w=800&q=80"
                       alt="Kashi Vishwanath Temple Puja"
                       fill
                       priority

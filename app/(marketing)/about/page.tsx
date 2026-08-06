@@ -56,19 +56,18 @@ export default async function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-[#FFFBF5] dark:bg-[#0A0302] min-h-screen">
-        {/* Premium Hero Banner */}
-        <div className="relative bg-gradient-to-b from-[#0C0402] to-[#160A07] py-16 md:py-20 overflow-hidden">
-          <div aria-hidden="true" className="absolute right-0 top-0 text-[25vw] font-serif text-[rgba(168,124,40,0.03)] leading-none pointer-events-none select-none">ॐ</div>
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FFFBF5] dark:from-[#0A0302] to-transparent pointer-events-none" />
+      <div className="bg-[#FFFDF7] min-h-screen">
+        {/* Premium Hero Banner (Bright Sanatani Gold) */}
+        <div className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-16 md:py-20 overflow-hidden border-b border-[#F5E2B8]">
+          <div aria-hidden="true" className="absolute right-0 top-0 text-[25vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none">ॐ</div>
           <div className="container max-w-4xl mx-auto px-4 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(168,124,40,0.12)] border border-[rgba(168,124,40,0.25)] mb-5">
-              <span className="text-[#D4A843] text-[10px] font-bold uppercase tracking-[0.14em]">🙏 Our Sacred Story</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-5">
+              <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">🙏 Our Sacred Story (हमारे बारे में)</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-white leading-tight mb-3">
-              हमारे <span className="gold-gradient-text">बारे में</span>
+            <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-[#2A1508] leading-tight mb-3">
+              हमारे <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">बारे में</span>
             </h1>
-            <p className="text-[rgba(245,235,220,0.60)] text-base font-light max-w-xl mx-auto">
+            <p className="text-[#4A2D1B] text-base font-medium max-w-xl mx-auto">
               35+ years of authentic Vedic tradition, guided by Pandit Mukesh Bohra
             </p>
           </div>
