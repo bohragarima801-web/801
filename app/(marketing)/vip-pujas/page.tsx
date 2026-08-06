@@ -11,7 +11,8 @@ export function generateMetadata() {
   })
 }
 
-export const revalidate = 10
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function VipPujasPage() {
   const dbPujas = await getCachedVipPujas()

@@ -1,63 +1,56 @@
 import { unstable_cache } from 'next/cache'
 import { prisma } from './prisma'
 
-// Cache public pujas list (10-sec revalidation for instant admin updates)
-export const getCachedPujas = unstable_cache(
-  async () => {
-    try {
-      const pujas = await prisma.puja.findMany({
-        where: { 
-          OR: [
-            { status: 'PUBLISHED' },
-            { status: 'DRAFT' },
-            { status: null as any }
-          ]
-        },
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          coverImage: true,
-          price: true,
-          vipPrice: true,
-          isVip: true,
-          isOnline: true,
-          isEvergreen: true,
-          isFestival: true,
-          pujaDate: true,
-          location: true,
-          shortDescription: true,
-          category: {
-            select: {
-              id: true,
-              name: true
-            }
-          },
-          temple: {
-            select: {
-              id: true,
-              name: true
-            }
+// Fetch public pujas list in real-time from database
+export const getCachedPujas = async () => {
+  try {
+    const pujas = await prisma.puja.findMany({
+      where: { 
+        OR: [
+          { status: 'PUBLISHED' },
+          { status: 'DRAFT' },
+          { status: null as any }
+        ]
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        coverImage: true,
+        price: true,
+        vipPrice: true,
+        isVip: true,
+        isOnline: true,
+        isEvergreen: true,
+        isFestival: true,
+        pujaDate: true,
+        location: true,
+        shortDescription: true,
+        category: {
+          select: {
+            id: true,
+            name: true
           }
         },
-        orderBy: { createdAt: 'desc' }
-      })
-      
-      return JSON.parse(JSON.stringify(pujas.map(p => ({
-        ...p,
-        price: Number(p.price),
-        vipPrice: p.vipPrice ? Number(p.vipPrice) : null
-      }))))
-    } catch (err) {
-      return []
-    }
-  },
-  ['public-pujas-list-v4'],
-  {
-    revalidate: 10,
-    tags: ['pujas']
+        temple: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    return JSON.parse(JSON.stringify(pujas.map(p => ({
+      ...p,
+      price: Number(p.price),
+      vipPrice: p.vipPrice ? Number(p.vipPrice) : null
+    }))))
+  } catch (err) {
+    return []
   }
-)
+}
 
 export const getCachedNormalPujas = async () => {
   const allPujas = await getCachedPujas()
