@@ -57,7 +57,10 @@ export async function POST(req: NextRequest) {
 
     await Promise.all(upserts)
 
-    return NextResponse.json({ ok: true, message: 'Payment settings saved successfully' });
+    const { clearSettingCache } = await import('@/lib/settings')
+    clearSettingCache()
+
+    return NextResponse.json({ ok: true, message: 'Payment settings saved and applied live!' });
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to save settings' }, { status: 500 });
   }

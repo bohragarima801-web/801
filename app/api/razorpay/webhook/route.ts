@@ -7,10 +7,13 @@ export async function POST(req: NextRequest) {
   try {
     let secret = (process.env.RAZORPAY_WEBHOOK_SECRET || '').trim()
     if (!secret) {
+      secret = (await getSetting('payments.razorpayWebhookSecret', 'RAZORPAY_WEBHOOK_SECRET')).replace(/^["']|["']$/g, '').trim()
+    }
+    if (!secret) {
       secret = (await getSetting('secret.razorpay_webhook_secret', 'RAZORPAY_WEBHOOK_SECRET')).replace(/^["']|["']$/g, '').trim()
     }
     if (!secret) {
-      return NextResponse.json({ ok: false, error: 'Webhook not configured' }, { status: 500 });
+      return NextResponse.json({ ok: false, error: 'Webhook secret not configured in Admin Settings' }, { status: 500 });
     }
 
     const rawBody = await req.text()

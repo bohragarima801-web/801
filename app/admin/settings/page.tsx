@@ -53,6 +53,7 @@ export default function SettingsPage() {
   const [geminiApiKey, setGeminiApiKey] = useState('')
   const [razorpayKeyId, setRazorpayKeyId] = useState('')
   const [razorpayKeySecret, setRazorpayKeySecret] = useState('')
+  const [razorpayWebhookSecret, setRazorpayWebhookSecret] = useState('')
   const [dbUrl, setDbUrl] = useState('')
   const [directUrlSetting, setDirectUrlSetting] = useState('')
 
@@ -157,6 +158,7 @@ export default function SettingsPage() {
         if (s['secret.gemini_api_key']) setGeminiApiKey(s['secret.gemini_api_key'])
         if (s['secret.razorpay_key_id']) setRazorpayKeyId(s['secret.razorpay_key_id'])
         if (s['secret.razorpay_key_secret']) setRazorpayKeySecret(s['secret.razorpay_key_secret'])
+        if (s['secret.razorpay_webhook_secret']) setRazorpayWebhookSecret(s['secret.razorpay_webhook_secret'])
         if (s['secret.database_url']) setDbUrl(s['secret.database_url'])
         if (s['secret.direct_url']) setDirectUrlSetting(s['secret.direct_url'])
       }
@@ -255,6 +257,7 @@ export default function SettingsPage() {
         'secret.gemini_api_key': geminiApiKey,
         'secret.razorpay_key_id': razorpayKeyId,
         'secret.razorpay_key_secret': razorpayKeySecret,
+        'secret.razorpay_webhook_secret': razorpayWebhookSecret,
       }
     }
 
@@ -325,6 +328,7 @@ export default function SettingsPage() {
       setGeminiApiKey(settings['secret.gemini_api_key'] || '')
       setRazorpayKeyId(settings['secret.razorpay_key_id'] || '')
       setRazorpayKeySecret(settings['secret.razorpay_key_secret'] || '')
+      setRazorpayWebhookSecret(settings['secret.razorpay_webhook_secret'] || '')
       setDbUrl(settings['secret.database_url'] || '')
       setDirectUrlSetting(settings['secret.direct_url'] || '')
     }
@@ -873,6 +877,10 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <Label>Razorpay Key Secret (RAZORPAY_KEY_SECRET)</Label>
                     <Input type="password" value={razorpayKeySecret} onChange={(e) => setRazorpayKeySecret(e.target.value)} placeholder="Secret Key" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Razorpay Webhook Secret (RAZORPAY_WEBHOOK_SECRET)</Label>
+                    <Input type="password" value={razorpayWebhookSecret} onChange={(e) => setRazorpayWebhookSecret(e.target.value)} placeholder="Paste Webhook Secret Key" />
                   </div>
 
                   <h3 className="font-semibold text-lg border-b pb-2 pt-2 flex items-center justify-between">
