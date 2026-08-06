@@ -82,12 +82,12 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   }
 
   // 1. SECURE PRICE CALCULATION
-  const isVipBooking = Boolean(body.isVipBooking || puja.isVip)
-  const basePrice = (isVipBooking && puja.vipPrice) ? Number(puja.vipPrice) : Number(puja.price) || 0
+  const finalIsVip = Boolean(isVipBooking || puja.isVip)
+  const basePrice = (finalIsVip && puja.vipPrice) ? Number(puja.vipPrice) : Number(puja.price) || 0
   const memberCount = Number(packageKey) || 1
 
   let packagePrice = basePrice
-  if (packageKey && !isVipBooking) {
+  if (packageKey && !finalIsVip) {
     const matchedPkg = puja.packages?.find((p: any) => p.id === packageKey)
     if (matchedPkg) {
       packagePrice = Number(matchedPkg.price)

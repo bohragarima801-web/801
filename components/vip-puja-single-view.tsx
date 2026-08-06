@@ -105,6 +105,8 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         })
       })
 
+      const data = await res.json()
+      const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
       const enc = encodeURIComponent
       const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${enc(bookingNo)}%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}%0A%0A🔒 *Note:* Official Bill & Tax Receipt will be issued automatically AFTER payment confirmation.`
 
