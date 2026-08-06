@@ -365,10 +365,10 @@ export default async function HomePage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-3">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200/80 shadow-xs">
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Sacred Temple Rituals
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Upcoming Sacred Pujas
             </span>
             <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-              दिव्य पूजा सेवाएँ <span className="text-amber-600 dark:text-amber-400 font-normal">/ Book Divine Pujas</span>
+              आगामी एवं दिव्य पूजाएँ <span className="text-amber-600 dark:text-amber-400 font-normal">/ Upcoming Divine Pujas</span>
             </h2>
             <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium max-w-2xl">
               Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by experienced priests.
