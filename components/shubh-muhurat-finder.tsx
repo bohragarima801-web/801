@@ -328,20 +328,12 @@ export function ShubhMuhuratFinder() {
                 <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-100 dark:border-slate-800/80 mt-auto">
                   <button
                     onClick={() => handleCopyDetails(item)}
-                    className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-800 text-xs font-semibold text-amber-900 dark:text-amber-300 hover:bg-amber-100 transition-colors"
                     title="Copy details"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>Copy</span>
+                    <span>Copy Details</span>
                   </button>
-
-                  <Link
-                    href={`/bookings/new?service=${encodeURIComponent(item.event)}`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs font-semibold shadow-xs transition-all"
-                  >
-                    <span>पूजा बुक करें</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
                 </div>
               </div>
             ))}
@@ -360,7 +352,6 @@ export function ShubhMuhuratFinder() {
                     <th className="py-3.5 px-4">नक्षत्र</th>
                     <th className="py-3.5 px-4">तिथि</th>
                     <th className="py-3.5 px-4">विशेष योग / टिप्पणी</th>
-                    <th className="py-3.5 px-4 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -396,14 +387,6 @@ export function ShubhMuhuratFinder() {
                       <td className="py-3 px-4 text-xs font-semibold text-amber-800 dark:text-amber-300 whitespace-nowrap">
                         {item.specialNotes}
                       </td>
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <Link
-                          href={`/bookings/new?service=${encodeURIComponent(item.event)}`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium shadow-xs"
-                        >
-                          <span>Book</span>
-                        </Link>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -425,7 +408,7 @@ export function ShubhMuhuratFinder() {
           </div>
 
           <Link
-            href="/bookings/new?service=Astrology%20Consultation"
+            href="/ask-a-pandit"
             className="px-5 py-2.5 rounded-xl bg-white text-amber-900 font-bold text-xs sm:text-sm shadow-md hover:bg-amber-50 transition-all shrink-0"
           >
             आचार्य जी से बात करें
