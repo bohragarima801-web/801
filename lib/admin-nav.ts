@@ -12,6 +12,7 @@ export type AdminNavSection = { title: string; icon: any; slug: string; href?: s
 
 export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Dashboard', slug: 'dashboard', icon: LayoutDashboard, href: '/admin' },
+  { title: '⚡ Real-Time Data Status', slug: 'live-data', icon: DatabaseBackup, href: '/admin/live-data' },
   { title: 'User Management', slug: 'users', icon: Users, permission: 'user.read', items: [
     { title: 'All Users', href: '/admin/users' }, { title: 'Customers', href: '/admin/customers' },
     { title: 'Sub-Admins', href: '/admin/users/admins' }, { title: 'Pandits', href: '/admin/users?tab=pandits' },
