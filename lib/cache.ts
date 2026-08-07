@@ -23,6 +23,7 @@ export const getCachedPujas = unstable_cache(
           pujaDate: true,
           location: true,
           shortDescription: true,
+          customHtml: true,
           category: {
             select: {
               id: true,
@@ -39,11 +40,22 @@ export const getCachedPujas = unstable_cache(
         orderBy: { createdAt: 'desc' }
       })
       
-      return JSON.parse(JSON.stringify(pujas.map(p => ({
-        ...p,
-        price: Number(p.price),
-        vipPrice: p.vipPrice ? Number(p.vipPrice) : null
-      }))))
+      return JSON.parse(JSON.stringify(pujas.map(p => {
+        let badge = null
+        if (p.customHtml) {
+          try {
+            const parsed = JSON.parse(p.customHtml)
+            if (parsed.badge) badge = parsed.badge
+          } catch (e) {}
+        }
+        return {
+          ...p,
+          badge,
+          price: Number(p.price),
+          vipPrice: p.vipPrice ? Number(p.vipPrice) : null
+        }
+      })))
+
     } catch (err) {
       return []
     }

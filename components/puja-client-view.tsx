@@ -448,11 +448,25 @@ export function PujaClientView({ puja }: { puja: any }) {
                       : "border-slate-200 hover:border-amber-300"
                   )}
                 >
-                  {pkg.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-md z-10">
+                  {/* Dynamic High-Converting Popular Badges */}
+                  {Number(pkg.price) === 1501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-[#FFD700] whitespace-nowrap animate-pulse">
+                      🔥 MOST POPULAR (78% यजमानों की पहली पसंद)
+                    </div>
+                  )}
+
+                  {Number(pkg.price) === 2501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-emerald-300 whitespace-nowrap">
+                      ⭐ POPULAR FAMILY CHOICE (4 सदस्य पैकेज)
+                    </div>
+                  )}
+
+                  {pkg.popular && Number(pkg.price) !== 1501 && Number(pkg.price) !== 2501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md z-10 border border-amber-200 whitespace-nowrap">
                       ⭐ सर्वाधिक बुक किया गया
                     </div>
                   )}
+
 
                   <div className="space-y-5">
                     {/* Package Specific Custom Image — Never Cropped / Full Aspect */}

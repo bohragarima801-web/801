@@ -133,6 +133,7 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
+              popular: !!pkg.popular,
               image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
@@ -148,11 +149,13 @@ export async function POST(req: NextRequest) {
               name: pkg.name,
               price: Number(pkg.price) || 0,
               description: pkg.description || '',
+              popular: !!pkg.popular,
               image: pkg.image ? convertGoogleDriveUrl(pkg.image) : null
             })) : []
           }
         }
       })
+
     }
 
     // Sync gallery images

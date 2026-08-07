@@ -49,7 +49,19 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
   return { isVideo: false, thumbUrl: url }
 }
 
+function getPujaBadgeInfo(p: any) {
+  if (p.isVip) {
+    return { text: '👑 VIP ANUSHTHAN', bg: 'bg-gradient-to-r from-[#3D0408] via-[#8B1A21] to-[#3D0408] text-[#FFD700] border border-[#F5B800]/60 shadow-lg' }
+  }
+  if (p.badge) {
+    return { text: p.badge, bg: 'bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-white shadow-md font-extrabold border border-[#FFD700]/30' }
+  }
+  return null
+}
+
+
 export const revalidate = 30
+
 
 // Fallback Pujas if DB has few items
 const fallbackPujas = [
@@ -323,10 +335,20 @@ export default async function HomePage() {
                   {/* Dark gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-transparent to-transparent pointer-events-none" />
 
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md">{badgeTag}</span>
-                  </div>
+                  {/* Admin Configured Card Badge */}
+                  {(() => {
+                    const badgeInfo = getPujaBadgeInfo(p)
+                    if (!badgeInfo) return null
+                    return (
+                      <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${badgeInfo.bg}`}>
+                          {badgeInfo.text}
+                        </span>
+                      </div>
+                    )
+                  })()}
+
+
 
                   {/* Category */}
                   <div className="absolute bottom-3 left-3">

@@ -15,7 +15,18 @@ export function generateMetadata() {
   })
 }
 
-export const revalidate = 60
+function getPujaBadgeInfo(p: any) {
+  if (p.isVip) {
+    return { text: '👑 VIP ANUSHTHAN', bg: 'bg-gradient-to-r from-[#3D0408] via-[#8B1A21] to-[#3D0408] text-[#FFD700] border border-[#F5B800]/60 shadow-lg' }
+  }
+  if (p.badge) {
+    return { text: p.badge, bg: 'bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-white shadow-md font-extrabold border border-[#FFD700]/30' }
+  }
+  return null
+}
+
+
+
 
 const fallbackNormalPujas = [
   {
@@ -156,19 +167,20 @@ export default async function PujasPage() {
                     {/* Dark gradient over image */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-[rgba(12,4,2,0.10)] to-transparent pointer-events-none" />
 
-                    {/* Badges */}
-                    <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
-                      {p.isVip && (
-                        <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md">
-                          ⭐ VIP
-                        </span>
-                      )}
-                      {p.badge && (
-                        <span className="px-2.5 py-1 rounded-full bg-[rgba(168,124,40,0.85)] text-white text-[10px] font-bold backdrop-blur-sm">
-                          {p.badge}
-                        </span>
-                      )}
-                    </div>
+                    {/* Admin Configured Card Badge */}
+                    {(() => {
+                      const badgeInfo = getPujaBadgeInfo(p)
+                      if (!badgeInfo) return null
+                      return (
+                        <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${badgeInfo.bg}`}>
+                            {badgeInfo.text}
+                          </span>
+                        </div>
+                      )
+                    })()}
+
+
 
                     {/* Category on image bottom */}
                     {p.category?.name && (

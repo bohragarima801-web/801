@@ -106,7 +106,9 @@ function NewPujaPage_Content() {
   const [seoDescription, setSeoDescription] = useState('')
   const [seoKeywords, setSeoKeywords] = useState('')
   const [customHtml, setCustomHtml] = useState('')
+  const [badgeTag, setBadgeTag] = useState('')
   const [assignedPanditName, setAssignedPanditName] = useState('पं. कन्हैया लाल दवे (Pt. Kanhaiya Lal Dave)')
+
   const [assignedPanditTitle, setAssignedPanditTitle] = useState('अथर्ववेद एवं महाविद्या पीठाधीश्वर')
   const [assignedPanditExperience, setAssignedPanditExperience] = useState('22+ वर्ष अनुभव')
   const [assignedPanditLocation, setAssignedPanditLocation] = useState('माँ बगलामुखी पीठ, दतिया')
@@ -190,6 +192,7 @@ function NewPujaPage_Content() {
           if (p.customHtml) {
             try {
               const parsed = JSON.parse(p.customHtml)
+              if (parsed.badge) setBadgeTag(parsed.badge)
               if (parsed.assignedPandit) {
                 setAssignedPanditName(parsed.assignedPandit.name || '')
                 setAssignedPanditTitle(parsed.assignedPandit.title || '')
@@ -199,6 +202,7 @@ function NewPujaPage_Content() {
               }
             } catch (e) {}
           }
+
           setCoverImage(p.coverImage || '')
           if (p.images && Array.isArray(p.images)) {
             const allUrls = p.images.map((img: any) => typeof img === 'string' ? img : img.url).filter(Boolean)
@@ -468,6 +472,7 @@ function NewPujaPage_Content() {
         seoDescription,
         seoKeywords,
         customHtml: JSON.stringify({
+          badge: badgeTag || null,
           assignedPandit: {
             name: assignedPanditName,
             title: assignedPanditTitle,
@@ -476,6 +481,7 @@ function NewPujaPage_Content() {
             photo: assignedPanditPhoto
           }
         }),
+
         coverImage,
         packages,
         images: [
@@ -578,8 +584,56 @@ function NewPujaPage_Content() {
             </CardContent>
           </Card>
 
+          {/* Puja Card Badge Management (Admin CMS) */}
+          <Card className="border-2 border-rose-300 bg-rose-50/20 dark:bg-rose-950/10">
+            <CardHeader className="bg-rose-100/50 dark:bg-rose-900/30 border-b border-rose-200">
+              <CardTitle className="text-base font-extrabold text-rose-950 dark:text-rose-300 flex items-center gap-2">
+                🔥 Puja Card Badge System (पूजा कार्ड का बैज - Admin Control)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 pt-4">
+              <div className="space-y-1.5">
+                <Label className="font-bold text-xs">कार्ड पर दिखने वाला बैज (Badge Label Text)</Label>
+                <Input
+                  value={badgeTag}
+                  onChange={(e) => setBadgeTag(e.target.value)}
+                  placeholder="e.g. 🔥 Most Booked, ⭐ Popular, ⚡ Trending, 🌸 Shakti Peeth Special"
+                  className="border-rose-300 bg-white"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 pt-1 items-center">
+                <span className="text-xs font-bold text-slate-600">क्विक सेलेक्ट (Presets):</span>
+                {[
+                  '🔥 Most Booked',
+                  '⭐ Popular',
+                  '⚡ Trending',
+                  '🌸 Shakti Peeth Special',
+                  '✨ Vedic Anushthan',
+                  '👑 VIP'
+                ].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setBadgeTag(preset)}
+                    className="px-2.5 py-1 text-xs rounded-full bg-white border border-rose-300 hover:bg-rose-100 font-bold text-rose-900 shadow-xs transition-colors"
+                  >
+                    {preset}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setBadgeTag('')}
+                  className="px-2.5 py-1 text-xs rounded-full bg-slate-200 hover:bg-slate-300 font-bold text-slate-700 transition-colors"
+                >
+                  (Clear / ख़ाली)
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* VIP Puja & Assigned Pandit Card */}
           <Card className="border-2 border-amber-400 bg-amber-50/20 dark:bg-amber-950/10">
+
             <CardHeader className="bg-amber-100/50 dark:bg-amber-900/30 border-b border-amber-200">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-extrabold text-amber-900 dark:text-amber-300 flex items-center gap-2">
@@ -774,7 +828,28 @@ function NewPujaPage_Content() {
                           </div>
                         </div>
 
+                        {/* Package Popular / Recommended Badge Admin Selection */}
+                        <div className="flex items-center justify-between p-2 rounded-md bg-amber-50/70 border border-amber-200">
+                          <div className="flex items-center gap-2">
+                            <Switch
+                              checked={!!pkg.popular}
+                              onCheckedChange={(checked) => handlePackageChange(i, 'popular', checked)}
+                            />
+                            <Label className="text-xs font-extrabold text-[#8B1A21] cursor-pointer">
+                              ⭐ Mark as Popular / Recommended (सर्वाधिक पसंदीदा पैकेज बैज)
+                            </Label>
+                          </div>
+                          {pkg.popular ? (
+                            <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-600 text-white shadow-xs">
+                              🔥 POPULAR BADGE ACTIVE
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 font-medium">Standard package</span>
+                          )}
+                        </div>
+
                         {/* Permanent Package Image Upload System */}
+
                         <div className="pt-3 border-t border-slate-200">
                           <Label className="text-xs font-bold text-slate-800 flex items-center gap-1.5 mb-1.5">
                             📸 पैकेज फ़ोटो अपलोड (Package Photo Upload)
