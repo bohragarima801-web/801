@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { SacredImageFrame } from '@/components/ui/safe-image'
-import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck, Crown, Flame, Award, Video, CheckCircle2, Star } from 'lucide-react'
+import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck, Crown, Flame, Award, Video, CheckCircle2, Star, UserCheck } from 'lucide-react'
+
 
 export interface VipPackageItem {
   id: string
