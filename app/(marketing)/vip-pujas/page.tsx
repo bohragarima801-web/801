@@ -5,7 +5,7 @@ import { VipPujasSection, VipPackageItem } from '@/components/vip-pujas-section'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'VIP Pujas — Exclusive, Personalized Vedic Rituals | DivyaYagyam',
+    title: 'VIP Special Puja Anushthan & Mahayagya | DivyaYagyam',
     description: 'Experience priority scheduling, dedicated priests, extended Vedic rituals, detailed sankalp with your name and gotra, and personalized HD video & prasad delivery.',
     path: '/vip-pujas',
   })

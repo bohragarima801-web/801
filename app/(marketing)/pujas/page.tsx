@@ -9,7 +9,7 @@ import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'ऑनलाइन पूजा बुकिंग — काशी, महाकाल, उज्जैन | DivyaYagyam',
+    title: 'Online Puja Booking – Rudrabhishek, Havan & Dosh Nivaran | DivyaYagyam',
     description: '100+ वैदिक पूजा अनुष्ठान ऑनलाइन बुक करें। रुद्राभिषेक, कालसर्प दोष निवारण, नवग्रह शांति — विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प।',
     path: '/pujas',
   })

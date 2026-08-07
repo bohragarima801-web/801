@@ -34,7 +34,16 @@ export function WhatsAppFloatingWidget() {
         }
       } catch {}
     }
-    loadConfig()
+
+    const loadWhatsApp = () => {
+      loadConfig()
+    }
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(loadWhatsApp, { timeout: 1500 })
+    } else {
+      setTimeout(loadWhatsApp, 1000)
+    }
   }, [])
 
   if (!enabled || teamMembers.length === 0) return null

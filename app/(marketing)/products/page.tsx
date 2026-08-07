@@ -8,7 +8,7 @@ import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'वैदिक पूजा सामग्री — रुद्राक्ष, यंत्र, माला | DivyaYagyam',
+    title: 'Abhimantrit Rudraksha, Yantra & Sacred Puja Samagri | DivyaYagyam',
     description: '100% अभिमंत्रित वैदिक सामग्री। रुद्राक्ष, यंत्र, पूजा थाली, माला — मंदिर से सीधे आपके घर। Free delivery on ₹999+.',
     path: '/products',
   })

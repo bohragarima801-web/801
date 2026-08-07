@@ -5,15 +5,15 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'आगामी पूजा कार्यक्रम — Upcoming Events | DivyaYagyam',
-    description: 'आगामी पूजा, अनुष्ठान और धार्मिक कार्यक्रम। शिवरात्रि, नवरात्रि, एकादशी — सभी आयोजनों की जानकारी।',
+    title: 'Upcoming Hindu Puja, Yagya & Temple Events | DivyaYagyam',
+    description: 'Upcoming Hindu temple events, Mahayagya, Mahashivratri, Navratri & festival Anushthan schedule. Join live or book online sankalp.',
     path: '/events',
   })
 }
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, MapPin, Video, Sparkles, AlertCircle } from 'lucide-react'
+import { Calendar, MapPin, Video, Sparkles, AlertCircle, ArrowRight, MessageCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 export const revalidate = 30
@@ -64,21 +64,48 @@ export default async function EventsPage() {
       <div className="container py-14 space-y-12">
       {/* HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
+        <Badge className="bg-amber-100 text-amber-900 border-amber-300 font-bold px-3 py-1 text-xs mb-2">
+          🪔 Sacred Anushthan Schedule
+        </Badge>
         <h1 className="text-4xl md:text-5xl font-black text-om-gradient">Spiritual Events & Festivals</h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          भारत के प्रमुख मंदिरों से साक्षात उत्सव एवं पावन धार्मिक कार्यक्रमों से जुड़ें।
+          भारत के प्रमुख शक्तिपीठों एवं ज्योतिर्लिंगों से साक्षात उत्सव एवं पावन महायज्ञ सम्पादन।
         </p>
       </div>
 
       {/* SCHEDULE & UPCOMING EVENTS */}
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-slate-800 border-l-4 border-[var(--primary-color)] pl-3">
-          आगामी उत्सव एवं शेड्यूल (Event Schedule)
+          आगामी उत्सव एवं अनुष्ठान (Upcoming Events & Rituals)
         </h2>
 
         {events.length === 0 ? (
-          <div className="text-center py-10 text-muted-foreground text-sm">
-            कोई आगामी इवेंट अनुसूचित नहीं है। कृपया जल्द ही दोबारा जांचें।
+          <div className="bg-gradient-to-br from-amber-50/70 via-white to-orange-50/50 p-8 md:p-12 border-2 border-amber-200 rounded-3xl text-center space-y-6 shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-800 flex items-center justify-center mx-auto border border-amber-400">
+              <Sparkles className="h-8 w-8 text-amber-700" />
+            </div>
+            <div className="space-y-2 max-w-xl mx-auto">
+              <h3 className="text-2xl font-extrabold text-slate-900">
+                आगामी पर्व एवं विशेष अनुष्ठान बुकिंग चालू है
+              </h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                महाशिवरात्रि, सावन सोमवार, एकादशी, प्रदोष व्रत एवं नवरात्रि विशेष अनुष्ठान हेतु विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प बुकिंग खुली है।
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4 pt-2">
+              <Button asChild className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold h-12 px-6 rounded-xl shadow-md">
+                <Link href="/pujas">
+                  पूजा एवं अनुष्ठान सूची देखें (View Pujas) <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" className="border-green-600 text-green-700 hover:bg-green-50 font-bold h-12 px-6 rounded-xl">
+                <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20information%20about%20upcoming%20puja%20events." target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4 text-green-600" /> WhatsApp पर इवेंट अलर्ट पाएं
+                </a>
+              </Button>
+            </div>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

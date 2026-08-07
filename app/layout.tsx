@@ -21,11 +21,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const googleVerification = await getSetting('seo.google_verification')
   const baseUrl = dynamicConfig.url || 'https://divyayagyam.com'
   const siteName = dynamicConfig.name || 'DivyaYagyam'
-  const defaultDescription = 'Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar & heritage temples. Verified Pandits, name-gotra sankalp, live video proof on WhatsApp & sacred prasad home delivery.'
+  const defaultDescription = 'Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar & heritage temples in India. Verified Vedic Pandits, name-gotra sankalp, WhatsApp video proof & sacred prasad home delivery.'
 
   return {
     title: {
-      default: `${siteName} — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      default: `Online Puja Booking from Temples in India | ${siteName}`,
       template: `%s | ${siteName}`
     },
     description: dynamicConfig.description || defaultDescription,

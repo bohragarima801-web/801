@@ -107,11 +107,12 @@ function NewPujaPage_Content() {
   const [seoKeywords, setSeoKeywords] = useState('')
   const [customHtml, setCustomHtml] = useState('')
   const [badgeTag, setBadgeTag] = useState('')
-  const [assignedPanditName, setAssignedPanditName] = useState('पं. कन्हैया लाल दवे (Pt. Kanhaiya Lal Dave)')
+  const [showPanditChoice, setShowPanditChoice] = useState(true)
+  const [assignedPanditName, setAssignedPanditName] = useState('पं. मुकेश बोहरा (Pt. Mukesh Bohra)')
 
-  const [assignedPanditTitle, setAssignedPanditTitle] = useState('अथर्ववेद एवं महाविद्या पीठाधीश्वर')
-  const [assignedPanditExperience, setAssignedPanditExperience] = useState('22+ वर्ष अनुभव')
-  const [assignedPanditLocation, setAssignedPanditLocation] = useState('माँ बगलामुखी पीठ, दतिया')
+  const [assignedPanditTitle, setAssignedPanditTitle] = useState('मुख्य आचार्य एवं वेदपाठी विद्वान')
+  const [assignedPanditExperience, setAssignedPanditExperience] = useState('20+ वर्ष अनुभव')
+  const [assignedPanditLocation, setAssignedPanditLocation] = useState('उज्जैन / काशी सिद्ध पीठ')
   const [assignedPanditPhoto, setAssignedPanditPhoto] = useState('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80')
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
@@ -193,6 +194,7 @@ function NewPujaPage_Content() {
             try {
               const parsed = JSON.parse(p.customHtml)
               if (parsed.badge) setBadgeTag(parsed.badge)
+              if (parsed.showPanditChoice !== undefined) setShowPanditChoice(!!parsed.showPanditChoice)
               if (parsed.assignedPandit) {
                 setAssignedPanditName(parsed.assignedPandit.name || '')
                 setAssignedPanditTitle(parsed.assignedPandit.title || '')
@@ -473,6 +475,7 @@ function NewPujaPage_Content() {
         seoKeywords,
         customHtml: JSON.stringify({
           badge: badgeTag || null,
+          showPanditChoice: !!showPanditChoice,
           assignedPandit: {
             name: assignedPanditName,
             title: assignedPanditTitle,
@@ -631,19 +634,38 @@ function NewPujaPage_Content() {
             </CardContent>
           </Card>
 
-          {/* VIP Puja & Assigned Pandit Card */}
+          {/* Pandit Ji Choice & Assigned Pandit Card */}
           <Card className="border-2 border-amber-400 bg-amber-50/20 dark:bg-amber-950/10">
 
             <CardHeader className="bg-amber-100/50 dark:bg-amber-900/30 border-b border-amber-200">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-extrabold text-amber-900 dark:text-amber-300 flex items-center gap-2">
-                  👑 VIP Puja & Assigned Acharya (VIP पूजा सेटिंग्स एवं आचार्य विवरण)
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <CardTitle className="text-base font-extrabold text-amber-950 dark:text-amber-300 flex items-center gap-2">
+                  🚩 पंडित जी चॉइस एवं आचार्य विवरण (Pandit Ji Choice & Assigned Acharya)
                 </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Label className="text-xs font-bold text-amber-900">Mark as VIP Puja</Label>
-                  <Switch checked={isVip} onCheckedChange={setIsVip} />
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-2 bg-white/90 dark:bg-amber-950/80 px-3 py-1.5 rounded-xl border border-amber-400 shadow-2xs">
+                    <Label className="text-xs font-black text-amber-950 dark:text-amber-200 cursor-pointer">
+                      पंडित जी चॉइस दिखाएँ (Show Pandit Choice)
+                    </Label>
+                    <Switch checked={showPanditChoice} onCheckedChange={setShowPanditChoice} />
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Label className="text-xs font-bold text-amber-900 dark:text-amber-300">VIP Puja</Label>
+                    <Switch checked={isVip} onCheckedChange={setIsVip} />
+                  </div>
                 </div>
               </div>
+              <p className="text-[11px] font-semibold text-amber-900 dark:text-amber-300 mt-2 bg-amber-200/50 dark:bg-amber-900/40 p-2 rounded-lg border border-amber-300/60">
+                {showPanditChoice ? (
+                  <span className="text-emerald-800 dark:text-emerald-300 font-bold">
+                    ✓ एडमिन निर्णय: पंडित जी चॉइस टिक विकल्प (ON) है — यूज़र को पूजा पेज एवं बुकिंग फॉर्म पर पंडित जी चॉइस टिक दिखेगा।
+                  </span>
+                ) : (
+                  <span className="text-rose-800 dark:text-rose-300 font-bold">
+                    ✕ एडमिन निर्णय: पंडित जी चॉइस टिक विकल्प (OFF) है — यूज़र को पंडित जी चॉइस का टिक विकल्प नहीं दिखेगा।
+                  </span>
+                )}
+              </p>
             </CardHeader>
 
             <CardContent className="space-y-4 pt-4">

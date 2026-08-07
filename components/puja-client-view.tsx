@@ -166,6 +166,18 @@ export function PujaClientView({ puja }: { puja: any }) {
 
   const currentSelectedPkgObj = packages.find((p: any) => p.id === selectedPackage) || packages[0]
 
+  let showPanditChoice = false
+  let assignedPandit: any = null
+  if (puja?.customHtml) {
+    try {
+      const parsed = JSON.parse(puja.customHtml)
+      showPanditChoice = !!parsed.showPanditChoice
+      if (parsed.assignedPandit && parsed.assignedPandit.name) {
+        assignedPandit = parsed.assignedPandit
+      }
+    } catch (e) {}
+  }
+
   return (
     <div className="relative bg-[#FAF8F5] pb-28 sm:pb-32 font-sans antialiased text-slate-800">
       
@@ -442,6 +454,48 @@ export function PujaClientView({ puja }: { puja: any }) {
       {/* Main Content Container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-12 space-y-16 lg:space-y-20">
         
+        {/* Admin Decided: Pandit Ji Choice Feature Banner */}
+        {showPanditChoice && (
+          <div className="bg-gradient-to-r from-amber-900 via-rose-950 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-amber-400/50 space-y-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border-2 border-amber-400 shrink-0 shadow-lg bg-amber-950">
+                  <img 
+                    src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
+                    alt={assignedPandit?.name || 'Pandit Ji'} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                    }}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[11px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" /> पंडित जी चॉइस उपलब्ध (Pandit Ji Choice Enabled)
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-amber-100 font-devanagari">
+                    {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-amber-200/90 font-medium">
+                    {assignedPandit?.title || 'मुख्य वेदपाठी आचार्य एवं वैदिक अनुष्ठान विशेषज्ञ'}
+                  </p>
+                  <p className="text-[11px] text-amber-300/80">
+                    📍 {assignedPandit?.location || 'उज्जैन / काशी धाम'} • 📜 {assignedPandit?.experience || '20+ वर्ष अनुभव'}
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0 text-center sm:text-right">
+                <Button 
+                  onClick={() => handleScrollTo('packages')}
+                  className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-slate-950 font-black px-5 py-3 rounded-xl shadow-lg border-b-4 border-amber-600 text-sm uppercase tracking-wide cursor-pointer"
+                >
+                  ✓ पंडित जी चॉइस के साथ बुक करें &rarr;
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 3. Packages Section */}
         <section id="packages" className="scroll-mt-32">
           <div className="text-center max-w-2xl mx-auto mb-10">

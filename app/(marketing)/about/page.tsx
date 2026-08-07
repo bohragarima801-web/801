@@ -10,7 +10,7 @@ export const revalidate = 3600; // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'हमारे बारे में (About Us) — Sanatan Seva & Authentic Pujas',
+    title: 'About DivyaYagyam – Verified Vedic Priests & Temple Pujas | DivyaYagyam',
     description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (35+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
     path: '/about',
   })

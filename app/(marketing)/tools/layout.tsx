@@ -2,7 +2,7 @@ import { generatePageMeta } from '@/lib/seo'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = generatePageMeta({
-  title: 'निःशुल्क वैदिक ज्योतिष टूल — Spiritual & Astro Tools',
+  title: 'Free Kundli, Panchang, Muhurat & Vedic Tools | DivyaYagyam',
   description: 'कुण्डली मिलान, दैनिक पंचांग, शुभ मुहूर्त, रुद्राक्ष परामर्श, नामकरण एवं AI पंडित जी से ज्योतिष मार्गदर्शन बिल्कुल मुफ्त प्राप्त करें।',
   path: '/tools',
 })

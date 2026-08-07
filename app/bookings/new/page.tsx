@@ -49,6 +49,7 @@ function BookingForm() {
   // Extra standard add-ons
   const [addCourier, setAddCourier] = useState(true)
   const [addDakshina, setAddDakshina] = useState(false)
+  const [selectPanditChoice, setSelectPanditChoice] = useState(true)
 
   useEffect(() => {
     if (!pujaId) {
@@ -115,6 +116,18 @@ function BookingForm() {
   const packageUpgrades: Record<string, number> = { '1': 0, '2': 550, '4': 1550, '6': 2550 }
   const packagePrice = basePrice + (packageUpgrades[packageKey] ?? 0)
 
+  let showPanditChoice = false
+  let assignedPandit: any = null
+  if (puja?.customHtml) {
+    try {
+      const parsed = JSON.parse(puja.customHtml)
+      showPanditChoice = !!parsed.showPanditChoice
+      if (parsed.assignedPandit && parsed.assignedPandit.name) {
+        assignedPandit = parsed.assignedPandit
+      }
+    } catch (e) {}
+  }
+
   let addOnsTotal = 0
   if (addCourier) addOnsTotal += 99
   if (addDakshina) addOnsTotal += 251
@@ -168,6 +181,11 @@ function BookingForm() {
     // Prepare structured members array
     const membersList = familyNames.filter(Boolean).map(name => ({ name }))
 
+    const finalSankalpPurpose = [
+      sankalpPurpose,
+      (showPanditChoice && selectPanditChoice) ? `[Pandit Choice: ${assignedPandit?.name || 'Pt. Mukesh Bohra'}]` : ''
+    ].filter(Boolean).join(' | ')
+
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
@@ -177,7 +195,7 @@ function BookingForm() {
           devoteeName: devoteeName,
           fatherHusbandName: fatherHusbandName || 'N/A',
           gotra,
-          sankalpPurpose,
+          sankalpPurpose: finalSankalpPurpose,
           members: membersList,
           selectedOfferingIds,
           addCourier,
@@ -361,6 +379,49 @@ function BookingForm() {
         {step === 'sankalp' && (
           <div className="space-y-4">
             <h3 className="font-bold text-sm uppercase text-slate-700 tracking-wider">Enhance your Puja (अतिरिक्त सेवा)</h3>
+
+            {/* Admin Controlled Pandit Ji Choice Tick Box */}
+            {showPanditChoice && (
+              <div 
+                className={`p-4 border-2 rounded-2xl flex items-center justify-between cursor-pointer transition-all ${
+                  selectPanditChoice ? 'border-amber-500 bg-amber-50/40 shadow-sm' : 'border-slate-200 bg-white'
+                }`}
+                onClick={() => setSelectPanditChoice(!selectPanditChoice)}
+              >
+                <div className="flex items-center gap-3">
+                  <Checkbox 
+                    checked={selectPanditChoice} 
+                    onCheckedChange={(val) => setSelectPanditChoice(!!val)} 
+                  />
+                  {assignedPandit?.photo && (
+                    <img 
+                      src={getSafeImageUrl(assignedPandit.photo)} 
+                      className="h-10 w-10 rounded-full object-cover border-2 border-amber-400 shrink-0" 
+                      alt="Pandit Ji" 
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                      }}
+                    />
+                  )}
+                  <div className="text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-bold text-slate-800">
+                        पंडित जी चॉइस (Pandit Ji Choice) — {assignedPandit?.name || 'पं. मुकेश बोहरा'}
+                      </h4>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded-full">
+                        ✓ Verified
+                      </span>
+                    </div>
+                    <p className="text-slate-500 text-[10px]">
+                      {assignedPandit?.title || 'विद्वान वेदपाठी आचार्य द्वारा विशेष नाम-गोत्र संकल्प एवं पूजन'}
+                    </p>
+                  </div>
+                </div>
+                <Badge className={selectPanditChoice ? "bg-amber-500 text-slate-950 font-black text-[10px]" : "bg-slate-200 text-slate-700 font-bold text-[10px]"}>
+                  {selectPanditChoice ? '✓ Selected' : 'Select'}
+                </Badge>
+              </div>
+            )}
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div className={`p-4 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${addCourier ? 'border-orange-500 bg-orange-50/20' : 'bg-white'}`} onClick={() => setAddCourier(!addCourier)}>

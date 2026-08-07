@@ -8,8 +8,8 @@ import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'सनातन धर्म ब्लॉग — पूजा विधि, मंत्र, ज्योतिष | DivyaYagyam',
-    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
+    title: 'Sanatan Dharma Blog – Puja Vidhi, Mantra, Vrat & Jyotish | DivyaYagyam',
+    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
     path: '/blog',
   })
 }
