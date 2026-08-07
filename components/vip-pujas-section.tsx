@@ -107,8 +107,9 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-[#FFF3D6] max-w-3xl mx-auto leading-relaxed font-medium">
-            वरिष्ठ पीताम्बरा वेदाचार्यों द्वारा विशेष नाम-गोत्र संकल्प के साथ व्यक्तिगत अनुष्ठान। १,२५,००० जाप, अखंड दीप, व्हाट्सएप पर एचडी लाइव वीडियो प्रमाण एवं घर द्वार दिव्य रजत-प्रसाद।
+            27 से अधिक वर्षों के अनुभवी आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा विशेष VIP अनुष्ठान आयोजित किए जाते हैं।
           </p>
+
 
           {/* Trust Chips */}
           <div className="flex flex-wrap gap-3 justify-center mt-9 max-w-4xl mx-auto">
@@ -250,8 +251,9 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 क्यों चुनें दिव्ययज्ञम् VIP महा अनुष्ठान?
               </h3>
               <p className="text-sm text-[#FFE89C] leading-relaxed font-medium">
-                VIP अनुष्ठान केवल आपके परिवार के लिए विशेष रूप से संपन्न किए जाते हैं। इसमें 5 से 11 वरिष्ठ वेदाचार्यों द्वारा अखंड मंत्र जाप, विशेष हवन सामग्री, व्हाट्सएप पर लाइव वीडियो संकल्प एवं रजत-प्रसाद विशेष डिब्बे में भेजा जाता है।
+                VIP अनुष्ठान केवल आपके परिवार के लिए विशेष रूप से संपन्न किए जाते हैं। इसमें 27 से अधिक वर्षों के अनुभवी वरिष्ठ आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा विशेष नाम-गोत्र संकल्प, अखंड मंत्र जाप एवं लाइव वीडियो प्रमाण के साथ अनुष्ठान संपन्न किया जाता है।
               </p>
+
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 pt-4">
