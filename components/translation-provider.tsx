@@ -31,21 +31,19 @@ export function TranslationProvider() {
     if (pathname?.startsWith('/admin')) return
 
     // 1. Read language from localStorage
-    const lang = localStorage.getItem('lang') || 'en'
+    const lang = localStorage.getItem('lang')
 
-    // 2. Set the Google Translate Cookie
-    if (lang === 'en') {
-      // Clear cookie for base language
+    // 2. Clear auto-translate cookie by default to prevent browser translator from mangling text
+    if (!lang || lang === 'en' || lang === 'default') {
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + window.location.hostname
-      
-      // Do not load the Google Translate script at all if default language is selected.
-      // This completely disables auto-translate unless explicitly requested by the user.
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname
       return
     } else {
-      document.cookie = `googtrans=/en/${lang}; path=/`
-      document.cookie = `googtrans=/en/${lang}; path=/; domain=.${window.location.hostname}`
+      document.cookie = `googtrans=/auto/${lang}; path=/`
+      document.cookie = `googtrans=/auto/${lang}; path=/; domain=.${window.location.hostname}`
     }
+
 
     // 3. Inject Google Translate CSS to hide UI frames
     let style = document.getElementById('__google_translate_css')

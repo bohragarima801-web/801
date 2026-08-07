@@ -284,6 +284,8 @@ export default async function HomePage() {
           >
             View All Pujas <ArrowRight className="h-4 w-4" />
           </Link>
+
+
         </div>
 
         {/* Responsive Grid of Puja Cards */}
@@ -387,6 +389,8 @@ export default async function HomePage() {
                     >
                       Book Now <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
+
+
                   </div>
                 </div>
 

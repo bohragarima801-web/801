@@ -182,14 +182,14 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                         activeMediaIndex === i ? 'border-[#F5B800] scale-105 shadow-lg' : 'border-[#54080F] opacity-60 hover:opacity-100'
                       }`}
                     >
-                      <Image src={img} alt={`Puja Gallery ${i + 1}`} fill className="object-cover" />
+                      <Image src={img} alt={`पूजा गैलरी ${i + 1}`} fill className="object-cover" />
                     </button>
                   ))}
                 </div>
               )}
 
               <div className="bg-gradient-to-r from-[#3D0408] to-[#200205] p-4 rounded-2xl border-2 border-[#F5B800]/50 flex items-center justify-between text-center shadow-lg">
-                <span className="text-xs text-[#FFF3D6] font-bold">VIP Sankalp Amount</span>
+                <span className="text-xs text-[#FFF3D6] font-bold">VIP अनुष्ठान दक्षिणा राशि</span>
                 <span className="text-2xl font-black text-[#F5B800]">₹{displayPrice.toLocaleString('en-IN')}</span>
               </div>
             </div>
@@ -199,13 +199,13 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               
               <div className="space-y-3">
                 <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-[#F5B800]/20 text-[#FFF3D6] border border-[#F5B800]/50">
-                  <Crown className="h-3.5 w-3.5 text-[#F5B800]" /> Exclusive Personalized Ritual
+                  <Crown className="h-3.5 w-3.5 text-[#F5B800]" /> विशेष व्यक्तिगत VIP अनुष्ठान
                 </span>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-white leading-tight">
                   {puja.name}
                 </h1>
                 <p className="text-sm text-[#FFE89C] font-medium leading-relaxed">
-                  {(puja.shortDescription || puja.description || 'Participate in this highly customized VIP ritual for health, prosperity, and lineage blessings.').replace(/<[^>]*>?/gm, '')}
+                  {(puja.shortDescription || puja.description || 'आपके एवं आपके परिवार के कल्याण, आरोग्य व समृद्धि हेतु विशेष VIP महा अनुष्ठान।').replace(/<[^>]*>?/gm, '')}
                 </p>
               </div>
 
@@ -213,10 +213,10 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               <div className="p-5 rounded-2xl bg-[#2B0306] border-2 border-[#F5B800]/60 space-y-3 shadow-xl">
                 <div className="flex items-center justify-between border-b border-[#F5B800]/30 pb-2.5">
                   <span className="text-xs font-black text-[#F5B800] uppercase tracking-wider flex items-center gap-1.5">
-                    <UserCheck className="h-4 w-4 text-[#F5B800]" /> Who Will Perform Your Puja (आचार्य जानकारी)
+                    <UserCheck className="h-4 w-4 text-[#F5B800]" /> अनुष्ठान संपन्नकर्ता मुख्य आचार्य
                   </span>
                   <Badge className="bg-[#54080F] text-[#FFF3D6] border border-[#F5B800]/50 font-bold text-[10px] px-2.5 py-0.5">
-                    ✓ Verified Lead Acharya
+                    ✓ प्रामाणिक पीठाधीश्वर आचार्य
                   </Badge>
                 </div>
 
@@ -247,19 +247,19 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               <div className="grid grid-cols-2 gap-3 pt-2 text-xs text-[#FFF3D6] font-bold">
                 <div className="flex items-center gap-2 p-3 bg-[#3D0408]/80 rounded-xl border border-[#F5B800]/30">
                   <Clock className="h-4 w-4 text-[#F5B800] shrink-0" />
-                  <span>Full-Day Special Ritual</span>
+                  <span>संपूर्ण दिवस सिद्ध महाअनुष्ठान</span>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-[#3D0408]/80 rounded-xl border border-[#F5B800]/30">
                   <UserCheck className="h-4 w-4 text-[#F5B800] shrink-0" />
-                  <span>3-5 Senior Pandits</span>
+                  <span>वरिष्ठ वेदाचार्य मंडल</span>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-[#3D0408]/80 rounded-xl border border-[#F5B800]/30">
                   <Video className="h-4 w-4 text-[#F5B800] shrink-0" />
-                  <span>WhatsApp Live Video & Proof</span>
+                  <span>व्हाट्सएप लाइव संकल्प व वीडियो</span>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-[#3D0408]/80 rounded-xl border border-[#F5B800]/30">
                   <Truck className="h-4 w-4 text-[#F5B800] shrink-0" />
-                  <span>Blessed Prasad Box Courier</span>
+                  <span>दिव्य सामग्री व सिद्ध प्रसाद</span>
                 </div>
               </div>
 
@@ -269,9 +269,8 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 className="w-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] font-black text-base py-6 rounded-2xl shadow-[0_4px_30px_rgba(245,184,0,0.4)] border border-[#FFE89C] hover:scale-[1.02] transition-transform mt-4" 
                 onClick={() => setBookingDialogOpen(true)}
               >
-                👑 Book VIP Anushthan - ₹{displayPrice.toLocaleString('en-IN')} &rarr;
+                👑 VIP अनुष्ठान बुक करें - ₹{displayPrice.toLocaleString('en-IN')} &rarr;
               </Button>
-
 
 
             </div>
