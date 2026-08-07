@@ -15,8 +15,8 @@ export function GargiChatbot() {
       <Button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-4 right-4 sm:bottom-6 sm:right-6 h-14 w-14 rounded-full shadow-2xl z-50 transition-all duration-300",
-          isOpen ? "bg-slate-800 hover:bg-slate-900" : "bg-orange-600 hover:bg-orange-700"
+          "fixed bottom-20 sm:bottom-6 right-4 sm:right-6 h-13 w-13 sm:h-14 sm:w-14 rounded-full shadow-2xl z-50 transition-all duration-300",
+          isOpen ? "bg-slate-800 hover:bg-slate-900" : "bg-gradient-to-r from-[#E85D04] to-[#7A1F2B] hover:scale-105"
         )}
       >
         {isOpen ? <X className="h-6 w-6 text-white" /> : <MessageCircle className="h-6 w-6 text-white" />}
@@ -25,7 +25,7 @@ export function GargiChatbot() {
       {/* Chat Window */}
       <div
         className={cn(
-          "fixed bottom-20 right-4 sm:bottom-24 sm:right-6 w-[350px] max-w-[calc(100vw-2rem)] max-h-[80vh] flex flex-col bg-white rounded-2xl shadow-2xl z-50 overflow-hidden transition-all duration-300 origin-bottom-right border border-orange-100",
+          "fixed bottom-36 sm:bottom-24 right-4 sm:right-6 w-[350px] max-w-[calc(100vw-2rem)] max-h-[80vh] flex flex-col bg-white rounded-2xl shadow-2xl z-50 overflow-hidden transition-all duration-300 origin-bottom-right border border-orange-100",
           isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
         )}
       >

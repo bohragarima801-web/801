@@ -9,8 +9,8 @@ export function MobileBottomNav() {
   const pathname = usePathname()
   const { totalItems } = useCart()
 
-  // Hide bottom nav on admin routes
-  if (pathname?.startsWith('/admin')) {
+  // Hide bottom nav on admin, checkout, or single puja detail pages where sticky booking bar exists
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/pujas/') || pathname?.startsWith('/checkout')) {
     return null
   }
 
