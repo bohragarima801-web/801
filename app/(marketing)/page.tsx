@@ -55,75 +55,51 @@ export const revalidate = 30
 const fallbackPujas = [
   {
     id: 'fp-1',
-    slug: 'kashi-vishwanath-rudrabhishekam',
-    name: 'काशी विश्वनाथ महादेव रुद्राभिषेक (Kashi Vishwanath Rudrabhishekam)',
-    shortDescription: 'भगवान शिव के पावन ज्योतिर्लिंग काशी में सुख-शांति, समृद्धि एवं आरोग्यता हेतु विशेष रुद्राभिषेक।',
-    location: 'Kashi Vishwanath Temple, Varanasi',
+    slug: 'maa-bagalamukhi-mirchi-hawan',
+    name: 'माँ बगलामुखी मिर्ची हवन व विशेष शत्रुनिवारण अनुष्ठान',
+    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु स्तंभन, तंत्र बाधा एवं व्यापारिक रुकावटों के सर्वनाश हेतु विशेष तीक्ष्ण मिर्ची महायज्ञ।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
     price: 1100,
-    badge: 'Most booked',
-    category: { name: 'ज्योतिर्लिंग पूजा' },
+    badge: 'Most Booked',
+    category: { name: 'महाविद्या अनुष्ठान' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/bagalamukhi_mirchi_hawan_2.jpg'
   },
   {
     id: 'fp-2',
-    slug: 'mahakaleshwar-kalsarp-dosh-shanti',
-    name: 'महाकालेश्वर कालसर्प दोष शांति पूजा (Mahakaleshwar Kalsarp Shanti)',
-    shortDescription: 'उज्जैन महाकाल धाम में वैदिक विधि द्वारा कालसर्प एवं राहु-केतु दोष निवारण महापूजा।',
-    location: 'Mahakaleshwar Temple, Ujjain',
-    price: 2100,
-    badge: 'Recommended',
-    category: { name: 'दोष निवारण' },
+    slug: 'shani-saadesati-dhaiya-dosh-nivaran-yagya',
+    name: 'शनि साढ़ेसाती, ढैय्या व शनि दोष निवारण महापूजा एवं शांति यज्ञ',
+    shortDescription: 'शनि साढ़ेसाती, अष्टम ढैय्या, शनि महादशा, व्यापारिक घाटा व वात रोगों के शमन हेतु विशेष तैलभिषेक व शमी पत्र यज्ञ।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Special',
+    category: { name: 'नवग्रह शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/shani_dosh_yagya.jpg'
   },
   {
     id: 'fp-3',
-    slug: 'trimbakeshwar-pitra-dosh-nivaran',
-    name: 'त्र्यंबकेश्वर नारायण नागबली व पितृदोष (Pitra Dosh Nivaran Homa)',
-    shortDescription: 'पितृ शांति एवं वंश वृद्धि हेतु नासिक त्र्यंबकेश्वर में सर्व दोष शांति यज्ञ एवं पूजा।',
-    location: 'Trimbakeshwar Temple, Nashik',
-    price: 2500,
-    badge: 'Popular',
-    category: { name: 'पितृ दोष शांति' },
+    slug: 'navgrah-shanti-sarva-graha-dosh-nivaran-puja',
+    name: 'नवग्रह शांति व सर्व ग्रह दोष निवारण महापूजा',
+    shortDescription: 'सूर्य, चंद्र, मंगल, बुध, गुरु, शुक्र, शनि, राहु एवं केतु की अशुभ दशा व ग्रह पीड़ा के सर्वथा शमन हेतु 9 समिधा हवन।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Vedic',
+    category: { name: 'नवग्रह शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/navgrah_shanti_yagya.jpg'
   },
   {
     id: 'fp-4',
-    slug: 'maa-baglamukhi-shatru-badha-homa',
-    name: 'माँ बगलामुखी शत्रु बाधा एवं तंत्र निवारण अनुष्ठान',
-    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु शांति एवं व्यापार वृद्धि हेतु सिद्ध पीठ बगलामुखी महायज्ञ।',
-    location: 'Baglamukhi Peeth, Datia / Nalkheda',
-    price: 3100,
-    badge: 'Special',
-    category: { name: 'महाविद्या अनुष्ठान' },
+    slug: 'pitra-shanti-vishesh-sarva-pitra-tarpan-puja',
+    name: 'पितृ शांति विशेष एवं सर्व पितृ तर्पण महापूजा',
+    shortDescription: 'पितृ दोष शांति, पूर्वजों की तृप्ति, वंश वृद्धि व पारिवारिक सुख-शांति हेतु कुशा जल, काले तिल व जौ द्वारा सर्व पितृ तर्पण, पिंड दान एवं ब्राह्मण भोजन संकल्प।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Pitra Shanti',
+    category: { name: 'पितृ दोष शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'fp-5',
-    slug: 'maha-mrityunjaya-jaap-yagya',
-    name: 'महामृत्युंजय मंत्र जाप एवं दीर्घायु होम',
-    shortDescription: 'असाध्य रोगों से मुक्ति, दुर्घटना सुरक्षा एवं उत्तम स्वास्थ्य हेतु 1,25,000 मंत्र जाप अनुष्ठान।',
-    location: 'Haridwar / Rishikesh Holy Ghats',
-    price: 5100,
-    badge: 'Recommended',
-    category: { name: 'आरोग्य पूजा' },
-    isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'fp-6',
-    slug: 'siddhivinayak-ganpati-puja',
-    name: 'सिद्धिविनायक गणपति पूजन एवं मोदक अर्पण',
-    shortDescription: 'कार्य सिद्धि, बुद्धि, नया व्यापार प्रारंभ एवं विघ्न विनाश हेतु प्रथम पूज्य श्री गणेश पूजा।',
-    location: 'Siddhivinayak Temple, Mumbai',
-    price: 1500,
-    badge: 'New',
-    category: { name: 'गणेश पूजा' },
-    isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/pitra_shanti_tarpan.jpg'
   }
 ]
 

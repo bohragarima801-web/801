@@ -6,11 +6,7 @@ export const getCachedPujas = async () => {
   try {
     const pujas = await prisma.puja.findMany({
       where: { 
-        OR: [
-          { status: 'PUBLISHED' },
-          { status: 'DRAFT' },
-          { status: null as any }
-        ]
+        status: 'PUBLISHED'
       },
       select: {
         id: true,
