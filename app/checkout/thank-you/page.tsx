@@ -1,326 +1,284 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { 
-  CheckCircle2, Download, MessageCircle, ArrowLeft, Calendar, 
-  Clock, ShieldCheck, Sparkles, Heart, FileText, Phone, Mail, ChevronRight, MapPin, User, Receipt
+  CheckCircle2, Download, MessageCircle, ArrowLeft, 
+  Clock, ShieldCheck, Sparkles, FileText, Phone, Mail, Receipt,
+  Package, Truck, CreditCard, Loader2
 } from 'lucide-react'
+
+interface OrderItem {
+  name: string
+  quantity: number
+  price: number
+  total: number
+}
+
+interface OrderData {
+  id: string
+  orderNumber: string
+  status: string
+  paymentStatus: string
+  subtotal: number
+  discount: number
+  shipping: number
+  total: number
+  items: OrderItem[]
+  customerName: string
+  phone: string
+  address: string
+  paymentId?: string | null
+  createdAt: string
+}
 
 function ThankYouContent() {
   const searchParams = useSearchParams()
   const orderNumber = searchParams.get('order') || searchParams.get('id') || ''
-  const paymentId = searchParams.get('payment') || searchParams.get('pay_id') || ''
-  const devoteeName = searchParams.get('name') || searchParams.get('devotee') || 'श्रद्धालु भक्त'
-  const pujaName = searchParams.get('puja') || 'आपका ऑर्डर'
-  const rawAmount = searchParams.get('amount')
-  const paymentMethod = searchParams.get('method') || (paymentId ? 'online' : 'cod')
-  const isCod = paymentMethod === 'cod' || paymentMethod === 'manual'
-  const amountPaid = rawAmount ? `₹${Number(rawAmount).toLocaleString('en-IN')}` : ''
-  
+  const razorpayPaymentId = searchParams.get('payment') || ''
+  const [order, setOrder] = useState<OrderData | null>(null)
+  const [loading, setLoading] = useState(true)
   const [currentTime, setCurrentTime] = useState('')
 
   useEffect(() => {
     const now = new Date()
-    const formatted = now.toLocaleString('hi-IN', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    })
-    setCurrentTime(formatted)
+    setCurrentTime(now.toLocaleString('hi-IN', {
+      day: '2-digit', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true
+    }))
   }, [])
 
+  useEffect(() => {
+    if (!orderNumber) { setLoading(false); return }
+    fetch(`/api/orders/detail?order=${encodeURIComponent(orderNumber)}`)
+      .then(r => r.json())
+      .then(data => { if (data.ok && data.order) setOrder(data.order) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [orderNumber])
+
+  const isCod = order
+    ? (order.paymentStatus !== 'SUCCESS')
+    : (!razorpayPaymentId)
+  const isOnline = order ? order.paymentStatus === 'SUCCESS' : !!razorpayPaymentId
+  const displayTotal = order ? `${Number(order.total).toLocaleString('en-IN')}` : ''
+  const customerName = order?.customerName || ''
+  
+  const whatsappText = `Namaste Divyayagyam! Mera order ${orderNumber} darj ho gaya hai. Kripaya update den.`
+  const whatsappUrl = `https://wa.me/919587171984?text=${encodeURIComponent(whatsappText)}`
+
   const timelineSteps = isCod ? [
-    { label: 'Order Confirmed', desc: 'ऑर्डर सफलतापूर्वक दर्ज (COD)', status: 'completed' },
-    { label: 'Invoice Generated', desc: 'रसीद डाउनलोड हेतु उपलब्ध', status: 'completed' },
-    { label: 'WhatsApp Confirmation', desc: 'व्हाट्सएप पर संदेश प्रेषित', status: 'completed' },
-    { label: 'Order Packed', desc: 'पैकेजिंग एवं डिस्पैच', status: 'in-progress' },
-    { label: 'Out for Delivery', desc: 'डिलीवरी पार्टनर को सौंपा', status: 'pending' },
-    { label: 'Payment at Doorstep', desc: 'डिलीवरी पर ₹ भुगतान करें', status: 'pending' },
+    { label: 'Order Confirmed', desc: 'COD ऑर्डर दर्ज', status: 'completed' },
+    { label: 'Invoice Ready', desc: 'रसीद उपलब्ध', status: 'completed' },
+    { label: 'WhatsApp Sent', desc: 'सूचना प्रेषित', status: 'completed' },
+    { label: 'Packing', desc: 'पैकेजिंग एवं डिस्पैच', status: 'in-progress' },
+    { label: 'Out for Delivery', desc: 'रास्ते में', status: 'pending' },
+    { label: 'Pay at Door', desc: 'डिलीवरी पर भुगतान', status: 'pending' },
   ] : [
-    { label: 'Booking Confirmed', desc: 'पूजा सफलतापूर्वक दर्ज', status: 'completed' },
-    { label: 'Payment Received', desc: '100% सुरक्षित भुगतान प्राप्त', status: 'completed' },
-    { label: 'Invoice Generated', desc: 'रसीद डाउनलोड हेतु उपलब्ध', status: 'completed' },
-    { label: 'WhatsApp Confirmation Sent', desc: 'व्हाट्सएप पर संदेश प्रेषित', status: 'completed' },
-    { label: 'Pandit Assignment', desc: 'अनुभवी वेदाचार्य आवंटन', status: 'in-progress' },
-    { label: 'Puja Scheduled', desc: 'शुभ मुहूर्त में पूजन संपन्नता', status: 'pending' },
+    { label: 'Order Confirmed', desc: 'सफलतापूर्वक दर्ज', status: 'completed' },
+    { label: 'Payment Done', desc: '100% सुरक्षित भुगतान', status: 'completed' },
+    { label: 'Invoice Ready', desc: 'रसीद उपलब्ध', status: 'completed' },
+    { label: 'WhatsApp Sent', desc: 'सूचना प्रेषित', status: 'completed' },
+    { label: 'Processing', desc: 'तैयारी / डिस्पैच', status: 'in-progress' },
+    { label: 'Delivered', desc: 'आपके द्वार पर', status: 'pending' },
   ]
 
-  const whatsappMessage = isCod
-    ? `नमस्ते Divyayagyam! मेरा COD ऑर्डर संख्या ${orderNumber} दर्ज हो गया है। कृपया डिलीवरी अपडेट साझा करें।`
-    : `नमस्ते Divyayagyam! मेरी पूजा बुकिंग संख्या ${orderNumber} सफलतापूर्वक दर्ज हो गई है। कृपया आगे का अपडेट साझा करें।`
-  const whatsappUrl = `https://wa.me/919587171984?text=${encodeURIComponent(whatsappMessage)}`
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FFF9EE] via-[#FFF3D6] to-[#FFFDF7] text-[#1E120A] relative overflow-hidden font-sans selection:bg-[#F2C94C]/30">
-      {/* Dynamic CSS Keyframe for floating lotus petals */}
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF9EE] via-[#FFF3D6] to-[#FFFDF7] text-[#1E120A] relative overflow-hidden font-sans">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes floatPetal {
-          0% {
-            transform: translateY(-10vh) rotate(0deg) scale(0.8);
-            opacity: 0;
-          }
-          15% {
-            opacity: 0.8;
-          }
-          85% {
-            opacity: 0.8;
-          }
-          100% {
-            transform: translateY(105vh) rotate(360deg) scale(1.1);
-            opacity: 0;
-          }
+          0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+          15% { opacity: 0.7; }
+          85% { opacity: 0.7; }
+          100% { transform: translateY(105vh) rotate(360deg) scale(1.1); opacity: 0; }
         }
-
-        .floating-petal {
-          position: absolute;
-          top: -5%;
-          pointer-events: none;
-          user-select: none;
-          z-index: 1;
-          animation: floatPetal linear infinite;
-        }
-
+        .floating-petal { position: absolute; top: -5%; pointer-events: none; user-select: none; z-index: 1; animation: floatPetal linear infinite; }
         @keyframes pulseGlow {
-          0%, 100% {
-            box-shadow: 0 0 25px rgba(212, 155, 0, 0.35), 0 0 60px rgba(139, 26, 33, 0.15);
-          }
-          50% {
-            box-shadow: 0 0 45px rgba(212, 155, 0, 0.65), 0 0 90px rgba(242, 201, 76, 0.4);
-          }
+          0%, 100% { box-shadow: 0 0 25px rgba(212,155,0,0.35), 0 0 60px rgba(139,26,33,0.15); }
+          50% { box-shadow: 0 0 45px rgba(212,155,0,0.65), 0 0 90px rgba(242,201,76,0.4); }
         }
-
-        .ring-glow-effect {
-          animation: pulseGlow 3s infinite ease-in-out;
-        }
+        .ring-glow { animation: pulseGlow 3s infinite ease-in-out; }
       ` }} />
 
-      {/* Floating Petals Background Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <span className="floating-petal text-2xl left-[5%]" style={{ animationDuration: '14s', animationDelay: '0s' }}>🌸</span>
-        <span className="floating-petal text-xl left-[18%]" style={{ animationDuration: '18s', animationDelay: '3s' }}>🪷</span>
-        <span className="floating-petal text-2xl left-[32%]" style={{ animationDuration: '16s', animationDelay: '1s' }}>🌺</span>
-        <span className="floating-petal text-xl left-[55%]" style={{ animationDuration: '15s', animationDelay: '4s' }}>🌸</span>
-        <span className="floating-petal text-2xl left-[72%]" style={{ animationDuration: '19s', animationDelay: '2s' }}>🪷</span>
-        <span className="floating-petal text-xl left-[88%]" style={{ animationDuration: '17s', animationDelay: '5s' }}>🌺</span>
+        {['🌸','🪷','🌺','🌸','🪷','🌺'].map((p, i) => (
+          <span key={i} className="floating-petal text-2xl"
+            style={{ left: `${[5,18,32,55,72,88][i]}%`, animationDuration: `${[14,18,16,15,19,17][i]}s`, animationDelay: `${[0,3,1,4,2,5][i]}s` }}>
+            {p}
+          </span>
+        ))}
       </div>
 
-      {/* Sacred Om Background Watermark */}
-      <div aria-hidden="true" className="absolute right-[-5%] top-[-2%] text-[38vw] font-serif text-[rgba(212,155,0,0.04)] leading-none pointer-events-none select-none overflow-hidden z-0">
-        ॐ
-      </div>
+      <div aria-hidden="true" className="absolute right-[-5%] top-[-2%] text-[38vw] font-serif text-[rgba(212,155,0,0.04)] leading-none pointer-events-none select-none overflow-hidden z-0">ॐ</div>
 
-      {/* Divine Ambient Radial Light Rays */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-radial from-[rgba(242,201,76,0.22)] via-[rgba(212,155,0,0.08)] to-transparent rounded-full blur-3xl pointer-events-none z-0" />
-
-      {/* Content Container */}
       <main className="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10 max-w-4xl">
 
-        {/* ============================================================
-            HERO SECTION: ANIMATED GOLDEN SUCCESS CHECKMARK & HEADINGS
-            ============================================================ */}
+        {/* HERO */}
         <div className="text-center space-y-6">
-          
-          {/* Animated Success Checkmark Ring */}
-          <motion.div 
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center justify-center"
-          >
-            <div className="relative flex items-center justify-center h-28 w-28 sm:h-32 sm:w-32 rounded-full bg-gradient-to-br from-[#FFFDF7] via-[#FFF3D6] to-[#FFE8A3] p-1.5 border-2 border-[#D49B00] ring-glow-effect">
-              {/* Outer pulsing ring */}
+          <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex items-center justify-center">
+            <div className="relative flex items-center justify-center h-28 w-28 sm:h-32 sm:w-32 rounded-full bg-gradient-to-br from-[#FFFDF7] via-[#FFF3D6] to-[#FFE8A3] p-1.5 border-2 border-[#D49B00] ring-glow">
               <div className="absolute inset-0 rounded-full border border-[#F2C94C]/60 animate-ping opacity-25" />
-              
-              {/* Inner Circle */}
               <div className="h-full w-full rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] flex items-center justify-center shadow-inner">
-                <CheckCircle2 className="h-14 w-14 sm:h-16 sm:w-16 text-white stroke-[2.2] drop-shadow-md" />
+                <CheckCircle2 className="h-14 w-14 sm:h-16 sm:w-16 text-white stroke-[2.2]" />
               </div>
             </div>
           </motion.div>
 
-          {/* Heading Badge */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] shadow-sm"
-          >
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] shadow-sm">
             <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
             <span className="text-[#8B1A21] text-xs sm:text-sm font-black tracking-wide uppercase">
-              जय श्री राम · 100% सफल बुकिंग
+              {isCod ? '📦 COD Order Confirmed' : '✅ Payment Successful'}
             </span>
           </motion.div>
 
-          {/* Main Title & Subtitles */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="space-y-3"
-          >
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }} className="space-y-3">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-[#2A1508] tracking-tight">
               🙏 धन्यवाद!
             </h1>
             <p className="text-xl sm:text-2xl font-heading font-extrabold bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">
-              {isCod ? 'आपका COD ऑर्डर कन्फर्म हो गया है!' : 'आपकी पूजा/ऑर्डर सफलतापूर्वक दर्ज हो गई है'}
+              {isCod ? 'आपका ऑर्डर COD कन्फर्म हो गया है!' : 'भुगतान सफल — ऑर्डर दर्ज हो गया!'}
             </p>
             <p className="text-sm sm:text-base text-[#4A2D1B] font-semibold max-w-lg mx-auto leading-relaxed">
-              {isCod
-                ? 'आपका ऑर्डर डिलीवरी के लिए भेजा जाएगा। डिलीवरी के समय भुगतान करें।'
-                : 'आपका भुगतान सफल रहा। हमारी टीम शीघ्र ही आपसे संपर्क करेगी।'}
+              {isCod ? 'डिलीवरी के समय कैश/UPI से भुगतान करें।' : 'हमारी टीम शीघ्र ही आपसे संपर्क करेगी।'}
             </p>
           </motion.div>
         </div>
 
-
-        {/* ============================================================
-            BOOKING INFORMATION CARD (RECEIPT)
-            ============================================================ */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-10 sm:mt-12"
-        >
+        {/* ORDER RECEIPT */}
+        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }} className="mt-10 sm:mt-12">
           <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-[0_15px_50px_rgba(212,155,0,0.10)] relative overflow-hidden">
-            {/* Top Royal Gold Accent Strip */}
             <div className="h-1.5 w-full bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] absolute top-0 left-0 right-0" />
 
             <div className="flex items-center justify-between border-b border-[#F5E2B8] pb-4 mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-xl bg-[#FFF5D6] border border-[#F2C94C] flex items-center justify-center text-[#8B1A21]">
-                  <Receipt className="h-5 w-5" />
+                <div className="h-9 w-9 rounded-xl bg-[#FFF5D6] border border-[#F2C94C] flex items-center justify-center">
+                  <Receipt className="h-5 w-5 text-[#8B1A21]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-extrabold text-[#2A1508] leading-none">
-                    बुकिंग विवरण (Booking Receipt)
-                  </h3>
-                  <p className="text-xs text-[#6A4D3B] font-bold mt-1">Divyayagyam Official Receipt</p>
+                  <h3 className="text-base font-extrabold text-[#2A1508] leading-none">ऑर्डर रसीद (Receipt)</h3>
+                  <p className="text-xs text-[#6A4D3B] font-bold mt-1">Divyayagyam — Official</p>
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-black">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${isCod ? 'bg-amber-100 border border-amber-300 text-amber-800' : 'bg-emerald-100 border border-emerald-300 text-emerald-800'}`}>
                 <ShieldCheck className="h-3.5 w-3.5" />
-                Success ✅
+                {isCod ? '📦 COD' : '✅ Paid'}
               </span>
             </div>
 
-            {/* Grid of Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              
-              <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">Booking ID</p>
-                <p className="text-base font-black text-[#8B1A21] font-mono mt-0.5">{orderNumber}</p>
+            {loading ? (
+              <div className="flex items-center justify-center py-10 gap-3 text-[#8B1A21]">
+                <Loader2 className="h-6 w-6 animate-spin" />
+                <span className="font-bold text-sm">ऑर्डर विवरण लोड हो रहा है...</span>
               </div>
-
-              {/* Payment ID - only for online */}
-              {!isCod && paymentId && (
-              <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">Payment ID (Razorpay)</p>
-                <p className="text-sm font-black text-[#2A1508] font-mono mt-0.5 break-all">{paymentId}</p>
-              </div>
-              )}
-
-              <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">भक्त / ग्राहक का नाम</p>
-                <p className="text-base font-extrabold text-[#2A1508] mt-0.5">{devoteeName}</p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">दिनांक व समय (Date & Time)</p>
-                <p className="text-sm font-extrabold text-[#2A1508] mt-0.5">{currentTime || 'आज का दिन'}</p>
-              </div>
-
-              {pujaName && pujaName !== 'आपका ऑर्डर' && (
-              <div className="sm:col-span-2 p-4 rounded-2xl bg-[#FFF7E6] border border-[#F2C94C]">
-                <p className="text-xs text-[#8B5A00] font-bold uppercase tracking-wider">चयनित पूजा / आइटम</p>
-                <p className="text-base font-black text-[#8B1A21] mt-0.5">{pujaName}</p>
-              </div>
-              )}
-
-              <div className="sm:col-span-2 flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-[#FFF5D6] via-[#FFF0C2] to-[#FFF5D6] border-2 border-[#D49B00]/40">
-                <div>
-                  <p className="text-xs text-[#6A4D3B] font-bold">
-                    {isCod ? 'कुल COD राशि (Pay at Delivery)' : 'कुल भुगतान राशि (Amount Paid)'}
-                  </p>
-                  <p className="text-2xl font-black text-[#8B1A21] leading-none mt-1">
-                    {amountPaid || '—'}
-                  </p>
+            ) : (
+              <div className="space-y-4">
+                {/* Info Grid */}
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
+                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">Order ID</p>
+                    <p className="text-sm font-black text-[#8B1A21] font-mono">{orderNumber || '—'}</p>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
+                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">ग्राहक नाम</p>
+                    <p className="text-sm font-extrabold text-[#2A1508]">{customerName || '—'}</p>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
+                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">दिनांक एवं समय</p>
+                    <p className="text-xs font-extrabold text-[#2A1508]">{currentTime || '—'}</p>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
+                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">भुगतान विधि</p>
+                    <p className="text-xs font-black text-[#2A1508]">{isCod ? '📦 Cash on Delivery' : '💳 Online (Razorpay)'}</p>
+                    {isOnline && razorpayPaymentId && <p className="text-[9px] font-mono text-[#6A4D3B] mt-0.5 break-all">ID: {razorpayPaymentId}</p>}
+                  </div>
                 </div>
-                {isCod ? (
-                  <span className="text-xs font-black text-amber-800 bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-center">
-                    📦 Cash on Delivery<br/>(डिलीवरी पर भुगतान)
-                  </span>
-                ) : (
-                  <span className="text-xs font-black text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-xl">
-                    ✅ Online Paid<br/>(Razorpay)
-                  </span>
+
+                {/* Items */}
+                {order?.items && order.items.length > 0 && (
+                  <div className="rounded-2xl overflow-hidden border border-[#F5E2B8]">
+                    <div className="bg-[#FFF8E8] px-4 py-2.5 border-b border-[#F5E2B8]">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[#6A4D3B]">🛒 ऑर्डर आइटम</p>
+                    </div>
+                    <div className="divide-y divide-[#F5E2B8]">
+                      {order.items.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between px-4 py-3 bg-white">
+                          <div className="flex-1 min-w-0 pr-3">
+                            <p className="text-sm font-bold text-[#1E120A] leading-snug">{item.name}</p>
+                            <p className="text-[11px] text-[#6A4D3B] mt-0.5">₹{Number(item.price).toLocaleString('en-IN')} × {item.quantity}</p>
+                          </div>
+                          <p className="text-sm font-black text-[#8B1A21] shrink-0">₹{Number(item.total).toLocaleString('en-IN')}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
+
+                {/* Bill Summary */}
+                <div className="rounded-2xl bg-gradient-to-r from-[#FFF5D6] via-[#FFF0C2] to-[#FFF5D6] border-2 border-[#D49B00]/40 p-4">
+                  {order && (
+                    <div className="space-y-1.5 text-sm mb-3">
+                      <div className="flex justify-between text-[#4A2D1B]">
+                        <span>Subtotal</span>
+                        <span className="font-bold">₹{Number(order.subtotal).toLocaleString('en-IN')}</span>
+                      </div>
+                      {Number(order.discount) > 0 && (
+                        <div className="flex justify-between text-emerald-700">
+                          <span>Discount</span>
+                          <span className="font-bold">-₹{Number(order.discount).toLocaleString('en-IN')}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between text-[#4A2D1B]">
+                        <span>Delivery Fee</span>
+                        {Number(order.shipping) > 0
+                          ? <span className="font-bold">₹{Number(order.shipping).toLocaleString('en-IN')}</span>
+                          : <span className="font-bold text-emerald-700">FREE ✅</span>
+                        }
+                      </div>
+                      <div className="border-t border-[#D49B00]/30 my-2" />
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-[#6A4D3B] font-bold">{isCod ? '💰 COD राशि (डिलीवरी पर)' : '✅ कुल भुगतान'}</p>
+                      <p className="text-2xl font-black text-[#8B1A21] leading-none mt-1">
+                        {displayTotal ? `₹${displayTotal}` : '—'}
+                      </p>
+                    </div>
+                    <span className={`text-xs font-black px-3 py-2 rounded-xl text-center ${isCod ? 'text-amber-800 bg-amber-100 border border-amber-300' : 'text-emerald-800 bg-emerald-100 border border-emerald-300'}`}>
+                      {isCod ? '📦 Pay at\nDelivery' : '✅ Paid via\nRazorpay'}
+                    </span>
+                  </div>
+                </div>
               </div>
-
-            </div>
-
+            )}
           </div>
         </motion.div>
 
-
-        {/* ============================================================
-            STATUS TIMELINE SECTION
-            ============================================================ */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-8 sm:mt-10"
-        >
+        {/* PROGRESS */}
+        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }} className="mt-8">
           <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-xl">
             <h3 className="text-lg font-heading font-black text-[#2A1508] mb-6 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-[#8B1A21]" />
-              पूजा स्थिति समय-सारणी (Booking Progress)
+              <Clock className="h-5 w-5 text-[#8B1A21]" /> ऑर्डर प्रगति (Progress)
             </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {timelineSteps.map((step, idx) => {
                 const isDone = step.status === 'completed'
-                const isInProgress = step.status === 'in-progress'
-
+                const isProgress = step.status === 'in-progress'
                 return (
-                  <div 
-                    key={step.label}
-                    className={`p-4 rounded-2xl border transition-all ${
-                      isDone 
-                        ? 'bg-[#F2FBF6] border-emerald-300 text-emerald-950'
-                        : isInProgress
-                        ? 'bg-[#FFFBF0] border-[#F2C94C] text-[#8B5A00] animate-pulse'
-                        : 'bg-[#FAF6EE] border-[#E8D8B0] opacity-75'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 mb-1.5">
-                      {isDone ? (
-                        <span className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0">
-                          ✓
-                        </span>
-                      ) : isInProgress ? (
-                        <span className="h-6 w-6 rounded-full bg-[#D49B00] text-white flex items-center justify-center text-xs font-black shrink-0">
-                          ⏳
-                        </span>
-                      ) : (
-                        <span className="h-6 w-6 rounded-full bg-stone-300 text-stone-700 flex items-center justify-center text-xs font-black shrink-0">
-                          {idx + 1}
-                        </span>
-                      )}
-                      <h4 className="text-xs font-black uppercase tracking-wide">
-                        {step.label}
-                      </h4>
+                  <div key={idx} className={`p-3 rounded-2xl border flex flex-col gap-1 ${isDone ? 'bg-emerald-50 border-emerald-200' : isProgress ? 'bg-amber-50 border-amber-200' : 'bg-[#FAFAFA] border-[#F0F0F0]'}`}>
+                    <div className={`h-7 w-7 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 ${isDone ? 'bg-emerald-500' : isProgress ? 'bg-amber-500' : 'bg-gray-300'}`}>
+                      {isDone ? '✓' : isProgress ? '⏳' : String(idx + 1)}
                     </div>
-                    <p className="text-xs font-bold text-[#4A2D1B] pl-8">
-                      {step.desc}
-                    </p>
+                    <p className={`text-xs font-black leading-snug ${isDone ? 'text-emerald-800' : isProgress ? 'text-amber-800' : 'text-gray-500'}`}>{step.label}</p>
+                    <p className="text-[10px] text-gray-500 leading-snug">{step.desc}</p>
                   </div>
                 )
               })}
@@ -328,129 +286,76 @@ function ThankYouContent() {
           </div>
         </motion.div>
 
-
-        {/* ============================================================
-            INFORMATION CARD: "अब आगे क्या होगा?"
-            ============================================================ */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-8 sm:mt-10"
-        >
-          <div className="bg-gradient-to-br from-[#FFF5D6] via-[#FFF3D6] to-[#FFF9EE] border-2 border-[#F2C94C] rounded-3xl p-6 sm:p-8 shadow-xl">
-            <h3 className="text-xl font-heading font-black text-[#8B1A21] mb-4 flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#D49B00] fill-[#D49B00]" />
-              अब आगे क्या होगा? (Next Steps)
+        {/* NEXT STEPS */}
+        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.6 }} className="mt-8">
+          <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-xl">
+            <h3 className="text-lg font-heading font-black text-[#2A1508] mb-5 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#D49B00] fill-[#D49B00]" /> अब आगे क्या होगा?
             </h3>
-
-            <ul className="space-y-3 text-sm sm:text-base font-semibold text-[#2A1508]">
-              <li className="flex items-start gap-3">
-                <span className="h-6 w-6 rounded-full bg-[#8B1A21] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  1
-                </span>
-                <span>हमारी आचार्य टीम शीघ्र ही आपसे व्हाट्सएप या फोन पर संपर्क कर नाम-गोत्र संकल्प की पुष्टि करेगी।</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="h-6 w-6 rounded-full bg-[#8B1A21] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  2
-                </span>
-                <span>पूजा आपके द्वारा चयनित शुभ समय पर सिद्ध मंदिर में वेदोक्त विधि से संपन्न कराई जाएगी।</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="h-6 w-6 rounded-full bg-[#8B1A21] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  3
-                </span>
-                <span>पूजा संपन्न होने के उपरांत पूजन का लाइव वीडियो/फोटो आपके व्हाट्सएप नंबर पर प्रेषित किया जाएगा।</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="h-6 w-6 rounded-full bg-[#8B1A21] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  4
-                </span>
-                <span>सिद्ध मंदिर का पावन प्रसाद आपके दिए गए पते पर सुरक्षित स्पीड पोस्ट द्वारा भेजा जाएगा।</span>
-              </li>
-            </ul>
+            <ol className="space-y-4">
+              {(isCod ? [
+                'हमारी टीम आपको शीघ्र ही ऑर्डर पुष्टि का संदेश व्हाट्सएप/SMS पर भेजेगी।',
+                'आपका ऑर्डर पैक करके भरोसेमंद कूरियर पार्टनर को सौंपा जाएगा।',
+                `डिलीवरी के समय कुल राशि ${displayTotal ? '₹' + displayTotal : ''} कैश/UPI में दें।`,
+                'किसी भी समस्या के लिए नीचे WhatsApp बटन से तुरंत संपर्क करें।',
+              ] : [
+                'हमारी टीम शीघ्र ही आपसे व्हाट्सएप/फोन पर संपर्क कर पुष्टि करेगी।',
+                'आपका ऑर्डर/पूजा/सेवा तैयार होकर डिस्पैच/संपन्न किया जाएगा।',
+                'सेवा/प्रसाद का वीडियो/फोटो आपके व्हाट्सएप पर भेजा जाएगा।',
+                'नीचे Invoice बटन से अपनी रसीद सुरक्षित PDF में डाउनलोड करें।',
+              ]).map((step, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white font-black text-xs flex items-center justify-center">{idx + 1}</span>
+                  <p className="text-sm text-[#4A2D1B] font-semibold leading-relaxed">{step}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </motion.div>
 
-
-        {/* ============================================================
-            ACTION BUTTONS ROW
-            ============================================================ */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+        {/* ACTION BUTTONS */}
+        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"
-        >
-          {/* 1. Download Invoice */}
-          <a
-            href={`/api/invoice/booking/${orderNumber}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#8B1A21] via-[#A8232B] to-[#D49B00] text-white font-black text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 border border-amber-300/40"
-          >
-            <Download className="h-4 w-4" />
-            Download Invoice (रसीद)
-          </a>
+          className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
 
-          {/* 2. WhatsApp Support */}
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200"
-          >
+          {orderNumber && (
+            <a href={`/api/invoice/order/${orderNumber}`} target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#8B1A21] via-[#A8232B] to-[#D49B00] text-white font-black text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 border border-amber-300/40">
+              <Download className="h-4 w-4" />
+              Invoice / रसीद PDF
+            </a>
+          )}
+
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200">
             <MessageCircle className="h-4 w-4 fill-white/20" />
-            WhatsApp सपोर्ट
+            WhatsApp Support
           </a>
 
-          {/* 3. View Booking Details */}
-          <Link
-            href="/dashboard/bookings"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white border-2 border-[#D49B00] text-[#8B1A21] font-black text-sm shadow-sm hover:bg-[#FFF8EA] hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center"
-          >
-            <FileText className="h-4 w-4 text-[#8B1A21]" />
-            मेरी बुकिंग देखें
+          <Link href="/dashboard/orders"
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white border-2 border-[#D49B00] text-[#8B1A21] font-black text-sm shadow-sm hover:bg-[#FFF8EA] hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
+            <FileText className="h-4 w-4" />
+            मेरे ऑर्डर
           </Link>
 
-          {/* 4. Back to Home */}
-          <Link
-            href="/"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/80 border border-[#F5E2B8] text-[#2A1508] font-extrabold text-sm hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center"
-          >
-            <ArrowLeft className="h-4 w-4 text-[#6A4D3B]" />
-            मुख्य पृष्ठ (Home)
+          <Link href="/"
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/80 border border-[#F5E2B8] text-[#2A1508] font-extrabold text-sm hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
+            <ArrowLeft className="h-4 w-4" />
+            Home
           </Link>
         </motion.div>
 
-
-        {/* ============================================================
-            BOTTOM QUOTE & SACRED SEAL
-            ============================================================ */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+        {/* QUOTE */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-14 text-center space-y-3 border-t border-[#F5E2B8] pt-10"
-        >
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] text-[#8B1A21] font-serif text-xl font-bold shadow-xs mx-auto">
-            ॐ
-          </div>
-          <p className="text-lg sm:text-xl font-heading font-black text-[#8B1A21] italic">
-            "आपकी श्रद्धा ही हमारी सबसे बड़ी प्रेरणा है।"
-          </p>
-          <p className="text-xs sm:text-sm font-extrabold text-[#8B5A00] tracking-[0.2em] uppercase">
-            सनातन सेवा • दिव्य अनुभूति • दिव्ययज्ञम्
-          </p>
+          className="mt-14 text-center space-y-3 border-t border-[#F5E2B8] pt-10">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] text-[#8B1A21] font-serif text-xl font-bold mx-auto">ॐ</div>
+          <p className="text-lg sm:text-xl font-heading font-black text-[#8B1A21] italic">"आपकी श्रद्धा ही हमारी सबसे बड़ी प्रेरणा है।"</p>
+          <p className="text-xs sm:text-sm font-extrabold text-[#8B5A00] tracking-[0.2em] uppercase">सनातन सेवा • दिव्य अनुभूति • दिव्ययज्ञम्</p>
         </motion.div>
-
       </main>
 
-
-      {/* ============================================================
-          FOOTER SECTION
-          ============================================================ */}
       <footer className="footer-spiritual py-8 mt-12 text-[#3D1E10] relative z-10">
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center space-y-4">
           <div className="flex flex-wrap justify-center items-center gap-6 text-xs sm:text-sm font-bold text-[#6A4D3B]">
@@ -460,25 +365,17 @@ function ThankYouContent() {
             <a href="mailto:support@divyayagyam.com" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
               <Mail className="h-3.5 w-3.5 text-[#8B1A21]" /> support@divyayagyam.com
             </a>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-700 flex items-center gap-1.5 transition-colors">
-              <MessageCircle className="h-3.5 w-3.5 text-emerald-600" /> WhatsApp Support
-            </a>
           </div>
-
           <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-semibold text-[#8B7355]">
             <Link href="/privacy" className="hover:text-[#8B1A21] transition-colors">Privacy Policy</Link>
             <span>•</span>
             <Link href="/terms" className="hover:text-[#8B1A21] transition-colors">Terms & Conditions</Link>
-            <span>•</span>
-            <Link href="/faq" className="hover:text-[#8B1A21] transition-colors">FAQ</Link>
           </div>
-
           <p className="text-[11px] text-[#8B7355] font-medium pt-2">
-            © {new Date().getFullYear()} Divyayagyam. All Rights Reserved. · भारत का सबसे भरोसेमंद सनातन प्लेटफॉर्म
+            © {new Date().getFullYear()} Divyayagyam. All Rights Reserved.
           </p>
         </div>
       </footer>
-
     </div>
   )
 }
@@ -487,7 +384,10 @@ export default function ThankYouPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
-        <div className="text-[#8B1A21] text-3xl font-serif animate-pulse">ॐ Divyayagyam</div>
+        <div className="text-center space-y-4">
+          <div className="text-[#8B1A21] text-4xl font-serif animate-pulse">ॐ</div>
+          <p className="text-[#8B1A21] font-bold">Divyayagyam...</p>
+        </div>
       </div>
     }>
       <ThankYouContent />
