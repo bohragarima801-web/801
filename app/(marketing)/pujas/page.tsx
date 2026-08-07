@@ -17,6 +17,19 @@ export function generateMetadata() {
 
 export const revalidate = 3600
 
+function getPujaBadgeInfo(p: any) {
+  if (p.isVip) {
+    return { text: 'VIP ANUSHTHAN', bg: 'bg-[#D49B00] text-[#2A1508] shadow-amber-900/40 border border-[#F2C94C]' }
+  }
+  if (p.isSpecial) {
+    return { text: 'FEATURED SEVA', bg: 'bg-[#8B1A21] text-white border border-[#D49B00]' }
+  }
+  if (p.badge) {
+    return { text: p.badge, bg: 'bg-[#8B1A21] text-white border border-[#D49B00]' }
+  }
+  return null
+}
+
 export default async function PujasPage() {
   const pujas = await getCachedPujas()
 
