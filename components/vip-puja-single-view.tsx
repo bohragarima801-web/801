@@ -498,48 +498,23 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         </DialogContent>
       </Dialog>
 
-      {/* STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#200205]/95 backdrop-blur-md border-t-2 border-[#F5B800] py-3 px-4 shadow-2xl">
+      {/* STICKY BOTTOM BAR - CLEAN COMPACT BAR */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#1A0F08]/95 backdrop-blur-md border-t-2 border-[#D4AF37] py-3 px-4 shadow-2xl">
         <div className="container mx-auto max-w-5xl flex items-center justify-between gap-4">
           <div className="hidden sm:block text-left">
-            <span className="text-xs text-[#F5B800] font-black block truncate max-w-md">👑 {puja.name}</span>
-            <span className="text-xs text-[#FFF3D6] font-medium">📍 {templeLocation}</span>
+            <span className="text-xs text-[#F4C430] font-black block truncate max-w-md">👑 {puja.name}</span>
+            <span className="text-xs text-[#F5F0E6] font-medium">📍 {templeLocation}</span>
           </div>
 
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
             <div>
-              <span className="text-[10px] text-[#FFE89C] font-medium block">Total Price</span>
-              <span className="text-lg font-black text-[#F5B800]">₹{displayPrice.toLocaleString('en-IN')}</span>
+              <span className="text-[10px] text-[#C9C0B3] font-medium block">Total Price</span>
+              <span className="text-lg font-black text-[#F4C430]">₹{displayPrice.toLocaleString('en-IN')}</span>
             </div>
 
-            <Button size="lg" className="bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] font-black text-sm px-6 py-5 rounded-xl shadow-lg hover:scale-105 transition-transform" onClick={() => setBookingDialogOpen(true)}>
+            <Button size="lg" className="btn-vip text-xs md:text-sm py-2.5 px-6" onClick={() => setBookingDialogOpen(true)}>
               Book VIP Puja - ₹{displayPrice.toLocaleString('en-IN')}
             </Button>
-          </div>
-        </div>
-
-        {/* How This Works Process Bar (DivyaYagyam Pattern) */}
-        <div className="p-5 rounded-2xl bg-[#360509]/90 border border-[#F5B800]/40 shadow-xl my-6">
-          <p className="text-center text-xs font-black uppercase text-[#F5B800] tracking-widest mb-4">
-            👑 VIP अनुष्ठान बुकिंग प्रक्रिया (How VIP Anushthan Works)
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-            <div className="flex items-center gap-2.5 p-2.5 bg-[#54080F]/80 rounded-xl border border-[#F5B800]/30">
-              <div className="w-8 h-8 rounded-lg bg-[#F5B800] text-[#3D0408] font-black flex items-center justify-center text-xs shrink-0">1</div>
-              <div className="text-left min-w-0"><p className="text-xs font-bold text-[#FFF3D6] truncate">VIP अनुष्ठान चयन</p><p className="text-[10px] text-[#FFE89C]/80 truncate">1-on-1 Personalized</p></div>
-            </div>
-            <div className="flex items-center gap-2.5 p-2.5 bg-[#54080F]/80 rounded-xl border border-[#F5B800]/30">
-              <div className="w-8 h-8 rounded-lg bg-[#F5B800] text-[#3D0408] font-black flex items-center justify-center text-xs shrink-0">2</div>
-              <div className="text-left min-w-0"><p className="text-xs font-bold text-[#FFF3D6] truncate">नाम व गोत्र संकल्प</p><p className="text-[10px] text-[#FFE89C]/80 truncate">Vedic Chanting</p></div>
-            </div>
-            <div className="flex items-center gap-2.5 p-2.5 bg-[#54080F]/80 rounded-xl border border-[#F5B800]/30">
-              <div className="w-8 h-8 rounded-lg bg-[#F5B800] text-[#3D0408] font-black flex items-center justify-center text-xs shrink-0">3</div>
-              <div className="text-left min-w-0"><p className="text-xs font-bold text-[#FFF3D6] truncate">व्हाट्सएप लाइव प्रमाण</p><p className="text-[10px] text-[#FFE89C]/80 truncate">HD Video Recording</p></div>
-            </div>
-            <div className="flex items-center gap-2.5 p-2.5 bg-[#54080F]/80 rounded-xl border border-[#F5B800]/30">
-              <div className="w-8 h-8 rounded-lg bg-[#F5B800] text-[#3D0408] font-black flex items-center justify-center text-xs shrink-0">4</div>
-              <div className="text-left min-w-0"><p className="text-xs font-bold text-[#FFF3D6] truncate">दिव्य सामग्री प्रसाद</p><p className="text-[10px] text-[#FFE89C]/80 truncate">Royal Delivery</p></div>
-            </div>
           </div>
         </div>
       </div>
