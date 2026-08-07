@@ -389,7 +389,7 @@ export function PujaClientView({ puja }: { puja: any }) {
         </div>
       </section>
 
-      {/* 1.5. How This Works Bar (Devpunya Pattern) */}
+      {/* 1.5. How This Works Bar (DivyaYagyam Pattern) */}
       <div className="w-full bg-white border-b border-amber-200/60 py-4 shadow-2xs">
         <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
           <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">

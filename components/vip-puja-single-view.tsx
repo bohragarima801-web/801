@@ -498,7 +498,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
           </div>
         </div>
 
-        {/* How This Works Process Bar (Devpunya Pattern) */}
+        {/* How This Works Process Bar (DivyaYagyam Pattern) */}
         <div className="p-5 rounded-2xl bg-[#360509]/90 border border-[#F5B800]/40 shadow-xl my-6">
           <p className="text-center text-xs font-black uppercase text-[#F5B800] tracking-widest mb-4">
             👑 VIP अनुष्ठान बुकिंग प्रक्रिया (How VIP Anushthan Works)
