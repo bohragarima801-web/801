@@ -1,9 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { SacredImageFrame } from '@/components/ui/safe-image'
-import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck, Crown, Flame, Award, Video, CheckCircle2, Star, UserCheck } from 'lucide-react'
-
+import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck, Crown, Flame, Award, Video, CheckCircle2, Star, UserCheck, Filter, Heart, Clock } from 'lucide-react'
 
 export interface VipPackageItem {
   id: string
@@ -75,54 +75,59 @@ const defaultVipPackages: VipPackageItem[] = [
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
   const displayPujas = dbPackages.length > 0 ? dbPackages : defaultVipPackages
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
+
+  const categories = ['ALL', ...Array.from(new Set(displayPujas.map(p => p.categoryTag || 'VIP Ritual')))]
+
+  const filteredPujas = selectedCategory === 'ALL'
+    ? displayPujas
+    : displayPujas.filter(p => (p.categoryTag || 'VIP Ritual') === selectedCategory)
 
   return (
-    <div className="bg-[#FFFDF7] min-h-screen">
-      {/* ── ROYAL VIP HERO BANNER (Imperial Deep Maroon × Pitambara Yellow Theme) */}
-      <section className="relative bg-gradient-to-b from-[#3D0408] via-[#54080F] to-[#2B0306] py-16 md:py-24 overflow-hidden border-b-4 border-[#F5B800]">
+    <div className="bg-[#0D0406] text-white min-h-screen">
+      {/* ── ROYAL VIP HERO BANNER (Imperial Deep Obsidian Maroon × Golden Glow) */}
+      <section className="relative bg-gradient-to-b from-[#2B0306] via-[#4A0A10] to-[#0D0406] py-16 md:py-24 overflow-hidden border-b-2 border-[#F5B800]/40">
         {/* Glowing Om Watermark */}
-        <div aria-hidden="true" className="absolute -right-10 -top-10 text-[35vw] font-serif text-[rgba(245,184,0,0.04)] leading-none pointer-events-none select-none overflow-hidden">
+        <div aria-hidden="true" className="absolute -right-10 -top-10 text-[35vw] font-serif text-[rgba(245,184,0,0.05)] leading-none pointer-events-none select-none overflow-hidden">
           ॐ
         </div>
 
         {/* Ambient Pitambara Gold & Agni Glow Effects */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[rgba(245,184,0,0.14)] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[rgba(139,26,33,0.25)] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[rgba(245,184,0,0.18)] rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[rgba(139,26,33,0.35)] rounded-full blur-[110px] pointer-events-none" />
 
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4">
           
           {/* VIP Badge */}
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] shadow-[0_4px_20px_rgba(245,184,0,0.35)] border border-[#FFE89C] mb-6 animate-pulse">
-            <Crown className="h-4 w-4 fill-[#3D0408] text-[#3D0408]" />
-            <span className="text-[12px] font-black uppercase tracking-[0.16em]">👑 Sri Royal VIP Anushthan (विशिष्ट सिद्ध पूजा)</span>
+          <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#2B0306] shadow-[0_4px_25px_rgba(245,184,0,0.45)] border-2 border-[#FFE89C] mb-6 animate-pulse">
+            <Crown className="h-5 w-5 fill-[#2B0306] text-[#2B0306]" />
+            <span className="text-[13px] font-black uppercase tracking-[0.18em]">👑 Royal VIP Anushthan (विशिष्ट सिद्ध महापूजा)</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white leading-[1.15] mb-5 tracking-tight">
-            Exclusive VIP Pujas &{' '}
-            <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent drop-shadow-sm">
-              Maha Yagyas
+            Exclusive VIP Anushthans &{' '}
+            <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent drop-shadow-md">
+              Personalized Yagyas
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-[#FFF3D6] max-w-3xl mx-auto leading-relaxed font-medium">
-            27 से अधिक वर्षों के अनुभवी आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा विशेष VIP अनुष्ठान आयोजित किए जाते हैं, और विशेष आशीर्वाद स्वरूप दिव्य सामग्री आपके घर प्रसाद के रूप में भेजी जाती है।
+          <p className="text-base sm:text-lg text-[#FFF3D6]/90 max-w-3xl mx-auto leading-relaxed font-medium">
+            27+ वर्षों के अनुभवी सिद्ध वेदाचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित ब्राह्मण दल एवं लाइव HD वीडियो स्ट्रीमिंग के साथ।
           </p>
-
-
 
           {/* Trust Chips */}
           <div className="flex flex-wrap gap-3 justify-center mt-9 max-w-4xl mx-auto">
             {[
-              { icon: <UserCheck className="h-4 w-4 text-[#F5B800]" />, label: 'Dedicated 3-5 Senior Pandits' },
-              { icon: <Flame className="h-4 w-4 text-[#F5B800]" />, label: 'Extended Maha Yagya & 1.25L Jaap' },
-              { icon: <Video className="h-4 w-4 text-[#F5B800]" />, label: 'HD Live Video & Personal Proof' },
-              { icon: <Award className="h-4 w-4 text-[#F5B800]" />, label: 'Royal Prasad Box Home Delivery' }
+              { icon: <UserCheck className="h-4 w-4 text-[#F5B800]" />, label: 'Dedicated 5 Veda Acharyas' },
+              { icon: <Flame className="h-4 w-4 text-[#F5B800]" />, label: 'Personalized 1.25L Mantra Jaap' },
+              { icon: <Video className="h-4 w-4 text-[#F5B800]" />, label: 'Private Live WhatsApp Video' },
+              { icon: <Award className="h-4 w-4 text-[#F5B800]" />, label: 'Special Prasad Box Home Delivery' }
             ].map((t) => (
               <div 
                 key={t.label} 
-                className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-[#54080F]/90 to-[#3D0408]/90 rounded-full border border-[#F5B800]/40 text-xs font-bold text-[#FFF3D6] shadow-md backdrop-blur-md"
+                className="inline-flex items-center gap-2.5 px-4.5 py-2 bg-black/40 backdrop-blur-md rounded-full border border-[#F5B800]/40 text-xs font-bold text-[#FFF3D6] shadow-lg"
               >
                 {t.icon}
                 <span>{t.label}</span>
@@ -133,54 +138,73 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
         </div>
       </section>
 
-      {/* ── VIP PUJA CARDS GRID (Deep Maroon × Pitambara Yellow Cards) */}
-      <section className="py-14 md:py-24 bg-gradient-to-b from-[#FFFDF7] via-[#FFF8EA] to-[#FFFDF7]">
+      {/* ── VIP PUJA CARDS GRID & FILTER (Luxe Dark Gold Glassmorphism Theme) */}
+      <section className="py-14 md:py-24 bg-[#0D0406]">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           
-          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8B1A21] flex items-center justify-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-[#F5B800]" /> Select Sacred VIP Ritual
-            </span>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-[#2A050A]">
-              सिद्ध पीठों के <span className="text-[#8B1A21]">विशेष वीआईपीसी महा अनुष्ठान</span>
-            </h2>
-            <div className="h-1 w-24 bg-gradient-to-r from-[#8B1A21] via-[#F5B800] to-[#8B1A21] mx-auto rounded-full" />
+          {/* Header & Category Filters */}
+          <div className="flex flex-col items-center justify-between gap-6 mb-12 text-center">
+            <div className="space-y-2">
+              <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#F5B800] flex items-center justify-center gap-1.5">
+                <Sparkles className="h-4 w-4 text-[#F5B800]" /> High-Impact Anushthans
+              </span>
+              <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-white">
+                वीआईपीसी <span className="bg-gradient-to-r from-[#F5B800] to-[#FFD700] bg-clip-text text-transparent">महा अनुष्ठान सूची</span>
+              </h2>
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex flex-wrap justify-center gap-2.5 bg-black/50 p-2 rounded-2xl border border-[#F5B800]/20 backdrop-blur-md">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
+                    selectedCategory === cat
+                      ? 'bg-gradient-to-r from-[#F5B800] to-[#D49B00] text-[#2B0306] shadow-[0_4px_15px_rgba(245,184,0,0.3)] scale-105'
+                      : 'text-[#FFF3D6]/70 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {cat === 'ALL' ? '🌟 All VIP Pujas' : cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {displayPujas.map((p, idx) => (
+            {filteredPujas.map((p, idx) => (
               <article
                 key={p.id}
-                className={`group relative flex flex-col bg-gradient-to-b from-white to-[#FFFDF5] rounded-3xl overflow-hidden border-2 border-[#E5C16C] shadow-[0_8px_30px_rgba(84,8,15,0.07)] hover:shadow-[0_16px_50px_rgba(84,8,15,0.20)] hover:border-[#F5B800] transition-all duration-300 reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
+                className="group relative flex flex-col bg-gradient-to-b from-[#1C060B] to-[#120306] rounded-3xl overflow-hidden border border-[#F5B800]/30 hover:border-[#F5B800] shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_15px_50px_rgba(245,184,0,0.25)] transition-all duration-300"
               >
                 {/* Image & Overlay */}
                 <Link href={`/pujas/${p.slug}`} className="relative block aspect-[4/3] overflow-hidden">
                   <SacredImageFrame 
                     src={p.coverImage || '/logo.jpg'} 
                     alt={p.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                   />
                   
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex flex-col items-start gap-2 z-10">
-                    <span className="bg-gradient-to-r from-[#54080F] to-[#8B1A21] text-[#FFF5D6] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#F5B800]/60 flex items-center gap-1.5">
-                      <Crown className="h-3 w-3 text-[#F5B800]" /> VIP RITUAL
+                    <span className="bg-gradient-to-r from-[#8B1A21] to-[#4A0A10] text-[#FFD700] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-lg border border-[#F5B800]/80 flex items-center gap-1.5">
+                      <Crown className="h-3 w-3 text-[#F5B800]" /> ROYAL VIP
                     </span>
                     {p.badgeTag && (
-                      <span className="bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] text-[10px] font-black px-2.5 py-1 rounded-full shadow-md">
+                      <span className="bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#2B0306] text-[10px] font-black px-2.5 py-1 rounded-full shadow-md">
                         {p.badgeTag}
                       </span>
                     )}
                   </div>
                   
                   <div className="absolute top-3 right-3 z-10">
-                    <span className="bg-[#54080F]/90 backdrop-blur-md border border-[#F5B800]/50 text-[#FFF3D6] text-[10px] font-extrabold px-2.5 py-1 rounded-xl flex flex-col items-center shadow-md">
-                      <Calendar className="w-3.5 h-3.5 text-[#F5B800] mb-0.5" />
-                      Any Day
+                    <span className="bg-black/70 backdrop-blur-md border border-[#F5B800]/40 text-[#FFF3D6] text-[10px] font-extrabold px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-md">
+                      <Clock className="w-3 h-3 text-[#F5B800]" />
+                      {p.duration || 'Full-Day'}
                     </span>
                   </div>
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A0306]/85 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#120306] via-transparent to-transparent pointer-events-none" />
                   
                   <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-white">
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-[#FFF3D6]">
@@ -191,50 +215,51 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 </Link>
 
                 {/* Card Body Content */}
-                <div className="flex flex-col flex-grow p-6">
-                  {p.categoryTag && (
-                    <div className="mb-2">
-                      <span className="text-[10px] font-black text-[#8B1A21] tracking-widest uppercase bg-[#FFF5D6] px-2.5 py-0.5 rounded-full border border-[#F5B800]/40">
-                        {p.categoryTag}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <Link href={`/pujas/${p.slug}`} className="group-hover:text-[#8B1A21] transition-colors">
-                    <h3 className="font-heading text-lg sm:text-xl font-extrabold text-[#2A050A] leading-snug mb-2 line-clamp-2">
-                      {p.name}
-                    </h3>
-                  </Link>
-                  
-                  <p className="text-xs text-[#523B30] mb-6 line-clamp-2 leading-relaxed flex-grow font-medium">
-                    {p.shortDesc}
-                  </p>
+                <div className="flex flex-col flex-grow p-6 justify-between gap-4">
+                  <div className="space-y-3">
+                    {p.categoryTag && (
+                      <div>
+                        <span className="text-[10px] font-black text-[#F5B800] tracking-widest uppercase bg-[#F5B800]/10 px-3 py-1 rounded-full border border-[#F5B800]/30">
+                          {p.categoryTag}
+                        </span>
+                      </div>
+                    )}
 
-                  {/* Highlights list */}
-                  <div className="space-y-1.5 mb-6 pt-3 border-t border-[#F5E2B8]/60">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#3D0408]">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-[#8B1A21] shrink-0" />
+                    <h3 className="font-heading font-extrabold text-xl text-white group-hover:text-[#F5B800] transition-colors leading-snug line-clamp-2">
+                      <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
+                    </h3>
+
+                    <p className="text-xs text-[#FFF3D6]/70 leading-relaxed line-clamp-3">
+                      {p.shortDesc}
+                    </p>
+                  </div>
+
+                  {/* Highlights */}
+                  <div className="py-3 border-y border-[#F5B800]/15 space-y-1.5 text-xs text-[#FFF3D6]/80 font-medium">
+                    <div className="flex items-center gap-2">
+                      <UserCheck className="w-3.5 h-3.5 text-[#F5B800] shrink-0" />
                       <span>{p.priestsCount}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#523B30]">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-[#F5B800] shrink-0" />
-                      <span>{p.duration}</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Dedicated Live Stream & Royal Prasad</span>
                     </div>
                   </div>
-                  
-                  {/* Price & Action */}
-                  <div className="flex items-center justify-between mt-auto pt-4 border-t-2 border-[#F5B800]/30">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-[#6B4E3B] font-bold uppercase tracking-wider">VIP Sankalp</span>
-                      <span className="text-2xl font-black text-[#8B1A21]">
-                        ₹{p.price?.toLocaleString('en-IN') || '21,000'}
+
+                  {/* Pricing & CTA */}
+                  <div className="flex items-center justify-between pt-1">
+                    <div>
+                      <span className="text-[10px] text-[#FFF3D6]/50 block uppercase font-bold tracking-wider">Dakshina</span>
+                      <span className="text-2xl font-black text-[#F5B800] drop-shadow-sm">
+                        ₹{p.price.toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <Link 
+
+                    <Link
                       href={`/pujas/${p.slug}`}
-                      className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#8B1A21] via-[#A3232A] to-[#F5B800] text-white px-6 py-3 rounded-full text-xs font-black shadow-md shadow-[#8B1A21]/25 hover:shadow-xl hover:scale-[1.04] transition-all"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#D49B00] text-[#2B0306] font-extrabold text-xs shadow-lg hover:shadow-[0_0_20px_rgba(245,184,0,0.5)] hover:scale-105 transition-all duration-300"
                     >
-                      Book VIP <ArrowRight className="w-4 h-4" />
+                      Book VIP Anushthan <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>
@@ -243,19 +268,17 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
           </div>
 
           {/* ── VIP Trust Guarantee Section */}
-          <div className="mt-16 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-[#3D0408] via-[#54080F] to-[#2B0306] border-2 border-[#F5B800] text-white shadow-2xl relative overflow-hidden text-center space-y-6">
+          <div className="mt-16 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-[#2B0306] via-[#4A0A10] to-[#2B0306] border-2 border-[#F5B800]/60 text-white shadow-2xl relative overflow-hidden text-center space-y-6">
             <div className="max-w-3xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#F5B800] text-[#3D0408] font-black text-xs uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#F5B800] text-[#2B0306] font-black text-xs uppercase tracking-widest">
                 👑 Royal Seva Commitment
               </div>
               <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-[#FFF3D6]">
                 क्यों चुनें दिव्ययज्ञम् VIP महा अनुष्ठान?
               </h3>
-              <p className="text-sm text-[#FFE89C] leading-relaxed font-medium">
+              <p className="text-sm text-[#FFF3D6]/80 leading-relaxed font-medium">
                 VIP अनुष्ठान केवल आपके परिवार के लिए विशेष रूप से संपन्न किए जाते हैं। इसमें 27 से अधिक वर्षों के अनुभवी वरिष्ठ आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा विशेष नाम-गोत्र संकल्प, अखंड मंत्र जाप एवं लाइव वीडियो प्रमाण के साथ अनुष्ठान संपन्न किया जाता है, तथा विशेष आशीर्वाद स्वरूप दिव्य सामग्री आपके घर प्रसाद के रूप में दी जाती है।
               </p>
-
-
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 pt-4">
@@ -263,7 +286,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20book%20a%20VIP%20Anushthan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] font-black text-sm shadow-xl hover:scale-105 transition-all"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#2B0306] font-black text-sm shadow-xl hover:scale-105 transition-all"
               >
                 💬 Talk to Lead Acharya on WhatsApp →
               </a>
@@ -275,3 +298,4 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
     </div>
   )
 }
+
