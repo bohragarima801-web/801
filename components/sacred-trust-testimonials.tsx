@@ -41,85 +41,73 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
   const displayReviews = testimonials.length > 0 ? testimonials.slice(0, 3) : defaultTestimonials
 
   return (
-    <section className="w-full py-16 md:py-24 bg-card border-t border-amber-100/60 dark:border-slate-800">
+    <section className="w-full py-16 md:py-24 bg-[#0D0704] text-[#F5F0E6]">
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200/80 shadow-xs">
-            <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500" /> Devotee Trust & Blessings
-          </span>
-          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-            भरोसा और आशीर्वाद <span className="text-amber-600 dark:text-amber-400 font-normal">/ Trust & Blessings</span>
+          <div className="vip-badge inline-flex">
+            <Heart className="h-3.5 w-3.5 text-[#F4C430] fill-[#F4C430]" /> Devotee Trust & Blessings
+          </div>
+          <h2 className="text-3xl md:text-5xl font-vip font-extrabold text-[#F5F0E6] tracking-tight">
+            भरोसा और आशीर्वाद <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-normal">/ Trust & Blessings</span>
           </h2>
-          <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">
+          <p className="text-sm md:text-base text-[#C9C0B3] font-medium">
             Read authentic experiences from 10,000+ devotee families across India & abroad who booked sacred rituals through DivyaYagyam.
           </p>
         </div>
 
         {/* 4 Trust Feature Pillars Strip */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16">
-          <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50/50 dark:from-slate-800/80 dark:to-slate-900 rounded-2xl border border-amber-200/60 dark:border-slate-700/60 flex flex-col items-center text-center space-y-2.5 hover:shadow-md transition-shadow">
-            <div className="h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
-              <ShieldCheck className="h-6 w-6" />
+          {[
+            { icon: <ShieldCheck className="h-6 w-6 text-[#F4C430]" />, title: 'Verified Priests', desc: 'Vedic certified pandits from sacred Dham temples' },
+            { icon: <Tag className="h-6 w-6 text-[#F4C430]" />, title: 'Transparent Pricing', desc: 'All-inclusive pricing with Samagri & Prasad' },
+            { icon: <Lock className="h-6 w-6 text-[#F4C430]" />, title: 'Secure Payments', desc: 'UPI, Cards & Netbanking via Razorpay' },
+            { icon: <MessageCircle className="h-6 w-6 text-[#F4C430]" />, title: 'Live Support', desc: '24/7 dedicated WhatsApp devotee assistance' },
+          ].map((f, idx) => (
+            <div key={idx} className="p-5 bg-[#180E08] rounded-2xl border border-[#D4AF37]/40 flex flex-col items-center text-center space-y-2.5 hover:border-[#F4C430] hover:shadow-[0_0_20px_rgba(212,175,55,0.25)] transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center shadow-md">
+                {f.icon}
+              </div>
+              <h4 className="font-bold text-sm md:text-base text-[#F5F0E6]">{f.title}</h4>
+              <p className="text-xs text-[#C9C0B3] leading-snug">{f.desc}</p>
             </div>
-            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Verified Priests</h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">Vedic certified pandits from sacred Dham temples</p>
-          </div>
-
-          <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50/50 dark:from-slate-800/80 dark:to-slate-900 rounded-2xl border border-amber-200/60 dark:border-slate-700/60 flex flex-col items-center text-center space-y-2.5 hover:shadow-md transition-shadow">
-            <div className="h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
-              <Tag className="h-6 w-6" />
-            </div>
-            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Transparent Pricing</h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">All-inclusive pricing with Samagri & Prasad</p>
-          </div>
-
-          <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50/50 dark:from-slate-800/80 dark:to-slate-900 rounded-2xl border border-amber-200/60 dark:border-slate-700/60 flex flex-col items-center text-center space-y-2.5 hover:shadow-md transition-shadow">
-            <div className="h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
-              <Lock className="h-6 w-6" />
-            </div>
-            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Secure Payments</h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">UPI, Cards & Netbanking via Razorpay</p>
-          </div>
-
-          <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50/50 dark:from-slate-800/80 dark:to-slate-900 rounded-2xl border border-amber-200/60 dark:border-slate-700/60 flex flex-col items-center text-center space-y-2.5 hover:shadow-md transition-shadow">
-            <div className="h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
-              <MessageCircle className="h-6 w-6" />
-            </div>
-            <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-slate-100">Live Support</h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">24/7 dedicated WhatsApp devotee assistance</p>
-          </div>
+          ))}
         </div>
 
         {/* 3-Card Testimonials Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {displayReviews.map((t, i) => (
-            <Card key={i} className="border border-amber-200/70 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <Card key={i} className="border-2 border-[#D4AF37]/30 rounded-2xl bg-[#180E08] text-[#F5F0E6] shadow-xl hover:border-[#F4C430] hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] transition-all duration-300 flex flex-col justify-between">
               <CardContent className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex gap-1 text-amber-500">
+                    <div className="flex gap-1 text-[#F4C430]">
                       {Array.from({ length: t.rating || 5 }).map((_, j) => (
-                        <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                        <Star key={j} className="h-4 w-4 fill-[#F4C430] text-[#F4C430]" />
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/40">
                       <CheckCircle2 className="h-3 w-3" /> Verified Devotee
                     </span>
                   </div>
 
-                  <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 leading-relaxed italic">
+                  <p className="text-xs sm:text-sm text-[#C9C0B3] leading-relaxed italic">
                     "{t.message}"
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3 mt-4">
-                  <div className="h-10 w-10 rounded-full bg-amber-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs shrink-0">
-                    {t.name.charAt(0)}
+                <div className="pt-4 border-t border-[#D4AF37]/20 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] font-vip font-black text-sm flex items-center justify-center border border-[#F4C430]">
+                    {t.name ? t.name.charAt(0) : '🙏'}
                   </div>
                   <div>
-                    <h5 className="font-bold text-sm text-slate-900 dark:text-slate-100 leading-tight">{t.name}</h5>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t.location}</p>
+                    <h5 className="font-vip font-bold text-sm text-[#F5F0E6]">{t.name}</h5>
+                    <p className="text-[11px] text-[#C9C0B3]">{t.location || 'India'}</p>
+                    {t.pujaName && (
+                      <span className="inline-block text-[10px] text-[#F4C430] font-semibold mt-0.5">
+                        🪔 {t.pujaName}
+                      </span>
+                    )}
                   </div>
                 </div>
               </CardContent>

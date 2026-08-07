@@ -200,7 +200,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFDF7] text-[#1E120A]">
+    <div className="min-h-screen bg-[#0D0704] text-[#F5F0E6] font-sans">
       <Script
         id="schema-organization"
         type="application/ld+json"
@@ -210,7 +210,7 @@ export default async function HomePage() {
       {/* ============================================================
           SECTION B: HERO SECTION — TIER 1 PREMIUM BLACK-GOLD LUXURY
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] py-16 md:py-28 overflow-hidden border-b-2 border-[#D4AF37]/50 text-[#F5F0E6]">
+      <section className="relative w-full bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] py-16 md:py-28 overflow-hidden border-b-2 border-[#D4AF37]/40 text-[#F5F0E6]">
         {/* Om watermark with slow pulse */}
         <div aria-hidden="true" className="absolute right-0 top-0 text-[32vw] font-vip text-[rgba(212,175,55,0.05)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
         {/* Warm golden radial glows */}
@@ -260,47 +260,45 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION C: UPCOMING PUJAS GRID
+          SECTION C: UPCOMING PUJAS GRID — TIER 1 DARK GOLD CARDS
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-16 md:py-24">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#D4AF37]/20 pb-6">
           <div className="space-y-3">
-            <div className="premium-badge">
-              <Sparkles className="h-3.5 w-3.5" /> Upcoming Sacred Pujas
+            <div className="vip-badge inline-flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#F4C430]" /> Upcoming Sacred Pujas
             </div>
-            <h2 className="text-3xl md:text-5xl font-heading font-bold text-[#1E120A] dark:text-white tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-vip font-bold text-[#F5F0E6] tracking-tight">
               आगामी दिव्य पूजाएँ{' '}
-              <span className="sacred-gradient-text font-normal">& Anushthans</span>
+              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-normal">& Anushthans</span>
             </h2>
-            <p className="text-sm md:text-base text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] font-medium max-w-2xl">
-              Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by experienced priests.
+            <p className="text-sm md:text-base text-[#C9C0B3] font-medium max-w-2xl">
+              Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by certified priests.
             </p>
           </div>
 
           <Link
             href="/pujas"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[rgba(139,26,33,0.25)] text-[#8B1A21] dark:text-[#E06070] hover:bg-[rgba(139,26,33,0.05)] font-bold text-sm transition-colors shrink-0"
+            className="btn-vip text-xs md:text-sm py-2.5 px-6 inline-flex items-center gap-2 shrink-0"
           >
             View All Pujas <ArrowRight className="h-4 w-4" />
           </Link>
-
-
         </div>
 
         {/* Responsive Grid of Puja Cards */}
         {displayPujas.length === 0 ? (
-          <div className="text-center py-16 px-6 bg-gradient-to-b from-[rgba(139,26,33,0.04)] to-[rgba(168,124,40,0.03)] dark:from-[rgba(139,26,33,0.08)] dark:to-transparent rounded-3xl border border-[rgba(139,26,33,0.10)] dark:border-[rgba(139,26,33,0.20)] space-y-5 max-w-2xl mx-auto">
-            <div className="h-16 w-16 mx-auto rounded-full bg-[rgba(139,26,33,0.08)] text-[#8B1A21] flex items-center justify-center text-3xl">🪔</div>
-            <h3 className="text-2xl md:text-3xl font-heading font-bold text-[#1E120A] dark:text-white">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
-            <p className="text-sm md:text-base text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] max-w-lg mx-auto font-medium leading-relaxed">
+          <div className="text-center py-16 px-6 bg-[#180E08] rounded-3xl border-2 border-[#D4AF37]/40 space-y-5 max-w-2xl mx-auto shadow-2xl">
+            <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center text-3xl">🪔</div>
+            <h3 className="text-2xl md:text-3xl font-vip font-bold text-[#F5F0E6]">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
+            <p className="text-sm md:text-base text-[#C9C0B3] max-w-lg mx-auto font-medium leading-relaxed">
               संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं।
             </p>
             <a
               href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all"
+              className="btn-vip inline-flex items-center gap-2 px-6 py-3"
             >
               💬 WhatsApp par Puja Paraamarsh →
             </a>
@@ -312,13 +310,12 @@ export default async function HomePage() {
             const isFallback = p.id.startsWith('fp-')
             const pujaHref = isFallback ? '/pujas' : `/pujas/${p.slug}`
             const categoryName = p.category?.name || 'Vedic Puja'
-            const badgeTag = p.badge || (p.isEvergreen ? 'Evergreen' : 'Popular')
 
             return (
-              <article key={p.id} className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <article key={p.id} className={`group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
                 {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-[rgba(168,124,40,0.06)] rounded-t-[18px]">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#0D0704] rounded-t-2xl">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
@@ -330,12 +327,12 @@ export default async function HomePage() {
                       />
                     )
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-[rgba(139,26,33,0.05)] text-[#8B1A21]">
-                      <Sparkles className="h-10 w-10 opacity-30" />
+                    <div className="h-full w-full flex items-center justify-center bg-[#180E08] text-[#F4C430]">
+                      <Sparkles className="h-10 w-10 opacity-40" />
                     </div>
                   )}
                   {/* Dark gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent pointer-events-none" />
 
                   {/* Admin Configured Card Badge */}
                   {(() => {
@@ -343,54 +340,50 @@ export default async function HomePage() {
                     if (!badgeInfo) return null
                     return (
                       <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${badgeInfo.bg}`}>
+                        <span className="vip-badge text-[10px]">
                           {badgeInfo.text}
                         </span>
                       </div>
                     )
                   })()}
 
-
-
                   {/* Category */}
                   <div className="absolute bottom-3 left-3">
-                    <span className="bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[rgba(255,255,255,0.10)]">{categoryName}</span>
+                    <span className="bg-[#0D0704]/80 backdrop-blur-sm text-[#F5F0E6] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[#D4AF37]/30">{categoryName}</span>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug">
+                    <h3 className="font-vip font-bold text-lg text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors line-clamp-2 leading-snug">
                       <Link href={pujaHref}>{p.name}</Link>
                     </h3>
                     {p.location && (
-                      <p className="text-xs text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] flex items-center gap-1.5">
-                        <MapPin className="h-3.5 w-3.5 text-[#A87C28] shrink-0" />
+                      <p className="text-xs text-[#C9C0B3] flex items-center gap-1.5 font-medium">
+                        <MapPin className="h-3.5 w-3.5 text-[#F4C430] shrink-0" />
                         {p.location}
                       </p>
                     )}
-                    <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-[#C9C0B3]/80 line-clamp-2 leading-relaxed font-normal">
                       {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                     </p>
                   </div>
 
                   {/* Price + CTA */}
-                  <div className="pt-3 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between">
+                  <div className="pt-3 border-t border-[#D4AF37]/20 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-[#8B7355] font-medium block">Booking Amount</span>
-                      <span className="text-xl font-black text-[#8B1A21] dark:text-[#E06070]">
+                      <span className="text-[10px] text-[#C9C0B3] font-medium block">Booking Amount</span>
+                      <span className="text-xl font-extrabold text-[#F4C430]">
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
                     <Link
                       href={pujaHref}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+                      className="btn-vip text-xs py-2 px-4 inline-flex items-center gap-1"
                     >
                       Book Now <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
-
-
                   </div>
                 </div>
 
@@ -402,28 +395,28 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION: WHY CHOOSE US (हमारे साथ ही पूजा क्यों कराएं?)
+          SECTION: WHY CHOOSE US (আমাদের সাথে ही पूजा क्यों कराएं?)
           ============================================================ */}
-      <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#200205] via-[#3D0408] to-[#200205] text-white overflow-hidden border-y border-[#F5B800]/40">
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] text-[#F5F0E6] overflow-hidden border-y-2 border-[#D4AF37]/40">
         {/* Om Watermark Background */}
-        <div aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-[35vw] font-serif text-[rgba(245,184,0,0.03)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#F5B800]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#8B1A21]/20 rounded-full blur-3xl pointer-events-none" />
+        <div aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-[35vw] font-vip text-[rgba(212,175,55,0.03)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[rgba(212,175,55,0.10)] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[rgba(107,15,26,0.25)] rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F5B800]/20 border border-[#F5B800]/50 text-[#FFF3D6] text-xs font-black uppercase tracking-widest">
-              <ShieldCheck className="h-4 w-4 text-[#F5B800]" /> Why Choose DivyaYagyam (हमारे साथ ही अनुष्ठान क्यों?)
+            <div className="vip-badge inline-flex">
+              <ShieldCheck className="h-4 w-4 text-[#F4C430]" /> Why Choose DivyaYagyam
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-vip font-extrabold text-[#F5F0E6] leading-tight">
               Why 50,000+ Devotees Trust{' '}
-              <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent">
                 DivyaYagyam
               </span>
             </h2>
-            <p className="text-sm sm:text-base text-[#FFF3D6]/90 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-[#C9C0B3] font-medium max-w-2xl mx-auto leading-relaxed">
               शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद — आपकी हर पूजा को बनाती है 100% सिद्ध व फलदायी।
             </p>
           </div>
@@ -440,7 +433,7 @@ export default async function HomePage() {
               {
                 icon: "📜",
                 title: "व्यक्तिगत नाम व गोत्र संकल्प",
-                subtitle: "108% Personalized Sankalp",
+                subtitle: "100% Personalized Sankalp",
                 desc: "पूजा आरंभ में मुख्य आचार्य द्वारा आपके तथा आपके परिवार के सदस्यों का स्पष्ट नाम व गोत्र बोलकर संकल्प कराया जाता है।"
               },
               {
@@ -470,31 +463,31 @@ export default async function HomePage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="group relative p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#3D0408]/90 to-[#2A0306]/90 border border-[#F5B800]/30 hover:border-[#F5B800] transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_10px_30px_rgba(245,184,0,0.25)] flex flex-col justify-between"
+                className="group relative p-6 sm:p-7 rounded-2xl bg-[#180E08] border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] flex flex-col justify-between"
               >
                 {/* Top Gold Corner Accent */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#F5B800]/20 to-transparent rounded-tr-2xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#D4AF37]/20 to-transparent rounded-tr-2xl pointer-events-none" />
 
                 <div className="space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-[#54080F] to-[#3D0408] border border-[#F5B800]/50 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-[#6B0F1A] to-[#180E08] border border-[#D4AF37]/50 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
                     {item.icon}
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F5B800] block mb-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F4C430] block mb-1">
                       {item.subtitle}
                     </span>
-                    <h3 className="text-lg font-bold text-white group-hover:text-[#FFF3D6] transition-colors leading-snug">
+                    <h3 className="text-lg font-bold text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors leading-snug">
                       {item.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-[#FFE89C]/80 leading-relaxed font-normal">
+                  <p className="text-xs sm:text-sm text-[#C9C0B3] leading-relaxed font-normal">
                     {item.desc}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-[#F5B800]/15 flex items-center justify-between text-xs font-extrabold text-[#F5B800]">
+                <div className="pt-4 mt-4 border-t border-[#D4AF37]/20 flex items-center justify-between text-xs font-extrabold text-[#F4C430]">
                   <span>100% Authentic Seva</span>
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">✓ Verified</span>
                 </div>
@@ -503,7 +496,7 @@ export default async function HomePage() {
           </div>
 
           {/* Bottom Trust Stat Bar */}
-          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-[#54080F]/90 via-[#3D0408]/90 to-[#54080F]/90 border border-[#F5B800]/40 grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-xl">
+          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#180E08] border-2 border-[#D4AF37]/50 grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-2xl">
             {[
               { val: "50,000+", label: "संतुष्ट यजमान (Happy Devotees)" },
               { val: "27+ Years", label: "वैदिक अनुभव (Vedic Lineage)" },
@@ -511,8 +504,8 @@ export default async function HomePage() {
               { val: "4.9 ★", label: "भक्त रेटिंग (User Rating)" }
             ].map((stat) => (
               <div key={stat.label} className="space-y-1">
-                <div className="text-2xl sm:text-3xl font-black text-[#F5B800] tracking-tight">{stat.val}</div>
-                <div className="text-xs font-bold text-[#FFF3D6] opacity-90">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl font-black text-[#F4C430] tracking-tight">{stat.val}</div>
+                <div className="text-xs font-bold text-[#F5F0E6] opacity-90">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -521,29 +514,32 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION D: DIVYA DARSHAN VIDEO GALLERY
+          SECTION D: DIVYA DARSHAN VIDEO GALLERY — TIER 1 DARK
           ============================================================ */}
-
-      <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4 border-t border-[rgba(168,124,40,0.10)]">
+      <section className="w-full bg-[#0D0704] py-8 border-t border-[#D4AF37]/20">
         <SacredVideoGallery videos={dbVideos} />
       </section>
 
       {/* ============================================================
-          SECTION E: JYOTISH & VEDIC TOOLS
+          SECTION E: JYOTISH & VEDIC TOOLS — TIER 1 DARK
           ============================================================ */}
-      <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4">
+      <section className="w-full bg-[#0D0704] py-8 border-t border-[#D4AF37]/20">
         <SacredAstroTools />
       </section>
 
       {/* ============================================================
-          SECTION F: TESTIMONIALS & TRUST SECTION
+          SECTION F: TESTIMONIALS & TRUST SECTION — TIER 1 DARK
           ============================================================ */}
-      <SacredTrustTestimonials testimonials={dbTestimonials} />
+      <section className="w-full bg-[#0D0704] border-t border-[#D4AF37]/20">
+        <SacredTrustTestimonials testimonials={dbTestimonials} />
+      </section>
 
       {/* ============================================================
-          SECTION G: FAQ SECTION
+          SECTION G: FAQ SECTION — TIER 1 DARK
           ============================================================ */}
-      <SacredFaqAccordion />
+      <section className="w-full bg-[#0D0704] border-t border-[#D4AF37]/20 pb-16">
+        <SacredFaqAccordion />
+      </section>
 
     </div>
   )

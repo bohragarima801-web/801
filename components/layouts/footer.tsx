@@ -5,6 +5,8 @@ import { Logo } from '@/components/logo'
 import { siteConfig } from '@/lib/site-config'
 import { Facebook, Instagram, Youtube, Twitter, Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 
+import { usePathname } from 'next/navigation'
+
 const columns: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: 'Sacred Services',
@@ -51,15 +53,18 @@ interface FooterProps {
   isDark?: boolean
 }
 
-export function Footer({ mapUrl, siteData, isDark = false }: FooterProps) {
+export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
+  const pathname = usePathname()
+  const isDarkTheme = isDark !== undefined ? isDark : (pathname === '/' || pathname?.startsWith('/vip-pujas'))
+
   const socials = siteData?.socials || siteConfig.socials
   const contact = siteData?.contact || siteConfig.contact
 
-  const bgClass = isDark ? 'bg-[#0D0704] text-[#F5F0E6] border-t-2 border-[#D4AF37]/40' : 'bg-[#F5EBDD] text-[#3E2723] border-t-2 border-[#C9A227]/30'
-  const textBodyClass = isDark ? 'text-[#C9C0B3]' : 'text-[#5A4A42]'
-  const headingClass = isDark ? 'text-[#F4C430] font-heading' : 'text-[#7A1F2B] font-heading font-bold'
-  const linkHoverClass = isDark ? 'hover:text-[#F4C430]' : 'hover:text-[#E85D04]'
-  const iconBgClass = isDark ? 'bg-[rgba(212,175,55,0.15)] text-[#F4C430]' : 'bg-[#EAD9C4] text-[#7A1F2B]'
+  const bgClass = isDarkTheme ? 'bg-[#0D0704] text-[#F5F0E6] border-t-2 border-[#D4AF37]/40' : 'bg-[#F5EBDD] text-[#3E2723] border-t-2 border-[#C9A227]/30'
+  const textBodyClass = isDarkTheme ? 'text-[#C9C0B3]' : 'text-[#5A4A42]'
+  const headingClass = isDarkTheme ? 'text-[#F4C430] font-heading font-bold' : 'text-[#7A1F2B] font-heading font-bold'
+  const linkHoverClass = isDarkTheme ? 'hover:text-[#F4C430]' : 'hover:text-[#E85D04]'
+  const iconBgClass = isDarkTheme ? 'bg-[rgba(212,175,55,0.15)] text-[#F4C430]' : 'bg-[#EAD9C4] text-[#7A1F2B]'
 
   return (
     <footer className={`relative transition-colors ${bgClass}`}>

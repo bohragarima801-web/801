@@ -59,19 +59,19 @@ export function SacredAstroTools() {
   ]
 
   return (
-    <section className="container mx-auto px-4 md:px-6 py-8 md:py-12 border-t border-amber-100/60 dark:border-slate-800">
+    <section className="container mx-auto px-4 md:px-6 py-8 md:py-12 bg-[#0D0704] text-[#F5F0E6]">
       {/* Compact Header */}
-      <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between gap-4 mb-6 border-b border-[#D4AF37]/20 pb-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-200/80">
-            <Sparkles className="h-3 w-3 text-amber-600 dark:text-amber-400" /> Astro & Vedic Tools
+          <div className="vip-badge inline-flex">
+            <Sparkles className="h-3 w-3 text-[#F4C430]" /> Astro & Vedic Tools
           </div>
-          <h2 className="text-xl md:text-2xl font-heading font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-            🔮 पावन वैदिक <span className="text-amber-600 dark:text-amber-400 font-bold">एवं ज्योतिष टूल्स</span>
+          <h2 className="text-xl md:text-2xl font-vip font-extrabold text-[#F5F0E6] tracking-tight">
+            🔮 पावन वैदिक <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-bold">एवं ज्योतिष टूल्स</span>
           </h2>
         </div>
 
-        <Button variant="ghost" size="sm" className="text-xs font-bold text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg px-3" asChild>
+        <Button variant="ghost" size="sm" className="btn-vip text-xs py-1.5 px-4" asChild>
           <Link href="/tools" prefetch={true}>
             सभी टूल्स <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
@@ -84,27 +84,27 @@ export function SacredAstroTools() {
           const IconComp = t.icon
           return (
             <Link href={t.slug} key={idx} prefetch={true} className="block group">
-              <Card className="p-3.5 border border-amber-200/60 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-2xs hover:shadow-md hover:border-amber-400/80 transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
+              <Card className="p-3.5 border-2 border-[#D4AF37]/30 rounded-xl bg-[#180E08] text-[#F5F0E6] shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:border-[#F4C430] transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center border shrink-0 ${t.color}`}>
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-[#D4AF37]/40 bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] shrink-0">
                     <IconComp className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex items-center gap-1.5">
-                      <h3 className="font-bold text-xs md:text-sm text-slate-900 dark:text-slate-100 group-hover:text-amber-700 transition-colors truncate">
+                      <h3 className="font-vip font-bold text-xs md:text-sm text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors truncate">
                         {t.title}
                       </h3>
-                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-extrabold text-amber-700 border-amber-200 bg-amber-50/50 shrink-0">
+                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-extrabold text-[#F4C430] border-[#D4AF37]/40 bg-[#140A05] shrink-0">
                         {t.tag}
                       </Badge>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate font-medium">
+                    <p className="text-[11px] text-[#C9C0B3] truncate font-medium">
                       {t.desc}
                     </p>
                   </div>
                 </div>
 
-                <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all shrink-0" />
+                <ChevronRight className="h-4 w-4 text-[#F4C430] group-hover:translate-x-1 transition-all shrink-0" />
               </Card>
             </Link>
           )
