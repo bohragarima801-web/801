@@ -24,13 +24,16 @@ module.exports = {
       },
       extend: {
         fontFamily: {
-          sans: ['Mukta', 'Outfit', 'Inter', 'system-ui', 'sans-serif'],
-          heading: ['Noto Serif Devanagari', 'Cormorant Garamond', 'serif'],
-          hero: ['Rozha One', 'Cinzel', 'Noto Serif Devanagari', 'serif'],
-          devanagari: ['Noto Serif Devanagari', 'Mukta', 'serif'],
+          sans: ['Poppins', 'Noto Sans Devanagari', 'Mukta', 'Outfit', 'Inter', 'system-ui', 'sans-serif'],
+          body: ['Poppins', 'Noto Sans Devanagari', 'sans-serif'],
+          heading: ['Cinzel', 'Noto Serif Devanagari', 'Cormorant Garamond', 'serif'],
+          vip: ['Cinzel Decorative', 'Yatra One', 'Cinzel', 'Noto Serif Devanagari', 'serif'],
+          hero: ['Cinzel Decorative', 'Yatra One', 'Cinzel', 'Noto Serif Devanagari', 'serif'],
+          devanagari: ['Noto Serif Devanagari', 'Noto Sans Devanagari', 'Mukta', 'serif'],
         },
         boxShadow: {
           'golden-glow': '0 0 40px -8px rgba(212, 175, 55, 0.4), 0 0 80px -20px rgba(230, 81, 0, 0.2)',
+          'vip-glow': '0 0 24px rgba(212, 175, 55, 0.35)',
         },
         colors: {
           border: 'hsl(var(--border))',

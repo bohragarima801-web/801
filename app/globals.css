@@ -1,15 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* ============================================================
-   🕉️  DIVYAYAGYAM — LUXURY PREMIUM SPIRITUAL DESIGN SYSTEM v2.0
-   Brand: Deep Maroon × Antique Gold × Sacred Ivory
-   Inspired by: Isha Foundation × Tanishq × 5-Star Temple Trust
-   ============================================================ */
-
 @layer base {
   :root {
+    /* ── Global Font System Tokens (Dual Latin + Devanagari) ── */
+    --font-heading-en: 'Cinzel', serif;
+    --font-heading-hi: 'Noto Serif Devanagari', serif;
+    --font-body-en: 'Poppins', sans-serif;
+    --font-body-hi: 'Noto Sans Devanagari', sans-serif;
+    --font-vip-en: 'Cinzel Decorative', serif;
+    --font-vip-hi: 'Yatra One', serif;
+
+    /* ── Tier 2: Standard Pages System Tokens ── */
+    --bg-tier2: #FFF8F0;
+    --surface-tier2: #FFFFFF;
+    --primary-tier2: #E85D04;
+    --secondary-tier2: #7A1F2B;
+    --accent-tier2: #C9A227;
+    --text-heading-tier2: #3E2723;
+    --text-body-tier2: #5A4A42;
+    --border-tier2: #EAD9C4;
+    --success-tier2: #2E7D32;
+
+    /* ── Tier 1: Premium (Landing & VIP Puja) System Tokens ── */
+    --bg-tier1-start: #1A0F08;
+    --bg-tier1-end: #0D0704;
+    --card-tier1: #180E08;
+    --gold-primary-tier1: #D4AF37;
+    --gold-bright-tier1: #F4C430;
+    --gold-bronze-tier1: #B8860B;
+    --maroon-vip-tier1: #6B0F1A;
+    --text-heading-tier1: #F5F0E6;
+    --text-body-tier1: #C9C0B3;
+    --divider-glow-tier1: rgba(212, 175, 55, 0.4);
+
     /* ── Core Palette (shadcn/Radix HSL tokens) ── */
     --background: 36 40% 97%;               /* Sacred ivory */
     --foreground: 20 40% 12%;               /* Deep espresso brown */
@@ -72,6 +93,7 @@
     /* ── Sanatani Light Theme Gradients ── */
     --gradient-primary: linear-gradient(135deg, #8B1A21 0%, #B84430 45%, #D49B00 100%);
     --gradient-gold: linear-gradient(90deg, #996B00 0%, #D49B00 35%, #F5C842 60%, #B37B00 100%);
+    --gradient-gold-vip: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #F4C430 100%);
     --gradient-sanatani-light: linear-gradient(165deg, #FFFDF7 0%, #FFF5E0 45%, #FFF0D1 80%, #FFFDF7 100%);
     --gradient-hero-light: linear-gradient(180deg, #FFF8EB 0%, #FFF2D6 55%, #FFFDF7 100%);
     --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFFDF7 100%);
@@ -128,7 +150,7 @@
 }
 
 /* ============================================================
-   BASE ELEMENTS
+   BASE ELEMENTS & DUAL FONT SYSTEM
    ============================================================ */
 @layer base {
   * {
@@ -144,9 +166,9 @@
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: 'Outfit', 'Mukta', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-tier2);
+    color: var(--text-body-tier2);
+    font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
@@ -156,34 +178,33 @@
     font-size: 15px;
   }
 
-  /* Premium heading hierarchy */
-  h1, h2 {
-    font-family: 'Cormorant Garamond', 'Noto Serif Devanagari', Georgia, serif;
+  /* Dual Font Heading Hierarchy */
+  h1, h2, h3, .heading {
+    font-family: var(--font-heading-en), var(--font-heading-hi), 'Cormorant Garamond', Georgia, serif;
     letter-spacing: -0.02em;
     line-height: 1.20;
     font-weight: 700;
+    color: var(--text-heading-tier2);
     word-break: break-word;
     overflow-wrap: break-word;
   }
 
-  h3, h4 {
-    font-family: 'Cormorant Garamond', 'Noto Serif Devanagari', Georgia, serif;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-    font-weight: 600;
-    word-break: break-word;
-  }
-
-  h5, h6 {
-    font-family: 'Outfit', 'Mukta', sans-serif;
+  h4, h5, h6 {
+    font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
     letter-spacing: 0;
     line-height: 1.45;
     font-weight: 600;
+    color: var(--text-heading-tier2);
   }
 
-  /* Sanskrit/Hindi text — Noto Serif Devanagari */
+  /* VIP Accent Typography */
+  .font-vip, .vip-text {
+    font-family: var(--font-vip-en), var(--font-vip-hi), var(--font-heading-en), var(--font-heading-hi), serif;
+  }
+
+  /* Sanskrit/Hindi text — Dual Noto Devanagari */
   :lang(hi), .text-hindi, .devanagari {
-    font-family: 'Noto Serif Devanagari', 'Mukta', sans-serif;
+    font-family: var(--font-heading-hi), var(--font-body-hi), sans-serif;
     line-height: 1.8;
   }
 
@@ -192,52 +213,97 @@
   }
 
   ::selection {
-    background: rgba(139, 26, 33, 0.15);
-    color: var(--sindoor);
+    background: rgba(232, 93, 4, 0.20);
+    color: #7A1F2B;
   }
 }
 
 /* ============================================================
-   SCROLL ANIMATIONS — Intersection Observer trigger
+   SCROLL ANIMATIONS — Safe Visibility Fallbacks
    ============================================================ */
 @layer utilities {
   .reveal {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.20s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.20s cubic-bezier(0.16, 1, 0.3, 1);
-    animation: revealAuto 0.25s ease-out 0.15s forwards;
-  }
-  .reveal.revealed {
-    opacity: 1;
+    opacity: 1; /* Fallback default so JS delays never hide content */
     transform: translateY(0);
-    animation: none;
+    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-left {
-    opacity: 0;
-    transform: translateX(-12px);
-    transition: opacity 0.20s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.20s cubic-bezier(0.16, 1, 0.3, 1);
-    animation: revealLeftAuto 0.25s ease-out 0.15s forwards;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal-left.revealed { opacity: 1; transform: translateX(0); animation: none; }
   .reveal-right {
-    opacity: 0;
-    transform: translateX(12px);
-    transition: opacity 0.20s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.20s cubic-bezier(0.16, 1, 0.3, 1);
-    animation: revealRightAuto 0.25s ease-out 0.15s forwards;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal-right.revealed { opacity: 1; transform: translateX(0); animation: none; }
 
-  @keyframes revealAuto { to { opacity: 1; transform: translateY(0); } }
-  @keyframes revealLeftAuto { to { opacity: 1; transform: translateX(0); } }
-  @keyframes revealRightAuto { to { opacity: 1; transform: translateX(0); } }
+  /* Slow Om pulse animation */
+  @keyframes omPulseGlow {
+    0%, 100% { opacity: 0.04; transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2)); }
+    50% { opacity: 0.09; transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5)); }
+  }
+  .animate-om-pulse {
+    animation: omPulseGlow 4s ease-in-out infinite;
+  }
 
-  /* Stagger delays — micro delays for ultra responsive feel */
+  /* Component Badge & Button Utilities from Prompt */
+  .vip-badge {
+    background: linear-gradient(135deg, #6B0F1A, #4A0A12);
+    border: 1px solid #D4AF37;
+    color: #F4C430;
+    font-family: var(--font-heading-en), var(--font-vip-hi), serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-standard {
+    background: #E85D04;
+    color: #FFF8F0;
+    font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.25s ease;
+  }
+  .btn-standard:hover {
+    background: #D55200;
+    box-shadow: 0 4px 16px rgba(232, 93, 4, 0.25);
+  }
+
+  .btn-vip {
+    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #F4C430 100%);
+    color: #1A0F08;
+    font-family: var(--font-vip-en), var(--font-vip-hi), var(--font-heading-en), serif;
+    font-weight: 700;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+    padding: 12px 24px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-vip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.45);
+  }
+
+  /* Stagger delays */
   .reveal-delay-1 { transition-delay: 0.02s; }
   .reveal-delay-2 { transition-delay: 0.04s; }
   .reveal-delay-3 { transition-delay: 0.06s; }
+
   .reveal-delay-4 { transition-delay: 0.08s; }
   .reveal-delay-5 { transition-delay: 0.10s; }
 }

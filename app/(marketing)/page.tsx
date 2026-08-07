@@ -208,46 +208,46 @@ export default async function HomePage() {
       />
 
       {/* ============================================================
-          SECTION B: HERO SECTION — BRIGHT SANATANI LIGHT GOLD
+          SECTION B: HERO SECTION — TIER 1 PREMIUM BLACK-GOLD LUXURY
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-14 md:py-24 overflow-hidden border-b border-[#F5E2B8]">
-        {/* Om watermark */}
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[30vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+      <section className="relative w-full bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] py-16 md:py-28 overflow-hidden border-b-2 border-[#D4AF37]/50 text-[#F5F0E6]">
+        {/* Om watermark with slow pulse */}
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[32vw] font-vip text-[rgba(212,175,55,0.05)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
         {/* Warm golden radial glows */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[rgba(242,169,0,0.12)] rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-[rgba(139,26,33,0.08)] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-[rgba(212,175,55,0.15)] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-32 w-[450px] h-[450px] bg-[rgba(107,15,26,0.30)] rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-5xl">
           {/* Label badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-4">
-            <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
-            <span className="text-[#8B5A00] text-xs font-extrabold uppercase tracking-[0.12em]">🪔 Sri Sanatan Seva & Anushthan</span>
+          <div className="vip-badge mb-6 shadow-[0_4px_25px_rgba(212,175,55,0.45)]">
+            <Sparkles className="h-4 w-4 text-[#F4C430] fill-[#F4C430]" />
+            <span className="font-vip tracking-widest">🪔 SRI SANATAN SEVA & VIP ANUSHTHAN</span>
           </div>
 
-          {/* H1 Headline (Sri Mandir Style) */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-[#2A1508] leading-[1.18] tracking-tight mb-4">
-            Perform Puja as per Vedic Rituals at{' '}
-            <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">
-              Famous Hindu Temples in India
+          {/* H1 Headline in Cinzel Decorative / Yatra One */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-vip font-extrabold text-[#F5F0E6] leading-[1.18] tracking-tight mb-5 drop-shadow-lg">
+            Perform Authentic Vedic Pujas at{' '}
+            <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent drop-shadow-md">
+              Sacred Temples in India
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-sm sm:text-base md:text-lg text-[#4A2D1B] font-medium leading-relaxed max-w-3xl mx-auto mb-6">
+          <p className="text-sm sm:text-base md:text-lg text-[#C9C0B3] font-medium leading-relaxed max-w-3xl mx-auto mb-8">
             भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे ऑनलाइन वैदिक पूजा। अपने नाम व गोत्र से संकल्प करवाएं — व्हाट्सएप पर लाइव वीडियो प्रमाण एवं घर द्वार सिद्ध प्रसाद।
           </p>
 
-          {/* 4 trust features */}
-          <div className="flex flex-wrap justify-center gap-2.5 max-w-3xl mx-auto mb-8">
+          {/* 4 trust features — Glassmorphism dark cards */}
+          <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto mb-10">
             {[
-              { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'अनुभवी वेदाचार्य' },
-              { icon: <MapPin className="h-3.5 w-3.5" />, label: 'Pan-India Sacred Dham' },
-              { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video Proof' },
-              { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent Seva' },
+              { icon: <ShieldCheck className="h-4 w-4 text-[#F4C430]" />, label: 'अनुभवी वेदाचार्य' },
+              { icon: <MapPin className="h-4 w-4 text-[#F4C430]" />, label: 'Pan-India Sacred Dham' },
+              { icon: <Video className="h-4 w-4 text-[#F4C430]" />, label: 'WhatsApp Video Proof' },
+              { icon: <CheckCircle2 className="h-4 w-4 text-[#F4C430]" />, label: '100% Transparent Seva' },
             ].map((f) => (
-              <div key={f.label} className="flex items-center gap-2 px-3.5 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-[#F0D695] shadow-xs">
-                <div className="h-5 w-5 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white flex items-center justify-center shrink-0">{f.icon}</div>
-                <span className="text-xs font-bold text-[#2A1508]">{f.label}</span>
+              <div key={f.label} className="flex items-center gap-2.5 px-4 py-2 bg-[#180E08]/80 backdrop-blur-md rounded-full border border-[#D4AF37]/40 shadow-lg">
+                <div className="h-5 w-5 rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center shrink-0">{f.icon}</div>
+                <span className="text-xs font-bold text-[#F5F0E6]">{f.label}</span>
               </div>
             ))}
           </div>
