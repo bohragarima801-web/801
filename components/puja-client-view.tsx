@@ -389,6 +389,29 @@ export function PujaClientView({ puja }: { puja: any }) {
         </div>
       </section>
 
+      {/* 1.5. How This Works Bar (Devpunya Pattern) */}
+      <div className="w-full bg-white border-b border-amber-200/60 py-4 shadow-2xs">
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">1</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">पैकेज चुनें</p><p className="text-[10px] text-slate-500 truncate">Select Package</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">2</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">नाम व गोत्र दर्ज करें</p><p className="text-[10px] text-slate-500 truncate">Name & Gotra</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">3</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">व्हाट्सएप लाइव वीडियो</p><p className="text-[10px] text-slate-500 truncate">Live Video Proof</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">4</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">सिद्ध प्रसाद डिलीवरी</p><p className="text-[10px] text-slate-500 truncate">Prasad at Doorstep</p></div>
+          </div>
+        </div>
+      </div>
+
+
       {/* 2. Sticky Sub-Header Anchor Menu */}
       <div className="sticky top-[58px] sm:top-[68px] z-40 w-full bg-white/95 backdrop-blur-md border-b border-amber-900/10 shadow-md overflow-x-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto flex items-center justify-start md:justify-center gap-6 sm:gap-8 px-4 py-3 min-w-max">
