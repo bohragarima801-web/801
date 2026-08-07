@@ -341,6 +341,29 @@ export async function POST(req: NextRequest) {
     }
 
     if (isExplicitManual) {
+      // Update order status to CONFIRMED for Cash on Delivery
+      // paymentStatus stays PENDING until delivery collection
+      await prisma.order.update({
+        where: { id: dbOrder.id },
+        data: {
+          status: 'CONFIRMED',
+          notes: (notes ? notes + ' | ' : '') + 'Payment: Cash on Delivery (COD)'
+        }
+      })
+
+      // Create a COD payment record for tracking
+      await prisma.payment.create({
+        data: {
+          userId: dbUserId,
+          orderId: dbOrder.id,
+          amount: total,
+          currency: 'INR',
+          gateway: 'COD',
+          status: 'PENDING',
+          metadata: { paymentType: 'cod', orderNumber: dbOrder.orderNumber }
+        }
+      }).catch(() => {})
+
       if (validCouponId) {
         await prisma.coupon.update({
           where: { id: validCouponId },
@@ -367,7 +390,8 @@ export async function POST(req: NextRequest) {
         orderId: dbOrder.id,
         orderNumber: dbOrder.orderNumber,
         total,
-        message: 'आपका ऑर्डर दर्ज हो गया है! हमारी टीम जल्द ही आपसे संपर्क करेगी।'
+        paymentMethod: 'cod',
+        message: 'आपका ऑर्डर COD (Cash on Delivery) के रूप में कन्फर्म हो गया है! डिलीवरी पर भुगतान करें।'
       });
     }
 
@@ -423,7 +447,15 @@ export async function POST(req: NextRequest) {
       console.error('Error Details:', rzpErr)
       console.error('================================================================')
       
-      // Fallback: If Razorpay API keys are missing or unconfigured, place order cleanly as COD / Manual Order
+      // Fallback: If Razorpay API keys are missing or unconfigured, place order as COD / Manual
+      await prisma.order.update({
+        where: { id: dbOrder.id },
+        data: {
+          status: 'CONFIRMED',
+          notes: (notes ? notes + ' | ' : '') + 'Payment: Cash on Delivery (COD) [Razorpay Fallback]'
+        }
+      }).catch(() => {})
+
       if (validCouponId) {
         await prisma.coupon.update({
           where: { id: validCouponId },
@@ -437,7 +469,8 @@ export async function POST(req: NextRequest) {
         orderId: dbOrder.id,
         orderNumber: dbOrder.orderNumber,
         total,
-        message: 'आपका ऑर्डर कैश ऑन डिलीवरी (COD) के रूप में सफलतापूर्वक दर्ज हो गया है!'
+        paymentMethod: 'cod',
+        message: 'आपका ऑर्डर COD (Cash on Delivery) के रूप में दर्ज हो गया है! डिलीवरी पर भुगतान करें।'
       });
     }
   } catch (err: any) {

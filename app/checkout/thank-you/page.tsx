@@ -11,11 +11,14 @@ import {
 
 function ThankYouContent() {
   const searchParams = useSearchParams()
-  const orderNumber = searchParams.get('order') || searchParams.get('id') || 'DY-2026-89421'
-  const paymentId = searchParams.get('payment') || searchParams.get('pay_id') || 'pay_Px89a2K19'
+  const orderNumber = searchParams.get('order') || searchParams.get('id') || ''
+  const paymentId = searchParams.get('payment') || searchParams.get('pay_id') || ''
   const devoteeName = searchParams.get('name') || searchParams.get('devotee') || 'श्रद्धालु भक्त'
-  const pujaName = searchParams.get('puja') || 'काशी विश्वनाथ महादेव रुद्राभिषेक एवं महायज्ञ'
-  const amountPaid = searchParams.get('amount') ? `₹${searchParams.get('amount')}` : '₹1,100'
+  const pujaName = searchParams.get('puja') || 'आपका ऑर्डर'
+  const rawAmount = searchParams.get('amount')
+  const paymentMethod = searchParams.get('method') || (paymentId ? 'online' : 'cod')
+  const isCod = paymentMethod === 'cod' || paymentMethod === 'manual'
+  const amountPaid = rawAmount ? `₹${Number(rawAmount).toLocaleString('en-IN')}` : ''
   
   const [currentTime, setCurrentTime] = useState('')
 
@@ -32,7 +35,14 @@ function ThankYouContent() {
     setCurrentTime(formatted)
   }, [])
 
-  const timelineSteps = [
+  const timelineSteps = isCod ? [
+    { label: 'Order Confirmed', desc: 'ऑर्डर सफलतापूर्वक दर्ज (COD)', status: 'completed' },
+    { label: 'Invoice Generated', desc: 'रसीद डाउनलोड हेतु उपलब्ध', status: 'completed' },
+    { label: 'WhatsApp Confirmation', desc: 'व्हाट्सएप पर संदेश प्रेषित', status: 'completed' },
+    { label: 'Order Packed', desc: 'पैकेजिंग एवं डिस्पैच', status: 'in-progress' },
+    { label: 'Out for Delivery', desc: 'डिलीवरी पार्टनर को सौंपा', status: 'pending' },
+    { label: 'Payment at Doorstep', desc: 'डिलीवरी पर ₹ भुगतान करें', status: 'pending' },
+  ] : [
     { label: 'Booking Confirmed', desc: 'पूजा सफलतापूर्वक दर्ज', status: 'completed' },
     { label: 'Payment Received', desc: '100% सुरक्षित भुगतान प्राप्त', status: 'completed' },
     { label: 'Invoice Generated', desc: 'रसीद डाउनलोड हेतु उपलब्ध', status: 'completed' },
@@ -41,7 +51,9 @@ function ThankYouContent() {
     { label: 'Puja Scheduled', desc: 'शुभ मुहूर्त में पूजन संपन्नता', status: 'pending' },
   ]
 
-  const whatsappMessage = `नमस्ते Divyayagyam! मेरी पूजा बुकिंग संख्या ${orderNumber} सफलतापूर्वक दर्ज हो गई है। कृपया आगे का अपडेट साझा करें।`
+  const whatsappMessage = isCod
+    ? `नमस्ते Divyayagyam! मेरा COD ऑर्डर संख्या ${orderNumber} दर्ज हो गया है। कृपया डिलीवरी अपडेट साझा करें।`
+    : `नमस्ते Divyayagyam! मेरी पूजा बुकिंग संख्या ${orderNumber} सफलतापूर्वक दर्ज हो गई है। कृपया आगे का अपडेट साझा करें।`
   const whatsappUrl = `https://wa.me/919587171984?text=${encodeURIComponent(whatsappMessage)}`
 
   return (
@@ -156,10 +168,12 @@ function ThankYouContent() {
               🙏 धन्यवाद!
             </h1>
             <p className="text-xl sm:text-2xl font-heading font-extrabold bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">
-              आपकी पूजा सफलतापूर्वक बुक हो गई है
+              {isCod ? 'आपका COD ऑर्डर कन्फर्म हो गया है!' : 'आपकी पूजा/ऑर्डर सफलतापूर्वक दर्ज हो गई है'}
             </p>
             <p className="text-sm sm:text-base text-[#4A2D1B] font-semibold max-w-lg mx-auto leading-relaxed">
-              आपका भुगतान सफल रहा। हमारी टीम शीघ्र ही आपसे संपर्क करेगी।
+              {isCod
+                ? 'आपका ऑर्डर डिलीवरी के लिए भेजा जाएगा। डिलीवरी के समय भुगतान करें।'
+                : 'आपका भुगतान सफल रहा। हमारी टीम शीघ्र ही आपसे संपर्क करेगी।'}
             </p>
           </motion.div>
         </div>
@@ -204,13 +218,16 @@ function ThankYouContent() {
                 <p className="text-base font-black text-[#8B1A21] font-mono mt-0.5">{orderNumber}</p>
               </div>
 
+              {/* Payment ID - only for online */}
+              {!isCod && paymentId && (
               <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">Payment ID</p>
-                <p className="text-base font-black text-[#2A1508] font-mono mt-0.5">{paymentId}</p>
+                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">Payment ID (Razorpay)</p>
+                <p className="text-sm font-black text-[#2A1508] font-mono mt-0.5 break-all">{paymentId}</p>
               </div>
+              )}
 
               <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">भक्त का नाम (Devotee)</p>
+                <p className="text-xs text-[#6A4D3B] font-bold uppercase tracking-wider">भक्त / ग्राहक का नाम</p>
                 <p className="text-base font-extrabold text-[#2A1508] mt-0.5">{devoteeName}</p>
               </div>
 
@@ -219,19 +236,31 @@ function ThankYouContent() {
                 <p className="text-sm font-extrabold text-[#2A1508] mt-0.5">{currentTime || 'आज का दिन'}</p>
               </div>
 
+              {pujaName && pujaName !== 'आपका ऑर्डर' && (
               <div className="sm:col-span-2 p-4 rounded-2xl bg-[#FFF7E6] border border-[#F2C94C]">
-                <p className="text-xs text-[#8B5A00] font-bold uppercase tracking-wider">चयनित पूजा (Selected Puja)</p>
+                <p className="text-xs text-[#8B5A00] font-bold uppercase tracking-wider">चयनित पूजा / आइटम</p>
                 <p className="text-base font-black text-[#8B1A21] mt-0.5">{pujaName}</p>
               </div>
+              )}
 
               <div className="sm:col-span-2 flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-[#FFF5D6] via-[#FFF0C2] to-[#FFF5D6] border-2 border-[#D49B00]/40">
                 <div>
-                  <p className="text-xs text-[#6A4D3B] font-bold">कुल भुगतान राशि (Amount Paid)</p>
-                  <p className="text-2xl font-black text-[#8B1A21] leading-none mt-1">{amountPaid}</p>
+                  <p className="text-xs text-[#6A4D3B] font-bold">
+                    {isCod ? 'कुल COD राशि (Pay at Delivery)' : 'कुल भुगतान राशि (Amount Paid)'}
+                  </p>
+                  <p className="text-2xl font-black text-[#8B1A21] leading-none mt-1">
+                    {amountPaid || '—'}
+                  </p>
                 </div>
-                <span className="text-xs font-black text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-xl">
-                  भुगतान सफल (Paid via Razorpay)
-                </span>
+                {isCod ? (
+                  <span className="text-xs font-black text-amber-800 bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-center">
+                    📦 Cash on Delivery<br/>(डिलीवरी पर भुगतान)
+                  </span>
+                ) : (
+                  <span className="text-xs font-black text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-xl">
+                    ✅ Online Paid<br/>(Razorpay)
+                  </span>
+                )}
               </div>
 
             </div>

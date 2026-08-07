@@ -43,9 +43,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (!order) return new NextResponse('Order tax invoice not found', { status: 404 })
 
-    // ANTI-FRAUD SECURITY CHECK: Products allow Cash on Delivery (COD) or Online Paid Orders
+    // ANTI-FRAUD SECURITY CHECK:
+    // Invoice is issued only when:
+    // - Online payment SUCCESS (Razorpay)
+    // - COD order (status CONFIRMED or paymentStatus COD_PENDING)
+    // - Order SHIPPED or DELIVERED
     const isCodOrder = order.status === 'CONFIRMED' || order.status === 'SHIPPED' || order.status === 'DELIVERED'
-    const isPaymentConfirmed = order.paymentStatus === 'SUCCESS' || isCodOrder
+    const isOnlinePaid = order.paymentStatus === 'SUCCESS'
+    const isPaymentConfirmed = isOnlinePaid || isCodOrder
     
     if (!isPaymentConfirmed && !isAdmin) {
       const pendingHtml = `<!DOCTYPE html>
@@ -87,6 +92,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const total = Number(order.total)
     const addr = order.shippingAddress
     const customerName = addr?.fullName || order.user?.fullName || user.fullName || 'Valued Devotee'
+
+    // Determine payment badge
+    const paymentBadge = isOnlinePaid ? '✅ PAID ONLINE' : '📦 CASH ON DELIVERY (COD)'
+    const paymentStatusLine = isOnlinePaid
+      ? `✅ Payment Confirmed · Paid Online on ${new Date(paymentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`
+      : `📦 Cash On Delivery (COD) · Amount Collectable at Delivery: ₹${total.toLocaleString('en-IN')}`
 
     // Extract Sankalp & Puja details from order.notes if present
     let sankalpGotra = ''
@@ -177,16 +188,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="invoice-meta">
       <div class="inv-label">${esc(brandLabel)}</div>
       <div class="inv-num">${order.orderNumber}</div>
-      <div class="inv-badge">${order.paymentStatus === 'SUCCESS' ? '✅ PAID ONLINE' : '📦 CASH ON DELIVERY'}</div>
+      <div class="inv-badge">${paymentBadge}</div>
     </div>
   </div>
 
   <!-- Status Banner -->
-  <div class="status-banner">
-    <span style="font-size:12px;font-weight:600;color:#065f46">
-      ${order.paymentStatus === 'SUCCESS'
-        ? `✅ Payment Confirmed · Paid Online on ${new Date(paymentDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`
-        : `📦 Cash On Delivery (COD) · Collectable at Delivery (₹${total.toLocaleString('en-IN')})`}
+  <div class="status-banner${isOnlinePaid ? '' : ' pending'}">
+    <span style="font-size:12px;font-weight:600;color:${isOnlinePaid ? '#065f46' : '#92400e'}">
+      ${paymentStatusLine}
     </span>
     ${paid?.gatewayRef ? `<span style="font-size:11px;color:#6b7280;">Ref: ${paid.gatewayRef}</span>` : ''}
   </div>

@@ -201,9 +201,12 @@ export default function CheckoutPage() {
 
       if (data.mode === 'manual') {
         clearCart()
-        toast.success('🎉 Order placed successfully!')
+        toast.success('🎉 ऑर्डर सफलतापूर्वक दर्ज हो गया!')
         const params = new URLSearchParams()
         if (data.orderNumber) params.set('order', data.orderNumber)
+        if (data.total != null) params.set('amount', String(data.total))
+        params.set('method', data.paymentMethod === 'cod' ? 'cod' : 'manual')
+        if (address?.name) params.set('name', address.name)
         window.location.href = `/checkout/thank-you?${params.toString()}`
         return
       }
@@ -261,6 +264,10 @@ export default function CheckoutPage() {
               if (orderNumber) params.set('order', orderNumber)
               const pid = verifyData.razorpay_payment_id || response.razorpay_payment_id
               if (pid) params.set('payment', pid)
+              params.set('method', 'online')
+              // amount in paise → convert to rupees
+              if (amount) params.set('amount', String(Math.round(amount / 100)))
+              if (address?.name) params.set('name', address.name)
               window.location.href = `/checkout/thank-you?${params.toString()}`
             } else {
               // Verification failed — but payment may have been deducted
