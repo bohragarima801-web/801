@@ -488,17 +488,48 @@ export default function CheckoutPage() {
                         ))}
                       </div>
 
-                      <div className="flex justify-between items-center mb-6">
-                        <span className="font-bold text-lg text-gray-900">Total</span>
-                        <span className="font-black text-xl text-green-600">₹ {cartTotal}</span>
+                      <div className="pt-4 border-t space-y-3 text-sm text-slate-600">
+                        <div className="flex justify-between">
+                          <span>Subtotal</span>
+                          <span className="font-bold text-slate-800">₹{cartTotal}</span>
+                        </div>
+                        {discountAmount > 0 && (
+                          <div className="flex justify-between text-emerald-700 font-semibold">
+                            <span>Coupon Discount</span>
+                            <span>-₹{discountAmount}</span>
+                          </div>
+                        )}
+                        {hasProducts && (
+                          <div className="flex justify-between items-center">
+                            <span>Delivery Fee</span>
+                            {shippingFee > 0 ? (
+                              <span className="font-extrabold text-[#8B1A21]">₹{shippingFee}</span>
+                            ) : (
+                              <span className="text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-xs">
+                                FREE (मुफ़्त)
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {hasProducts && productSubtotal < freeShippingThreshold && (
+                          <p className="text-[11px] text-amber-800 bg-amber-50/80 p-2.5 rounded-xl border border-amber-200 font-medium leading-relaxed">
+                            💡 <b>₹{freeShippingThreshold} से कम के प्रोडक्ट ऑर्डर पर ₹{deliveryFee} डिलीवरी शुल्क लागू है।</b> (₹{(freeShippingThreshold - productSubtotal).toLocaleString()} की और खरीदारी करने पर मुफ़्त डिलीवरी मिलेगी!)
+                          </p>
+                        )}
+                        <div className="pt-4 border-t flex justify-between font-black text-xl text-slate-900">
+                          <span>Total to Pay</span>
+                          <span className="text-orange-600">₹{finalTotal}</span>
+                        </div>
                       </div>
 
                       <Button 
-                        onClick={() => setStep('details')} 
-                        className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-lg shadow-lg shadow-orange-200"
+                        onClick={initiatePayment} 
+                        disabled={processing}
+                        className="w-full h-14 bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-amber-700 text-white font-extrabold rounded-xl text-lg shadow-lg shadow-orange-200 cursor-pointer mt-4"
                       >
-                        Proceed to Checkout
-                        <ArrowRight className="ml-2 h-5 w-5" />
+                        {processing ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : null}
+                        {processing ? 'Processing Securely...' : `Pay ₹${finalTotal} Securely`}
+                        {!processing && <ArrowRight className="ml-2 h-5 w-5" />}
                       </Button>
                       <p className="text-center text-xs text-slate-400 mt-3">100% Secure & Encrypted Payments</p>
                     </CardContent>

@@ -10,8 +10,8 @@ export async function GET() {
     const thresholdStr = await getSetting('delivery.free_threshold', '999')
 
     const enabled = enabledStr !== 'false'
-    const fee = Number(feeStr) > 0 ? Number(feeStr) : 99
-    const freeThreshold = Number(thresholdStr) > 0 ? Number(thresholdStr) : 999
+    const fee = isNaN(Number(feeStr)) ? 99 : Math.max(0, Number(feeStr))
+    const freeThreshold = isNaN(Number(thresholdStr)) ? 999 : Math.max(0, Number(thresholdStr))
 
     return NextResponse.json({
       ok: true,
@@ -19,6 +19,7 @@ export async function GET() {
       fee,
       freeThreshold
     })
+
   } catch (err: any) {
     return NextResponse.json({
       ok: true,

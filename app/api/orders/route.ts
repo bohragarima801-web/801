@@ -183,15 +183,16 @@ export async function POST(req: NextRequest) {
     const freeThresholdStr = await getSetting('delivery.free_threshold', '999')
 
     const deliveryEnabled = deliveryEnabledStr !== 'false'
-    const deliveryFee = Number(deliveryFeeStr) > 0 ? Number(deliveryFeeStr) : 99
-    const freeThreshold = Number(freeThresholdStr) > 0 ? Number(freeThresholdStr) : 999
+    const deliveryFee = isNaN(Number(deliveryFeeStr)) ? 99 : Math.max(0, Number(deliveryFeeStr))
+    const freeThreshold = isNaN(Number(freeThresholdStr)) ? 999 : Math.max(0, Number(freeThresholdStr))
 
     let shipping = 0
-    if (deliveryEnabled && productSubtotal > 0 && productSubtotal <= freeThreshold) {
+    if (deliveryEnabled && productSubtotal > 0 && productSubtotal < freeThreshold) {
       shipping = deliveryFee
     } else {
       shipping = 0
     }
+
 
     let discountAmount = 0
     let validCouponId: string | null = null
