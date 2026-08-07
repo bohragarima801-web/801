@@ -54,49 +54,61 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
   const contact = siteData?.contact || siteConfig.contact
 
   return (
-    <footer className="footer-spiritual border-t border-[#E5D5A5]">
-      <div className="container relative z-10 py-8 md:py-10">
+    <footer className="footer-spiritual relative z-10 overflow-hidden">
+      
+      {/* Sacred Top Sanatani Banner Strip */}
+      <div className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-[#FFF7E6] py-2.5 px-4 text-center border-b-2 border-[#D49B00] shadow-sm">
+        <div className="container mx-auto flex items-center justify-center gap-3 text-xs sm:text-sm font-extrabold tracking-wider uppercase">
+          <span className="text-[#F5C842]">🌸</span>
+          <span>सनातन धर्म • 100% प्रामाणिक वैदिक पूजा संस्थान • हरि ॐ</span>
+          <span className="text-[#F5C842]">🪷</span>
+        </div>
+      </div>
+
+      <div className="container relative z-10 py-10 md:py-12">
         
         {/* Main Grid — Compact 12 Cols */}
         <div className="grid gap-8 lg:grid-cols-12 items-start">
 
           {/* Left Brand Column */}
           <div className="lg:col-span-4 space-y-4">
-            <Logo />
-            <p className="text-xs text-[#5C4233] leading-relaxed max-w-xs font-medium">
-              {siteData?.description || 'India\'s most trusted online portal for authentic Vedic pujas, VIP darshan, and sacred prasad.'}
+            <div className="flex items-center gap-3">
+              <Logo />
+            </div>
+            <p className="text-xs sm:text-sm text-[#4A2D1B] leading-relaxed max-w-xs font-semibold">
+              {siteData?.description || 'भारत का सबसे भरोसेमंद सनातन संस्थान — 100% प्रामाणिक वैदिक पूजा, शक्तिपीठ अनुष्ठान एवं सिद्ध प्रसाद सेवा।'}
             </p>
 
-            {/* Quick Contact & Socials Row */}
-            <div className="pt-1 space-y-2">
-              <div className="flex flex-wrap gap-4 text-xs font-semibold text-[#2C1810]">
+            {/* Sacred Om & Contact Row */}
+            <div className="pt-2 space-y-3">
+              <div className="flex flex-col gap-2 text-xs font-extrabold text-[#2A1508]">
                 <a
                   href={`tel:${(contact?.phone || '').replace(/[^0-9+]/g, '').split(',')[0]}`}
-                  className="flex items-center gap-1.5 hover:text-[#8B1A21] transition-colors"
+                  className="inline-flex items-center gap-2 text-[#8B1A21] hover:text-[#B84430] transition-colors"
                 >
-                  <Phone className="h-3.5 w-3.5 text-[#8B1A21]" />
-                  <span>{contact?.phone || '+91-95871-71984'}</span>
+                  <Phone className="h-4 w-4 text-[#8B1A21]" />
+                  <span>संपर्क: {contact?.phone || '+91-95871-71984'}</span>
                 </a>
                 <a
                   href={`mailto:${contact?.email || 'seva@divyayagyam.com'}`}
-                  className="flex items-center gap-1.5 hover:text-[#8B1A21] transition-colors"
+                  className="inline-flex items-center gap-2 text-[#8B1A21] hover:text-[#B84430] transition-colors"
                 >
-                  <Mail className="h-3.5 w-3.5 text-[#8B1A21]" />
-                  <span>{contact?.email || 'seva@divyayagyam.com'}</span>
+                  <Mail className="h-4 w-4 text-[#8B1A21]" />
+                  <span>ईमेल: {contact?.email || 'seva@divyayagyam.com'}</span>
                 </a>
               </div>
 
               {/* Compact Socials */}
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2.5 pt-1">
                 {socials?.facebook && socials.facebook !== '#' && (
                   <a
                     href={socials.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
-                    className="w-7 h-7 rounded-full bg-white border border-[#D8C28A] flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-2xs"
+                    className="w-8 h-8 rounded-full bg-[#FFFBF0] border-2 border-[#D49B00]/40 flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-xs"
                   >
-                    <Facebook className="h-3.5 w-3.5" />
+                    <Facebook className="h-4 w-4" />
                   </a>
                 )}
                 {socials?.instagram && socials.instagram !== '#' && (
@@ -105,9 +117,9 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"
-                    className="w-7 h-7 rounded-full bg-white border border-[#D8C28A] flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-2xs"
+                    className="w-8 h-8 rounded-full bg-[#FFFBF0] border-2 border-[#D49B00]/40 flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-xs"
                   >
-                    <Instagram className="h-3.5 w-3.5" />
+                    <Instagram className="h-4 w-4" />
                   </a>
                 )}
                 {socials?.youtube && socials.youtube !== '#' && (
@@ -116,9 +128,9 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="YouTube"
-                    className="w-7 h-7 rounded-full bg-white border border-[#D8C28A] flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-2xs"
+                    className="w-8 h-8 rounded-full bg-[#FFFBF0] border-2 border-[#D49B00]/40 flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-xs"
                   >
-                    <Youtube className="h-3.5 w-3.5" />
+                    <Youtube className="h-4 w-4" />
                   </a>
                 )}
                 {socials?.twitter && socials.twitter !== '#' && (
@@ -127,9 +139,9 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Twitter"
-                    className="w-7 h-7 rounded-full bg-white border border-[#D8C28A] flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-2xs"
+                    className="w-8 h-8 rounded-full bg-[#FFFBF0] border-2 border-[#D49B00]/40 flex items-center justify-center text-[#8B1A21] hover:bg-[#8B1A21] hover:text-white transition-all text-xs shadow-xs"
                   >
-                    <Twitter className="h-3.5 w-3.5" />
+                    <Twitter className="h-4 w-4" />
                   </a>
                 )}
               </div>
@@ -140,15 +152,15 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
           <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
             {columns.map((col) => (
               <div key={col.title}>
-                <h4 className="text-[11px] font-extrabold text-[#8B1A21] uppercase tracking-wider mb-2.5">
-                  {col.title}
+                <h4 className="text-xs font-black text-[#8B1A21] uppercase tracking-wider mb-3 flex items-center gap-1">
+                  <span>🚩</span> {col.title}
                 </h4>
-                <ul className="space-y-1.5">
+                <ul className="space-y-2">
                   {col.links.map((l) => (
                     <li key={l.href}>
                       <Link
                         href={l.href}
-                        className="text-xs text-[#4A3225] hover:text-[#8B1A21] transition-colors font-medium hover:underline"
+                        className="text-xs sm:text-sm text-[#4A2D1B] hover:text-[#8B1A21] transition-colors font-bold hover:underline"
                       >
                         {l.label}
                       </Link>
@@ -161,20 +173,20 @@ export function Footer({ mapUrl, siteData }: FooterProps) {
 
         </div>
 
-        {/* Compact Bottom Bar */}
-        <div className="mt-6 pt-4 border-t border-[#E8D49E] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#5C4233]">
+        {/* Bottom Bar */}
+        <div className="mt-8 pt-5 border-t-2 border-[#E5C16C]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#4A2D1B]">
           
-          {/* Badges */}
+          {/* Trust Badges */}
           <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-            <span className="px-2 py-0.5 rounded bg-white border border-[#E0CE95] text-[10px] font-bold text-[#8B1A21]">Razorpay</span>
-            <span className="px-2 py-0.5 rounded bg-white border border-[#E0CE95] text-[10px] font-bold text-[#2C1810]">UPI</span>
-            <span className="px-2 py-0.5 rounded bg-white border border-[#E0CE95] text-[10px] font-bold text-[#2C1810]">Cards & NetBanking</span>
-            <span className="px-2 py-0.5 rounded bg-white border border-[#E0CE95] text-[10px] font-bold text-emerald-700">🔒 SSL</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#FFFDF5] border border-[#D49B00]/40 text-[11px] font-black text-[#8B1A21] shadow-2xs">Razorpay Secure</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#FFFDF5] border border-[#D49B00]/40 text-[11px] font-black text-[#2A1508] shadow-2xs">BHIM UPI</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#FFFDF5] border border-[#D49B00]/40 text-[11px] font-black text-[#2A1508] shadow-2xs">Cards & NetBanking</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#FFFDF5] border border-[#D49B00]/40 text-[11px] font-black text-emerald-800 shadow-2xs">🔒 256-bit SSL</span>
           </div>
 
           {/* Copyright */}
-          <div className="text-center sm:text-right font-medium">
-            © {new Date().getFullYear()} DivyaYagyam • Made in Bharat 🇮🇳 • हरि ॐ 🙏
+          <div className="text-center sm:text-right font-extrabold text-[#8B1A21]">
+            © {new Date().getFullYear()} DivyaYagyam • मेड इन भारत 🇮🇳 • सर्व भवन्तु सुखिनः 🙏
           </div>
 
         </div>

@@ -63,13 +63,12 @@ export function PujaClientView({ puja }: { puja: any }) {
     return <VipPujaSingleView puja={puja} />
   }
 
-  const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || '/package-1.jpg'
+  const fallbackImage = puja?.coverImage || '/katyayani_yagya_hero.jpg'
   const rawImages = [
     ...(puja?.coverImage ? [puja.coverImage] : []),
-    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img.url),
-    ...(puja?.packages || []).map((pkg: any) => pkg.image).filter(Boolean),
+    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img?.url),
     ...(puja?.temple?.coverImage ? [puja.temple.coverImage] : [])
-  ].filter(Boolean)
+  ].filter((img: any) => Boolean(img) && typeof img === 'string' && !img.includes('package-'))
   
   const mediaList = Array.from(new Set(rawImages.length > 0 ? rawImages : [fallbackImage]))
   const currentMedia = mediaList[activeMediaIndex] || fallbackImage

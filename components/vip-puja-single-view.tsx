@@ -63,7 +63,18 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   const displayPrice = Number(puja.vipPrice || puja.price || 11000)
   const categoryName = puja.category?.name || 'Exclusive VIP Ritual'
   const templeLocation = puja.location || puja.temple?.name || 'Sacred Dham, India'
-  const coverImg = puja.coverImage || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
+  const coverImg = puja.coverImage || '/katyayani_yagya_hero.jpg'
+
+  // Parse gallery images strictly from Puja cover & Puja gallery images (excluding package images)
+  const rawGallery = [
+    ...(puja.coverImage ? [puja.coverImage] : []),
+    ...((puja as any).galleryImages ? (typeof (puja as any).galleryImages === 'string' ? JSON.parse((puja as any).galleryImages) : (puja as any).galleryImages) : []),
+    ...((puja as any).images || []).map((img: any) => typeof img === 'string' ? img : img?.url)
+  ].filter((img: any) => Boolean(img) && typeof img === 'string' && !img.includes('package-'))
+
+  const vipMediaList = Array.from(new Set(rawGallery.length > 0 ? rawGallery : [coverImg]))
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0)
+  const currentVipImage = vipMediaList[activeMediaIndex] || coverImg
 
   let parsedPandit = puja.assignedPandit
   if (!parsedPandit && (puja as any).customHtml) {
@@ -131,11 +142,11 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             <div className="lg:col-span-5 relative space-y-3">
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-amber-500/40 shadow-xl">
                 <Image 
-                  src={coverImg} 
+                  src={currentVipImage} 
                   alt={puja.name} 
                   fill 
                   priority
-                  className="object-cover" 
+                  className="object-cover transition-transform duration-500" 
                 />
                 
                 <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
@@ -147,7 +158,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   </span>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-5 text-left space-y-1">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-5 text-left space-y-1 pointer-events-none">
                   <span className="text-amber-400 font-extrabold text-xs uppercase tracking-widest">Destroy Negativity • Achieve Success</span>
                   <h4 className="text-xl font-heading font-black text-white leading-tight">
                     {puja.name}
@@ -155,6 +166,23 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   <p className="text-xs text-amber-200/90 font-medium">📍 {templeLocation}</p>
                 </div>
               </div>
+
+              {/* Gallery Thumbnails (strictly Puja Images) */}
+              {vipMediaList.length > 1 && (
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                  {vipMediaList.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveMediaIndex(i)}
+                      className={`relative h-14 w-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                        activeMediaIndex === i ? 'border-amber-400 scale-105 shadow-md' : 'border-amber-900/50 opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <Image src={img} alt={`Puja Gallery ${i + 1}`} fill className="object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="bg-gradient-to-r from-amber-950/80 to-amber-900/60 p-4 rounded-xl border border-amber-500/30 flex items-center justify-between text-center">
                 <span className="text-xs text-amber-300 font-bold">VIP Sankalp Amount</span>
