@@ -17,47 +17,58 @@ export function generateMetadata() {
 const fallbackProducts = [
   {
     id: 'prod-1',
-    slug: '5-mukhi-rudraksha-mala',
-    name: '5 मुखी नेपाल रुद्राक्ष माला (108+1 मनके)',
-    price: 1250,
-    salePrice: 999,
+    slug: 'siddha-abhimantrit-rudraksha-mala',
+    name: 'सिद्ध प्राण-प्रतिष्ठित चैतन्य रुद्राक्ष माला (Siddha Abhimantrit Rudraksha Mala)',
+    price: 901,
+    salePrice: 901,
     isAbhimantrit: true,
-    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80',
+    coverImage: '/rudraksha_mala_product.jpg',
     category: { name: 'Rudraksha Mala' },
-    inventory: { quantity: 10 }
+    inventory: { quantity: 500 }
   },
   {
     id: 'prod-2',
-    slug: 'shree-yantra-copper',
-    name: 'सिद्ध तांबे का श्री यंत्र (24k गोल्ड प्लेटेड)',
-    price: 1500,
-    salePrice: 1199,
+    slug: 'divya-shrikhand-chandan-puja-100g',
+    name: 'दिव्य शुद्ध श्रीखण्ड मलयगिरि चन्दन (Divya Chandan for Puja & Tilak - 100g)',
+    price: 200,
+    salePrice: 200,
     isAbhimantrit: true,
-    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-    category: { name: 'Siddha Yantra' },
-    inventory: { quantity: 15 }
+    coverImage: '/divya_chandan_product.jpg',
+    category: { name: 'Puja Samagri' },
+    inventory: { quantity: 300 }
   },
   {
     id: 'prod-3',
-    slug: 'kashi-vishwanath-bhasma-prasad',
-    name: 'काशी विश्वनाथ मंदिर भस्म व गंगाजल प्रसाद',
-    price: 550,
-    salePrice: 350,
+    slug: 'divya-dhoop-special-negativity-remover-125g',
+    name: 'दिव्य धूप स्पेशल - ३२ जड़ी-बूटी अभिमंत्रित सर्व दोष व नकारात्मक ऊर्जा नाशक (Divya Dhoop Special - 125g)',
+    price: 599,
+    salePrice: 599,
     isAbhimantrit: true,
-    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80',
-    category: { name: 'Sacred Prasad' },
-    inventory: { quantity: 20 }
+    coverImage: '/divya_dhoop_product.jpg',
+    category: { name: 'Puja Samagri' },
+    inventory: { quantity: 600 }
   },
   {
     id: 'prod-4',
-    slug: 'pure-sphatik-mala',
-    name: 'प्राकृतिक स्फटिक माला (108 मनके)',
-    price: 2100,
-    salePrice: 1499,
+    slug: 'siddha-pure-copper-naag-naagin-pair-rahu-shanti',
+    name: 'सिद्ध शुद्ध ताँबा नाग-नागिन जोड़ा - राहु-केतु व कालसर्प दोष शांति (Siddha Pure Copper Naag Naagin Pair - Small)',
+    price: 599,
+    salePrice: 599,
     isAbhimantrit: true,
-    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80',
-    category: { name: 'Gemstone Mala' },
-    inventory: { quantity: 8 }
+    coverImage: '/naag_naagin_copper_product.jpg',
+    category: { name: 'Rahu Shanti Items' },
+    inventory: { quantity: 360 }
+  },
+  {
+    id: 'prod-5',
+    slug: 'siddha-9-abhimantrit-lakshmi-kaudi-set-free-gifts',
+    name: 'सिद्ध अभिमंत्रित 9 महालक्ष्मी कौड़ी सेट - कर्ज मुक्ति व व्यापार बरकत (Siddha 9 Lakshmi Kaudi Set + FREE Gifts)',
+    price: 899,
+    salePrice: 899,
+    isAbhimantrit: true,
+    coverImage: '/laxmi_kaudi_set_product.jpg',
+    category: { name: 'Lakshmi Wealth Items' },
+    inventory: { quantity: 500 }
   }
 ]
 
