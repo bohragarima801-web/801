@@ -14,7 +14,7 @@ import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusines
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter', display: 'swap' })
 const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap' })
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-cinzel', display: 'swap' })
-const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-[#noto]', display: 'swap' })
+const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
 
 export async function generateMetadata(): Promise<Metadata> {
   const dynamicConfig = await getDynamicSiteConfig()
@@ -107,7 +107,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="hi" suppressHydrationWarning>
-      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} font-sans bg-watermark overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-watermark overflow-x-hidden`} suppressHydrationWarning>
         <Script
           id="schema-global-organization"
           type="application/ld+json"
