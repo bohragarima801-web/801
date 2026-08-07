@@ -91,7 +91,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     title: 'मुख्य आचार्य एवं वैदिक कर्मकांड विशेषज्ञ',
     experience: '15+ वर्ष अनुभव',
     location: templeLocation,
-    photo: '/pandit.jpg'
+    photo: '/pandit_mukesh_bohra.jpg'
   }
 
   const handleConfirmBooking = (e: React.FormEvent) => {
