@@ -59,9 +59,7 @@ function getPujaBadgeInfo(p: any) {
   return null
 }
 
-
 export const revalidate = 30
-
 
 // Fallback Pujas if DB has few items
 const fallbackPujas = [
@@ -148,55 +146,26 @@ export default async function HomePage() {
     return g.type === 'VIDEO' || url.includes('youtube.com') || url.includes('youtu.be') || url.endsWith('.mp4')
   }).map((g: any) => ({
     id: g.id,
+    title: g.title,
     url: g.coverImage,
-    filename: g.title,
-    folder: 'Live Darshan',
-    type: 'VIDEO',
-    createdAt: g.createdAt
+    folder: 'Gallery Video'
   }))
 
-  const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 6)
+  const dbVideos = [...allMediaVideos, ...galleryVideos]
 
-  // Pujas to render: strictly normal DB pujas (non-VIP) created via Admin Panel
-  const activeDbPujas = dbPujas.filter((p: any) => {
-    if (p.isVip) return false
-    if (p.isEvergreen) return true
-    if (p.pujaDate) {
-      const pDate = new Date(p.pujaDate)
-      pDate.setHours(0, 0, 0, 0)
-      return pDate.getTime() >= new Date().setHours(0,0,0,0)
-    }
-    return true
-  })
+  // Deduplicate Pujas & ensure fallback pujas show if db is sparse
+  const displayPujas = dbPujas.length >= 3 ? dbPujas : [...dbPujas, ...fallbackPujas.filter(fp => !dbPujas.some((dp: any) => dp.slug === fp.slug))]
 
-  const displayPujas = activeDbPujas
-
-  // Structured Data (JSON-LD)
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://divyayagyam.com/#organization",
-        "name": "DivyaYagyam",
-        "url": "https://divyayagyam.com",
-        "logo": siteData.logo || "https://divyayagyam.com/logo.jpg",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": siteData.contact?.phone || "+91-95871-71984",
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": ["en", "hi"]
-        }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://divyayagyam.com/#website",
-        "url": "https://divyayagyam.com",
-        "name": "DivyaYagyam",
-        "description": "India's Most Trusted Online Temple Puja & Vedic Sanatan Platform"
-      }
-    ]
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'DivyaYagyam',
+    url: 'https://divyayagyam.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://divyayagyam.com/pujas?q={search_term_string}',
+      'query-input': 'required name=search_term_string'
+    }
   }
 
   return (
@@ -395,7 +364,86 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION: WHY CHOOSE US (আমাদের সাথে ही पूजा क्यों कराएं?)
+          SECTION C2: ABHIMANTRIT PRODUCTS & STORE — TIER 1 DARK GOLD CARDS
+          ============================================================ */}
+      <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-[#D4AF37]/20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#D4AF37]/20 pb-6">
+          <div className="space-y-3">
+            <div className="vip-badge inline-flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#F4C430]" /> Abhimantrit Store & Samagri
+            </div>
+            <h2 className="text-3xl md:text-5xl font-vip font-bold text-[#F5F0E6] tracking-tight">
+              अभिमंत्रित सामग्री{' '}
+              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-normal">& Spiritual Products</span>
+            </h2>
+            <p className="text-sm md:text-base text-[#C9C0B3] font-medium max-w-2xl">
+              100% अभिमंत्रित सिद्ध रुद्राक्ष, पावन भस्म, शंख, पूजा थाली व प्रामाणिक सामग्री — सीधे सिद्ध पीठों से आपके घर द्वार।
+            </p>
+          </div>
+
+          <Link
+            href="/products"
+            className="btn-vip text-xs md:text-sm py-2.5 px-6 inline-flex items-center gap-2 shrink-0"
+          >
+            Explore Store <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {products.length === 0 ? (
+          <div className="text-center py-12 px-6 bg-[#180E08] rounded-3xl border-2 border-[#D4AF37]/40 space-y-4 max-w-2xl mx-auto shadow-2xl">
+            <div className="h-14 w-14 mx-auto rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center text-2xl">🛍️</div>
+            <h3 className="text-xl md:text-2xl font-vip font-bold text-[#F5F0E6]">शीघ्र आ रही है अभिमंत्रित सामग्री</h3>
+            <p className="text-xs md:text-sm text-[#C9C0B3]">संस्थान की वैदिक स्टोर सामग्री जल्द ही यहाँ उपलब्ध होगी।</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.slice(0, 4).map((p: any) => {
+              const price = Number(p.price || 501)
+              return (
+                <article key={p.id} className="group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden">
+                  <div className="relative aspect-square overflow-hidden bg-[#0D0704]">
+                    <SafeImage
+                      src={p.coverImage || '/product_fallback.jpg'}
+                      alt={p.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent pointer-events-none" />
+                    <span className="absolute top-3 left-3 vip-badge text-[9px] px-2 py-0.5">
+                      🔥 अभिमंत्रित
+                    </span>
+                  </div>
+
+                  <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                    <div className="space-y-1">
+                      <span className="text-[10px] uppercase font-bold text-[#F4C430] tracking-wider block">
+                        {p.category?.name || 'Vedic Product'}
+                      </span>
+                      <h3 className="font-vip font-bold text-base text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors line-clamp-1">
+                        <Link href={`/products/${p.slug}`}>{p.name}</Link>
+                      </h3>
+                    </div>
+
+                    <div className="pt-3 border-t border-[#D4AF37]/20 flex items-center justify-between">
+                      <span className="text-lg font-black text-[#F4C430]">
+                        ₹{price.toLocaleString('en-IN')}
+                      </span>
+                      <Link
+                        href={`/products/${p.slug}`}
+                        className="btn-vip text-xs py-1.5 px-3.5 inline-flex items-center gap-1"
+                      >
+                        Buy Now &rarr;
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* ============================================================
+          SECTION: WHY CHOOSE US (हमारे साथ ही पूजा क्यों कराएं?)
           ============================================================ */}
       <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] text-[#F5F0E6] overflow-hidden border-y-2 border-[#D4AF37]/40">
         {/* Om Watermark Background */}
@@ -521,10 +569,10 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION E: JYOTISH & VEDIC TOOLS — TIER 1 DARK
+          SECTION E: JYOTISH & VEDIC TOOLS — TIER 1 DARK (3 ITEMS DISPLAYED)
           ============================================================ */}
       <section className="w-full bg-[#0D0704] py-8 border-t border-[#D4AF37]/20">
-        <SacredAstroTools />
+        <SacredAstroTools limit={3} />
       </section>
 
       {/* ============================================================

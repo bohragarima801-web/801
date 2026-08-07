@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Sparkles, Calendar, Sun, Heart, Compass, ArrowRight, Bot, Repeat, ChevronRight } from 'lucide-react'
 
-export function SacredAstroTools() {
+export function SacredAstroTools({ limit = 3 }: { limit?: number }) {
   const toolsList = [
     {
       title: 'AI पंडित जी (AI Pandit)',
@@ -58,6 +58,8 @@ export function SacredAstroTools() {
     }
   ]
 
+  const displayTools = limit ? toolsList.slice(0, limit) : toolsList
+
   return (
     <section className="container mx-auto px-4 md:px-6 py-8 md:py-12 bg-[#0D0704] text-[#F5F0E6]">
       {/* Compact Header */}
@@ -73,14 +75,14 @@ export function SacredAstroTools() {
 
         <Button variant="ghost" size="sm" className="btn-vip text-xs py-1.5 px-4" asChild>
           <Link href="/tools" prefetch={true}>
-            सभी टूल्स <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            सभी टूल्स ({toolsList.length}) <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
         </Button>
       </div>
 
       {/* Sleek Compact Grid (2 cols mobile, 3 cols desktop) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {toolsList.map((t, idx) => {
+        {displayTools.map((t, idx) => {
           const IconComp = t.icon
           return (
             <Link href={t.slug} key={idx} prefetch={true} className="block group">
