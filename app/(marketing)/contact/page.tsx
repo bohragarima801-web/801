@@ -64,7 +64,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-bold text-slate-800">WhatsApp & Phone Support</p>
                     <p className="text-xs text-slate-500">Fastest response for puja video updates and booking assistance.</p>
-                    <p className="font-medium text-slate-700 mt-1">+91-95871-71984, +91-95320-11984</p>
+                    <p className="font-medium text-slate-700 mt-1">+91-95871-71984, +91-95304-01984</p>
                   </div>
                 </div>
 
