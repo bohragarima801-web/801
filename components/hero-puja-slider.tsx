@@ -23,7 +23,7 @@ const defaultHeroSlides: HeroSlide[] = [
     subtitle: 'Chamunda Mata Temple, Jodhpur',
     image: '/ashta_lakshmi_16days.webp',
     ctaText: 'Book Anushthan',
-    ctaUrl: '/pujas/maa-ashta-lakshmi-16-day-karz-mukti-mahayagya'
+    ctaUrl: '/pujas/maa-ashta-lakshmi-karz-mukti-puja'
   },
   {
     id: 'slide-2',
@@ -38,8 +38,8 @@ const defaultHeroSlides: HeroSlide[] = [
     title: 'काशी विश्वनाथ महामृत्युंजय सवा लाख मंत्र जाप एवं रुद्राभिषेक',
     subtitle: 'Kashi Vishwanath Temple, Varanasi',
     image: '/mahamrityunjaya_hawan.webp',
-    ctaText: 'Book VIP Puja',
-    ctaUrl: '/pujas/kashi-vishwanath-mahamrityunjaya'
+    ctaText: 'Book Puja',
+    ctaUrl: '/pujas/mahamrityunjaya-jaap-rudrabhishekam'
   },
   {
     id: 'slide-4',
@@ -50,6 +50,7 @@ const defaultHeroSlides: HeroSlide[] = [
     ctaUrl: '/pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya'
   }
 ]
+
 
 export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children?: React.ReactNode }) {
   const slideList = slides && slides.length > 0 ? slides : defaultHeroSlides
