@@ -1,3 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   🕉️  DIVYAYAGYAM — LUXURY PREMIUM SPIRITUAL DESIGN SYSTEM v2.0
+   Brand: Deep Maroon × Antique Gold × Sacred Ivory
+   ============================================================ */
+
 @layer base {
   :root {
     /* ── Global Font System Tokens (Dual Latin + Devanagari) ── */
