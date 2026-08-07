@@ -19,6 +19,7 @@ export async function GET() {
       fee,
       freeThreshold
     })
+
   } catch (err: any) {
     return NextResponse.json({
       ok: true,

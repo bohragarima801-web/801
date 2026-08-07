@@ -93,13 +93,16 @@ export async function PUT(req: NextRequest) {
 
     const data = await req.json()
 
-    if (data.order !== undefined) {
-      data.order = parseInt(data.order) || 0
+    // Destructure out 'id' so Prisma update object doesn't fail on primary key mutation
+    const { id: _ignoredId, ...updateData } = data
+
+    if (updateData.order !== undefined) {
+      updateData.order = parseInt(updateData.order) || 0
     }
 
     const slide = await prisma.heroSlider.update({
       where: { id },
-      data
+      data: updateData
     })
 
     revalidatePath('/')
@@ -112,6 +115,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to update slide' }, { status: 500 });
   }
 }
+
 
 export async function DELETE(req: NextRequest) {
   try {

@@ -63,13 +63,12 @@ export function PujaClientView({ puja }: { puja: any }) {
     return <VipPujaSingleView puja={puja} />
   }
 
-  const fallbackImage = process.env.NEXT_PUBLIC_URL_4684 || '/package-1.jpg'
+  const fallbackImage = puja?.coverImage || '/katyayani_yagya_hero.jpg'
   const rawImages = [
     ...(puja?.coverImage ? [puja.coverImage] : []),
-    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img.url),
-    ...(puja?.packages || []).map((pkg: any) => pkg.image).filter(Boolean),
+    ...(puja?.images || []).map((img: any) => typeof img === 'string' ? img : img?.url),
     ...(puja?.temple?.coverImage ? [puja.temple.coverImage] : [])
-  ].filter(Boolean)
+  ].filter((img: any) => Boolean(img) && typeof img === 'string' && !img.includes('package-'))
   
   const mediaList = Array.from(new Set(rawImages.length > 0 ? rawImages : [fallbackImage]))
   const currentMedia = mediaList[activeMediaIndex] || fallbackImage
@@ -390,6 +389,29 @@ export function PujaClientView({ puja }: { puja: any }) {
         </div>
       </section>
 
+      {/* 1.5. How This Works Bar (DivyaYagyam Pattern) */}
+      <div className="w-full bg-white border-b border-amber-200/60 py-4 shadow-2xs">
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">1</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">पैकेज चुनें</p><p className="text-[10px] text-slate-500 truncate">Select Package</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">2</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">नाम व गोत्र दर्ज करें</p><p className="text-[10px] text-slate-500 truncate">Name & Gotra</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">3</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">व्हाट्सएप लाइव वीडियो</p><p className="text-[10px] text-slate-500 truncate">Live Video Proof</p></div>
+          </div>
+          <div className="flex items-center gap-2.5 p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/70 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-rose-800 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-xs">4</div>
+            <div className="text-left min-w-0"><p className="text-xs font-extrabold text-slate-900 truncate">सिद्ध प्रसाद डिलीवरी</p><p className="text-[10px] text-slate-500 truncate">Prasad at Doorstep</p></div>
+          </div>
+        </div>
+      </div>
+
+
       {/* 2. Sticky Sub-Header Anchor Menu */}
       <div className="sticky top-[58px] sm:top-[68px] z-40 w-full bg-white/95 backdrop-blur-md border-b border-amber-900/10 shadow-md overflow-x-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto flex items-center justify-start md:justify-center gap-6 sm:gap-8 px-4 py-3 min-w-max">
@@ -449,11 +471,25 @@ export function PujaClientView({ puja }: { puja: any }) {
                       : "border-slate-200 hover:border-amber-300"
                   )}
                 >
-                  {pkg.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-md z-10">
+                  {/* Dynamic High-Converting Popular Badges */}
+                  {Number(pkg.price) === 1501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-[#FFD700] whitespace-nowrap animate-pulse">
+                      🔥 MOST POPULAR (78% यजमानों की पहली पसंद)
+                    </div>
+                  )}
+
+                  {Number(pkg.price) === 2501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-emerald-300 whitespace-nowrap">
+                      ⭐ POPULAR FAMILY CHOICE (4 सदस्य पैकेज)
+                    </div>
+                  )}
+
+                  {pkg.popular && Number(pkg.price) !== 1501 && Number(pkg.price) !== 2501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md z-10 border border-amber-200 whitespace-nowrap">
                       ⭐ सर्वाधिक बुक किया गया
                     </div>
                   )}
+
 
                   <div className="space-y-5">
                     {/* Package Specific Custom Image — Never Cropped / Full Aspect */}

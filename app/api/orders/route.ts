@@ -228,6 +228,7 @@ export async function POST(req: NextRequest) {
       shipping = 0
     }
 
+
     let discountAmount = 0
     let validCouponId: string | null = null
 

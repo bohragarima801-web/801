@@ -14,8 +14,8 @@ export const siteConfig = {
   ],
   contact: {
     email: 'seva@divyayagyam.com',
-    phone: '+91-95871-71984, +91-95320-11984',
-    whatsapp: '+91-95871-71984, +91-95320-11984',
+    phone: '+91-95871-71984, +91-95304-01984',
+    whatsapp: '+91-95871-71984, +91-95304-01984',
   },
   socials: {
     facebook: 'https://www.facebook.com/divyayagyam',

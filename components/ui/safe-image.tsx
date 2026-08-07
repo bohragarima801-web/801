@@ -8,6 +8,7 @@ interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string
   hideOnError?: boolean
   seoCategory?: 'puja' | 'product' | 'bhaktiseva' | 'temple' | 'general'
+  priority?: boolean
 }
 
 export function SafeImage({
@@ -19,13 +20,31 @@ export function SafeImage({
   seoCategory = 'general',
   src,
   className,
+  priority = false,
+  loading,
+  decoding,
   ...props
 }: SafeImageProps) {
-  const [imgSrc, setImgSrc] = useState<string | undefined>(src as string)
+  // Convert local .jpg/.png to .webp if it's a local public asset
+  const getOptimizedSrc = (inputSrc?: string) => {
+    if (!inputSrc) return fallbackSrc
+    if (typeof inputSrc === 'string' && (inputSrc.startsWith('/') || inputSrc.startsWith('http')) && !inputSrc.endsWith('.webp') && !inputSrc.endsWith('.gif') && !inputSrc.endsWith('.svg')) {
+      // Check if it's local public asset
+      if (inputSrc.startsWith('/') && !inputSrc.startsWith('/uploads/')) {
+        return inputSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp')
+      }
+    }
+    return inputSrc
+  }
+
+  const [imgSrc, setImgSrc] = useState<string | undefined>(getOptimizedSrc(src as string))
   const [hasError, setHasError] = useState(false)
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    if (!hasError && fallbackSrc) {
+    // If .webp failed, fall back to original src first, then fallbackSrc
+    if (!hasError && imgSrc && imgSrc.endsWith('.webp') && typeof src === 'string' && src !== imgSrc) {
+      setImgSrc(src)
+    } else if (!hasError && fallbackSrc) {
       setHasError(true)
       setImgSrc(fallbackSrc)
     } else if (hideOnError) {
@@ -45,6 +64,8 @@ export function SafeImage({
       src={imgSrc || fallbackSrc}
       alt={finalAlt}
       title={title || finalAlt}
+      loading={priority ? 'eager' : (loading || 'lazy')}
+      decoding={decoding || 'async'}
       onError={handleError}
       className={className}
     />
@@ -96,6 +117,8 @@ export function SacredImageFrame({
         src={displaySrc}
         alt=""
         aria-hidden="true"
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover filter blur-lg opacity-40 scale-110 pointer-events-none transition-opacity duration-500 group-hover:opacity-55"
         onError={(e) => {
           e.currentTarget.src = fallbackSrc

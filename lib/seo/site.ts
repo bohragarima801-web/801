@@ -18,8 +18,8 @@ export const SITE = {
   foundingYear: "2024",
 
   contact: {
-    phone: "+91-95871-71984",
-    whatsapp: "+91-95871-71984",
+    phone: "+91-95871-71984, +91-95304-01984",
+    whatsapp: "+91-95871-71984, +91-95304-01984",
     email: "seva@divyayagyam.com",
   },
 

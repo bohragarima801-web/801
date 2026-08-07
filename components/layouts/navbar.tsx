@@ -103,11 +103,13 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className="nav-link-spiritual"
             >
               {item.title}
             </Link>
           ))}
+
 
           {/* Tools mega dropdown */}
           <div
@@ -284,6 +286,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               onClick={() => setOpen(false)}
               className="px-4 py-3 rounded-xl text-sm font-semibold text-[#2A1508]/80 dark:text-[rgba(245,235,220,0.80)] hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.05)] transition-colors"
             >
@@ -292,6 +295,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           ))}
           <Link
             href="/tools"
+            prefetch={true}
             onClick={() => setOpen(false)}
             className="px-4 py-3 rounded-xl text-sm font-semibold text-[#2A1508]/80 dark:text-[rgba(245,235,220,0.80)] hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.05)] transition-colors"
           >
@@ -302,9 +306,11 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* Book Puja CTA — mobile */}
           <Link
             href="/pujas"
+            prefetch={true}
             onClick={() => setOpen(false)}
             className="mx-4 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-center shadow-md"
           >
+
             🔥 Book a Puja Now
           </Link>
 

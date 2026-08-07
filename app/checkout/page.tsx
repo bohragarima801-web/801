@@ -17,7 +17,7 @@ import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity, appliedCoupon, applyCoupon, removeCoupon, finalTotal, discountAmount, shippingFee, freeShippingThreshold, deliveryFee } = useCart()
+  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity, appliedCoupon, applyCoupon, removeCoupon, finalTotal, discountAmount, shippingFee, freeShippingThreshold, deliveryFee, hasProducts, productSubtotal } = useCart()
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
   const [user, setUser] = useState<any>(null)
@@ -525,8 +525,9 @@ export default function CheckoutPage() {
                       </div>
 
                       <Button 
-                        onClick={() => setStep('details')} 
-                        className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-lg shadow-lg shadow-orange-200"
+                        onClick={initiatePayment} 
+                        disabled={processing}
+                        className="w-full h-14 bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-amber-700 text-white font-extrabold rounded-xl text-lg shadow-lg shadow-orange-200 cursor-pointer mt-4"
                       >
                         Proceed to Address
                         <ArrowRight className="ml-2 h-5 w-5" />

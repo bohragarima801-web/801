@@ -52,18 +52,18 @@ export function WhatsAppFloatingWidget() {
   const singleMember = teamMembers.length === 1 ? teamMembers[0] : null
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
       {/* Expanded Team Selection Popup */}
       {open && (
-        <div className="mb-3 w-80 max-w-[calc(100vw-3rem)] rounded-3xl bg-slate-900/95 backdrop-blur-xl border border-emerald-500/30 text-white shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="mb-3 w-80 max-w-[calc(100vw-2.5rem)] rounded-3xl bg-slate-900/95 backdrop-blur-xl border border-emerald-500/30 text-white shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="p-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white flex items-start justify-between">
+          <div className="p-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white flex items-start justify-between">
             <div className="space-y-0.5">
-              <h4 className="font-bold text-sm flex items-center gap-1.5">
-                <Sparkles className="h-4 w-4 text-amber-300 animate-pulse" />
+              <h4 className="font-bold text-xs sm:text-sm flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-300 animate-pulse" />
                 {title}
               </h4>
-              <p className="text-[11px] text-emerald-100 opacity-90">
+              <p className="text-[10px] sm:text-[11px] text-emerald-100 opacity-90">
                 Online Team Support · 24/7 Response
               </p>
             </div>
@@ -84,7 +84,7 @@ export function WhatsAppFloatingWidget() {
               <button
                 key={member.id}
                 onClick={() => handleDirectChat(member)}
-                className="w-full text-left p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 transition-all flex items-center justify-between group"
+                className="w-full text-left p-2.5 sm:p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 transition-all flex items-center justify-between group"
               >
                 <div className="space-y-0.5 min-w-0 pr-2">
                   <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function WhatsAppFloatingWidget() {
           </div>
 
           {/* Footer Note */}
-          <div className="p-2.5 bg-slate-950/60 border-t border-white/5 text-center text-[10px] text-slate-400">
+          <div className="p-2 bg-slate-950/60 border-t border-white/5 text-center text-[10px] text-slate-400">
             🙏 जय श्री राम · Direct Business WhatsApp Assistance
           </div>
         </div>
@@ -119,14 +119,14 @@ export function WhatsAppFloatingWidget() {
             setOpen(!open)
           }
         }}
-        className="relative group flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-emerald-500/20"
+        className="relative group flex items-center justify-center h-11 w-11 sm:h-13 sm:w-13 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 ring-2 sm:ring-4 ring-emerald-500/20"
         aria-label="WhatsApp Support"
       >
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-amber-400 border-2 border-white animate-bounce" />
+        <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-amber-400 border-2 border-white animate-bounce" />
         {open ? (
-          <X className="h-7 w-7 text-white" />
+          <X className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
         ) : (
-          <MessageCircle className="h-7 w-7 text-white fill-white/20" />
+          <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white fill-white/20" />
         )}
       </button>
     </div>

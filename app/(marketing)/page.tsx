@@ -49,81 +49,69 @@ function getMediaDisplaySrc(url: string | null | undefined): { isVideo: boolean;
   return { isVideo: false, thumbUrl: url }
 }
 
+function getPujaBadgeInfo(p: any) {
+  if (p.isVip) {
+    return { text: '👑 VIP ANUSHTHAN', bg: 'bg-gradient-to-r from-[#3D0408] via-[#8B1A21] to-[#3D0408] text-[#FFD700] border border-[#F5B800]/60 shadow-lg' }
+  }
+  if (p.badge) {
+    return { text: p.badge, bg: 'bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-white shadow-md font-extrabold border border-[#FFD700]/30' }
+  }
+  return null
+}
+
+
 export const revalidate = 30
+
 
 // Fallback Pujas if DB has few items
 const fallbackPujas = [
   {
     id: 'fp-1',
-    slug: 'kashi-vishwanath-rudrabhishekam',
-    name: 'काशी विश्वनाथ महादेव रुद्राभिषेक (Kashi Vishwanath Rudrabhishekam)',
-    shortDescription: 'भगवान शिव के पावन ज्योतिर्लिंग काशी में सुख-शांति, समृद्धि एवं आरोग्यता हेतु विशेष रुद्राभिषेक।',
-    location: 'Kashi Vishwanath Temple, Varanasi',
+    slug: 'maa-bagalamukhi-mirchi-hawan',
+    name: 'माँ बगलामुखी मिर्ची हवन व विशेष शत्रुनिवारण अनुष्ठान',
+    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु स्तंभन, तंत्र बाधा एवं व्यापारिक रुकावटों के सर्वनाश हेतु विशेष तीक्ष्ण मिर्ची महायज्ञ।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
     price: 1100,
-    badge: 'Most booked',
-    category: { name: 'ज्योतिर्लिंग पूजा' },
+    badge: 'Most Booked',
+    category: { name: 'महाविद्या अनुष्ठान' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/bagalamukhi_mirchi_hawan_2.jpg'
   },
   {
     id: 'fp-2',
-    slug: 'mahakaleshwar-kalsarp-dosh-shanti',
-    name: 'महाकालेश्वर कालसर्प दोष शांति पूजा (Mahakaleshwar Kalsarp Shanti)',
-    shortDescription: 'उज्जैन महाकाल धाम में वैदिक विधि द्वारा कालसर्प एवं राहु-केतु दोष निवारण महापूजा।',
-    location: 'Mahakaleshwar Temple, Ujjain',
-    price: 2100,
-    badge: 'Recommended',
-    category: { name: 'दोष निवारण' },
+    slug: 'shani-saadesati-dhaiya-dosh-nivaran-yagya',
+    name: 'शनि साढ़ेसाती, ढैय्या व शनि दोष निवारण महापूजा एवं शांति यज्ञ',
+    shortDescription: 'शनि साढ़ेसाती, अष्टम ढैय्या, शनि महादशा, व्यापारिक घाटा व वात रोगों के शमन हेतु विशेष तैलभिषेक व शमी पत्र यज्ञ।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Special',
+    category: { name: 'नवग्रह शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/shani_dosh_yagya.jpg'
   },
   {
     id: 'fp-3',
-    slug: 'trimbakeshwar-pitra-dosh-nivaran',
-    name: 'त्र्यंबकेश्वर नारायण नागबली व पितृदोष (Pitra Dosh Nivaran Homa)',
-    shortDescription: 'पितृ शांति एवं वंश वृद्धि हेतु नासिक त्र्यंबकेश्वर में सर्व दोष शांति यज्ञ एवं पूजा।',
-    location: 'Trimbakeshwar Temple, Nashik',
-    price: 2500,
-    badge: 'Popular',
-    category: { name: 'पितृ दोष शांति' },
+    slug: 'navgrah-shanti-sarva-graha-dosh-nivaran-puja',
+    name: 'नवग्रह शांति व सर्व ग्रह दोष निवारण महापूजा',
+    shortDescription: 'सूर्य, चंद्र, मंगल, बुध, गुरु, शुक्र, शनि, राहु एवं केतु की अशुभ दशा व ग्रह पीड़ा के सर्वथा शमन हेतु 9 समिधा हवन।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Vedic',
+    category: { name: 'नवग्रह शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/navgrah_shanti_yagya.jpg'
   },
   {
     id: 'fp-4',
-    slug: 'maa-baglamukhi-shatru-badha-homa',
-    name: 'माँ बगलामुखी शत्रु बाधा एवं तंत्र निवारण अनुष्ठान',
-    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु शांति एवं व्यापार वृद्धि हेतु सिद्ध पीठ बगलामुखी महायज्ञ।',
-    location: 'Baglamukhi Peeth, Datia / Nalkheda',
-    price: 3100,
-    badge: 'Special',
-    category: { name: 'महाविद्या अनुष्ठान' },
+    slug: 'pitra-shanti-vishesh-sarva-pitra-tarpan-puja',
+    name: 'पितृ शांति विशेष एवं सर्व पितृ तर्पण महापूजा',
+    shortDescription: 'पितृ दोष शांति, पूर्वजों की तृप्ति, वंश वृद्धि व पारिवारिक सुख-शांति हेतु कुशा जल, काले तिल व जौ द्वारा सर्व पितृ तर्पण, पिंड दान एवं ब्राह्मण भोजन संकल्प।',
+    location: 'Maa Katyayani Durga Shakti Peeth, Jodhpur, Rajasthan',
+    price: 901,
+    badge: 'Pitra Shanti',
+    category: { name: 'पितृ दोष शांति' },
     isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'fp-5',
-    slug: 'maha-mrityunjaya-jaap-yagya',
-    name: 'महामृत्युंजय मंत्र जाप एवं दीर्घायु होम',
-    shortDescription: 'असाध्य रोगों से मुक्ति, दुर्घटना सुरक्षा एवं उत्तम स्वास्थ्य हेतु 1,25,000 मंत्र जाप अनुष्ठान।',
-    location: 'Haridwar / Rishikesh Holy Ghats',
-    price: 5100,
-    badge: 'Recommended',
-    category: { name: 'आरोग्य पूजा' },
-    isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'fp-6',
-    slug: 'siddhivinayak-ganpati-puja',
-    name: 'सिद्धिविनायक गणपति पूजन एवं मोदक अर्पण',
-    shortDescription: 'कार्य सिद्धि, बुद्धि, नया व्यापार प्रारंभ एवं विघ्न विनाश हेतु प्रथम पूज्य श्री गणेश पूजा।',
-    location: 'Siddhivinayak Temple, Mumbai',
-    price: 1500,
-    badge: 'New',
-    category: { name: 'गणेश पूजा' },
-    isEvergreen: true,
-    coverImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80'
+    coverImage: '/pitra_shanti_tarpan.jpg'
   }
 ]
 
@@ -228,17 +216,40 @@ export default async function HomePage() {
         <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[rgba(242,169,0,0.12)] rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-[rgba(139,26,33,0.08)] rounded-full blur-3xl pointer-events-none" />
 
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-5xl">
+          {/* Label badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-4">
+            <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
+            <span className="text-[#8B5A00] text-xs font-extrabold uppercase tracking-[0.12em]">🪔 Sri Sanatan Seva & Anushthan</span>
+          </div>
 
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
+          {/* H1 Headline (Sri Mandir Style) */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-[#2A1508] leading-[1.18] tracking-tight mb-4">
+            Perform Puja as per Vedic Rituals at{' '}
+            <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">
+              Famous Hindu Temples in India
+            </span>
+          </h1>
 
-              {/* Label badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs">
-                <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
-                <span className="text-[#8B5A00] text-xs font-extrabold uppercase tracking-[0.12em]">Verified Temples & Puja Booking</span>
+          {/* Subheading */}
+          <p className="text-sm sm:text-base md:text-lg text-[#4A2D1B] font-medium leading-relaxed max-w-3xl mx-auto mb-6">
+            भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे ऑनलाइन वैदिक पूजा। अपने नाम व गोत्र से संकल्प करवाएं — व्हाट्सएप पर लाइव वीडियो प्रमाण एवं घर द्वार सिद्ध प्रसाद।
+          </p>
+
+          {/* 4 trust features */}
+          <div className="flex flex-wrap justify-center gap-2.5 max-w-3xl mx-auto mb-8">
+            {[
+              { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'अनुभवी वेदाचार्य' },
+              { icon: <MapPin className="h-3.5 w-3.5" />, label: 'Pan-India Sacred Dham' },
+              { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video Proof' },
+              { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent Seva' },
+            ].map((f) => (
+              <div key={f.label} className="flex items-center gap-2 px-3.5 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-[#F0D695] shadow-xs">
+                <div className="h-5 w-5 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white flex items-center justify-center shrink-0">{f.icon}</div>
+                <span className="text-xs font-bold text-[#2A1508]">{f.label}</span>
               </div>
+            ))}
+          </div>
 
               {/* H1 */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.8rem] font-heading font-extrabold text-[#2A1508] leading-[1.14] tracking-tight">
@@ -362,6 +373,8 @@ export default async function HomePage() {
           >
             View All Pujas <ArrowRight className="h-4 w-4" />
           </Link>
+
+
         </div>
 
         {/* Responsive Grid of Puja Cards */}
@@ -413,10 +426,20 @@ export default async function HomePage() {
                   {/* Dark gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-transparent to-transparent pointer-events-none" />
 
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-[10px] font-bold shadow-md">{badgeTag}</span>
-                  </div>
+                  {/* Admin Configured Card Badge */}
+                  {(() => {
+                    const badgeInfo = getPujaBadgeInfo(p)
+                    if (!badgeInfo) return null
+                    return (
+                      <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${badgeInfo.bg}`}>
+                          {badgeInfo.text}
+                        </span>
+                      </div>
+                    )
+                  })()}
+
+
 
                   {/* Category */}
                   <div className="absolute bottom-3 left-3">
@@ -455,6 +478,8 @@ export default async function HomePage() {
                     >
                       Book Now <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
+
+
                   </div>
                 </div>
 
@@ -466,8 +491,128 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
+          SECTION: WHY CHOOSE US (हमारे साथ ही पूजा क्यों कराएं?)
+          ============================================================ */}
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#200205] via-[#3D0408] to-[#200205] text-white overflow-hidden border-y border-[#F5B800]/40">
+        {/* Om Watermark Background */}
+        <div aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-[35vw] font-serif text-[rgba(245,184,0,0.03)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#F5B800]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#8B1A21]/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F5B800]/20 border border-[#F5B800]/50 text-[#FFF3D6] text-xs font-black uppercase tracking-widest">
+              <ShieldCheck className="h-4 w-4 text-[#F5B800]" /> Why Choose DivyaYagyam (हमारे साथ ही अनुष्ठान क्यों?)
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+              Why 50,000+ Devotees Trust{' '}
+              <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent">
+                DivyaYagyam
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-[#FFF3D6]/90 font-medium max-w-2xl mx-auto leading-relaxed">
+              शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद — आपकी हर पूजा को बनाती है 100% सिद्ध व फलदायी।
+            </p>
+          </div>
+
+          {/* 6 High-Converting Value Pillars */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {[
+              {
+                icon: "🕉️",
+                title: "27+ वर्षों की शुद्ध वैदिक परंपरा",
+                subtitle: "Vedic Lineage & Pandits",
+                desc: "27 से अधिक वर्षों के अनुभवी वरिष्ठ आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा पूर्ण शास्त्रोक्त विधि से पूजन संपन्न किया जाता है।"
+              },
+              {
+                icon: "📜",
+                title: "व्यक्तिगत नाम व गोत्र संकल्प",
+                subtitle: "108% Personalized Sankalp",
+                desc: "पूजा आरंभ में मुख्य आचार्य द्वारा आपके तथा आपके परिवार के सदस्यों का स्पष्ट नाम व गोत्र बोलकर संकल्प कराया जाता है।"
+              },
+              {
+                icon: "🎥",
+                title: "HD लाइव वीडियो व व्हाट्सएप प्रमाण",
+                subtitle: "Live WhatsApp Video Proof",
+                desc: "पूजा संकल्प एवं मुख्य आहुति का स्पष्ट HD वीडियो व्हाट्सएप पर भेजा जाता है ताकि आप घर बैठे लाइव दर्शन कर सकें।"
+              },
+              {
+                icon: "🎁",
+                title: "दिव्य सामग्री व सिद्ध प्रसाद",
+                subtitle: "Blessed Prasad Doorstep Courier",
+                desc: "विशेष आशीर्वाद स्वरूप सिद्ध पीठों से पावन अक्षत, रक्षासूत्र, भस्म, रुद्राक्ष एवं दिव्य सामग्री आपके घर प्रसाद के रूप में भेजी जाती है।"
+              },
+              {
+                icon: "🏛️",
+                title: "भारत के प्रसिद्ध सिद्ध शक्तिपीठ",
+                subtitle: "Authentic Sacred Dham",
+                desc: "काशी विश्वनाथ, माँ बगलामुखी धाम दतिया, महाकालेश्वर, कामाख्या एवं सिद्ध मंदिरों से सीधे प्रामाणिक अनुष्ठान।"
+              },
+              {
+                icon: "🤝",
+                title: "100% पारदर्शी एवं विश्वस्त सेवा",
+                subtitle: "100% Transparent Seva",
+                desc: "कोई गुप्त शुल्क नहीं। 24/7 आचार्य मार्गदर्शन एवं सहायता उपलब्ध — सनातन धर्म की मर्यादा के साथ अटूट विश्वास।"
+              }
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="group relative p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#3D0408]/90 to-[#2A0306]/90 border border-[#F5B800]/30 hover:border-[#F5B800] transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_10px_30px_rgba(245,184,0,0.25)] flex flex-col justify-between"
+              >
+                {/* Top Gold Corner Accent */}
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#F5B800]/20 to-transparent rounded-tr-2xl pointer-events-none" />
+
+                <div className="space-y-4">
+                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-[#54080F] to-[#3D0408] border border-[#F5B800]/50 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                    {item.icon}
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F5B800] block mb-1">
+                      {item.subtitle}
+                    </span>
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#FFF3D6] transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-[#FFE89C]/80 leading-relaxed font-normal">
+                    {item.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-[#F5B800]/15 flex items-center justify-between text-xs font-extrabold text-[#F5B800]">
+                  <span>100% Authentic Seva</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">✓ Verified</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Trust Stat Bar */}
+          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-[#54080F]/90 via-[#3D0408]/90 to-[#54080F]/90 border border-[#F5B800]/40 grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-xl">
+            {[
+              { val: "50,000+", label: "संतुष्ट यजमान (Happy Devotees)" },
+              { val: "27+ Years", label: "वैदिक अनुभव (Vedic Lineage)" },
+              { val: "100%", label: "नाम-गोत्र संकल्प (Personalized)" },
+              { val: "4.9 ★", label: "भक्त रेटिंग (User Rating)" }
+            ].map((stat) => (
+              <div key={stat.label} className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-black text-[#F5B800] tracking-tight">{stat.val}</div>
+                <div className="text-xs font-bold text-[#FFF3D6] opacity-90">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ============================================================
           SECTION D: DIVYA DARSHAN VIDEO GALLERY
           ============================================================ */}
+
       <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4 border-t border-[rgba(168,124,40,0.10)]">
         <SacredVideoGallery videos={dbVideos} />
       </section>

@@ -107,14 +107,19 @@ export default function HeroSliderPage() {
 
   function handleEditClick(slide: any) {
     setEditingId(slide.id)
-    setTitle(slide.title)
+    setTitle(slide.title || '')
     setSubtitle(slide.subtitle || '')
-    setImage(slide.image)
-    setCtaText(slide.ctaText || '')
-    setCtaUrl(slide.ctaUrl || '')
-    setOrder(slide.order.toString())
+    setImage(slide.image || '')
+    setDriveUrl('')
+    setCtaText(slide.ctaText || slide.buttonText || '')
+    setCtaUrl(slide.ctaUrl || slide.link || '')
+    setOrder((slide.order ?? 0).toString())
     setShowAddForm(true)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 50)
   }
+
 
   function resetForm() {
     setShowAddForm(false)

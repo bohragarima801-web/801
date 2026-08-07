@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Outfit, Cinzel, Noto_Serif_Devanagari } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
@@ -11,7 +11,10 @@ import { TranslationProvider } from '@/components/translation-provider'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusinessSchema } from '@/lib/seo'
 
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter' })
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter', display: 'swap' })
+const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap' })
+const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-cinzel', display: 'swap' })
+const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
 
 export async function generateMetadata(): Promise<Metadata> {
   const dynamicConfig = await getDynamicSiteConfig()
@@ -104,7 +107,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="hi" suppressHydrationWarning>
-      <body className={`${inter.className} ${inter.variable} font-sans bg-watermark overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-watermark overflow-x-hidden`} suppressHydrationWarning>
         <Script
           id="schema-global-organization"
           type="application/ld+json"
