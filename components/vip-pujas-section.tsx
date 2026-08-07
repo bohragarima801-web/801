@@ -139,7 +139,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
           <div className="flex gap-2 shrink-0">
             {packagesToDisplay.map((pkg, idx) => (
               <button
-                key={pkg.id}
+                key={pkg.id || idx}
                 onClick={() => setActivePackageIndex(idx)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                   activePackageIndex === idx
@@ -147,9 +147,8 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                     : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
                 }`}
               >
-                {t.icon}
-                <span>{t.label}</span>
-              </div>
+                <span>{pkg.title || pkg.name || `VIP Package ${idx + 1}`}</span>
+              </button>
             ))}
           </div>
 

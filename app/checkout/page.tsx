@@ -46,11 +46,7 @@ export default function CheckoutPage() {
 
   const isItemInCart = (id: string) => items.some(i => i.id === id)
   const dakshinaItem = items.find(i => i.id === 'addon-dakshina')
-  const hasProducts = items.some(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
   const hasPuja = items.some(i => i.id.startsWith('puja-'))
-  const productSubtotal = items
-    .filter(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
-    .reduce((sum, i) => sum + i.price * i.quantity, 0)
 
   // Automatically start on 'details' step for product-only carts
   useEffect(() => {

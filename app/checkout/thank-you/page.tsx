@@ -100,23 +100,25 @@ function ThankYouContent() {
         transform: show ? 'translateY(0)' : 'translateY(30px)',
       }}>
 
-        .floating-petal {
-          position: absolute;
-          top: -5%;
-          pointer-events: none;
-          user-select: none;
-          z-index: 1;
-          animation: floatPetal linear infinite;
-        }
+        <style dangerouslySetInnerHTML={{ __html: `
+          .floating-petal {
+            position: absolute;
+            top: -5%;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            animation: floatPetal linear infinite;
+          }
 
-        @keyframes pulseGlow {
-          0%, 100% {
-            box-shadow: 0 0 25px rgba(212, 155, 0, 0.35), 0 0 60px rgba(139, 26, 33, 0.15);
+          @keyframes pulseGlow {
+            0%, 100% {
+              box-shadow: 0 0 25px rgba(212, 155, 0, 0.35), 0 0 60px rgba(139, 26, 33, 0.15);
+            }
+            50% {
+              box-shadow: 0 0 45px rgba(212, 155, 0, 0.65), 0 0 90px rgba(242, 201, 76, 0.4);
+            }
           }
-          50% {
-            box-shadow: 0 0 45px rgba(212, 155, 0, 0.65), 0 0 90px rgba(242, 201, 76, 0.4);
-          }
-        }
+        ` }} />
 
           {/* Receipt Body */}
           <div style={{ padding: '1.2rem 1.5rem' }}>

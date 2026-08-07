@@ -251,48 +251,21 @@ export default async function HomePage() {
             ))}
           </div>
 
-              {/* H1 */}
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.8rem] font-heading font-extrabold text-[#2A1508] leading-[1.14] tracking-tight">
-                India's Most Trusted Temples.{' '}
-                <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
-                  One Sacred Booking Away.
-                </span>
-              </h1>
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto mb-10">
+            <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-8 py-4 shadow-lg hover:shadow-xl">
+              Book a Divine Puja (पूजा बुक करें) <ArrowRight className="h-4 w-4" />
+            </Link>
+            <a
+              href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white border-2 border-[#D49B00] text-[#8B1A21] font-bold text-sm md:text-base shadow-sm hover:bg-[#FFF8EA] hover:border-[#8B1A21] transition-all"
+            >
+              <MessageCircle className="h-4 w-4 text-emerald-600" /> Chat on WhatsApp
+            </a>
+          </div>
 
-              {/* Subheading */}
-              <p className="text-base sm:text-lg text-[#4A2D1B] font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Book authentic Vedic pujas and temple offerings from verified priests across India, with transparent pricing, live WhatsApp video proof, and home-delivered sacred prasad.
-              </p>
-
-              {/* 4 trust features */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 max-w-2xl mx-auto lg:mx-0">
-                {[
-                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: 'Verified Priests' },
-                  { icon: <MapPin className="h-3.5 w-3.5" />, label: 'Pan-India Temples' },
-                  { icon: <Video className="h-3.5 w-3.5" />, label: 'WhatsApp Video' },
-                  { icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: '100% Transparent' },
-                ].map((f) => (
-                  <div key={f.label} className="flex items-center gap-2 p-2.5 bg-white/90 backdrop-blur-sm rounded-xl border border-[#F0D695] shadow-xs">
-                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white flex items-center justify-center shrink-0">{f.icon}</div>
-                    <span className="text-xs font-bold text-[#2A1508]">{f.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
-                <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-8 py-4 shadow-lg hover:shadow-xl">
-                  Book a Divine Puja (पूजा बुक करें) <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white border-2 border-[#D49B00] text-[#8B1A21] font-bold text-sm md:text-base shadow-sm hover:bg-[#FFF8EA] hover:border-[#8B1A21] transition-all"
-                >
-                  <MessageCircle className="h-4 w-4 text-emerald-600" /> Chat on WhatsApp
-                </a>
-              </div>
 
               {/* Stats row */}
               <div className="pt-6 border-t border-[#F5E2B8] grid grid-cols-3 gap-6 text-center lg:text-left max-w-sm">
