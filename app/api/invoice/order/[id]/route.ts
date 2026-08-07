@@ -274,9 +274,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       </tr>` : ''}
       ${shipping > 0 ? `
       <tr>
-        <td style="color:#6b7280">Shipping Fee</td>
-        <td>₹${shipping.toLocaleString('en-IN')}</td>
-      </tr>` : ''}
+        <td style="color:#6b7280">Shipping / Delivery Fee</td>
+        <td style="color:#ea580c">₹${shipping.toLocaleString('en-IN')}</td>
+      </tr>` : `
+      <tr>
+        <td style="color:#6b7280">Shipping / Delivery Fee</td>
+        <td style="color:#10b981;font-weight:700">FREE (₹0)</td>
+      </tr>`}
       <tr class="grand-total">
         <td>Total Paid</td>
         <td>₹${total.toLocaleString('en-IN')}</td>

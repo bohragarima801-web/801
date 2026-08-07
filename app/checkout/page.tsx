@@ -24,7 +24,8 @@ export default function CheckoutPage() {
   const [bhaktiSevaOfferings, setBhaktiSevaOfferings] = useState<any[]>([])
   const [couponCode, setCouponCode] = useState('')
   const [validatingCoupon, setValidatingCoupon] = useState(false)
-  const [step, setStep] = useState<'addons' | 'details'>('addons')
+  const [step, setStep] = useState<'addons' | 'details'>('details')
+  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'cod'>('cod')
 
   const [address, setAddress] = useState({
     name: '',
@@ -46,9 +47,17 @@ export default function CheckoutPage() {
   const isItemInCart = (id: string) => items.some(i => i.id === id)
   const dakshinaItem = items.find(i => i.id === 'addon-dakshina')
   const hasProducts = items.some(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
+  const hasPuja = items.some(i => i.id.startsWith('puja-'))
   const productSubtotal = items
     .filter(i => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-'))
     .reduce((sum, i) => sum + i.price * i.quantity, 0)
+
+  // Automatically start on 'details' step for product-only carts
+  useEffect(() => {
+    if (!loading && items.length > 0 && !hasPuja) {
+      setStep('details')
+    }
+  }, [loading, items, hasPuja])
 
   const handleDakshinaSelect = (amt: number) => {
     if (dakshinaItem && dakshinaItem.price === amt) {
@@ -152,8 +161,6 @@ export default function CheckoutPage() {
     }
   }
 
-
-
   const initiatePayment = () => {
     if (!address.name || !address.phone || !address.pincode || !address.street || !address.city || !address.state) {
       toast.error('Please fill all address fields completely')
@@ -184,7 +191,8 @@ export default function CheckoutPage() {
           })),
           shippingAddress: address,
           notes: sankalpNotes,
-          couponCode: appliedCoupon?.code
+          couponCode: appliedCoupon?.code,
+          paymentMethod: paymentMethod
         })
       })
       const data = await res.json()
@@ -319,110 +327,130 @@ export default function CheckoutPage() {
               {/* Left Column: Puja Details & Add-ons */}
               <div className="lg:col-span-8 space-y-6">
                 
-                {/* Puja Header Card */}
-                <Card className="border-gray-200 shadow-sm overflow-hidden">
-                  <div className="p-5 space-y-4">
-                    <div className="flex items-start gap-3">
-                      <button onClick={() => router.back()} className="mt-1 text-gray-800 hover:text-orange-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                      </button>
-                      <div className="space-y-3 flex-1">
-                        <h1 className="text-lg md:text-xl font-bold text-gray-900 leading-snug pr-4">
-                          {primaryItem.name}
-                        </h1>
-                        <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-orange-100">
-                          âœ¦ Selected Puja
-                        </span>
-                        
-                        {/* Metadata Details */}
-                        <div className="space-y-2 text-sm text-gray-600 pt-2">
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
-                            <span>Sacred Temple / Online Booking</span>
+                {/* Puja Header & Puja Add-ons — ONLY shown when a Puja is in cart */}
+                {hasPuja ? (
+                  <>
+                    <Card className="border-gray-200 shadow-sm overflow-hidden">
+                      <div className="p-5 space-y-4">
+                        <div className="flex items-start gap-3">
+                          <button onClick={() => router.back()} className="mt-1 text-gray-800 hover:text-orange-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                          </button>
+                          <div className="space-y-3 flex-1">
+                            <h1 className="text-lg md:text-xl font-bold text-gray-900 leading-snug pr-4">
+                              {primaryItem.name}
+                            </h1>
+                            <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-orange-100">
+                              🪔 Sacred Puja Booking
+                            </span>
+                            
+                            {/* Metadata Details */}
+                            <div className="space-y-2 text-sm text-gray-600 pt-2">
+                              <div className="flex items-center gap-3">
+                                <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
+                                <span>Sacred Temple / Online Booking</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
+                                <span>As per selected slot</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <User className="w-4 h-4 text-gray-400 shrink-0" />
+                                <span className="text-gray-800 font-medium">{primaryItem.name} - {totalItems} Item(s) ( ₹ {cartTotal} )</span>
+                                <button onClick={() => router.back()} className="text-orange-600 text-xs font-semibold flex items-center gap-1 ml-2 hover:underline">
+                                  <Edit2 className="w-3 h-3" /> Change Package
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
-                            <span>As per selected slot</span>
+                        </div>
+                      </div>
+                    </Card>
+
+                    {/* Add-on Cards Grid */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {[
+                        { id: 'courier', title: 'Prasad Courier Fee', price: 99 },
+                      ].map((addon) => {
+                        const inCart = isItemInCart(`addon-${addon.id}`)
+                        return (
+                        <div key={addon.id} onClick={() => toggleAddonToCart(addon.id, addon.price, addon.title)} className={`cursor-pointer border rounded-xl p-4 flex items-start justify-between shadow-sm transition-all ${inCart ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
+                          <div>
+                            <div className="mb-2">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </div>
+                            <p className="text-sm text-gray-800 font-semibold mb-1">{addon.title}</p>
+                            <p className="text-sm text-gray-500">₹ {addon.price}</p>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <User className="w-4 h-4 text-gray-400 shrink-0" />
-                            <span className="text-gray-800 font-medium">{primaryItem.name} - {totalItems} Item(s) ( ₹ {cartTotal} )</span>
-                            <button onClick={() => router.back()} className="text-orange-600 text-xs font-semibold flex items-center gap-1 ml-2 hover:underline">
-                              <Edit2 className="w-3 h-3" /> Change Package
+                          <button className={`w-6 h-6 rounded-full flex items-center justify-center border ${inCart ? 'bg-green-600 border-green-600 text-white' : 'border-gray-400 text-gray-600'}`}>
+                            {inCart ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      )})}
+                    </div>
+
+                    {/* Pandit Dakshina Custom Section */}
+                    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                      <div className="flex items-center gap-2 mb-1">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                         <h3 className="font-bold text-gray-900 text-base">Pandit Dakshina (Optional)</h3>
+                      </div>
+                      <p className="text-xs text-gray-500 mb-4">Support the pandits performing your sacred puja.</p>
+                      
+                      <div className="flex flex-wrap gap-2 md:gap-3">
+                        {[251, 551, 1100].map(amt => {
+                          const isSelected = dakshinaItem?.price === amt
+                          return (
+                            <button 
+                              key={amt} 
+                              onClick={() => handleDakshinaSelect(amt)}
+                              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all ${isSelected ? 'bg-orange-600 text-white border-orange-600 shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-orange-300 hover:bg-orange-50'}`}
+                            >
+                              ₹ {amt}
                             </button>
-                          </div>
+                          )
+                        })}
+                        
+                        {/* Custom Input */}
+                        <div className={`flex items-center border rounded-lg overflow-hidden transition-all ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'border-orange-600 ring-1 ring-orange-600 shadow-md' : 'border-slate-200 focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400'}`}>
+                          <span className="px-3 text-slate-500 font-bold bg-slate-50 h-full flex items-center">₹</span>
+                          <input 
+                            type="number" 
+                            value={customDakshinaInput} 
+                            onChange={(e) => setCustomDakshinaInput(e.target.value)}
+                            placeholder="2100"
+                            className="w-20 px-2 py-2 text-sm font-bold outline-none text-slate-700 bg-white"
+                          />
+                          <button 
+                            onClick={() => handleDakshinaSelect(Number(customDakshinaInput) || 2100)}
+                            className={`px-4 py-2 text-sm font-bold transition-all border-l ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'bg-orange-600 text-white border-orange-600' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200'}`}
+                          >
+                            {(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'Added' : 'Add'}
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-
-                {/* Add-on Cards Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { id: 'courier', title: 'Prasad Courier Fee', price: 99 },
-                  ].map((addon) => {
-                    const inCart = isItemInCart(`addon-${addon.id}`)
-                    return (
-                    <div key={addon.id} onClick={() => toggleAddonToCart(addon.id, addon.price, addon.title)} className={`cursor-pointer border rounded-xl p-4 flex items-start justify-between shadow-sm transition-all ${inCart ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
-                      <div>
-                        <div className="mb-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </div>
-                        <p className="text-sm text-gray-800 font-semibold mb-1">{addon.title}</p>
-                        <p className="text-sm text-gray-500">₹ {addon.price}</p>
-                      </div>
-                      <button className={`w-6 h-6 rounded-full flex items-center justify-center border ${inCart ? 'bg-green-600 border-green-600 text-white' : 'border-gray-400 text-gray-600'}`}>
-                        {inCart ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                      </button>
-                    </div>
-                  )})}
-                </div>
-
-                {/* Pandit Dakshina Custom Section */}
-                <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                     <h3 className="font-bold text-gray-900 text-base">Pandit Dakshina (Optional)</h3>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-4">Support the pandits performing your sacred puja.</p>
-                  
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {[251, 551, 1100].map(amt => {
-                      const isSelected = dakshinaItem?.price === amt
-                      return (
-                        <button 
-                          key={amt} 
-                          onClick={() => handleDakshinaSelect(amt)}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all ${isSelected ? 'bg-orange-600 text-white border-orange-600 shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-orange-300 hover:bg-orange-50'}`}
-                        >
-                          ₹ {amt}
+                  </>
+                ) : (
+                  <Card className="border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-5 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <button onClick={() => router.push('/cart')} className="text-gray-800 hover:text-orange-600">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         </button>
-                      )
-                    })}
-                    
-                    {/* Custom Input */}
-                    <div className={`flex items-center border rounded-lg overflow-hidden transition-all ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'border-orange-600 ring-1 ring-orange-600 shadow-md' : 'border-slate-200 focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400'}`}>
-                      <span className="px-3 text-slate-500 font-bold bg-slate-50 h-full flex items-center">₹</span>
-                      <input 
-                        type="number" 
-                        value={customDakshinaInput} 
-                        onChange={(e) => setCustomDakshinaInput(e.target.value)}
-                        placeholder="2100"
-                        className="w-20 px-2 py-2 text-sm font-bold outline-none text-slate-700 bg-white"
-                      />
-                      <button 
-                        onClick={() => handleDakshinaSelect(Number(customDakshinaInput) || 2100)}
-                        className={`px-4 py-2 text-sm font-bold transition-all border-l ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'bg-orange-600 text-white border-orange-600' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200'}`}
-                      >
-                        {(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'Added' : 'Add'}
-                      </button>
+                        <div>
+                          <h1 className="text-lg md:text-xl font-bold text-gray-900 leading-snug">
+                            🛍️ Order Summary ({totalItems} Item(s))
+                          </h1>
+                          <p className="text-xs text-gray-500">Products in your cart ready for delivery.</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </Card>
+                )}
 
                 {/* Sacred Offerings / BhaktiSeva — ONLY shown when a Puja is in cart */}
-                {bhaktiSevaOfferings.length > 0 && items.some(i => i.id.startsWith('puja-')) && (
+                {bhaktiSevaOfferings.length > 0 && hasPuja && (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
                       <h2 className="text-lg font-bold text-gray-900">🪔 BhaktiSeva — Sacred Offerings</h2>
@@ -470,7 +498,7 @@ export default function CheckoutPage() {
                 <div className="sticky top-24">
                   <Card className="border-gray-200 shadow-sm rounded-xl">
                     <CardContent className="p-5">
-                      <h3 className="font-bold text-gray-900 text-sm mb-4">Your Offerings & Items</h3>
+                      <h3 className="font-bold text-gray-900 text-sm mb-4">Your Cart Items</h3>
                       
                       <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 mb-4 border-b border-dashed border-gray-200 pb-4">
                         {items.map(item => (
@@ -493,17 +521,17 @@ export default function CheckoutPage() {
 
                       <div className="flex justify-between items-center mb-6">
                         <span className="font-bold text-lg text-gray-900">Total</span>
-                        <span className="font-black text-xl text-green-600">₹ {cartTotal}</span>
+                        <span className="font-black text-xl text-green-600">₹ {finalTotal}</span>
                       </div>
 
                       <Button 
                         onClick={() => setStep('details')} 
                         className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-lg shadow-lg shadow-orange-200"
                       >
-                        Proceed to Checkout
+                        Proceed to Address
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
-                      <p className="text-center text-xs text-slate-400 mt-3">100% Secure & Encrypted Payments</p>
+                      <p className="text-center text-xs text-slate-400 mt-3">100% Secure & Encrypted</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -533,48 +561,79 @@ export default function CheckoutPage() {
         {step === 'details' && (
           <div className="container py-14 max-w-6xl">
              <div className="flex items-center gap-4 mb-8">
-               <button onClick={() => setStep('addons')} className="text-orange-600 font-bold hover:underline flex items-center gap-1">
-                 <ArrowRight className="h-4 w-4 rotate-180" /> Back to Add-ons
+               <button onClick={() => hasPuja ? setStep('addons') : router.push('/cart')} className="text-orange-600 font-bold hover:underline flex items-center gap-1">
+                 <ArrowRight className="h-4 w-4 rotate-180" /> {hasPuja ? 'Back to Add-ons' : 'Back to Cart'}
                </button>
                <h1 className="text-3xl font-black text-slate-800">
-                 {items.some(i => i.id.startsWith('puja-')) ? 'Sankalp & Billing' : 'Secure Checkout'}
+                 {hasPuja ? 'Sankalp & Shipping' : 'Shipping & Payment'}
                </h1>
              </div>
              
              <div className="grid lg:grid-cols-12 gap-10">
                <div className="lg:col-span-7 space-y-6">
                  
-                 {/* Sankalp form moved to popup */}
-
+                 {/* Shipping Address Form */}
                  <Card className="border-orange-100 shadow-sm">
                    <CardContent className="p-6 space-y-4">
                      <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-                       <CheckCircle2 className="h-5 w-5 text-green-600" /> Shipping Details
+                       <CheckCircle2 className="h-5 w-5 text-green-600" /> Shipping Details (डिलीवरी पता)
                      </h2>
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="space-y-2">
-                         <Label>Full Name</Label>
+                         <Label>Full Name (नाम)</Label>
                          <Input value={address.name} onChange={e => setAddress({...address, name: e.target.value})} placeholder="John Doe" />
                        </div>
                        <div className="space-y-2">
-                         <Label>Phone Number</Label>
+                         <Label>Phone Number (फ़ोन नंबर)</Label>
                          <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="+91 9587171984" />
                        </div>
                        <div className="space-y-2 md:col-span-2">
-                         <Label>Street Address (House No, Building, Area)</Label>
+                         <Label>Street Address (मकान नंबर / गली / क्षेत्र)</Label>
                          <Input value={address.street} onChange={e => setAddress({...address, street: e.target.value})} placeholder="123 Spiritual Lane..." />
                        </div>
                        <div className="space-y-2">
-                         <Label>City</Label>
+                         <Label>City (शहर)</Label>
                          <Input value={address.city} onChange={e => setAddress({...address, city: e.target.value})} placeholder="Varanasi" />
                        </div>
                        <div className="space-y-2">
-                         <Label>State</Label>
+                         <Label>State (राज्य)</Label>
                          <Input value={address.state} onChange={e => setAddress({...address, state: e.target.value})} placeholder="Uttar Pradesh" />
                        </div>
                        <div className="space-y-2">
-                         <Label>Pincode</Label>
+                         <Label>Pincode (पिनकोड)</Label>
                          <Input value={address.pincode} onChange={e => setAddress({...address, pincode: e.target.value})} placeholder="221001" />
+                       </div>
+                     </div>
+                   </CardContent>
+                 </Card>
+
+                 {/* Payment Method Selection Card */}
+                 <Card className="border-orange-100 shadow-sm">
+                   <CardContent className="p-6 space-y-4">
+                     <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
+                       <CheckCircle2 className="h-5 w-5 text-green-600" /> Payment Method (भुगतान का प्रकार)
+                     </h2>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                       <div 
+                         onClick={() => setPaymentMethod('cod')}
+                         className={`cursor-pointer p-4 rounded-xl border flex items-center gap-3 transition-all ${paymentMethod === 'cod' ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-500/20' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
+                       >
+                         <input type="radio" name="paymentOption" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="h-4 w-4 text-orange-600 cursor-pointer" />
+                         <div>
+                           <p className="font-bold text-slate-800 text-sm">📦 Cash on Delivery (COD)</p>
+                           <p className="text-xs text-slate-500">सामग्री घर मिलने पर नकद भुगतान करें</p>
+                         </div>
+                       </div>
+
+                       <div 
+                         onClick={() => setPaymentMethod('razorpay')}
+                         className={`cursor-pointer p-4 rounded-xl border flex items-center gap-3 transition-all ${paymentMethod === 'razorpay' ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-500/20' : 'border-slate-200 hover:border-slate-300 bg-white'}`}
+                       >
+                         <input type="radio" name="paymentOption" checked={paymentMethod === 'razorpay'} onChange={() => setPaymentMethod('razorpay')} className="h-4 w-4 text-orange-600 cursor-pointer" />
+                         <div>
+                           <p className="font-bold text-slate-800 text-sm">💳 Online Payment (UPI / Card)</p>
+                           <p className="text-xs text-slate-500">तुरंत UPI / डेबिट / क्रेडिट कार्ड से भुगतान</p>
+                         </div>
                        </div>
                      </div>
                    </CardContent>

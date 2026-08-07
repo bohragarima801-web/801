@@ -155,15 +155,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0
   
   // Delivery Fee calculation (Applies ONLY to physical products! Pujas have 0 delivery fee):
-  // If deliveryEnabled == false -> 0
+  // If deliveryEnabled == false or deliveryFee == 0 -> 0
   // If productSubtotal == 0 -> no products in cart -> 0
-  // If productSubtotal > freeThreshold -> FREE SHIPPING (0)
-  // If productSubtotal <= freeThreshold -> deliveryFee (default 99)
+  // If productSubtotal >= freeThreshold -> FREE SHIPPING (0)
+  // If productSubtotal < freeThreshold -> deliveryFee (admin configured, default 99)
   const deliveryEnabled = deliveryConfig.enabled
   const deliveryFee = deliveryConfig.fee
   const freeShippingThreshold = deliveryConfig.freeThreshold
   
-  const shippingFee = (!deliveryEnabled || !hasProducts || productSubtotal > freeShippingThreshold) ? 0 : deliveryFee
+  const shippingFee = (!deliveryEnabled || !hasProducts || deliveryFee === 0 || productSubtotal >= freeShippingThreshold) ? 0 : deliveryFee
   
   const finalTotal = Math.max(0, cartTotal - discountAmount + shippingFee)
 

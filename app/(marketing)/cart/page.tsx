@@ -12,7 +12,8 @@ import { Badge } from '@/components/ui/badge'
 export default function CartPage() {
   const { 
     items, removeFromCart, updateQuantity, cartTotal, totalItems, 
-    deliveryFee, freeShippingThreshold, shippingFee, finalTotal, discountAmount 
+    deliveryFee, freeShippingThreshold, shippingFee, finalTotal, discountAmount,
+    productSubtotal, hasProducts, deliveryEnabled 
   } = useCart()
 
   if (items.length === 0) {
@@ -30,7 +31,8 @@ export default function CartPage() {
     )
   }
 
-  const remainingForFreeShipping = freeShippingThreshold - cartTotal
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - productSubtotal)
+  const isFreeShippingUnlocked = !deliveryEnabled || deliveryFee === 0 || !hasProducts || productSubtotal >= freeShippingThreshold
 
   return (
     <div className="container py-10 max-w-5xl">
@@ -39,33 +41,39 @@ export default function CartPage() {
       </h1>
 
       {/* Free Shipping Progress Banner */}
-      <div className="mb-8 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center gap-3 shadow-xs">
-        <Truck className="h-6 w-6 text-orange-600 shrink-0 animate-bounce" />
-        {cartTotal > freeShippingThreshold ? (
-          <div className="flex-1">
-            <p className="font-extrabold text-sm text-emerald-800 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" /> 🎉 बधाई हो! आपको मुफ़्त डिलीवरी मिली है (FREE Delivery Unlocked!)
-            </p>
-            <p className="text-xs text-emerald-700">₹{freeShippingThreshold} से अधिक की खरीदारी पर कोई डिलीवरी शुल्क नहीं लिया जाएगा।</p>
-          </div>
-        ) : (
-          <div className="flex-1">
-            <p className="font-bold text-sm text-slate-800">
-              ₹{freeShippingThreshold} से अधिक की खरीदारी पर <span className="text-orange-600 font-black">मुफ़्त डिलीवरी (FREE Delivery)</span>!
-            </p>
-            <p className="text-xs text-slate-600 mt-0.5">
-              मुफ़्त डिलीवरी के लिए <span className="font-black text-orange-700">₹{remainingForFreeShipping}</span> की सामग्री और जोड़ें।
-            </p>
-            {/* Progress Bar */}
-            <div className="w-full bg-slate-200 h-2 rounded-full mt-2 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-amber-500 to-orange-600 h-full rounded-full transition-all duration-500" 
-                style={{ width: `${Math.min(100, Math.round((cartTotal / freeShippingThreshold) * 100))}%` }}
-              />
+      {hasProducts && (
+        <div className="mb-8 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center gap-3 shadow-xs">
+          <Truck className="h-6 w-6 text-orange-600 shrink-0 animate-bounce" />
+          {isFreeShippingUnlocked ? (
+            <div className="flex-1">
+              <p className="font-extrabold text-sm text-emerald-800 flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" /> 🎉 बधाई हो! आपको मुफ़्त डिलीवरी मिली है (FREE Delivery Unlocked!)
+              </p>
+              <p className="text-xs text-emerald-700">
+                {!deliveryEnabled || deliveryFee === 0 
+                  ? 'एडमिन द्वारा सभी प्रोडक्ट्स पर मुफ़्त डिलीवरी चालू है।'
+                  : `₹${freeShippingThreshold} या उससे अधिक की खरीदारी पर कोई डिलीवरी शुल्क नहीं लिया जाएगा।`}
+              </p>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="flex-1">
+              <p className="font-bold text-sm text-slate-800">
+                ₹{freeShippingThreshold} या उससे अधिक की खरीदारी पर <span className="text-orange-600 font-black">मुफ़्त डिलीवरी (FREE Delivery)</span>! (अन्यथा ₹{deliveryFee} शुल्क)
+              </p>
+              <p className="text-xs text-slate-600 mt-0.5">
+                मुफ़्त डिलीवरी के लिए <span className="font-black text-orange-700">₹{remainingForFreeShipping}</span> की सामग्री और जोड़ें।
+              </p>
+              {/* Progress Bar */}
+              <div className="w-full bg-slate-200 h-2 rounded-full mt-2 overflow-hidden">
+                <div 
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 h-full rounded-full transition-all duration-500" 
+                  style={{ width: `${Math.min(100, Math.round((productSubtotal / freeShippingThreshold) * 100))}%` }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Cart Items List */}

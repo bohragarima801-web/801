@@ -493,15 +493,16 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
-                  <p className="font-bold text-slate-900">📌 वर्तमान लाइव नियम:</p>
-                  {deliveryEnabled ? (
+                  <p className="font-bold text-slate-900">📌 वर्तमान लाइव नियम (Admin Configured Rule):</p>
+                  {deliveryEnabled && Number(deliveryFee) > 0 ? (
                     <>
-                      <p>• ₹{deliveryFreeThreshold} या उससे कम की प्रोडक्ट खरीद पर: <strong className="text-orange-700">₹{deliveryFee} डिलीवरी शुल्क</strong> जुड़ेगा।</p>
-                      <p>• ₹{deliveryFreeThreshold} से अधिक की प्रोडक्ट खरीद पर: <strong className="text-emerald-700">मुफ़्त डिलीवरी (FREE)</strong> रहेगी।</p>
+                      <p>• ₹{deliveryFreeThreshold} से कम (Under ₹{deliveryFreeThreshold}) की प्रोडक्ट खरीद पर: <strong className="text-orange-700">₹{deliveryFee} डिलीवरी शुल्क</strong> जुड़ेगा।</p>
+                      <p>• ₹{deliveryFreeThreshold} या उससे अधिक (₹{deliveryFreeThreshold}+) की प्रोडक्ट खरीद पर: <strong className="text-emerald-700">मुफ़्त डिलीवरी (FREE Delivery)</strong> रहेगी।</p>
                       <p>• <strong>पूजा अनुष्ठान (Puja Bookings):</strong> डिलीवरी शुल्क पूर्णतः मुक्त (₹0) रहेगा।</p>
+                      <p className="text-[11px] text-slate-500 pt-1">💡 (आप ऊपर दिए गए बॉक्स से डिलीवरी शुल्क ₹99 को घटा या बढ़ा सकते हैं, न्यूनतम सीमा ₹999 बदल सकते हैं, या स्विच बंद करके डिलीवरी मुफ़्त कर सकते हैं।)</p>
                     </>
                   ) : (
-                    <p className="text-emerald-700 font-bold">✓ डिलीवरी शुल्क बंद है — सभी प्रोडक्ट ऑर्डर्स पर मुफ़्त डिलीवरी (FREE) रहेगी!</p>
+                    <p className="text-emerald-700 font-bold">✓ मुफ़्त डिलीवरी एक्टिव है — सभी प्रोडक्ट ऑर्डर्स पर ₹0 डिलीवरी शुल्क रहेगा!</p>
                   )}
                 </div>
 
