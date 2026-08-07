@@ -283,33 +283,43 @@ export default async function HomePage() {
             return (
               <article key={p.id} className={`group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#0D0704] rounded-t-2xl">
+                {/* Pro-Level Uncropped Image Frame with Ambient Backdrop */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#0D0704] rounded-t-2xl flex items-center justify-center">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
                     ) : (
-                      <SafeImage
-                        src={mediaInfo.thumbUrl || p.coverImage}
-                        alt={p.name}
-                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                      />
+                      <>
+                        {/* Ambient Blurred Background Layer (Prevents empty gaps) */}
+                        <img
+                          src={mediaInfo.thumbUrl || p.coverImage}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-125 pointer-events-none"
+                        />
+                        {/* Foreground Full Uncropped Image */}
+                        <SafeImage
+                          src={mediaInfo.thumbUrl || p.coverImage}
+                          alt={p.name}
+                          className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-[1.03] drop-shadow-2xl"
+                        />
+                      </>
                     )
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-[#180E08] text-[#F4C430]">
                       <Sparkles className="h-10 w-10 opacity-40" />
                     </div>
                   )}
-                  {/* Dark gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent pointer-events-none" />
+                  {/* Dark gradient overlay bottom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent z-10 pointer-events-none" />
 
                   {/* Admin Configured Card Badge */}
                   {(() => {
                     const badgeInfo = getPujaBadgeInfo(p)
                     if (!badgeInfo) return null
                     return (
-                      <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
-                        <span className="vip-badge text-[10px]">
+                      <div className="absolute top-3 left-3 z-20 flex gap-1.5 flex-wrap">
+                        <span className="vip-badge text-[10px] shadow-lg">
                           {badgeInfo.text}
                         </span>
                       </div>
@@ -317,8 +327,8 @@ export default async function HomePage() {
                   })()}
 
                   {/* Category */}
-                  <div className="absolute bottom-3 left-3">
-                    <span className="bg-[#0D0704]/80 backdrop-blur-sm text-[#F5F0E6] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[#D4AF37]/30">{categoryName}</span>
+                  <div className="absolute bottom-3 left-3 z-20">
+                    <span className="bg-[#0D0704]/90 backdrop-blur-md text-[#F5F0E6] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[#D4AF37]/40 shadow-md">{categoryName}</span>
                   </div>
                 </div>
 
@@ -399,16 +409,25 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.slice(0, 4).map((p: any) => {
               const price = Number(p.price || 501)
+              const imgSrc = p.coverImage || '/product_fallback.jpg'
               return (
                 <article key={p.id} className="group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden">
-                  <div className="relative aspect-square overflow-hidden bg-[#0D0704]">
-                    <SafeImage
-                      src={p.coverImage || '/product_fallback.jpg'}
-                      alt={p.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  <div className="relative aspect-square overflow-hidden bg-[#0D0704] flex items-center justify-center">
+                    {/* Ambient Blur Backdrop */}
+                    <img
+                      src={imgSrc}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-125 pointer-events-none"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent pointer-events-none" />
-                    <span className="absolute top-3 left-3 vip-badge text-[9px] px-2 py-0.5">
+                    {/* Foreground Uncropped Image */}
+                    <SafeImage
+                      src={imgSrc}
+                      alt={p.name}
+                      className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-[1.03] drop-shadow-2xl"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent z-10 pointer-events-none" />
+                    <span className="absolute top-3 left-3 vip-badge text-[9px] px-2 py-0.5 z-20 shadow-md">
                       🔥 अभिमंत्रित
                     </span>
                   </div>
