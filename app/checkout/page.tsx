@@ -17,7 +17,7 @@ import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity, appliedCoupon, applyCoupon, removeCoupon, finalTotal, discountAmount, shippingFee, freeShippingThreshold, deliveryFee } = useCart()
+  const { items, cartTotal, totalItems, clearCart, addToCart, removeFromCart, updateQuantity, appliedCoupon, applyCoupon, removeCoupon, finalTotal, discountAmount, shippingFee, freeShippingThreshold, deliveryFee, hasProducts, productSubtotal } = useCart()
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
   const [user, setUser] = useState<any>(null)
