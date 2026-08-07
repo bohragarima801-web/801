@@ -47,7 +47,7 @@ function ThankYouContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FFF9EE] via-[#FFF3D6] to-[#FFFDF7] text-[#1E120A] relative overflow-hidden font-sans selection:bg-[#F2C94C]/30">
       {/* Dynamic CSS Keyframe for floating lotus petals */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes floatPetal {
           0% {
             transform: translateY(-10vh) rotate(0deg) scale(0.8);
@@ -86,7 +86,7 @@ function ThankYouContent() {
         .ring-glow-effect {
           animation: pulseGlow 3s infinite ease-in-out;
         }
-      `}</style>
+      ` }} />
 
       {/* Floating Petals Background Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

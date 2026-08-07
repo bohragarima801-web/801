@@ -17,19 +17,6 @@ export function generateMetadata() {
 
 export const revalidate = 3600
 
-function getPujaBadgeInfo(p: any) {
-  if (p.isVip) {
-    return { text: 'VIP ANUSHTHAN', bg: 'bg-[#D49B00] text-[#2A1508] shadow-amber-900/40 border border-[#F2C94C]' }
-  }
-  if (p.isSpecial) {
-    return { text: 'FEATURED SEVA', bg: 'bg-[#8B1A21] text-white border border-[#D49B00]' }
-  }
-  if (p.badge) {
-    return { text: p.badge, bg: 'bg-[#8B1A21] text-white border border-[#D49B00]' }
-  }
-  return null
-}
-
 export default async function PujasPage() {
   const pujas = await getCachedPujas()
 
@@ -133,17 +120,17 @@ export default async function PujasPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-[rgba(12,4,2,0.10)] to-transparent pointer-events-none" />
 
                     {/* Admin Configured Card Badge */}
-                    {(() => {
-                      const badgeInfo = getPujaBadgeInfo(p)
-                      if (!badgeInfo) return null
-                      return (
-                        <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${badgeInfo.bg}`}>
-                            {badgeInfo.text}
-                          </span>
-                        </div>
-                      )
-                    })()}
+                    {(p.isVip || p.isSpecial || p.badge) && (
+                      <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${
+                          p.isVip
+                            ? 'bg-[#D49B00] text-[#2A1508] border border-[#F2C94C]'
+                            : 'bg-[#8B1A21] text-white border border-[#D49B00]'
+                        }`}>
+                          {p.isVip ? 'VIP ANUSHTHAN' : p.badge || 'FEATURED SEVA'}
+                        </span>
+                      </div>
+                    )}
 
 
 
