@@ -206,25 +206,34 @@
     transform: translateY(24px);
     transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: revealAuto 0.6s ease-out 0.5s forwards;
   }
   .reveal.revealed {
     opacity: 1;
     transform: translateY(0);
+    animation: none;
   }
   .reveal-left {
     opacity: 0;
     transform: translateX(-24px);
     transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: revealLeftAuto 0.6s ease-out 0.5s forwards;
   }
-  .reveal-left.revealed { opacity: 1; transform: translateX(0); }
+  .reveal-left.revealed { opacity: 1; transform: translateX(0); animation: none; }
   .reveal-right {
     opacity: 0;
     transform: translateX(24px);
     transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: revealRightAuto 0.6s ease-out 0.5s forwards;
   }
-  .reveal-right.revealed { opacity: 1; transform: translateX(0); }
+  .reveal-right.revealed { opacity: 1; transform: translateX(0); animation: none; }
+
+  @keyframes revealAuto { to { opacity: 1; transform: translateY(0); } }
+  @keyframes revealLeftAuto { to { opacity: 1; transform: translateX(0); } }
+  @keyframes revealRightAuto { to { opacity: 1; transform: translateX(0); } }
+
 
   /* Stagger delays */
   .reveal-delay-1 { transition-delay: 0.08s; }
