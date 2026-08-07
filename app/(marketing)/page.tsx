@@ -398,8 +398,128 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
+          SECTION: WHY CHOOSE US (हमारे साथ ही पूजा क्यों कराएं?)
+          ============================================================ */}
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#200205] via-[#3D0408] to-[#200205] text-white overflow-hidden border-y border-[#F5B800]/40">
+        {/* Om Watermark Background */}
+        <div aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-[35vw] font-serif text-[rgba(245,184,0,0.03)] leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#F5B800]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#8B1A21]/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F5B800]/20 border border-[#F5B800]/50 text-[#FFF3D6] text-xs font-black uppercase tracking-widest">
+              <ShieldCheck className="h-4 w-4 text-[#F5B800]" /> Why Choose DivyaYagyam (हमारे साथ ही अनुष्ठान क्यों?)
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+              Why 50,000+ Devotees Trust{' '}
+              <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent">
+                DivyaYagyam
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-[#FFF3D6]/90 font-medium max-w-2xl mx-auto leading-relaxed">
+              शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद — आपकी हर पूजा को बनाती है 100% सिद्ध व फलदायी।
+            </p>
+          </div>
+
+          {/* 6 High-Converting Value Pillars */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {[
+              {
+                icon: "🕉️",
+                title: "27+ वर्षों की शुद्ध वैदिक परंपरा",
+                subtitle: "Vedic Lineage & Pandits",
+                desc: "27 से अधिक वर्षों के अनुभवी वरिष्ठ आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा पूर्ण शास्त्रोक्त विधि से पूजन संपन्न किया जाता है।"
+              },
+              {
+                icon: "📜",
+                title: "व्यक्तिगत नाम व गोत्र संकल्प",
+                subtitle: "108% Personalized Sankalp",
+                desc: "पूजा आरंभ में मुख्य आचार्य द्वारा आपके तथा आपके परिवार के सदस्यों का स्पष्ट नाम व गोत्र बोलकर संकल्प कराया जाता है।"
+              },
+              {
+                icon: "🎥",
+                title: "HD लाइव वीडियो व व्हाट्सएप प्रमाण",
+                subtitle: "Live WhatsApp Video Proof",
+                desc: "पूजा संकल्प एवं मुख्य आहुति का स्पष्ट HD वीडियो व्हाट्सएप पर भेजा जाता है ताकि आप घर बैठे लाइव दर्शन कर सकें।"
+              },
+              {
+                icon: "🎁",
+                title: "दिव्य सामग्री व सिद्ध प्रसाद",
+                subtitle: "Blessed Prasad Doorstep Courier",
+                desc: "विशेष आशीर्वाद स्वरूप सिद्ध पीठों से पावन अक्षत, रक्षासूत्र, भस्म, रुद्राक्ष एवं दिव्य सामग्री आपके घर प्रसाद के रूप में भेजी जाती है।"
+              },
+              {
+                icon: "🏛️",
+                title: "भारत के प्रसिद्ध सिद्ध शक्तिपीठ",
+                subtitle: "Authentic Sacred Dham",
+                desc: "काशी विश्वनाथ, माँ बगलामुखी धाम दतिया, महाकालेश्वर, कामाख्या एवं सिद्ध मंदिरों से सीधे प्रामाणिक अनुष्ठान।"
+              },
+              {
+                icon: "🤝",
+                title: "100% पारदर्शी एवं विश्वस्त सेवा",
+                subtitle: "100% Transparent Seva",
+                desc: "कोई गुप्त शुल्क नहीं। 24/7 आचार्य मार्गदर्शन एवं सहायता उपलब्ध — सनातन धर्म की मर्यादा के साथ अटूट विश्वास।"
+              }
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="group relative p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#3D0408]/90 to-[#2A0306]/90 border border-[#F5B800]/30 hover:border-[#F5B800] transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_10px_30px_rgba(245,184,0,0.25)] flex flex-col justify-between"
+              >
+                {/* Top Gold Corner Accent */}
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#F5B800]/20 to-transparent rounded-tr-2xl pointer-events-none" />
+
+                <div className="space-y-4">
+                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-[#54080F] to-[#3D0408] border border-[#F5B800]/50 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                    {item.icon}
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F5B800] block mb-1">
+                      {item.subtitle}
+                    </span>
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#FFF3D6] transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-[#FFE89C]/80 leading-relaxed font-normal">
+                    {item.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-[#F5B800]/15 flex items-center justify-between text-xs font-extrabold text-[#F5B800]">
+                  <span>100% Authentic Seva</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">✓ Verified</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Trust Stat Bar */}
+          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-[#54080F]/90 via-[#3D0408]/90 to-[#54080F]/90 border border-[#F5B800]/40 grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-xl">
+            {[
+              { val: "50,000+", label: "संतुष्ट यजमान (Happy Devotees)" },
+              { val: "27+ Years", label: "वैदिक अनुभव (Vedic Lineage)" },
+              { val: "100%", label: "नाम-गोत्र संकल्प (Personalized)" },
+              { val: "4.9 ★", label: "भक्त रेटिंग (User Rating)" }
+            ].map((stat) => (
+              <div key={stat.label} className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-black text-[#F5B800] tracking-tight">{stat.val}</div>
+                <div className="text-xs font-bold text-[#FFF3D6] opacity-90">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ============================================================
           SECTION D: DIVYA DARSHAN VIDEO GALLERY
           ============================================================ */}
+
       <section className="w-full bg-[#FFFBF5] dark:bg-[#0A0302] py-4 border-t border-[rgba(168,124,40,0.10)]">
         <SacredVideoGallery videos={dbVideos} />
       </section>
