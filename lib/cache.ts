@@ -58,8 +58,9 @@ export const getCachedPujas = unstable_cache(
 
 export const getCachedNormalPujas = async () => {
   const allPujas = await getCachedPujas()
-  return allPujas.filter((p: any) => !p.isVip)
+  return allPujas
 }
+
 
 export const getCachedVipPujas = async () => {
   const allPujas = await getCachedPujas()

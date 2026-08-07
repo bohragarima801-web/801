@@ -263,14 +263,53 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 </div>
               </div>
 
-              {/* Primary Action Button */}
+              {/* Package Tier Selection Grid */}
+              <div className="space-y-3 pt-2">
+                <Label className="text-xs font-black text-[#F5B800] uppercase tracking-wider block">
+                  🪔 Select Puja Package (संकल्प प्रकार चुनें)
+                </Label>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {[
+                    { id: 'p901', name: 'व्यक्तिगत नाम-गोत्र संकल्प (1 सदस्य)', price: 901, badge: 'Standard' },
+                    { id: 'p1501', name: 'दंपति नाम-गोत्र संकल्प (पति-पत्नी)', price: 1501, badge: 'Popular' },
+                    { id: 'p2501', name: 'संपूर्ण परिवार संकल्प (4 सदस्य)', price: 2501, badge: 'Family' },
+                    { id: 'p3501', name: 'विशेष महायज्ञ संकल्प (6 सदस्य)', price: 3501, badge: 'Maha Yagya' },
+                  ].map((pkg) => (
+                    <button
+                      key={pkg.id}
+                      type="button"
+                      onClick={() => {
+                        clearCart()
+                        addToCart({
+                          id: `puja-${puja.id}-${pkg.id}`,
+                          name: `${puja.name} (${pkg.name})`,
+                          price: pkg.price,
+                          image: coverImg || ''
+                        }, 1)
+                        router.push('/checkout')
+                      }}
+                      className="p-3 rounded-xl border-2 border-[#F5B800]/40 bg-[#3D0408]/90 hover:bg-[#54080F] hover:border-[#F5B800] text-left transition-all group relative shadow-md"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#FFF3D6] line-clamp-1">{pkg.name}</span>
+                        <span className="text-sm font-black text-[#F5B800]">₹{pkg.price}</span>
+                      </div>
+                      <span className="text-[10px] text-[#FFE89C] opacity-80 mt-0.5 block">व्हाट्सएप वीडियो संकल्प + घर द्वार प्रसाद</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Primary VIP Action Button */}
               <Button 
                 size="lg" 
                 className="w-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#3D0408] font-black text-base py-6 rounded-2xl shadow-[0_4px_30px_rgba(245,184,0,0.4)] border border-[#FFE89C] hover:scale-[1.02] transition-transform" 
                 onClick={() => setBookingDialogOpen(true)}
               >
-                Book VIP Puja - ₹{displayPrice.toLocaleString('en-IN')} &rarr;
+                👑 Book Full VIP Anushthan - ₹{displayPrice.toLocaleString('en-IN')} &rarr;
               </Button>
+
 
             </div>
 
