@@ -87,11 +87,11 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   }
 
   const assignedPandit = parsedPandit || {
-    name: 'पं. कन्हैया लाल दवे (Pt. Kanhaiya Lal Dave)',
-    title: 'अथर्ववेद एवं महाविद्या पीठाधीश्वर',
-    experience: '22+ वर्ष अनुभव',
+    name: 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)',
+    title: 'मुख्य आचार्य एवं वैदिक कर्मकांड विशेषज्ञ',
+    experience: '15+ वर्ष अनुभव',
     location: templeLocation,
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80'
+    photo: '/pandit.jpg'
   }
 
   const handleConfirmBooking = (e: React.FormEvent) => {
