@@ -217,12 +217,12 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="relative h-16 w-16 rounded-2xl overflow-hidden border-2 border-amber-400 shrink-0 shadow-md">
+                  <div className="relative h-24 w-24 rounded-2xl overflow-hidden border-2 border-amber-400 shrink-0 shadow-md">
                     <Image 
                       src={assignedPandit.photo} 
                       alt={assignedPandit.name} 
                       fill 
-                      className="object-cover object-top" 
+                      className="object-cover object-center" 
                     />
                   </div>
                   <div className="space-y-0.5 text-left min-w-0">
