@@ -358,7 +358,7 @@ export async function POST(req: NextRequest) {
           orderId: dbOrder.id,
           amount: total,
           currency: 'INR',
-          gateway: 'COD',
+          gateway: 'COD' as any,
           status: 'PENDING',
           metadata: { paymentType: 'cod', orderNumber: dbOrder.orderNumber }
         }
