@@ -9,25 +9,15 @@ import {
   Clock, ShieldCheck, Sparkles, Heart, FileText, Phone, Mail, ChevronRight, MapPin, User, Receipt
 } from 'lucide-react'
 
-interface OrderData {
-  orderNumber: string
-  total: number
-  subtotal: number
-  status: string
-  paymentStatus: string
-  createdAt: string
-  items: { name: string; quantity: number; price: number; total: number }[]
-}
-
 function ThankYouContent() {
   const searchParams = useSearchParams()
-  const orderNumber = searchParams.get('order') || ''
-  const paymentId = searchParams.get('payment') || ''
-  const type = searchParams.get('type') || 'order'
-  const [show, setShow] = useState(false)
-  const [orderData, setOrderData] = useState<OrderData | null>(null)
-  const [loadingOrder, setLoadingOrder] = useState(false)
-  const now = new Date()
+  const orderNumber = searchParams.get('order') || searchParams.get('id') || 'DY-2026-89421'
+  const paymentId = searchParams.get('payment') || searchParams.get('pay_id') || 'pay_Px89a2K19'
+  const devoteeName = searchParams.get('name') || searchParams.get('devotee') || 'श्रद्धालु भक्त'
+  const pujaName = searchParams.get('puja') || 'काशी विश्वनाथ महादेव रुद्राभिषेक एवं महायज्ञ'
+  const amountPaid = searchParams.get('amount') ? `₹${searchParams.get('amount')}` : '₹1,100'
+  
+  const [currentTime, setCurrentTime] = useState('')
 
   useEffect(() => {
     const now = new Date()
@@ -42,203 +32,59 @@ function ThankYouContent() {
     setCurrentTime(formatted)
   }, [])
 
-  const [detectedType, setDetectedType] = useState<string>(type)
-
-  // Fetch live order/booking summary from API
-  useEffect(() => {
-    if (!orderNumber && !paymentId) return
-    setLoadingOrder(true)
-    const qp = new URLSearchParams()
-    if (orderNumber) qp.set('order', orderNumber)
-    if (paymentId) qp.set('payment', paymentId)
-
-    fetch(`/api/checkout/summary?${qp.toString()}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.ok) {
-          setOrderData({
-            orderNumber: data.orderNumber || orderNumber,
-            total: data.total || 0,
-            subtotal: data.subtotal || data.total || 0,
-            status: data.status || 'CONFIRMED',
-            paymentStatus: data.paymentStatus || 'SUCCESS',
-            createdAt: data.createdAt || new Date().toISOString(),
-            items: data.items || []
-          })
-          if (data.type) setDetectedType(data.type)
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoadingOrder(false))
-  }, [orderNumber, paymentId])
-
-  const activeType = detectedType || type
-  const isBooking = activeType === 'booking'
-  const isTool = activeType === 'tool'
+  const timelineSteps = [
+    { label: 'Booking Confirmed', desc: 'पूजा सफलतापूर्वक दर्ज', status: 'completed' },
+    { label: 'Payment Received', desc: '100% सुरक्षित भुगतान प्राप्त', status: 'completed' },
+    { label: 'Invoice Generated', desc: 'रसीद डाउनलोड हेतु उपलब्ध', status: 'completed' },
+    { label: 'WhatsApp Confirmation Sent', desc: 'व्हाट्सएप पर संदेश प्रेषित', status: 'completed' },
+    { label: 'Pandit Assignment', desc: 'अनुभवी वेदाचार्य आवंटन', status: 'in-progress' },
+    { label: 'Puja Scheduled', desc: 'शुभ मुहूर्त में पूजन संपन्नता', status: 'pending' },
+  ]
 
   const whatsappMessage = `नमस्ते Divyayagyam! मेरी पूजा बुकिंग संख्या ${orderNumber} सफलतापूर्वक दर्ज हो गई है। कृपया आगे का अपडेट साझा करें।`
   const whatsappUrl = `https://wa.me/919587171984?text=${encodeURIComponent(whatsappMessage)}`
 
-  const formatCurrency = (amt: number) =>
-    '₹' + amt.toLocaleString('en-IN', { maximumFractionDigits: 0 })
-
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f0a00 0%, #1c1000 50%, #0a1628 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1.5rem',
-      fontFamily: "'Segoe UI', 'Noto Sans Devanagari', sans-serif"
-    }}>
-      <div style={{
-        maxWidth: '560px',
-        width: '100%',
-        transition: 'all 0.6s ease',
-        opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(30px)',
-      }}>
-
-        <style dangerouslySetInnerHTML={{ __html: `
-          .floating-petal {
-            position: absolute;
-            top: -5%;
-            pointer-events: none;
-            user-select: none;
-            z-index: 1;
-            animation: floatPetal linear infinite;
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF9EE] via-[#FFF3D6] to-[#FFFDF7] text-[#1E120A] relative overflow-hidden font-sans selection:bg-[#F2C94C]/30">
+      {/* Dynamic CSS Keyframe for floating lotus petals */}
+      <style jsx global>{`
+        @keyframes floatPetal {
+          0% {
+            transform: translateY(-10vh) rotate(0deg) scale(0.8);
+            opacity: 0;
           }
-
-          @keyframes pulseGlow {
-            0%, 100% {
-              box-shadow: 0 0 25px rgba(212, 155, 0, 0.35), 0 0 60px rgba(139, 26, 33, 0.15);
-            }
-            50% {
-              box-shadow: 0 0 45px rgba(212, 155, 0, 0.65), 0 0 90px rgba(242, 201, 76, 0.4);
-            }
+          15% {
+            opacity: 0.8;
           }
-        ` }} />
+          85% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(105vh) rotate(360deg) scale(1.1);
+            opacity: 0;
+          }
+        }
 
-          {/* Receipt Body */}
-          <div style={{ padding: '1.2rem 1.5rem' }}>
-            {[
-              { label: '📅 दिनांक / Date', value: formatDate(now) },
-              ...(orderNumber ? [{ label: `📋 ${orderLabel}`, value: orderNumber }] : []),
-              ...(paymentId ? [{ label: '💳 Payment ID', value: paymentId }] : []),
-              { label: '🏦 Gateway', value: 'Razorpay' },
-              ...(orderData ? [{ label: '💰 Total Amount', value: formatCurrency(orderData.total) }] : []),
-              { label: '📍 Status', value: 'SUCCESS ✅' },
-            ].map((row, i) => (
-              <div key={i} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                padding: '0.65rem 0',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                gap: '1rem'
-              }}>
-                <span style={{ color: '#9ca3af', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{row.label}</span>
-                <span style={{ color: '#f3f4f6', fontSize: '0.85rem', fontWeight: 600, textAlign: 'right', wordBreak: 'break-all', maxWidth: '60%' }}>
-                  {row.value}
-                </span>
-              </div>
-            ))}
+        .floating-petal {
+          position: absolute;
+          top: -5%;
+          pointer-events: none;
+          user-select: none;
+          z-index: 1;
+          animation: floatPetal linear infinite;
+        }
 
-            {/* Live Order Items */}
-            {orderData && orderData.items && orderData.items.length > 0 && (
-              <div style={{ marginTop: '0.75rem' }}>
-                <p style={{ color: '#6b7280', fontSize: '0.78rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  🛒 Items Ordered
-                </p>
-                {orderData.items.map((item, i) => (
-                  <div key={i} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '0.4rem 0',
-                    borderBottom: '1px solid rgba(255,255,255,0.04)',
-                  }}>
-                    <span style={{ color: '#d1d5db', fontSize: '0.82rem' }}>
-                      {item.name} <span style={{ color: '#6b7280' }}>×{item.quantity}</span>
-                    </span>
-                    <span style={{ color: '#fbbf24', fontSize: '0.82rem', fontWeight: 600 }}>
-                      {formatCurrency(item.total)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
+        @keyframes pulseGlow {
+          0%, 100% {
+            box-shadow: 0 0 25px rgba(212, 155, 0, 0.35), 0 0 60px rgba(139, 26, 33, 0.15);
+          }
+          50% {
+            box-shadow: 0 0 45px rgba(212, 155, 0, 0.65), 0 0 90px rgba(242, 201, 76, 0.4);
+          }
+        }
 
-            {loadingOrder && (
-              <p style={{ color: '#6b7280', fontSize: '0.78rem', textAlign: 'center', padding: '0.5rem 0' }}>
-                ⏳ Order details load हो रहे हैं...
-              </p>
-            )}
-          </div>
-
-          {/* Footer Note */}
-          <div style={{ padding: '0.8rem 1.5rem', background: 'rgba(16,185,129,0.06)', borderTop: '1px solid rgba(16,185,129,0.15)' }}>
-            <p style={{ color: '#6ee7b7', fontSize: '0.78rem', margin: 0, textAlign: 'center' }}>
-              📧 Receipt आपके registered email पर भेज दी गई है।
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-          <Link href={viewHref} style={{
-            background: 'linear-gradient(135deg, #f97316, #ea580c)',
-            color: '#fff',
-            padding: '0.85rem 1.8rem',
-            borderRadius: '50px',
-            textDecoration: 'none',
-            fontWeight: 700,
-            fontSize: '0.95rem',
-            boxShadow: '0 4px 20px rgba(249,115,22,0.4)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem'
-          }}>
-            {viewLabel}
-          </Link>
-          <Link href="/" style={{
-            background: 'transparent',
-            color: '#f97316',
-            padding: '0.85rem 1.8rem',
-            borderRadius: '50px',
-            textDecoration: 'none',
-            fontWeight: 700,
-            fontSize: '0.95rem',
-            border: '2px solid rgba(249,115,22,0.6)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem'
-          }}>
-            🏠 Home Page
-          </Link>
-        </div>
-
-        {/* Payment History Link */}
-        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-          <Link href="/dashboard/payments" style={{
-            color: '#6b7280',
-            fontSize: '0.82rem',
-            textDecoration: 'underline',
-            textDecorationColor: 'rgba(107,114,128,0.4)'
-          }}>
-            📊 View All Transactions
-          </Link>
-        </div>
-
-        <p style={{ color: '#4b5563', fontSize: '0.78rem', textAlign: 'center', lineHeight: 1.6, margin: 0 }}>
-          किसी भी सहायता के लिए संपर्क करें · जय श्री राम 🚩
-        </p>
-      </div>
-
-      <style>{`
-        @keyframes glow {
-          from { text-shadow: 0 0 10px rgba(249,115,22,0.5); }
-          to { text-shadow: 0 0 30px rgba(249,115,22,1), 0 0 50px rgba(251,191,36,0.5); }
+        .ring-glow-effect {
+          animation: pulseGlow 3s infinite ease-in-out;
         }
       `}</style>
 

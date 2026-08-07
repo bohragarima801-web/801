@@ -2,17 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { 
-  Sparkles, Award, UserCheck, Calendar, Clock, Video, Truck, ShieldCheck, 
-  Heart, CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, ChevronRight,
-  Flame, Lock, Compass, HelpCircle, Check, MapPin, Zap
-} from 'lucide-react'
+import { SacredImageFrame } from '@/components/ui/safe-image'
+import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck, Crown, Flame, Award, Video, CheckCircle2, Star, UserCheck, Filter, Heart, Clock } from 'lucide-react'
 
 export interface VipPackageItem {
   id: string
@@ -45,7 +36,7 @@ const defaultVipPackages: VipPackageItem[] = [
     shortDesc: 'Court case victory, enemy neutralization, protection from severe negativity & business triumph.',
     location: 'Maa Katyayani Shakti Peeth, Jodhpur / Datia',
     duration: 'Full-Day Intensive Homa',
-    priestsCount: '5 Veda Certified Acharyas',
+    priestsCount: '5 अनुभवी वेदाचार्य (5 Senior Veda Acharyas)',
     price: 15100,
     categoryTag: 'Tantra & Victory Homa',
     badgeTag: 'Most Popular VIP',
@@ -83,204 +74,68 @@ const defaultVipPackages: VipPackageItem[] = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
-  const packagesToDisplay = dbPackages
-  const [activePackageIndex, setActivePackageIndex] = useState(0)
+  const displayPujas = dbPackages.length > 0 ? dbPackages : defaultVipPackages
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
 
   const categories = ['ALL', ...Array.from(new Set(displayPujas.map(p => p.categoryTag || 'VIP Ritual')))]
 
-  if (packagesToDisplay.length === 0) {
-    return (
-      <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans py-24 px-4 text-center flex flex-col items-center justify-center space-y-6">
-        <div className="h-20 w-20 rounded-full bg-amber-500/20 border-2 border-amber-400/50 text-amber-400 flex items-center justify-center text-4xl shadow-xl">👑</div>
-        <div className="space-y-3 max-w-lg">
-          <h2 className="text-3xl font-extrabold font-heading text-white">शीघ्र उपलब्ध होंगी दिव्य VIP पूजाएँ एवं महायज्ञ</h2>
-          <p className="text-slate-300 text-sm font-medium leading-relaxed">
-            संस्थान के मुख्य आचार्यों द्वारा सिद्ध शक्तिपीठों पर विशेष VIP अनुष्ठानों की तारीखें घोषित की जा रही हैं। किसी भी विशेष VIP पूजा संकल्प हेतु आचार्य जी से परामर्श लें।
-          </p>
-        </div>
-        <Button size="lg" className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl shadow-xl text-sm py-6 px-8" asChild>
-          <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20consult%20regarding%20special%20VIP%20Puja%20booking" target="_blank" rel="noopener noreferrer">
-            💬 आचार्य जी से VIP पूजा परामर्श लें &rarr;
-          </a>
-        </Button>
-      </div>
-    )
-  }
-
-  const currentPackage = packagesToDisplay[activePackageIndex] || packagesToDisplay[0]
-
-  const handleConfirmBooking = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!devoteeName || !whatsappPhone) {
-      alert('कृपया अपना नाम एवं व्हाट्सएप नंबर दर्ज करें।')
-      return
-    }
-
-    const slotObj = timeSlotOptions.find(s => s.id === selectedTimeSlot)
-    const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
-    const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
-    const panditName = currentPackage.assignedPandit?.name || 'DivyaYagyam Admin Assigned Acharya'
-
-    const message = `Namaste DivyaYagyam Team!%0A%0A*I want to book a VIP Puja:*%0A- *Puja:* ${currentPackage.name}%0A- *Price:* ₹${currentPackage.price}%0A- *Devotee Name:* ${devoteeName}%0A- *WhatsApp:* ${whatsappPhone}%0A- *Gotra:* ${gotra || 'Kashyap / Unspecified'}%0A- *Preferred Date:* ${dateText}%0A- *Time Slot:* ${slotText}%0A- *Assigned Priest:* ${panditName}%0A- *Sankalp Intention:* ${sankalpWish || 'Overall Victory & Prosperity'}`
-
-    window.open(`https://wa.me/919587171984?text=${message}`, '_blank')
-    setBookingDialogOpen(false)
-  }
+  const filteredPujas = selectedCategory === 'ALL'
+    ? displayPujas
+    : displayPujas.filter(p => (p.categoryTag || 'VIP Ritual') === selectedCategory)
 
   return (
-    <div className="min-h-screen bg-[#1D070B] text-slate-100 font-sans">
-      
-      {/* Top Banner Navigation Selector if multiple packages */}
-      <div className="bg-[#1A0608] border-b border-[rgba(168,124,40,0.25)] py-3 sticky top-[64px] z-40">
-        <div className="container mx-auto px-4 flex items-center justify-between gap-4 overflow-x-auto">
-          <span className="text-xs font-bold text-[#D4A843] shrink-0 flex items-center gap-1.5 tracking-wider">
-            <Sparkles className="h-3.5 w-3.5" /> SELECT VIP PUJA:
-          </span>
-          <div className="flex gap-2 shrink-0">
-            {packagesToDisplay.map((pkg, idx) => (
-              <button
-                key={pkg.id || idx}
-                onClick={() => setActivePackageIndex(idx)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activePackageIndex === idx
-                    ? 'bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white shadow-md'
-                    : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
-                }`}
+    <div className="bg-[#0D0406] text-white min-h-screen">
+      {/* ── ROYAL VIP HERO BANNER (Imperial Deep Obsidian Maroon × Golden Glow) */}
+      <section className="relative bg-gradient-to-b from-[#2B0306] via-[#4A0A10] to-[#0D0406] py-16 md:py-24 overflow-hidden border-b-2 border-[#F5B800]/40">
+        {/* Glowing Om Watermark */}
+        <div aria-hidden="true" className="absolute -right-10 -top-10 text-[35vw] font-serif text-[rgba(245,184,0,0.05)] leading-none pointer-events-none select-none overflow-hidden">
+          ॐ
+        </div>
+
+        {/* Ambient Pitambara Gold & Agni Glow Effects */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[rgba(245,184,0,0.18)] rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[rgba(139,26,33,0.35)] rounded-full blur-[110px] pointer-events-none" />
+
+        <div className="container relative z-10 text-center max-w-5xl mx-auto px-4">
+          
+          {/* VIP Badge */}
+          <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#F5B800] via-[#FFD700] to-[#E5A100] text-[#2B0306] shadow-[0_4px_25px_rgba(245,184,0,0.45)] border-2 border-[#FFE89C] mb-6 animate-pulse">
+            <Crown className="h-5 w-5 fill-[#2B0306] text-[#2B0306]" />
+            <span className="text-[13px] font-black uppercase tracking-[0.18em]">👑 Royal VIP Anushthan (विशिष्ट सिद्ध महापूजा)</span>
+          </div>
+
+          {/* Heading */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white leading-[1.15] mb-5 tracking-tight">
+            Exclusive VIP Anushthans &{' '}
+            <span className="bg-gradient-to-r from-[#FFE89C] via-[#F5B800] to-[#FFD700] bg-clip-text text-transparent drop-shadow-md">
+              Personalized Yagyas
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base sm:text-lg text-[#FFF3D6]/90 max-w-3xl mx-auto leading-relaxed font-medium">
+            27+ वर्षों के अनुभवी सिद्ध वेदाचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित ब्राह्मण दल एवं लाइव HD वीडियो स्ट्रीमिंग के साथ।
+          </p>
+
+          {/* Trust Chips */}
+          <div className="flex flex-wrap gap-3 justify-center mt-9 max-w-4xl mx-auto">
+            {[
+              { icon: <UserCheck className="h-4 w-4 text-[#F5B800]" />, label: 'Dedicated 5 Veda Acharyas' },
+              { icon: <Flame className="h-4 w-4 text-[#F5B800]" />, label: 'Personalized 1.25L Mantra Jaap' },
+              { icon: <Video className="h-4 w-4 text-[#F5B800]" />, label: 'Private Live WhatsApp Video' },
+              { icon: <Award className="h-4 w-4 text-[#F5B800]" />, label: 'Special Prasad Box Home Delivery' }
+            ].map((t) => (
+              <div 
+                key={t.label} 
+                className="inline-flex items-center gap-2.5 px-4.5 py-2 bg-black/40 backdrop-blur-md rounded-full border border-[#F5B800]/40 text-xs font-bold text-[#FFF3D6] shadow-lg"
               >
-                <span>{pkg.title || pkg.name || `VIP Package ${idx + 1}`}</span>
-              </button>
+                {t.icon}
+                <span>{t.label}</span>
+              </div>
             ))}
           </div>
 
         </div>
-
-        {/* ============================================================
-            SECTION 2: "WHAT MAKES THIS SPECIAL" (विशेषताएँ)
-            ============================================================ */}
-        <div className="space-y-6 pt-4">
-          <div className="text-center space-y-1">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">WHY THIS RITUAL IS DIFFERENT</span>
-            <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-white">What Makes This Special?</h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-slate-100 space-y-3">
-              <div className="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                1
-              </div>
-              <h4 className="font-extrabold text-lg text-amber-200">Personalized 1-on-1 Sankalp</h4>
-              <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                Your full name, gotra, family members, and specific personal intention chanted with complete Vedic mantras by the Lead Acharya.
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-slate-100 space-y-3">
-              <div className="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                2
-              </div>
-              <h4 className="font-extrabold text-lg text-amber-200">Extended Ahuti & Yagya Vidhi</h4>
-              <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                Special herbs, energized samagri, and 108/1008 mantra ahutis offered solely for your intention in an exclusive mandap.
-              </p>
-            </Card>
-          </div>
-        </div>
-
-        {/* ============================================================
-            SECTION 3: "YOUR PERSONAL PUJA PROCESS" (पूजा प्रक्रिया)
-            ============================================================ */}
-        <div className="space-y-6 pt-6">
-          <div className="text-center space-y-1">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">5 SIMPLE STEPS</span>
-            <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-white">Your Personal Puja Process</h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">1</div>
-              <h5 className="font-bold text-sm text-amber-200">Select Slot</h5>
-              <p className="text-[11px] text-slate-400">Choose date & time slot or use default auspicious Muhurat.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">2</div>
-              <h5 className="font-bold text-sm text-amber-200">Submit Gotra</h5>
-              <p className="text-[11px] text-slate-400">Provide name, gotra and specific Sankalp wishes.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">3</div>
-              <h5 className="font-bold text-sm text-amber-200">Admin Assigns</h5>
-              <p className="text-[11px] text-slate-400">Admin allocates certified Veda Acharya for your puja.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">4</div>
-              <h5 className="font-bold text-sm text-amber-200">Watch Live</h5>
-              <p className="text-[11px] text-slate-400">Join live stream or get HD WhatsApp video proof.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="h-8 w-8 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center mx-auto">5</div>
-              <h5 className="font-bold text-sm text-amber-200">Prasad Courier</h5>
-              <p className="text-[11px] text-slate-400">Blessed prasad & yantra shipped to your address.</p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ============================================================
-            SECTION 4: "WHAT YOU WILL RECEIVE" (आप क्या प्राप्त करेंगे)
-            ============================================================ */}
-        <div className="space-y-6 pt-6">
-          <div className="text-center space-y-1">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">SACRED DELIVERABLES</span>
-            <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-white">What You Will Receive</h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="text-2xl">🎥</div>
-              <h5 className="font-bold text-base text-amber-200">Live Video & HD Proof</h5>
-              <p className="text-xs text-slate-300">Complete video recording with explicit Gotra Sankalp sent on WhatsApp.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="text-2xl">📦</div>
-              <h5 className="font-bold text-base text-amber-200">Blessed Temple Prasad</h5>
-              <p className="text-xs text-slate-300">Dry fruits, holy bhasma, kumkum & energized Raksha Sutra shipped pan-India.</p>
-            </div>
-
-            <div className="p-5 bg-[#2A0C14] border border-amber-500/30 rounded-2xl text-center space-y-2">
-              <div className="text-2xl">🕉️</div>
-              <h5 className="font-bold text-base text-amber-200">Energized Yantra</h5>
-              <p className="text-xs text-slate-300">Sanctified Yantra energized during the Homa for your home altar.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ============================================================
-            SECTION 5: "TRUE EXCLUSIVITY" (पूर्ण गोपनीयता व विशिष्टता)
-            ============================================================ */}
-        <div className="p-6 md:p-8 bg-[#2A0C14] border border-amber-500/40 rounded-3xl space-y-4 text-center max-w-3xl mx-auto shadow-xl">
-          <Badge className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs px-3 py-1 font-bold">
-            True Exclusivity & Trust
-          </Badge>
-
-          <ul className="text-xs md:text-sm text-slate-300 space-y-2 font-medium text-left max-w-md mx-auto">
-            <li className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-amber-400 shrink-0" /> Limited 2-3 VIP Bookings Per Day
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-amber-400 shrink-0" /> Dedicated Priest & Mandap Allocation by Admin
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-amber-400 shrink-0" /> 100% Personalized & Confidential Ritual
-            </li>
-          </ul>
-        </div>
-
       </section>
 
       {/* ── VIP PUJA CARDS GRID & FILTER (Luxe Dark Gold Glassmorphism Theme) */}
@@ -436,48 +291,6 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 💬 Talk to Lead Acharya on WhatsApp →
               </a>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="font-bold text-xs text-amber-200">गोत्र (Gotra) <span className="text-slate-400 font-normal">(Optional)</span></Label>
-                <Input
-                  type="text"
-                  placeholder="e.g. कश्यप / गर्ग"
-                  value={gotra}
-                  onChange={(e) => setGotra(e.target.value)}
-                  className="rounded-xl border-amber-500/40 bg-black/40 text-white text-xs"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="font-bold text-xs text-amber-200">विशेष मनोकामना (Sankalp Wish)</Label>
-                <Input
-                  type="text"
-                  placeholder="e.g. कोर्ट केस में विजय एवं व्यापार वृद्धि"
-                  value={sankalpWish}
-                  onChange={(e) => setSankalpWish(e.target.value)}
-                  className="rounded-xl border-amber-500/40 bg-black/40 text-white text-xs"
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-3">
-              <Button type="submit" size="lg" className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black rounded-xl text-sm shadow-xl py-6">
-                Confirm VIP Booking via WhatsApp &rarr;
-              </Button>
-            </div>
-
-          </form>
-        </DialogContent>
-      </Dialog>
-
-
-      {/* Bottom Sticky Action Bar (Like DevPunya) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#150407]/95 backdrop-blur-md border-t border-amber-500/40 py-3 px-4 shadow-2xl">
-        <div className="container mx-auto max-w-5xl flex items-center justify-between gap-4">
-          <div className="hidden sm:block text-left">
-            <span className="text-xs text-amber-300 font-extrabold block truncate max-w-md">{currentPackage.name}</span>
-            <span className="text-xs text-slate-300 font-medium">📍 {currentPackage.location}</span>
           </div>
 
         </div>

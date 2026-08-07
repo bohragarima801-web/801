@@ -157,8 +157,9 @@ export default async function HomePage() {
 
   const dbVideos = [...allMediaVideos, ...galleryVideos].slice(0, 6)
 
-  // Pujas to render: strictly DB pujas created via Admin Panel
+  // Pujas to render: strictly normal DB pujas (non-VIP) created via Admin Panel
   const activeDbPujas = dbPujas.filter((p: any) => {
+    if (p.isVip) return false
     if (p.isEvergreen) return true
     if (p.pujaDate) {
       const pDate = new Date(p.pujaDate)
@@ -251,72 +252,9 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto mb-10">
-            <Link href="/pujas" className="btn-primary-sacred text-sm md:text-base px-8 py-4 shadow-lg hover:shadow-xl">
-              Book a Divine Puja (पूजा बुक करें) <ArrowRight className="h-4 w-4" />
-            </Link>
-            <a
-              href={`https://wa.me/${(siteData.contact?.whatsapp || '919587171984').replace(/[^0-9]/g, '')}?text=Namaste!%20I%20want%20to%20know%20more%20about%20DivyaYagyam%20Puja%20Services.`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white border-2 border-[#D49B00] text-[#8B1A21] font-bold text-sm md:text-base shadow-sm hover:bg-[#FFF8EA] hover:border-[#8B1A21] transition-all"
-            >
-              <MessageCircle className="h-4 w-4 text-emerald-600" /> Chat on WhatsApp
-            </a>
-          </div>
-
-
-              {/* Stats row */}
-              <div className="pt-6 border-t border-[#F5E2B8] grid grid-cols-3 gap-6 text-center lg:text-left max-w-sm">
-                {[
-                  { val: '10,000+', label: 'Devotee Bookings' },
-                  { val: '100+', label: 'Verified Temples' },
-                  { val: '24/7', label: 'Seva Support' },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="text-xl md:text-2xl font-black text-[#8B1A21]">{s.val}</p>
-                    <p className="text-[11px] text-[#6A4D3B] font-bold mt-0.5">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — Puja Slider / Image */}
-            <div className="lg:col-span-5 w-full">
-              {heroSlides.length > 0 ? (
-                <div className="w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-[#F2C94C] ring-1 ring-amber-200">
-                  <HeroPujaSlider slides={heroSlides} />
-                </div>
-              ) : (
-                <div className="relative rounded-3xl overflow-hidden shadow-xl border-2 border-[#F2C94C] bg-white p-5 space-y-4">
-                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md">
-                    <Image
-                      src="https://images.unsplash.com/photo-1609345635867-03f565b9dfd1?auto=format&fit=crop&w=800&q=80"
-                      alt="Kashi Vishwanath Temple Puja"
-                      fill
-                      priority
-                      className="object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(42,21,8,0.85)] via-[rgba(42,21,8,0.25)] to-transparent flex flex-col justify-end p-4 text-left">
-                      <span className="text-[10px] font-bold text-[#F2C94C] uppercase tracking-widest">🌟 Featured Sacred Puja</span>
-                      <h3 className="text-base font-heading font-bold text-white leading-tight mt-1">Kashi Vishwanath Mahadev Rudrabhishekam</h3>
-                      <p className="text-xs text-[#FFF3D6] mt-0.5">Live Video Sankalp & Temple Prasad</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between bg-[#FFF9EE] border border-[#F5E2B8] p-4 rounded-xl">
-                    <div>
-                      <p className="text-[10px] text-[#6A4D3B] font-bold">Starting Price</p>
-                      <p className="text-lg font-black text-[#8B1A21]">₹1,100 <span className="text-xs font-normal text-[#6A4D3B]">(All inclusive)</span></p>
-                    </div>
-                    <Link href="/pujas" className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#D49B00] text-white text-xs font-extrabold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
-                      Book Now →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
+          {/* Full Width Sri Mandir Auto-Sliding Banner Slider */}
+          <div className="w-full max-w-6xl mx-auto">
+            <HeroPujaSlider slides={heroSlides} />
           </div>
         </div>
       </section>
