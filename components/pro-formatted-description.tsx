@@ -77,11 +77,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
   })
 
   return (
-    <div className={cn("space-y-4 font-sans text-[#d1d5db]", className)}>
+    <div className={cn("space-y-4 font-sans text-[#f3e5ab]", className)}>
       {blocks.map((block, idx) => {
         if (block.type === 'header') {
           return (
-            <div key={idx} className="pt-3 pb-1 border-b border-[#d4af37]/30">
+            <div key={idx} className="pt-3 pb-1 border-b border-[#d4af37]/35">
               <h3 className="text-lg font-bold text-[#fbbf24] font-heading flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[#fbbf24] shrink-0" />
                 {block.text}
@@ -92,11 +92,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'keyval') {
           return (
-            <div key={idx} className="bg-[#1f293d] p-4 rounded-xl border border-[#d4af37]/25 space-y-1">
+            <div key={idx} className="bg-[#2E0A06] p-4 rounded-xl border border-[#d4af37]/30 space-y-1">
               <span className="font-bold text-[#f6d860] text-sm block uppercase tracking-wider">
                 ✨ {block.title}
               </span>
-              <p className="text-[#e5e7eb] text-sm sm:text-base leading-relaxed">
+              <p className="text-white text-sm sm:text-base leading-relaxed font-medium">
                 {block.text}
               </p>
             </div>
@@ -105,8 +105,8 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'bullet') {
           return (
-            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#1f293d] border border-[#d4af37]/20 hover:border-[#d4af37]/50 transition-colors">
-              <div className="h-6 w-6 rounded-full bg-[#d4af37]/20 text-[#fbbf24] border border-[#d4af37]/40 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs">
+            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#2E0A06] border border-[#d4af37]/25 hover:border-[#d4af37]/60 transition-colors">
+              <div className="h-6 w-6 rounded-full bg-[#d4af37]/20 text-[#fbbf24] border border-[#d4af37]/50 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs">
                 ॐ
               </div>
               <p className="text-white text-sm sm:text-base leading-relaxed font-medium">
