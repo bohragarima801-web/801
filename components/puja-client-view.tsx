@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { 
   MapPin, Calendar, CheckCircle2, Video, Gift, Sparkles, ShieldCheck, 
-  Star, User, HandHeart, Clock, ThumbsUp, ArrowRight, ArrowDown, Play, PhoneCall, Award,
+  Star, User, HandHeart, Clock, ThumbsUp, ArrowRight, ArrowDown, Play, PhoneCall, Award, Flame,
   ChevronLeft, ChevronRight 
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
