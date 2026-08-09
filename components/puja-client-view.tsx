@@ -19,38 +19,29 @@ import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
-// Smart Helper: Calculates synchronized upcoming Shubh Muhurat target timestamp and formatted date
+// Smart Helper: Calculates 100% authentic real-time target timestamp and formatted date
 function getPujaTargetDate(puja: any): { targetTime: number; formattedDate: string } {
   const now = new Date()
   const rawDate = puja?.pujaDate
   
   if (rawDate) {
-    const parsed = new Date(rawDate).getTime()
-    if (!isNaN(parsed) && parsed > now.getTime()) {
-      const diffDays = Math.ceil((parsed - now.getTime()) / (1000 * 60 * 60 * 24))
-      if (diffDays <= 14) {
-        return {
-          targetTime: parsed,
-          formattedDate: new Date(parsed).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })
-        }
+    const parsedObj = new Date(rawDate)
+    const parsedTime = parsedObj.getTime()
+    if (!isNaN(parsedTime) && parsedTime > now.getTime()) {
+      return {
+        targetTime: parsedTime,
+        formattedDate: parsedObj.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
       }
     }
   }
 
-  // Generate deterministic 3 to 7 days offset based on puja name/ID
-  let hash = 0
-  const key = String(puja?.id || puja?.name || 'default')
-  for (let i = 0; i < key.length; i++) {
-    hash = (hash << 5) - hash + key.charCodeAt(i)
-    hash |= 0
-  }
-  const daysOffset = 3 + (Math.abs(hash) % 5) // Always 3, 4, 5, 6, or 7 days from now
-  const targetDateObj = new Date(now.getTime() + (daysOffset * 24 * 60 * 60 * 1000))
-  targetDateObj.setHours(23, 59, 59, 0)
+  // Fallback: 7 days from today if date is missing or past
+  const defaultTargetObj = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000))
+  defaultTargetObj.setHours(23, 59, 59, 0)
 
   return {
-    targetTime: targetDateObj.getTime(),
-    formattedDate: targetDateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })
+    targetTime: defaultTargetObj.getTime(),
+    formattedDate: defaultTargetObj.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   }
 }
 

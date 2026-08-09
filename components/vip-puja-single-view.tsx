@@ -57,16 +57,14 @@ function VipPujaCountdownTimer({ puja }: { puja: any }) {
   })
 
   useEffect(() => {
-    let hash = 0
-    const key = String(puja?.id || puja?.name || 'default')
-    for (let i = 0; i < key.length; i++) {
-      hash = (hash << 5) - hash + key.charCodeAt(i)
-      hash |= 0
+    const rawDate = puja?.pujaDate
+    let targetTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
+    if (rawDate) {
+      const parsed = new Date(rawDate).getTime()
+      if (!isNaN(parsed) && parsed > new Date().getTime()) {
+        targetTime = parsed
+      }
     }
-    const daysOffset = 3 + (Math.abs(hash) % 5)
-    const targetDateObj = new Date(new Date().getTime() + (daysOffset * 24 * 60 * 60 * 1000))
-    targetDateObj.setHours(23, 59, 59, 0)
-    const targetTime = targetDateObj.getTime()
 
     const updateTimer = () => {
       const now = new Date().getTime()
