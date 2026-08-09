@@ -135,7 +135,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
             }`}
           >
             <Link href={targetUrl} className="block w-full h-full relative group/link">
-              {/* Background Banner Image */}
+              {/* Pure Banner Image Display (No Text Overlay) */}
               <Image
                 src={slide.image || '/katyayani_yagya_hero.webp'}
                 alt={slide.title || 'Sacred Puja Banner'}
@@ -146,45 +146,8 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
                 className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover/link:scale-105"
               />
 
-              {/* ── 1. DARK SEMI-TRANSPARENT MULTI-LAYER GRADIENT OVERLAY ── */}
-              {/* Dark Gradient Bottom-to-Top (Mobile & Desktop) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30 pointer-events-none z-10" />
-              {/* Dark Gradient Left-to-Right Accent (Desktop) */}
-              <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent pointer-events-none z-10" />
-
-              {/* ── 2. HIGH-CONTRAST ALWAYS-VISIBLE TEXT OVERLAY CONTAINER ── */}
-              {slide.title && (
-                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-5 md:p-6 z-20 flex flex-col justify-end">
-                  <div className="max-w-2xl bg-black/65 backdrop-blur-md border border-white/20 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 text-white shadow-2xl space-y-2 text-left">
-                    
-                    {/* Subtitle / Location Badge */}
-                    {slide.subtitle && (
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF7A00]/25 border border-[#FF7A00]/50 text-[#FF7A00] text-[10px] sm:text-xs font-extrabold uppercase tracking-wider">
-                        <MapPin className="h-3 w-3 text-[#FF7A00] shrink-0" />
-                        <span className="line-clamp-1">{slide.subtitle}</span>
-                      </div>
-                    )}
-
-                    {/* Main Title Heading (Explicit High Contrast White Text) */}
-                    <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-heading font-extrabold text-white leading-snug drop-shadow-md line-clamp-2">
-                      {slide.title}
-                    </h3>
-
-                    {/* CTA Button Badge */}
-                    <div className="pt-1 flex items-center justify-between gap-3">
-                      <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg group-hover/link:brightness-110 transition-all">
-                        <span>{buttonLabel}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </span>
-
-                      <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-amber-300 font-bold">
-                        <Sparkles className="h-3 w-3" /> Live Sankalp Seva
-                      </span>
-                    </div>
-
-                  </div>
-                </div>
-              )}
+              {/* Subtle Bottom Vignette Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none z-10" />
             </Link>
           </div>
         )
