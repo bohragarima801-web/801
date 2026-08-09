@@ -18,6 +18,50 @@ import { FAQAccordion } from '@/components/ui/FAQAccordion'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
+// Real-time Date-based Urgency Countdown Timer Component
+function PujaCountdownTimer({ targetDate }: { targetDate?: string | Date }) {
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  })
+
+  useEffect(() => {
+    // Target timestamp from puja.pujaDate or 7 days from now
+    const target = targetDate ? new Date(targetDate).getTime() : new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
+
+    const updateTimer = () => {
+      const now = new Date().getTime()
+      const diff = Math.max(0, target - now)
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+      setTimeLeft({ days, hours, minutes, seconds })
+    }
+
+    updateTimer()
+    const interval = setInterval(updateTimer, 1000)
+    return () => clearInterval(interval)
+  }, [targetDate])
+
+  return (
+    <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-2 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-100 shadow-md">
+      <Clock className="w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
+      <span className="text-[11px] sm:text-xs font-bold text-amber-200 uppercase tracking-wider">Puja Starts In:</span>
+      <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-black text-amber-300">
+        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.days).padStart(2, '0')}d</span>:
+        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.hours).padStart(2, '0')}h</span>:
+        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.minutes).padStart(2, '0')}m</span>:
+        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.seconds).padStart(2, '0')}s</span>
+      </div>
+    </div>
+  )
+}
+
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
   const basePrice = Number(puja?.price || 951)
@@ -203,63 +247,87 @@ export function PujaClientView({ puja }: { puja: any }) {
         <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           
           {/* Main Title & Details */}
-          <div className="flex-1 space-y-5 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 border border-amber-400/40 bg-amber-500/20 backdrop-blur-xl px-4 py-1.5 rounded-full shadow-[0_4px_25px_rgba(245,158,11,0.25)]">
-              <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-              <span className="text-amber-200 font-bold text-xs sm:text-sm tracking-widest uppercase">
-                {puja.category?.name || 'दिव्य अनुष्ठान एवं महायज्ञ'}
+          <div className="flex-1 space-y-4 text-center lg:text-left">
+            
+            {/* Countdown Timer & Special Event Badge */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-black uppercase tracking-widest shadow-md">
+                ✦ {puja.category?.name || 'विशेष सनातन महायज्ञ'}
               </span>
+
+              {/* Real-time Ticking Countdown Timer */}
+              <PujaCountdownTimer targetDate={puja.pujaDate} />
             </div>
             
             <div className="space-y-2">
-              <p className="text-amber-300/90 text-sm sm:text-base md:text-lg font-bold font-devanagari tracking-wide italic">
-                ✨ सर्व कार्य सिद्धि हेतु
-              </p>
               <h1 className={cn(
-                "font-extrabold text-amber-100 tracking-tight leading-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] font-devanagari py-1",
+                "font-extrabold text-amber-100 tracking-tight leading-snug drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] font-heading py-1",
                 puja.name.length > 50 ? "text-2xl sm:text-3xl lg:text-4xl" : "text-3xl sm:text-4xl lg:text-5xl"
               )}>
                 {puja.name}
               </h1>
+
+              <p className="text-amber-200/90 text-xs sm:text-sm font-medium leading-relaxed max-w-2xl">
+                {puja.shortDescription || 'Removes Obstacles in Career & Success | Provides Financial Stability | Restore Marital Harmony | Resolves Karmic Blockage'}
+              </p>
             </div>
 
-            {/* Location & Date Details */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-amber-100/90 font-medium text-xs sm:text-sm pt-1">
-              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/30 shadow-inner">
+            {/* Location & Date Details Card Container */}
+            <div className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-amber-400/30 space-y-2.5 text-xs sm:text-sm">
+              <div className="flex items-center gap-2 text-amber-100 font-medium">
                 <MapPin className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>{puja.location || 'विशेष सिद्ध शक्तिपीठ / उज्जैन धाम'}</span>
+                <span className="font-semibold">{puja.location || 'Trimbakeshwar Jyotirlinga Kshetra, Nashik / Ujjain Dham'}</span>
               </div>
-              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-xl border border-amber-400/30 shadow-inner">
+              <div className="flex items-center gap-2 text-amber-200 font-bold border-t border-amber-400/15 pt-2">
                 <Calendar className="h-4 w-4 text-amber-400 shrink-0" />
                 <span>
                   {puja.pujaDate 
-                    ? new Date(puja.pujaDate).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }) 
-                    : (puja.isEvergreen ? 'नियमित शुभ मुहूर्त' : 'आगामी शुभ मुहूर्त - बुकिंग चालू')}
+                    ? new Date(puja.pujaDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }) 
+                    : '17 August 2026, Monday'}
                 </span>
               </div>
             </div>
 
-            {/* Key Assurance Feature Chips */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-3 text-center">
-              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
-                  <Video className="w-5 h-5" />
-                </div>
-                <p className="text-[11px] sm:text-xs font-bold text-amber-100">लाइव वीडियो रिकॉर्डिंग</p>
+            {/* 3 DevPunya Verified Trust Badges */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center text-xs font-bold text-amber-100 pt-1">
+              <div className="p-2.5 rounded-xl bg-black/30 border border-amber-400/25 flex items-center justify-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Verified Pandits</span>
               </div>
-              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
-                  <Gift className="w-5 h-5" />
-                </div>
-                <p className="text-[11px] sm:text-xs font-bold text-amber-100">घर पर शुद्ध प्रसाद</p>
+              <div className="p-2.5 rounded-xl bg-black/30 border border-amber-400/25 flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-amber-300 shrink-0" />
+                <span>Name - Gotra Sankalp</span>
               </div>
-              <div className="bg-black/30 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 shadow-lg group">
-                <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center mx-auto mb-2 text-amber-300 group-hover:scale-110 transition-transform border border-amber-400/30">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <p className="text-[11px] sm:text-xs font-bold text-amber-100">नाम व गोत्र संकल्प</p>
+              <div className="p-2.5 rounded-xl bg-black/30 border border-amber-400/25 flex items-center justify-center gap-1.5">
+                <Video className="w-4 h-4 text-amber-300 shrink-0" />
+                <span>HD Video Proof</span>
               </div>
             </div>
+
+            {/* Devotee Stack & Direct CTA Button */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex -space-x-2 overflow-hidden shrink-0">
+                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-amber-400/80 bg-amber-800 text-amber-100 font-bold text-xs flex items-center justify-center shadow-md">R</div>
+                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-amber-400/80 bg-red-900 text-amber-100 font-bold text-xs flex items-center justify-center shadow-md">S</div>
+                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-amber-400/80 bg-emerald-900 text-amber-100 font-bold text-xs flex items-center justify-center shadow-md">V</div>
+                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-amber-400/80 bg-purple-900 text-amber-100 font-bold text-xs flex items-center justify-center shadow-md">A</div>
+                </div>
+                <div className="text-xs text-amber-100/90 font-medium text-left">
+                  <strong className="text-amber-300 font-black text-sm">387+ devotees</strong>
+                  <span className="block text-[11px] text-amber-200/80">have booked puja with DivyaYagyam</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleScrollTo('packages')}
+                className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 hover:from-emerald-400 hover:to-green-500 text-white font-extrabold text-sm sm:text-base py-3.5 px-8 rounded-2xl shadow-[0_8px_25px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer border-b-4 border-emerald-700"
+              >
+                <span>Select puja package</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
           </div>
 
           {/* Hero Media / Banner Showcase Card */}
@@ -452,7 +520,56 @@ export function PujaClientView({ puja }: { puja: any }) {
       </div>
 
       {/* Main Content Container */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-12 space-y-16 lg:space-y-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12 space-y-12 lg:space-y-16">
+
+        {/* DevPunya Style: 4-Step "How This Works" Visual Horizontal Flow Bar */}
+        <div id="process" className="p-6 md:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-[#F3E8DE] dark:border-gray-800 shadow-md space-y-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-[#F3E8DE] dark:border-gray-800 pb-4">
+            <h3 className="text-xl md:text-2xl font-heading font-extrabold text-[#111827] dark:text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#FF7A00]" />
+              <span>How this works (अनुष्ठान प्रक्रिया)</span>
+            </h3>
+            <span className="text-xs text-[#6B7280] font-semibold">4 सरल चरणों में वैदिक अनुष्ठान</span>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            {/* Step 1 */}
+            <div className="p-4 rounded-2xl bg-[#FFFBF7] dark:bg-slate-800/60 border border-[#F3E8DE] dark:border-gray-700 space-y-2 group hover:border-[#FF7A00] transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-orange-100 dark:bg-amber-900/40 text-[#FF7A00] flex items-center justify-center mx-auto text-2xl font-bold shadow-xs group-hover:scale-110 transition-transform">
+                📋
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#111827] dark:text-white">1. Members & Gotra Details</div>
+              <p className="text-[11px] text-[#4B5563] dark:text-gray-400 font-medium">नाम व गोत्र दर्ज करें</p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-4 rounded-2xl bg-[#FFFBF7] dark:bg-slate-800/60 border border-[#F3E8DE] dark:border-gray-700 space-y-2 group hover:border-[#FF7A00] transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-orange-100 dark:bg-amber-900/40 text-[#FF7A00] flex items-center justify-center mx-auto text-2xl font-bold shadow-xs group-hover:scale-110 transition-transform">
+                💳
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#111827] dark:text-white">2. Confirm Puja Booking</div>
+              <p className="text-[11px] text-[#4B5563] dark:text-gray-400 font-medium">सुरक्षित दक्षिणा भुगतान करें</p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-4 rounded-2xl bg-[#FFFBF7] dark:bg-slate-800/60 border border-[#F3E8DE] dark:border-gray-700 space-y-2 group hover:border-[#FF7A00] transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-orange-100 dark:bg-amber-900/40 text-[#FF7A00] flex items-center justify-center mx-auto text-2xl font-bold shadow-xs group-hover:scale-110 transition-transform">
+                🔔
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#111827] dark:text-white">3. Mantra & Puja Update</div>
+              <p className="text-[11px] text-[#4B5563] dark:text-gray-400 font-medium">व्हाट्सएप लाइव अपडेट प्राप्त करें</p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="p-4 rounded-2xl bg-[#FFFBF7] dark:bg-slate-800/60 border border-[#F3E8DE] dark:border-gray-700 space-y-2 group hover:border-[#FF7A00] transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-orange-100 dark:bg-amber-900/40 text-[#FF7A00] flex items-center justify-center mx-auto text-2xl font-bold shadow-xs group-hover:scale-110 transition-transform">
+                📹
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#111827] dark:text-white">4. Puja Video & Prasad</div>
+              <p className="text-[11px] text-[#4B5563] dark:text-gray-400 font-medium">HD वीडियो एवं शुद्ध प्रसाद डिलीवरी</p>
+            </div>
+          </div>
+        </div>
         
         {/* Admin Decided: Pandit Ji Choice Feature Banner */}
         {showPanditChoice && (

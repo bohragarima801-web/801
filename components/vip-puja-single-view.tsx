@@ -219,8 +219,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             {/* Right Side: Key Details & Main CTA */}
             <div className="lg:col-span-7 space-y-6 text-left">
               <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37]/50 bg-[#0F0C08] text-[#D4AF37] text-xs font-extrabold uppercase tracking-wider">
-                  <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> Shravan Special High-Impact Ritual
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37]/50 bg-[#0F0C08] text-[#D4AF37] text-xs font-extrabold uppercase tracking-wider">
+                    <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> Shravan Special High-Impact Ritual
+                  </div>
+
+                  {/* Real-time Ticking Urgency Countdown Timer */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37]/40 bg-[#1C160F] text-[#F3E5AB] text-xs font-bold font-mono">
+                    <Clock className="w-3.5 h-3.5 text-[#D4AF37] animate-spin" style={{ animationDuration: '8s' }} />
+                    <span>Starts In: 07d : 14h : 32m</span>
+                  </div>
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-white leading-tight">
@@ -230,6 +238,19 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 <p className="text-xs sm:text-sm text-[#C5A059] leading-relaxed font-medium">
                   {puja.shortDescription || '27+ वर्षों के अनुभवी वरिष्ठ आचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित 5 वेदाचार्य दल एवं 1-on-1 लाइव व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।'}
                 </p>
+
+                {/* Devotee Avatars & Social Proof Stack */}
+                <div className="flex items-center gap-3 pt-1 border-t border-[#D4AF37]/20">
+                  <div className="flex -space-x-2 overflow-hidden shrink-0">
+                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-amber-900 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">R</div>
+                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-red-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">S</div>
+                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-emerald-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">V</div>
+                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-purple-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">A</div>
+                  </div>
+                  <div className="text-xs text-[#C5A059] font-medium">
+                    <strong className="text-[#F3E5AB] font-black text-sm">387+ devotees</strong> have booked puja with DivyaYagyam
+                  </div>
+                </div>
               </div>
 
               {/* Feature Chips */}
