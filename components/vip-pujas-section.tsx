@@ -247,18 +247,18 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                     </div>
                   </div>
 
-                  {/* Pricing & CTA */}
-                  <div className="flex items-center justify-between pt-1">
-                    <div>
+                  {/* Pricing & CTA Container (Responsive Flex Layout) */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#D4AF37]/20 w-full">
+                    <div className="min-w-0">
                       <span className="text-[10px] text-[#C5A059] block uppercase font-bold tracking-wider">Dakshina</span>
-                      <span className="text-2xl font-heading font-black text-[#F3E5AB]">
+                      <span className="text-xl sm:text-2xl font-heading font-black text-[#F3E5AB] tracking-tight block">
                         ₹{p.price.toLocaleString('en-IN')}
                       </span>
                     </div>
 
                     <Link
                       href={`/pujas/${p.slug}`}
-                      className="vip-cta-btn text-xs py-2.5 px-5"
+                      className="vip-cta-btn text-xs py-2.5 px-4 sm:px-5 shrink-0"
                     >
                       Book VIP Puja <ArrowRight className="w-4 h-4" />
                     </Link>

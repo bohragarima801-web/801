@@ -247,21 +247,21 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 ))}
               </div>
 
-              {/* Price & Main CTA Button */}
-              <div className="p-6 rounded-2xl bg-[#0F0C08] border border-[#D4AF37]/50 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-                <div>
-                  <span className="text-xs text-[#C5A059] block uppercase font-bold tracking-wider">VIP Dakshina Amount</span>
-                  <div className="text-3xl md:text-4xl font-heading font-black vip-gold-gradient-text">
+              {/* Price & Main CTA Button Container (No Text Overflow or Clipping) */}
+              <div className="w-full max-w-2xl p-4 sm:p-6 rounded-2xl bg-[#0F0C08] border border-[#D4AF37]/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl overflow-hidden">
+                <div className="min-w-0 flex-1 space-y-1">
+                  <span className="text-[11px] sm:text-xs text-[#C5A059] block uppercase font-bold tracking-wider">VIP Dakshina Amount</span>
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-heading font-black vip-gold-gradient-text break-words tracking-tight">
                     ₹{displayPrice.toLocaleString('en-IN')}
                   </div>
-                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-                    <CheckCircle2 className="h-3 w-3" /> All-Inclusive Samagri & Prasad Shipping
+                  <span className="text-[10px] sm:text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5 leading-snug">
+                    <CheckCircle2 className="h-3 w-3 shrink-0" /> All-Inclusive Samagri & Prasad Shipping
                   </span>
                 </div>
 
                 <button
                   onClick={() => setBookingDialogOpen(true)}
-                  className="vip-cta-btn w-full sm:w-auto text-sm py-4 px-8 shadow-2xl"
+                  className="vip-cta-btn w-full sm:w-auto text-xs sm:text-sm py-3.5 sm:py-4 px-6 sm:px-8 shadow-2xl shrink-0"
                 >
                   <Crown className="h-4 w-4" /> Book VIP Puja Now →
                 </button>
@@ -502,16 +502,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
       </div>
 
       {/* ── STICKY MOBILE BOTTOM BAR (Always visible on mobile view) ── */}
-      <div className="fixed bottom-0 inset-x-0 bg-[#0F0C08]/95 backdrop-blur-lg border-t border-[#D4AF37]/40 p-3.5 z-40 sm:hidden flex items-center justify-between gap-3 shadow-2xl">
-        <div>
-          <span className="text-[10px] text-[#C5A059] uppercase font-bold block">VIP Dakshina</span>
-          <span className="text-xl font-heading font-black vip-gold-gradient-text">
+      <div className="fixed bottom-0 inset-x-0 bg-[#0F0C08]/95 backdrop-blur-lg border-t border-[#D4AF37]/40 p-3.5 z-40 sm:hidden flex items-center justify-between gap-3 shadow-2xl overflow-hidden">
+        <div className="min-w-0 shrink-0">
+          <span className="text-[9px] text-[#C5A059] uppercase font-bold block">VIP Dakshina</span>
+          <span className="text-lg font-heading font-black vip-gold-gradient-text">
             ₹{displayPrice.toLocaleString('en-IN')}
           </span>
         </div>
         <button
           onClick={() => setBookingDialogOpen(true)}
-          className="vip-cta-btn text-xs py-3 px-6 shadow-xl"
+          className="vip-cta-btn text-xs py-2.5 px-4 shadow-xl shrink-0"
         >
           Book VIP Puja →
         </button>
