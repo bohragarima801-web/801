@@ -1,25 +1,54 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image';
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart-context'
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Loader2, Sparkles, Video } from 'lucide-react'
+import { Loader2, Sparkles, Video, Heart, Flame, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { getAutoSeoAlt } from '@/lib/seo-auto'
 
 function getEmbedUrl(url: string) {
-  if (!url) return '';
-  const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+  if (!url) return ''
+  const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i)
   if (ytMatch && ytMatch[1]) {
-    return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    return `https://www.youtube.com/embed/${ytMatch[1]}`
   }
-  return url;
+  return url
 }
+
+const defaultOfferings = [
+  {
+    id: 'bs-1',
+    name: 'काशी विश्वनाथ अन्नपूर्णा महाप्रसाद भोग सेवा',
+    price: 1100,
+    description: 'काशी विश्वनाथ मंदिर प्रांगण में साधु-संतों एवं भक्तों हेतु शुद्ध अन्नपूर्णा महाप्रसाद भोग अर्पण सेवा।',
+    image: '/katyayani_yagya_hero.webp'
+  },
+  {
+    id: 'bs-2',
+    name: 'गौ सेवा एवं हरा चारा अर्पण (Kamdhenu Gau Seva)',
+    price: 751,
+    description: 'पवित्र गोशाला में नंदी एवं गोमाता हेतु शुद्ध हरा चारा, गुड़ एवं गुड़-चना सेवा आपके नाम से।',
+    image: '/gau_seva.jpg'
+  },
+  {
+    id: 'bs-3',
+    name: 'गंगा आरती 108 दीप दान सेवा (Har Ki Pauri / Kashi)',
+    price: 501,
+    description: 'गंगा मैया के पावन तट पर आपके परिवार की सुख-समृद्धि एवं शांति हेतु 108 संकल्पित दीप दान।',
+    image: '/deep_daan.jpg'
+  },
+  {
+    id: 'bs-4',
+    name: 'माँ बगलामुखी वस्त्र व पुष्प शृंगार सेवा',
+    price: 2100,
+    description: 'माता बगलामुखी शक्तिपीठ पर पीताम्बरी वस्त्र, पुष्पमाला एवं विशेष शृंगार सामग्री अर्पण।',
+    image: '/bagalamukhi_kavach_yagya.webp'
+  }
+]
 
 export default function Page() {
   const router = useRouter()
@@ -32,111 +61,123 @@ export default function Page() {
       .then((r) => r.json())
       .then((j) => {
         const items = j.offerings || j.data || []
-        setOfferings(items)
+        setOfferings(items.length > 0 ? items : defaultOfferings)
       })
-      .catch(() => {})
+      .catch(() => {
+        setOfferings(defaultOfferings)
+      })
       .finally(() => setLoading(false))
   }, [])
 
   return (
-    <div className="container py-14 space-y-10">
-      <div className="text-center max-w-2xl mx-auto">
-        <Badge variant="secondary" className="mb-3">🌼 Offerings</Badge>
-        <h1 className="text-4xl md:text-5xl font-black text-om-gradient">BhaktiSeva Seva</h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Offer flowers, prasad, bhog, deep daan, or gau seva at India's most powerful, heritage temples.
-        </p>
-      </div>
+    <div className="bg-[#0c1017] text-[#f3f4f6] min-h-screen py-10 md:py-16">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-10">
+        
+        {/* ── Page Header Banner */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <Badge className="bg-[#d4af37]/20 text-[#fbbf24] border border-[#d4af37]/40 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+            🌼 Sacred Devotional Offerings
+          </Badge>
 
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <h1 className="text-3xl sm:text-5xl font-heading font-extrabold text-white tracking-tight">
+            दिव्य <span className="bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#d97706] bg-clip-text text-transparent">भक्ति सेवा एवं दान</span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-[#9ca3af] leading-relaxed font-medium">
+            भारत के प्रमुख दिव्य धामों (काशी, उज्जैन, हरिद्वार, जोधपुर) में साधु-संतों, गोमाता एवं तीर्थ यात्रियों हेतु आपके एवं आपके परिवार के नाम से पवित्र अन्नदान, दीपदान व पुष्प सेवा।
+          </p>
         </div>
-      ) : offerings.length === 0 ? (
-        <Card className="border-dashed max-w-md mx-auto">
-          <CardContent className="p-8 text-center space-y-4">
-            <Sparkles className="h-12 w-12 text-muted-foreground/60 mx-auto" />
-            <h3 className="text-lg font-semibold">No Offerings Active</h3>
-            <p className="text-sm text-muted-foreground">Check back soon for available BhaktiSeva services.</p>
-            <Button asChild size="sm">
-              <Link href="/">Back Home</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {offerings.map((offering) => (
-            <Card key={offering.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 transition-all duration-500 border border-amber-200/60 bg-gradient-to-b from-amber-50/40 via-white to-white rounded-3xl relative">
-              <div className="p-4 pb-0 flex justify-center">
-                {/* Fixed Uniform 3D Parallelogram Frame (h-48) */}
-                <div className="relative h-48 w-full max-w-[220px] bg-gradient-to-tr from-amber-100/50 via-orange-50/30 to-amber-50 rounded-2xl overflow-hidden shadow-md border border-amber-300/60 transition-transform duration-500 group-hover:scale-[1.03]"
-                     style={{
-                       clipPath: 'polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%)',
-                       transform: 'perspective(800px) rotateX(3deg) rotateY(-3deg)',
-                       boxShadow: '0 12px 24px -8px rgba(234, 88, 12, 0.2)'
-                     }}>
-                  {offering.image ? (
-                    <Image src={offering.image}
-                      alt={getAutoSeoAlt(offering.name, 'bhaktiseva')}
-                      fill sizes="220px"
-                      className="absolute inset-0 object-contain p-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
-                    />
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center text-orange-400/40">
-                      <Sparkles className="h-10 w-10" />
+
+        {/* ── Content Area */}
+        {loading ? (
+          <div className="flex justify-center py-24">
+            <Loader2 className="h-10 w-10 animate-spin text-[#fbbf24]" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-6">
+            {offerings.map((offering) => {
+              const displayPrice = Number(offering.price || 501)
+              const imgSrc = offering.image || '/katyayani_yagya_hero.webp'
+
+              return (
+                <div
+                  key={offering.id}
+                  className="bg-[#141b26] border border-[#d4af37]/20 hover:border-[#d4af37] rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_25px_rgba(212,175,55,0.18)] group"
+                >
+                  <div>
+                    {/* Clean Frame (Image fix: object-cover & h-[180px]) */}
+                    <div className="relative w-full h-[180px] rounded-xl overflow-hidden bg-[#1f293d] mb-4 border border-[#d4af37]/20 shadow-md">
+                      <Image
+                        src={imgSrc}
+                        alt={getAutoSeoAlt(offering.name, 'bhaktiseva')}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      />
+
+                      {offering.videoUrl && (
+                        <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-md z-10">
+                          <Video className="h-3 w-3" /> Live Video
+                        </span>
+                      )}
                     </div>
-                  )}
-                  {offering.videoUrl && (
-                    <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 shadow-sm px-2 py-0.5 border-none font-bold text-[9px] z-10">
-                      <Video className="h-3 w-3" /> Video
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              <CardContent className="p-5 space-y-3">
-                <div>
-                  <h3 className="font-bold text-lg text-slate-800 line-clamp-1 group-hover:text-orange-600 transition-colors">{offering.name}</h3>
-                  <div className="text-xl font-extrabold text-orange-600 mt-1">₹{Number(offering.price)}</div>
-                </div>
-                <p className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
-                  {offering.description || 'No description available for this sacred offering service.'}
-                </p>
-                {offering.isVideoEnabled && offering.videoUrl && (
-                  <div className="aspect-video w-full rounded-xl overflow-hidden mt-4 border border-slate-200 bg-black shadow-sm ring-1 ring-black/5">
-                    <iframe
-                      src={getEmbedUrl(offering.videoUrl)}
-                      className="h-full w-full"
-                      allowFullScreen
-                      title={offering.name}
-                    />
+
+                    {/* Card Title & Pricing */}
+                    <div className="space-y-1.5 mb-3">
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#fbbf24] transition-colors leading-snug line-clamp-2">
+                        {offering.name}
+                      </h3>
+                      <div className="text-xl font-heading font-black text-[#fbbf24]">
+                        ₹{displayPrice.toLocaleString('en-IN')}
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-[#9ca3af] line-clamp-3 leading-relaxed mb-4 font-medium">
+                      {offering.description || 'भारत के पावन धाम पर आपके नाम से संपन्न होने वाली पवित्र भक्ति सेवा।'}
+                    </p>
+
+                    {/* Embedded Video if present */}
+                    {offering.isVideoEnabled && offering.videoUrl && (
+                      <div className="aspect-video w-full rounded-xl overflow-hidden mb-4 border border-[#d4af37]/30 bg-black shadow-md">
+                        <iframe
+                          src={getEmbedUrl(offering.videoUrl)}
+                          className="h-full w-full"
+                          allowFullScreen
+                          title={offering.name}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-                <div className="pt-4 border-t border-slate-100 flex justify-end">
-                  <Button
-                    size="sm"
-                    className="rounded-full px-6 bg-orange-600 hover:bg-orange-700 text-white shadow-sm hover:shadow-md transition-all font-bold"
-                    onClick={() => {
-                      const itemId = `addon-bhaktiSeva-${offering.id}`
-                      addToCart({
-                        id: itemId,
-                        name: `BhaktiSeva: ${offering.name}`,
-                        price: Number(offering.price),
-                        image: offering.image || ''
-                      })
-                      toast.success(`Added ${offering.name} to cart!`)
-                      router.push('/checkout')
-                    }}
-                  >
-                    Offer Seva Now (₹{Number(offering.price)})
-                  </Button>
+
+                  {/* Action Button (Preserves routing & addToCart logic) */}
+                  <div className="pt-3 border-t border-[#d4af37]/15">
+                    <button
+                      type="button"
+                      className="w-full text-center bg-gradient-to-r from-[#f59e0b] to-[#d97706] text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-md hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2"
+                      onClick={() => {
+                        const itemId = `addon-bhaktiSeva-${offering.id}`
+                        addToCart({
+                          id: itemId,
+                          name: `BhaktiSeva: ${offering.name}`,
+                          price: displayPrice,
+                          image: imgSrc
+                        })
+                        toast.success(`Added ${offering.name} to cart!`)
+                        router.push('/checkout')
+                      }}
+                    >
+                      <span>Offer Seva Now (₹{displayPrice.toLocaleString('en-IN')})</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+              )
+            })}
+          </div>
+        )}
+
+      </div>
     </div>
   )
 }
-
-
