@@ -43,11 +43,12 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
     }
   }
 
-  const bgClass = isDarkTheme ? 'bg-[#111827] text-white border-t border-gray-800' : 'bg-[#FFFBF7] text-[#111827] border-t border-[#F3E8DE]'
-  const textBodyClass = isDarkTheme ? 'text-[#9CA3AF]' : 'text-[#4B5563]'
-  const headingClass = 'text-[#FFB000] dark:text-[#FFB000] font-heading font-extrabold text-xs uppercase tracking-[0.14em]'
-  const linkHoverClass = 'hover:text-[#FF7A00] dark:hover:text-[#FF7A00]'
-  const iconBgClass = 'bg-[#FF7A00]/15 text-[#FF7A00]'
+  // Footer styling tokens (Premium Dark Theme #0C1017 for 100% high contrast across all pages including /blog)
+  const bgClass = 'bg-[#0C1017] text-white border-t border-[#D4AF37]/30'
+  const textBodyClass = 'text-[#D1D5DB]'
+  const headingClass = 'text-[#FBBF24] font-heading font-extrabold text-xs uppercase tracking-[0.14em] drop-shadow-sm'
+  const linkHoverClass = 'hover:text-[#FBBF24]'
+  const iconBgClass = 'bg-[#1C160F] text-[#F3E5AB] border border-[#D4AF37]/40'
 
   return (
     <footer className={`relative z-10 transition-colors ${bgClass} pb-28 md:pb-12`}>
@@ -68,44 +69,44 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
         {/* ============================================================
             SECTION 1: TRUST BANNER (Top 4-Column Strip)
             ============================================================ */}
-        <div className="mb-12 p-6 rounded-2xl bg-white dark:bg-[#1E222A] border border-[#F3E8DE] dark:border-gray-800 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mb-12 p-6 rounded-2xl bg-[#141B26] border border-[#D4AF37]/30 shadow-md grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#FFF3E0] dark:bg-orange-500/10 text-[#FF7A00] flex items-center justify-center shrink-0 font-bold">
-              <ShieldCheck className="h-5 w-5" />
+            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
+              <ShieldCheck className="h-5 w-5 text-[#FBBF24]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-[#111827] dark:text-white">100% Verified Pandits</div>
-              <div className="text-[11px] text-[#4B5563] dark:text-gray-400">शास्त्रोक्त विधि व शुद्ध संकल्प</div>
+              <div className="text-xs md:text-sm font-bold text-white">100% Verified Pandits</div>
+              <div className="text-[11px] text-[#9CA3AF]">शास्त्रोक्त विधि व शुद्ध संकल्प</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#FFF3E0] dark:bg-orange-500/10 text-[#FF7A00] flex items-center justify-center shrink-0 font-bold">
-              <Video className="h-5 w-5" />
+            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
+              <Video className="h-5 w-5 text-[#FBBF24]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-[#111827] dark:text-white">Live Video Proof</div>
-              <div className="text-[11px] text-[#4B5563] dark:text-gray-400">व्हाट्सएप पर लाइव प्रमाण</div>
+              <div className="text-xs md:text-sm font-bold text-white">Live Video Proof</div>
+              <div className="text-[11px] text-[#9CA3AF]">व्हाट्सएप पर लाइव प्रमाण</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#FFF3E0] dark:bg-orange-500/10 text-[#FF7A00] flex items-center justify-center shrink-0 font-bold">
-              <PackageCheck className="h-5 w-5" />
+            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
+              <PackageCheck className="h-5 w-5 text-[#FBBF24]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-[#111827] dark:text-white">Abhimantrit Prasad</div>
-              <div className="text-[11px] text-[#4B5563] dark:text-gray-400">घर द्वार पावन डिलीवरी</div>
+              <div className="text-xs md:text-sm font-bold text-white">Abhimantrit Prasad</div>
+              <div className="text-[11px] text-[#9CA3AF]">घर द्वार पावन डिलीवरी</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#FFF3E0] dark:bg-orange-500/10 text-[#FF7A00] flex items-center justify-center shrink-0 font-bold">
-              <Star className="h-5 w-5 fill-[#FF7A00]" />
+            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
+              <Star className="h-5 w-5 fill-[#FBBF24] text-[#FBBF24]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-[#111827] dark:text-white">4.9 / 5 Rating</div>
-              <div className="text-[11px] text-[#4B5563] dark:text-gray-400">50,000+ संतुष्ट यजमान</div>
+              <div className="text-xs md:text-sm font-bold text-white">4.9 / 5 Rating</div>
+              <div className="text-[11px] text-[#9CA3AF]">50,000+ संतुष्ट यजमान</div>
             </div>
           </div>
         </div>
