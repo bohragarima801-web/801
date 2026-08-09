@@ -61,19 +61,19 @@ export function SacredAstroTools({ limit = 3 }: { limit?: number }) {
   const displayTools = limit ? toolsList.slice(0, limit) : toolsList
 
   return (
-    <section className="container mx-auto px-4 md:px-6 py-8 md:py-12 bg-[#0D0704] text-[#F5F0E6]">
+    <section className="container mx-auto px-4 md:px-6 py-8 md:py-12 bg-[#FFFBF7] text-[#111827]">
       {/* Compact Header */}
-      <div className="flex items-center justify-between gap-4 mb-6 border-b border-[#D4AF37]/20 pb-4">
+      <div className="flex items-center justify-between gap-4 mb-6 border-b border-[#F3E8DE] pb-4">
         <div className="space-y-1">
-          <div className="vip-badge inline-flex">
-            <Sparkles className="h-3 w-3 text-[#F4C430]" /> Astro & Vedic Tools
+          <div className="kundli-badge-orange inline-flex">
+            <Sparkles className="h-3 w-3 text-[#FF7A00]" /> Astro & Vedic Tools
           </div>
-          <h2 className="text-xl md:text-2xl font-vip font-extrabold text-[#F5F0E6] tracking-tight">
-            🔮 पावन वैदिक <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-bold">एवं ज्योतिष टूल्स</span>
+          <h2 className="text-xl md:text-2xl font-heading font-extrabold text-[#111827] tracking-tight">
+            🔮 पावन वैदिक <span className="text-[#FF7A00] font-bold">एवं ज्योतिष टूल्स</span>
           </h2>
         </div>
 
-        <Button variant="ghost" size="sm" className="btn-vip text-xs py-1.5 px-4" asChild>
+        <Button variant="ghost" size="sm" className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-1.5 px-4 rounded-full shadow-md hover:shadow-lg transition-all" asChild>
           <Link href="/tools" prefetch={true}>
             सभी टूल्स ({toolsList.length}) <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
@@ -86,27 +86,27 @@ export function SacredAstroTools({ limit = 3 }: { limit?: number }) {
           const IconComp = t.icon
           return (
             <Link href={t.slug} key={idx} prefetch={true} className="block group">
-              <Card className="p-3.5 border-2 border-[#D4AF37]/30 rounded-xl bg-[#180E08] text-[#F5F0E6] shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:border-[#F4C430] transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
+              <Card className="p-3.5 border border-[#F3E8DE] rounded-xl bg-white text-[#111827] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-md hover:border-[#FF7A00]/40 transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-[#D4AF37]/40 bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] shrink-0">
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-orange-100 bg-[#FFF3E0] text-[#FF7A00] shrink-0 font-bold">
                     <IconComp className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex items-center gap-1.5">
-                      <h3 className="font-vip font-bold text-xs md:text-sm text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors truncate">
+                      <h3 className="font-heading font-bold text-xs md:text-sm text-[#111827] group-hover:text-[#FF7A00] transition-colors truncate">
                         {t.title}
                       </h3>
-                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-extrabold text-[#F4C430] border-[#D4AF37]/40 bg-[#140A05] shrink-0">
+                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-extrabold text-[#FF7A00] border-orange-200 bg-orange-50 shrink-0">
                         {t.tag}
                       </Badge>
                     </div>
-                    <p className="text-[11px] text-[#C9C0B3] truncate font-medium">
+                    <p className="text-[11px] text-[#4B5563] truncate font-medium">
                       {t.desc}
                     </p>
                   </div>
                 </div>
 
-                <ChevronRight className="h-4 w-4 text-[#F4C430] group-hover:translate-x-1 transition-all shrink-0" />
+                <ChevronRight className="h-4 w-4 text-[#FF7A00] group-hover:translate-x-1 transition-all shrink-0" />
               </Card>
             </Link>
           )

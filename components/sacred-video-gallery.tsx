@@ -22,38 +22,8 @@ interface SacredVideoGalleryProps {
   videos?: VideoItem[]
 }
 
-const fallbackVideos: VideoItem[] = [
-  {
-    id: 'demo-1',
-    url: 'https://www.youtube.com/watch?v=1_S1W3KSt0A',
-    filename: 'Kashi Vishwanath Mangala Aarti & Sankalp',
-    folder: 'Live Darshan',
-    type: 'VIDEO',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'demo-2',
-    url: 'https://www.youtube.com/watch?v=77lM5cHQE20',
-    filename: 'Mahakaleshwar Bhasma Aarti Ujjain',
-    folder: 'Past Puja',
-    type: 'VIDEO',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'demo-3',
-    url: 'https://www.youtube.com/watch?v=1_S1W3KSt0A',
-    filename: 'Navgrah Homa Live Stream & Vedic Chanting',
-    folder: 'Aarti & Bhajan',
-    type: 'VIDEO',
-    createdAt: new Date().toISOString()
-  }
-]
-
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
-  // Use authentic uploaded videos from DB or curated fallback
-  const displayVideos = (videos && videos.length > 0) ? videos : fallbackVideos
-
-
+  const displayVideos = videos || []
 
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
@@ -110,17 +80,17 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   }
 
   return (
-    <section className="container py-16 md:py-24 border-t border-border/40">
+    <section className="container py-16 md:py-24 border-t border-[#F3E8DE]">
       {/* Title Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div className="space-y-3">
-          <span className="sacred-subtitle text-primary inline-flex items-center gap-1.5 font-bold">
-            <Sparkles className="h-4 w-4 text-amber-500" /> Divine Visuals & Reels
+          <span className="kundli-badge-orange inline-flex items-center gap-1.5 font-bold">
+            <Sparkles className="h-4 w-4 text-[#FF7A00]" /> Divine Visuals & Reels
           </span>
-          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-foreground tracking-tight">
-            🎥 दिव्य दर्शन <span className="sacred-gradient-text">एवं पूजा वीडियो</span>
+          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight">
+            🎥 दिव्य दर्शन <span className="text-[#FF7A00] font-bold">एवं पूजा वीडियो</span>
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl font-medium">
+          <p className="text-sm md:text-base text-[#4B5563] max-w-2xl font-medium">
             प्रसिद्ध मंदिरों के लाइव दर्शन, संपन्न हुई महापूजाओं की झलकियां, आरती एवं भक्तों के अनुभव देखें।
           </p>
         </div>
@@ -131,10 +101,10 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 border ${
                 selectedCategory === cat.id
-                  ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
-                  : 'bg-card text-muted-foreground border-border/80 hover:bg-muted/60 hover:text-foreground'
+                  ? 'bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white border-transparent shadow-sm'
+                  : 'bg-white text-[#4B5563] border-[#F3E8DE] hover:bg-orange-50 hover:text-[#FF7A00]'
               }`}
             >
               {cat.label}
@@ -144,7 +114,22 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
       </div>
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {filteredVideos.length === 0 ? (
+        <div className="text-center py-12 px-6 bg-white rounded-3xl border border-[#F3E8DE] space-y-4 max-w-2xl mx-auto shadow-sm">
+          <div className="h-14 w-14 mx-auto rounded-full bg-orange-50 text-[#FF7A00] flex items-center justify-center text-2xl">🎥</div>
+          <h3 className="text-xl md:text-2xl font-heading font-bold text-[#111827]">शीघ्र आ रहे हैं नए पावन दर्शन वीडियो</h3>
+          <p className="text-xs md:text-sm text-[#4B5563]">संस्थान के यूट्यूब एवं दिव्य दर्शन वीडियो शीघ्र यहाँ लाइव उपलब्ध कराए जाएंगे।</p>
+          <a
+            href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20get%20live%20video%20updates"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-2.5 px-5 rounded-full shadow-md"
+          >
+            💬 WhatsApp पर वीडियो अपडेट पाएं →
+          </a>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredVideos.map((video) => {
           const ytId = getYouTubeId(video.url)
           const thumb = getThumbnail(video)
@@ -153,7 +138,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
             <Card
               key={video.id}
               onClick={() => setActiveVideo(video)}
-              className="group relative cursor-pointer overflow-hidden border border-amber-200/50 dark:border-border/60 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 bg-card flex flex-col justify-between"
+              className="group relative cursor-pointer overflow-hidden border border-[#F3E8DE] rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 bg-white flex flex-col justify-between reveal"
             >
               {/* Media Aspect Ratio Container */}
               <div className="relative aspect-video w-full bg-slate-900 overflow-hidden">
@@ -180,24 +165,24 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
 
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-14 w-14 rounded-full bg-amber-500/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-amber-600 transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
+                  <div className="h-14 w-14 rounded-full bg-[#FF7A00] text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-[#FF6B00] transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
                     <Play className="h-6 w-6 fill-white ml-1" />
                   </div>
                 </div>
 
                 {/* Category Badge */}
-                <Badge className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-amber-300 font-bold border border-amber-400/30 rounded-md px-2.5 py-1 text-[10px] tracking-wide">
+                <Badge className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white font-bold border border-white/20 rounded-md px-2.5 py-1 text-[10px] tracking-wide">
                   {getCategoryDisplayLabel(video.folder)}
                 </Badge>
               </div>
 
               {/* Card Footer Info */}
               <CardContent className="p-4 space-y-2">
-                <h3 className="font-heading font-bold text-base text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                <h3 className="font-heading font-bold text-base text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-tight">
                   {video.filename || 'पावन पूजा एवं लाइव दर्शन'}
                 </h3>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 font-medium">
-                  <Flame className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                <p className="text-xs text-[#4B5563] flex items-center gap-1 font-medium">
+                  <Flame className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
                   <span>DivyaYagyam Verified Media</span>
                 </p>
               </CardContent>
@@ -205,12 +190,13 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
           )
         })}
       </div>
+      )}
 
       {/* Video Modal Player */}
       <Dialog open={!!activeVideo} onOpenChange={(open) => !open && setActiveVideo(null)}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-950 border-amber-500/30 text-white rounded-2xl">
+        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-950 border-orange-500/30 text-white rounded-2xl">
           <DialogHeader className="p-4 bg-slate-900 border-b border-slate-800 flex flex-row items-center justify-between">
-            <DialogTitle className="text-base md:text-lg font-bold text-amber-400 line-clamp-1 pr-6">
+            <DialogTitle className="text-base md:text-lg font-bold text-[#FF7A00] line-clamp-1 pr-6">
               {activeVideo?.filename || 'पावन दर्शन वीडियो'}
             </DialogTitle>
           </DialogHeader>
@@ -235,7 +221,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
 
           <div className="p-5 bg-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs text-amber-300 font-semibold uppercase tracking-wider block">
+              <span className="text-xs text-[#FF7A00] font-semibold uppercase tracking-wider block">
                 {activeVideo?.folder || 'Divine Media'}
               </span>
               <p className="text-xs text-slate-300 mt-1">
@@ -243,7 +229,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
               </p>
             </div>
 
-            <Button size="lg" className="bg-amber-600 hover:bg-amber-500 text-white font-bold px-6 shrink-0 shadow-lg" asChild>
+            <Button size="lg" className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] hover:brightness-110 text-white font-bold px-6 shrink-0 shadow-lg" asChild>
               <Link href="/pujas" onClick={() => setActiveVideo(null)}>
                 पूजा में भाग लें (Book Puja) <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

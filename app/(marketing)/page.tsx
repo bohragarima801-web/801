@@ -169,7 +169,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D0704] text-[#F5F0E6] font-sans">
+    <div className="min-h-screen bg-[#FFFBF7] text-[#111827] font-sans">
       <Script
         id="schema-organization"
         type="application/ld+json"
@@ -177,51 +177,51 @@ export default async function HomePage() {
       />
 
       {/* ============================================================
-          SECTION B: HERO SECTION — TIER 1 PREMIUM BLACK-GOLD LUXURY
+          SECTION B: HERO SECTION — KUNDLIAPI STYLE CLEAN & VIBRANT
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] py-16 md:py-28 overflow-hidden border-b-2 border-[#D4AF37]/40 text-[#F5F0E6]">
-        {/* Om watermark with slow pulse */}
-        <div aria-hidden="true" className="absolute right-0 top-0 text-[32vw] font-vip text-[rgba(212,175,55,0.05)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
-        {/* Warm golden radial glows */}
-        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-[rgba(212,175,55,0.15)] rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-32 w-[450px] h-[450px] bg-[rgba(107,15,26,0.30)] rounded-full blur-3xl pointer-events-none" />
+      <section className="relative w-full bg-gradient-to-b from-[#FFFBF7] via-[#FFF8F2] to-[#FFFBF7] py-16 md:py-24 overflow-hidden border-b border-[#F3E8DE] text-[#111827]">
+        {/* Om watermark subtle pulse */}
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[32vw] font-heading text-orange-500/5 leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
+        {/* Soft orange radial glows */}
+        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-32 w-[450px] h-[450px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-5xl">
-          {/* Label badge */}
-          <div className="vip-badge mb-6 shadow-[0_4px_25px_rgba(212,175,55,0.45)]">
-            <Sparkles className="h-4 w-4 text-[#F4C430] fill-[#F4C430]" />
-            <span className="font-vip tracking-widest">🪔 SRI SANATAN SEVA & VIP ANUSHTHAN</span>
+          {/* Category pill badge */}
+          <div className="kundli-badge-orange mb-6 shadow-sm inline-flex">
+            <Sparkles className="h-4 w-4 text-[#FF7A00] fill-[#FF7A00]" />
+            <span className="font-bold tracking-wide uppercase text-xs">☸ SRI SANATAN SEVA & ANUSHTHAN</span>
           </div>
 
-          {/* H1 Headline in Cinzel Decorative / Yatra One */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-vip font-extrabold text-[#F5F0E6] leading-[1.18] tracking-tight mb-5 drop-shadow-lg">
+          {/* H1 Headline in Outfit / Plus Jakarta Sans */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-[#111827] leading-[1.15] tracking-tight mb-5">
             Perform Authentic Vedic Pujas at{' '}
-            <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent drop-shadow-md">
+            <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
               Sacred Temples in India
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-sm sm:text-base md:text-lg text-[#C9C0B3] font-medium leading-relaxed max-w-3xl mx-auto mb-8">
+          <p className="text-sm sm:text-base md:text-lg text-[#4B5563] font-medium leading-relaxed max-w-3xl mx-auto mb-8">
             भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे ऑनलाइन वैदिक पूजा। अपने नाम व गोत्र से संकल्प करवाएं — व्हाट्सएप पर लाइव वीडियो प्रमाण एवं घर द्वार सिद्ध प्रसाद।
           </p>
 
-          {/* 4 trust features — Glassmorphism dark cards */}
+          {/* 4 trust features — Modern crisp white cards */}
           <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto mb-10">
             {[
-              { icon: <ShieldCheck className="h-4 w-4 text-[#F4C430]" />, label: 'अनुभवी वेदाचार्य' },
-              { icon: <MapPin className="h-4 w-4 text-[#F4C430]" />, label: 'Pan-India Sacred Dham' },
-              { icon: <Video className="h-4 w-4 text-[#F4C430]" />, label: 'WhatsApp Video Proof' },
-              { icon: <CheckCircle2 className="h-4 w-4 text-[#F4C430]" />, label: '100% Transparent Seva' },
+              { icon: <ShieldCheck className="h-4 w-4 text-[#FF7A00]" />, label: 'अनुभवी वेदाचार्य' },
+              { icon: <MapPin className="h-4 w-4 text-[#FF7A00]" />, label: 'Pan-India Sacred Dham' },
+              { icon: <Video className="h-4 w-4 text-[#FF7A00]" />, label: 'WhatsApp Video Proof' },
+              { icon: <CheckCircle2 className="h-4 w-4 text-[#FF7A00]" />, label: '100% Transparent Seva' },
             ].map((f) => (
-              <div key={f.label} className="flex items-center gap-2.5 px-4 py-2 bg-[#180E08]/80 backdrop-blur-md rounded-full border border-[#D4AF37]/40 shadow-lg">
-                <div className="h-5 w-5 rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center shrink-0">{f.icon}</div>
-                <span className="text-xs font-bold text-[#F5F0E6]">{f.label}</span>
+              <div key={f.label} className="flex items-center gap-2.5 px-4 py-2 bg-white rounded-full border border-[#F3E8DE] shadow-sm">
+                <div className="h-5 w-5 rounded-full bg-[#FFF3E0] text-[#FF7A00] flex items-center justify-center shrink-0">{f.icon}</div>
+                <span className="text-xs font-semibold text-[#111827]">{f.label}</span>
               </div>
             ))}
           </div>
 
-          {/* Full Width Sri Mandir Auto-Sliding Banner Slider */}
+          {/* Full Width Auto-Sliding Banner Slider */}
           <div className="w-full max-w-6xl mx-auto">
             <HeroPujaSlider slides={heroSlides} />
           </div>
@@ -229,27 +229,27 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION C: UPCOMING PUJAS GRID — TIER 1 DARK GOLD CARDS
+          SECTION C: UPCOMING PUJAS GRID — KUNDLIAPI WHITE CARDS
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-16 md:py-24">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#D4AF37]/20 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#F3E8DE] pb-6">
           <div className="space-y-3">
-            <div className="vip-badge inline-flex">
-              <Sparkles className="h-3.5 w-3.5 text-[#F4C430]" /> Upcoming Sacred Pujas
+            <div className="kundli-badge-orange inline-flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#FF7A00]" /> Upcoming Sacred Pujas
             </div>
-            <h2 className="text-3xl md:text-5xl font-vip font-bold text-[#F5F0E6] tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight">
               आगामी दिव्य पूजाएँ{' '}
-              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-normal">& Anushthans</span>
+              <span className="text-[#FF7A00] font-bold">& Anushthans</span>
             </h2>
-            <p className="text-sm md:text-base text-[#C9C0B3] font-medium max-w-2xl">
+            <p className="text-sm md:text-base text-[#4B5563] font-medium max-w-2xl">
               Choose from a curated list of authentic Veda-compliant pujas, homas, and temple offerings performed by certified priests.
             </p>
           </div>
 
           <Link
             href="/pujas"
-            className="btn-vip text-xs md:text-sm py-2.5 px-6 inline-flex items-center gap-2 shrink-0"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs md:text-sm font-bold py-2.5 px-6 rounded-full shadow-md hover:shadow-lg hover:shadow-[#FF7A00]/25 transition-all shrink-0"
           >
             View All Pujas <ArrowRight className="h-4 w-4" />
           </Link>
@@ -257,17 +257,17 @@ export default async function HomePage() {
 
         {/* Responsive Grid of Puja Cards */}
         {displayPujas.length === 0 ? (
-          <div className="text-center py-16 px-6 bg-[#180E08] rounded-3xl border-2 border-[#D4AF37]/40 space-y-5 max-w-2xl mx-auto shadow-2xl">
-            <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center text-3xl">🪔</div>
-            <h3 className="text-2xl md:text-3xl font-vip font-bold text-[#F5F0E6]">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
-            <p className="text-sm md:text-base text-[#C9C0B3] max-w-lg mx-auto font-medium leading-relaxed">
+          <div className="text-center py-16 px-6 bg-white rounded-3xl border border-[#F3E8DE] space-y-5 max-w-2xl mx-auto shadow-sm">
+            <div className="h-16 w-16 mx-auto rounded-full bg-[#FFF3E0] text-[#FF7A00] flex items-center justify-center text-3xl">🪔</div>
+            <h3 className="text-2xl md:text-3xl font-heading font-bold text-[#111827]">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
+            <p className="text-sm md:text-base text-[#4B5563] max-w-lg mx-auto font-medium leading-relaxed">
               संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं।
             </p>
             <a
               href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-vip inline-flex items-center gap-2 px-6 py-3"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-3 px-6 rounded-full shadow-md"
             >
               💬 WhatsApp par Puja Paraamarsh →
             </a>
@@ -281,37 +281,35 @@ export default async function HomePage() {
             const categoryName = p.category?.name || 'Vedic Puja'
 
             return (
-              <article key={p.id} className={`group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <article key={p.id} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
                 {/* Pro-Level Uncropped Image Frame with Ambient Backdrop */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#0D0704] rounded-t-2xl flex items-center justify-center">
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 rounded-t-2xl flex items-center justify-center">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
                     ) : (
                       <>
-                        {/* Ambient Blurred Background Layer (Prevents empty gaps) */}
+                        {/* Ambient Blurred Background Layer */}
                         <img
                           src={mediaInfo.thumbUrl || p.coverImage}
                           alt=""
                           aria-hidden="true"
-                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-125 pointer-events-none"
+                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-25 scale-125 pointer-events-none"
                         />
                         {/* Foreground Full Uncropped Image */}
                         <SafeImage
                           src={mediaInfo.thumbUrl || p.coverImage}
                           alt={p.name}
-                          className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-[1.03] drop-shadow-2xl"
+                          className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
                         />
                       </>
                     )
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-[#180E08] text-[#F4C430]">
+                    <div className="h-full w-full flex items-center justify-center bg-orange-50 text-[#FF7A00]">
                       <Sparkles className="h-10 w-10 opacity-40" />
                     </div>
                   )}
-                  {/* Dark gradient overlay bottom */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent z-10 pointer-events-none" />
 
                   {/* Admin Configured Card Badge */}
                   {(() => {
@@ -319,7 +317,7 @@ export default async function HomePage() {
                     if (!badgeInfo) return null
                     return (
                       <div className="absolute top-3 left-3 z-20 flex gap-1.5 flex-wrap">
-                        <span className="vip-badge text-[10px] shadow-lg">
+                        <span className="kundli-badge-orange shadow-sm">
                           {badgeInfo.text}
                         </span>
                       </div>
@@ -328,38 +326,38 @@ export default async function HomePage() {
 
                   {/* Category */}
                   <div className="absolute bottom-3 left-3 z-20">
-                    <span className="bg-[#0D0704]/90 backdrop-blur-md text-[#F5F0E6] text-[10px] font-semibold px-2.5 py-1 rounded-md border border-[#D4AF37]/40 shadow-md">{categoryName}</span>
+                    <span className="bg-[#111827]/90 backdrop-blur-md text-white text-[10px] font-semibold px-2.5 py-1 rounded-md shadow-sm">{categoryName}</span>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <h3 className="font-vip font-bold text-lg text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors line-clamp-2 leading-snug">
+                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-snug">
                       <Link href={pujaHref}>{p.name}</Link>
                     </h3>
                     {p.location && (
-                      <p className="text-xs text-[#C9C0B3] flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-[#F4C430] shrink-0" />
+                      <p className="text-xs text-[#4B5563] flex items-center gap-1.5 font-medium">
+                        <MapPin className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
                         {p.location}
                       </p>
                     )}
-                    <p className="text-xs text-[#C9C0B3]/80 line-clamp-2 leading-relaxed font-normal">
+                    <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed font-normal">
                       {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
                     </p>
                   </div>
 
                   {/* Price + CTA */}
-                  <div className="pt-3 border-t border-[#D4AF37]/20 flex items-center justify-between">
+                  <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-[#C9C0B3] font-medium block">Booking Amount</span>
-                      <span className="text-xl font-extrabold text-[#F4C430]">
+                      <span className="text-[10px] text-[#4B5563] font-medium block">Booking Amount</span>
+                      <span className="text-xl font-extrabold text-[#FF7A00]">
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
                     <Link
                       href={pujaHref}
-                      className="btn-vip text-xs py-2 px-4 inline-flex items-center gap-1"
+                      className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-2 px-4 rounded-xl shadow-md hover:shadow-lg hover:shadow-[#FF7A00]/25 transition-all inline-flex items-center gap-1"
                     >
                       Book Now <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -374,36 +372,36 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION C2: ABHIMANTRIT PRODUCTS & STORE — TIER 1 DARK GOLD CARDS
+          SECTION C2: ABHIMANTRIT PRODUCTS & STORE — KUNDLIAPI CARDS
           ============================================================ */}
-      <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-[#D4AF37]/20">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#D4AF37]/20 pb-6">
+      <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-[#F3E8DE]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[#F3E8DE] pb-6">
           <div className="space-y-3">
-            <div className="vip-badge inline-flex">
-              <Sparkles className="h-3.5 w-3.5 text-[#F4C430]" /> Abhimantrit Store & Samagri
+            <div className="kundli-badge-orange inline-flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#FF7A00]" /> Abhimantrit Store & Samagri
             </div>
-            <h2 className="text-3xl md:text-5xl font-vip font-bold text-[#F5F0E6] tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight">
               अभिमंत्रित सामग्री{' '}
-              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent font-normal">& Spiritual Products</span>
+              <span className="text-[#FF7A00] font-bold">& Spiritual Products</span>
             </h2>
-            <p className="text-sm md:text-base text-[#C9C0B3] font-medium max-w-2xl">
+            <p className="text-sm md:text-base text-[#4B5563] font-medium max-w-2xl">
               100% अभिमंत्रित सिद्ध रुद्राक्ष, पावन भस्म, शंख, पूजा थाली व प्रामाणिक सामग्री — सीधे सिद्ध पीठों से आपके घर द्वार।
             </p>
           </div>
 
           <Link
             href="/products"
-            className="btn-vip text-xs md:text-sm py-2.5 px-6 inline-flex items-center gap-2 shrink-0"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs md:text-sm font-bold py-2.5 px-6 rounded-full shadow-md hover:shadow-lg hover:shadow-[#FF7A00]/25 transition-all shrink-0"
           >
             Explore Store <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {products.length === 0 ? (
-          <div className="text-center py-12 px-6 bg-[#180E08] rounded-3xl border-2 border-[#D4AF37]/40 space-y-4 max-w-2xl mx-auto shadow-2xl">
-            <div className="h-14 w-14 mx-auto rounded-full bg-gradient-to-br from-[#6B0F1A] to-[#D4AF37] text-[#F5F0E6] flex items-center justify-center text-2xl">🛍️</div>
-            <h3 className="text-xl md:text-2xl font-vip font-bold text-[#F5F0E6]">शीघ्र आ रही है अभिमंत्रित सामग्री</h3>
-            <p className="text-xs md:text-sm text-[#C9C0B3]">संस्थान की वैदिक स्टोर सामग्री जल्द ही यहाँ उपलब्ध होगी।</p>
+          <div className="text-center py-12 px-6 bg-white rounded-3xl border border-[#F3E8DE] space-y-4 max-w-2xl mx-auto shadow-sm">
+            <div className="h-14 w-14 mx-auto rounded-full bg-[#FFF3E0] text-[#FF7A00] flex items-center justify-center text-2xl">🛍️</div>
+            <h3 className="text-xl md:text-2xl font-heading font-bold text-[#111827]">शीघ्र आ रही है अभिमंत्रित सामग्री</h3>
+            <p className="text-xs md:text-sm text-[#4B5563]">संस्थान की वैदिक स्टोर सामग्री जल्द ही यहाँ उपलब्ध होगी।</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -411,44 +409,41 @@ export default async function HomePage() {
               const price = Number(p.price || 501)
               const imgSrc = p.coverImage || '/product_fallback.jpg'
               return (
-                <article key={p.id} className="group relative bg-[#180E08] rounded-2xl border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] flex flex-col overflow-hidden">
-                  <div className="relative aspect-square overflow-hidden bg-[#0D0704] flex items-center justify-center">
-                    {/* Ambient Blur Backdrop */}
+                <article key={p.id} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal">
+                  <div className="relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center">
                     <img
                       src={imgSrc}
                       alt=""
                       aria-hidden="true"
-                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-125 pointer-events-none"
+                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-125 pointer-events-none"
                     />
-                    {/* Foreground Uncropped Image */}
                     <SafeImage
                       src={imgSrc}
                       alt={p.name}
-                      className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-[1.03] drop-shadow-2xl"
+                      className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent z-10 pointer-events-none" />
-                    <span className="absolute top-3 left-3 vip-badge text-[9px] px-2 py-0.5 z-20 shadow-md">
-                      🔥 अभिमंत्रित
+                    <span className="absolute top-3 left-3 kundli-badge-orange text-[9px] px-2 py-0.5 z-20 shadow-sm">
+                      ⚡ अभिमंत्रित
                     </span>
                   </div>
 
                   <div className="p-4 flex-1 flex flex-col justify-between gap-3">
                     <div className="space-y-1">
-                      <span className="text-[10px] uppercase font-bold text-[#F4C430] tracking-wider block">
+                      <span className="text-[10px] uppercase font-bold text-[#FF7A00] tracking-wider block">
                         {p.category?.name || 'Vedic Product'}
                       </span>
-                      <h3 className="font-vip font-bold text-base text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors line-clamp-1">
+                      <h3 className="font-heading font-bold text-base text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-1">
                         <Link href={`/products/${p.slug}`}>{p.name}</Link>
                       </h3>
                     </div>
 
-                    <div className="pt-3 border-t border-[#D4AF37]/20 flex items-center justify-between">
-                      <span className="text-lg font-black text-[#F4C430]">
+                    <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
+                      <span className="text-lg font-black text-[#FF7A00]">
                         ₹{price.toLocaleString('en-IN')}
                       </span>
                       <Link
                         href={`/products/${p.slug}`}
-                        className="btn-vip text-xs py-1.5 px-3.5 inline-flex items-center gap-1"
+                        className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-1.5 px-3.5 rounded-lg shadow-sm hover:shadow-md transition-all inline-flex items-center gap-1"
                       >
                         Buy Now &rarr;
                       </Link>
@@ -462,28 +457,23 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION: WHY CHOOSE US (हमारे साथ ही पूजा क्यों कराएं?)
+          SECTION: WHY CHOOSE US (KundliAPI Clean White Pillars)
           ============================================================ */}
-      <section className="relative py-16 md:py-24 bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] text-[#F5F0E6] overflow-hidden border-y-2 border-[#D4AF37]/40">
-        {/* Om Watermark Background */}
-        <div aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-[35vw] font-vip text-[rgba(212,175,55,0.03)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">ॐ</div>
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[rgba(212,175,55,0.10)] rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[rgba(107,15,26,0.25)] rounded-full blur-3xl pointer-events-none" />
-
+      <section className="relative py-16 md:py-24 bg-white text-[#111827] overflow-hidden border-y border-[#F3E8DE]">
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-            <div className="vip-badge inline-flex">
-              <ShieldCheck className="h-4 w-4 text-[#F4C430]" /> Why Choose DivyaYagyam
+            <div className="kundli-badge-orange inline-flex">
+              <ShieldCheck className="h-4 w-4 text-[#FF7A00]" /> Why Choose DivyaYagyam
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-vip font-extrabold text-[#F5F0E6] leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-[#111827] leading-tight">
               Why 50,000+ Devotees Trust{' '}
-              <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
                 DivyaYagyam
               </span>
             </h2>
-            <p className="text-sm sm:text-base text-[#C9C0B3] font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-[#4B5563] font-medium max-w-2xl mx-auto leading-relaxed">
               शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद — आपकी हर पूजा को बनाती है 100% सिद्ध व फलदायी।
             </p>
           </div>
@@ -530,40 +520,37 @@ export default async function HomePage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="group relative p-6 sm:p-7 rounded-2xl bg-[#180E08] border-2 border-[#D4AF37]/30 hover:border-[#F4C430] transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] flex flex-col justify-between"
+                className="group relative p-6 sm:p-7 rounded-2xl bg-[#FFFBF7] border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl flex flex-col justify-between reveal"
               >
-                {/* Top Gold Corner Accent */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#D4AF37]/20 to-transparent rounded-tr-2xl pointer-events-none" />
-
                 <div className="space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-[#6B0F1A] to-[#180E08] border border-[#D4AF37]/50 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                  <div className="h-14 w-14 rounded-xl bg-[#FFF3E0] border border-[#FF7A00]/20 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
                     {item.icon}
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F4C430] block mb-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#FF7A00] block mb-1">
                       {item.subtitle}
                     </span>
-                    <h3 className="text-lg font-bold text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors leading-snug">
+                    <h3 className="text-lg font-bold text-[#111827] group-hover:text-[#FF7A00] transition-colors leading-snug">
                       {item.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-[#C9C0B3] leading-relaxed font-normal">
+                  <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed font-normal">
                     {item.desc}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-[#D4AF37]/20 flex items-center justify-between text-xs font-extrabold text-[#F4C430]">
+                <div className="pt-4 mt-4 border-t border-[#F3E8DE] flex items-center justify-between text-xs font-extrabold text-[#FF7A00]">
                   <span>100% Authentic Seva</span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">✓ Verified</span>
+                  <span className="text-emerald-600 font-bold">⚡ Verified</span>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Bottom Trust Stat Bar */}
-          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#180E08] border-2 border-[#D4AF37]/50 grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-2xl">
+          <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#FFFBF7] border border-[#F3E8DE] grid grid-cols-2 md:grid-cols-4 gap-6 text-center shadow-sm">
             {[
               { val: "50,000+", label: "संतुष्ट यजमान (Happy Devotees)" },
               { val: "27+ Years", label: "वैदिक अनुभव (Vedic Lineage)" },
@@ -571,8 +558,8 @@ export default async function HomePage() {
               { val: "4.9 ★", label: "भक्त रेटिंग (User Rating)" }
             ].map((stat) => (
               <div key={stat.label} className="space-y-1">
-                <div className="text-2xl sm:text-3xl font-black text-[#F4C430] tracking-tight">{stat.val}</div>
-                <div className="text-xs font-bold text-[#F5F0E6] opacity-90">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl font-black text-[#FF7A00] tracking-tight">{stat.val}</div>
+                <div className="text-xs font-bold text-[#111827] opacity-90">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -581,30 +568,30 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION D: DIVYA DARSHAN VIDEO GALLERY — TIER 1 DARK
+          SECTION D: DIVYA DARSHAN VIDEO GALLERY
           ============================================================ */}
-      <section className="w-full bg-[#0D0704] py-8 border-t border-[#D4AF37]/20">
+      <section className="w-full bg-[#FFFBF7] py-8 border-t border-[#F3E8DE]">
         <SacredVideoGallery videos={dbVideos} />
       </section>
 
       {/* ============================================================
-          SECTION E: JYOTISH & VEDIC TOOLS — TIER 1 DARK (3 ITEMS DISPLAYED)
+          SECTION E: JYOTISH & VEDIC TOOLS (3 ITEMS DISPLAYED)
           ============================================================ */}
-      <section className="w-full bg-[#0D0704] py-8 border-t border-[#D4AF37]/20">
+      <section className="w-full bg-[#FFFBF7] py-8 border-t border-[#F3E8DE]">
         <SacredAstroTools limit={3} />
       </section>
 
       {/* ============================================================
-          SECTION F: TESTIMONIALS & TRUST SECTION — TIER 1 DARK
+          SECTION F: TESTIMONIALS & TRUST SECTION
           ============================================================ */}
-      <section className="w-full bg-[#0D0704] border-t border-[#D4AF37]/20">
+      <section className="w-full bg-[#FFFBF7] border-t border-[#F3E8DE]">
         <SacredTrustTestimonials testimonials={dbTestimonials} />
       </section>
 
       {/* ============================================================
-          SECTION G: FAQ SECTION — TIER 1 DARK
+          SECTION G: FAQ SECTION
           ============================================================ */}
-      <section className="w-full bg-[#0D0704] border-t border-[#D4AF37]/20 pb-16">
+      <section className="w-full bg-[#FFFBF7] border-t border-[#F3E8DE] pb-16">
         <SacredFaqAccordion />
       </section>
 

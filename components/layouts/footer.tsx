@@ -60,16 +60,16 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
   const socials = siteData?.socials || siteConfig.socials
   const contact = siteData?.contact || siteConfig.contact
 
-  const bgClass = isDarkTheme ? 'bg-[#0D0704] text-[#F5F0E6] border-t-2 border-[#D4AF37]/40' : 'bg-[#F5EBDD] text-[#3E2723] border-t-2 border-[#C9A227]/30'
-  const textBodyClass = isDarkTheme ? 'text-[#C9C0B3]' : 'text-[#5A4A42]'
-  const headingClass = isDarkTheme ? 'text-[#F4C430] font-heading font-bold' : 'text-[#7A1F2B] font-heading font-bold'
-  const linkHoverClass = isDarkTheme ? 'hover:text-[#F4C430]' : 'hover:text-[#E85D04]'
-  const iconBgClass = isDarkTheme ? 'bg-[rgba(212,175,55,0.15)] text-[#F4C430]' : 'bg-[#EAD9C4] text-[#7A1F2B]'
+  const bgClass = isDarkTheme ? 'bg-[#111827] text-white border-t border-gray-800' : 'bg-[#FFFBF7] text-[#111827] border-t border-[#F3E8DE]'
+  const textBodyClass = isDarkTheme ? 'text-[#9CA3AF]' : 'text-[#4B5563]'
+  const headingClass = isDarkTheme ? 'text-white font-heading font-bold' : 'text-[#111827] font-heading font-bold'
+  const linkHoverClass = isDarkTheme ? 'hover:text-[#FF7A00]' : 'hover:text-[#FF7A00]'
+  const iconBgClass = isDarkTheme ? 'bg-[#FF7A00]/15 text-[#FF7A00]' : 'bg-[#FFF3E0] text-[#FF7A00]'
 
   return (
     <footer className={`relative transition-colors ${bgClass}`}>
-      {/* Gold divider line top */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-80" />
+      {/* Accent divider line top */}
+      <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-[#FF7A00]/60 to-transparent" />
 
       {/* Om background watermark */}
       <div

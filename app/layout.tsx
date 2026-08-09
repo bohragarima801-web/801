@@ -110,9 +110,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Cinzel:wght@400;600;700&family=Noto+Serif+Devanagari:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-[#FFF8F0] text-[#3E2723] overflow-x-hidden selection:bg-[#E85D04]/20 selection:text-[#7A1F2B]`} suppressHydrationWarning>
+      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
         <Script
           id="schema-global-organization"
           type="application/ld+json"

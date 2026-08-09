@@ -9,157 +9,144 @@
 
 @layer base {
   :root {
-    /* ── Global Font System Tokens (Dual Latin + Devanagari) ── */
-    --font-heading-en: 'Cinzel', serif;
+    /* ── Global Font System Tokens (KundliAPI Style: Outfit/Plus Jakarta Sans + Inter) ── */
+    --font-heading-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     --font-heading-hi: 'Noto Serif Devanagari', serif;
-    --font-body-en: 'Poppins', sans-serif;
+    --font-body-en: 'Inter', sans-serif;
     --font-body-hi: 'Noto Sans Devanagari', sans-serif;
-    --font-vip-en: 'Cinzel Decorative', serif;
+    --font-vip-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     --font-vip-hi: 'Yatra One', serif;
 
-    /* ── Tier 2: Standard Pages System Tokens ── */
-    --bg-tier2: #FFF8F0;
+    /* ── Tier 2: Standard & Home System Tokens (Warm Off-White + Crisp White + Orange) ── */
+    --bg-tier2: #FFFBF7;
     --surface-tier2: #FFFFFF;
-    --primary-tier2: #E85D04;
-    --secondary-tier2: #7A1F2B;
-    --accent-tier2: #C9A227;
-    --text-heading-tier2: #3E2723;
-    --text-body-tier2: #5A4A42;
-    --border-tier2: #EAD9C4;
-    --success-tier2: #2E7D32;
+    --primary-tier2: #FF7A00;
+    --secondary-tier2: #FF6B00;
+    --accent-tier2: #FF7A00;
+    --text-heading-tier2: #111827;
+    --text-body-tier2: #4B5563;
+    --border-tier2: #F3E8DE;
+    --success-tier2: #16A34A;
 
     /* ── Tier 1: Premium (Landing & VIP Puja) System Tokens ── */
-    --bg-tier1-start: #1A0F08;
-    --bg-tier1-end: #0D0704;
-    --card-tier1: #180E08;
-    --gold-primary-tier1: #D4AF37;
-    --gold-bright-tier1: #F4C430;
-    --gold-bronze-tier1: #B8860B;
-    --maroon-vip-tier1: #6B0F1A;
-    --text-heading-tier1: #F5F0E6;
-    --text-body-tier1: #C9C0B3;
-    --divider-glow-tier1: rgba(212, 175, 55, 0.4);
+    --bg-tier1-start: #111827;
+    --bg-tier1-end: #0B0F19;
+    --card-tier1: #1E222A;
+    --gold-primary-tier1: #FF7A00;
+    --gold-bright-tier1: #FF9433;
+    --gold-bronze-tier1: #D95D00;
+    --maroon-vip-tier1: #1E222A;
+    --text-heading-tier1: #FFFFFF;
+    --text-body-tier1: #9CA3AF;
+    --divider-glow-tier1: rgba(255, 122, 0, 0.4);
 
     /* ── Core Palette (shadcn/Radix HSL tokens) ── */
-    --background: 36 40% 97%;               /* Sacred ivory */
-    --foreground: 20 40% 12%;               /* Deep espresso brown */
-    --card: 36 50% 99%;
-    --card-foreground: 20 40% 12%;
-    --popover: 36 40% 97%;
-    --popover-foreground: 20 40% 12%;
-    --primary: 356 70% 30%;                 /* Deep sindoor maroon */
-    --primary-foreground: 40 60% 97%;
-    --secondary: 42 60% 42%;                /* Antique Mughal gold */
-    --secondary-foreground: 20 40% 12%;
-    --muted: 36 30% 93%;
-    --muted-foreground: 20 15% 42%;
-    --accent: 15 60% 42%;                   /* Temple saffron-terracotta */
-    --accent-foreground: 40 60% 97%;
-    --destructive: 0 70% 42%;
-    --destructive-foreground: 40 60% 97%;
-    --border: 36 25% 88%;
-    --input: 36 25% 88%;
-    --ring: 356 70% 30%;
-    --radius: 0.65rem;
+    --background: 33 50% 98%;               /* Soft Warm Off-White #FFFBF7 */
+    --foreground: 222 47% 11%;              /* Deep Charcoal #111827 */
+    --card: 0 0% 100%;                      /* Crisp Pure White #FFFFFF */
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 28 100% 50%;                 /* Vibrant Modern Orange #FF7A00 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 100% 50%;               /* Saffron Orange #FF6B00 */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 30 30% 96%;
+    --muted-foreground: 215 16% 34%;        /* Slate Gray #4B5563 */
+    --accent: 28 100% 50%;                  /* Vibrant Orange */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 40% 91%;                   /* Warm Soft Border #F3E8DE */
+    --input: 30 40% 91%;
+    --ring: 28 100% 50%;                    /* Focus Ring Orange #FF7A00 */
+    --radius: 0.85rem;
 
     /* Chart tokens */
-    --chart-1: 356 70% 30%;
-    --chart-2: 42 60% 42%;
+    --chart-1: 28 100% 50%;
+    --chart-2: 25 100% 50%;
     --chart-3: 15 60% 42%;
     --chart-4: 160 60% 40%;
     --chart-5: 250 60% 55%;
 
     /* Sidebar */
-    --sidebar-background: 36 40% 97%;
-    --sidebar-foreground: 20 40% 12%;
-    --sidebar-primary: 356 70% 30%;
-    --sidebar-primary-foreground: 40 60% 97%;
-    --sidebar-accent: 36 30% 93%;
-    --sidebar-accent-foreground: 20 15% 42%;
-    --sidebar-border: 36 25% 88%;
-    --sidebar-ring: 356 70% 30%;
+    --sidebar-background: 33 50% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 28 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 30% 96%;
+    --sidebar-accent-foreground: 215 16% 34%;
+    --sidebar-border: 30 40% 91%;
+    --sidebar-ring: 28 100% 50%;
 
     /* ── Legacy hex aliases ── */
-    --primary-color: #8B1A21;     /* Sindoor maroon */
-    --secondary-color: #D49B00;   /* Vibrant Sanatani Gold */
-    --bg-light: #FFFDF7;
-    --text-dark: #1E120A;
+    --primary-color: #FF7A00;     /* Saffron Orange */
+    --secondary-color: #FF6B00;   /* Modern Orange */
+    --bg-light: #FFFBF7;
+    --text-dark: #111827;
     --card-bg: #FFFFFF;
 
-    /* ── Sacred Palette (decorative) ── */
-    --saffron: #D9531E;
-    --saffron-light: #F27A30;
-    --sindoor: #8B1A21;           /* Deep maroon */
-    --gold: #D49B00;
-    --gold-light: #F5C842;
-    --gold-pale: #FFF7E6;
-    --cream: #FFFDF7;
-    --ivory: #FFF8EA;
-    --charcoal: #1E120A;
-    --warm-brown: #2A1508;
-    --divine-gold: #B37B00;
+    /* ── Sacred Palette (KundliAPI modern vibe) ── */
+    --saffron: #FF7A00;
+    --saffron-light: #FF9433;
+    --sindoor: #FF6B00;
+    --gold: #FF7A00;
+    --gold-light: #FF9433;
+    --gold-pale: #FFF3E0;
+    --cream: #FFFBF7;
+    --ivory: #FFFBF7;
+    --charcoal: #111827;
+    --warm-brown: #111827;
+    --divine-gold: #FF7A00;
 
-    /* ── Sanatani Light Theme Gradients ── */
-    --gradient-primary: linear-gradient(135deg, #8B1A21 0%, #B84430 45%, #D49B00 100%);
-    --gradient-gold: linear-gradient(90deg, #996B00 0%, #D49B00 35%, #F5C842 60%, #B37B00 100%);
-    --gradient-gold-vip: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #F4C430 100%);
-    --gradient-sanatani-light: linear-gradient(165deg, #FFFDF7 0%, #FFF5E0 45%, #FFF0D1 80%, #FFFDF7 100%);
-    --gradient-hero-light: linear-gradient(180deg, #FFF8EB 0%, #FFF2D6 55%, #FFFDF7 100%);
-    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFFDF7 100%);
+    /* ── Modern Light Theme Gradients ── */
+    --gradient-primary: linear-gradient(135deg, #FF7A00 0%, #FF6B00 100%);
+    --gradient-gold: linear-gradient(90deg, #FF7A00 0%, #FF9433 100%);
+    --gradient-gold-vip: linear-gradient(135deg, #FF7A00 0%, #FF6B00 100%);
+    --gradient-sanatani-light: linear-gradient(165deg, #FFFBF7 0%, #FFF5EB 50%, #FFFBF7 100%);
+    --gradient-hero-light: linear-gradient(180deg, #FFF8F2 0%, #FFFBF7 100%);
+    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFFBF7 100%);
 
     /* ── Shadows ── */
-    --shadow-soft: 0 4px 24px rgba(42, 21, 8, 0.05);
-    --shadow-medium: 0 8px 40px rgba(42, 21, 8, 0.08);
-    --shadow-heavy: 0 16px 64px rgba(42, 21, 8, 0.12);
-    --shadow-glow: 0 6px 32px rgba(212, 155, 0, 0.22);
-    --shadow-gold: 0 6px 32px rgba(245, 200, 66, 0.30);
-    --shadow-card: 0 4px 20px rgba(180, 130, 20, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+    --shadow-medium: 0 10px 30px -4px rgba(0, 0, 0, 0.08);
+    --shadow-heavy: 0 20px 48px -6px rgba(0, 0, 0, 0.12);
+    --shadow-glow: 0 8px 25px -4px rgba(255, 122, 0, 0.35);
+    --shadow-gold: 0 8px 25px -4px rgba(255, 122, 0, 0.30);
+    --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
   }
 
   .dark {
-    --background: 20 30% 7%;
-    --foreground: 40 45% 94%;
-    --card: 20 25% 11%;
-    --card-foreground: 40 45% 94%;
-    --popover: 20 30% 7%;
-    --popover-foreground: 40 45% 94%;
-    --primary: 356 60% 55%;
-    --primary-foreground: 40 45% 94%;
-    --secondary: 42 55% 55%;
-    --secondary-foreground: 20 30% 7%;
-    --muted: 20 20% 18%;
-    --muted-foreground: 36 30% 70%;
-    --accent: 15 65% 55%;
-    --accent-foreground: 40 45% 94%;
-    --destructive: 0 65% 48%;
-    --destructive-foreground: 40 45% 94%;
-    --border: 20 20% 18%;
-    --input: 20 20% 18%;
-    --ring: 356 60% 55%;
-    --sidebar-background: 20 30% 7%;
-    --sidebar-foreground: 40 45% 94%;
-    --sidebar-primary: 356 60% 55%;
-    --sidebar-primary-foreground: 20 30% 7%;
-    --sidebar-accent: 20 20% 18%;
-    --sidebar-accent-foreground: 36 30% 70%;
-    --sidebar-border: 20 20% 18%;
-    --sidebar-ring: 356 60% 55%;
+    --background: 222 47% 11%;
+    --foreground: 0 0% 100%;
+    --card: 217 33% 14%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 28 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217 19% 20%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 28 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 19% 22%;
+    --input: 217 19% 22%;
+    --ring: 28 100% 50%;
 
-    --primary-color: #E06070;
-    --secondary-color: #D4B15C;
-    --bg-light: #1C1008;
-    --text-dark: #F5EBDD;
-    --card-bg: #261510;
-    --shadow-soft: 0 4px 24px rgba(0,0,0,0.30);
-    --shadow-medium: 0 8px 40px rgba(0,0,0,0.38);
-    --shadow-heavy: 0 16px 64px rgba(0,0,0,0.48);
-    --shadow-glow: 0 6px 32px rgba(224,96,112,0.22);
-    --shadow-gold: 0 6px 32px rgba(212,177,92,0.22);
+    --primary-color: #FF7A00;
+    --secondary-color: #FF6B00;
+    --bg-light: #111827;
+    --text-dark: #F9FAFB;
+    --card-bg: #1E222A;
   }
 }
 
 /* ============================================================
-   BASE ELEMENTS & DUAL FONT SYSTEM
+   BASE ELEMENTS & PRO-LEVEL TYPOGRAPHY (KundliAPI Style)
    ============================================================ */
 @layer base {
   * {
@@ -177,7 +164,7 @@
   body {
     background-color: var(--bg-tier2);
     color: var(--text-body-tier2);
-    font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
@@ -187,10 +174,10 @@
     font-size: 15px;
   }
 
-  /* Dual Font Heading Hierarchy */
+  /* Headings: Tight tracking, bold modern sans-serif */
   h1, h2, h3, .heading {
-    font-family: var(--font-heading-en), var(--font-heading-hi), 'Cormorant Garamond', Georgia, serif;
-    letter-spacing: -0.02em;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.025em;
     line-height: 1.20;
     font-weight: 700;
     color: var(--text-heading-tier2);
@@ -199,19 +186,17 @@
   }
 
   h4, h5, h6 {
-    font-family: var(--font-body-en), var(--font-body-hi), sans-serif;
-    letter-spacing: 0;
-    line-height: 1.45;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    line-height: 1.40;
     font-weight: 600;
     color: var(--text-heading-tier2);
   }
 
-  /* VIP Accent Typography */
   .font-vip, .vip-text {
-    font-family: var(--font-vip-en), var(--font-vip-hi), var(--font-heading-en), var(--font-heading-hi), serif;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 
-  /* Sanskrit/Hindi text — Dual Noto Devanagari */
   :lang(hi), .text-hindi, .devanagari {
     font-family: var(--font-heading-hi), var(--font-body-hi), sans-serif;
     line-height: 1.8;
@@ -222,50 +207,68 @@
   }
 
   ::selection {
-    background: rgba(232, 93, 4, 0.20);
-    color: #7A1F2B;
+    background: rgba(255, 122, 0, 0.20);
+    color: #FF7A00;
   }
 }
 
 /* ============================================================
-   SCROLL ANIMATIONS — Safe Visibility Fallbacks
+   SMOOTH SCROLL-TRIGGERED ENTRANCE ANIMATIONS (Slide-Up Effect)
    ============================================================ */
 @layer utilities {
   .reveal {
-    opacity: 1; /* Fallback default so JS delays never hide content */
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.revealed {
+    opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-left.revealed {
     opacity: 1;
     transform: translateX(0);
-    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-right {
+    opacity: 0;
+    transform: translateX(28px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-right.revealed {
     opacity: 1;
     transform: translateX(0);
-    transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.30s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Slow Om pulse animation */
-  @keyframes omPulseGlow {
-    0%, 100% { opacity: 0.04; transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2)); }
-    50% { opacity: 0.09; transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5)); }
+  /* Badge Pills (KundliAPI Style) */
+  .kundli-badge-orange {
+    background-color: #FFF3E0;
+    border: 1px solid rgba(255, 122, 0, 0.25);
+    color: #FF7A00;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
-  .animate-om-pulse {
-    animation: omPulseGlow 4s ease-in-out infinite;
-  }
-
-  /* Component Badge & Button Utilities from Prompt */
   .vip-badge {
-    background: linear-gradient(135deg, #6B0F1A, #4A0A12);
-    border: 1px solid #D4AF37;
-    color: #F4C430;
-    font-family: var(--font-heading-en), var(--font-vip-hi), serif;
-    letter-spacing: 1.5px;
+    background: #FFF3E0;
+    border: 1px solid rgba(255, 122, 0, 0.3);
+    color: #FF7A00;
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     padding: 4px 12px;
     border-radius: 20px;
@@ -590,43 +593,43 @@
 }
 
 /* ============================================================
-   NAVBAR (BRIGHT SANATANI LIGHT CREAM & MAROON)
+   NAVBAR (STICKY GLASSMORPHIC WHITE - KUNDLIAPI STYLE)
    ============================================================ */
 .navbar-spiritual {
-  background: linear-gradient(180deg, #FFFDF5 0%, #FFF8EA 100%) !important;
-  backdrop-filter: blur(24px) saturate(1.8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  border-bottom: 2px solid #E5C16C !important;
-  box-shadow: 0 4px 20px rgba(139, 26, 33, 0.06);
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid #F3E8DE !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
 }
 
 .navbar-scrolled {
-  background: linear-gradient(180deg, #FFFDF2 0%, #FFF5E0 100%) !important;
-  box-shadow: 0 6px 28px rgba(139, 26, 33, 0.10);
-  border-bottom: 2px solid #8B1A21 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #F3E8DE !important;
 }
 
 .nav-link-spiritual {
-  font-family: 'Outfit', 'Mukta', sans-serif;
-  color: #3D1E10 !important;
-  font-weight: 700;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  color: #111827 !important;
+  font-weight: 600;
   font-size: 0.90rem;
   padding: 8px 16px;
   border-radius: 40px;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   position: relative;
   text-decoration: none;
 }
 .nav-link-spiritual:hover {
-  color: #8B1A21 !important;
-  background: rgba(139, 26, 33, 0.08);
-  box-shadow: 0 2px 8px rgba(139, 26, 33, 0.08);
+  color: #FF7A00 !important;
+  background: rgba(255, 122, 0, 0.06);
 }
 .nav-link-spiritual.active {
-  color: #8B1A21 !important;
-  background: rgba(139, 26, 33, 0.12);
-  font-weight: 800;
-  border: 1px solid rgba(139, 26, 33, 0.20);
+  color: #FF7A00 !important;
+  background: rgba(255, 122, 0, 0.10);
+  font-weight: 700;
 }
 
 /* ============================================================

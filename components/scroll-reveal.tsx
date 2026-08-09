@@ -27,13 +27,13 @@ export function ScrollReveal() {
             }
           })
         },
-        { threshold: 0.01, rootMargin: '100px 0px 100px 0px' }
+        { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
       )
 
       revealEls.forEach((el) => {
         const rect = el.getBoundingClientRect()
-        // If element is already within or near the visible viewport, reveal immediately
-        if (rect.top < window.innerHeight + 150 && rect.bottom > -150) {
+        // If element is already in the visible top fold of viewport, reveal immediately
+        if (rect.top < window.innerHeight - 50 && rect.bottom > 0) {
           el.classList.add('revealed')
         } else {
           observer?.observe(el)

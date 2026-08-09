@@ -84,50 +84,44 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
     : displayPujas.filter(p => (p.categoryTag || 'VIP Ritual') === selectedCategory)
 
   return (
-    <div className="bg-[#0D0704] text-[#F5F0E6] min-h-screen">
-      {/* ── ROYAL VIP HERO BANNER (Imperial Deep Obsidian Maroon × Golden Glow) */}
-      <section className="relative bg-gradient-to-b from-[#1A0F08] via-[#140A05] to-[#0D0704] py-16 md:py-24 overflow-hidden border-b-2 border-[#D4AF37]/50">
-        {/* Glowing Om Watermark with slow pulse */}
-        <div aria-hidden="true" className="absolute -right-10 -top-10 text-[35vw] font-vip text-[rgba(212,175,55,0.05)] leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">
+    <div className="bg-[#FFFBF7] text-[#111827] min-h-screen">
+      {/* ── HERO BANNER */}
+      <section className="relative bg-gradient-to-b from-[#FFFBF7] via-[#FFF8F2] to-[#FFFBF7] py-16 md:py-24 overflow-hidden border-b border-[#F3E8DE]">
+        <div aria-hidden="true" className="absolute -right-10 -top-10 text-[35vw] font-heading text-orange-500/5 leading-none pointer-events-none select-none overflow-hidden animate-om-pulse">
           ॐ
         </div>
 
-        {/* Ambient Pitambara Gold & Agni Glow Effects */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[rgba(212,175,55,0.15)] rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[rgba(107,15,26,0.35)] rounded-full blur-[110px] pointer-events-none" />
-
         <div className="container relative z-10 text-center max-w-5xl mx-auto px-4">
-          
           {/* VIP Badge */}
-          <div className="vip-badge mb-6 shadow-[0_4px_25px_rgba(212,175,55,0.45)]">
-            <Crown className="h-4 w-4 text-[#F4C430]" />
+          <div className="kundli-badge-orange mb-6 shadow-sm inline-flex">
+            <Crown className="h-4 w-4 text-[#FF7A00]" />
             <span>👑 ROYAL VIP ANUSHTHAN (विशिष्ट सिद्ध महापूजा)</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-vip font-extrabold text-[#F5F0E6] leading-[1.15] mb-5 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-extrabold text-[#111827] leading-[1.15] mb-5 tracking-tight">
             Exclusive VIP Anushthans &{' '}
-            <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent drop-shadow-md">
+            <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
               Personalized Yagyas
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-[#C9C0B3] max-w-3xl mx-auto leading-relaxed font-medium">
+          <p className="text-base sm:text-lg text-[#4B5563] max-w-3xl mx-auto leading-relaxed font-medium">
             27+ वर्षों के अनुभवी सिद्ध वेदाचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित ब्राह्मण दल एवं लाइव HD वीडियो स्ट्रीमिंग के साथ।
           </p>
 
           {/* Trust Chips */}
           <div className="flex flex-wrap gap-3 justify-center mt-9 max-w-4xl mx-auto">
             {[
-              { icon: <UserCheck className="h-4 w-4 text-[#F4C430]" />, label: 'Dedicated 5 Veda Acharyas' },
-              { icon: <Flame className="h-4 w-4 text-[#F4C430]" />, label: 'Personalized 1.25L Mantra Jaap' },
-              { icon: <Video className="h-4 w-4 text-[#F4C430]" />, label: 'Private Live WhatsApp Video' },
-              { icon: <Award className="h-4 w-4 text-[#F4C430]" />, label: 'Special Prasad Box Home Delivery' }
+              { icon: <UserCheck className="h-4 w-4 text-[#FF7A00]" />, label: 'Dedicated 5 Veda Acharyas' },
+              { icon: <Flame className="h-4 w-4 text-[#FF7A00]" />, label: 'Personalized 1.25L Mantra Jaap' },
+              { icon: <Video className="h-4 w-4 text-[#FF7A00]" />, label: 'Private Live WhatsApp Video' },
+              { icon: <Award className="h-4 w-4 text-[#FF7A00]" />, label: 'Special Prasad Box Home Delivery' }
             ].map((t) => (
               <div 
                 key={t.label} 
-                className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#180E08]/80 backdrop-blur-md rounded-full border border-[#D4AF37]/40 text-xs font-bold text-[#F5F0E6] shadow-lg"
+                className="inline-flex items-center gap-2.5 px-4 py-2 bg-white rounded-full border border-[#F3E8DE] text-xs font-bold text-[#111827] shadow-sm"
               >
                 {t.icon}
                 <span>{t.label}</span>
@@ -139,30 +133,30 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
       </section>
 
       {/* ── VIP PUJA CARDS GRID & FILTER */}
-      <section className="py-14 md:py-24 bg-[#0D0704]">
+      <section className="py-14 md:py-24 bg-[#FFFBF7]">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           
           {/* Header & Category Filters */}
           <div className="flex flex-col items-center justify-between gap-6 mb-12 text-center">
             <div className="space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#F4C430] flex items-center justify-center gap-1.5 font-vip">
-                <Sparkles className="h-4 w-4 text-[#F4C430]" /> High-Impact Anushthans
+              <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF7A00] flex items-center justify-center gap-1.5 font-heading">
+                <Sparkles className="h-4 w-4 text-[#FF7A00]" /> High-Impact Anushthans
               </span>
-              <h2 className="text-3xl md:text-5xl font-vip font-extrabold text-[#F5F0E6]">
-                वीआईपीसी <span className="bg-gradient-to-r from-[#F4C430] via-[#D4AF37] to-[#B8860B] bg-clip-text text-transparent">महा अनुष्ठान सूची</span>
+              <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827]">
+                वीआईपीसी <span className="text-[#FF7A00] font-bold">महा अनुष्ठान सूची</span>
               </h2>
             </div>
 
             {/* Category Pills */}
-            <div className="flex flex-wrap justify-center gap-2.5 bg-[#180E08] p-2 rounded-2xl border border-[#D4AF37]/30 backdrop-blur-md">
+            <div className="flex flex-wrap justify-center gap-2.5 bg-white p-2 rounded-2xl border border-[#F3E8DE] shadow-sm">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                     selectedCategory === cat
-                      ? 'bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#F4C430] text-[#1A0F08] shadow-[0_4px_15px_rgba(212,175,55,0.4)] scale-105 font-vip'
-                      : 'text-[#C9C0B3] hover:text-[#F5F0E6] hover:bg-white/5'
+                      ? 'bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white shadow-md scale-105'
+                      : 'text-[#4B5563] hover:text-[#FF7A00] hover:bg-orange-50'
                   }`}
                 >
                   {cat === 'ALL' ? '🌟 All VIP Pujas' : cat}
@@ -175,7 +169,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
             {filteredPujas.map((p, idx) => (
               <article
                 key={p.id}
-                className="group relative flex flex-col bg-[#180E08] rounded-3xl overflow-hidden border-2 border-[#D4AF37]/50 hover:border-[#F4C430] shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:shadow-vip-glow transition-all duration-300"
+                className="group relative flex flex-col bg-white rounded-3xl overflow-hidden border border-[#F3E8DE] hover:border-[#FF7A00]/40 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl transition-all duration-300 reveal"
               >
                 {/* Image & Overlay */}
                 <Link href={`/pujas/${p.slug}`} className="relative block aspect-[4/3] overflow-hidden">
@@ -187,28 +181,28 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                   
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex flex-col items-start gap-2 z-10">
-                    <span className="vip-badge">
-                      <Crown className="h-3 w-3 text-[#F4C430]" /> VIP EXCLUSIVE
+                    <span className="kundli-badge-orange shadow-sm">
+                      <Crown className="h-3 w-3 text-[#FF7A00]" /> VIP EXCLUSIVE
                     </span>
                     {p.badgeTag && (
-                      <span className="bg-gradient-to-r from-[#6B0F1A] to-[#B8860B] text-[#F4C430] border border-[#D4AF37]/60 text-[10px] font-black px-2.5 py-1 rounded-full shadow-md font-vip">
+                      <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-md">
                         {p.badgeTag}
                       </span>
                     )}
                   </div>
                   
                   <div className="absolute top-3 right-3 z-10">
-                    <span className="bg-[#0D0704]/80 backdrop-blur-md border border-[#D4AF37]/40 text-[#F5F0E6] text-[10px] font-extrabold px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-md">
-                      <Clock className="w-3 h-3 text-[#F4C430]" />
+                    <span className="bg-[#111827]/80 backdrop-blur-md border border-white/20 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-sm">
+                      <Clock className="w-3 h-3 text-[#FF7A00]" />
                       {p.duration || 'Full-Day'}
                     </span>
                   </div>
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#180E08] via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                   
                   <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-white">
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#F5F0E6]">
-                      <MapPin className="w-3.5 h-3.5 text-[#F4C430]" />
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-white">
+                      <MapPin className="w-3.5 h-3.5 text-[#FF7A00]" />
                       <span className="line-clamp-1">{p.location || 'Holy Temple, India'}</span>
                     </div>
                   </div>
@@ -219,29 +213,29 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                   <div className="space-y-3">
                     {p.categoryTag && (
                       <div>
-                        <span className="text-[10px] font-black text-[#F4C430] tracking-widest uppercase bg-[#6B0F1A]/40 px-3 py-1 rounded-full border border-[#D4AF37]/40 font-vip">
+                        <span className="text-[10px] font-black text-[#FF7A00] tracking-widest uppercase bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
                           {p.categoryTag}
                         </span>
                       </div>
                     )}
 
-                    <h3 className="font-vip font-extrabold text-xl text-[#F5F0E6] group-hover:text-[#F4C430] transition-colors leading-snug line-clamp-2">
+                    <h3 className="font-heading font-extrabold text-xl text-[#111827] group-hover:text-[#FF7A00] transition-colors leading-snug line-clamp-2">
                       <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
                     </h3>
 
-                    <p className="text-xs text-[#C9C0B3] leading-relaxed line-clamp-3 font-medium">
+                    <p className="text-xs text-[#4B5563] leading-relaxed line-clamp-3 font-medium">
                       {p.shortDesc}
                     </p>
                   </div>
 
-                  {/* Highlights with Gold Dividers */}
-                  <div className="py-3 border-y border-[#D4AF37]/30 space-y-1.5 text-xs text-[#C9C0B3] font-medium">
+                  {/* Highlights */}
+                  <div className="py-3 border-y border-[#F3E8DE] space-y-1.5 text-xs text-[#4B5563] font-medium">
                     <div className="flex items-center gap-2">
-                      <UserCheck className="w-3.5 h-3.5 text-[#F4C430] shrink-0" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#FF7A00] shrink-0" />
                       <span>{p.priestsCount}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       <span>Dedicated Live Stream & Royal Prasad</span>
                     </div>
                   </div>
@@ -249,15 +243,15 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                   {/* Pricing & CTA */}
                   <div className="flex items-center justify-between pt-1">
                     <div>
-                      <span className="text-[10px] text-[#C9C0B3] block uppercase font-bold tracking-wider">Dakshina</span>
-                      <span className="text-2xl font-vip font-black text-[#F4C430] drop-shadow-sm">
+                      <span className="text-[10px] text-[#4B5563] block uppercase font-bold tracking-wider">Dakshina</span>
+                      <span className="text-2xl font-heading font-black text-[#FF7A00]">
                         ₹{p.price.toLocaleString('en-IN')}
                       </span>
                     </div>
 
                     <Link
                       href={`/pujas/${p.slug}`}
-                      className="btn-vip"
+                      className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-2.5 px-5 rounded-full shadow-md hover:shadow-lg hover:shadow-[#FF7A00]/25 transition-all inline-flex items-center gap-1.5"
                     >
                       Book VIP Anushthan <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -268,15 +262,15 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
           </div>
 
           {/* ── VIP Trust Guarantee Section */}
-          <div className="mt-16 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-[#1A0F08] via-[#2A1508] to-[#1A0F08] border-2 border-[#D4AF37] text-white shadow-2xl relative overflow-hidden text-center space-y-6">
+          <div className="mt-16 p-8 md:p-12 rounded-3xl bg-white border border-[#F3E8DE] text-[#111827] shadow-sm relative overflow-hidden text-center space-y-6">
             <div className="max-w-3xl mx-auto space-y-3">
-              <div className="vip-badge inline-flex">
+              <div className="kundli-badge-orange inline-flex">
                 👑 Royal Seva Commitment
               </div>
-              <h3 className="text-2xl md:text-3xl font-vip font-extrabold text-[#F5F0E6]">
+              <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-[#111827]">
                 क्यों चुनें दिव्ययज्ञम् VIP महा अनुष्ठान?
               </h3>
-              <p className="text-sm text-[#C9C0B3] leading-relaxed font-medium">
+              <p className="text-sm text-[#4B5563] leading-relaxed font-medium">
                 VIP अनुष्ठान केवल आपके परिवार के लिए विशेष रूप से संपन्न किए जाते हैं। इसमें 27 से अधिक वर्षों के अनुभवी वरिष्ठ आचार्यों एवं उनकी योग्य विद्वान टीम द्वारा विशेष नाम-गोत्र संकल्प, अखंड मंत्र जाप एवं लाइव वीडियो प्रमाण के साथ अनुष्ठान संपन्न किया जाता है, तथा विशेष आशीर्वाद स्वरूप दिव्य सामग्री आपके घर प्रसाद के रूप में दी जाती है।
               </p>
             </div>
@@ -286,7 +280,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
                 href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20book%20a%20VIP%20Anushthan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-vip"
+                className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-sm py-3 px-6 rounded-full shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
               >
                 💬 Talk to Lead Acharya on WhatsApp →
               </a>

@@ -30,13 +30,12 @@ const navItems = [
 ]
 
 const toolsMenu = [
-  { title: 'Kundali', href: '/tools#kundali', desc: 'Birth chart & analysis', icon: '♑' },
-  { title: 'Kundali Milan', href: '/tools#milan', desc: 'Marriage compatibility', icon: '♥' },
-  { title: 'Panchang', href: '/tools#panchang', desc: 'Daily Hindu calendar', icon: '📅' },
-  { title: 'Muhurat', href: '/tools#muhurat', desc: 'Auspicious timings', icon: '⏰' },
-  { title: 'Numerology', href: '/tools#numerology', desc: 'Number-based insights', icon: '🔢' },
-  { title: 'Ratna', href: '/tools#ratna', desc: 'Gemstone suggestion', icon: '💎' },
-  { title: 'Mala Counter', href: '/tools#mala', desc: 'Digital jaap tracker', icon: '📿' },
+  { title: 'AI Pandit Ji', href: '/ask-a-pandit', desc: 'Instant AI spiritual guidance', icon: '🤖' },
+  { title: 'Vedic Kundali', href: '/tools', desc: 'Birth chart & horoscope', icon: '♑' },
+  { title: 'Daily Panchang', href: '/panchang', desc: 'Tithi, Nakshtra & Choghadiya', icon: '📅' },
+  { title: 'Shubh Muhurat', href: '/muhurat', desc: 'Auspicious timing finder', icon: '⏰' },
+  { title: 'Jyotish Consultation', href: '/astro', desc: 'Talk to expert astrologers', icon: '🔮' },
+  { title: 'Sacred Gallery', href: '/gallery', desc: 'Temple darshan & photos', icon: '🖼️' },
 ]
 
 export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?: any } = {}) {
@@ -165,12 +164,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             size="icon"
             aria-label="Cart"
             asChild
-            className="relative rounded-full text-[#2A1508]/70 hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.06)] transition-all"
+            className="relative rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 transition-all"
           >
             <Link href="/cart">
               <ShoppingBag className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-[#8B1A21] to-[#B84430] text-[9px] font-bold text-white shadow-md ring-2 ring-white">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-[#FF7A00] to-[#FF6B00] text-[9px] font-bold text-white shadow-md ring-2 ring-white">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -184,7 +183,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 px-2.5 h-8 text-[#2A1508]/70 hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.06)] rounded-lg text-xs font-semibold uppercase tracking-wide"
+              className="gap-1.5 px-2.5 h-8 text-[#111827]/80 hover:text-[#FF7A00] hover:bg-orange-50 rounded-lg text-xs font-semibold uppercase tracking-wide"
               onClick={() => setLangOpen(!langOpen)}
             >
               <Languages className="h-3.5 w-3.5" />
@@ -192,14 +191,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               <ChevronDown className="h-3 w-3 opacity-50" />
             </Button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-white dark:bg-[#1A0B05] border border-[rgba(168,124,40,0.18)] rounded-xl shadow-xl p-1 z-50">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-white dark:bg-[#111827] border border-[#F3E8DE] dark:border-gray-800 rounded-xl shadow-xl p-1 z-50">
                 {languages.map((l) => (
                   <button
                     key={l.code}
                     onClick={() => changeLang(l.code)}
                     className={cn(
-                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-[rgba(139,26,33,0.06)] transition-colors',
-                      currentLang === l.code ? 'text-[#8B1A21] font-bold' : 'text-[#2A1508]/80 dark:text-[rgba(245,235,220,0.80)]'
+                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-orange-50 dark:hover:bg-gray-800 transition-colors',
+                      currentLang === l.code ? 'text-[#FF7A00] font-bold' : 'text-[#111827] dark:text-gray-200'
                     )}
                   >
                     {l.label}
@@ -209,10 +208,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — premium pill */}
+          {/* "Book Puja" CTA — KundliAPI Prominent Orange Pill */}
           <Link
             href="/pujas"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold tracking-wide shadow-[0_4px_16px_rgba(139,26,33,0.30)] hover:shadow-[0_6px_24px_rgba(139,26,33,0.40)] hover:scale-[1.02] transition-all duration-200"
+            className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold tracking-wide shadow-[0_4px_16px_rgba(255,122,0,0.30)] hover:shadow-[0_6px_24px_rgba(255,122,0,0.45)] hover:scale-[1.02] transition-all duration-200"
           >
             <Flame className="h-3.5 w-3.5 opacity-90" />
             Book Puja
@@ -226,7 +225,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-full text-[#2A1508]/70 hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.06)] font-semibold text-xs gap-1.5"
+                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-semibold text-xs gap-1.5"
                 >
                   <Link href="/dashboard">
                     <User className="h-3.5 w-3.5" />
@@ -238,7 +237,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     type="submit"
                     size="sm"
                     variant="ghost"
-                    className="text-[#2A1508]/50 hover:text-red-600 hover:bg-red-50 rounded-full text-xs font-medium px-2"
+                    className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full text-xs font-medium px-2"
                   >
                     Logout
                   </Button>
@@ -249,7 +248,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 asChild
                 size="sm"
                 variant="ghost"
-                className="hidden lg:inline-flex rounded-full border border-[rgba(139,26,33,0.20)] text-[#8B1A21] hover:bg-[rgba(139,26,33,0.06)] font-semibold text-xs"
+                className="hidden lg:inline-flex rounded-full border border-[#FF7A00]/30 text-[#FF7A00] hover:bg-orange-50 font-semibold text-xs"
               >
                 <Link href="/login">
                   <User className="h-3.5 w-3.5 mr-1.5" />
@@ -258,7 +257,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               </Button>
             )
           ) : (
-            <div className="hidden lg:flex h-8 w-20 bg-[rgba(139,26,33,0.06)] rounded-full animate-pulse" />
+            <div className="hidden lg:flex h-8 w-20 bg-orange-50 rounded-full animate-pulse" />
           )}
 
           {/* Mobile hamburger */}
@@ -266,7 +265,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             variant="ghost"
             size="icon"
             onClick={() => setOpen(!open)}
-            className="lg:hidden rounded-full text-[#2A1508]/70 hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.06)]"
+            className="lg:hidden rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50"
             aria-label="Menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
