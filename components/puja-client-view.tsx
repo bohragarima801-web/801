@@ -613,63 +613,63 @@ export function PujaClientView({ puja }: { puja: any }) {
           </div>
         )}
 
-        {/* 3. Packages Section */}
-        <section id="packages" className="scroll-mt-32">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-rose-900 font-bold text-xs tracking-widest uppercase bg-rose-100 px-3 py-1 rounded-full border border-rose-200">
-              शुभ संकल्प पैकेज
+        {/* 3. Packages Section (Pro Vedic Dark Obsidian Theme with Gold Gradient Buttons) */}
+        <section id="packages" className="scroll-mt-32 bg-[#141b26] border border-[#d4af37]/25 rounded-3xl p-6 sm:p-10 shadow-[0_8px_24px_rgba(0,0,0,0.5)] space-y-8">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/30 text-[#f6d860] text-xs font-bold uppercase tracking-widest">
+              🌸 अपने परिवार की समृद्धि हेतु पवित्र संकल्प पैकेज चुनें
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-rose-950 uppercase tracking-wide mt-2">
+            <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-white tracking-wide pt-1">
               पूजा सेवा पैकेज का चयन करें
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base mt-2">
-              अपने परिवार की आवश्यकतानुसार पैकेज चुनें। आपके नाम और गोत्र से विशेष मंत्रोच्चार किया जाएगा।
+            <p className="text-[#d1d5db] text-xs sm:text-sm leading-relaxed font-medium">
+              आपके और आपके परिजनों के नाम व गोत्र से वेदमंत्रों द्वारा विशेष आहुतियाँ दी जाएंगी।
             </p>
-            <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-rose-700 mx-auto mt-4 rounded-full"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#f59e0b] to-[#d97706] mx-auto mt-3 rounded-full"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {packages.map((pkg: any) => {
               const isSelected = selectedPackage === pkg.id
+              const pkgPrice = Number(pkg.price || 901)
               return (
                 <div 
                   key={pkg.id} 
                   onClick={() => setSelectedPackage(pkg.id)}
                   className={cn(
-                    "relative border-2 rounded-2xl p-5 sm:p-6 bg-white transition-all cursor-pointer flex flex-col justify-between shadow-sm hover:shadow-xl group",
+                    "relative bg-gradient-to-b from-[#18202e] to-[#101622] border rounded-2xl p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between shadow-[0_4px_15px_rgba(0,0,0,0.3)] hover:-translate-y-1 group",
                     isSelected 
-                      ? "border-emerald-600 ring-2 ring-emerald-500/20 bg-emerald-50/10 shadow-lg scale-[1.02]" 
-                      : "border-slate-200 hover:border-amber-300"
+                      ? "border-[#d4af37] ring-2 ring-[#d4af37]/40 shadow-[0_10px_25px_rgba(212,175,55,0.25)]" 
+                      : "border-[#d4af37]/30 hover:border-[#d4af37]"
                   )}
                 >
                   {/* Dynamic High-Converting Popular Badges */}
-                  {Number(pkg.price) === 1501 && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-[#FFD700] whitespace-nowrap animate-pulse">
-                      🔥 MOST POPULAR (78% यजमानों की पहली पसंद)
+                  {pkgPrice === 1501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#f59e0b] to-[#d97706] text-white font-extrabold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-[#f6d860] whitespace-nowrap">
+                      🔥 MOST POPULAR (दंपति संकल्प)
                     </div>
                   )}
 
-                  {Number(pkg.price) === 2501 && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-emerald-300 whitespace-nowrap">
-                      ⭐ POPULAR FAMILY CHOICE (4 सदस्य पैकेज)
+                  {pkgPrice === 2501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-emerald-300 whitespace-nowrap">
+                      ⭐ POPULAR (4 सदस्य परिवार संकल्प)
                     </div>
                   )}
 
-                  {pkg.popular && Number(pkg.price) !== 1501 && Number(pkg.price) !== 2501 && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md z-10 border border-amber-200 whitespace-nowrap">
-                      ⭐ सर्वाधिक बुक किया गया
+                  {pkgPrice === 3501 && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-extrabold text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-full shadow-lg z-10 border border-purple-300 whitespace-nowrap">
+                      👑 SERVA SAMRIDDHI (6 सदस्य संकल्प)
                     </div>
                   )}
 
-
-                  <div className="space-y-5">
-                    {/* Package Specific Custom Image — Never Cropped / Full Aspect */}
+                  <div className="space-y-4">
+                    {/* Package Specific Image Frame */}
                     {pkg.image && (
-                      <div className="relative w-full rounded-xl overflow-hidden border border-amber-200/70 bg-gradient-to-b from-amber-50/50 to-slate-100/50 mb-3 shadow-xs p-2 flex items-center justify-center min-h-[140px] max-h-[220px]">
+                      <div className="relative w-full rounded-xl overflow-hidden border border-[#d4af37]/25 bg-[#0c1017] p-2 flex items-center justify-center min-h-[130px] max-h-[180px]">
                         <img 
                           src={pkg.image || '/package-1.jpg'} 
                           alt={pkg.name} 
-                          className="w-full max-h-[200px] h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]" 
+                          className="w-full max-h-[160px] h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-105" 
                           onError={(e) => {
                             e.currentTarget.src = '/package-1.jpg';
                           }}
@@ -677,48 +677,44 @@ export function PujaClientView({ puja }: { puja: any }) {
                       </div>
                     )}
 
-
-                    <div className="border-b border-slate-100 pb-4 text-center">
-                      <h3 className="text-lg font-black text-slate-800 group-hover:text-rose-900 transition-colors">
+                    <div className="border-b border-[#d4af37]/20 pb-3 text-center">
+                      <h3 className="text-base font-bold text-white group-hover:text-[#f6d860] transition-colors leading-snug">
                         {pkg.name}
                       </h3>
                       <div className="mt-2 flex items-baseline justify-center gap-1">
-                        <span className="text-xs text-slate-400">शुल्क:</span>
-                        <span className="text-2xl font-black text-rose-900">₹{Number(pkg.price).toLocaleString()}</span>
+                        <span className="text-xs text-[#9ca3af]">दक्षिणा शुल्क:</span>
+                        <span className="text-2xl font-black text-[#fbbf24] font-heading">₹{pkgPrice.toLocaleString('en-IN')}</span>
                       </div>
                     </div>
                     
-                    <ul className="space-y-3">
+                    <ul className="space-y-2.5 text-xs text-[#d1d5db]">
                       {pkg.desc ? pkg.desc.split('. ').map((feat: string, i: number) => feat.trim() && (
-                        <li key={i} className="flex gap-2.5 items-start text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                          <span className="text-rose-800 font-black text-base shrink-0 mt-0.5">ॐ</span>
+                        <li key={i} className="flex gap-2 items-start leading-relaxed font-medium">
+                          <span className="text-[#fbbf24] font-bold text-sm shrink-0">ॐ</span>
                           <span>{feat}</span>
                         </li>
                       )) : (
-                        <li className="flex gap-2.5 items-start text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                          <span className="text-rose-800 font-black text-base shrink-0 mt-0.5">ॐ</span>
+                        <li className="flex gap-2 items-start leading-relaxed font-medium">
+                          <span className="text-[#fbbf24] font-bold text-sm shrink-0">ॐ</span>
                           <span>वैदिक विधि-विधान से सम्पादित सम्पूर्ण पूजा अनुष्ठान</span>
                         </li>
                       )}
                     </ul>
                   </div>
 
-                  <div className="pt-6 mt-4 border-t border-slate-100">
-                    <Button 
+                  {/* Super Attractive BOOK PUJA Button */}
+                  <div className="pt-4 mt-auto border-t border-[#d4af37]/20">
+                    <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedPackage(pkg.id);
                         handleBookNow(pkg.id);
                       }}
-                      className={cn(
-                        "w-full font-bold h-12 text-sm rounded-xl shadow-md transition-all uppercase tracking-wider border-b-4",
-                        isSelected 
-                          ? "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white border-emerald-800" 
-                          : "bg-slate-100 hover:bg-rose-900 hover:text-white text-slate-700 border-slate-300"
-                      )}
+                      className="w-full bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#fbbf24] hover:to-[#f59e0b] text-white font-extrabold text-sm py-3 px-4 rounded-xl shadow-[0_4px_12px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_18px_rgba(245,158,11,0.6)] transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer border-none"
                     >
-                      बुक करें (Book Puja)
-                    </Button>
+                      <span>BOOK PUJA NOW</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               )
