@@ -62,6 +62,54 @@ function PujaCountdownTimer({ targetDate }: { targetDate?: string | Date }) {
   )
 }
 
+// Smart Dynamic Helper: Generates Puja-specific "Why perform this Puja?" benefits tailored to any puja
+function getDynamicPujaBenefits(puja: any) {
+  const name = puja?.name || ''
+  const desc = (puja?.shortDescription || puja?.description || '').toLowerCase()
+
+  // 1. If Kalsarp / Rahu Ketu / Dosha Puja
+  if (name.includes('कालसर्प') || name.includes('Kaal Sarp') || desc.includes('kalsarp') || desc.includes('rahu')) {
+    return [
+      { icon: ShieldCheck, title: 'Relief from Kaal Sarp Dosh and Life Obstacles', desc: 'Kaal Sarp Dosh causes repeated obstacles and failures in life. This special puja helps remove these barriers.' },
+      { icon: HandHeart, title: 'Family Peace and Marital Harmony', desc: 'Kaal Sarp Dosh leads to marriage delays, conflicts, and child-related issues. This puja provides effective solutions.' },
+      { icon: Sparkles, title: 'Relief from Financial Crisis and Debt', desc: 'Kaal Sarp Dosh creates financial instability. This puja brings stability, prosperity, and financial balance.' },
+      { icon: Award, title: 'Karmic Purification and Spiritual Growth', desc: 'This puja frees one from past-life karmic debts and Pitru Dosh, purifying the soul and opening the path to spiritual upliftment.' },
+      { icon: Flame, title: 'Protection from Negative Energies', desc: 'The puja removes negativity from the environment and protects against evil eye, tantric obstacles, and negative forces.' }
+    ]
+  }
+
+  // 2. If Baglamukhi / Shatru Samhara / Victory Puja
+  if (name.includes('बगलामुखी') || name.includes('Bagalamukhi') || name.includes('शत्रु') || desc.includes('court') || desc.includes('enemy')) {
+    return [
+      { icon: ShieldCheck, title: 'Court Case Victory & Legal Dispute Defense', desc: 'Neutralizes enemy actions, legal disputes, court cases, and workplace harassment through Maa Baglamukhi divine shield.' },
+      { icon: HandHeart, title: 'Protection from Evil Eye & Negative Badha', desc: 'Destroys unseen dark energies, black magic, jealousy obstacles, and protects family peace and reputation.' },
+      { icon: Sparkles, title: 'Business Triumph & Financial Dominance', desc: 'Removes severe trade stagnation, competitor hostility, and grants overwhelming victory in business ventures.' },
+      { icon: Award, title: 'Courage, Focus & Speech Mastery', desc: 'Empowers internal courage, clarity of thought, and persuasive speech during crucial life confrontations.' },
+      { icon: Flame, title: 'Maha Kavach for Family Security', desc: 'Establishes an impenetrable protective Kavach over your home, assets, and family members.' }
+    ]
+  }
+
+  // 3. If Shiv / Rudrabhishek / Mahamrityunjaya Puja
+  if (name.includes('विश्वनाथ') || name.includes('महामृत्युंजय') || name.includes('रुद्राभिषेक') || desc.includes('health') || desc.includes('shiv')) {
+    return [
+      { icon: ShieldCheck, title: 'Divine Health, Longevity & Healing', desc: 'Invocation of Bhagwan Shiv Mahamrityunjaya mantra bestows physical healing, disease resistance, and longevity.' },
+      { icon: HandHeart, title: 'Removal of Planetary Doshas & Graha Peeda', desc: 'Pacifies adverse planetary transits including Shani Sade Sati, Rahu Mahadasha, and birth chart afflictions.' },
+      { icon: Sparkles, title: 'Mental Peace & Stress Alleviation', desc: 'Calms anxiety, depression, and mental restlessness by infusing pure sattvic divine energy into your consciousness.' },
+      { icon: Award, title: 'Family Harmony & Domestic Peace', desc: 'Harmonizes family relations, cleanses domestic environment, and attracts continuous divine grace.' },
+      { icon: Flame, title: 'Spiritual Purification & Moksha Blessings', desc: 'Purifies past karmic impressions and connects your soul directly with Mahadev divine consciousness.' }
+    ]
+  }
+
+  // 4. Default Universal Vedic Puja Benefits
+  return [
+    { icon: ShieldCheck, title: 'Removal of Unseen Barriers & Obstacles', desc: 'Clears karmic blockages and unexpected hurdles hindering career, education, and life progress.' },
+    { icon: HandHeart, title: 'Family Unity & Peace of Mind', desc: 'Restores warmth, harmony, and mutual respect among family members while relieving emotional distress.' },
+    { icon: Sparkles, title: 'Financial Stability & Prosperity', desc: 'Attracts auspicious opportunities, steady income, and relieves burdensome debt cycles.' },
+    { icon: Award, title: 'Personalized Name & Gotra Vedic Sankalp', desc: 'Senior Veda Pandits chant your exact name and gotra with 108 auspicious Vedic mantras.' },
+    { icon: Flame, title: 'HD Video Proof & Sacred Prasad Delivery', desc: 'Receive personalized video proof of your sankalp on WhatsApp and blessed prasad delivered to your home.' }
+  ]
+}
+
 export function PujaClientView({ puja }: { puja: any }) {
   const router = useRouter()
   const basePrice = Number(puja?.price || 951)
@@ -749,24 +797,26 @@ export function PujaClientView({ puja }: { puja: any }) {
               />
             </div>
 
-            {/* Highlighted Benefit Cards Grid (Dark Obsidian Cards) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-[#d4af37]/20">
-              {[
-                { icon: ShieldCheck, title: 'शत्रु व बाधा मुक्ति', desc: 'कोर्ट-कचहरी, शत्रु बाधा तथा नकारात्मक ऊर्जा से मुक्ति।' },
-                { icon: HandHeart, title: 'सुख व समृद्धि', desc: 'व्यापार, नौकरी एवं धन-धान्य में निरंतर वृद्धि।' },
-                { icon: Sparkles, title: 'आरोग्य व शांति', desc: 'दीर्घकालिक बीमारियों से राहत एवं मानसिक शांति।' },
-                { icon: Award, title: 'वंश व कुल वृद्धि', desc: 'पारिवारिक सौहार्द एवं संतान सुख की प्राप्ति।' }
-              ].map((b, i) => (
-                <div key={i} className="bg-[#1f293d] p-4 rounded-2xl border border-[#d4af37]/20 flex items-start gap-3 hover:border-[#d4af37]/50 transition-colors">
-                  <div className="h-10 w-10 rounded-xl bg-[#d4af37]/15 text-[#fbbf24] border border-[#d4af37]/30 flex items-center justify-center shrink-0 shadow-xs">
-                    <b.icon className="h-5 w-5" />
+            {/* Why Perform This Puja? Dynamic Benefits Grid (DevPunya Style) */}
+            <div className="space-y-4 pt-4 border-t border-[#d4af37]/20">
+              <h3 className="text-lg font-heading font-extrabold text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-[#fbbf24]" />
+                <span>Why perform this Puja? (अनुष्ठान के दिव्य फल)</span>
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {getDynamicPujaBenefits(puja).map((b, i) => (
+                  <div key={i} className="bg-[#1f293d] p-5 rounded-2xl border border-[#d4af37]/20 flex items-start gap-3.5 hover:border-[#d4af37]/60 transition-all group">
+                    <div className="h-10 w-10 rounded-xl bg-[#d4af37]/15 text-[#fbbf24] border border-[#d4af37]/30 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-110 transition-transform">
+                      <b.icon className="h-5 w-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-white text-sm leading-snug">{b.title}</h4>
+                      <p className="text-[#9ca3af] text-xs leading-relaxed font-normal">{b.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white text-sm">{b.title}</h4>
-                    <p className="text-[#9ca3af] text-xs mt-0.5 leading-snug">{b.desc}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
