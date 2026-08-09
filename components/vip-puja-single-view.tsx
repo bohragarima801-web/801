@@ -83,9 +83,9 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   }
 
   const assignedPandit = parsedPandit || {
-    name: 'Pandit Ram Sharma (Senior Mahant)',
-    title: 'मुख्य वेदाचार्य एवं कर्मकांड प्रमुख (25+ Years Experience)',
-    experience: '25+ वर्ष वेद अनुभव',
+    name: 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)',
+    title: 'मुख्य वेदाचार्य एवं कर्मकांड प्रमुख (27+ Years Experience)',
+    experience: '27+ वर्ष वेद अनुभव',
     location: templeLocation,
     photo: '/pandit_mukesh_bohra.jpg'
   }
