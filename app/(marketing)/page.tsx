@@ -281,7 +281,7 @@ export default async function HomePage() {
             const categoryName = p.category?.name || 'Vedic Puja'
 
             return (
-              <article key={p.id} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
                 {/* Clean Light Image Frame with Object Cover */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center">
@@ -324,7 +324,7 @@ export default async function HomePage() {
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
                     <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-snug">
-                      <Link href={pujaHref}>{p.name}</Link>
+                      {p.name}
                     </h3>
                     {p.location && (
                       <p className="text-xs text-[#4B5563] flex items-center gap-1.5 font-medium">
@@ -345,16 +345,13 @@ export default async function HomePage() {
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <Link
-                      href={pujaHref}
-                      className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-2 px-4 rounded-xl shadow-md hover:shadow-lg hover:shadow-[#FF7A00]/25 transition-all inline-flex items-center gap-1"
-                    >
+                    <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-2 px-4 rounded-xl shadow-md group-hover:shadow-lg group-hover:shadow-[#FF7A00]/25 transition-all inline-flex items-center gap-1">
                       Book Now <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
+                    </span>
                   </div>
                 </div>
 
-              </article>
+              </Link>
             )
           })}
         </div>
@@ -399,7 +396,7 @@ export default async function HomePage() {
               const price = Number(p.price || 501)
               const imgSrc = p.coverImage || '/product_fallback.jpg'
               return (
-                <article key={p.id} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal">
+                <Link key={p.id} href={`/products/${p.slug}`} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal">
                   <div className="relative aspect-square overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 flex items-center justify-center">
                     <SafeImage
                       src={imgSrc}
@@ -417,7 +414,7 @@ export default async function HomePage() {
                         {p.category?.name || 'Vedic Product'}
                       </span>
                       <h3 className="font-heading font-bold text-base text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-1">
-                        <Link href={`/products/${p.slug}`}>{p.name}</Link>
+                        {p.name}
                       </h3>
                     </div>
 
@@ -425,15 +422,12 @@ export default async function HomePage() {
                       <span className="text-lg font-black text-[#FF7A00]">
                         ₹{price.toLocaleString('en-IN')}
                       </span>
-                      <Link
-                        href={`/products/${p.slug}`}
-                        className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-1.5 px-3.5 rounded-lg shadow-sm hover:shadow-md transition-all inline-flex items-center gap-1"
-                      >
+                      <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-1.5 px-3.5 rounded-lg shadow-sm group-hover:shadow-md transition-all inline-flex items-center gap-1">
                         Buy Now &rarr;
-                      </Link>
+                      </span>
                     </div>
                   </div>
-                </article>
+                </Link>
               )
             })}
           </div>
