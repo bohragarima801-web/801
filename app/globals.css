@@ -27,6 +27,56 @@
     --text-body-tier2: #4B5563;
     --border-tier2: #F3E8DE;
     --success-tier2: #16A34A;
+  }
+}
+
+/* Custom VIP Luxury Styling Classes (DevPunya Style Royal Obsidian × Metallic Gold) */
+.vip-container {
+  background-color: #0f0c08;
+  color: #ffffff;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+.vip-card {
+  background: #1c160f;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+.vip-card:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.28);
+  transition: all 0.3s ease-in-out;
+}
+.vip-gold-gradient-text {
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+.vip-cta-btn {
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #b38728 70%, #fbf5b7 100%);
+  color: #0f0c08;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  box-shadow: 0 4px 15px rgba(191, 149, 63, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.vip-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(252, 246, 186, 0.6);
+}
+
+@layer base {
+  :root {
 
     /* ── Tier 1: Premium (Landing & VIP Puja) System Tokens ── */
     --bg-tier1-start: #111827;
