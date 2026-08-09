@@ -19,8 +19,43 @@ import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
+// Smart Helper: Calculates synchronized upcoming Shubh Muhurat target timestamp and formatted date
+function getPujaTargetDate(puja: any): { targetTime: number; formattedDate: string } {
+  const now = new Date()
+  const rawDate = puja?.pujaDate
+  
+  if (rawDate) {
+    const parsed = new Date(rawDate).getTime()
+    if (!isNaN(parsed) && parsed > now.getTime()) {
+      const diffDays = Math.ceil((parsed - now.getTime()) / (1000 * 60 * 60 * 24))
+      if (diffDays <= 14) {
+        return {
+          targetTime: parsed,
+          formattedDate: new Date(parsed).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })
+        }
+      }
+    }
+  }
+
+  // Generate deterministic 3 to 7 days offset based on puja name/ID
+  let hash = 0
+  const key = String(puja?.id || puja?.name || 'default')
+  for (let i = 0; i < key.length; i++) {
+    hash = (hash << 5) - hash + key.charCodeAt(i)
+    hash |= 0
+  }
+  const daysOffset = 3 + (Math.abs(hash) % 5) // Always 3, 4, 5, 6, or 7 days from now
+  const targetDateObj = new Date(now.getTime() + (daysOffset * 24 * 60 * 60 * 1000))
+  targetDateObj.setHours(23, 59, 59, 0)
+
+  return {
+    targetTime: targetDateObj.getTime(),
+    formattedDate: targetDateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })
+  }
+}
+
 // Real-time Date-based Urgency Countdown Timer Component
-function PujaCountdownTimer({ targetDate }: { targetDate?: string | Date }) {
+function PujaCountdownTimer({ targetTime }: { targetTime: number }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
     days: 0,
     hours: 0,
@@ -29,12 +64,9 @@ function PujaCountdownTimer({ targetDate }: { targetDate?: string | Date }) {
   })
 
   useEffect(() => {
-    // Target timestamp from puja.pujaDate or 7 days from now
-    const target = targetDate ? new Date(targetDate).getTime() : new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
-
     const updateTimer = () => {
       const now = new Date().getTime()
-      const diff = Math.max(0, target - now)
+      const diff = Math.max(0, targetTime - now)
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24))
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -47,17 +79,17 @@ function PujaCountdownTimer({ targetDate }: { targetDate?: string | Date }) {
     updateTimer()
     const interval = setInterval(updateTimer, 1000)
     return () => clearInterval(interval)
-  }, [targetDate])
+  }, [targetTime])
 
   return (
-    <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-2 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-100 shadow-md">
-      <Clock className="w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
-      <span className="text-[11px] sm:text-xs font-bold text-amber-200 uppercase tracking-wider">Puja Starts In:</span>
-      <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-black text-amber-300">
-        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.days).padStart(2, '0')}d</span>:
-        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.hours).padStart(2, '0')}h</span>:
-        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.minutes).padStart(2, '0')}m</span>:
-        <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">{String(timeLeft.seconds).padStart(2, '0')}s</span>
+    <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-2 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/40 text-[#f6d860] shadow-md">
+      <Clock className="w-4 h-4 text-[#fbbf24] animate-spin" style={{ animationDuration: '8s' }} />
+      <span className="text-[11px] sm:text-xs font-bold text-[#f6d860] uppercase tracking-wider">Puja Starts In:</span>
+      <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-black text-[#fbbf24]">
+        <span className="bg-black/60 px-2 py-0.5 rounded border border-[#d4af37]/40">{String(timeLeft.days).padStart(2, '0')}d</span>:
+        <span className="bg-black/60 px-2 py-0.5 rounded border border-[#d4af37]/40">{String(timeLeft.hours).padStart(2, '0')}h</span>:
+        <span className="bg-black/60 px-2 py-0.5 rounded border border-[#d4af37]/40">{String(timeLeft.minutes).padStart(2, '0')}m</span>:
+        <span className="bg-black/60 px-2 py-0.5 rounded border border-[#d4af37]/40">{String(timeLeft.seconds).padStart(2, '0')}s</span>
       </div>
     </div>
   )
@@ -271,6 +303,8 @@ export function PujaClientView({ puja }: { puja: any }) {
     } catch (e) {}
   }
 
+  const { targetTime, formattedDate } = getPujaTargetDate(puja)
+
   return (
     <div className="relative bg-[#0c1017] pb-28 sm:pb-32 font-sans antialiased text-[#d1d5db]">
       
@@ -305,7 +339,7 @@ export function PujaClientView({ puja }: { puja: any }) {
               </span>
 
               {/* Real-time Ticking Countdown Timer */}
-              <PujaCountdownTimer targetDate={puja.pujaDate} />
+              <PujaCountdownTimer targetTime={targetTime} />
             </div>
             
             <div className="space-y-2">
@@ -329,11 +363,7 @@ export function PujaClientView({ puja }: { puja: any }) {
               </div>
               <div className="flex items-center gap-2 text-[#f6d860] font-bold border-t border-[#d4af37]/20 pt-2">
                 <Calendar className="h-4 w-4 text-[#fbbf24] shrink-0" />
-                <span>
-                  {puja.pujaDate 
-                    ? new Date(puja.pujaDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }) 
-                    : 'Friday, 11 September 2026'}
-                </span>
+                <span>{formattedDate}</span>
               </div>
             </div>
 

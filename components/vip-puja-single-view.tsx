@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
@@ -46,6 +46,52 @@ const timeSlotOptions = [
   { id: 'abhijit', label: '☀️ Abhijit Muhurat / Midday Slot', desc: '11:00 AM - 02:00 PM (Best for Victory & Wealth)' },
   { id: 'godhuli', label: '🌆 Godhuli Muhurat / Evening Slot', desc: '05:00 PM - 08:00 PM (Best for Family Harmony)' },
 ]
+
+// Real-time Date-based Urgency Countdown Timer Component
+function VipPujaCountdownTimer({ puja }: { puja: any }) {
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  })
+
+  useEffect(() => {
+    let hash = 0
+    const key = String(puja?.id || puja?.name || 'default')
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash << 5) - hash + key.charCodeAt(i)
+      hash |= 0
+    }
+    const daysOffset = 3 + (Math.abs(hash) % 5)
+    const targetDateObj = new Date(new Date().getTime() + (daysOffset * 24 * 60 * 60 * 1000))
+    targetDateObj.setHours(23, 59, 59, 0)
+    const targetTime = targetDateObj.getTime()
+
+    const updateTimer = () => {
+      const now = new Date().getTime()
+      const diff = Math.max(0, targetTime - now)
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+      setTimeLeft({ days, hours, minutes, seconds })
+    }
+
+    updateTimer()
+    const interval = setInterval(updateTimer, 1000)
+    return () => clearInterval(interval)
+  }, [puja?.id, puja?.name])
+
+  return (
+    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37]/50 bg-[#1C160F] text-[#F3E5AB] text-xs font-bold font-mono shadow-md">
+      <Clock className="w-3.5 h-3.5 text-[#D4AF37] animate-spin" style={{ animationDuration: '8s' }} />
+      <span>Starts In: {String(timeLeft.days).padStart(2, '0')}d : {String(timeLeft.hours).padStart(2, '0')}h : {String(timeLeft.minutes).padStart(2, '0')}m : {String(timeLeft.seconds).padStart(2, '0')}s</span>
+    </div>
+  )
+}
 
 export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false)
@@ -226,10 +272,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   </div>
 
                   {/* Real-time Ticking Urgency Countdown Timer */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37]/40 bg-[#1C160F] text-[#F3E5AB] text-xs font-bold font-mono">
-                    <Clock className="w-3.5 h-3.5 text-[#D4AF37] animate-spin" style={{ animationDuration: '8s' }} />
-                    <span>Starts In: 07d : 14h : 32m</span>
-                  </div>
+                  <VipPujaCountdownTimer puja={puja} />
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-white leading-tight">
