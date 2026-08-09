@@ -283,27 +283,17 @@ export default async function HomePage() {
             return (
               <article key={p.id} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
-                {/* Pro-Level Uncropped Image Frame with Ambient Backdrop */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 rounded-t-2xl flex items-center justify-center">
+                {/* Clean Light Image Frame with Object Cover */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
                     ) : (
-                      <>
-                        {/* Ambient Blurred Background Layer */}
-                        <img
-                          src={mediaInfo.thumbUrl || p.coverImage}
-                          alt=""
-                          aria-hidden="true"
-                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-25 scale-125 pointer-events-none"
-                        />
-                        {/* Foreground Full Uncropped Image */}
-                        <SafeImage
-                          src={mediaInfo.thumbUrl || p.coverImage}
-                          alt={p.name}
-                          className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
-                        />
-                      </>
+                      <SafeImage
+                        src={mediaInfo.thumbUrl || p.coverImage}
+                        alt={p.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     )
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-orange-50 text-[#FF7A00]">
@@ -410,17 +400,11 @@ export default async function HomePage() {
               const imgSrc = p.coverImage || '/product_fallback.jpg'
               return (
                 <article key={p.id} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden reveal">
-                  <div className="relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center">
-                    <img
-                      src={imgSrc}
-                      alt=""
-                      aria-hidden="true"
-                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-125 pointer-events-none"
-                    />
+                  <div className="relative aspect-square overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 flex items-center justify-center">
                     <SafeImage
                       src={imgSrc}
                       alt={p.name}
-                      className="relative z-10 w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <span className="absolute top-3 left-3 kundli-badge-orange text-[9px] px-2 py-0.5 z-20 shadow-sm">
                       ⚡ अभिमंत्रित

@@ -107,32 +107,19 @@ export function SacredImageFrame({
   return (
     <div
       className={cn(
-        'relative w-full overflow-hidden bg-gradient-to-b from-[#1E0C07]/90 to-[#0A0302] rounded-xl flex items-center justify-center p-1 group shadow-inner',
+        'relative w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-xl flex items-center justify-center group shadow-sm',
         aspectClass,
         className
       )}
     >
-      {/* Ambient Blur Fill Background (No Ugly White Bars & No Image Cropping) */}
-      <img
-        src={displaySrc}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover filter blur-lg opacity-40 scale-110 pointer-events-none transition-opacity duration-500 group-hover:opacity-55"
-        onError={(e) => {
-          e.currentTarget.src = fallbackSrc
-        }}
-      />
-
-      {/* Main Full Non-Cropped Centered Image */}
+      {/* Main Clean Seamless Image with Object Cover */}
       <SafeImage
         src={displaySrc}
         alt={alt}
         fallbackSrc={fallbackSrc}
         seoCategory={seoCategory}
         className={cn(
-          'relative z-10 max-h-full max-w-full object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-[1.03]',
+          'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105',
           imageClassName
         )}
       />
