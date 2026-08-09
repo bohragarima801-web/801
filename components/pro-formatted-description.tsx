@@ -30,15 +30,15 @@ export function ProFormattedDescription({ content, type = 'product', className }
       <div className={cn("space-y-4", className)}>
         <div 
           className={cn(
-            "prose max-w-none text-slate-700 font-sans leading-relaxed",
-            "prose-headings:font-black prose-headings:text-slate-900 prose-headings:font-serif",
-            "prose-h2:text-xl prose-h2:border-b prose-h2:border-amber-200 prose-h2:pb-2 prose-h2:mt-6 prose-h2:text-rose-950",
-            "prose-h3:text-lg prose-h3:text-amber-900 prose-h3:mt-4",
-            "prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-p:my-3",
-            "prose-ul:my-4 prose-ul:space-y-2 prose-ul:list-none prose-ul:pl-0",
-            "prose-li:flex prose-li:items-start prose-li:gap-2 prose-li:text-sm sm:prose-li:text-base prose-li:text-slate-700",
-            "prose-strong:text-slate-900 prose-strong:font-bold",
-            "prose-blockquote:border-l-4 prose-blockquote:border-amber-500 prose-blockquote:bg-amber-50/60 prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:text-slate-800"
+            "prose max-w-none text-[#d1d5db] font-sans leading-relaxed dark:prose-invert",
+            "prose-headings:font-extrabold prose-headings:text-white prose-headings:font-heading",
+            "prose-h2:text-xl prose-h2:border-b prose-h2:border-[#d4af37]/30 prose-h2:pb-2 prose-h2:mt-6 prose-h2:text-[#fbbf24]",
+            "prose-h3:text-lg prose-h3:text-[#f6d860] prose-h3:mt-4",
+            "prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-p:my-3 prose-p:text-[#d1d5db]",
+            "prose-ul:my-4 prose-ul:space-y-2.5 prose-ul:list-none prose-ul:pl-0",
+            "prose-li:flex prose-li:items-start prose-li:gap-2.5 prose-li:text-sm sm:prose-li:text-base prose-li:text-[#e5e7eb]",
+            "prose-strong:text-white prose-strong:font-bold",
+            "prose-blockquote:border-l-4 prose-blockquote:border-[#d4af37] prose-blockquote:bg-[#1f293d] prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:text-white"
           )}
           dangerouslySetInnerHTML={{ __html: rawText }}
         />
@@ -77,13 +77,13 @@ export function ProFormattedDescription({ content, type = 'product', className }
   })
 
   return (
-    <div className={cn("space-y-5 font-sans", className)}>
+    <div className={cn("space-y-4 font-sans text-[#d1d5db]", className)}>
       {blocks.map((block, idx) => {
         if (block.type === 'header') {
           return (
-            <div key={idx} className="pt-2 pb-1 border-b border-amber-200/80">
-              <h3 className="text-lg font-black text-rose-950 font-serif flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-amber-500 shrink-0" />
+            <div key={idx} className="pt-3 pb-1 border-b border-[#d4af37]/30">
+              <h3 className="text-lg font-bold text-[#fbbf24] font-heading flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-[#fbbf24] shrink-0" />
                 {block.text}
               </h3>
             </div>
@@ -92,11 +92,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'keyval') {
           return (
-            <div key={idx} className="bg-amber-50/60 p-4 rounded-xl border border-amber-200/70 space-y-1">
-              <span className="font-bold text-amber-900 text-sm block uppercase tracking-wider font-serif">
+            <div key={idx} className="bg-[#1f293d] p-4 rounded-xl border border-[#d4af37]/25 space-y-1">
+              <span className="font-bold text-[#f6d860] text-sm block uppercase tracking-wider">
                 ✨ {block.title}
               </span>
-              <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+              <p className="text-[#e5e7eb] text-sm sm:text-base leading-relaxed">
                 {block.text}
               </p>
             </div>
@@ -105,11 +105,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'bullet') {
           return (
-            <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/80 border border-slate-200/60 hover:border-amber-300 transition-colors">
-              <div className="h-6 w-6 rounded-full bg-rose-900 text-amber-300 flex items-center justify-center font-black text-xs shrink-0 mt-0.5 shadow-xs">
+            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#1f293d] border border-[#d4af37]/20 hover:border-[#d4af37]/50 transition-colors">
+              <div className="h-6 w-6 rounded-full bg-[#d4af37]/20 text-[#fbbf24] border border-[#d4af37]/40 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs">
                 ॐ
               </div>
-              <p className="text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+              <p className="text-white text-sm sm:text-base leading-relaxed font-medium">
                 {block.text}
               </p>
             </div>
@@ -117,7 +117,7 @@ export function ProFormattedDescription({ content, type = 'product', className }
         }
 
         return (
-          <p key={idx} className="text-slate-700 text-sm sm:text-base leading-relaxed">
+          <p key={idx} className="text-[#d1d5db] text-sm sm:text-base leading-relaxed font-normal">
             {block.text}
           </p>
         )
