@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin, ArrowRight, Sparkles } from 'lucide-react'
 
 export interface HeroSlide {
   id: string
@@ -51,7 +51,6 @@ const defaultHeroSlides: HeroSlide[] = [
   }
 ]
 
-
 export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children?: React.ReactNode }) {
   const slideList = slides && slides.length > 0 ? slides : defaultHeroSlides
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -61,12 +60,12 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
   const touchStartX = useRef<number | null>(null)
   const touchEndX = useRef<number | null>(null)
 
-  // Automatic slide rotation every 3.5 seconds
+  // Automatic slide rotation every 4 seconds
   useEffect(() => {
     if (slideList.length <= 1 || isPaused) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slideList.length)
-    }, 3500)
+    }, 4000)
     return () => clearInterval(timer)
   }, [slideList.length, isPaused])
 
@@ -120,12 +119,13 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full aspect-[16/8] sm:aspect-[21/9] md:aspect-[24/9] overflow-hidden rounded-2xl md:rounded-3xl bg-[#1E0C07] shadow-xl border border-[#F5E2B8] select-none group"
+      className="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] min-h-[220px] sm:min-h-[280px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-2xl border border-[#F3E8DE] dark:border-gray-800 select-none group"
     >
-      {/* Slides */}
+      {/* Slides Loop */}
       {slideList.map((slide, idx) => {
         const isActive = currentIndex === idx
         const targetUrl = slide.ctaUrl || slide.link || '/pujas'
+        const buttonLabel = slide.ctaText || slide.buttonText || 'Book Puja'
 
         return (
           <div
@@ -134,7 +134,8 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
               isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
-            <Link href={targetUrl} className="block w-full h-full relative">
+            <Link href={targetUrl} className="block w-full h-full relative group/link">
+              {/* Background Banner Image */}
               <Image
                 src={slide.image || '/katyayani_yagya_hero.webp'}
                 alt={slide.title || 'Sacred Puja Banner'}
@@ -142,24 +143,45 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
                 priority={idx === 0}
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 unoptimized
-                className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover/link:scale-105"
               />
 
-              {/* Bottom Subtle Shadow Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+              {/* ── 1. DARK SEMI-TRANSPARENT MULTI-LAYER GRADIENT OVERLAY ── */}
+              {/* Dark Gradient Bottom-to-Top (Mobile & Desktop) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30 pointer-events-none z-10" />
+              {/* Dark Gradient Left-to-Right Accent (Desktop) */}
+              <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent pointer-events-none z-10" />
 
-              {/* Optional Slide Content overlay */}
+              {/* ── 2. HIGH-CONTRAST ALWAYS-VISIBLE TEXT OVERLAY CONTAINER ── */}
               {slide.title && (
-                <div className="absolute bottom-6 left-6 right-6 z-20 hidden sm:block">
-                  <div className="max-w-xl bg-black/40 backdrop-blur-md border border-amber-400/30 rounded-2xl p-4 text-white shadow-lg">
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-5 md:p-6 z-20 flex flex-col justify-end">
+                  <div className="max-w-2xl bg-black/65 backdrop-blur-md border border-white/20 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 text-white shadow-2xl space-y-2 text-left">
+                    
+                    {/* Subtitle / Location Badge */}
                     {slide.subtitle && (
-                      <span className="text-xs font-bold text-amber-300 uppercase tracking-widest block mb-1">
-                        📍 {slide.subtitle}
-                      </span>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF7A00]/25 border border-[#FF7A00]/50 text-[#FF7A00] text-[10px] sm:text-xs font-extrabold uppercase tracking-wider">
+                        <MapPin className="h-3 w-3 text-[#FF7A00] shrink-0" />
+                        <span className="line-clamp-1">{slide.subtitle}</span>
+                      </div>
                     )}
-                    <h3 className="text-lg md:text-xl font-bold font-heading line-clamp-1">
+
+                    {/* Main Title Heading (Explicit High Contrast White Text) */}
+                    <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-heading font-extrabold text-white leading-snug drop-shadow-md line-clamp-2">
                       {slide.title}
                     </h3>
+
+                    {/* CTA Button Badge */}
+                    <div className="pt-1 flex items-center justify-between gap-3">
+                      <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg group-hover/link:brightness-110 transition-all">
+                        <span>{buttonLabel}</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+
+                      <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-amber-300 font-bold">
+                        <Sparkles className="h-3 w-3" /> Live Sankalp Seva
+                      </span>
+                    </div>
+
                   </div>
                 </div>
               )}
@@ -168,29 +190,29 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
         )
       })}
 
-      {/* Navigation Arrows */}
+      {/* ── 3. NAVIGATION ARROWS (Z-INDEX 30) ── */}
       {slideList.length > 1 && (
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/50 hover:bg-[#8B1A21] text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 z-30 border border-white/20 shadow-md"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/65 hover:bg-[#FF7A00] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Previous Slide"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/50 hover:bg-[#8B1A21] text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 z-30 border border-white/20 shadow-md"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/65 hover:bg-[#FF7A00] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Next Slide"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
         </>
       )}
 
-      {/* Bottom Center Indicator Dots (Sri Mandir Style) */}
+      {/* ── 4. INDICATOR DOTS (Z-INDEX 30) ── */}
       {slideList.length > 1 && (
-        <div className="absolute bottom-3 inset-x-0 flex items-center justify-center gap-2 z-30 pointer-events-auto">
+        <div className="absolute top-3 right-3 sm:bottom-3 sm:top-auto sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-1.5 z-30 pointer-events-auto">
           {slideList.map((_, idx) => (
             <button
               key={idx}
@@ -200,8 +222,8 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
               }}
               className={`rounded-full transition-all duration-300 ${
                 currentIndex === idx
-                  ? 'w-7 h-2.5 bg-[#D49B00] shadow-md'
-                  : 'w-2.5 h-2.5 bg-white/60 hover:bg-white'
+                  ? 'w-6 h-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] shadow-md'
+                  : 'w-2 h-2 bg-white/70 hover:bg-white'
               }`}
               aria-label={`Slide ${idx + 1}`}
             />
