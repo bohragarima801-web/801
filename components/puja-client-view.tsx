@@ -15,6 +15,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { FAQAccordion } from '@/components/ui/FAQAccordion'
+import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
@@ -352,20 +353,9 @@ export function PujaClientView({ puja }: { puja: any }) {
               </div>
             </div>
 
-            {/* Devotee Stack & Direct CTA Button */}
+            {/* Devotee Social Proof with Dynamic Incremental Count & Real Indian Face Avatars */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2 overflow-hidden shrink-0">
-                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#d4af37] bg-amber-800 text-white font-bold text-xs flex items-center justify-center shadow-md">R</div>
-                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#d4af37] bg-rose-900 text-white font-bold text-xs flex items-center justify-center shadow-md">S</div>
-                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#d4af37] bg-emerald-900 text-white font-bold text-xs flex items-center justify-center shadow-md">V</div>
-                  <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#d4af37] bg-purple-900 text-white font-bold text-xs flex items-center justify-center shadow-md">A</div>
-                </div>
-                <div className="text-xs text-[#d1d5db] font-medium text-left">
-                  <strong className="text-[#fbbf24] font-black text-sm">387+ devotees</strong>
-                  <span className="block text-[11px] text-[#9ca3af]">have booked puja with DivyaYagyam</span>
-                </div>
-              </div>
+              <DevoteeSocialProof pujaId={puja.id} pujaName={puja.name} />
 
               <button
                 onClick={() => handleScrollTo('packages')}

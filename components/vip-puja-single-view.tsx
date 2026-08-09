@@ -13,6 +13,7 @@ import {
   Sparkles, Award, UserCheck, Calendar, Clock, Video, Truck, ShieldCheck, 
   CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, Flame, Check, Zap, MapPin, Crown, ChevronDown
 } from 'lucide-react'
+import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 
 export interface SingleVipPujaProps {
   puja: {
@@ -239,17 +240,9 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   {puja.shortDescription || '27+ वर्षों के अनुभवी वरिष्ठ आचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित 5 वेदाचार्य दल एवं 1-on-1 लाइव व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।'}
                 </p>
 
-                {/* Devotee Avatars & Social Proof Stack */}
-                <div className="flex items-center gap-3 pt-1 border-t border-[#D4AF37]/20">
-                  <div className="flex -space-x-2 overflow-hidden shrink-0">
-                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-amber-900 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">R</div>
-                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-red-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">S</div>
-                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-emerald-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">V</div>
-                    <div className="inline-block h-8 w-8 rounded-full ring-2 ring-[#D4AF37] bg-purple-950 text-[#F3E5AB] font-black text-xs flex items-center justify-center shadow-md">A</div>
-                  </div>
-                  <div className="text-xs text-[#C5A059] font-medium">
-                    <strong className="text-[#F3E5AB] font-black text-sm">387+ devotees</strong> have booked puja with DivyaYagyam
-                  </div>
+                {/* Devotee Social Proof with Dynamic Incremental Count & Real Indian Face Avatars */}
+                <div className="pt-1 border-t border-[#D4AF37]/20">
+                  <DevoteeSocialProof pujaId={puja.id} pujaName={puja.name} />
                 </div>
               </div>
 
