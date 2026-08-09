@@ -50,7 +50,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
   const iconBgClass = 'bg-[#FF7A00]/15 text-[#FF7A00]'
 
   return (
-    <footer className={`relative transition-colors ${bgClass} pb-20 md:pb-6`}>
+    <footer className={`relative z-10 transition-colors ${bgClass} pb-28 md:pb-12`}>
       {/* ── 1. GRADIENT TOP BORDER (Golden Strip) ── */}
       <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#FF7A00] to-[#D4AF37] shadow-sm" />
 
@@ -68,7 +68,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
         {/* ============================================================
             SECTION 1: TRUST BANNER (Top 4-Column Strip)
             ============================================================ */}
-        <div className="mb-12 p-6 rounded-2xl bg-white dark:bg-[#1E222A] border border-[#F3E8DE] dark:border-gray-800 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mb-12 p-6 rounded-2xl bg-white dark:bg-[#1E222A] border border-[#F3E8DE] dark:border-gray-800 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-[#FFF3E0] dark:bg-orange-500/10 text-[#FF7A00] flex items-center justify-center shrink-0 font-bold">
               <ShieldCheck className="h-5 w-5" />
@@ -327,9 +327,9 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
           </div>
 
           {/* Payment & Security Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-[#F3E8DE]/60 dark:border-gray-800/60">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-2 border-t border-[#F3E8DE]/60 dark:border-gray-800/60 text-center md:text-left">
             {/* Payment Logos */}
-            <div className="flex items-center gap-2 flex-wrap text-xs">
+            <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap text-xs">
               <span className="font-bold text-gray-500 text-[11px] uppercase tracking-wider">Payments:</span>
               <div className="px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold text-blue-600">
                 Razorpay
@@ -350,7 +350,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
             </div>
 
             {/* Language Switcher */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center gap-2">
               <Languages className="h-3.5 w-3.5 text-[#FF7A00]" />
               <div className="inline-flex rounded-lg p-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold">
                 <button
@@ -370,8 +370,8 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
           </div>
 
           {/* Legal Links & Copyright */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#F3E8DE]/60 dark:border-gray-800/60 text-xs font-medium text-gray-500">
-            <div className="flex flex-wrap items-center gap-4 justify-center sm:justify-start">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-[#F3E8DE]/60 dark:border-gray-800/60 text-xs font-medium text-gray-500 text-center md:text-left">
+            <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
               <Link href="/terms" className="hover:text-[#FF7A00] transition-colors">Terms of Service</Link>
               <span>•</span>
               <Link href="/privacy" className="hover:text-[#FF7A00] transition-colors">Privacy Policy</Link>
@@ -383,7 +383,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <Link href="/register" className="text-[#FF7A00] font-bold hover:underline">Pandit / Temple Registration</Link>
             </div>
 
-            <div className="text-center sm:text-right">
+            <div className="text-center md:text-right">
               © {new Date().getFullYear()} DivyaYagyam. All rights reserved. • हरि ॐ 🙏
             </div>
           </div>

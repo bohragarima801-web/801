@@ -119,7 +119,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] min-h-[220px] sm:min-h-[280px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-2xl border border-[#F3E8DE] dark:border-gray-800 select-none group"
+      className="relative w-full h-[260px] sm:h-[360px] md:h-[440px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-2xl border border-[#F3E8DE] dark:border-gray-800 select-none group flex items-center"
     >
       {/* Slides Loop */}
       {slideList.map((slide, idx) => {
@@ -130,7 +130,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
         return (
           <div
             key={slide.id || idx}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-in-out flex items-center justify-center ${
               isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
