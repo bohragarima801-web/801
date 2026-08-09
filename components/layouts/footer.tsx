@@ -125,9 +125,8 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
             {/* Certification Badges */}
             <div className="space-y-2 pt-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FFF3E0] dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 text-[#FF7A00] text-xs font-bold">
-                <Award className="h-4 w-4" />
-                <span>ISO Certified & Veda Compliant Seva</span>
+              <div className="footer-badge-box" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(212, 175, 55, 0.1)', border: '1px solid rgba(212, 175, 55, 0.3)', padding: '8px 14px', borderRadius: '8px', color: '#fbbf24', fontSize: '0.9rem', fontWeight: 600 }}>
+                <span>🛡️</span> 100% Veda Compliant Vedic Seva
               </div>
               <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
                 <CheckCircle2 className="h-3.5 w-3.5" />
