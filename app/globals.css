@@ -822,14 +822,43 @@
 }
 
 /* ============================================================
-   SANATANI LIGHT NIMBU PILA & MAROON FOOTER SYSTEM
+   SANATANI REDDISH-BROWN & MAROON FOOTER SYSTEM (#501d0c & #3a1408)
    ============================================================ */
+.divyayagyam-footer {
+  background-color: #501d0c !important; /* Main Footer Background */
+  color: #ffffff !important;             /* Text color */
+}
+
+/* Headings inside footer */
+.divyayagyam-footer h2, 
+.divyayagyam-footer h3, 
+.divyayagyam-footer h4 {
+  color: #ffffff !important;
+}
+
+/* Footer Links */
+.divyayagyam-footer a {
+  color: #e3c0a5;             /* Light warm tone for links */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.divyayagyam-footer a:hover {
+  color: #ffffff !important;             /* Hover karne par bright white */
+  text-decoration: underline;
+}
+
+/* Bottom copyright bar */
+.divyayagyam-footer-bottom {
+  background-color: #3a1408 !important;  /* Darker brown for bottom bar */
+  color: #d1c1b7;
+}
+
 .footer-spiritual {
-  background: linear-gradient(180deg, #FFFDF0 0%, #FEF9E6 40%, #FAF0D4 100%) !important;
-  color: #3D1E10 !important;
-  border-top: 3px solid #8B1A21 !important;
+  background: #501d0c !important;
+  color: #ffffff !important;
+  border-top: 3px solid #3a1408 !important;
   position: relative;
-  box-shadow: 0 -4px 20px rgba(139, 26, 33, 0.05);
+  box-shadow: 0 -4px 20px rgba(58, 20, 8, 0.2);
 }
 
 .footer-spiritual::before {

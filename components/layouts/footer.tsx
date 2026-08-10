@@ -43,24 +43,24 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
     }
   }
 
-  // Footer styling tokens (Premium Dark Theme #0C1017 for 100% high contrast across all pages including /blog)
-  const bgClass = 'bg-[#0C1017] text-white border-t border-[#D4AF37]/30'
-  const textBodyClass = 'text-[#D1D5DB]'
-  const headingClass = 'text-[#FBBF24] font-heading font-extrabold text-xs uppercase tracking-[0.14em] drop-shadow-sm'
-  const linkHoverClass = 'hover:text-[#FBBF24]'
-  const iconBgClass = 'bg-[#1C160F] text-[#F3E5AB] border border-[#D4AF37]/40'
+  // Footer styling tokens (Dark Reddish-Brown #501d0c & Bottom Bar #3a1408 Theme)
+  const bgClass = 'bg-[#501d0c] text-white border-t border-[#e3c0a5]/20'
+  const textBodyClass = 'text-[#e3c0a5]'
+  const headingClass = 'text-white font-heading font-extrabold text-xs uppercase tracking-[0.14em] drop-shadow-sm'
+  const linkHoverClass = 'hover:text-white transition-colors duration-200 hover:underline'
+  const iconBgClass = 'bg-[#3a1408] text-white border border-[#e3c0a5]/30'
 
   return (
-    <footer className={`relative z-10 transition-colors ${bgClass} pb-28 md:pb-12`}>
-      {/* ── 1. GRADIENT TOP BORDER (Golden Strip) ── */}
-      <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#FF7A00] to-[#D4AF37] shadow-sm" />
+    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12`}>
+      {/* ── 1. GRADIENT TOP BORDER (Warm Antique Strip) ── */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#e3c0a5] to-[#D4AF37] shadow-sm" />
 
       {/* ── BACKGROUND SPIRITUAL WATERMARK OVERLAY ── */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden select-none opacity-5"
         style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FF7A00' fill-opacity='0.15'%3E%3Cpath d='M50 20 L55 35 L70 35 L58 45 L62 60 L50 50 L38 60 L42 45 L30 35 L45 35 Z'/%3E%3C/g%3E%3C/svg%3E\")",
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e3c0a5' fill-opacity='0.2'%3E%3Cpath d='M50 20 L55 35 L70 35 L58 45 L62 60 L50 50 L38 60 L42 45 L30 35 L45 35 Z'/%3E%3C/g%3E%3C/svg%3E\")",
         }}
       />
 
@@ -69,44 +69,44 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
         {/* ============================================================
             SECTION 1: TRUST BANNER (Top 4-Column Strip)
             ============================================================ */}
-        <div className="mb-12 p-6 rounded-2xl bg-[#141B26] border border-[#D4AF37]/30 shadow-md grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mb-12 p-6 rounded-2xl bg-[#3a1408] border border-[#e3c0a5]/25 shadow-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
-              <ShieldCheck className="h-5 w-5 text-[#FBBF24]" />
+            <div className="h-10 w-10 rounded-xl bg-[#501d0c] border border-[#e3c0a5]/30 text-white flex items-center justify-center shrink-0 font-bold">
+              <ShieldCheck className="h-5 w-5 text-[#e3c0a5]" />
             </div>
             <div>
               <div className="text-xs md:text-sm font-bold text-white">100% Verified Pandits</div>
-              <div className="text-[11px] text-[#9CA3AF]">शास्त्रोक्त विधि व शुद्ध संकल्प</div>
+              <div className="text-[11px] text-[#e3c0a5]">शास्त्रोक्त विधि व शुद्ध संकल्प</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
-              <Video className="h-5 w-5 text-[#FBBF24]" />
+            <div className="h-10 w-10 rounded-xl bg-[#501d0c] border border-[#e3c0a5]/30 text-white flex items-center justify-center shrink-0 font-bold">
+              <Video className="h-5 w-5 text-[#e3c0a5]" />
             </div>
             <div>
               <div className="text-xs md:text-sm font-bold text-white">Live Video Proof</div>
-              <div className="text-[11px] text-[#9CA3AF]">व्हाट्सएप पर लाइव प्रमाण</div>
+              <div className="text-[11px] text-[#e3c0a5]">व्हाट्सएप पर लाइव प्रमाण</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
-              <PackageCheck className="h-5 w-5 text-[#FBBF24]" />
+            <div className="h-10 w-10 rounded-xl bg-[#501d0c] border border-[#e3c0a5]/30 text-white flex items-center justify-center shrink-0 font-bold">
+              <PackageCheck className="h-5 w-5 text-[#e3c0a5]" />
             </div>
             <div>
               <div className="text-xs md:text-sm font-bold text-white">Abhimantrit Prasad</div>
-              <div className="text-[11px] text-[#9CA3AF]">घर द्वार पावन डिलीवरी</div>
+              <div className="text-[11px] text-[#e3c0a5]">घर द्वार पावन डिलीवरी</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#0F0C08] border border-[#D4AF37]/40 text-[#F3E5AB] flex items-center justify-center shrink-0 font-bold">
-              <Star className="h-5 w-5 fill-[#FBBF24] text-[#FBBF24]" />
+            <div className="h-10 w-10 rounded-xl bg-[#501d0c] border border-[#e3c0a5]/30 text-white flex items-center justify-center shrink-0 font-bold">
+              <Star className="h-5 w-5 fill-[#e3c0a5] text-[#e3c0a5]" />
             </div>
             <div>
               <div className="text-xs md:text-sm font-bold text-white">4.9 / 5 Rating</div>
-              <div className="text-[11px] text-[#9CA3AF]">50,000+ संतुष्ट यजमान</div>
+              <div className="text-[11px] text-[#e3c0a5]">50,000+ संतुष्ट यजमान</div>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
         {/* ============================================================
             SECTION 2: MAIN FOOTER GRID (5 Columns)
             ============================================================ */}
-        <div className="grid gap-8 lg:grid-cols-12 pb-12 border-b border-[#F3E8DE] dark:border-gray-800">
+        <div className="grid gap-8 lg:grid-cols-12 pb-12 border-b border-[#e3c0a5]/20">
           
           {/* Col 1: Brand & Belief */}
           <div className="lg:col-span-3 space-y-5">
@@ -125,11 +125,11 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
             {/* Certification Badges */}
             <div className="space-y-2 pt-1">
-              <div className="footer-badge-box" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(212, 175, 55, 0.1)', border: '1px solid rgba(212, 175, 55, 0.3)', padding: '8px 14px', borderRadius: '8px', color: '#fbbf24', fontSize: '0.9rem', fontWeight: 600 }}>
+              <div className="footer-badge-box" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(58, 20, 8, 0.7)', border: '1px solid rgba(227, 192, 165, 0.3)', padding: '8px 14px', borderRadius: '8px', color: '#ffffff', fontSize: '0.85rem', fontWeight: 600 }}>
                 <span>🛡️</span> 100% Veda Compliant Vedic Seva
               </div>
-              <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-2 text-[11px] font-semibold text-[#e3c0a5]">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
                 <span>Made with Sanatan Devotion in Bharat 🇮🇳</span>
               </div>
             </div>
@@ -142,7 +142,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-[#F3E8DE] dark:border-gray-700 flex items-center justify-center text-[#4B5563] dark:text-gray-300 hover:bg-[#FF7A00] hover:text-white hover:border-[#FF7A00] transition-all"
+                  className="w-8 h-8 rounded-full bg-[#3a1408] border border-[#e3c0a5]/30 flex items-center justify-center text-[#e3c0a5] hover:bg-white hover:text-[#501d0c] hover:border-white transition-all"
                 >
                   <Facebook className="h-3.5 w-3.5" />
                 </a>
@@ -153,7 +153,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-[#F3E8DE] dark:border-gray-700 flex items-center justify-center text-[#4B5563] dark:text-gray-300 hover:bg-[#FF7A00] hover:text-white hover:border-[#FF7A00] transition-all"
+                  className="w-8 h-8 rounded-full bg-[#3a1408] border border-[#e3c0a5]/30 flex items-center justify-center text-[#e3c0a5] hover:bg-white hover:text-[#501d0c] hover:border-white transition-all"
                 >
                   <Instagram className="h-3.5 w-3.5" />
                 </a>
@@ -164,7 +164,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-[#F3E8DE] dark:border-gray-700 flex items-center justify-center text-[#4B5563] dark:text-gray-300 hover:bg-[#FF7A00] hover:text-white hover:border-[#FF7A00] transition-all"
+                  className="w-8 h-8 rounded-full bg-[#3a1408] border border-[#e3c0a5]/30 flex items-center justify-center text-[#e3c0a5] hover:bg-white hover:text-[#501d0c] hover:border-white transition-all"
                 >
                   <Youtube className="h-3.5 w-3.5" />
                 </a>
@@ -175,7 +175,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter"
-                  className="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-[#F3E8DE] dark:border-gray-700 flex items-center justify-center text-[#4B5563] dark:text-gray-300 hover:bg-[#FF7A00] hover:text-white hover:border-[#FF7A00] transition-all"
+                  className="w-8 h-8 rounded-full bg-[#3a1408] border border-[#e3c0a5]/30 flex items-center justify-center text-[#e3c0a5] hover:bg-white hover:text-[#501d0c] hover:border-white transition-all"
                 >
                   <Twitter className="h-3.5 w-3.5" />
                 </a>
@@ -200,7 +200,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                     href={l.href}
                     className={`${textBodyClass} ${linkHoverClass} transition-all flex items-center gap-1.5 group`}
                   >
-                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0 text-[#FF7A00]" />
+                    <ArrowRight className="h-3 w-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0 text-[#e3c0a5]" />
                     {l.label}
                   </Link>
                 </li>
@@ -225,7 +225,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                     href={l.href}
                     className={`${textBodyClass} ${linkHoverClass} transition-all flex items-center gap-1.5 group`}
                   >
-                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0 text-[#FF7A00]" />
+                    <ArrowRight className="h-3 w-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0 text-[#e3c0a5]" />
                     {l.label}
                   </Link>
                 </li>
@@ -276,7 +276,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 href="https://wa.me/919587171984?text=Namaste!%20I%20need%20help%20with%20puja%20booking"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold shadow-sm transition-all"
+                className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white text-[11px] font-extrabold shadow-sm transition-all"
               >
                 💬 WhatsApp Direct Chat
               </a>
@@ -297,18 +297,18 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                   placeholder="अपना व्हाट्सएप / ईमेल दर्ज करें"
                   value={subInput}
                   onChange={(e) => setSubInput(e.target.value)}
-                  className="w-full pl-3 pr-10 py-2 rounded-xl text-xs bg-white dark:bg-[#1E222A] border border-[#F3E8DE] dark:border-gray-700 text-[#111827] dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
+                  className="w-full pl-3 pr-10 py-2 rounded-xl text-xs bg-[#3a1408] border border-[#e3c0a5]/40 text-white placeholder:text-[#e3c0a5]/60 focus:outline-none focus:ring-2 focus:ring-[#e3c0a5]"
                   required
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 top-1 bottom-1 px-3 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white rounded-lg text-xs font-bold hover:brightness-105 transition-all flex items-center justify-center"
+                  className="absolute right-1 top-1 bottom-1 px-3 bg-gradient-to-r from-[#D4AF37] to-[#FF7A00] text-white rounded-lg text-xs font-bold hover:brightness-110 transition-all flex items-center justify-center"
                 >
                   <Send className="h-3.5 w-3.5" />
                 </button>
               </div>
               {subSuccess && (
-                <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                <p className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
                   ✓ धन्यवाद! आप पंचांग अपडेट्स से जुड़ चुके हैं।
                 </p>
               )}
@@ -318,50 +318,50 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
         </div>
 
         {/* ============================================================
-            SECTION 3: SEO, LEGAL & SECURITY FOOTER (Bottom Bar)
+            SECTION 3: SEO, LEGAL & SECURITY FOOTER (Divyayagyam Footer Bottom Bar)
             ============================================================ */}
-        <div className="pt-8 space-y-6">
+        <div className="divyayagyam-footer-bottom bg-[#3a1408] rounded-2xl mt-8 p-6 space-y-6 border border-[#e3c0a5]/20 shadow-md">
           {/* Keyword Rich Tagline */}
-          <div className="text-center text-xs font-semibold text-[#FF7A00] tracking-wide">
+          <div className="text-center text-xs font-extrabold text-[#e3c0a5] tracking-wider uppercase">
             India's Most Trusted Online Vedic Puja & Abhimantrit Samagri Platform
           </div>
 
           {/* Payment & Security Strip */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-2 border-t border-[#F3E8DE]/60 dark:border-gray-800/60 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-2 border-t border-[#e3c0a5]/20 text-center md:text-left">
             {/* Payment Logos */}
             <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap text-xs">
-              <span className="font-bold text-gray-500 text-[11px] uppercase tracking-wider">Payments:</span>
-              <div className="px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold text-blue-600">
+              <span className="font-bold text-[#e3c0a5] text-[11px] uppercase tracking-wider">Payments:</span>
+              <div className="px-2.5 py-1 rounded bg-[#501d0c] border border-[#e3c0a5]/20 text-[11px] font-bold text-[#e3c0a5]">
                 Razorpay
               </div>
-              <div className="px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-extrabold text-[#111827] dark:text-white">
+              <div className="px-2.5 py-1 rounded bg-[#501d0c] border border-[#e3c0a5]/20 text-[11px] font-extrabold text-white">
                 UPI / GPay
               </div>
-              <div className="px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold text-[#111827] dark:text-white">
+              <div className="px-2.5 py-1 rounded bg-[#501d0c] border border-[#e3c0a5]/20 text-[11px] font-bold text-white">
                 PhonePe
               </div>
-              <div className="px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold text-[#111827] dark:text-white">
+              <div className="px-2.5 py-1 rounded bg-[#501d0c] border border-[#e3c0a5]/20 text-[11px] font-bold text-white">
                 Cards & NetBanking
               </div>
-              <div className="px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold flex items-center gap-1">
-                <Lock className="h-3 w-3 text-emerald-600" />
+              <div className="px-2.5 py-1 rounded bg-[#501d0c] border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center gap-1">
+                <Lock className="h-3 w-3 text-emerald-400" />
                 <span>256-Bit SSL Encrypted</span>
               </div>
             </div>
 
             {/* Language Switcher */}
             <div className="flex items-center justify-center gap-2">
-              <Languages className="h-3.5 w-3.5 text-[#FF7A00]" />
-              <div className="inline-flex rounded-lg p-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-bold">
+              <Languages className="h-3.5 w-3.5 text-[#e3c0a5]" />
+              <div className="inline-flex rounded-lg p-0.5 bg-[#501d0c] border border-[#e3c0a5]/30 text-[11px] font-bold">
                 <button
                   onClick={() => toggleLanguage('hi')}
-                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'hi' ? 'bg-[#FF7A00] text-white shadow-sm' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'hi' ? 'bg-[#e3c0a5] text-[#3a1408] font-bold shadow-sm' : 'text-[#e3c0a5] hover:text-white'}`}
                 >
                   हिन्दी
                 </button>
                 <button
                   onClick={() => toggleLanguage('en')}
-                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'en' ? 'bg-[#FF7A00] text-white shadow-sm' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'en' ? 'bg-[#e3c0a5] text-[#3a1408] font-bold shadow-sm' : 'text-[#e3c0a5] hover:text-white'}`}
                 >
                   English
                 </button>
@@ -370,20 +370,20 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
           </div>
 
           {/* Legal Links & Copyright */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-[#F3E8DE]/60 dark:border-gray-800/60 text-xs font-medium text-gray-500 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-[#e3c0a5]/20 text-xs font-medium text-[#d1c1b7] text-center md:text-left">
             <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
-              <Link href="/terms" className="hover:text-[#FF7A00] transition-colors">Terms of Service</Link>
+              <Link href="/terms" className="text-[#e3c0a5] hover:text-white hover:underline transition-colors">Terms of Service</Link>
               <span>•</span>
-              <Link href="/privacy" className="hover:text-[#FF7A00] transition-colors">Privacy Policy</Link>
+              <Link href="/privacy" className="text-[#e3c0a5] hover:text-white hover:underline transition-colors">Privacy Policy</Link>
               <span>•</span>
-              <Link href="/refunds" className="hover:text-[#FF7A00] transition-colors">Refund Policy</Link>
+              <Link href="/refunds" className="text-[#e3c0a5] hover:text-white hover:underline transition-colors">Refund Policy</Link>
               <span>•</span>
-              <Link href="/shipping" className="hover:text-[#FF7A00] transition-colors">Shipping Policy</Link>
+              <Link href="/shipping" className="text-[#e3c0a5] hover:text-white hover:underline transition-colors">Shipping Policy</Link>
               <span>•</span>
-              <Link href="/register" className="text-[#FF7A00] font-bold hover:underline">Pandit / Temple Registration</Link>
+              <Link href="/register" className="text-white font-extrabold hover:underline">Pandit / Temple Registration</Link>
             </div>
 
-            <div className="text-center md:text-right">
+            <div className="text-center md:text-right text-[#d1c1b7]">
               © {new Date().getFullYear()} DivyaYagyam. All rights reserved. • हरि ॐ 🙏
             </div>
           </div>
