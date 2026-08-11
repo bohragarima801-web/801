@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { siteConfig } from '@/lib/site-config'
 
 export function Logo({ className, showText = true, size = "md" }: { className?: string; showText?: boolean; size?: "sm" | "md" | "lg" }) {
-  const [logoUrl, setLogoUrl] = useState('/logo-icon.png')
+  const [logoUrl, setLogoUrl] = useState('/logo.jpg')
   const [siteName, setSiteName] = useState(siteConfig.name || 'DivyaYagyam')
 
   useEffect(() => {
@@ -24,20 +24,20 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
   }, [])
 
   const sizeClasses = {
-    sm: 'h-9 w-9 min-w-[36px]',
-    md: 'h-11 w-11 min-w-[44px]',
-    lg: 'h-14 w-14 min-w-[56px]',
+    sm: 'h-10 w-10 min-w-[40px]',
+    md: 'h-12 w-12 min-w-[48px]',
+    lg: 'h-16 w-16 min-w-[64px]',
   }[size]
 
   return (
     <Link href="/" className={cn('flex items-center gap-3 group shrink-0', className)}>
-      <div className={cn("relative flex items-center justify-center overflow-hidden rounded-xl bg-white p-1 group-hover:scale-105 transition-transform shrink-0 shadow-md border-2 border-[#D49B00]/40 ring-1 ring-amber-300/30", sizeClasses)}>
+      <div className={cn("relative flex items-center justify-center overflow-hidden rounded-xl bg-amber-950/20 p-0.5 group-hover:scale-105 transition-transform shrink-0 shadow-md border-2 border-[#D49B00]/40 ring-1 ring-amber-300/30", sizeClasses)}>
         <img 
-          src={logoUrl || '/logo-icon.png'} 
+          src={logoUrl || '/logo.jpg'} 
           alt="DivyaYagyam Logo" 
           className="h-full w-full object-contain object-center rounded-lg drop-shadow-sm"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = '/logo-icon.png'
+            (e.target as HTMLImageElement).src = '/logo.jpg'
           }}
         />
       </div>

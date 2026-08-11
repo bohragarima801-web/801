@@ -20,7 +20,7 @@ export function AdminSidebar({ permissions = ['*'], isMobile }: { permissions?: 
       <div className="h-16 flex items-center px-4 border-b border-sidebar-border shrink-0 justify-between">
         <Link href="/admin" className="flex items-center gap-2">
           <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl shadow-sm border border-amber-500/20 bg-white">
-            <Image src="/logo-icon.png" alt="Logo" width={400} height={300} loading="lazy" className="h-full w-full object-contain p-0.5" />
+            <Image src="/logo.jpg" alt="Logo" width={400} height={300} loading="lazy" className="h-full w-full object-contain p-0.5" />
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-sm font-bold text-slate-800">Divyayagyam</span>
