@@ -63,7 +63,7 @@ export default function SupportPage() {
                   Fastest way to update Gotra, check puja timings, or receive video proof links directly on WhatsApp.
                 </p>
               </div>
-              <p className="text-xs font-bold text-slate-800 pt-2 border-t">+91-95871-71984, +91-95320-11984</p>
+              <p className="text-xs font-bold text-slate-800 pt-2 border-t">+91-95304-01984, +91-95320-11984</p>
             </div>
 
             {/* Email Support */}
@@ -109,7 +109,7 @@ export default function SupportPage() {
             <div className="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed">
               <div className="border-b pb-4 space-y-1">
                 <h3 className="font-bold text-slate-800 text-sm">1. How do I provide my Name and Gotra for the Sankalp?</h3>
-                <p>You can enter your Name, Gotra, and special prayers during checkout. If you forgot to include them, simply WhatsApp your Booking ID to +91-95871-71984 prior to the puja start time.</p>
+                <p>You can enter your Name, Gotra, and special prayers during checkout. If you forgot to include them, simply WhatsApp your Booking ID to +91-95304-01984 prior to the puja start time.</p>
               </div>
 
               <div className="border-b pb-4 space-y-1">

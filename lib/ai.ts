@@ -50,7 +50,7 @@ const DIVYAYAGYAM_SITE_CONTEXT = `
 === DIVYAYAGYAM (दिव्ययज्ञम्) OFFICIAL SITE KNOWLEDGE BASE ===
 Website: https://divyayagyam.com
 Tagline: Aastha Ki Nai Pehchan (आस्था की नई पहचान)
-Contact: Phone/WhatsApp: +91-95871-71984, Email: seva@divyayagyam.com
+Contact: Phone/WhatsApp: +91-95304-01984, Email: seva@divyayagyam.com
 
 PUJAS AVAILABLE ON DIVYAYAGYAM:
 1. Kalsarp Dosh Nivaran Puja (कालसर्प दोष निवारण) - Trimbakeshwar / Ujjain (Single / Couple / VIP)

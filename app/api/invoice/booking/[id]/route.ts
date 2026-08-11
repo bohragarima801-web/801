@@ -66,7 +66,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="icon">🔒</div>
     <h2>आधिकारिक बिल रसीद लॉक है (Official Bill Locked)</h2>
     <p>सुरक्षा कारणों से आधिकारिक बिल/इनवॉइस रसीद <strong>भुगतान (Payment) जमा होने के पश्चात</strong> ही जेनरेट होती है।<br><br>booking ID: <strong>${booking.bookingNumber}</strong> का भुगतान अभी लंबित (Pending) है।</p>
-    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20complete%20payment%20for%20Booking%20${booking.bookingNumber}" class="btn">
+    <a href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20complete%20payment%20for%20Booking%20${booking.bookingNumber}" class="btn">
       💬 Complete Payment via WhatsApp
     </a>
   </div>

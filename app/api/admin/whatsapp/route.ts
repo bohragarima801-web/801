@@ -9,7 +9,7 @@ const DEFAULT_TEAM_MEMBERS = [
   {
     id: 'wa_default_1',
     name: 'Pandit Seva Desk',
-    phone: '919587171984',
+    phone: '919530401984',
     role: 'Online Puja & Sankalp Booking',
     message: 'जय श्री राम! मुझे पूजा एवं नाम-गोत्र संकल्प के बारे में जानकारी चाहिए।',
     isPrimary: true,
@@ -66,7 +66,7 @@ export async function GET() {
         teamMembers,
         widgetEnabled: settingsMap['whatsapp.widget_enabled'] !== 'false',
         widgetTitle: settingsMap['whatsapp.widget_title'] || 'DivyaYagyam WhatsApp Seva (व्हाट्सएप सहायता)',
-        defaultPhone: settingsMap['whatsapp.default_phone'] || '919587171984',
+        defaultPhone: settingsMap['whatsapp.default_phone'] || '919530401984',
       },
     })
   } catch (err: any) {
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
       return {
         id: m.id || `wa_${Date.now()}_${idx}`,
         name: String(m.name || 'Team Member').trim(),
-        phone: cleanPhone || '919587171984',
+        phone: cleanPhone || '919530401984',
         role: String(m.role || 'General Assistance').trim(),
         message: String(m.message || 'जय श्री राम! मुझे जानकारी चाहिए।').trim(),
         isPrimary: !!m.isPrimary,
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
     }
 
     const primaryMember = formattedMembers.find((m) => m.isPrimary) || formattedMembers[0]
-    const primaryPhone = primaryMember ? primaryMember.phone : (defaultPhone || '919587171984')
+    const primaryPhone = primaryMember ? primaryMember.phone : (defaultPhone || '919530401984')
 
     const upserts = [
       prisma.websiteSetting.upsert({

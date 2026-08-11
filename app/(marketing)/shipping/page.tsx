@@ -131,7 +131,7 @@ export default function ShippingPage() {
                   <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-[var(--primary-color)]" /> Email: <a href="mailto:Seva@divyayagyam.com" className="hover:underline text-[var(--primary-color)] font-bold">Seva@divyayagyam.com</a></p>
                 </div>
                 <div className="space-y-2">
-                  <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp: +91-95871-71984, +91-95320-11984</p>
+                  <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp: +91-95304-01984, +91-95320-11984</p>
                 </div>
               </div>
             </section>

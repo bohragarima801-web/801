@@ -110,7 +110,7 @@ export default function NotificationsPage() {
   }
 
   function downloadSampleCSV() {
-    const csvContent = 'data:text/csv;charset=utf-8,name,email,phone,message\nRahul Sharma,rahul@example.com,+919587171984,Jai Shri Ram {name}! Your Somwar Puja starts in 1 hour.\nAnjali Verma,anjali@example.com,+918888888888,Namaste {name}! Receive your prasad updates here.'
+    const csvContent = 'data:text/csv;charset=utf-8,name,email,phone,message\nRahul Sharma,rahul@example.com,+919530401984,Jai Shri Ram {name}! Your Somwar Puja starts in 1 hour.\nAnjali Verma,anjali@example.com,+918888888888,Namaste {name}! Receive your prasad updates here.'
     const encodedUri = encodeURI(csvContent)
     const link = document.createElement('a')
     link.setAttribute('href', encodedUri)

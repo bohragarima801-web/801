@@ -589,7 +589,7 @@ export default function CheckoutPage() {
                        </div>
                        <div className="space-y-2">
                          <Label>Phone Number (फ़ोन नंबर)</Label>
-                         <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="+91 9587171984" />
+                         <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="+91 9530401984" />
                        </div>
                        <div className="space-y-2 md:col-span-2">
                          <Label>Street Address (मकान नंबर / गली / क्षेत्र)</Label>

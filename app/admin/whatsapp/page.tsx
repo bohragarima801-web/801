@@ -33,7 +33,7 @@ export default function WhatsAppManagementPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [widgetEnabled, setWidgetEnabled] = useState(true)
   const [widgetTitle, setWidgetTitle] = useState('DivyaYagyam WhatsApp Seva (व्हाट्सएप सहायता)')
-  const [defaultPhone, setDefaultPhone] = useState('919587171984')
+  const [defaultPhone, setDefaultPhone] = useState('919530401984')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
@@ -56,7 +56,7 @@ export default function WhatsAppManagementPage() {
         setTeamMembers(data.data.teamMembers || [])
         setWidgetEnabled(data.data.widgetEnabled !== false)
         setWidgetTitle(data.data.widgetTitle || 'DivyaYagyam WhatsApp Seva')
-        setDefaultPhone(data.data.defaultPhone || '919587171984')
+        setDefaultPhone(data.data.defaultPhone || '919530401984')
       } else {
         toast.error(data.error || 'Failed to load WhatsApp configuration')
       }
@@ -186,7 +186,7 @@ export default function WhatsAppManagementPage() {
           teamMembers: membersList,
           widgetEnabled: enabled,
           widgetTitle: title,
-          defaultPhone: primary ? primary.phone : '919587171984',
+          defaultPhone: primary ? primary.phone : '919530401984',
         }),
       })
       const data = await res.json()
@@ -452,7 +452,7 @@ export default function WhatsAppManagementPage() {
               <Label htmlFor="mPhone" className="text-xs font-bold">WhatsApp Business Number (with 91) *</Label>
               <Input
                 id="mPhone"
-                placeholder="e.g. 919587171984 or 9587171984"
+                placeholder="e.g. 919530401984 or 9530401984"
                 value={memberPhone}
                 onChange={(e) => setMemberPhone(e.target.value)}
                 required

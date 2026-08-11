@@ -7,14 +7,14 @@ async function main() {
   // Create User profile for Pt. Mukesh Bohra if not existing
   const email = 'mukesh.bohra@divyayagyam.com'
   let user = await prisma.user.findFirst({
-    where: { OR: [{ email }, { phone: '+919587171984' }] }
+    where: { OR: [{ email }, { phone: '+919530401984' }] }
   })
 
   if (!user) {
     user = await prisma.user.create({
       data: {
         email,
-        phone: '+919587171984',
+        phone: '+919530401984',
         fullName: 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)',
         firstName: 'मुकेश',
         lastName: 'बोहरा',

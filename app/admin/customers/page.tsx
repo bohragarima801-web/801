@@ -226,7 +226,7 @@ export default function CustomersPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="custPhone">WhatsApp Number *</Label>
-                <Input id="custPhone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required placeholder="e.g. +919587171984" />
+                <Input id="custPhone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required placeholder="e.g. +919530401984" />
               </div>
               {actionType === 'create' && (
                 <div className="space-y-2">

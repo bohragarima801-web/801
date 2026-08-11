@@ -120,7 +120,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
           <h3 className="text-xl md:text-2xl font-heading font-bold text-[#111827]">शीघ्र आ रहे हैं नए पावन दर्शन वीडियो</h3>
           <p className="text-xs md:text-sm text-[#4B5563]">संस्थान के यूट्यूब एवं दिव्य दर्शन वीडियो शीघ्र यहाँ लाइव उपलब्ध कराए जाएंगे।</p>
           <a
-            href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20get%20live%20video%20updates"
+            href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20get%20live%20video%20updates"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-2.5 px-5 rounded-full shadow-md"

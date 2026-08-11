@@ -67,7 +67,7 @@ function ThankYouContent() {
   const customerName = order?.customerName || ''
   
   const whatsappText = `Namaste Divyayagyam! Mera order ${orderNumber} darj ho gaya hai. Kripaya update den.`
-  const whatsappUrl = `https://wa.me/919587171984?text=${encodeURIComponent(whatsappText)}`
+  const whatsappUrl = `https://wa.me/919530401984?text=${encodeURIComponent(whatsappText)}`
 
   const timelineSteps = isCod ? [
     { label: 'Order Confirmed', desc: 'COD ऑर्डर दर्ज', status: 'completed' },
@@ -359,8 +359,8 @@ function ThankYouContent() {
       <footer className="footer-spiritual py-8 mt-12 text-[#3D1E10] relative z-10">
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center space-y-4">
           <div className="flex flex-wrap justify-center items-center gap-6 text-xs sm:text-sm font-bold text-[#6A4D3B]">
-            <a href="tel:+919587171984" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
-              <Phone className="h-3.5 w-3.5 text-[#8B1A21]" /> +91 95871-71984
+            <a href="tel:+919530401984" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
+              <Phone className="h-3.5 w-3.5 text-[#8B1A21]" /> +91 95304-01984
             </a>
             <a href="mailto:support@divyayagyam.com" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
               <Mail className="h-3.5 w-3.5 text-[#8B1A21]" /> support@divyayagyam.com

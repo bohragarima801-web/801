@@ -65,7 +65,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'Product Name', 'Order Number', 'Total Paid Amount'],
       actions: [
         { type: 'URL', title: 'Track Order Now 📦', value: 'https://divyayagyam.com/dashboard/orders' },
-        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919530401984' }
       ]
     },
     {
@@ -93,7 +93,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'VIP Anusthan Name', 'VIP Reference ID', 'Total Dakshina', 'Live Stream Schedule'],
       actions: [
         { type: 'URL', title: 'Live Stream Link 🎥', value: 'https://divyayagyam.com/live' },
-        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919530401984' }
       ]
     },
     {
@@ -149,7 +149,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'Product Name', 'Order Number', 'Total Paid Amount'],
       actions: [
         { type: 'URL', title: 'Track Order Now 📦', value: 'https://divyayagyam.com/dashboard/orders' },
-        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919530401984' }
       ]
     },
     {
@@ -177,7 +177,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'VIP Anusthan Name', 'VIP Reference ID', 'Total Dakshina', 'Live Stream Schedule'],
       actions: [
         { type: 'URL', title: 'Live Stream Link 🎥', value: 'https://divyayagyam.com/live' },
-        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919530401984' }
       ]
     },
     {
@@ -233,7 +233,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'Product Name', 'Order Number', 'Total Paid Amount'],
       actions: [
         { type: 'URL', title: 'Track Order Now 📦', value: 'https://divyayagyam.com/dashboard/orders' },
-        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Support Helpline 📞', value: '919530401984' }
       ]
     },
     {
@@ -261,7 +261,7 @@ export const META_TEMPLATES: Record<string, MetaTemplateDefinition[]> = {
       params: ['Devotee Name', 'VIP Anusthan Name', 'VIP Reference ID', 'Total Dakshina', 'Live Stream Schedule'],
       actions: [
         { type: 'URL', title: 'Live Stream Link 🎥', value: 'https://divyayagyam.com/live' },
-        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919587171984' }
+        { type: 'PHONE_NUMBER', title: 'Acharya Contact 📞', value: '919530401984' }
       ]
     },
     {

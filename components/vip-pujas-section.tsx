@@ -284,7 +284,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
             
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <a
-                href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20book%20a%20VIP%20Anushthan"
+                href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20book%20a%20VIP%20Anushthan"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="vip-cta-btn text-sm py-3 px-6"

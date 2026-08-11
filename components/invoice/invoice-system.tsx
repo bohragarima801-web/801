@@ -293,7 +293,7 @@ export function InvoiceSystem({ initialData, allowDemoSwitcher = true }: Invoice
 
               <div className="pt-1 text-xs text-[#6A4D3B] font-medium leading-relaxed max-w-xs">
                 <p>भारत का सबसे भरोसेमंद ऑनलाइन वैदिक पूजा एवं अनुष्ठान संस्थान</p>
-                <p className="text-[11px] text-[#8B7355] mt-0.5">divyayagyam.com · +91 95871-71984</p>
+                <p className="text-[11px] text-[#8B7355] mt-0.5">divyayagyam.com · +91 95304-01984</p>
               </div>
             </div>
 
@@ -852,7 +852,7 @@ export function InvoiceSystem({ initialData, allowDemoSwitcher = true }: Invoice
             {/* Support Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 text-xs font-bold text-[#6A4D3B] pt-2">
               <span>🌐 Website: <a href="https://divyayagyam.com" className="text-[#8B1A21] underline">divyayagyam.com</a></span>
-              <span>📞 WhatsApp Support: <a href="https://wa.me/919587171984" className="text-emerald-700 underline">+91 95871-71984</a></span>
+              <span>📞 WhatsApp Support: <a href="https://wa.me/919530401984" className="text-emerald-700 underline">+91 95304-01984</a></span>
               <span>✉️ Email: <a href="mailto:support@divyayagyam.com" className="text-[#8B1A21] underline">support@divyayagyam.com</a></span>
             </div>
 

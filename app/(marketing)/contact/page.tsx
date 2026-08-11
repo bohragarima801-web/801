@@ -8,7 +8,7 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 export function generateMetadata() {
   return generatePageMeta({
     title: 'Contact Us – Guidance & Support Desk | DivyaYagyam',
-    description: 'DivyaYagyam संपर्क केंद्र। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प या ज्योतिष परामर्श हेतु संपर्क करें। WhatsApp: +91-95871-71984, Email: Seva@divyayagyam.com.',
+    description: 'DivyaYagyam संपर्क केंद्र। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प या ज्योतिष परामर्श हेतु संपर्क करें। WhatsApp: +91-95304-01984, Email: Seva@divyayagyam.com.',
     path: '/contact',
   })
 }
@@ -64,7 +64,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-bold text-slate-800">WhatsApp & Phone Support</p>
                     <p className="text-xs text-slate-500">Fastest response for puja video updates and booking assistance.</p>
-                    <p className="font-medium text-slate-700 mt-1">+91-95871-71984, +91-95304-01984</p>
+                    <p className="font-medium text-slate-700 mt-1">+91-95304-01984, +91-95304-01984</p>
                   </div>
                 </div>
 

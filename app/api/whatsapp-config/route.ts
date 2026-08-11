@@ -7,7 +7,7 @@ const DEFAULT_MEMBERS = [
   {
     id: 'wa_1',
     name: 'Pandit Seva Desk',
-    phone: '919587171984',
+    phone: '919530401984',
     role: 'Online Puja & Sankalp Booking',
     message: 'जय श्री राम! मुझे पूजा एवं नाम-गोत्र संकल्प के बारे में जानकारी चाहिए।',
     isPrimary: true,

@@ -181,7 +181,7 @@ export default async function AboutPage() {
                 <Phone className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
                 <div>
                   <p className="font-semibold text-slate-800">WhatsApp / Phone</p>
-                  <p>+91-95871-71984, +91-95320-11984</p>
+                  <p>+91-95304-01984, +91-95320-11984</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">

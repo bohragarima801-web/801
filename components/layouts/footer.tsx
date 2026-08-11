@@ -244,7 +244,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
                   <Phone className="h-3 w-3" />
                 </div>
-                <span className="font-bold">{contact?.phone || '+91-95871-71984'}</span>
+                <span className="font-bold">{contact?.phone || '+91-95304-01984'}</span>
               </a>
 
               <a
@@ -273,7 +273,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
               {/* Direct WhatsApp Chat Button */}
               <a
-                href="https://wa.me/919587171984?text=Namaste!%20I%20need%20help%20with%20puja%20booking"
+                href="https://wa.me/919530401984?text=Namaste!%20I%20need%20help%20with%20puja%20booking"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white text-[11px] font-extrabold shadow-sm transition-all"

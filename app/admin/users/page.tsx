@@ -195,7 +195,7 @@ function UsersManager() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="usrPhone">Phone / WhatsApp Number</Label>
-                <Input id="usrPhone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. +919587171984" />
+                <Input id="usrPhone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. +919530401984" />
               </div>
               <div className="space-y-2">
                 <Label>System Role *</Label>

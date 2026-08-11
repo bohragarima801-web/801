@@ -325,7 +325,7 @@ export function generateLocalBusinessSchema() {
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
     image: DEFAULT_OG_IMAGE,
-    telephone: '+91-95871-71984',
+    telephone: '+91-95304-01984',
     email: 'seva@divyayagyam.com',
     address: {
       '@type': 'PostalAddress',
@@ -354,7 +354,7 @@ export function generateOrganizationSchema() {
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
     email: 'seva@divyayagyam.com',
-    telephone: '+91-95871-71984',
+    telephone: '+91-95304-01984',
     sameAs: [
       'https://facebook.com/divyayagyam',
       'https://instagram.com/divyayagyam',

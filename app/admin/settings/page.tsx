@@ -28,8 +28,8 @@ export default function SettingsPage() {
   const [siteTagline, setSiteTagline] = useState('Sanatan Seva Online')
   const [logoUrl, setLogoUrl] = useState('')
   const [email, setEmail] = useState('seva@divyayagyam.com')
-  const [phone, setPhone] = useState('+91-95871-71984')
-  const [whatsapp, setWhatsapp] = useState('+91-95871-71984')
+  const [phone, setPhone] = useState('+91-95304-01984')
+  const [whatsapp, setWhatsapp] = useState('+91-95304-01984')
   const [address, setAddress] = useState('')
   const [googleMapUrl, setGoogleMapUrl] = useState('')
   const [facebook, setFacebook] = useState('')
@@ -294,8 +294,8 @@ export default function SettingsPage() {
       setDeliveryFreeThreshold(settings['delivery.free_threshold'] || '999')
     } else if (group === 'contact') {
       setEmail(settings['contact.email'] || 'seva@divyayagyam.com')
-      setPhone(settings['contact.phone'] || '+91-95871-71984')
-      setWhatsapp(settings['contact.whatsapp'] || '+91-95871-71984')
+      setPhone(settings['contact.phone'] || '+91-95304-01984')
+      setWhatsapp(settings['contact.whatsapp'] || '+91-95304-01984')
       setAddress(settings['contact.address'] || '')
       setGoogleMapUrl(settings['contact.google_map_url'] || '')
       setFacebook(settings['socials.facebook'] || '')
@@ -657,7 +657,7 @@ export default function SettingsPage() {
 
                 <div className="space-y-2">
                   <Label className="font-bold">Sender WhatsApp Number</Label>
-                  <Input value={waSenderNumber} onChange={(e) => setWaSenderNumber(e.target.value)} placeholder="919587171984" />
+                  <Input value={waSenderNumber} onChange={(e) => setWaSenderNumber(e.target.value)} placeholder="919530401984" />
                 </div>
               </div>
 

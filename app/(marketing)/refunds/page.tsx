@@ -74,7 +74,7 @@ export default async function RefundsPage() {
               <h3 className="font-bold text-slate-800 text-xs md:text-sm">1.1 Before Puja Performance</h3>
               <p>You may cancel your booking at any time <strong>BEFORE</strong> the scheduled start time of the puja.</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li><strong>How to cancel:</strong> Contact us via WhatsApp at <strong>+91-95871-71984, +91-95320-11984</strong> or email <strong>Seva@divyayagyam.com</strong>.</li>
+                <li><strong>How to cancel:</strong> Contact us via WhatsApp at <strong>+91-95304-01984, +91-95320-11984</strong> or email <strong>Seva@divyayagyam.com</strong>.</li>
                 <li><strong>Verification:</strong> Please provide your Booking ID and registered mobile number.</li>
                 <li><strong>Confirmation:</strong> Cancellation is effective only upon receipt of a confirmation message from DivyaYagyam.</li>
                 <li><em>Note: Requests made less than 2 hours before the scheduled time may not be processed in time.</em></li>
@@ -161,7 +161,7 @@ export default async function RefundsPage() {
                 <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-[var(--primary-color)]" /> Email: <a href="mailto:Seva@divyayagyam.com" className="hover:underline text-[var(--primary-color)]">Seva@divyayagyam.com</a></p>
               </div>
               <div className="space-y-2">
-                <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95871-71984, +91-95320-11984</p>
+                <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95304-01984, +91-95320-11984</p>
                 <p className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[var(--primary-color)]" /> Pandit: Pandit Mukesh Bohra</p>
               </div>
             </div>

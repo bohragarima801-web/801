@@ -101,7 +101,7 @@ export default async function EventsPage() {
               </Button>
 
               <Button asChild variant="outline" className="border-green-600 text-green-700 hover:bg-green-50 font-bold h-12 px-6 rounded-xl">
-                <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20information%20about%20upcoming%20puja%20events." target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/919530401984?text=Namaste!%20I%20want%20information%20about%20upcoming%20puja%20events." target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="mr-2 h-4 w-4 text-green-600" /> WhatsApp पर इवेंट अलर्ट पाएं
                 </a>
               </Button>

@@ -92,7 +92,7 @@ export default function RegisterPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">WhatsApp Number</Label>
-            <Input id="phone" type="tel" placeholder="e.g. +919587171984" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+            <Input id="phone" type="tel" placeholder="e.g. +919530401984" value={phone} onChange={(e) => setPhone(e.target.value)} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

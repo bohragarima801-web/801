@@ -72,7 +72,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     <div class="icon">🔒</div>
     <h2>टैक्स इनवॉइस बिल लॉक है (Tax Invoice Locked)</h2>
     <p>सुरक्षा कारणों से टैक्स इनवॉइस बिल <strong>ऑनलाइन भुगतान या कूरियर कैश ऑन डिलीवरी (COD) कन्फर्मेशन के बाद ही</strong> जारी किया जाता है।<br><br>Order ID: <strong>${order.orderNumber}</strong> अभी लंबित (Pending) है।</p>
-    <a href="https://wa.me/919587171984?text=Namaste!%20I%20want%20to%20confirm%20Order%20${order.orderNumber}" class="btn">
+    <a href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20confirm%20Order%20${order.orderNumber}" class="btn">
       💬 Order Support via WhatsApp
     </a>
   </div>

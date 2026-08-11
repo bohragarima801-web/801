@@ -173,7 +173,7 @@ export default async function TermsPage() {
                 <div className="grid gap-4 sm:grid-cols-2 text-xs md:text-sm">
                   <div className="space-y-2">
                     <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-[var(--primary-color)]" /> Location: Jodhpur, Rajasthan, India</p>
-                    <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95871-71984, +91-95320-11984</p>
+                    <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95304-01984, +91-95320-11984</p>
                   </div>
                   <div className="space-y-2">
                     <p className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[var(--primary-color)]" /> Pandit: Pandit Mukesh Bohra</p>
