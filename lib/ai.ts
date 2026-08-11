@@ -37,8 +37,8 @@ export async function getLLM(): Promise<OpenAI> {
 }
 
 export const MODELS = {
-  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-2.0-flash',
-  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-2.0-flash',
+  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-flash-latest',
+  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-flash-latest',
 }
 
 export type ChatMessage = {
