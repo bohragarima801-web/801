@@ -257,7 +257,7 @@ async function main() {
 
   const settings = [
     { key: 'site.name', value: 'Divyayagyam', group: 'general' },
-    { key: 'site.tagline', value: 'Sanatan Seva Online', group: 'general' },
+    { key: 'site.tagline', value: 'Aastha Ki Nai Pehchan', group: 'general' },
     { key: 'payment.currency', value: 'INR', group: 'payment' },
     { key: 'contact.email', value: 'seva@divyayagyam.com', group: 'contact' },
   ]

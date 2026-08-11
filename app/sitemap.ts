@@ -59,14 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'daily',
             priority: p.isVip ? 0.98 : 0.95,
           })
-          if (p.isVip) {
-            sitemapEntries.push({
-              url: `${baseUrl}/vip-pujas/${encodeURIComponent(p.slug.trim())}`,
-              lastModified: p.updatedAt || now,
-              changeFrequency: 'daily',
-              priority: 0.95,
-            })
-          }
         }
       })
 

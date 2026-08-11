@@ -143,7 +143,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
                 priority={idx === 0}
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 unoptimized
-                className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover/link:scale-105"
+                className="w-full h-full object-contain object-center transition-transform duration-1000 group-hover/link:scale-105"
               />
 
               {/* Subtle Bottom Vignette Gradient */}

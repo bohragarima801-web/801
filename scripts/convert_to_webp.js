@@ -13,25 +13,33 @@ async function processDirectory(dir) {
       if (file !== 'uploads' && file !== '.well-known') {
         await processDirectory(fullPath);
       }
-    } else if (/\.(jpg|jpeg|png)$/i.test(file)) {
+    } else if (/\.(jpg|jpeg|png|bmp|tiff)$/i.test(file)) {
       const ext = path.extname(file);
       const name = path.basename(file, ext);
       const webpPath = path.join(dir, `${name}.webp`);
 
-      // Convert to webp if not already converted or if webp is older
       try {
         const inputStats = fs.statSync(fullPath);
         const inputSizeKB = (inputStats.size / 1024).toFixed(1);
 
-        if (inputStats.size > 100 * 1024) { // Only for images > 100KB
-          await sharp(fullPath)
-            .webp({ quality: 80, effort: 6 })
-            .toFile(webpPath);
-          
-          const outputStats = fs.statSync(webpPath);
-          const outputSizeKB = (outputStats.size / 1024).toFixed(1);
-          console.log(`Converted: ${file} (${inputSizeKB} KB) -> ${name}.webp (${outputSizeKB} KB)`);
+        let maxDim = 1200;
+        let quality = 80;
+        let buffer;
+
+        for (let pass = 0; pass < 5; pass++) {
+          buffer = await sharp(fullPath)
+            .resize({ width: maxDim, height: maxDim, fit: 'inside', withoutEnlargement: true })
+            .webp({ quality, effort: 6 })
+            .toBuffer();
+
+          if (buffer.length <= 98 * 1024) break;
+          quality = Math.max(40, quality - 12);
+          maxDim = Math.max(600, Math.round(maxDim * 0.85));
         }
+
+        fs.writeFileSync(webpPath, buffer);
+        const outputSizeKB = (buffer.length / 1024).toFixed(1);
+        console.log(`Converted: ${file} (${inputSizeKB} KB) -> ${name}.webp (${outputSizeKB} KB)`);
       } catch (err) {
         console.error(`Error converting ${file}:`, err.message);
       }

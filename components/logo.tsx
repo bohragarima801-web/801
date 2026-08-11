@@ -45,8 +45,8 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
           <span className="text-[18px] sm:text-[21px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
-          <span className="text-[9px] sm:text-[10px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.18em] uppercase mt-[1px]">
-            SANATAN SEVA
+          <span className="text-[9px] sm:text-[10px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.14em] uppercase mt-[1px]">
+            AASTHA KI NAI PEHCHAN
           </span>
         </div>
       )}

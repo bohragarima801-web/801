@@ -8,7 +8,7 @@ export default function Loading() {
         <div className="relative z-10 h-16 w-16 rounded-2xl bg-white dark:bg-slate-950 p-2 flex items-center justify-center shadow-lg border border-amber-400/50 animate-pulse">
           <img 
             src="/logo.jpg" 
-            alt="Divyayagyam Sanatan Seva" 
+            alt="Divyayagyam - Aastha Ki Nai Pehchan" 
             className="h-full w-full object-contain rounded-xl"
           />
         </div>

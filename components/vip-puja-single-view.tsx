@@ -219,7 +219,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   alt={puja.name} 
                   fill 
                   priority
-                  className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                  className="object-contain p-2 group-hover:scale-105 transition-transform duration-700" 
                 />
                 
                 {/* Gold Outline Badge */}
@@ -232,7 +232,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   </span>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0C08] via-black/30 to-transparent flex flex-col justify-end p-5 text-left space-y-1.5 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0C08]/90 via-black/20 to-transparent flex flex-col justify-end p-5 text-left space-y-1.5 pointer-events-none">
                   <span className="text-[#D4AF37] font-black text-xs uppercase tracking-widest flex items-center gap-1">
                     <Sparkles className="h-3.5 w-3.5" /> Exclusive 1-on-1 Anushthan
                   </span>
@@ -250,11 +250,11 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                     <button
                       key={i}
                       onClick={() => setActiveMediaIndex(i)}
-                      className={`relative h-14 w-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                      className={`relative h-14 w-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 p-0.5 ${
                         activeMediaIndex === i ? 'border-[#D4AF37] scale-105 shadow-lg' : 'border-[#D4AF37]/30 opacity-60 hover:opacity-100'
                       }`}
                     >
-                      <Image src={img} alt={`Gallery ${i + 1}`} fill className="object-cover" />
+                      <Image src={img} alt={`Gallery ${i + 1}`} fill className="object-contain" />
                     </button>
                   ))}
                 </div>

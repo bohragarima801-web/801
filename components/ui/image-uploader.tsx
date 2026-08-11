@@ -29,12 +29,6 @@ export function ImageUploader({
   // Compress large image client-side to save bandwidth and ensure fast uploads on mobile/desktop
   const compressImage = (file: File): Promise<File> => {
     return new Promise((resolve) => {
-      // If file is smaller than 1MB, don't compress
-      if (file.size < 1024 * 1024) {
-        resolve(file)
-        return
-      }
-
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (event) => {
@@ -46,7 +40,7 @@ export function ImageUploader({
           let height = img.height
 
           // Maximum dimension limit for high-quality compression
-          const MAX_DIM = 1600
+          const MAX_DIM = 1200
           if (width > MAX_DIM || height > MAX_DIM) {
             if (width > height) {
               height = Math.round((height * MAX_DIM) / width)
@@ -70,8 +64,8 @@ export function ImageUploader({
           canvas.toBlob(
             (blob) => {
               if (blob) {
-                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.jpg', {
-                  type: 'image/jpeg',
+                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.webp', {
+                  type: 'image/webp',
                   lastModified: Date.now(),
                 })
                 resolve(compressedFile)
@@ -79,8 +73,8 @@ export function ImageUploader({
                 resolve(file)
               }
             },
-            'image/jpeg',
-            0.82 // high quality ratio
+            'image/webp',
+            0.80 // high quality ratio
           )
         }
         img.onerror = () => resolve(file)
@@ -238,7 +232,7 @@ export function ImageUploader({
           <img
             src={activePreviewUrl}
             alt="Preview"
-            className={`w-full object-cover transition-all ${
+            className={`w-full object-contain p-2 transition-all ${
               aspectRatio === 'square' ? 'aspect-square' : aspectRatio === 'video' ? 'aspect-video' : 'h-48'
             }`}
           />

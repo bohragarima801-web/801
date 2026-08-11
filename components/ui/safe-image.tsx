@@ -76,6 +76,7 @@ interface SacredImageFrameProps {
   src: string | null | undefined
   alt: string
   aspectRatio?: '4/3' | '16/10' | '16/9' | 'square' | 'auto'
+  fitMode?: 'contain' | 'cover'
   className?: string
   imageClassName?: string
   fallbackSrc?: string
@@ -86,6 +87,7 @@ export function SacredImageFrame({
   src,
   alt,
   aspectRatio = '16/10',
+  fitMode = 'contain',
   className = '',
   imageClassName = '',
   fallbackSrc = '/package-1.jpg',
@@ -107,19 +109,20 @@ export function SacredImageFrame({
   return (
     <div
       className={cn(
-        'relative w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-xl flex items-center justify-center group shadow-sm',
+        'relative w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-xl flex items-center justify-center group shadow-sm p-1',
         aspectClass,
         className
       )}
     >
-      {/* Main Clean Seamless Image with Object Cover */}
+      {/* Main Clean Seamless Image with Object Fit Contain */}
       <SafeImage
         src={displaySrc}
         alt={alt}
         fallbackSrc={fallbackSrc}
         seoCategory={seoCategory}
         className={cn(
-          'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105',
+          'w-full h-full transition-transform duration-500 group-hover:scale-105',
+          fitMode === 'cover' ? 'object-cover' : 'object-contain',
           imageClassName
         )}
       />

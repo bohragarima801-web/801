@@ -162,7 +162,7 @@ export function ProductClientView({ product }: { product: any }) {
                 fill
                 priority
                 unoptimized
-                className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                className="object-contain p-3 object-center group-hover:scale-105 transition-transform duration-500 ease-out"
               />
               
               {/* Badges on Image */}
@@ -193,11 +193,11 @@ export function ProductClientView({ product }: { product: any }) {
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
                     className={cn(
-                      "relative h-20 w-20 shrink-0 rounded-2xl overflow-hidden border-2 transition-all bg-white shadow-xs",
+                      "relative h-20 w-20 shrink-0 rounded-2xl overflow-hidden border-2 transition-all bg-white shadow-xs p-1",
                       activeImageIndex === idx ? "border-[#8B1A21] ring-2 ring-amber-400 scale-105" : "border-[#F5E2B8] opacity-70 hover:opacity-100"
                     )}
                   >
-                    <Image src={imgUrl} alt={`Thumbnail ${idx+1}`} fill unoptimized className="object-cover" />
+                    <Image src={imgUrl} alt={`Thumbnail ${idx+1}`} fill unoptimized className="object-contain" />
                   </button>
                 ))}
               </div>
@@ -450,8 +450,8 @@ export function ProductClientView({ product }: { product: any }) {
               {relatedProducts.map(rel => (
                 <div key={rel.id} className="bg-white rounded-3xl border border-[#F5E2B8] hover:border-[#F2C94C] p-4 space-y-3 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
                   <div className="space-y-3">
-                    <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#FFF9EE]">
-                      <Image src={rel.coverImage} alt={rel.name} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#FFF9EE] p-2">
+                      <Image src={rel.coverImage} alt={rel.name} fill unoptimized className="object-contain group-hover:scale-105 transition-transform duration-500" />
                       <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#8B1A21] text-white text-[10px] font-bold">
                         {rel.category}
                       </span>

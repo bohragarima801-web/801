@@ -60,6 +60,11 @@ const nextConfig = {
         destination: '/tools/kundali-milan',
         permanent: true,
       },
+      {
+        source: '/vip-pujas/:slug',
+        destination: '/pujas/:slug',
+        permanent: true,
+      },
     ]
   },
 

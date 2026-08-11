@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'DivyaYagyam',
-  tagline: 'Sanatan Seva & Online Puja Booking',
+  tagline: 'Aastha Ki Nai Pehchan',
   description:
     'Experience divine blessings with DivyaYagyam — India\'s most trusted portal for authentic online pujas, VIP temple darshan, Kashi Vishwanath Rudrabhishek, Mahakaleshwar Bhasma Aarti, Kalsarp Dosh Nivaran, sacred prasad home delivery, and verified pandit ji services.',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://divyayagyam.com',

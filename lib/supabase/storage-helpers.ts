@@ -34,14 +34,13 @@ export async function ensureBucketExists() {
 
 export async function uploadToSupabase(fileBuffer: Buffer, fileName: string, mimeType: string) {
   const supabase = await createAdminClient()
-  const fileExt = fileName.split('.').pop() || 'jpg'
-  const uniqueId = uuidv4()
   
-  let finalBuffer = fileBuffer;
-  let finalMimeType = mimeType;
-  let finalExt = fileExt.toLowerCase();
+  // Automatically convert image to WebP, shrink to under 100 KB, and preserve aspect ratio without cropping
+  const { optimizeImageToWebP } = await import('@/lib/image-optimizer')
+  const { buffer: finalBuffer, fileName: finalFileName, mimeType: finalMimeType } = await optimizeImageToWebP(fileBuffer, fileName, mimeType)
 
-  const filePath = `uploads/${uniqueId}.${finalExt}`
+  const uniqueId = uuidv4()
+  const filePath = `uploads/${uniqueId}_${finalFileName}`
 
   const { data, error } = await supabase.storage
     .from('images')
