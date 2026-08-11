@@ -74,96 +74,143 @@ Recent Tickets: ${tickets.length > 0 ? tickets.map(t => `#${t.ticketNumber} - ${
       }
     }
 
+    // Extract last user message
+    const lastUserMessage = [...messages].reverse().find((m: any) => m.role === 'user')?.content || ''
+
     const chatMessages: ChatMessage[] = [
       { role: 'system', content: systemPrompt },
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ]
 
-    const llm = await getLLM()
+    try {
+      const llm = await getLLM()
 
-    if (!doStream) {
-      const completion = await llm.chat.completions.create({
+      if (!doStream) {
+        const completion = await llm.chat.completions.create({
+          model: chosenModel,
+          messages: chatMessages as any,
+          temperature: mode.startsWith('admin') ? 0.75 : 0.85,
+        })
+        const text = completion.choices?.[0]?.message?.content ?? ''
+        return new Response(JSON.stringify({
+          ok: true,
+          content: text,
+          model: chosenModel,
+          session_id: session_id || null,
+        }), { headers: { 'Content-Type': 'application/json' } })
+      }
+
+      // Streaming path
+      const completionStream = await llm.chat.completions.create({
         model: chosenModel,
         messages: chatMessages as any,
         temperature: mode.startsWith('admin') ? 0.75 : 0.85,
+        stream: true,
       })
-      const text = completion.choices?.[0]?.message?.content ?? ''
-      return new Response(JSON.stringify({
-        ok: true,
-        content: text,
-        model: chosenModel,
-        session_id: session_id || null,
-      }), { headers: { 'Content-Type': 'application/json' } })
-    }
 
-    // Streaming path
-    const completionStream = await llm.chat.completions.create({
-      model: chosenModel,
-      messages: chatMessages as any,
-      temperature: mode.startsWith('admin') ? 0.75 : 0.85,
-      stream: true,
-    })
-
-    const encoder = new TextEncoder()
-    const readable = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of completionStream as any) {
-            const delta = chunk?.choices?.[0]?.delta?.content
-            if (delta) controller.enqueue(encoder.encode(delta))
-          }
-          controller.close()
-        } catch (err: any) {
-          controller.enqueue(encoder.encode(`\n\n[stream error: ${err?.message || 'unknown'}]`))
-          controller.close()
-        }
-      },
-    })
-
-    return new Response(readable, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        'X-Model': chosenModel,
-      },
-    })
-  } catch (err: any) {
-// console.error('[ai/chat] error:', err) (removed for production)
-    
-    // Smart mode fallbacks when LLM API is unavailable or unconfigured
-    let errorMessage = err?.message || 'Server error'
-    let fallbackText = ''
-    
-    if (mode === 'gargi') {
-      fallbackText = `हरि ओम्! 🙏 मैं गार्गी, दिव्ययज्ञम् की सहायक।\n\nदिव्ययज्ञम् पोर्टल पर आपका स्वागत है। हमारे माध्यम से आप देश के पवित्र शक्तिपीठों व मंदिरों से नाम-गोत्र से ऑनलाइन पूजा अनुष्ठान बुक कर सकते हैं तथा 100% अभिमंत्रित वैदिक सामग्री (रुद्राक्ष, यंत्र, माला) घर मँगवा सकते हैं।\n\nकिसी भी विशेष सहायता, ऑर्डर या बुकिंग स्थिति के लिए आप सपोर्ट सेक्शन या व्हाट्सएप पर संपर्क कर सकते हैं। कल्याणम अस्तु! 🌸`
-    } else if (mode === 'pandit') {
-      fallbackText = `हरि ओम्! 🙏 दिव्ययज्ञम् के डिजिटल पंडित कक्ष में आपका स्वागत है।\n\nमैं आपका वैदिक मार्गदर्शक पंडित जी हूँ। अपनी जन्म-तिथि (DOB), जन्म समय (Time) और जन्म स्थान (Place) के साथ अपना प्रश्न पूछें।\n\nहम नवग्रह शांति, कालसर्प दोष, रुद्राभिषेक तथा समस्त वैदिक अनुष्ठान विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प से सम्पन्न कराते हैं। शुभम भवतु! 🌸`
-    } else {
-      fallbackText = `⚠️ AI Service Warning: ${errorMessage}. Please check API Key in Admin Settings -> Secrets.`
-    }
-    
-    if (!doStream) {
-      return new Response(JSON.stringify({
-        ok: true,
-        content: fallbackText,
-        model: 'fallback-handler',
-        session_id: session_id || null,
-      }), { headers: { 'Content-Type': 'application/json' } })
-    } else {
       const encoder = new TextEncoder()
       const readable = new ReadableStream({
-        start(controller) {
-          controller.enqueue(encoder.encode(fallbackText))
-          controller.close()
-        }
+        async start(controller) {
+          try {
+            for await (const chunk of completionStream as any) {
+              const delta = chunk?.choices?.[0]?.delta?.content
+              if (delta) controller.enqueue(encoder.encode(delta))
+            }
+            controller.close()
+          } catch (err: any) {
+            const fallback = getSiteAwareFallback(lastUserMessage, mode)
+            controller.enqueue(encoder.encode(`\n\n${fallback}`))
+            controller.close()
+          }
+        },
       })
+
       return new Response(readable, {
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
           'Cache-Control': 'no-cache, no-transform',
-          'X-Model': 'fallback-handler',
+          'X-Model': chosenModel,
         },
       })
+    } catch (llmErr: any) {
+      // Smart site fallback when LLM API Key is missing, invalid or unavailable
+      const fallbackText = getSiteAwareFallback(lastUserMessage, mode)
+
+      if (!doStream) {
+        return new Response(JSON.stringify({
+          ok: true,
+          content: fallbackText,
+          model: 'site-aware-fallback',
+          session_id: session_id || null,
+        }), { headers: { 'Content-Type': 'application/json' } })
+      } else {
+        const encoder = new TextEncoder()
+        const readable = new ReadableStream({
+          start(controller) {
+            controller.enqueue(encoder.encode(fallbackText))
+            controller.close()
+          }
+        })
+        return new Response(readable, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'no-cache, no-transform',
+            'X-Model': 'site-aware-fallback',
+          },
+        })
+      }
     }
+  } catch (err: any) {
+    const fallbackText = `हरि ओम्! 🙏 दिव्ययज्ञम् (www.divyayagyam.com) के वर्चुअल पंडित जी कक्ष में आपका स्वागत है। किसी भी सहायता के लिए हमें WhatsApp +91-95871-71984 पर संपर्क करें।`
+    return new Response(JSON.stringify({ ok: true, content: fallbackText }), { headers: { 'Content-Type': 'application/json' } })
   }
+}
+
+function getSiteAwareFallback(userQuery: string, mode: Mode): string {
+  const q = (userQuery || '').toLowerCase()
+
+  // 1. Off-topic check (outside DivyaYagyam & Sanatan Seva)
+  const offTopicKeywords = [
+    'code', 'python', 'javascript', 'html', 'css', 'java', 'c++', 'programming',
+    'cricket', 'football', 'sports', 'match', 'ipl', 'score',
+    'movie', 'actor', 'bollywood', 'hollywood', 'song',
+    'politics', 'election', 'modi', 'rahul', 'party',
+    'weather', 'joke', 'chutkula', 'news', 'bitcoin', 'crypto'
+  ]
+
+  const isOffTopic = offTopicKeywords.some(k => q.includes(k))
+
+  if (isOffTopic) {
+    if (mode === 'gargi') {
+      return `हरि ओम्! 🙏 मैं गार्गी हूँ, दिव्ययज्ञम् की सहायता अधिकारी।\n\nक्षमा करें, मैं केवल दिव्ययज्ञम् (www.divyayagyam.com) की पूजाओं, अभिमंत्रित उत्पादों और बुकिंग सेवाओं से संबंधित प्रश्नों का उत्तर देने के लिए ही समर्पित हूँ। कृपया अपनी पूजा या उत्पाद संबंधी प्रश्न पूछें। कल्याणम अस्तु! 🌸`
+    }
+    return `हरि ओम्! 🙏 मैं दिव्ययज्ञम् का वैदिक वर्चुअल पंडित जी हूँ।\n\nमैं केवल दिव्ययज्ञम् पोर्टल पर उपलब्ध पूजा अनुष्ठानों, अभिमंत्रित उत्पादों (रुद्राक्ष, कौड़ी, यंत्र), पंचांग और सनातन वैदिक मार्गदर्शिका से संबंधित प्रश्नों का उत्तर देने के लिए अधिकृत हूँ।\n\nआप दिव्ययज्ञम् (www.divyayagyam.com) पर उपलब्ध पूजा या आध्यात्मिक समस्या के बारे में पूछ सकते हैं। कल्याणम अस्तु! 🌸`
+  }
+
+  // 2. Specific DivyaYagyam Puja / Product query matching
+  if (q.includes('कालसर्प') || q.includes('kalsarp') || q.includes('सर्प')) {
+    return `हरि ओम्! 🙏 **कालसर्प दोष निवारण पूजा (Trimbakeshwar / Ujjain)**\n\nयदि आपकी कुंडली में कालसर्प दोष है तो जीवन में रुकावटें, मानसिक तनाव व कार्य में देरी आती है। दिव्ययज्ञम् पर विद्वान आचार्यों द्वारा नाम व गोत्र से सिद्ध कालसर्प दोष शांति पूजा आयोजित की जाती है।\n\nविस्तृत जानकारी व बुकिंग के लिए हमारी वेबसाइट पर **Pujas → Kalsarp Dosh** सेक्शन देखें या WhatsApp (+91-95871-71984) पर संपर्क करें। कल्याणम अस्तु! 🌸`
+  }
+
+  if (q.includes('महामृत्युंजय') || q.includes('mrityunjaya') || q.includes('स्वास्थ्य') || q.includes('बीमारी')) {
+    return `हरि ओम्! 🙏 **महामृत्युंजय हवन एवं मंत्र जाप**\n\nअसाध्य रोगों से मुक्ति, उत्तम स्वास्थ्य और दीर्घायु के लिए महामृत्युंजय अनुष्ठान सर्वोत्तम है। दिव्ययज्ञम् द्वारा यह अनुष्ठान वैदिक रीति से सम्पन्न कराया जाता है और अभिमंत्रित भस्म/प्रसाद आपके घर भेजा जाता है।\n\nबुकिंग के लिए पोर्टल पर **Mahamrityunjaya Hawan** विकल्प चुनें। शुभम भवतु! 🌸`
+  }
+
+  if (q.includes('रुद्राक्ष') || q.includes('rudraksha') || q.includes('माला')) {
+    return `हरि ओम्! 🙏 **100% असली व अभिमंत्रित रुद्राक्ष माला**\n\nदिव्ययज्ञम् पर 5-मुखी एवं 7-मुखी सिद्ध रुद्राक्ष माला उपलब्ध है जो नेपाल/हरिद्वार के पवित्र स्थानों से मंत्रों द्वारा अभिमंत्रित कर आपके घर भेजी जाती है।\n\nखरीदने के लिए हमारी वेबसाइट पर **Products → Rudraksha Mala** देखें। हरि ओम्! 🌸`
+  }
+
+  if (q.includes('बगलामुखी') || q.includes('bagalamukhi') || q.includes('शत्रु') || q.includes('कोर्ट')) {
+    return `हरि ओम्! 🙏 **बगलामुखी मिर्ची हवन एवं कवच पूजा**\n\nशत्रु बाधा, कोर्ट-कचहरी के विवाद और तंत्र बाधा से मुक्ति के लिए माँ बगलामुखी की पूजा अत्यंत प्रभावकारी है। दिव्ययज्ञम् पर नाम-गोत्र संकल्प से यह विशेष अनुष्ठान कराया जाता है।\n\nअधिक जानकारी के लिए **Pujas → Bagalamukhi Hawan** पर जाएँ। कल्याणम अस्तु! 🌸`
+  }
+
+  if (q.includes('बुकिंग') || q.includes('book') || q.includes('ऑर्डर') || q.includes('order')) {
+    return `हरि ओम्! 🙏 **दिव्ययज्ञम् पर पूजा बुक करने की प्रक्रिया:**\n\n1. हमारी वेबसाइट www.divyayagyam.com पर जाएँ।\n2. अपनी इच्छित पूजा (जैसे कालसर्प, महामृत्युंजय, नवग्रह) चुनें।\n3. अपना नाम, गोत्र और संकल्प विवरण दर्ज करके सुरक्षित ऑनलाइन भुगतान करें।\n4. पूजा सम्पन्न होने के बाद वीडियो/तस्वीरें एवं अभिमंत्रित प्रसाद आपके पते पर भेजा जाएगा।\n\nसहायता के लिए कॉल/व्हाट्सएप करें: +91-95871-71984। 🌸`
+  }
+
+  if (mode === 'gargi') {
+    return `हरि ओम्! 🙏 मैं गार्गी, दिव्ययज्ञम् की सहायक।\n\nदिव्ययज्ञम् (www.divyayagyam.com) पर आपका स्वागत है। हमारे माध्यम से आप देश के प्रसिद्ध मंदिरों से नाम-गोत्र संकल्प से ऑनलाइन पूजा बुक कर सकते हैं तथा अभिमंत्रित रुद्राक्ष, लक्ष्मी कौड़ी एवं महाप्रसाद घर मँगवा सकते हैं।\n\nसहायता के लिए हमें WhatsApp (+91-95871-71984) करें। कल्याणम अस्तु! 🌸`
+  }
+
+  return `हरि ओम्! 🙏 दिव्ययज्ञम् के वर्चुअल पंडित जी का प्रणाम।\n\nअपनी समस्या या कुंडली विवरण (जन्म तिथि, समय, स्थान) साझा करें। हम आपको दिव्ययज्ञम् पर उपलब्ध सही वैदिक पूजा (कालसर्प, नवग्रह, महामृत्युंजय) एवं उपायों की सलाह देंगे।\n\nवेबसाइट: www.divyayagyam.com | हेल्पलाइन: +91-95871-71984। कल्याणम अस्तु! 🌸`
 }
