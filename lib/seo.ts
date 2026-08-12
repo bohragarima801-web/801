@@ -67,9 +67,13 @@ export function generatePageMeta({
     title: metaTitle,
     description: cleanDesc,
     keywords: keywords || [
-      'online puja booking', 'ऑनलाइन पूजा', 'divyayagyam', 'vedic puja',
-      'kashi vishwanath puja', 'mahakaleshwar puja', 'rudraksha', 'puja samagri',
-      'astrology online', 'jyotish', 'sanatan seva',
+      'online puja booking', 'ऑनलाइन पूजा बुकिंग', 'divyayagyam', 'vedic puja india',
+      'kashi vishwanath puja online', 'mahakaleshwar puja online', 'rudrabhishek online',
+      'kalsarp dosh nivaran', 'navgrah shanti puja', 'pitra shanti puja',
+      'bagalamukhi puja', 'online havan booking', 'temple puja booking india',
+      'pandit booking online', 'prasad home delivery india',
+      'naam gotra sankalp puja', 'whatsapp video proof puja',
+      'rudraksha online', 'puja samagri', 'astrology online', 'jyotish', 'sanatan seva',
     ],
     alternates: {
       canonical: url,
@@ -213,21 +217,18 @@ export function generateServiceSchema({
   rating?: number
   reviewCount?: number
 }) {
+  // Google supports AggregateRating on: Product, LocalBusiness, Event — NOT on Service.
+  // Using Product type so price + star rating rich snippets work in Google search results.
   return {
     '@context': 'https://schema.org',
-    '@type': 'Service',
+    '@type': 'Product',
     name,
     description: description?.substring(0, 300) || `Book online ${name} ritual at DivyaYagyam.`,
     image: image || DEFAULT_OG_IMAGE,
     url: `${BASE_URL}/pujas/${slug}`,
-    provider: {
-      '@type': 'Organization',
+    brand: {
+      '@type': 'Brand',
       name: SITE_NAME,
-      url: BASE_URL,
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'India',
     },
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -320,23 +321,41 @@ export function generateLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'PlaceOfWorship'],
+    '@id': `${BASE_URL}/#localbusiness`,
     name: SITE_NAME,
-
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
     image: DEFAULT_OG_IMAGE,
     telephone: '+91-95304-01984',
     email: 'seva@divyayagyam.com',
+    currenciesAccepted: 'INR',
+    paymentAccepted: 'Cash, UPI, Credit Card, Debit Card, Net Banking',
+    priceRange: '₹199 - ₹51000',
     address: {
       '@type': 'PostalAddress',
+      streetAddress: 'Maa Katyayani Durga Shakti Peeth',
+      addressLocality: 'Jodhpur',
+      addressRegion: 'Rajasthan',
+      postalCode: '342001',
       addressCountry: 'IN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: '26.2389',
+      longitude: '73.0243',
     },
     sameAs: [
       'https://facebook.com/divyayagyam',
       'https://instagram.com/divyayagyam',
       'https://youtube.com/@divyayagyam',
     ],
-    priceRange: '₹199 - ₹51000',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '2174',
+      bestRating: '5',
+      worstRating: '1',
+    },
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -350,6 +369,7 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': `${BASE_URL}/#organization`,
     name: SITE_NAME,
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
@@ -367,6 +387,7 @@ export function generateWebSiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${BASE_URL}/#website`,
     name: SITE_NAME,
     url: BASE_URL,
     potentialAction: {
@@ -412,6 +433,12 @@ export function generatePujaGraphSchema({
   const pujaUrl = `${BASE_URL}/pujas/${puja.slug}`
   const descriptionText = (puja.shortDescription || puja.description || '').replace(/<[^>]*>?/gm, '')
 
+  // Helper to strip @context when nesting inside @graph
+  const stripContext = (obj: any) => {
+    const { '@context': _, ...rest } = obj
+    return rest
+  }
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -437,25 +464,29 @@ export function generatePujaGraphSchema({
         },
         organizer: {
           '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
           name: SITE_NAME,
           url: BASE_URL,
         },
       },
-      generateServiceSchema({
-        name: puja.name,
-        description: descriptionText.substring(0, 300),
-        image: puja.coverImage || DEFAULT_OG_IMAGE,
-        price: Number(puja.price),
-        slug: puja.slug,
-        location: puja.temple?.name || puja.location || 'Jodhpur, Rajasthan',
-      }),
-      generateLocalBusinessSchema(),
-      generateBreadcrumbSchema([
-        { name: 'Home', url: BASE_URL },
-        { name: 'Pujas', url: `${BASE_URL}/pujas` },
-        { name: puja.name, url: pujaUrl },
-      ]),
-      generateFaqSchema(faqs),
+      stripContext(
+        generateServiceSchema({
+          name: puja.name,
+          description: descriptionText.substring(0, 300),
+          image: puja.coverImage || DEFAULT_OG_IMAGE,
+          price: Number(puja.price),
+          slug: puja.slug,
+          location: puja.temple?.name || puja.location || 'Jodhpur, Rajasthan',
+        })
+      ),
+      stripContext(
+        generateBreadcrumbSchema([
+          { name: 'Home', url: BASE_URL },
+          { name: 'Pujas', url: `${BASE_URL}/pujas` },
+          { name: puja.name, url: pujaUrl },
+        ])
+      ),
+      stripContext(generateFaqSchema(faqs)),
     ],
   }
 }

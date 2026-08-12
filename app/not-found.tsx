@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Search, Home, Sparkles } from 'lucide-react'
 
 export const metadata = {
-  title: '404 - Page Not Found | Divyayagyam'
+  title: 'पृष्ठ नहीं मिला (404) | DivyaYagyam',
+  description: 'The page you are looking for does not exist. Please return to DivyaYagyam homepage to book online pujas and Vedic rituals.',
+  robots: { index: false, follow: true },
 }
 
 export default function NotFound() {

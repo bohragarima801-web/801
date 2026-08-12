@@ -188,11 +188,11 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
             <h4 className={headingClass}>QUICK BOOKING</h4>
             <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { label: 'रुद्राभिषेक महापूजा', href: '/pujas' },
-                { label: 'बगलामुखी मिर्ची हवन', href: '/pujas' },
-                { label: 'पितृ शांति तर्पण पूजा', href: '/pujas' },
-                { label: 'कालसर्प दोष शांति', href: '/pujas' },
-                { label: 'नवग्रह शांति अनुष्ठान', href: '/pujas' },
+                { label: 'रुद्राभिषेक महापूजा', href: '/pujas/rudrabhishek-mahapuja' },
+                { label: 'बगलामुखी मिर्ची हवन', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
+                { label: 'पितृ शांति तर्पण पूजा', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
+                { label: 'कालसर्प दोष शांति', href: '/pujas/kalsarp-dosh-nivaran-puja' },
+                { label: 'नवग्रह शांति अनुष्ठान', href: '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja' },
                 { label: 'VIP सिद्ध महापूजा', href: '/vip-pujas' },
               ].map((l) => (
                 <li key={l.label}>
@@ -380,7 +380,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <span>•</span>
               <Link href="/shipping" className="text-[#e3c0a5] hover:text-white hover:underline transition-colors">Shipping Policy</Link>
               <span>•</span>
-              <Link href="/register" className="text-white font-extrabold hover:underline">Pandit / Temple Registration</Link>
+              <Link href="/register" className="text-white font-extrabold hover:underline">Create Your Sacred Account</Link>
             </div>
 
             <div className="text-center md:text-right text-[#d1c1b7]">

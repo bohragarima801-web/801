@@ -1,21 +1,49 @@
 {
-  "name": "Divyayagyam - Online Puja & Sanatan Seva",
-  "short_name": "Divyayagyam",
-  "description": "Book online pujas, chadhawa, and astrology consultations from top temples in India.",
+  "name": "DivyaYagyam - Online Puja Booking India",
+  "short_name": "DivyaYagyam",
+  "description": "Book authentic online Vedic pujas from India's sacred temples. Name-Gotra Sankalp, WhatsApp Video Proof & Prasad Home Delivery.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "lang": "hi-IN",
+  "background_color": "#FFFBF7",
   "theme_color": "#FF8C21",
+  "categories": ["lifestyle", "shopping", "religion"],
   "icons": [
     {
-      "src": "/apple-touch-icon.png",
+      "src": "/logo-icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/apple-touch-icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Book a Puja",
+      "short_name": "Book Puja",
+      "description": "Browse and book authentic online pujas",
+      "url": "/pujas",
+      "icons": [{ "src": "/logo-icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Daily Panchang",
+      "short_name": "Panchang",
+      "description": "Today's Tithi, Nakshatra & Muhurat",
+      "url": "/panchang",
+      "icons": [{ "src": "/logo-icon.png", "sizes": "192x192" }]
     }
   ]
 }

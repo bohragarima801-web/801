@@ -14,7 +14,22 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
-export const revalidate = 30
+export const revalidate = 3600
+
+// Pre-build all published blog posts at deploy time for faster Google crawling
+export async function generateStaticParams() {
+  try {
+    const posts = await prisma.blog.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true },
+    })
+    return posts
+      .filter(p => p.slug)
+      .map(p => ({ slug: p.slug as string }))
+  } catch {
+    return []
+  }
+}
 
 function getEmbedUrl(url: string | null): string | null {
   if (!url) return null

@@ -919,7 +919,15 @@
   overflow: hidden;
   color: #FFFFFF;
 }
-.vedic-gold-text { @extend .gold-gradient-text; }
+.vedic-gold-text {
+  background: linear-gradient(135deg, #8B1A21 0%, #C47F00 50%, #8B1A21 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  line-height: 1.30;
+}
 .vedic-glass-chip {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
@@ -947,7 +955,7 @@
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — MOBILE FIRST ENHANCEMENTS
    ============================================================ */
 @media (max-width: 768px) {
   .luxury-section { padding: 48px 0; }
@@ -957,6 +965,21 @@
   .btn-outline-sacred, .btn-gold-outline-dark {
     padding: 11px 22px;
     font-size: 0.88rem;
+  }
+  /* Prevent hover card lifts on touch — feels broken on mobile */
+  .puja-card-premium:hover,
+  .card-sacred:hover {
+    transform: none;
+  }
+  /* Hero heading word wrap */
+  .container h1 {
+    word-break: break-word;
+    hyphens: auto;
+  }
+  /* Prevent font size inflation on rotate (iOS) */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 }
 
@@ -969,9 +992,21 @@
     -webkit-overflow-scrolling: touch;
     max-width: 100vw;
   }
-  .fixed.bottom-4.right-4 {
-    bottom: 0.5rem !important;
-    right: 0.5rem !important;
+}
+
+/* ── Mobile Touch Quality Improvements ── */
+@media (pointer: coarse) {
+  /* Remove iOS tap highlight for native app feel */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Momentum scrolling on carousels/lists */
+  .overflow-x-auto, .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Sharper image rendering on high-DPI mobile */
+  img {
+    image-rendering: -webkit-optimize-contrast;
   }
 }
 
@@ -985,7 +1020,7 @@
     max-width: 100vw !important;
   }
   .font-heading {
-    font-family: 'Cormorant Garamond', 'Noto Serif Devanagari', Georgia, serif !important;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif !important;
   }
   .font-display {
     font-family: 'Cinzel Decorative', 'Cinzel', serif !important;

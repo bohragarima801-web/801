@@ -36,7 +36,12 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: './',
+      canonical: baseUrl,
+      languages: {
+        'hi-IN': baseUrl,
+        'en-IN': baseUrl,
+        'x-default': baseUrl,
+      },
     },
     robots: {
       index: true,
@@ -96,21 +101,24 @@ export const viewport: Viewport = {
 import { WhatsAppFloatingWidget } from '@/components/whatsapp-floating-widget'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const stripContext = (obj: any) => {
+    const { '@context': _, ...rest } = obj
+    return rest
+  }
+
   const globalSchema = {
     '@context': 'https://schema.org',
     '@graph': [
-      generateOrganizationSchema(),
-      generateWebSiteSchema(),
-      generateLocalBusinessSchema(),
+      stripContext(generateOrganizationSchema()),
+      stripContext(generateWebSiteSchema()),
+      stripContext(generateLocalBusinessSchema()),
     ],
   }
 
   return (
     <html lang="hi" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Cinzel:wght@400;600;700&family=Noto+Serif+Devanagari:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        {/* Fonts are loaded via next/font — no duplicate link tag needed */}
       </head>
       <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
         <Script

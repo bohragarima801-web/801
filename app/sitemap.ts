@@ -12,9 +12,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const sitemapEntries: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
-    { url: `${baseUrl}/panchang`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
-    { url: `${baseUrl}/festivals`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
-    { url: `${baseUrl}/muhurat`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${baseUrl}/panchang`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/festivals`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/muhurat`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${baseUrl}/pujas`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
 
     { url: `${baseUrl}/products`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },

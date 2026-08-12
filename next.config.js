@@ -7,8 +7,8 @@ const nextConfig = {
   compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 86400,
-    deviceSizes: [375, 640, 750, 828, 1080, 1200, 1920],
+    minimumCacheTTL: 604800, // 7 days — better for mobile repeat visitors
+    deviceSizes: [375, 430, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       { protocol: 'https', hostname: '**' },
@@ -50,6 +50,14 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // ── CRITICAL: www → non-www canonical redirect (301 permanent)
+      // Fixes Google "Duplicate, chose different canonical" issue
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.divyayagyam.com' }],
+        destination: 'https://divyayagyam.com/:path*',
+        permanent: true,
+      },
       {
         source: '/store',
         destination: '/products',
@@ -63,6 +71,27 @@ const nextConfig = {
       {
         source: '/vip-pujas/:slug',
         destination: '/pujas/:slug',
+        permanent: true,
+      },
+      // Common typos & variants
+      {
+        source: '/puja',
+        destination: '/pujas',
+        permanent: true,
+      },
+      {
+        source: '/product',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug/amp',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      {
+        source: '/home',
+        destination: '/',
         permanent: true,
       },
     ]

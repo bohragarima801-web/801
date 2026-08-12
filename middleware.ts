@@ -4,6 +4,16 @@ import { verifyAdminToken, ADMIN_COOKIE_NAME } from '@/lib/admin-session'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const hostname = request.headers.get('host') || ''
+
+  // ── CRITICAL SEO FIX: www → non-www 301 redirect ──
+  // Resolves "Duplicate, Google chose different canonical" issue
+  if (hostname.startsWith('www.')) {
+    const url = request.nextUrl.clone()
+    url.host = hostname.replace(/^www\./, '')
+    url.protocol = 'https:'
+    return NextResponse.redirect(url, { status: 301 })
+  }
 
   // ---- Legacy/Corrupted Blog URL Redirect Guard ----
   if (pathname.startsWith('/blog/')) {

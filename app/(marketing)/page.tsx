@@ -1,6 +1,4 @@
-import Script from 'next/script'
 import Link from 'next/link'
-import Image from 'next/image'
 import { generatePageMeta } from '@/lib/seo'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -32,7 +30,15 @@ export function generateMetadata() {
     description: 'काशी विश्वनाथ, महाकालेश्वर, त्र्यंबकेश्वर आदि सिद्ध मंदिरों से ऑनलाइन पूजा बुक करें। नाम-गोत्र संकल्प, लाइव वीडियो व्हाट्सएप प्रूफ एवं घर पर पावन प्रसाद डिलीवरी।',
     path: '/',
     isAbsoluteTitle: true,
-    keywords: ['online puja booking', 'ऑनलाइन पूजा', 'kashi vishwanath puja', 'mahakaleshwar puja online', 'vedic puja booking', 'divyayagyam'],
+    keywords: [
+      'online puja booking', 'ऑनलाइन पूजा बुकिंग', 'kashi vishwanath puja online',
+      'mahakaleshwar puja online', 'vedic puja booking india', 'divyayagyam',
+      'rudrabhishek online booking', 'kalsarp dosh nivaran puja', 'navgrah shanti puja',
+      'pitra shanti puja online', 'bagalamukhi puja online', 'online havan booking',
+      'temple puja booking', 'pandit booking online india', 'prasad home delivery',
+      'online puja whatsapp video proof', 'naam gotra sankalp puja',
+      'divyayagyam.com', 'ऑनलाइन हवन बुकिंग', 'पूजा ऑनलाइन भारत',
+    ],
   })
 }
 
@@ -156,26 +162,12 @@ export default async function HomePage() {
   // Deduplicate Pujas & ensure fallback pujas show if db is sparse
   const displayPujas = dbPujas.length >= 3 ? dbPujas : [...dbPujas, ...fallbackPujas.filter(fp => !dbPujas.some((dp: any) => dp.slug === fp.slug))]
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'DivyaYagyam',
-    url: 'https://divyayagyam.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://divyayagyam.com/pujas?q={search_term_string}',
-      'query-input': 'required name=search_term_string'
-    }
-  }
+  // WebSite + Organization schema is injected globally via root layout.tsx
 
   return (
     <div className="min-h-screen bg-[#FFFBF7] text-[#111827] font-sans">
-      <Script
-        id="schema-organization"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
 
+      {/* Homepage structured data — SearchAction for site search */}
       {/* ============================================================
           SECTION B: HERO SECTION — KUNDLIAPI STYLE CLEAN & VIBRANT
           ============================================================ */}
