@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Outfit, Cinzel, Noto_Serif_Devanagari } from 'next/font/google'
+import { Inter, Outfit, Cinzel, Noto_Serif_Devanagari, Noto_Sans_Devanagari, Mukta, Poppins } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
@@ -15,6 +15,9 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], 
 const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap' })
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-cinzel', display: 'swap' })
 const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
+const notoSansDevanagari = Noto_Sans_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-sans-devanagari', display: 'swap' })
+const mukta = Mukta({ subsets: ['devanagari', 'latin'], weight: ['400', '500', '600', '700'], variable: '--font-mukta', display: 'swap' })
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-poppins', display: 'swap' })
 
 export async function generateMetadata(): Promise<Metadata> {
   const dynamicConfig = await getDynamicSiteConfig()
@@ -120,7 +123,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* Fonts are loaded via next/font — no duplicate link tag needed */}
       </head>
-      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
+      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} ${notoSansDevanagari.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
         <Script
           id="schema-global-organization"
           type="application/ld+json"
