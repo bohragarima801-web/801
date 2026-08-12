@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ProductClientView } from '@/components/product-client-view'
 import { notFound, redirect } from 'next/navigation'
@@ -7,7 +8,7 @@ import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE
 
 export const revalidate = 3600; // ISR: Revalidate every 3600s
 
-async function getProductBySlugOrFallback(slug: string) {
+const getProductBySlugOrFallback = cache(async (slug: string) => {
   try {
     // 1. Try exact slug match
     let product = await prisma.product.findUnique({
@@ -56,7 +57,7 @@ async function getProductBySlugOrFallback(slug: string) {
     console.error("Error fetching product by slug:", err);
     return null;
   }
-}
+})
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

@@ -173,7 +173,7 @@ export default async function PujasPage() {
                       </div>
                       <Link
                         href={`/pujas/${p.slug}`}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] active:scale-95 transition-all duration-200"
                       >
                         Book Now <ArrowRight className="h-3.5 w-3.5" />
                       </Link>

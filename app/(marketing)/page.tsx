@@ -281,7 +281,7 @@ export default async function HomePage() {
             const categoryName = p.category?.name || 'Vedic Puja'
 
             return (
-              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
                 {/* Clean Light Image Frame with Object Cover */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center">
@@ -396,7 +396,7 @@ export default async function HomePage() {
               const price = Number(p.price || 501)
               const imgSrc = p.coverImage || '/product_fallback.jpg'
               return (
-                <Link key={p.id} href={`/products/${p.slug}`} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal">
+                <Link key={p.id} href={`/products/${p.slug}`} className="group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal">
                   <div className="relative aspect-square overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 flex items-center justify-center">
                     <SafeImage
                       src={imgSrc}

@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { PujaClientView } from '@/components/puja-client-view'
 import { notFound, redirect } from 'next/navigation'
@@ -14,7 +15,7 @@ const defaultFaqs = [
   { question: 'क्या बुकिंग राशि सुरक्षित है और रसीद मिलेगी?', answer: 'जी हाँ, आपकी बुकिंग 100% सुरक्षित है। भुगतान के तुरंत पश्चात आपको डिजिटल रसीद एवं बुकिंग कन्फर्मेशन WhatsApp व Email द्वारा प्राप्त हो जाएगी।' }
 ]
 
-async function getPujaBySlugOrFallback(slug: string) {
+const getPujaBySlugOrFallback = cache(async (slug: string) => {
   try {
     // 1. Try exact slug match
     let puja = await prisma.puja.findUnique({
@@ -68,7 +69,7 @@ async function getPujaBySlugOrFallback(slug: string) {
     console.error("Error fetching puja by slug:", err);
     return null;
   }
-}
+})
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
