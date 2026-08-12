@@ -130,7 +130,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               </div>
               <div className="flex items-center gap-2 text-[11px] font-semibold text-[#e3c0a5]">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span>Made with Sanatan Devotion in Bharat 🇮🇳</span>
+                <span>A DivyaYagyam Initiative — Dedicated to Sanatan Tradition 🇮🇳</span>
               </div>
             </div>
 
