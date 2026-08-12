@@ -50,12 +50,35 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
   const { items } = useCart()
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
-  // Scroll detection for navbar
+  // Scroll detection & Accessibility keyboard/scroll lock handlers
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        setToolsOpen(false)
+        setLangOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [open])
 
   useEffect(() => {
     fetch('/api/profile')
@@ -209,13 +232,13 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — Prominent Saffron Pill */}
+          {/* "Book Puja Now" CTA — Primary Maroon Brand Pill */}
           <Link
             href="/pujas"
-            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
+            className="hidden md:inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-[#7B241C] hover:bg-[#5E1B16] text-white text-xs font-extrabold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 focus-ring-sacred"
           >
-            <Flame className="h-3.5 w-3.5 opacity-90" />
-            Book Puja
+            <Flame className="h-3.5 w-3.5 text-[#FFD700]" />
+            Book Puja Now
           </Link>
 
           {/* User Profile / Account Icon */}
@@ -226,10 +249,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
+                  className="rounded-full text-[#111827] hover:text-[#7B241C] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
                 >
                   <Link href="/dashboard" title="My Account">
-                    <User className="h-4 w-4 text-[#FF7A00]" />
+                    <User className="h-4 w-4 text-[#7B241C]" />
                     <span className="hidden sm:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                   </Link>
                 </Button>
@@ -249,7 +272,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 asChild
                 size="sm"
                 variant="ghost"
-                className="rounded-full border border-[#FF7A00]/40 text-[#FF7A00] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
+                className="rounded-full border border-[#7B241C]/40 text-[#7B241C] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
               >
                 <Link href="/login" title="Login / Register">
                   <User className="h-4 w-4 mr-1 sm:mr-1.5" />
@@ -266,8 +289,9 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             variant="ghost"
             size="icon"
             onClick={() => setOpen(!open)}
-            className="lg:hidden rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50"
-            aria-label="Menu"
+            aria-expanded={open}
+            aria-label={open ? "Close Navigation Menu" : "Open Navigation Menu"}
+            className="lg:hidden rounded-full text-[#111827] hover:text-[#7B241C] hover:bg-orange-50 focus-ring-sacred"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>

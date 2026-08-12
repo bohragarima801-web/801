@@ -46,10 +46,10 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
           <div className="kundli-badge-orange inline-flex">
-            <Heart className="h-3.5 w-3.5 text-[#FF7A00] fill-[#FF7A00]" /> Devotee Trust & Blessings
+            <Heart className="h-3.5 w-3.5 text-[#7B241C] fill-[#7B241C]" /> Devotee Trust & Blessings
           </div>
           <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight">
-            भरोसा और आशीर्वाद <span className="text-[#FF7A00] font-bold">/ Trust & Blessings</span>
+            भरोसा और आशीर्वाद <span className="text-[#7B241C] font-bold">/ Trust & Blessings</span>
           </h2>
           <p className="text-sm md:text-base text-[#4B5563] font-medium">
             Read authentic experiences from 10,000+ devotee families across India & abroad who booked sacred rituals through DivyaYagyam.
@@ -59,13 +59,13 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
         {/* 4 Trust Feature Pillars Strip */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16">
           {[
-            { icon: <ShieldCheck className="h-6 w-6 text-[#FF7A00]" />, title: 'Verified Priests', desc: 'Vedic certified pandits from sacred Dham temples' },
-            { icon: <Tag className="h-6 w-6 text-[#FF7A00]" />, title: 'Transparent Pricing', desc: 'All-inclusive pricing with Samagri & Prasad' },
-            { icon: <Lock className="h-6 w-6 text-[#FF7A00]" />, title: 'Secure Payments', desc: 'UPI, Cards & Netbanking via Razorpay' },
-            { icon: <MessageCircle className="h-6 w-6 text-[#FF7A00]" />, title: 'Live Support', desc: '24/7 dedicated WhatsApp devotee assistance' },
+            { icon: <ShieldCheck className="h-6 w-6 text-[#7B241C]" />, title: 'Verified Priests', desc: 'Certified pandits from sacred Dham temples' },
+            { icon: <Tag className="h-6 w-6 text-[#7B241C]" />, title: 'Transparent Pricing', desc: 'All-inclusive pricing with Samagri & Prasad' },
+            { icon: <Lock className="h-6 w-6 text-[#7B241C]" />, title: 'Secure Payments', desc: 'UPI, Cards & Netbanking via Razorpay' },
+            { icon: <MessageCircle className="h-6 w-6 text-[#7B241C]" />, title: 'Live Support', desc: '24/7 dedicated WhatsApp devotee assistance' },
           ].map((f, idx) => (
-            <div key={idx} className="p-5 bg-white rounded-2xl border border-[#F3E8DE] shadow-sm flex flex-col items-center text-center space-y-2.5 hover:border-[#FF7A00]/40 hover:shadow-md transition-all">
-              <div className="h-12 w-12 rounded-2xl bg-[#FFF3E0] text-[#FF7A00] flex items-center justify-center font-bold">
+            <div key={idx} className="p-5 bg-white rounded-2xl border border-[#F3E8DE] shadow-sm flex flex-col items-center text-center space-y-2.5 hover:border-[#7B241C]/40 hover:shadow-md transition-all">
+              <div className="h-12 w-12 rounded-2xl bg-[#FFF3E0] text-[#7B241C] flex items-center justify-center font-bold">
                 {f.icon}
               </div>
               <h4 className="font-bold text-sm md:text-base text-[#111827]">{f.title}</h4>
@@ -77,13 +77,13 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
         {/* 3-Card Testimonials Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {displayReviews.map((t, i) => (
-            <Card key={i} className="border border-[#F3E8DE] rounded-2xl bg-white text-[#111827] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:border-[#FF7A00]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between reveal">
+            <Card key={i} className="border border-[#F3E8DE] rounded-2xl bg-white text-[#111827] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:border-[#7B241C]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between reveal">
               <CardContent className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex gap-1 text-[#FF7A00]">
+                    <div className="flex gap-1 text-[#D97706]">
                       {Array.from({ length: t.rating || 5 }).map((_, j) => (
-                        <Star key={j} className="h-4 w-4 fill-[#FF7A00] text-[#FF7A00]" />
+                        <Star key={j} className="h-4 w-4 fill-[#D97706] text-[#D97706]" />
                       ))}
                     </div>
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
@@ -97,14 +97,14 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
                 </div>
 
                 <div className="pt-4 border-t border-[#F3E8DE] flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-[#FFF3E0] text-[#FF7A00] font-heading font-black text-sm flex items-center justify-center border border-orange-200">
+                  <div className="h-10 w-10 rounded-full bg-[#FFF3E0] text-[#7B241C] font-heading font-black text-sm flex items-center justify-center border border-orange-200">
                     {t.name ? t.name.charAt(0) : '🙏'}
                   </div>
                   <div>
                     <h5 className="font-heading font-bold text-sm text-[#111827]">{t.name}</h5>
                     <p className="text-[11px] text-[#4B5563]">{t.location || 'India'}</p>
                     {t.pujaName && (
-                      <span className="inline-block text-[10px] text-[#FF7A00] font-semibold mt-0.5">
+                      <span className="inline-block text-[10px] text-[#7B241C] font-semibold mt-0.5">
                         🪔 {t.pujaName}
                       </span>
                     )}

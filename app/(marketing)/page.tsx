@@ -332,10 +332,10 @@ export default async function HomePage() {
             const categoryName = p.category?.name || 'Vedic Puja'
 
             return (
-              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#7B241C]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
-                {/* Standardized 200px Image Frame */}
-                <div className="relative h-[200px] w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center shrink-0">
+                {/* Responsive Aspect-Ratio Image Frame (Non-cropping) */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center shrink-0">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
@@ -343,7 +343,7 @@ export default async function HomePage() {
                       <SafeImage
                         src={mediaInfo.thumbUrl || p.coverImage}
                         alt={p.name}
-                        className="w-full h-[200px] object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )
                   ) : (
@@ -352,7 +352,7 @@ export default async function HomePage() {
                     </div>
                   )}
 
-                  {/* Sri Mandir Style Pill Tag Badge */}
+                  {/* Pill Tag Badge */}
                   {(() => {
                     const badgeInfo = getPujaBadgeInfo(p)
                     if (!badgeInfo) return null
@@ -374,12 +374,12 @@ export default async function HomePage() {
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-snug">
+                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#7B241C] transition-colors line-clamp-2 leading-snug">
                       {p.name}
                     </h3>
                     {p.location && (
                       <p className="text-xs text-[#4B5563] flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
+                        <MapPin className="h-3.5 w-3.5 text-[#D97706] shrink-0" />
                         {p.location}
                       </p>
                     )}
@@ -388,15 +388,15 @@ export default async function HomePage() {
                     </p>
                   </div>
 
-                  {/* Price + High-CTR Emerald Green CTA Button */}
+                  {/* Price + Primary Maroon Brand CTA Button */}
                   <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-[#4B5563] font-medium block">Booking Amount</span>
-                      <span className="text-xl font-extrabold text-[#FF7A00]">
+                      <span className="text-xl font-extrabold text-[#7B241C]">
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <span className="bg-[#00875A] hover:bg-[#00704A] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide">
+                    <span className="bg-[#7B241C] hover:bg-[#5E1B16] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide focus-ring-sacred">
                       PARTICIPATE <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>

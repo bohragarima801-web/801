@@ -8,8 +8,25 @@
    ============================================================ */
 
 @layer base {
-  :root {
-    /* ── Global Font System Tokens (KundliAPI Style: Outfit/Plus Jakarta Sans + Inter) ── */
+    /* ── Approved Brand Palette Design Tokens ── */
+    --color-primary-maroon: #7B241C;
+    --color-dark-maroon: #5E1B16;
+    --color-saffron: #D97706;
+    --color-muted-gold: #C89B3C;
+    --color-warm-cream: #FFF9EF;
+    --color-dark-brown: #3B2418;
+    --color-body-text: #29221D;
+    --color-muted-text: #756B63;
+    --color-success-green: #287A45;
+    --color-error-red: #B42318;
+
+    /* ── Standardized Border Radius Tokens ── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --min-touch-target: 44px;
+
+    /* ── Global Font System Tokens ── */
     --font-heading-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     --font-heading-hi: 'Noto Serif Devanagari', serif;
     --font-body-en: 'Inter', sans-serif;
@@ -17,16 +34,16 @@
     --font-vip-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     --font-vip-hi: 'Yatra One', serif;
 
-    /* ── Tier 2: Standard & Home System Tokens (Warm Off-White + Crisp White + Orange) ── */
+    /* ── Tier 2: Standard & Home System Tokens ── */
     --bg-tier2: #FFFBF7;
     --surface-tier2: #FFFFFF;
-    --primary-tier2: #FF7A00;
-    --secondary-tier2: #FF6B00;
-    --accent-tier2: #FF7A00;
+    --primary-tier2: #7B241C;
+    --secondary-tier2: #D97706;
+    --accent-tier2: #C89B3C;
     --text-heading-tier2: #111827;
     --text-body-tier2: #4B5563;
     --border-tier2: #F3E8DE;
-    --success-tier2: #16A34A;
+    --success-tier2: #287A45;
   }
 }
 
@@ -1027,5 +1044,21 @@
   }
   .font-body {
     font-family: 'Outfit', 'Mukta', sans-serif !important;
+  }
+  .focus-ring-sacred:focus-visible {
+    outline: 2px solid var(--color-primary-maroon);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Accessibility: Reduced Motion Support ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
