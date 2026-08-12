@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { PujaClientView } from '@/components/puja-client-view'
 import { notFound, redirect } from 'next/navigation'
@@ -15,7 +16,7 @@ const defaultFaqs = [
   { question: 'क्या बुकिंग राशि सुरक्षित है और रसीद मिलेगी?', answer: 'जी हाँ, आपकी बुकिंग 100% सुरक्षित है। भुगतान के तुरंत पश्चात आपको डिजिटल रसीद एवं बुकिंग कन्फर्मेशन WhatsApp व Email द्वारा प्राप्त हो जाएगी।' }
 ]
 
-const getPujaBySlugOrFallback = cache(async (slug: string) => {
+const fetchPujaFromDb = async (slug: string) => {
   try {
     // 1. Try exact slug match
     let puja = await prisma.puja.findUnique({
@@ -69,7 +70,33 @@ const getPujaBySlugOrFallback = cache(async (slug: string) => {
     console.error("Error fetching puja by slug:", err);
     return null;
   }
+}
+
+// Global cross-request Data Cache for single Puja Detail (1-hour TTL)
+const getCachedPujaBySlug = (slug: string) =>
+  unstable_cache(
+    async () => fetchPujaFromDb(slug),
+    [`puja-detail-v2-${slug}`],
+    { revalidate: 3600, tags: ['pujas', `puja-${slug}`] }
+  )()
+
+// Per-request memoization wrapper
+const getPujaBySlugOrFallback = cache(async (slug: string) => {
+  return getCachedPujaBySlug(slug)
 })
+
+export async function generateStaticParams() {
+  try {
+    const pujas = await prisma.puja.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true },
+      take: 50
+    })
+    return pujas.map((p) => ({ slug: p.slug }))
+  } catch (e) {
+    return []
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
