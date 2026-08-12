@@ -21,21 +21,21 @@ const languages = [
 ]
 
 const navItems = [
-  { title: 'Home', href: '/' },
-  { title: 'Pujas', href: '/pujas' },
-  { title: 'VIP Pujas', href: '/vip-pujas' },
-  { title: 'Products', href: '/products' },
-  { title: 'BhaktiSeva', href: '/bhaktiseva' },
-  { title: 'Blog', href: '/blog' },
+  { title: 'होम (Home)', href: '/' },
+  { title: 'पूजा सेवा', href: '/pujas' },
+  { title: 'VIP अनुष्ठान', href: '/vip-pujas' },
+  { title: 'सिद्ध स्टोर', href: '/products' },
+  { title: 'भक्ति सेवा', href: '/bhaktiseva' },
+  { title: 'ब्लॉग', href: '/blog' },
 ]
 
 const toolsMenu = [
-  { title: 'AI Pandit Ji', href: '/ask-a-pandit', desc: 'Instant AI spiritual guidance', icon: '🤖' },
-  { title: 'Vedic Kundali', href: '/tools', desc: 'Birth chart & horoscope', icon: '♑' },
-  { title: 'Daily Panchang', href: '/panchang', desc: 'Tithi, Nakshtra & Choghadiya', icon: '📅' },
-  { title: 'Shubh Muhurat', href: '/muhurat', desc: 'Auspicious timing finder', icon: '⏰' },
-  { title: 'Jyotish Consultation', href: '/astro', desc: 'Talk to expert astrologers', icon: '🔮' },
-  { title: 'Sacred Gallery', href: '/gallery', desc: 'Temple darshan & photos', icon: '🖼️' },
+  { title: '🤖 AI पंडित जी', href: '/ask-a-pandit', desc: 'तुरंत वैदिक मार्गदर्शन व सहायता', icon: '🤖' },
+  { title: '♑ वैदिक जन्म कुंडली', href: '/tools', desc: 'निःशुल्क जन्मपत्रिका व फलादेश', icon: '♑' },
+  { title: '📅 दैनिक पंचांग', href: '/panchang', desc: 'तिथि, नक्षत्र व चौघड़िया', icon: '📅' },
+  { title: '⏰ शुभ मुहूर्त खोजक', href: '/muhurat', desc: 'विवाह, गृह प्रवेश व वाहन मुहूर्त', icon: '⏰' },
+  { title: '🔮 ज्योतिष परामर्श', href: '/astro', desc: 'विद्वान ज्योतिषियों से सीधी बात', icon: '🔮' },
+  { title: '🖼️ सिद्ध फोटो गैलरी', href: '/gallery', desc: 'मंदिर दर्शन व पावन चित्र', icon: '🖼️' },
 ]
 
 export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?: any } = {}) {
@@ -113,6 +113,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         scrolled ? 'navbar-scrolled' : 'navbar-spiritual'
       )}
     >
+      {/* Top Announcement Bar — Sanatani Saffron Strip */}
+      <div className="w-full bg-gradient-to-r from-[#FF7A00] via-[#FF6B00] to-[#FF7A00] text-white py-1 px-4 text-center text-[11px] sm:text-xs font-bold flex items-center justify-center gap-2 shadow-sm notranslate" translate="no">
+        <Flame className="h-3.5 w-3.5 text-[#FFF3E0] animate-pulse shrink-0" />
+        <span>🚩 100% प्रामाणिक वैदिक पूजा एवं अनुष्ठान — नाम व गोत्र संकल्प से सिद्ध सेवा 🪔</span>
+      </div>
+
       {/* Top gold accent strip */}
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#A87C28]/50 to-transparent" />
 
