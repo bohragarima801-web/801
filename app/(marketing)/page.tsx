@@ -374,12 +374,12 @@ export default async function HomePage() {
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#7B241C] transition-colors line-clamp-2 leading-snug">
+                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-snug">
                       {p.name}
                     </h3>
                     {p.location && (
                       <p className="text-xs text-[#4B5563] flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-[#D97706] shrink-0" />
+                        <MapPin className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
                         {p.location}
                       </p>
                     )}
@@ -388,15 +388,15 @@ export default async function HomePage() {
                     </p>
                   </div>
 
-                  {/* Price + Primary Maroon Brand CTA Button */}
+                  {/* Price + High-CTR Emerald Green CTA Button */}
                   <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-[#4B5563] font-medium block">Booking Amount</span>
-                      <span className="text-xl font-extrabold text-[#7B241C]">
+                      <span className="text-xl font-extrabold text-[#FF7A00]">
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <span className="bg-[#7B241C] hover:bg-[#5E1B16] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide focus-ring-sacred">
+                    <span className="bg-[#00875A] hover:bg-[#00704A] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide focus-ring-sacred">
                       PARTICIPATE <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>

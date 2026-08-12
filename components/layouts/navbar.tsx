@@ -232,12 +232,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — Compact Vibrant Saffron Pill */}
+          {/* "Book Puja" CTA — Prominent Vibrant Sanatani Saffron Pill */}
           <Link
             href="/pujas"
-            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#D97706] via-[#C89B3C] to-[#B45309] hover:from-[#B45309] hover:to-[#7B241C] text-white text-xs font-extrabold tracking-wide shadow-sm hover:shadow-md transition-all duration-200 shrink-0 whitespace-nowrap focus-ring-sacred border border-[#F59E0B]/30"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] hover:from-[#FF6B00] hover:to-[#E65100] text-white text-xs font-extrabold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 shrink-0 whitespace-nowrap focus-ring-sacred"
           >
-            <Flame className="h-3.5 w-3.5 text-[#FFF5D6]" />
+            <Flame className="h-3.5 w-3.5 text-[#FFF3E0]" />
             <span>Book Puja</span>
           </Link>
 
@@ -249,10 +249,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-full text-[#111827] hover:text-[#7B241C] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
+                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
                 >
                   <Link href="/dashboard" title="My Account">
-                    <User className="h-4 w-4 text-[#7B241C]" />
+                    <User className="h-4 w-4 text-[#FF7A00]" />
                     <span className="hidden sm:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                   </Link>
                 </Button>
@@ -272,7 +272,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 asChild
                 size="sm"
                 variant="ghost"
-                className="rounded-full border border-[#7B241C]/40 text-[#7B241C] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
+                className="rounded-full border border-[#FF7A00]/40 text-[#FF7A00] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
               >
                 <Link href="/login" title="Login / Register">
                   <User className="h-4 w-4 mr-1 sm:mr-1.5" />

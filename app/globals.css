@@ -9,16 +9,15 @@
 
 @layer base {
   :root {
-    /* ── Approved Brand Palette Design Tokens ── */
-    --color-primary-maroon: #7B241C;
-    --color-dark-maroon: #5E1B16;
-    --color-saffron: #D97706;
-    --color-muted-gold: #C89B3C;
+    /* ── Vibrant Sanatani Saffron Brand Palette Design Tokens ── */
+    --color-primary-saffron: #FF7A00;
+    --color-secondary-orange: #FF6B00;
+    --color-accent-gold: #FFD700;
     --color-warm-cream: #FFF9EF;
-    --color-dark-brown: #3B2418;
-    --color-body-text: #29221D;
-    --color-muted-text: #756B63;
-    --color-success-green: #287A45;
+    --color-dark-brown: #29221D;
+    --color-body-text: #111827;
+    --color-muted-text: #4B5563;
+    --color-cta-green: #00875A;
     --color-error-red: #B42318;
 
     /* ── Standardized Border Radius Tokens ── */
@@ -38,13 +37,13 @@
     /* ── Tier 2: Standard & Home System Tokens ── */
     --bg-tier2: #FFFBF7;
     --surface-tier2: #FFFFFF;
-    --primary-tier2: #7B241C;
-    --secondary-tier2: #D97706;
-    --accent-tier2: #C89B3C;
+    --primary-tier2: #FF7A00;
+    --secondary-tier2: #FF6B00;
+    --accent-tier2: #FFD700;
     --text-heading-tier2: #111827;
     --text-body-tier2: #4B5563;
     --border-tier2: #F3E8DE;
-    --success-tier2: #287A45;
+    --success-tier2: #00875A;
   }
 }
 
