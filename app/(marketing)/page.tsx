@@ -180,21 +180,21 @@ export default async function HomePage() {
 
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-5xl">
           {/* Category pill badge */}
-          <div className="kundli-badge-orange mb-6 shadow-sm inline-flex">
-            <Sparkles className="h-4 w-4 text-[#FF7A00] fill-[#FF7A00]" />
-            <span className="font-bold tracking-wide uppercase text-xs">☸ SRI SANATAN SEVA & ANUSHTHAN</span>
+          <div className="kundli-badge-orange mb-4 shadow-sm inline-flex items-center gap-1.5 px-3 py-1">
+            <Sparkles className="h-3.5 w-3.5 text-[#FF7A00] fill-[#FF7A00]" />
+            <span className="font-bold tracking-wide uppercase text-[11px] sm:text-xs">☸ श्री सनातन सेवा एवं अनुष्ठान</span>
           </div>
 
           {/* H1 Headline in Outfit / Plus Jakarta Sans */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-[#111827] leading-[1.15] tracking-tight mb-5">
-            Perform Authentic Vedic Pujas at{' '}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-[#111827] leading-snug tracking-tight mb-4">
+            भारत के पवित्र मंदिरों में{' '}
             <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
-              Sacred Temples in India
+              प्रामाणिक वैदिक पूजा-अर्चना करें
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-sm sm:text-base md:text-lg text-[#4B5563] font-medium leading-relaxed max-w-3xl mx-auto mb-8">
+          <p className="text-xs sm:text-sm md:text-base text-[#4B5563] font-medium leading-relaxed max-w-2xl mx-auto mb-6">
             भारत के सुप्रसिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे ऑनलाइन वैदिक पूजा। अपने नाम व गोत्र से संकल्प करवाएं — व्हाट्सएप पर लाइव वीडियो प्रमाण एवं घर द्वार सिद्ध प्रसाद।
           </p>
 
@@ -530,17 +530,17 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-            <div className="kundli-badge-orange inline-flex">
-              <ShieldCheck className="h-4 w-4 text-[#FF7A00]" /> Why Choose DivyaYagyam
+          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+            <div className="kundli-badge-orange inline-flex items-center gap-1.5 px-3 py-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#FF7A00]" /> दिव्या यज्ञम क्यों चुनें?
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-[#111827] leading-tight">
-              Why 50,000+ Devotees Trust{' '}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-[#111827] leading-snug">
+              50,000 से अधिक भक्त{' '}
               <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
-                DivyaYagyam
+                दिव्या यज्ञम पर भरोसा क्यों करते हैं?
               </span>
             </h2>
-            <p className="text-sm sm:text-base text-[#4B5563] font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#4B5563] font-medium max-w-2xl mx-auto leading-relaxed">
               शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद — आपकी हर पूजा को बनाती है 100% सिद्ध व फलदायी।
             </p>
           </div>
