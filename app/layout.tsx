@@ -23,17 +23,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const dynamicConfig = await getDynamicSiteConfig()
   const googleVerification = await getSetting('seo.google_verification')
   const baseUrl = dynamicConfig.url || 'https://divyayagyam.com'
-  const siteName = dynamicConfig.name || 'DivyaYagyam'
+  const siteName = dynamicConfig.name || 'Divya Yagyam'
   const defaultDescription = 'Book authentic online pujas at Kashi Vishwanath, Mahakaleshwar & heritage temples in India. Verified Vedic Pandits, name-gotra sankalp, WhatsApp video proof & sacred prasad home delivery.'
 
   return {
     title: {
-      default: `Online Puja Booking from Temples in India | ${siteName}`,
+      default: `दिव्या यज्ञम (Divya Yagyam) — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
       template: `%s | ${siteName}`
     },
     description: dynamicConfig.description || defaultDescription,
     keywords: dynamicConfig.keywords || [
-      'online puja booking', 'ऑनलाइन पूजा', 'divyayagyam', 'vedic puja',
+      'online puja booking', 'ऑनलाइन पूजा', 'divya yagyam', 'दिव्या यज्ञम', 'divyayagyam', 'vedic puja',
       'kashi vishwanath puja', 'mahakaleshwar puja', 'rudraksha', 'puja samagri',
       'astrology online', 'jyotish', 'sanatan seva'
     ],
@@ -58,10 +58,10 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: `दिव्ययज्ञम् (DivyaYagyam) — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      title: `दिव्या यज्ञम (Divya Yagyam) — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
       description: dynamicConfig.description || defaultDescription,
       url: baseUrl,
-      siteName: 'दिव्ययज्ञम् (DivyaYagyam)',
+      siteName: 'दिव्या यज्ञम (Divya Yagyam)',
       locale: 'hi_IN',
       type: 'website',
       images: [{
