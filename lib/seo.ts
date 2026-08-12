@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 const BASE_URL = 'https://divyayagyam.com'
-const SITE_NAME = 'Divya Yagyam'
+const SITE_NAME = 'DivyaYagyam'
 const DEFAULT_OG_IMAGE = `${BASE_URL}/logo.jpg`
 
 // ─────────────────────────────────────────────
@@ -370,8 +370,8 @@ export function generateOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${BASE_URL}/#organization`,
-    name: 'दिव्या यज्ञम | Divya Yagyam',
-    alternateName: ['Divya Yagyam', 'DivyaYagyam', 'दिव्या यज्ञम', 'दिव्य यज्ञम्', 'Divya Yagyam India'],
+    name: 'दिव्ययज्ञम् | DivyaYagyam',
+    alternateName: ['दिव्ययज्ञम्', 'DivyaYagyam', 'Divya Yagyam', 'दिव्य यज्ञम्', 'DivyaYagyam India'],
     url: BASE_URL,
     logo: DEFAULT_OG_IMAGE,
     email: 'seva@divyayagyam.com',
@@ -389,8 +389,8 @@ export function generateWebSiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${BASE_URL}/#website`,
-    name: 'दिव्या यज्ञम (Divya Yagyam)',
-    alternateName: ['Divya Yagyam', 'DivyaYagyam', 'दिव्या यज्ञम', 'दिव्य यज्ञम्'],
+    name: 'दिव्ययज्ञम् (DivyaYagyam)',
+    alternateName: ['दिव्ययज्ञम्', 'DivyaYagyam', 'Divya Yagyam', 'दिव्य यज्ञम्'],
     url: BASE_URL,
     potentialAction: {
       '@type': 'SearchAction',

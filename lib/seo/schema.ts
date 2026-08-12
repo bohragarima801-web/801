@@ -19,7 +19,7 @@ export function organizationNode(): Json {
     "@type": "Organization",
     "@id": ID.organization,
     name: SITE.name,
-    alternateName: [SITE.nameHi, "Divya Yagyam", "DivyaYagyam", "दिव्या यज्ञम", "दिव्य यज्ञम्"],
+    alternateName: [SITE.nameHi, "DivyaYagyam", "Divya Yagyam", "दिव्ययज्ञम्", "दिव्य यज्ञम्"],
     legalName: SITE.legalName,
     url: SITE.url,
     logo: {

@@ -532,12 +532,12 @@ export default async function HomePage() {
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
             <div className="kundli-badge-orange inline-flex items-center gap-1.5 px-3 py-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-[#FF7A00]" /> दिव्या यज्ञम क्यों चुनें?
+              <ShieldCheck className="h-3.5 w-3.5 text-[#FF7A00]" /> दिव्ययज्ञम् क्यों चुनें?
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-[#111827] leading-snug">
               50,000 से अधिक भक्त{' '}
               <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] bg-clip-text text-transparent">
-                दिव्या यज्ञम पर भरोसा क्यों करते हैं?
+                दिव्ययज्ञम् पर भरोसा क्यों करते हैं?
               </span>
             </h2>
             <p className="text-xs sm:text-sm text-[#4B5563] font-medium max-w-2xl mx-auto leading-relaxed">

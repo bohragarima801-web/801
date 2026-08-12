@@ -4,9 +4,9 @@
 
 export const SITE = {
   url: "https://divyayagyam.com",
-  name: "Divya Yagyam",
-  nameHi: "दिव्या यज्ञम",
-  legalName: "Divya Yagyam",
+  name: "DivyaYagyam",
+  nameHi: "दिव्ययज्ञम्",
+  legalName: "DivyaYagyam",
   tagline: "ऑनलाइन पूजा बुकिंग | Online Puja Booking India",
   description:
     "भारत के पवित्र शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे ऑनलाइन पूजा व यज्ञ अनुष्ठान बुक करें। नाम-गोत्र संकल्प, लाइव वीडियो दर्शन, 100% अभिमंत्रित प्रसाद डिलीवरी।",
