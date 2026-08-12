@@ -90,6 +90,21 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/pujas/rudrabhishek-mahapuja',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/pujas/kalsarp-dosh-nivaran-puja',
+        destination: '/pujas/kalsarp-dosh-shanti-puja',
+        permanent: true,
+      },
+      {
+        source: '/pujas/rudrabhishek',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
         source: '/home',
         destination: '/',
         permanent: true,
