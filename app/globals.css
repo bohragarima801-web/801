@@ -8,6 +8,7 @@
    ============================================================ */
 
 @layer base {
+  :root {
     /* ── Approved Brand Palette Design Tokens ── */
     --color-primary-maroon: #7B241C;
     --color-dark-maroon: #5E1B16;
