@@ -232,13 +232,13 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja Now" CTA — Primary Maroon Brand Pill */}
+          {/* "Book Puja" CTA — Compact Vibrant Saffron Pill */}
           <Link
             href="/pujas"
-            className="hidden md:inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-[#7B241C] hover:bg-[#5E1B16] text-white text-xs font-extrabold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 focus-ring-sacred"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#D97706] via-[#C89B3C] to-[#B45309] hover:from-[#B45309] hover:to-[#7B241C] text-white text-xs font-extrabold tracking-wide shadow-sm hover:shadow-md transition-all duration-200 shrink-0 whitespace-nowrap focus-ring-sacred border border-[#F59E0B]/30"
           >
-            <Flame className="h-3.5 w-3.5 text-[#FFD700]" />
-            Book Puja Now
+            <Flame className="h-3.5 w-3.5 text-[#FFF5D6]" />
+            <span>Book Puja</span>
           </Link>
 
           {/* User Profile / Account Icon */}
