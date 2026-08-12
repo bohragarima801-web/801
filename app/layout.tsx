@@ -121,7 +121,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="hi" suppressHydrationWarning>
       <head>
-        {/* Fonts are loaded via next/font — no duplicate link tag needed */}
+        <meta charSet="utf-8" />
+        {/* Prevents Google Translate from auto-corrupting brand names & mantras */}
+        <meta name="google" content="notranslate" />
       </head>
       <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} ${notoSansDevanagari.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
         <Script

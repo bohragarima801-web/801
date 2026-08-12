@@ -43,12 +43,12 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
       </div>
 
       {showText && (
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center notranslate" translate="no">
           <span className="text-[18px] sm:text-[21px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
           <span className="text-[9px] sm:text-[10px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.14em] uppercase mt-[1px]">
-            AASTHA KI NAI PEHCHAN
+            दिव्ययज्ञम् — आस्था की नई पहचान
           </span>
         </div>
       )}
