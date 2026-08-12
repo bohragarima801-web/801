@@ -42,7 +42,7 @@ const fetchPujaFromDb = async (slug: string) => {
         where: {
           OR: [
             { id: slug },
-            { slug: { contains: slug.slice(0, 15) } },
+            { slug: { contains: slug.slice(0, 12) } },
             { name: { contains: slug.replace(/-/g, ' '), mode: 'insensitive' } }
           ]
         },
@@ -62,6 +62,43 @@ const fetchPujaFromDb = async (slug: string) => {
       });
     }
 
+    // 3. Smart Keyword Fallback: Extract main keyword (e.g. rudrabhishek, kalsarp, bagalamukhi, pitra, shani, navgrah)
+    if (!puja) {
+      const keywords = slug.split('-').filter(w => !['puja', 'mahapuja', 'vishesh', 'sarva', 'yagya', 'dosh', 'nivaran', 'shanti', 'hawan'].includes(w) && w.length > 3)
+      for (const kw of keywords) {
+        puja = await prisma.puja.findFirst({
+          where: {
+            OR: [
+              { slug: { contains: kw } },
+              { name: { contains: kw, mode: 'insensitive' } }
+            ]
+          },
+          include: {
+            category: true,
+            temple: true,
+            packages: { orderBy: { price: 'asc' } },
+            images: { orderBy: { order: 'asc' } },
+            videos: { orderBy: { createdAt: 'desc' } }
+          }
+        })
+        if (puja) break;
+      }
+    }
+
+    // 4. Absolute Fallback: Get first published puja if still null
+    if (!puja) {
+      puja = await prisma.puja.findFirst({
+        where: { status: 'PUBLISHED' },
+        include: {
+          category: true,
+          temple: true,
+          packages: { orderBy: { price: 'asc' } },
+          images: { orderBy: { order: 'asc' } },
+          videos: { orderBy: { createdAt: 'desc' } }
+        }
+      })
+    }
+
     if (!puja) return null;
 
     // Deep serialize to plain JSON to prevent Decimal/Date RSC serialization crashes
@@ -76,7 +113,7 @@ const fetchPujaFromDb = async (slug: string) => {
 const getCachedPujaBySlug = (slug: string) =>
   unstable_cache(
     async () => fetchPujaFromDb(slug),
-    [`puja-detail-v2-${slug}`],
+    [`puja-detail-v3-${slug}`],
     { revalidate: 3600, tags: ['pujas', `puja-${slug}`] }
   )()
 
@@ -102,7 +139,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja) return generatePageMeta({ title: 'Puja Not Found | DivyaYagyam', description: 'The requested puja service is unavailable.', path: `/pujas/${slug}` });
+  if (!puja) return generatePageMeta({ title: 'Puja Booking | DivyaYagyam', description: 'Book online Vedic pujas at sacred temples with WhatsApp video proof and prasad delivery.', path: `/pujas` });
 
   const title = puja.seoTitle || `${puja.name} — Book Online Puja | DivyaYagyam`
   const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
@@ -121,8 +158,8 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja || puja.status === 'DRAFT' || (puja.publishedAt && new Date(puja.publishedAt) > new Date())) {
-    notFound()
+  if (!puja) {
+    redirect('/pujas')
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID
