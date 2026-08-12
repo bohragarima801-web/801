@@ -217,6 +217,65 @@ export default async function HomePage() {
           <div className="w-full max-w-6xl mx-auto">
             <HeroPujaSlider slides={heroSlides} />
           </div>
+
+          {/* Top Trust Counter Bar directly under Hero */}
+          <div className="mt-10 p-5 sm:p-6 rounded-2xl bg-white border border-[#F3E8DE] grid grid-cols-2 md:grid-cols-4 gap-4 text-center shadow-sm max-w-5xl mx-auto">
+            {[
+              { val: "50,000+", label: "संतुष्ट यजमान (Happy Devotees)" },
+              { val: "27+ Years", label: "वैदिक अनुभव (Vedic Lineage)" },
+              { val: "100%", label: "नाम-गोत्र संकल्प (Personalized)" },
+              { val: "4.9 ★", label: "भक्त रेटिंग (User Rating)" }
+            ].map((stat) => (
+              <div key={stat.label} className="space-y-0.5">
+                <div className="text-xl sm:text-2xl font-black text-[#FF7A00] tracking-tight">{stat.val}</div>
+                <div className="text-[11px] sm:text-xs font-bold text-[#111827] opacity-90">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION B2: VISUAL 4-STEP "HOW IT WORKS" FLOW (SRI MANDIR STYLE)
+          ============================================================ */}
+      <section className="w-full bg-white py-12 md:py-16 border-b border-[#F3E8DE]">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl">
+          <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+            <div className="kundli-badge-orange inline-flex">
+              <Sparkles className="h-3.5 w-3.5 text-[#FF7A00]" /> 4 Easy Steps
+            </div>
+            <h2 className="text-2xl md:text-4xl font-heading font-extrabold text-[#111827]">
+              पूजा कैसे संपन्न होती है? <span className="text-[#FF7A00]">/ How It Works</span>
+            </h2>
+            <p className="text-xs md:text-sm text-[#4B5563] font-medium">
+              घर बैठे 4 सरल चरणों में अपनी पूजा संपन्न कराएं एवं लाइव प्रमाण प्राप्त करें।
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { step: "01", icon: "🪔", title: "अपनी पूजा चुनें", subtitle: "Select Sacred Ritual", desc: "काशी, उज्जैन, बगलामुखी आदि सिद्ध धामों में अपनी पूजा व मंदिर चुनें।" },
+              { step: "02", icon: "✍️", title: "नाम व गोत्र भरें", subtitle: "Fill Name & Gotra", desc: "अपने व परिवार के सदस्यों का नाम, गोत्र व विशेष मनोकामना भरें।" },
+              { step: "03", icon: "🎥", title: "WhatsApp पर प्रमाण", subtitle: "Live Video Proof", desc: "पूजन संकल्प व मुख्य आहुति का HD वीडियो सीधे आपके व्हाट्सएप पर प्राप्त करें।" },
+              { step: "04", icon: "📦", title: "घर पर सिद्ध प्रसाद", subtitle: "Prasad Home Delivery", desc: "सिद्ध पीठों का पावन अक्षत, भस्म, रक्षासूत्र व प्रसाद आपके घर कोरियर से।" }
+            ].map((st) => (
+              <div key={st.step} className="relative bg-[#FFFBF7] p-5 rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all flex flex-col justify-between shadow-sm hover:shadow-md">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="h-11 w-11 rounded-xl bg-[#FFF3E0] border border-[#FF7A00]/20 flex items-center justify-center text-2xl shadow-sm">
+                    {st.icon}
+                  </div>
+                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#FF7A00]/10 text-[#FF7A00] border border-[#FF7A00]/20">
+                    STEP {st.step}
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-heading font-bold text-base text-[#111827]">{st.title}</h3>
+                  <span className="text-[10px] uppercase font-bold text-[#FF7A00] block">{st.subtitle}</span>
+                  <p className="text-xs text-[#4B5563] leading-relaxed font-normal">{st.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -265,7 +324,7 @@ export default async function HomePage() {
             </a>
           </div>
         ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
           {displayPujas.map((p: any, idx: number) => {
             const mediaInfo = getMediaDisplaySrc(p.coverImage)
             const isFallback = p.id.startsWith('fp-')
@@ -273,10 +332,10 @@ export default async function HomePage() {
             const categoryName = p.category?.name || 'Vedic Puja'
 
             return (
-              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col overflow-hidden cursor-pointer reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
+              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
 
-                {/* Clean Light Image Frame with Object Cover */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center">
+                {/* Standardized 200px Image Frame */}
+                <div className="relative h-[200px] w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center shrink-0">
                   {p.coverImage ? (
                     mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
                       <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
@@ -284,7 +343,7 @@ export default async function HomePage() {
                       <SafeImage
                         src={mediaInfo.thumbUrl || p.coverImage}
                         alt={p.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-[200px] object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )
                   ) : (
@@ -293,14 +352,14 @@ export default async function HomePage() {
                     </div>
                   )}
 
-                  {/* Admin Configured Card Badge */}
+                  {/* Sri Mandir Style Pill Tag Badge */}
                   {(() => {
                     const badgeInfo = getPujaBadgeInfo(p)
                     if (!badgeInfo) return null
                     return (
                       <div className="absolute top-3 left-3 z-20 flex gap-1.5 flex-wrap">
-                        <span className="kundli-badge-orange shadow-sm">
-                          {badgeInfo.text}
+                        <span className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-[#FFD700] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md border border-[#FFD700]/40 flex items-center gap-1">
+                          ✨ {badgeInfo.text}
                         </span>
                       </div>
                     )
@@ -329,7 +388,7 @@ export default async function HomePage() {
                     </p>
                   </div>
 
-                  {/* Price + CTA */}
+                  {/* Price + High-CTR Emerald Green CTA Button */}
                   <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-[#4B5563] font-medium block">Booking Amount</span>
@@ -337,8 +396,8 @@ export default async function HomePage() {
                         ₹{Number(p.price || 1100).toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs py-2 px-4 rounded-xl shadow-md group-hover:shadow-lg group-hover:shadow-[#FF7A00]/25 transition-all inline-flex items-center gap-1">
-                      Book Now <ArrowRight className="h-3.5 w-3.5" />
+                    <span className="bg-[#00875A] hover:bg-[#00704A] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide">
+                      PARTICIPATE <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </div>
@@ -424,6 +483,68 @@ export default async function HomePage() {
             })}
           </div>
         )}
+      </section>
+
+      {/* ============================================================
+          SECTION: VERIFIED ACHARYAS & VEDA PRIESTS (SOCIAL PROOF)
+          ============================================================ */}
+      <section className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-t border-[#F3E8DE]">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+          <div className="kundli-badge-orange inline-flex">
+            <ShieldCheck className="h-4 w-4 text-[#FF7A00]" /> Certified Veda Priests
+          </div>
+          <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827]">
+            हमारे प्रमाणित वेदाचार्य <span className="text-[#FF7A00]">& विद्वान आचार्य</span>
+          </h2>
+          <p className="text-sm md:text-base text-[#4B5563] font-medium max-w-2xl mx-auto">
+            काशी, उज्जैन, कामाख्या व हरिद्वार के मुख्य सिद्ध मंदिरों के प्रामाणिक, वेद-विशारद आचार्यों द्वारा पूर्ण शास्त्रोक्त विधि से पूजन।
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {[
+            {
+              name: "आचार्य पं. मुकेश बोहरा",
+              title: "वरिष्ठ वेदाचार्य व तंत्र-यज्ञ विशेषज्ञ",
+              exp: "27+ वर्ष अनुभव",
+              location: "माँ कात्यायनी शक्तिपीठ, जोधपुर",
+              badge: "✔ Verified Senior Priest"
+            },
+            {
+              name: "पं. रामकृष्ण शास्त्री",
+              title: "कर्मकांड व रुद्राभिषेक विशेषज्ञ",
+              exp: "18+ वर्ष अनुभव",
+              location: "काशी विश्वनाथ क्षेत्र, वाराणसी",
+              badge: "✔ Verified Veda Acharya"
+            },
+            {
+              name: "पं. गोविन्द शर्मा",
+              title: "कालसर्प व नवग्रह शांति विशेषज्ञ",
+              exp: "15+ वर्ष अनुभव",
+              location: "महाकालेश्वर धाम, उज्जैन",
+              badge: "✔ Verified Jyotish Acharya"
+            }
+          ].map((ach) => (
+            <div key={ach.name} className="bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 p-6 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-[#FFF3E0] border border-[#FF7A00]/30 flex items-center justify-center shrink-0 text-2xl font-bold text-[#FF7A00] shadow-sm">
+                  🕉️
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 inline-block">
+                    {ach.badge}
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-[#111827]">{ach.name}</h3>
+                  <p className="text-xs text-[#FF7A00] font-semibold">{ach.title}</p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between text-xs text-[#4B5563] font-medium">
+                <span>📍 {ach.location}</span>
+                <span className="font-extrabold text-[#111827] bg-[#FFF3E0] px-2 py-0.5 rounded-md">{ach.exp}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ============================================================

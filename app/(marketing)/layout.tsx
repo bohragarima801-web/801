@@ -46,16 +46,16 @@ export default async function MarketingLayout({ children }: { children: React.Re
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
       <PwaInstallBanner />
       {activeCoupon && (
-        <div className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white py-2 px-4 text-center text-xs md:text-sm font-semibold flex flex-wrap justify-center items-center gap-1.5 shadow-md relative z-50 border-b border-orange-600">
-          <span className="animate-pulse mr-1">⚡</span>
+        <div className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-amber-100 py-1.5 px-3 text-center text-xs font-medium flex flex-wrap justify-center items-center gap-2 shadow-sm relative z-50 border-b border-[#FFD700]/30">
+          <span className="animate-pulse text-[#FFD700]">⚡</span>
           <span>
-            Special Offer: Use code{' '}
-            <span className="bg-white/20 text-white border border-white/30 px-2 py-0.5 rounded-md tracking-wider mx-1 font-extrabold inline-block text-xs">
+            विशेष ऑफर: Use code{' '}
+            <span className="bg-black/25 text-[#FFD700] border border-[#FFD700]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
               {activeCoupon.code}
             </span>{' '}
-            for {activeCoupon.discountType === 'PERCENTAGE' ? `${activeCoupon.discountValue}% OFF` : `₹${activeCoupon.discountValue} OFF`}!
+            for <strong className="text-white font-extrabold">{activeCoupon.discountType === 'PERCENTAGE' ? `${activeCoupon.discountValue}% OFF` : `₹${activeCoupon.discountValue} OFF`}</strong>!
           </span>
-          {activeCoupon.description && <span className="hidden md:inline font-normal opacity-90"> — {activeCoupon.description}</span>}
+          {activeCoupon.description && <span className="hidden md:inline font-normal opacity-85 text-[11px]"> — {activeCoupon.description}</span>}
         </div>
       )}
       <Navbar siteData={siteData} />

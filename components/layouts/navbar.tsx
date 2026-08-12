@@ -178,17 +178,18 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
 
           <ThemeToggle />
 
-          {/* Language */}
-          <div className="relative hidden sm:block">
+          {/* Language Switcher */}
+          <div className="relative">
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 px-2.5 h-8 text-[#111827]/80 hover:text-[#FF7A00] hover:bg-orange-50 rounded-lg text-xs font-semibold uppercase tracking-wide"
+              className="gap-1 px-2 h-8 text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50/80 rounded-full text-xs font-bold uppercase tracking-wide border border-[#F3E8DE]"
               onClick={() => setLangOpen(!langOpen)}
+              title="Change Language"
             >
-              <Languages className="h-3.5 w-3.5" />
-              {currentLang}
-              <ChevronDown className="h-3 w-3 opacity-50" />
+              <Languages className="h-3.5 w-3.5 text-[#FF7A00]" />
+              <span>{currentLang === 'hi' ? 'HI' : 'EN'}</span>
+              <ChevronDown className="h-3 w-3 opacity-60" />
             </Button>
             {langOpen && (
               <div className="absolute right-0 top-full mt-2 w-32 bg-white dark:bg-[#111827] border border-[#F3E8DE] dark:border-gray-800 rounded-xl shadow-xl p-1 z-50">
@@ -197,8 +198,8 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     key={l.code}
                     onClick={() => changeLang(l.code)}
                     className={cn(
-                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-orange-50 dark:hover:bg-gray-800 transition-colors',
-                      currentLang === l.code ? 'text-[#FF7A00] font-bold' : 'text-[#111827] dark:text-gray-200'
+                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-orange-50 dark:hover:bg-gray-800 transition-colors font-medium',
+                      currentLang === l.code ? 'text-[#FF7A00] font-bold bg-orange-50/60' : 'text-[#111827] dark:text-gray-200'
                     )}
                   >
                     {l.label}
@@ -208,36 +209,36 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — KundliAPI Prominent Orange Pill */}
+          {/* "Book Puja" CTA — Prominent Saffron Pill */}
           <Link
             href="/pujas"
-            className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold tracking-wide shadow-[0_4px_16px_rgba(255,122,0,0.30)] hover:shadow-[0_6px_24px_rgba(255,122,0,0.45)] hover:scale-[1.02] transition-all duration-200"
+            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
           >
             <Flame className="h-3.5 w-3.5 opacity-90" />
             Book Puja
           </Link>
 
-          {/* User / Account */}
+          {/* User Profile / Account Icon */}
           {userLoaded ? (
             user ? (
-              <div className="hidden lg:flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <Button
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-semibold text-xs gap-1.5"
+                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
                 >
-                  <Link href="/dashboard">
-                    <User className="h-3.5 w-3.5" />
-                    {user.fullName?.split(' ')[0] || 'Account'}
+                  <Link href="/dashboard" title="My Account">
+                    <User className="h-4 w-4 text-[#FF7A00]" />
+                    <span className="hidden sm:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                   </Link>
                 </Button>
-                <form action="/auth/signout" method="post">
+                <form action="/auth/signout" method="post" className="hidden lg:block">
                   <Button
                     type="submit"
                     size="sm"
                     variant="ghost"
-                    className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full text-xs font-medium px-2"
+                    className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full text-xs font-medium px-2 h-8"
                   >
                     Logout
                   </Button>
@@ -248,16 +249,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 asChild
                 size="sm"
                 variant="ghost"
-                className="hidden lg:inline-flex rounded-full border border-[#FF7A00]/30 text-[#FF7A00] hover:bg-orange-50 font-semibold text-xs"
+                className="rounded-full border border-[#FF7A00]/40 text-[#FF7A00] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
               >
-                <Link href="/login">
-                  <User className="h-3.5 w-3.5 mr-1.5" />
-                  Login
+                <Link href="/login" title="Login / Register">
+                  <User className="h-4 w-4 mr-1 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Login</span>
                 </Link>
               </Button>
             )
           ) : (
-            <div className="hidden lg:flex h-8 w-20 bg-orange-50 rounded-full animate-pulse" />
+            <div className="h-8 w-8 rounded-full bg-orange-50 animate-pulse" />
           )}
 
           {/* Mobile hamburger */}
