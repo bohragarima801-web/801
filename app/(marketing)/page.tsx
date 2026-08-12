@@ -201,7 +201,7 @@ export default async function HomePage() {
           {/* 4 trust features — Modern crisp white cards */}
           <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto mb-10">
             {[
-              { icon: <ShieldCheck className="h-4 w-4 text-[#FF7A00]" />, label: 'अनुभवी वेदाचार्य' },
+              { icon: <ShieldCheck className="h-4 w-4 text-[#FF7A00]" />, label: 'अनुभवी आचार्य व पंडितजी' },
               { icon: <MapPin className="h-4 w-4 text-[#FF7A00]" />, label: 'Pan-India Sacred Dham' },
               { icon: <Video className="h-4 w-4 text-[#FF7A00]" />, label: 'WhatsApp Video Proof' },
               { icon: <CheckCircle2 className="h-4 w-4 text-[#FF7A00]" />, label: '100% Transparent Seva' },
@@ -312,7 +312,7 @@ export default async function HomePage() {
             <div className="h-16 w-16 mx-auto rounded-full bg-[#FFF3E0] text-[#FF7A00] flex items-center justify-center text-3xl">🪔</div>
             <h3 className="text-2xl md:text-3xl font-heading font-bold text-[#111827]">शीघ्र आ रही हैं दिव्य पूजाएँ एवं विशेष अनुष्ठान</h3>
             <p className="text-sm md:text-base text-[#4B5563] max-w-lg mx-auto font-medium leading-relaxed">
-              संस्थान के वेदाचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं।
+              संस्थान के मुख्य आचार्य शीघ्र ही नए सिद्ध मंदिरों की विशेष पूजाएँ एवं महायज्ञ यहाँ उपलब्ध करा रहे हैं।
             </p>
             <a
               href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20know%20more%20about%20upcoming%20pujas%20and%20rituals"
@@ -486,64 +486,40 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION: VERIFIED ACHARYAS & VEDA PRIESTS (SOCIAL PROOF)
+          SECTION: VERIFIED ACHARYAS & PRIESTS (SOCIAL PROOF)
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-t border-[#F3E8DE]">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
           <div className="kundli-badge-orange inline-flex">
-            <ShieldCheck className="h-4 w-4 text-[#FF7A00]" /> Certified Veda Priests
+            <ShieldCheck className="h-4 w-4 text-[#FF7A00]" /> Certified Acharya & Priest
           </div>
           <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827]">
-            हमारे प्रमाणित वेदाचार्य <span className="text-[#FF7A00]">& विद्वान आचार्य</span>
+            हमारे मुख्य आचार्य <span className="text-[#FF7A00]">& पूजा विशेषज्ञ</span>
           </h2>
           <p className="text-sm md:text-base text-[#4B5563] font-medium max-w-2xl mx-auto">
-            काशी, उज्जैन, कामाख्या व हरिद्वार के मुख्य सिद्ध मंदिरों के प्रामाणिक, वेद-विशारद आचार्यों द्वारा पूर्ण शास्त्रोक्त विधि से पूजन।
+            माँ कात्यायनी शक्तिपीठ एवं प्रमुख सिद्ध मंदिरों के प्रामाणिक आचार्यों द्वारा पूर्ण शास्त्रोक्त विधि से पूजन।
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {[
-            {
-              name: "आचार्य पं. मुकेश बोहरा",
-              title: "वरिष्ठ वेदाचार्य व तंत्र-यज्ञ विशेषज्ञ",
-              exp: "27+ वर्ष अनुभव",
-              location: "माँ कात्यायनी शक्तिपीठ, जोधपुर",
-              badge: "✔ Verified Senior Priest"
-            },
-            {
-              name: "पं. रामकृष्ण शास्त्री",
-              title: "कर्मकांड व रुद्राभिषेक विशेषज्ञ",
-              exp: "18+ वर्ष अनुभव",
-              location: "काशी विश्वनाथ क्षेत्र, वाराणसी",
-              badge: "✔ Verified Veda Acharya"
-            },
-            {
-              name: "पं. गोविन्द शर्मा",
-              title: "कालसर्प व नवग्रह शांति विशेषज्ञ",
-              exp: "15+ वर्ष अनुभव",
-              location: "महाकालेश्वर धाम, उज्जैन",
-              badge: "✔ Verified Jyotish Acharya"
-            }
-          ].map((ach) => (
-            <div key={ach.name} className="bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 p-6 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="h-14 w-14 rounded-2xl bg-[#FFF3E0] border border-[#FF7A00]/30 flex items-center justify-center shrink-0 text-2xl font-bold text-[#FF7A00] shadow-sm">
-                  🕉️
-                </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 inline-block">
-                    {ach.badge}
-                  </span>
-                  <h3 className="font-heading font-bold text-base text-[#111827]">{ach.name}</h3>
-                  <p className="text-xs text-[#FF7A00] font-semibold">{ach.title}</p>
-                </div>
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/40 p-6 shadow-md hover:shadow-xl transition-all flex flex-col justify-between space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-2xl bg-[#FFF3E0] border-2 border-[#FF7A00]/40 flex items-center justify-center shrink-0 text-3xl font-bold text-[#FF7A00] shadow-sm">
+                🕉️
               </div>
-              <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between text-xs text-[#4B5563] font-medium">
-                <span>📍 {ach.location}</span>
-                <span className="font-extrabold text-[#111827] bg-[#FFF3E0] px-2 py-0.5 rounded-md">{ach.exp}</span>
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 inline-block">
+                  ✔ Verified Senior Acharya
+                </span>
+                <h3 className="font-heading font-bold text-lg text-[#111827]">आचार्य पं. मुकेश बोहरा</h3>
+                <p className="text-xs text-[#FF7A00] font-bold">वरिष्ठ कर्मकांड व तंत्र-यज्ञ विशेषज्ञ</p>
               </div>
             </div>
-          ))}
+            <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between text-xs text-[#4B5563] font-medium">
+              <span>📍 माँ कात्यायनी शक्तिपीठ, जोधपुर</span>
+              <span className="font-extrabold text-[#111827] bg-[#FFF3E0] px-2.5 py-1 rounded-md">27+ वर्ष अनुभव</span>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -36,7 +36,7 @@ const defaultVipPackages: VipPackageItem[] = [
     shortDesc: 'Court case victory, enemy neutralization, protection from severe negativity & business triumph.',
     location: 'Maa Katyayani Shakti Peeth, Jodhpur / Datia',
     duration: 'Full-Day Intensive Homa',
-    priestsCount: '5 अनुभवी वेदाचार्य (5 Senior Veda Acharyas)',
+    priestsCount: '5 वरिष्ठ विद्वान आचार्य (5 Senior Acharyas)',
     price: 15100,
     categoryTag: 'Tantra & Victory Homa',
     badgeTag: 'Most Popular VIP',
@@ -114,7 +114,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-[#C5A059] max-w-3xl mx-auto leading-relaxed font-medium">
-            27+ वर्षों के अनुभवी सिद्ध वेदाचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित ब्राह्मण दल एवं 1-on-1 व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।
+            27+ वर्षों के अनुभवी सिद्ध आचार्यों द्वारा व्यक्तिगत नाम-गोत्र संकल्प, समर्पित ब्राह्मण दल एवं 1-on-1 व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।
           </p>
 
           {/* Feature Chips */}
