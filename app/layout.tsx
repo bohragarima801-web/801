@@ -55,10 +55,10 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: `${siteName} — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      title: `दिव्ययज्ञम् (DivyaYagyam) — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
       description: dynamicConfig.description || defaultDescription,
       url: baseUrl,
-      siteName: siteName,
+      siteName: 'दिव्ययज्ञम् (DivyaYagyam)',
       locale: 'hi_IN',
       type: 'website',
       images: [{
