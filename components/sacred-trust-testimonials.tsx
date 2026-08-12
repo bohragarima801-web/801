@@ -25,7 +25,7 @@ const defaultTestimonials: Testimonial[] = [
     name: "Sunita Verma",
     location: "Delhi NCR",
     rating: 5,
-    message: "महाकालेश्वर उज्जैन में कालसर्प दोष पूजा करवाई। ऑनलाइन व्यवस्था इतनी पारदर्शी थी कि घर बैठे ही पूरी संतुष्टि मिली। धन्यवाद DivyaYagyam टीम!",
+    message: "महाकालेश्वर उज्जैन में कालसर्प दोष पूजा करवाई। ऑनलाइन व्यवस्था इतनी पारदर्शी थी कि घर बैठे ही पूरी संतुष्टि मिली। धन्यवाद दिव्ययज्ञम् संस्थान!",
     pujaName: "Mahakaleshwar Ujjain Puja"
   },
   {
