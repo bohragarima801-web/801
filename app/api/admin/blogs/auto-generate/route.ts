@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
       const result = await generateAutoBlog({
         forceTopic: forceTopic || undefined,
         status: publishMode === 'DRAFT' ? 'DRAFT' : 'PUBLISHED',
-        authorId: session.id
+        authorId: session.id,
+        bypassLimit: true
       })
 
       if (!result.ok) {

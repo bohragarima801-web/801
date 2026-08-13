@@ -27,6 +27,28 @@ const DEFAULT_SACRED_COVER_IMAGES = [
 
 export async function generateAutoBlog(options: AutoBlogOptions = {}) {
   try {
+    // 0. Enforce Strict Daily Limit (Max 2-3 blogs per day)
+    const startOfToday = new Date()
+    startOfToday.setHours(0, 0, 0, 0)
+
+    const todayCount = await prisma.blog.count({
+      where: {
+        createdAt: {
+          gte: startOfToday
+        }
+      }
+    })
+
+    const dbMaxLimit = parseInt(await getSetting('autoblog.max_daily_limit', '3'), 10) || 3
+
+    if (!options.bypassLimit && todayCount >= dbMaxLimit) {
+      return {
+        ok: true,
+        skipped: true,
+        message: `आज का डेली ब्लॉग लिमिट पूरा हो चुका है (आज ${todayCount}/${dbMaxLimit} ब्लॉग बन चुके हैं)। नया ब्लॉग कल ऑटो-जनरेट होगा।`
+      }
+    }
+
     const llm = await getLLM()
     const aiModel = getPreferredModel(llm.apiKey)
 
