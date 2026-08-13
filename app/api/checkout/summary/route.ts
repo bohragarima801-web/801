@@ -15,29 +15,47 @@ export async function GET(req: NextRequest) {
     if (orderNumber) {
       const order = await prisma.order.findFirst({
         where: { OR: [{ orderNumber: orderNumber }, { id: orderNumber }] },
-        include: { items: true, payments: { take: 1, orderBy: { createdAt: 'desc' } } }
+        include: {
+          items: true,
+          payments: { take: 1, orderBy: { createdAt: 'desc' } },
+          shippingAddress: true,
+          user: { select: { fullName: true, email: true, phone: true } },
+          coupon: { select: { code: true } },
+        }
       })
 
       if (order) {
+        const addr = order.shippingAddress
+        const addressStr = addr
+          ? [addr.line1, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ')
+          : ''
         return NextResponse.json({
           ok: true,
           type: 'order',
           orderNumber: order.orderNumber,
           total: Number(order.total),
           subtotal: Number(order.subtotal),
+          discount: Number(order.discount),
+          shipping: Number(order.shipping),
           status: order.status,
           paymentStatus: order.paymentStatus,
           createdAt: order.createdAt,
+          customerName: addr?.fullName || order.user?.fullName || '',
+          phone: addr?.phone || order.user?.phone || '',
+          address: addressStr,
+          couponCode: order.coupon?.code || null,
           items: order.items.map(i => ({
             name: (!i.name || i.name === 'Unknown Item') ? '🪔 Sacred Puja Booking / Item' : i.name,
             quantity: i.quantity,
             price: Number(i.price),
             total: Number(i.total)
           })),
-          paymentRef: order.payments[0]?.gatewayRef || paymentId || null
+          paymentRef: order.payments[0]?.gatewayRef || paymentId || null,
+          gateway: order.payments[0]?.gateway || null,
         })
       }
     }
+
 
     // 2. Try finding Booking by bookingNumber or id
     if (orderNumber) {

@@ -528,7 +528,7 @@ export default function CheckoutPage() {
                       </div>
 
                       <Button 
-                        onClick={initiatePayment} 
+                        onClick={() => setStep('details')} 
                         disabled={processing}
                         className="w-full h-14 bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-amber-700 text-white font-extrabold rounded-xl text-lg shadow-lg shadow-orange-200 cursor-pointer mt-4"
                       >

@@ -13,16 +13,17 @@ interface ProDescriptionProps {
 export function ProFormattedDescription({ content, type = 'product', className }: ProDescriptionProps) {
   if (!content || !content.trim()) {
     return (
-      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 italic text-xs">
+      <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-amber-900 italic text-xs font-medium">
         {type === 'puja' 
           ? 'शास्त्रों के अनुसार विधि-विधान से सम्पादित सम्पूर्ण महायज्ञ एवं पूजा अनुष्ठान।' 
-          : 'गंगाजल से अभिमंत्रित सिद्ध सनातन सामग्री।'}
+          : 'गंगाजल से अभिमंत्रित 100% सिद्ध सनातन सामग्री।'}
       </div>
     )
   }
 
   const rawText = content.trim()
   const isHtml = /<[a-z][\s\S]*>/i.test(rawText)
+  const isDark = type === 'puja'
 
   // If HTML content: wrap in customized pro typography styling
   if (isHtml) {
@@ -30,15 +31,29 @@ export function ProFormattedDescription({ content, type = 'product', className }
       <div className={cn("space-y-4", className)}>
         <div 
           className={cn(
-            "prose max-w-none text-[#d1d5db] font-sans leading-relaxed dark:prose-invert",
-            "prose-headings:font-extrabold prose-headings:text-white prose-headings:font-heading",
-            "prose-h2:text-xl prose-h2:border-b prose-h2:border-[#d4af37]/30 prose-h2:pb-2 prose-h2:mt-6 prose-h2:text-[#fbbf24]",
-            "prose-h3:text-lg prose-h3:text-[#f6d860] prose-h3:mt-4",
-            "prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-p:my-3 prose-p:text-[#d1d5db]",
-            "prose-ul:my-4 prose-ul:space-y-2.5 prose-ul:list-none prose-ul:pl-0",
-            "prose-li:flex prose-li:items-start prose-li:gap-2.5 prose-li:text-sm sm:prose-li:text-base prose-li:text-[#e5e7eb]",
-            "prose-strong:text-white prose-strong:font-bold",
-            "prose-blockquote:border-l-4 prose-blockquote:border-[#d4af37] prose-blockquote:bg-[#1f293d] prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:text-white"
+            "prose max-w-none font-sans leading-relaxed",
+            isDark ? [
+              "text-[#e5e7eb] dark:prose-invert",
+              "prose-headings:font-extrabold prose-headings:text-white prose-headings:font-heading",
+              "prose-h2:text-xl prose-h2:border-b prose-h2:border-[#d4af37]/30 prose-h2:pb-2 prose-h2:mt-6 prose-h2:text-[#fbbf24]",
+              "prose-h3:text-lg prose-h3:text-[#f6d860] prose-h3:mt-4",
+              "prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-p:my-3 prose-p:text-[#e5e7eb] prose-p:font-medium",
+              "prose-ul:my-4 prose-ul:space-y-2.5 prose-ul:list-none prose-ul:pl-0",
+              "prose-li:flex prose-li:items-start prose-li:gap-2.5 prose-li:text-sm sm:prose-li:text-base prose-li:text-[#f3e5ab] prose-li:font-medium",
+              "prose-strong:text-white prose-strong:font-bold",
+              "prose-blockquote:border-l-4 prose-blockquote:border-[#d4af37] prose-blockquote:bg-[#1f293d] prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:text-white"
+            ] : [
+              "text-[#2A1508]",
+              "prose-headings:font-extrabold prose-headings:text-[#1E120A] prose-headings:font-heading",
+              "prose-h2:text-xl prose-h2:border-b prose-h2:border-[#F2C94C] prose-h2:pb-2 prose-h2:mt-6 prose-h2:text-[#8B1A21]",
+              "prose-h3:text-lg prose-h3:text-[#8B1A21] prose-h3:mt-4",
+              "prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-p:my-3 prose-p:text-[#2A1508] prose-p:font-medium",
+              "prose-ul:my-4 prose-ul:space-y-2.5 prose-ul:list-disc prose-ul:pl-5",
+              "prose-li:text-sm sm:prose-li:text-base prose-li:text-[#2A1508] prose-li:font-medium prose-li:my-1.5",
+              "prose-strong:text-[#8B1A21] prose-strong:font-black",
+              "prose-span:text-[#2A1508]",
+              "prose-blockquote:border-l-4 prose-blockquote:border-[#8B1A21] prose-blockquote:bg-[#FFF5D6] prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:text-[#2A1508]"
+            ]
           )}
           dangerouslySetInnerHTML={{ __html: rawText }}
         />
@@ -77,13 +92,13 @@ export function ProFormattedDescription({ content, type = 'product', className }
   })
 
   return (
-    <div className={cn("space-y-4 font-sans text-[#f3e5ab]", className)}>
+    <div className={cn("space-y-4 font-sans", isDark ? "text-[#f3e5ab]" : "text-[#2A1508]", className)}>
       {blocks.map((block, idx) => {
         if (block.type === 'header') {
           return (
-            <div key={idx} className="pt-3 pb-1 border-b border-[#d4af37]/35">
-              <h3 className="text-lg font-bold text-[#fbbf24] font-heading flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-[#fbbf24] shrink-0" />
+            <div key={idx} className={cn("pt-3 pb-1 border-b", isDark ? "border-[#d4af37]/35" : "border-[#F2C94C]")}>
+              <h3 className={cn("text-lg font-bold font-heading flex items-center gap-2", isDark ? "text-[#fbbf24]" : "text-[#8B1A21]")}>
+                <Sparkles className={cn("h-5 w-5 shrink-0", isDark ? "text-[#fbbf24]" : "text-[#8B1A21]")} />
                 {block.text}
               </h3>
             </div>
@@ -92,11 +107,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'keyval') {
           return (
-            <div key={idx} className="bg-[#2E0A06] p-4 rounded-xl border border-[#d4af37]/30 space-y-1">
-              <span className="font-bold text-[#f6d860] text-sm block uppercase tracking-wider">
+            <div key={idx} className={cn("p-4 rounded-xl border space-y-1", isDark ? "bg-[#2E0A06] border-[#d4af37]/30" : "bg-[#FFF8EA] border-[#F2C94C]")}>
+              <span className={cn("font-bold text-sm block uppercase tracking-wider", isDark ? "text-[#f6d860]" : "text-[#8B1A21]")}>
                 ✨ {block.title}
               </span>
-              <p className="text-white text-sm sm:text-base leading-relaxed font-medium">
+              <p className={cn("text-sm sm:text-base leading-relaxed font-medium", isDark ? "text-white" : "text-[#2A1508]")}>
                 {block.text}
               </p>
             </div>
@@ -105,11 +120,11 @@ export function ProFormattedDescription({ content, type = 'product', className }
 
         if (block.type === 'bullet') {
           return (
-            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#2E0A06] border border-[#d4af37]/25 hover:border-[#d4af37]/60 transition-colors">
-              <div className="h-6 w-6 rounded-full bg-[#d4af37]/20 text-[#fbbf24] border border-[#d4af37]/50 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs">
+            <div key={idx} className={cn("flex items-start gap-3 p-3.5 rounded-xl border transition-colors", isDark ? "bg-[#2E0A06] border-[#d4af37]/25 hover:border-[#d4af37]/60" : "bg-[#FFF8EA] border-[#F5E2B8] hover:border-[#F2C94C]")}>
+              <div className={cn("h-6 w-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs border", isDark ? "bg-[#d4af37]/20 text-[#fbbf24] border-[#d4af37]/50" : "bg-[#8B1A21] text-white border-[#8B1A21]")}>
                 ॐ
               </div>
-              <p className="text-white text-sm sm:text-base leading-relaxed font-medium">
+              <p className={cn("text-sm sm:text-base leading-relaxed font-semibold", isDark ? "text-white" : "text-[#2A1508]")}>
                 {block.text}
               </p>
             </div>

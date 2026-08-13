@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -51,13 +51,37 @@ function ThankYouContent() {
   }, [])
 
   useEffect(() => {
-    if (!orderNumber) { setLoading(false); return }
-    fetch(`/api/orders/detail?order=${encodeURIComponent(orderNumber)}`)
+    if (!orderNumber && !razorpayPaymentId) { setLoading(false); return }
+    const url = orderNumber
+      ? `/api/checkout/summary?order=${encodeURIComponent(orderNumber)}`
+      : `/api/checkout/summary?payment=${encodeURIComponent(razorpayPaymentId)}`
+    fetch(url)
       .then(r => r.json())
-      .then(data => { if (data.ok && data.order) setOrder(data.order) })
+      .then(data => {
+        if (data.ok) {
+          // Summary API returns fields at top level (not nested under data.order)
+          setOrder({
+            id: data.orderNumber || orderNumber,
+            orderNumber: data.orderNumber || orderNumber,
+            status: data.status || '',
+            paymentStatus: data.paymentStatus || '',
+            subtotal: Number(data.subtotal || 0),
+            discount: Number(data.discount || 0),
+            shipping: Number(data.shipping || 0),
+            total: Number(data.total || 0),
+            items: data.items || [],
+            customerName: data.customerName || '',
+            phone: data.phone || '',
+            address: data.address || '',
+            paymentId: data.paymentRef || razorpayPaymentId || null,
+            createdAt: data.createdAt || new Date().toISOString(),
+          })
+        }
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [orderNumber])
+  }, [orderNumber, razorpayPaymentId])
+
 
   const isCod = order
     ? (order.paymentStatus !== 'SUCCESS')

@@ -6,7 +6,7 @@ import { Metadata } from 'next'
 import Script from 'next/script'
 import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
-export const revalidate = 3600; // ISR: Revalidate every 3600s
+export const revalidate = 30; // ISR: Revalidate every 30s
 
 const getProductBySlugOrFallback = cache(async (slug: string) => {
   try {
@@ -26,14 +26,23 @@ const getProductBySlugOrFallback = cache(async (slug: string) => {
       }
     });
 
-    // 2. Fallback: Check if slug is partial or old long slug
+    // 2. Fallback: Check if slug is partial or old long slug (only active/out_of_stock)
     if (!product) {
       product = await prisma.product.findFirst({
         where: {
-          OR: [
-            { id: slug },
-            { slug: { contains: slug.slice(0, 15) } },
-            { name: { contains: slug.replace(/-/g, ' '), mode: 'insensitive' } }
+          AND: [
+            {
+              OR: [
+                { id: slug },
+                { name: { contains: slug.replace(/-/g, ' '), mode: 'insensitive' } }
+              ]
+            },
+            {
+              OR: [
+                { status: 'ACTIVE' },
+                { status: 'OUT_OF_STOCK' }
+              ]
+            }
           ]
         },
         include: {
@@ -91,6 +100,26 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     redirect(`/products/${product.slug}`);
   }
 
+  // Fetch real active related products from DB
+  const rawRelated = await prisma.product.findMany({
+    where: {
+      status: 'ACTIVE',
+      id: { not: product.id }
+    },
+    take: 4,
+    include: { category: true }
+  }).catch(() => [])
+
+  const relatedProducts = rawRelated.map(p => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    price: Number(p.price),
+    mrp: Math.round(Number(p.price) * 2.1),
+    coverImage: p.coverImage || '/placeholder.jpg',
+    category: p.category?.name || 'Sanatan Store'
+  }))
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -117,7 +146,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductClientView product={product} />
+      <ProductClientView product={product} relatedProducts={relatedProducts} />
     </>
   )
 }

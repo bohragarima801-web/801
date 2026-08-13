@@ -166,8 +166,12 @@ export async function POST(req: NextRequest) {
         },
       })
     } catch (rzpErr: any) {
-      // Clean up order
+      // Clean up order AND BhaktiSeva records to prevent orphaned rows
       await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
+      const bhaktiSevaIds = bhaktiSevaRecords.filter(Boolean).map((r: any) => r.id)
+      if (bhaktiSevaIds.length > 0) {
+        await prisma.bhaktiSeva.deleteMany({ where: { id: { in: bhaktiSevaIds } } }).catch(() => {})
+      }
       return NextResponse.json({
         ok: false,
         error: `Payment gateway error: ${rzpErr?.error?.description || rzpErr?.message || 'Failed to initialize payment'}`,

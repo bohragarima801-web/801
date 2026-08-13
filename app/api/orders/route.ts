@@ -408,12 +408,8 @@ export async function POST(req: NextRequest) {
         notes: { paymentType: 'product_order', orderId: dbOrder.id, userId: dbUserId }
       })
 
-      if (validCouponId) {
-        await prisma.coupon.update({
-          where: { id: validCouponId },
-          data: { usedCount: { increment: 1 } }
-        }).catch(e => console.error('[Coupon] Failed to increment usedCount:', e))
-      }
+      // NOTE: Coupon usedCount is incremented ONLY after payment verification succeeds (in /api/payments/verify)
+      // This prevents phantom coupon usage when users cancel the payment popup.
 
       const paymentRecord = await prisma.payment.create({
         data: {

@@ -13,7 +13,7 @@ import { useCart } from '@/lib/cart-context'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { cn } from '@/lib/utils'
 
-export function ProductClientView({ product }: { product: any }) {
+export function ProductClientView({ product, relatedProducts: dynamicRelated }: { product: any; relatedProducts?: any[] }) {
   const router = useRouter()
   const { addToCart } = useCart()
   
@@ -62,54 +62,8 @@ export function ProductClientView({ product }: { product: any }) {
     }
   }
 
-  // Related products fallback list
-  const relatedProducts = [
-    {
-      id: 'rel-1',
-      name: 'सिद्ध प्राण-प्रतिष्ठित चैतन्य रुद्राक्ष माला',
-      slug: 'siddha-abhimantrit-rudraksha-mala',
-      price: 901,
-      mrp: 1999,
-      coverImage: '/rudraksha_mala_product.jpg',
-      category: 'रुद्राक्ष माला'
-    },
-    {
-      id: 'rel-2',
-      name: 'दिव्य शुद्ध श्रीखण्ड मलयगिरि चन्दन (100g)',
-      slug: 'divya-shrikhand-chandan-puja-100g',
-      price: 200,
-      mrp: 499,
-      coverImage: '/divya_chandan_product.jpg',
-      category: 'पूजा सामग्री'
-    },
-    {
-      id: 'rel-3',
-      name: 'दिव्य धूप स्पेशल - ३२ जड़ी-बूटी अभिमंत्रित (125g)',
-      slug: 'divya-dhoop-special-negativity-remover-125g',
-      price: 599,
-      mrp: 1299,
-      coverImage: '/divya_dhoop_product.jpg',
-      category: 'धूप व सुगन्ध'
-    },
-    {
-      id: 'rel-4',
-      name: 'सिद्ध शुद्ध ताँबा नाग-नागिन जोड़ा (राहु शांति)',
-      slug: 'siddha-pure-copper-naag-naagin-pair-rahu-shanti',
-      price: 599,
-      mrp: 1499,
-      coverImage: '/naag_naagin_copper_product.jpg',
-      category: 'राहु शांति'
-    },
-    {
-      id: 'rel-5',
-      name: 'सिद्ध अभिमंत्रित 9 महालक्ष्मी कौड़ी सेट',
-      slug: 'siddha-9-abhimantrit-lakshmi-kaudi-set-free-gifts',
-      price: 899,
-      mrp: 1999,
-      coverImage: '/laxmi_kaudi_set_product.jpg',
-      category: 'लक्ष्मी कल्प'
-    }
-  ].filter(p => p.slug !== product.slug)
+  // Dynamic active related products from DB
+  const relatedProducts = (dynamicRelated && dynamicRelated.length > 0 ? dynamicRelated : []).filter(p => p.slug !== product.slug)
 
   return (
     <div className="bg-[#FFFDF7] text-[#1E120A] min-h-screen pb-20 font-sans">
@@ -361,8 +315,8 @@ export function ProductClientView({ product }: { product: any }) {
 
           {/* Full Description & Benefits HTML */}
           {product.description && (
-            <div className="prose prose-amber max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-[#1E120A] prose-p:text-[#4A2D1B] prose-li:text-[#4A2D1B]">
-              <ProFormattedDescription content={product.description} />
+            <div className="prose prose-amber max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-[#1E120A] prose-p:text-[#2A1508] prose-p:font-medium prose-li:text-[#2A1508]">
+              <ProFormattedDescription content={product.description} type="product" />
             </div>
           )}
 

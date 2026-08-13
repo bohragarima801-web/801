@@ -93,7 +93,7 @@ export const getCachedProducts = unstable_cache(
   },
   ['home-products-list-v2'],
   {
-    revalidate: 300,
+    revalidate: 30,
     tags: ['products']
   }
 )

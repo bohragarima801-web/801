@@ -55,13 +55,16 @@ export async function POST(req: NextRequest) {
     try {
       let paymentRecord: any = null
       if (paymentId) {
+        // Fetch existing metadata first to merge (avoid overwrite)
+        const existingPayment = await prisma.payment.findUnique({ where: { id: paymentId } }).catch(() => null)
+        const existingMeta = (existingPayment?.metadata && typeof existingPayment.metadata === 'object') ? existingPayment.metadata as any : {}
         paymentRecord = await prisma.payment.update({
           where: { id: paymentId },
           data: {
             status: isValid ? 'SUCCESS' : 'FAILED',
             gatewayRef: razorpay_payment_id,
             paidAt: isValid ? new Date() : null,
-            metadata: { verified: isValid, razorpay_order_id, razorpay_payment_id, razorpay_signature },
+            metadata: { ...existingMeta, verified: isValid, razorpay_order_id, razorpay_payment_id, razorpay_signature },
           },
         })
       } else {
@@ -91,10 +94,38 @@ export async function POST(req: NextRequest) {
           const updatedOrder = await prisma.order.update({
             where: { id: linkedOrderId },
             data: { paymentStatus: 'SUCCESS', status: 'PROCESSING' },
-            include: { items: true, user: true, shippingAddress: true }
+            include: { items: true, user: true, shippingAddress: true, coupon: { select: { id: true } } }
           }).catch(() => null)
 
           if (updatedOrder) {
+            // Increment coupon usedCount now that payment is confirmed
+            const couponId = (updatedOrder as any).couponId || (updatedOrder as any).coupon?.id
+            if (couponId) {
+              await prisma.coupon.update({
+                where: { id: couponId },
+                data: { usedCount: { increment: 1 } }
+              }).catch(() => {})
+            }
+
+            // Update BhaktiSeva records linked to this order (if it's a BhaktiSeva purchase)
+            await prisma.bhaktiSeva.updateMany({
+              where: { userId: updatedOrder.userId, status: 'PENDING', paymentStatus: 'PENDING' },
+              data: { status: 'SUCCESS', paymentStatus: 'SUCCESS' }
+            }).catch(() => {})
+
+            // WhatsApp notification for product order success
+            const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
+            sendWhatsAppNotification({
+              type: 'ORDER_SUCCESS',
+              phone: updatedOrder.shippingAddress?.phone || updatedOrder.user?.phone || '',
+              name: updatedOrder.shippingAddress?.fullName || updatedOrder.user?.fullName || 'Devotee',
+              details: {
+                orderNumber: updatedOrder.orderNumber,
+                amount: Number(updatedOrder.total),
+                items: updatedOrder.items.map((i: any) => i.name).join(', ')
+              }
+            }).catch(() => {})
+
             sendMetaCapiEvent({
               eventName: 'Purchase',
               eventId: `ord_${updatedOrder.id}_${Date.now()}`,
@@ -117,6 +148,7 @@ export async function POST(req: NextRequest) {
               }
             }).catch(() => {})
           }
+
         } else {
           // Last resort: find order via Razorpay order ID in payment metadata
           const orderViaGateway = await prisma.order.findFirst({

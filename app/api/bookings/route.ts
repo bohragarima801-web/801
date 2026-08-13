@@ -180,20 +180,9 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     }
   })
 
-  // Trigger WhatsApp Notification for Puja Booking Confirmed
-  try {
-    const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
-    sendWhatsAppNotification({
-      type: 'PUJA_CONFIRMED',
-      phone: (user as any)?.phone || phone || userEmail,
-      name: devoteeName || userFullName,
-      details: {
-        bookingNumber: booking.bookingNumber,
-        pujaName: puja.name,
-        amount: total
-      }
-    }).catch(() => {})
-  } catch (e) {}
+  // NOTE: WhatsApp PUJA_CONFIRMED notification is sent ONLY after payment verification
+  // succeeds (in /api/payments/verify). Sending it here would notify devotees who
+  // then cancel or close the Razorpay popup without completing payment.
 
   if (total === 0) {
     await prisma.booking.update({

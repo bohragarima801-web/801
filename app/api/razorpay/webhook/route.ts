@@ -104,6 +104,17 @@ export async function POST(req: NextRequest) {
               status: statusUpdate === 'SUCCESS' ? 'PROCESSING' : 'PENDING'
             }
           }).catch(() => {})
+
+          // Also update any BhaktiSeva records linked to this order
+          if (statusUpdate === 'SUCCESS') {
+            const linkedOrder = await prisma.order.findUnique({ where: { id: actualOrderId }, select: { userId: true } }).catch(() => null)
+            if (linkedOrder?.userId) {
+              await prisma.bhaktiSeva.updateMany({
+                where: { userId: linkedOrder.userId, status: 'PENDING', paymentStatus: 'PENDING' },
+                data: { status: 'SUCCESS', paymentStatus: 'SUCCESS' }
+              }).catch(() => {})
+            }
+          }
         }
 
         if (actualBookingId) {
