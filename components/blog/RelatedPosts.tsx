@@ -73,16 +73,24 @@ export default async function RelatedPosts({ currentPostId, categoryId, category
               className="group flex flex-col bg-white border border-amber-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg hover:border-amber-300 transition-all duration-300 no-underline"
               title={post.title}
             >
-              {/* Thumbnail */}
-              <div className="aspect-video w-full bg-amber-50 overflow-hidden relative">
+              {/* Thumbnail with Ambient Background - Zero Cropping */}
+              <div className="aspect-[16/9] w-full bg-gradient-to-b from-[#2A1508] to-[#120703] overflow-hidden relative flex items-center justify-center">
                 {imgSrc ? (
-                  <img
-                    src={imgSrc}
-                    alt={alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <>
+                    <img
+                      src={imgSrc}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-md opacity-45 scale-115 pointer-events-none"
+                    />
+                    <img
+                      src={imgSrc}
+                      alt={alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="relative z-10 w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50">
                     <BookOpen className="h-10 w-10 text-amber-300" />

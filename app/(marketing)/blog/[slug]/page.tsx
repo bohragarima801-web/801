@@ -157,8 +157,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
-          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-amber-200/70 bg-amber-50/30">
-            <div className="aspect-[16/9] w-full max-h-[480px] relative overflow-hidden bg-slate-900/5">
+          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border-2 border-amber-300/40 bg-gradient-to-b from-[#2A1508] to-[#120703]">
+            <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
+              <img 
+                src={getSafeImageUrl(post.coverImage)} 
+                alt="" 
+                aria-hidden="true" 
+                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-115 pointer-events-none" 
+              />
               <img 
                 loading="lazy" 
                 decoding="async" 
@@ -166,10 +172,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 alt={coverAlt} 
                 title={post.title} 
                 itemProp="image" 
-                className="w-full h-full object-cover object-center" 
+                className="relative z-10 w-full h-full max-h-[500px] object-contain p-1 sm:p-2" 
               />
             </div>
-            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900/90 bg-amber-50/80 border-t border-amber-100 italic">
+            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900/90 bg-amber-50/90 border-t border-amber-100 italic">
               📷 {coverAlt}
             </figcaption>
           </figure>

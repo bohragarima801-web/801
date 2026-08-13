@@ -95,19 +95,27 @@ export default async function BlogListPage() {
                   key={post.id}
                   className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
                 >
-                  {/* Image */}
-                  <Link href={`/blog/${post.slug}`} className="relative block aspect-video overflow-hidden">
+                  {/* Image Container with Ambient Background - Zero Cropping */}
+                  <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] w-full overflow-hidden bg-gradient-to-b from-[#2A1508] to-[#120703] group">
+                    {/* Ambient blurred backdrop to seamlessly fill 16:9 box */}
+                    <img
+                      src={getSafeImageUrl(post.coverImage)}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-lg opacity-45 scale-115 pointer-events-none"
+                    />
+                    {/* Main crisp full image contained without any cropping */}
                     <img
                       loading="lazy"
                       src={getSafeImageUrl(post.coverImage)}
                       alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`}
                       title={post.title}
-                      className="object-cover object-top w-full h-full transition-transform duration-500 hover:scale-105"
+                      className="relative z-10 w-full h-full object-contain p-1 transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.55)] via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 z-20 bg-gradient-to-t from-[rgba(12,4,2,0.45)] via-transparent to-transparent pointer-events-none" />
                     {post.category?.name && (
-                      <div className="absolute bottom-3 left-3">
-                        <span className="px-2.5 py-1 rounded-md bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold border border-[rgba(255,255,255,0.10)]">
+                      <div className="absolute bottom-3 left-3 z-30">
+                        <span className="px-2.5 py-1 rounded-md bg-[rgba(12,4,2,0.75)] backdrop-blur-sm text-[rgba(245,235,220,0.95)] text-[10px] font-bold border border-[rgba(255,255,255,0.15)] shadow-xs">
                           {post.category.name}
                         </span>
                       </div>

@@ -29,7 +29,7 @@ export function BlogBannerPoster({
         />
 
         {/* Dynamic Content Overlay in the empty bottom parchment frame */}
-        <div className="absolute top-[47%] bottom-[7%] left-[8%] right-[8%] flex flex-col justify-between items-center text-center p-3 sm:p-5 md:p-6 overflow-hidden">
+        <div className="absolute top-[48%] bottom-[8%] left-[10%] right-[10%] flex flex-col justify-between items-center text-center p-2 sm:p-4 md:p-5 overflow-hidden">
           
           {/* Top Decorative Header */}
           <div className="space-y-1 sm:space-y-1.5 w-full">
@@ -48,20 +48,20 @@ export function BlogBannerPoster({
           </div>
 
           {/* Main Blog Title */}
-          <div className="my-auto px-1 sm:px-3">
-            <h2 className="text-[#2A0E04] font-heading font-bold text-sm sm:text-lg md:text-xl lg:text-2xl leading-[1.3] line-clamp-4 drop-shadow-xs">
+          <div className="my-auto px-1 sm:px-3 w-full">
+            <h2 className="text-[#2A0E04] font-heading font-bold text-xs sm:text-base md:text-lg lg:text-xl leading-[1.38] line-clamp-3 sm:line-clamp-4 drop-shadow-2xs">
               {title}
             </h2>
 
             {excerpt && (
-              <p className="mt-1.5 sm:mt-2.5 text-[#5A331A] text-[11px] sm:text-xs md:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3 font-medium">
+              <p className="mt-1 sm:mt-2 text-[#5A331A] text-[10px] sm:text-xs md:text-sm leading-relaxed line-clamp-2 font-medium">
                 {excerpt}
               </p>
             )}
           </div>
 
           {/* Bottom Footer Stamp */}
-          <div className="w-full pt-1.5 sm:pt-2 border-t border-[#D4A843]/30 flex items-center justify-between text-[9px] sm:text-[11px] md:text-xs font-bold text-[#7A4B1A]">
+          <div className="w-full pt-1 sm:pt-1.5 border-t border-[#D4A843]/30 flex items-center justify-between text-[9px] sm:text-[10px] md:text-xs font-bold text-[#7A4B1A]">
             <span className="flex items-center gap-1">
               <span>🚩</span> {authorName || 'दिव्ययज्ञम्'}
             </span>
