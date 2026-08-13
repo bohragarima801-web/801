@@ -248,27 +248,56 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                       href={safeHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 my-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm md:text-base shadow-md hover:shadow-lg transition-all duration-300 no-underline"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 my-1 rounded-xl bg-emerald-50 text-emerald-800 font-bold border border-emerald-300 hover:bg-emerald-100 transition-all text-sm no-underline align-baseline"
                       {...props}
                     >
-                      <FileText className="h-4 w-4 shrink-0 text-emerald-200" />
+                      <FileText className="h-4 w-4 shrink-0 text-emerald-600" />
                       <span>{children}</span>
-                      <Download className="h-4 w-4 shrink-0 ml-1 text-emerald-200" />
+                      <Download className="h-3.5 w-3.5 shrink-0 ml-1 text-emerald-600" />
                     </a>
                   )
                 }
 
-
                 if (href.startsWith('/pujas/') || href.startsWith('/pujas')) {
+                  const rawString = typeof children === 'string' 
+                    ? children 
+                    : Array.isArray(children) 
+                    ? children.map(c => (typeof c === 'string' ? c : '')).join('') 
+                    : ''
+
+                  const isExplicitCTA = rawString.includes('👉') || rawString.includes('संकल्प') || rawString.includes('बुक करें')
+
+                  if (isExplicitCTA) {
+                    return (
+                      <div className="my-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-300/70 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group not-prose">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <Sparkles className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">🚩 प्रामाणिक वैदिक पूजा एवं अनुष्ठान</span>
+                            <span className="text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors">{children}</span>
+                          </div>
+                        </div>
+                        <Link
+                          href={href}
+                          className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs font-bold shadow-xs hover:shadow-md transition-all shrink-0 no-underline"
+                        >
+                          ऑनलाइन संकल्प लें ➔
+                        </Link>
+                      </div>
+                    )
+                  }
+
                   return (
                     <Link
                       href={href}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 my-3 rounded-2xl bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-sm md:text-base shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 no-underline cursor-pointer group"
+                      className="inline-flex items-center gap-1 px-2.5 py-0.5 mx-1 my-0.5 rounded-md bg-amber-500/10 hover:bg-gradient-to-r hover:from-amber-600 hover:to-orange-600 text-amber-900 hover:text-white font-bold border border-amber-500/30 hover:border-transparent transition-all duration-200 text-[0.92em] align-baseline no-underline shadow-2xs hover:shadow-xs group cursor-pointer"
                     >
-                      <Sparkles className="h-4 w-4 text-amber-200 animate-pulse shrink-0" />
-                      <span className="underline-offset-2">{children}</span>
-                      <span className="bg-white/20 text-white text-xs px-2.5 py-0.5 rounded-full font-black ml-1 group-hover:translate-x-0.5 transition-transform">
-                        ऑनलाइन संकल्प लें ➔
+                      <Sparkles className="h-3 w-3 text-amber-600 group-hover:text-white transition-colors shrink-0" />
+                      <span className="underline decoration-amber-400/50 decoration-1 underline-offset-2">{children}</span>
+                      <span className="text-[9px] font-extrabold uppercase tracking-wide bg-amber-600/15 group-hover:bg-white/25 text-amber-800 group-hover:text-white px-1 py-0.2 rounded-xs ml-0.5 transition-colors">
+                        पूजा ➔
                       </span>
                     </Link>
                   )
@@ -280,7 +309,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-1 my-1 rounded-xl bg-amber-50 text-amber-800 font-bold border border-amber-300/50 hover:bg-amber-100 hover:text-amber-900 transition-all cursor-pointer no-underline"
+                      className="inline font-bold text-amber-700 hover:text-amber-900 underline decoration-amber-400 decoration-1 underline-offset-4 hover:decoration-amber-700 transition-colors"
                       {...props}
                     >
                       <span>{children}</span> ↗
@@ -291,9 +320,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 return (
                   <Link
                     href={href}
-                    className="inline-flex items-center gap-1 px-3.5 py-1.5 my-1 rounded-xl bg-amber-500/10 text-amber-900 font-bold border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer no-underline"
+                    className="inline font-bold text-amber-700 hover:text-amber-900 underline decoration-amber-400 decoration-1 underline-offset-4 hover:decoration-amber-700 transition-colors"
                   >
-                    <span>{children}</span> ➔
+                    <span>{children}</span>
                   </Link>
                 )
               },
