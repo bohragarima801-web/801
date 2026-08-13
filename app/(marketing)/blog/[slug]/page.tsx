@@ -156,8 +156,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage ? (
-          <figure className="my-8 rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50 bg-slate-900">
-            <div className="aspect-video w-full relative overflow-hidden">
+          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-amber-200/70 bg-amber-50/30">
+            <div className="aspect-[16/9] w-full max-h-[480px] relative overflow-hidden bg-slate-900/5">
               <img 
                 loading="lazy" 
                 decoding="async" 
@@ -165,10 +165,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 alt={coverAlt} 
                 title={post.title} 
                 itemProp="image" 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover object-center" 
               />
             </div>
-            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900 bg-amber-50/70 border-t border-amber-100 italic">
+            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900/90 bg-amber-50/80 border-t border-amber-100 italic">
               📷 {coverAlt}
             </figcaption>
           </figure>
@@ -300,23 +300,27 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               img: ({ src, alt, title, ...props }) => {
                 if (!src) return null
                 const safeSrc = getSafeImageUrl(src)
-                const imageAltText = alt || `${post.title} - Online Puja Booking & Spiritual Guide DivyaYagyam`
+                const imageAltText = alt || `${post.title} - DivyaYagyam`
                 const imageTitleText = title || imageAltText
                 return (
-                  <figure className="my-8 text-center bg-slate-50 border border-amber-100 rounded-3xl p-3 shadow-md">
-                    <img
-                      src={safeSrc}
-                      alt={imageAltText}
-                      title={imageTitleText}
-                      loading="lazy"
-                      decoding="async"
-                      itemProp="image"
-                      className="max-h-[500px] w-auto mx-auto object-contain rounded-2xl shadow-sm border border-amber-50"
-                      {...props}
-                    />
-                    <figcaption className="text-center text-xs font-bold text-amber-900 mt-2.5 px-2">
-                      📷 {imageAltText}
-                    </figcaption>
+                  <figure className="my-8 mx-auto max-w-2xl text-center bg-amber-50/40 border border-amber-200/50 rounded-2xl p-2.5 shadow-sm">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-amber-50">
+                      <img
+                        src={safeSrc}
+                        alt={imageAltText}
+                        title={imageTitleText}
+                        loading="lazy"
+                        decoding="async"
+                        itemProp="image"
+                        className="w-full h-full object-cover object-center"
+                        {...props}
+                      />
+                    </div>
+                    {alt && (
+                      <figcaption className="text-center text-xs font-semibold text-amber-900/80 mt-2 px-2">
+                        📷 {imageAltText}
+                      </figcaption>
+                    )}
                   </figure>
                 )
               }
