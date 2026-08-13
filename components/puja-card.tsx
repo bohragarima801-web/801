@@ -21,6 +21,7 @@ interface PujaCardProps {
     badge?: string | null
   }
   idx?: number
+  hidePrice?: boolean
 }
 
 // Helper for date formatting
@@ -35,7 +36,7 @@ function formatPujaDate(rawDate?: string | Date | null): string {
   }
 }
 
-export function PujaCard({ puja, idx = 0 }: PujaCardProps) {
+export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
   const isFallback = puja.id.startsWith('fp-')
   const pujaHref = isFallback ? '/pujas' : `/pujas/${puja.slug}`
   const categoryName = puja.category?.name || 'Vedic Puja'
@@ -108,14 +109,16 @@ export function PujaCard({ puja, idx = 0 }: PujaCardProps) {
           </p>
         </div>
 
-        {/* Price & Solid Saffron-Orange Rectangular CTA Button */}
+        {/* Price & Solid Green Rectangular CTA Button */}
         <div className="pt-4 border-t border-[#F5E2B8] space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-[#6A4D3B] font-extrabold uppercase tracking-wider">न्यूनतम सहयोग:</span>
-            <span className="text-xl font-black text-[#8B1A21]">
-              ₹{displayPrice}
-            </span>
-          </div>
+          {!hidePrice && (
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-[#6A4D3B] font-extrabold uppercase tracking-wider">न्यूनतम सहयोग:</span>
+              <span className="text-xl font-black text-[#8B1A21]">
+                ₹{displayPrice}
+              </span>
+            </div>
+          )}
 
           {/* Solid Vibrant Green Button taking full width */}
           <Link
@@ -130,4 +133,3 @@ export function PujaCard({ puja, idx = 0 }: PujaCardProps) {
     </article>
   )
 }
-

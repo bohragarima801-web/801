@@ -160,8 +160,9 @@ export default async function HomePage() {
 
   const dbVideos = [...allMediaVideos, ...galleryVideos]
 
-  // Deduplicate Pujas & ensure fallback pujas show if db is sparse
-  const displayPujas = dbPujas.length >= 3 ? dbPujas : [...dbPujas, ...fallbackPujas.filter(fp => !dbPujas.some((dp: any) => dp.slug === fp.slug))]
+  // Exclude VIP pujas from homepage (they belong exclusively in VIP Section)
+  const nonVipDbPujas = dbPujas.filter((p: any) => !p.isVip)
+  const displayPujas = nonVipDbPujas.length >= 3 ? nonVipDbPujas : [...nonVipDbPujas, ...fallbackPujas.filter(fp => !nonVipDbPujas.some((dp: any) => dp.slug === fp.slug))]
 
   // WebSite + Organization schema is injected globally via root layout.tsx
 
@@ -327,7 +328,7 @@ export default async function HomePage() {
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
           {displayPujas.map((p: any, idx: number) => (
-            <PujaCard key={p.id} puja={p} idx={idx} />
+            <PujaCard key={p.id} puja={p} idx={idx} hidePrice={true} />
           ))}
         </div>
         )}
