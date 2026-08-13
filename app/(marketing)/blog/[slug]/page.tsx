@@ -15,6 +15,7 @@ import rehypeRaw from 'rehype-raw'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { BlogViewTracker } from '@/components/blog/BlogViewTracker'
 import RelatedPosts from '@/components/blog/RelatedPosts'
+import { BlogBannerPoster } from '@/components/blog/BlogBannerPoster'
 
 export const revalidate = 3600
 
@@ -155,7 +156,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <div className="my-8 p-4 text-center italic text-sm text-slate-400 bg-slate-50 border rounded-xl">
             Video disabled by admin.
           </div>
-        ) : post.coverImage ? (
+        ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
           <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-amber-200/70 bg-amber-50/30">
             <div className="aspect-[16/9] w-full max-h-[480px] relative overflow-hidden bg-slate-900/5">
               <img 
@@ -172,7 +173,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               📷 {coverAlt}
             </figcaption>
           </figure>
-        ) : null}
+        ) : (
+          <BlogBannerPoster
+            title={post.title}
+            categoryName={post.category?.name || 'वैदिक पूजा एवं अनुष्ठान'}
+            excerpt={post.excerpt}
+            authorName={post.author?.fullName || 'आचार्य मुकेश बोहरा जी'}
+            dateStr={post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : null}
+          />
+        )}
 
         {/* PDF Material Download Section Banner */}
         {post.pdfUrl && (() => {

@@ -102,7 +102,7 @@ export default async function BlogListPage() {
                       src={getSafeImageUrl(post.coverImage)}
                       alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`}
                       title={post.title}
-                      className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+                      className="object-cover object-top w-full h-full transition-transform duration-500 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.55)] via-transparent to-transparent pointer-events-none" />
                     {post.category?.name && (

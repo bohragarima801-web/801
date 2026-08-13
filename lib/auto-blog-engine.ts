@@ -150,19 +150,6 @@ Format internal links in standard Markdown link format [Anchor Text](URL) using 
 9. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
 [${existingTitles}]
 
-10. 🎯 STRICT IMAGE GENERATION RULES FOR "imagePrompt" (100% TOPIC & DEITY SPECIFIC):
-The "imagePrompt" MUST be written in vivid, photographic English (80-120 words) and MUST EXACTLY MATCH the deity, ritual, or festival of the article:
-- For Shiva / Rudrabhishek / Mahamrityunjaya / Sawan: Depict Lord Shiva with crescent moon, sacred Shivalinga abhishekam with milk and holy water, fresh bilva leaves, damru, trishul, glowing golden hawan kund fire in ancient stone temple.
-- For Lakshmi / Karz Mukti / Kanakadhara / Dhan: Depict Goddess Mahalakshmi seated on a pink lotus with golden coins flowing, golden kalash, red silk traditional saree, surrounded by illuminated brass lamps and lotus flowers.
-- For Bagalamukhi / Shatru Badha / Hawan: Depict Maa Bagalamukhi in radiant golden-yellow pitambar clothing, yellow flowers, turmeric, brass lamps, sacred hawan fire with divine yellow aura.
-- For Shani Dev / Sade Sati / Dhaiya: Depict Lord Shani Dev sacred stone shila, burning mustard oil brass diya lamps, black sesame, blue flowers, sacred ancient temple shrine.
-- For Kalsarp Dosh / Naag Panchami / Rahu Ketu: Depict sacred copper Naag Devta serpent pair, sacred Shivalinga, holy river sangam, marigold flowers, fragrant incense smoke.
-- For Hanuman / Sundarkand / Bajarangbali: Depict Lord Hanuman with orange vermilion sindoor, holding gada, folded hands in deep devotion, brass oil lamps in temple.
-- For Durga / Navratri / Hawan: Depict Maa Durga in royal red silk with divine aura, lion vahana, marigold flower garlands, sacred Vedic hawan kund with bright flames.
-- For Pitra Dosh / Tarpan / Shradha: Depict sacred holy river ghat, sacred kusha grass, copper vessel with water and sesame seeds, white flowers, devout Vedic pandits in yellow-white dhotis.
-- For Vastu Shastra / Griha Shanti: Depict a traditional sacred Indian courtyard with auspicious Swastika, sacred Tulsi plant, morning sun rays, brass diya lamps, pure harmonious Vedic aura.
-- STRICTLY FORBIDDEN: Never output a generic image prompt. Always explicitly mention the exact deity/ritual in the prompt. Zero nudity, modest traditional attire, zero watermark.
-
 MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no extra text. Start your response directly with { and end with }. Keep contentMarkdown under 12000 characters to fit within token limits:
 {
   "seoTitle": "Under 60 chars Hindi SEO title with main & long-tail keyword",
@@ -172,8 +159,6 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
   "h1": "Main Engaging H1 Title",
   "excerpt": "Short 2-3 line captivating summary for blog cards",
   "contentMarkdown": "Full 1500+ word detailed Markdown text with H2, H3 headings, bullet points, mantras, ritual steps, and internal Puja booking links",
-  "imagePrompt": "Photographic English prompt matching the EXACT deity, ritual, or festival of the article with specific sacred items, lighting, and ancient temple atmosphere",
-  "coverImageAlt": "SEO Alt text for cover image in Hindi",
   "categoryName": "Vedic Pujas & Anushthan",
   "tags": ["व्रत कथा", "वैदिक पूजा", "ज्योतिष उपाय"],
   "faqs": [
@@ -308,24 +293,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       })
     }
 
-    // 6. Generate a BRAND NEW Unique Sacred AI Image strictly matched to topic
-    const seed = Math.floor(Math.random() * 1000000)
-    let coverImage = ''
-
-    try {
-      const rawImagePrompt = (blogData.imagePrompt || '').trim()
-      const effectivePrompt = rawImagePrompt.length > 15
-        ? rawImagePrompt
-        : `Sacred authentic Vedic depiction for ${title}, divine golden lighting, brass diya oil lamps, fresh lotus and marigold flowers, ancient sacred stone temple sanctum`
-
-      const photographicQualitySuffix = "8k resolution, cinematic golden hour lighting, hyperrealistic, intricate ancient Indian stone architecture, photorealistic masterpiece, 16:9 aspect ratio, modest traditional Indian silk clothing, pure sacred Sanatan atmosphere, strictly zero nudity, zero text, zero watermark"
-      const cleanPrompt = encodeURIComponent(`${effectivePrompt}, ${photographicQualitySuffix}`)
-      coverImage = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1000&height=562&seed=${seed}&nologo=true&enhance=true`
-    } catch {
-      // Elegant Fallback: Clean Royal Saffron/Maroon background with DivyaYagyam Golden Lotus Emblem & Title Heading
-      const bannerTitlePrompt = encodeURIComponent(`Simple elegant royal saffron and maroon background with golden DivyaYagyam lotus emblem logo and title header for ${title}, clean sacred banner, 16:9, no humans, zero nudity, ultra high quality`)
-      coverImage = `https://image.pollinations.ai/prompt/${bannerTitlePrompt}?width=1200&height=675&seed=${seed}&nologo=true`
-    }
+    // 6. Use the Official Divyayagyam Master Template Image with Pandit Ji & Temple Branding
+    const coverImage = '/blog-banner-template.webp'
 
     // Append FAQs to content Markdown if present
     let fullMarkdown = blogData.contentMarkdown || ''
@@ -344,7 +313,7 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
         excerpt: blogData.excerpt || blogData.metaDescription,
         content: fullMarkdown,
         coverImage,
-        coverImageAlt: blogData.coverImageAlt || title,
+        coverImageAlt: title,
         status: targetStatus,
         seoTitle: blogData.seoTitle || title,
         seoDescription: blogData.metaDescription || blogData.excerpt,
