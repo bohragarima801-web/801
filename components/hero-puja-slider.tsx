@@ -119,7 +119,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[260px] sm:h-[360px] md:h-[440px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-2xl border border-[#F3E8DE] dark:border-gray-800 select-none group flex items-center"
+      className="relative w-full aspect-[16/9] sm:aspect-[16/8] md:h-[440px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-2xl border border-[#F3E8DE] dark:border-gray-800 select-none group flex items-center"
     >
       {/* Slides Loop */}
       {slideList.map((slide, idx) => {
@@ -135,7 +135,17 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
             }`}
           >
             <Link href={targetUrl} className="block w-full h-full relative group/link">
-              {/* Pure Banner Image Display (No Text Overlay) */}
+              {/* Background Blur Fill (Eliminates black borders) */}
+              <Image
+                src={slide.image || '/katyayani_yagya_hero.webp'}
+                alt=""
+                fill
+                aria-hidden="true"
+                unoptimized
+                className="absolute inset-0 w-full h-full object-cover filter blur-2xl opacity-60 scale-110 pointer-events-none"
+              />
+
+              {/* Main Edge-to-Edge Banner Image */}
               <Image
                 src={slide.image || '/katyayani_yagya_hero.webp'}
                 alt={slide.title || 'Sacred Puja Banner'}
@@ -143,7 +153,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
                 priority={idx === 0}
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 unoptimized
-                className="w-full h-full object-contain object-center transition-transform duration-1000 group-hover/link:scale-105"
+                className="relative z-10 w-full h-full object-cover object-center transition-transform duration-1000 group-hover/link:scale-[1.02]"
               />
 
               {/* Subtle Bottom Vignette Gradient */}
