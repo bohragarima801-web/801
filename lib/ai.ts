@@ -7,43 +7,21 @@ let _client: OpenAI | null = null
 let _clientCreatedAt = 0
 const CLIENT_TTL_MS = 5 * 60 * 1000 // Refresh client every 5 minutes to pick up key changes
 
-export async function getLLM(options: { preferOpenAI?: boolean; preferGemini?: boolean } = {}): Promise<OpenAI> {
+export async function getLLM(options: { preferGemini?: boolean } = {}): Promise<OpenAI> {
   const now = Date.now()
 
-  let apiKey = ''
-
-  // 1. Try Gemini first by default unless OpenAI is explicitly preferred
-  if (options.preferGemini || !options.preferOpenAI) {
-    apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
-    if (!apiKey) {
-      apiKey = await getSetting('secret.gemini_api_key')
-    }
-  }
-
-  // 2. If Gemini is empty or preferOpenAI is true, try OpenAI key
+  let apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
   if (!apiKey) {
-    apiKey = (process.env.OPENAI_API_KEY || '').replace(/^"|"$/g, '')
-    if (!apiKey) {
-      apiKey = await getSetting('secret.openai_api_key')
-    }
-  }
-
-  // 3. Fallback check for Gemini if OpenAI key was empty
-  if (!apiKey) {
-    apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
-    if (!apiKey) {
-      apiKey = await getSetting('secret.gemini_api_key')
-    }
+    apiKey = await getSetting('secret.gemini_api_key')
   }
 
   if (!apiKey) {
     _client = null
     _clientCreatedAt = 0
-    throw new Error('AI API key is not configured. Go to Admin → Settings → Secrets and add your OpenAI or Gemini API Key.')
+    throw new Error('Google Gemini API Key is not configured. Please ensure GEMINI_API_KEY is added in Admin Settings or .env file.')
   }
 
-  const isOpenAIKey = apiKey.startsWith('sk-')
-  const baseURL = isOpenAIKey ? undefined : 'https://generativelanguage.googleapis.com/v1beta/openai/'
+  const baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/'
 
   const client = new OpenAI({ apiKey, baseURL })
   _client = client
@@ -52,9 +30,6 @@ export async function getLLM(options: { preferOpenAI?: boolean; preferGemini?: b
 }
 
 export function getPreferredModel(apiKey?: string): string {
-  if (apiKey?.startsWith('sk-') || _client?.apiKey?.startsWith('sk-')) {
-    return process.env.OPENAI_MODEL || 'gpt-4o-mini'
-  }
   return process.env.GEMINI_MODEL_FLASH || 'gemini-flash-latest'
 }
 
