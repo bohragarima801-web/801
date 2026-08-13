@@ -422,7 +422,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                     <img 
                       src={currentMedia} 
                       alt={puja.name} 
-                      className="relative z-10 max-h-full max-w-full object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-[1.03]" 
+                      className="relative z-10 w-full h-full object-cover drop-shadow-xl transition-transform duration-500 group-hover:scale-[1.03]" 
                     />
                   </div>
                 )}

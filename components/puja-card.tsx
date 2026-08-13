@@ -48,20 +48,23 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
     <article
       className={`group relative bg-white rounded-3xl border-2 border-[#F5E2B8] hover:border-[#FF6600] transition-all duration-300 hover:-translate-y-1.5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06)] hover:shadow-2xl flex flex-col justify-between overflow-hidden h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
     >
-      {/* Top Image Frame with Rounded Aesthetics */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FFF9EE] p-2.5 shrink-0">
-        <Link href={pujaHref} className="block relative w-full h-full rounded-2xl overflow-hidden shadow-inner">
+      {/* Top Image Frame with Clean Edge-to-Edge Aesthetics */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden shrink-0 bg-slate-900">
+        <Link href={pujaHref} className="block relative w-full h-full overflow-hidden">
           <SacredImageFrame
             src={puja.coverImage || '/katyayani_yagya_hero.jpg'}
             alt={puja.name}
             aspectRatio="4/3"
+            fitMode="cover"
             seoCategory="puja"
+            className="p-0 border-none rounded-none w-full h-full bg-slate-900"
+            imageClassName="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1C0604]/70 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
           {/* Badge Tag */}
           {(puja.isVip || puja.isSpecial || puja.badge) && (
-            <div className="absolute top-2.5 left-2.5 z-10 flex gap-1.5 flex-wrap">
+            <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
               <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md shadow-md ${
                 puja.isVip
                   ? 'bg-[#D49B00] text-[#2A1508] border border-[#F2C94C]'
@@ -73,8 +76,8 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
           )}
 
           {/* Category Tag */}
-          <div className="absolute bottom-2.5 left-2.5 z-10">
-            <span className="bg-[#2A1508]/85 backdrop-blur-md text-[#FFF3D6] text-[10px] font-bold px-2.5 py-1 rounded-lg border border-[#F5E2B8]/20 shadow-xs">
+          <div className="absolute bottom-3 left-3 z-10">
+            <span className="bg-black/75 backdrop-blur-md text-[#FFF3D6] text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/20 shadow-xs">
               {categoryName}
             </span>
           </div>
