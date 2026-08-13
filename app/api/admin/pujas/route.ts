@@ -216,3 +216,39 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete puja' }, { status: 500 });
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const session = await getAdminSession()
+    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+
+    const { id, status } = await req.json()
+
+    if (!id) {
+      return NextResponse.json({ ok: false, error: 'Puja ID is required' }, { status: 400 });
+    }
+
+    if (!status || !['PUBLISHED', 'DRAFT', 'ARCHIVED'].includes(status)) {
+      return NextResponse.json({ ok: false, error: 'Invalid status value' }, { status: 400 });
+    }
+
+    const updatedPuja = await prisma.puja.update({
+      where: { id },
+      data: {
+        status: status as any,
+        publishedAt: status === 'PUBLISHED' ? new Date() : undefined,
+      }
+    })
+
+    revalidateTag('pujas')
+    revalidatePath('/pujas')
+    revalidatePath('/vip-pujas')
+    if (updatedPuja?.slug) revalidatePath(`/pujas/${updatedPuja.slug}`)
+    revalidatePath('/')
+
+    return NextResponse.json({ ok: true, puja: updatedPuja });
+  } catch (err: any) {
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to update puja status' }, { status: 500 });
+  }
+}
+
