@@ -26,6 +26,41 @@ const DEFAULT_SACRED_COVER_IMAGES = [
   '/katyayani_yagya_hero.webp'
 ]
 
+// 🎯 2025-26 High-Search-Volume Sanatan Keywords — Rotated Daily
+const HIGH_SEARCH_KEYWORDS = [
+  // Graha Dosh — Most searched
+  'शनि साढ़ेसाती 2025-26 के अचूक शास्त्रोक्त उपाय और पूजा विधि',
+  'कालसर्प दोष के लक्षण, प्रकार और प्रामाणिक निवारण हवन विधि',
+  'पितृ दोष के लक्षण और नारायण बलि तर्पण का पौराणिक महत्व',
+  'मंगल दोष निवारण के शास्त्रोक्त उपाय और विवाह में बाधा',
+  'राहु केतु दोष शांति के प्रामाणिक मंत्र और पूजा विधि',
+  'गुरु चांडाल दोष लक्षण और निवारण के सिद्ध उपाय',
+  // Festival Pujas — Trending each year
+  'हरियाली तीज 2025 व्रत कथा, पूजा विधि और सावन का महत्व',
+  'नाग पंचमी 2025 पूजा विधि, मंत्र और शास्त्रोक्त नियम',
+  'रक्षाबंधन 2025 शुभ मुहूर्त, रक्षासूत्र मंत्र और महत्व',
+  'जन्माष्टमी 2025 व्रत, पूजा विधि और श्रीकृष्ण जन्म का महत्व',
+  'नवरात्रि 2025 नौ देवियों की पूजा विधि और व्रत नियम',
+  'दीपावली 2025 शुभ मुहूर्त, लक्ष्मी पूजा विधि और मंत्र',
+  // Puja Types — High booking intent
+  'महामृत्युंजय जाप के 10 सिद्ध लाभ और रुद्राभिषेक विधि',
+  'मां बगलामुखी शत्रु बाधा निवारण हवन विधि और मंत्र शक्ति',
+  'कनकधारा स्तोत्र पाठ से कर्ज मुक्ति और अष्टलक्ष्मी साधना',
+  'मां कात्यायनी पूजा से विवाह बाधा निवारण और शीघ्र विवाह',
+  'प्रत्यंगिरा देवी हवन से नकारात्मक ऊर्जा और तंत्र बाधा निवारण',
+  'दुर्गा सप्तशती पाठ के नियम, फल और सिद्धि के उपाय',
+  // Vastu & Remedies — Evergreen traffic
+  'घर की समृद्धि के लिए वास्तु दोष निवारण के अचूक उपाय',
+  'कुंडली में शनि की साढ़ेसाती आने के संकेत और उपाय',
+  'जन्मकुंडली में पितृ दोष कैसे पहचानें और शांति के उपाय',
+  'ग्रह दशा और अंतर्दशा का जीवन पर प्रभाव और उपाय',
+  // Devotional / Informational
+  'सावन में शिव पूजा के शास्त्रोक्त नियम और रुद्राभिषेक का महत्व',
+  'श्राद्ध और पितृ पक्ष में तर्पण की सही विधि और नियम',
+  'एकादशी व्रत के नियम, महत्व और विष्णु पूजा की विधि',
+  'कुलदेवी कुलदेवता की पूजा का महत्व और विधि',
+]
+
 export async function generateAutoBlog(options: AutoBlogOptions = {}) {
   try {
     // 0. Enforce Strict Daily Limit (Max 2-3 blogs per day)
@@ -133,8 +168,17 @@ MUST RETURN VALID JSON ONLY with this structure:
   ]
 }`
 
+    // 5. Smart Topic Selection — Rotate through high-search keywords daily
+    // When no forceTopic given, pick from curated keyword list (rotating by day-of-year)
+    let smartForceTopic: string | undefined = options.forceTopic
+    if (!smartForceTopic) {
+      const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000)
+      const keywordIndex = dayOfYear % HIGH_SEARCH_KEYWORDS.length
+      smartForceTopic = HIGH_SEARCH_KEYWORDS[keywordIndex]
+    }
+
     const userPrompt = options.forceTopic
-      ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${options.forceTopic}"`
+      ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${smartForceTopic}"`
       : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, रक्षाबंधन) अथवा गूगल पर अत्यधिक सर्च किए जा रहे प्रामाणिक सनातन ज्योतिषीय/शास्त्रोक्त उपाय (जैसे कर्ज मुक्ति कनकधारा स्तोत्र, शनि ढैय्या शांति, कालसर्प दोष निवारण, महामृत्युंजय जाप लाभ) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक 100% प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
     // Helper function with exponential backoff retry for 429 rate-limit / 503 / 500 transient errors

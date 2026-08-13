@@ -95,7 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         if (c.slug) sitemapEntries.push({ url: `${baseUrl}/products/category/${encodeURIComponent(c.slug)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 })
       })
 
-      // 4. Blog Posts (Only Published)
+      // 4. Blog Posts (Only Published) — with freshness signals for Google
       const posts = await prisma.blog.findMany({
         where: {
           status: 'PUBLISHED',
@@ -104,18 +104,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             { publishedAt: { lte: now } }
           ]
         },
-        select: { slug: true, updatedAt: true }
+        select: { slug: true, updatedAt: true, publishedAt: true, createdAt: true }
       })
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
       posts.forEach(p => {
         if (p.slug && p.slug.trim()) {
+          const lastMod = p.updatedAt || p.publishedAt || p.createdAt || now
+          const isRecent = lastMod > thirtyDaysAgo
           sitemapEntries.push({
             url: `${baseUrl}/blog/${encodeURIComponent(p.slug.trim())}`,
-            lastModified: p.updatedAt || now,
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            lastModified: lastMod,
+            changeFrequency: isRecent ? 'daily' : 'weekly',
+            priority: isRecent ? 0.88 : 0.82,
           })
         }
       })
+
 
       // 5. Spiritual Tools (Active tools)
       const tools = await prisma.spiritualTool.findMany({

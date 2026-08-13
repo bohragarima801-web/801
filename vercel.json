@@ -3,10 +3,25 @@
     {
       "path": "/api/cron/backup",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/auto-blog",
+      "schedule": "30 0 * * *"
+    },
+    {
+      "path": "/api/cron/auto-blog",
+      "schedule": "30 6 * * *"
+    },
+    {
+      "path": "/api/cron/auto-blog",
+      "schedule": "30 12 * * *"
     }
   ],
   "functions": {
     "app/api/admin/blogs/auto-generate/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/cron/auto-blog/route.ts": {
       "maxDuration": 60
     }
   }

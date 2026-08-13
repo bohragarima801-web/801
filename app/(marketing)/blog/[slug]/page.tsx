@@ -14,6 +14,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { BlogViewTracker } from '@/components/blog/BlogViewTracker'
+import RelatedPosts from '@/components/blog/RelatedPosts'
 
 export const revalidate = 3600
 
@@ -68,7 +69,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const post = await prisma.blog.findUnique({
     where: { slug: cleanSlug },
     include: {
-      category: { select: { name: true } },
+      category: { select: { name: true, id: true } },
       author: { select: { fullName: true } }
     }
   })
@@ -343,6 +344,12 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </Accordion>
           </div>
         )}
+
+        <RelatedPosts
+          currentPostId={post.id}
+          categoryId={post.categoryId ?? null}
+          categoryName={post.category?.name ?? null}
+        />
       </article>
     </div>
     </>
