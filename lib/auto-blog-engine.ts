@@ -146,6 +146,7 @@ MUST RETURN VALID JSON ONLY with this structure:
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userPrompt }
             ],
+            max_tokens: 8192,
             temperature: 0.7,
             response_format: { type: 'json_object' }
           })
@@ -160,7 +161,7 @@ MUST RETURN VALID JSON ONLY with this structure:
       }
     }
 
-    // 4. Call LLM (OpenAI gpt-4o-mini with fallback to Gemini if OpenAI credits are 0 or key is invalidated)
+    // 4. Call LLM (Gemini / OpenAI with auto-fallback)
     let completion: any
     try {
       completion = await callAIWithRetry(llm, aiModel)
@@ -172,7 +173,7 @@ MUST RETURN VALID JSON ONLY with this structure:
         err?.message?.toLowerCase().includes('credits') ||
         err?.message?.toLowerCase().includes('billing')
       ) {
-        console.warn('OpenAI Key error (401/429/invalidated). Automatically falling back to Gemini Key...')
+        console.warn('AI Provider error (401/429). Automatically falling back to Gemini Key...')
         const fallbackLlm = await getLLM({ preferGemini: true })
         completion = await callAIWithRetry(fallbackLlm, 'gemini-flash-latest')
       } else {
@@ -183,7 +184,7 @@ MUST RETURN VALID JSON ONLY with this structure:
     const rawResponse = completion.choices[0]?.message?.content || '{}'
     const firstBrace = rawResponse.indexOf('{')
     const lastBrace = rawResponse.lastIndexOf('}')
-    const jsonCandidate = (firstBrace !== -1 && lastBrace > firstBrace)
+    let jsonCandidate = (firstBrace !== -1 && lastBrace > firstBrace)
       ? rawResponse.substring(firstBrace, lastBrace + 1)
       : rawResponse.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim()
 
@@ -191,8 +192,18 @@ MUST RETURN VALID JSON ONLY with this structure:
     try {
       blogData = JSON.parse(jsonCandidate)
     } catch (parseErr) {
-      console.error('Raw LLM Response parsing error:', rawResponse.slice(0, 300))
-      throw new Error('Failed to parse AI blog JSON output')
+      // Auto-repair truncated JSON by attempting to close open quotes/brackets
+      try {
+        let repairedStr = jsonCandidate
+        if (!repairedStr.endsWith('}')) {
+          if ((repairedStr.match(/"/g) || []).length % 2 !== 0) repairedStr += '"'
+          repairedStr += '\n}'
+        }
+        blogData = JSON.parse(repairedStr)
+      } catch {
+        console.error('Raw LLM Response parsing error:', rawResponse.slice(0, 300))
+        throw new Error('Failed to parse AI blog JSON output')
+      }
     }
 
     if (!blogData.title && !blogData.h1) {
