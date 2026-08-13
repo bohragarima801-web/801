@@ -5,6 +5,7 @@ import { getSetting, clearSettingCache } from '@/lib/settings'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60 // Allow up to 60s for AI blog generation (Vercel Pro/Hobby limit)
 
 export async function GET() {
   try {
@@ -33,7 +34,12 @@ export async function POST(req: NextRequest) {
     const session = await getAdminSession()
     if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
 
-    const body = await req.json()
+    let body: any
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ ok: false, error: 'Invalid JSON request body' }, { status: 400 })
+    }
     const { action, enabled, publishMode, forceTopic } = body
 
     if (action === 'settings') {
