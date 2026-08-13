@@ -122,13 +122,19 @@ MUST RETURN VALID JSON ONLY with this structure:
       }
     }
 
-    // 4. Call LLM (OpenAI gpt-4o-mini with fallback to Gemini if OpenAI credits are 0)
+    // 4. Call LLM (OpenAI gpt-4o-mini with fallback to Gemini if OpenAI credits are 0 or key is invalidated)
     let completion: any
     try {
       completion = await callAIWithRetry(llm, aiModel)
     } catch (err: any) {
-      if (err?.status === 429 || err?.message?.toLowerCase().includes('credits') || err?.message?.toLowerCase().includes('billing')) {
-        console.warn('OpenAI Key has 0 credits / 429. Automatically falling back to Gemini Key...')
+      if (
+        err?.status === 429 ||
+        err?.status === 401 ||
+        err?.message?.toLowerCase().includes('invalid') ||
+        err?.message?.toLowerCase().includes('credits') ||
+        err?.message?.toLowerCase().includes('billing')
+      ) {
+        console.warn('OpenAI Key error (401/429/invalidated). Automatically falling back to Gemini Key...')
         const fallbackLlm = await getLLM({ preferGemini: true })
         completion = await callAIWithRetry(fallbackLlm, 'gemini-flash-latest')
       } else {
