@@ -394,6 +394,15 @@ const MASTER_FESTIVALS_DB: RealFestivalItem[] = [
   },
 ]
 
+export function getUpcomingRealFestivals(limit = 10): RealFestivalItem[] {
+  const now = new Date()
+  const todayIso = now.toISOString()
+  return MASTER_FESTIVALS_DB
+    .filter((item) => item.date >= todayIso)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, limit)
+}
+
 export function getRealFestivalsForMonth(year: number, month: number, categoryFilter?: string, searchQuery?: string): RealFestivalItem[] {
   let list = MASTER_FESTIVALS_DB.filter((item) => {
     const d = new Date(item.date)

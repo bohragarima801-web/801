@@ -1,6 +1,7 @@
 import { getLLM, getPreferredModel, MODELS } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { getSetting } from '@/lib/settings'
+import { getUpcomingRealFestivals } from '@/lib/real-festival-engine'
 
 export interface AutoBlogOptions {
   forceTopic?: string
@@ -41,7 +42,13 @@ export async function generateAutoBlog(options: AutoBlogOptions = {}) {
       ? realPujas.map((p, i) => `${i + 1}. ${p.name}: /pujas/${p.slug}`).join('\n')
       : `1. मां बगलामुखी मिर्ची हवन: /pujas/maa-bagalamukhi-mirchi-hawan\n2. अष्टलक्ष्मी कर्ज मुक्ति पूजा: /pujas/maa-ashta-lakshmi-karz-mukti-puja\n3. महामृत्युंजय जाप एवं रुद्राभिषेक: /pujas/mahamrityunjaya-jaap-rudrabhishekam\n4. शनि दोष शांति महापूजा: /pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya`
 
-    // 2. Fetch recent existing blog titles to avoid duplicate topics
+    // 2. Fetch REAL UPCOMING FESTIVALS from Drik Panchang Master Engine for exact date accuracy
+    const upcomingFestivals = getUpcomingRealFestivals(10)
+    const upcomingFestivalsText = upcomingFestivals.map(f => `- ${f.festivalHi} (Date: ${f.date.slice(0, 10)}): ${f.significanceHi}`).join('\n')
+    const todayFormatted = new Date().toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+    const todayIsoStr = new Date().toISOString().slice(0, 10)
+
+    // 3. Fetch recent existing blog titles to avoid duplicate topics
     const existingBlogs = await prisma.blog.findMany({
       select: { title: true, slug: true },
       orderBy: { createdAt: 'desc' },
@@ -50,21 +57,27 @@ export async function generateAutoBlog(options: AutoBlogOptions = {}) {
 
     const existingTitles = existingBlogs.map(b => b.title).join(', ')
 
-    // 3. Determine target publish mode (default from database settings or options)
+    // 4. Determine target publish mode (default from database settings or options)
     const dbPublishMode = await getSetting('autoblog.publish_mode', 'PUBLISHED')
     const targetStatus = options.status || (dbPublishMode === 'DRAFT' ? 'DRAFT' : 'PUBLISHED')
 
-    // 4. Construct System & User Prompt
+    // 5. Construct System & User Prompt
     const systemPrompt = `You are "Acharya DivyaYagyam AI", an esteemed Senior Vedic Scholar, Puranic Historian, and Master Technical SEO Specialist for DivyaYagyam (divyayagyam.com).
 
 YOUR CORE MISSION:
 Research and compose a 100% human-like, deeply reverent, authoritative, 1500+ word Hindi blog post.
 
+REAL CALENDAR CONTEXT:
+TODAY'S ACTUAL REAL SYSTEM DATE IS: ${todayFormatted} (${todayIsoStr})
+
+UPCOMING VERIFIED DRIK PANCHANG FESTIVALS FOR THE NEXT 30 DAYS:
+${upcomingFestivalsText}
+
 CRITICAL BOUNDARY & SANCTITY RULES:
 1. NICHE BOUNDARY: Strictly stay within Sanatan Dharma, Vedic Pujas, Hawan, Shastra Remedies, Upcoming Festivals (आगामी पर्व/त्यौहार), Temple Traditions, Mantras, Astrology & Graha Dosh Remedies.
-2. NO HARDCODED SPECIFIC LOCATION NAMES: NEVER automatically add specific city or temple location names like "काशी", "हरिद्वार", "मथुरा", "उज्जैन", "त्र्यंबकेश्वर", "वृंदावन" anywhere in the blog title or body. ALWAYS use generic reverent terms like **"दिव्य प्राचीन स्थानों पर (Divya Prachin Sthano Pe)"**, **"पवित्र सिद्ध पीठों पर"**, or **"सिद्ध तीर्थ क्षेत्रों में"**.
-3. UPCOMING FESTIVALS ONLY: Target ONLY upcoming/future festivals (निकटतम आने वाले पर्व एवं त्यौहार) based on current date. STRICTLY FORBIDDEN to write blogs on past or completed festivals (गए हुए/बीते हुए त्यौहारों पर ब्लॉग कभी न बनाएं).
-4. HIGH-SEARCH MAIN & LONG-TAIL KEYWORDS: Perform real keyword strategy. Target high-volume Main Focus Keywords combined with high-intent Long-Tail Keywords currently being searched by Indian devotees on Google (e.g. "माघ गुप्त नवरात्रि घटस्थापना शुभ मुहूर्त", "कर्ज मुक्ति कनकधारा स्तोत्र पाठ विधि", "शनि ढैय्या शांति पूजा के अचूक उपाय").
+2. UPCOMING FESTIVALS ONLY: You MUST pick your article topic ONLY from the UPCOMING FESTIVALS list above happening on or after TODAY (${todayIsoStr}). STRICTLY FORBIDDEN to write blogs on past or completed festivals (गए हुए/बीते हुए त्यौहारों पर ब्लॉग कभी न बनाएं, जैसे यदि आज अगस्त है तो माघ या फाल्गुन पर ब्लॉग न बनाएं).
+3. NO HARDCODED SPECIFIC LOCATION NAMES: NEVER automatically add specific city or temple location names like "काशी", "हरिद्वार", "मथुरा", "उज्जैन", "त्र्यंबकेश्वर", "वृंदावन" anywhere in the blog title or body. ALWAYS use generic reverent terms like **"दिव्य प्राचीन स्थानों पर (Divya Prachin Sthano Pe)"**, **"पवित्र सिद्ध पीठों पर"**, or **"सिद्ध तीर्थ क्षेत्रों में"**.
+4. HIGH-SEARCH MAIN & LONG-TAIL KEYWORDS: Perform real keyword strategy. Target high-volume Main Focus Keywords combined with high-intent Long-Tail Keywords currently being searched by Indian devotees on Google (e.g. "हरियाली तीज 2026 व्रत कथा व पूजा मुहूर्त", "नागपंचमी 2026 कालसर्प दोष पूजा विधि", "श्रावण पुत्रदा एकादशी 2026 संतान प्राप्ति उपाय", "रक्षाबंधन 2026 भद्रा काल व राखी बांधने का शुभ मुहूर्त").
 5. ZERO ROBOTIC JARGON: NEVER use robotic phrases like "इस आधुनिक दौर में", "डिजिटल युग में", "संक्षेप में कहें तो", "निष्कर्षतः", "आज के समय में". Write in natural, warm, authoritative Hindi by a respected Acharya.
 6. ABSOLUTE SPIRITUAL SANCTITY: Every word must be respectful, accurate to Shastras (Purana/Vedas), uplifting, and divine. Zero offensive, crude, or inaccurate claims.
 7. REAL INTERNAL PUJA LINKING ONLY: Seamlessly integrate contextual links to our REAL live Pujas dynamically fetched from DB in the body and Call-To-Action sections:
@@ -96,7 +109,7 @@ MUST RETURN VALID JSON ONLY with this structure:
 
     const userPrompt = options.forceTopic
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${options.forceTopic}"`
-      : `आज की तिथि से आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार या मुख्य ग्रह दोष निवारण उपाय पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक अत्यंत प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
+      : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, पुत्रदा एकादशी, रक्षाबंधन) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक अत्यंत प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
     // Helper function with retry for 503/500 transient errors
     const callAIWithRetry = async (client: any, model: string, maxRetries = 3) => {
