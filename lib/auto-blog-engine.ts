@@ -7,6 +7,7 @@ export interface AutoBlogOptions {
   forceTopic?: string
   status?: 'PUBLISHED' | 'DRAFT'
   authorId?: string
+  bypassLimit?: boolean
 }
 
 const AVAILABLE_PUJA_LINKS = `
