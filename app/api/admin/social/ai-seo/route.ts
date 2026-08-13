@@ -36,16 +36,15 @@ export async function POST(req: Request) {
         response_format: { type: 'json_object' },
       })
 
-        const content = response.choices[0]?.message?.content
-        if (content) {
-          const parsed = JSON.parse(content)
-          if (parsed.title) generatedTitle = parsed.title
-          if (parsed.caption) generatedCaption = parsed.caption
-          if (parsed.hashtags) generatedHashtags = parsed.hashtags
-        }
-      } catch (aiErr) {
-        console.warn('[AISeo] OpenAI fallback to template generator:', aiErr)
+      const content = response.choices[0]?.message?.content
+      if (content) {
+        const parsed = JSON.parse(content)
+        if (parsed.title) generatedTitle = parsed.title
+        if (parsed.caption) generatedCaption = parsed.caption
+        if (parsed.hashtags) generatedHashtags = parsed.hashtags
       }
+    } catch (aiErr) {
+      console.warn('[AISeo] AI fallback to template generator:', aiErr)
     }
 
     return NextResponse.json({
