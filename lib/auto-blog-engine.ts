@@ -75,18 +75,21 @@ ${upcomingFestivalsText}
 
 CRITICAL BOUNDARY & SANCTITY RULES:
 1. NICHE BOUNDARY: Strictly stay within Sanatan Dharma, Vedic Pujas, Hawan, Shastra Remedies, Upcoming Festivals (आगामी पर्व/त्यौहार), Temple Traditions, Mantras, Astrology & Graha Dosh Remedies.
-2. UPCOMING FESTIVALS ONLY: You MUST pick your article topic ONLY from the UPCOMING FESTIVALS list above happening on or after TODAY (${todayIsoStr}). STRICTLY FORBIDDEN to write blogs on past or completed festivals (गए हुए/बीते हुए त्यौहारों पर ब्लॉग कभी न बनाएं, जैसे यदि आज अगस्त है तो माघ या फाल्गुन पर ब्लॉग न बनाएं).
-3. NO HARDCODED SPECIFIC LOCATION NAMES: NEVER automatically add specific city or temple location names like "काशी", "हरिद्वार", "मथुरा", "उज्जैन", "त्र्यंबकेश्वर", "वृंदावन" anywhere in the blog title or body. ALWAYS use generic reverent terms like **"दिव्य प्राचीन स्थानों पर (Divya Prachin Sthano Pe)"**, **"पवित्र सिद्ध पीठों पर"**, or **"सिद्ध तीर्थ क्षेत्रों में"**.
-4. HIGH-SEARCH MAIN & LONG-TAIL KEYWORDS: Perform real keyword strategy. Target high-volume Main Focus Keywords combined with high-intent Long-Tail Keywords currently being searched by Indian devotees on Google (e.g. "हरियाली तीज 2026 व्रत कथा व पूजा मुहूर्त", "नागपंचमी 2026 कालसर्प दोष पूजा विधि", "श्रावण पुत्रदा एकादशी 2026 संतान प्राप्ति उपाय", "रक्षाबंधन 2026 भद्रा काल व राखी बांधने का शुभ मुहूर्त").
-5. ZERO ROBOTIC JARGON: NEVER use robotic phrases like "इस आधुनिक दौर में", "डिजिटल युग में", "संक्षेप में कहें तो", "निष्कर्षतः", "आज के समय में". Write in natural, warm, authoritative Hindi by a respected Acharya.
-6. ABSOLUTE SPIRITUAL SANCTITY: Every word must be respectful, accurate to Shastras (Purana/Vedas), uplifting, and divine. Zero offensive, crude, or inaccurate claims.
-7. REAL INTERNAL PUJA LINKING ONLY: Seamlessly integrate contextual links to our REAL live Pujas dynamically fetched from DB in the body and Call-To-Action sections:
+2. DYNAMIC TOPIC SELECTION (FESTIVALS + HOT SEARCHING SPIRITUAL KEYWORDS):
+   - TOPIC OPTION A (Upcoming Festivals): Target upcoming festivals from the Drik Panchang list above happening on or after TODAY (${todayIsoStr}). STRICTLY FORBIDDEN to write about past/completed festivals (गए हुए त्यौहारों पर ब्लॉग कभी न बनाएं).
+   - TOPIC OPTION B (High-Search Authentic Shastra & Astrology Keywords): Target high-search-volume, high-intent Sanatan & Shastra queries currently searched by millions of devotees on Google (e.g., "कर्ज मुक्ति कनकधारा स्तोत्र पाठ व अष्टलक्ष्मी साधना", "शनि ढैय्या एवं साढ़ेसाती के अचूक शास्त्रोक्त शांति उपाय", "कालसर्प दोष लक्षण एवं प्रामाणिक निवारण विधि", "पितृ दोष शांति हेतु तर्पण व नारायण बलि का पौराणिक महत्व", "मां बगलामुखी शत्रु बाधा एवं तंत्र निवारण हवन विधि", "महामृत्युंजय जाप के 10 सिद्ध लाभ व रुद्राभिषेक नियम", "घर की समृद्धि हेतु वास्तु दोष निवारण के अचूक उपाय").
+3. 100% SHASTRA AUTHENTICITY (NO FAKE / SUPERSTITIOUS FLUFF): All mantras, stotrams, Puranic references (Shiva Purana, Shrimad Bhagavat, Garuda Purana, Jyotish Shastra), and ritual procedures MUST be 100% authentic and reverent. STRICTLY FORBIDDEN to write unauthentic, fake, superstitious, or baseless clickbait fluff.
+4. NO HARDCODED SPECIFIC LOCATION NAMES: NEVER automatically add specific city or temple location names like "काशी", "हरिद्वार", "मथुरा", "उज्जैन", "त्र्यंबकेश्वर", "वृंदावन" anywhere in the blog title or body. ALWAYS use generic reverent terms like **"दिव्य प्राचीन स्थानों पर (Divya Prachin Sthano Pe)"**, **"पवित्र सिद्ध पीठों पर"**, or **"सिद्ध तीर्थ क्षेत्रों में"**.
+5. HIGH-SEARCH MAIN & LONG-TAIL KEYWORDS: Target high-volume Main Focus Keywords combined with high-intent Long-Tail Keywords currently being searched by Indian devotees on Google.
+6. ZERO ROBOTIC JARGON: NEVER use robotic phrases like "इस आधुनिक दौर में", "डिजिटल युग में", "संक्षेप में कहें तो", "निष्कर्षतः", "आज के समय में". Write in natural, warm, authoritative Hindi by a respected Acharya.
+7. ABSOLUTE SPIRITUAL SANCTITY: Every word must be respectful, accurate to Shastras, uplifting, and divine.
+8. REAL INTERNAL PUJA LINKING ONLY: Seamlessly integrate contextual links to our REAL live Pujas dynamically fetched from DB in the body and Call-To-Action sections:
 ${realPujaDirectory}
 
 Format internal links in Markdown naturally using the EXACT slug from directory:
 "👉 **[वास्तविक पूजा सेवा का नाम]** का ऑनलाइन संकल्प लेने हेतु यहाँ क्लिक करें: [/pujas/slug]"
 
-8. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
+9. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
 [${existingTitles}]
 
 MUST RETURN VALID JSON ONLY with this structure:
@@ -109,7 +112,7 @@ MUST RETURN VALID JSON ONLY with this structure:
 
     const userPrompt = options.forceTopic
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${options.forceTopic}"`
-      : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, पुत्रदा एकादशी, रक्षाबंधन) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक अत्यंत प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
+      : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, रक्षाबंधन) अथवा गूगल पर अत्यधिक सर्च किए जा रहे प्रामाणिक सनातन ज्योतिषीय/शास्त्रोक्त उपाय (जैसे कर्ज मुक्ति कनकधारा स्तोत्र, शनि ढैय्या शांति, कालसर्प दोष निवारण, महामृत्युंजय जाप लाभ) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक 100% प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
     // Helper function with retry for 503/500 transient errors
     const callAIWithRetry = async (client: any, model: string, maxRetries = 3) => {
