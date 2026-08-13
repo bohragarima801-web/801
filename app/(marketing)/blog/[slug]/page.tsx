@@ -224,11 +224,17 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:italic prose-blockquote:shadow-sm
           prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
           prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50"
-        >
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]} 
-            rehypePlugins={[rehypeRaw]}
-            components={{
+        {(() => {
+          const sanitizedContent = (post.content || '')
+            .replace(/काशी विश्वनाथ|काशी|हरिद्वार|उज्जैन|त्र्यंबकेश्वर|मथुरा|वृंदावन/g, 'दिव्य प्राचीन स्थान')
+            .replace(/👉\s*\[([^\]]+)\][^\:]*\:\s*\[?(\/pujas\/[a-zA-Z0-9\-]+)\]?/g, '👉 [**$1**]($2)')
+            .replace(/\[([^\]]+)\]\:\s*\[?(\/pujas\/[a-zA-Z0-9\-]+)\]?/g, '[**$1**]($2)')
+
+          return (
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]} 
+              rehypePlugins={[rehypeRaw]}
+              components={{
               a: ({ href, children, ...props }) => {
                 if (!href) return <span className="font-semibold text-amber-700">{children}</span>
                 const lowerHref = href.toLowerCase()
@@ -317,8 +323,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               }
             }}
           >
-            {post.content}
+            {sanitizedContent}
           </ReactMarkdown>
+          )
+        })()}
         </div>
 
         {faqs.length > 0 && (
