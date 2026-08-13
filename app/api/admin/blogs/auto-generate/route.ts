@@ -66,22 +66,37 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'generate') {
-      const result = await generateAutoBlog({
-        forceTopic: forceTopic || undefined,
-        status: publishMode === 'DRAFT' ? 'DRAFT' : 'PUBLISHED',
-        authorId: session.email,
-        bypassLimit: true
-      })
+      try {
+        const targetStatus = publishMode === 'DRAFT' ? 'DRAFT' : 'PUBLISHED'
 
-      if (!result.ok) {
-        return NextResponse.json({ ok: false, error: result.error }, { status: 500 })
+        const result = await generateAutoBlog({
+          forceTopic: forceTopic || undefined,
+          status: targetStatus,
+          authorId: session.email,
+          bypassLimit: true
+        })
+
+        if (!result.ok) {
+          console.error('[AutoBlog] generateAutoBlog returned error:', result.error)
+          return NextResponse.json({ ok: false, error: result.error || 'Blog generation failed' }, { status: 500 })
+        }
+
+        if (result.skipped) {
+          return NextResponse.json({ ok: true, skipped: true, message: result.message })
+        }
+
+        return NextResponse.json({
+          ok: true,
+          message: 'Instant AI Blog Generated & Published Successfully!',
+          data: result.data
+        })
+      } catch (genErr: any) {
+        console.error('[AutoBlog] Unexpected crash in generateAutoBlog:', genErr?.message || genErr)
+        return NextResponse.json({
+          ok: false,
+          error: genErr?.message || 'Unexpected error during blog generation'
+        }, { status: 500 })
       }
-
-      return NextResponse.json({
-        ok: true,
-        message: 'Instant AI Blog Generated & Published Successfully!',
-        data: result.data
-      })
     }
 
     return NextResponse.json({ ok: false, error: 'Invalid action' }, { status: 400 })
