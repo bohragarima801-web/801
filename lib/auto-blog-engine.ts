@@ -1,4 +1,4 @@
-import { getLLM, MODELS } from '@/lib/ai'
+import { getLLM, getPreferredModel, MODELS } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { getSetting } from '@/lib/settings'
 
@@ -27,6 +27,7 @@ const DEFAULT_SACRED_COVER_IMAGES = [
 export async function generateAutoBlog(options: AutoBlogOptions = {}) {
   try {
     const llm = await getLLM()
+    const aiModel = getPreferredModel(llm.apiKey)
 
     // 1. Fetch recent existing blog titles to avoid duplicate topics
     const existingBlogs = await prisma.blog.findMany({
@@ -82,16 +83,35 @@ MUST RETURN VALID JSON ONLY with this structure:
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${options.forceTopic}"`
       : `आज की तिथि एवं निकटतम आने वाले पौराणिक पर्व/त्यौहार या मुख्य ग्रह दोष निवारण उपाय पर एक अत्यंत प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें।`
 
-    // 4. Call Gemini LLM
-    const completion = await llm.chat.completions.create({
-      model: MODELS.FLASH,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.7,
-      response_format: { type: 'json_object' }
-    })
+    // 4. Call LLM (OpenAI gpt-4o-mini with fallback to Gemini if OpenAI credits are 0)
+    let completion: any
+    try {
+      completion = await llm.chat.completions.create({
+        model: aiModel,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7,
+        response_format: { type: 'json_object' }
+      })
+    } catch (err: any) {
+      if (err?.status === 429 || err?.message?.toLowerCase().includes('credits') || err?.message?.toLowerCase().includes('billing')) {
+        console.warn('OpenAI Key has 0 credits / 429. Automatically falling back to Gemini Key...')
+        const fallbackLlm = await getLLM({ preferGemini: true })
+        completion = await fallbackLlm.chat.completions.create({
+          model: 'gemini-flash-latest',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          temperature: 0.7,
+          response_format: { type: 'json_object' }
+        })
+      } else {
+        throw err
+      }
+    }
 
     const rawResponse = completion.choices[0]?.message?.content || '{}'
     const cleanedJson = rawResponse.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim()
@@ -120,8 +140,7 @@ MUST RETURN VALID JSON ONLY with this structure:
       category = await prisma.blogCategory.create({
         data: {
           name: blogData.categoryName || 'Vedic Pujas & Anushthan',
-          slug: (blogData.categoryName || 'Vedic Pujas').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now(),
-          description: 'वैदिक अनुष्ठान, व्रत-त्यौहार एवं सनातन धर्म ग्रन्थ मार्गदर्शिका'
+          slug: (blogData.categoryName || 'Vedic Pujas').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now()
         }
       })
     }

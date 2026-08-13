@@ -7,33 +7,45 @@ let _client: OpenAI | null = null
 let _clientCreatedAt = 0
 const CLIENT_TTL_MS = 5 * 60 * 1000 // Refresh client every 5 minutes to pick up key changes
 
-export async function getLLM(): Promise<OpenAI> {
+export async function getLLM(options: { preferGemini?: boolean } = {}): Promise<OpenAI> {
   const now = Date.now()
 
-  // Return cached client if still fresh
-  if (_client && (now - _clientCreatedAt) < CLIENT_TTL_MS) {
-    return _client
+  let apiKey = ''
+
+  if (!options.preferGemini) {
+    apiKey = (process.env.OPENAI_API_KEY || '').replace(/^"|"$/g, '')
+    if (!apiKey) {
+      apiKey = await getSetting('secret.openai_api_key')
+    }
   }
 
-  // Always try env variable first, then database setting
-  let apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
-
+  if (!apiKey) {
+    apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
+  }
   if (!apiKey) {
     apiKey = await getSetting('secret.gemini_api_key')
   }
 
   if (!apiKey) {
-    // Clear stale client before throwing
     _client = null
     _clientCreatedAt = 0
-    throw new Error('AI API key is not configured. Go to Admin → Settings → Secrets and add your Gemini API Key.')
+    throw new Error('AI API key is not configured. Go to Admin → Settings → Secrets and add your OpenAI or Gemini API Key.')
   }
 
-  const baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/'
+  const isOpenAIKey = apiKey.startsWith('sk-')
+  const baseURL = isOpenAIKey ? undefined : 'https://generativelanguage.googleapis.com/v1beta/openai/'
 
-  _client = new OpenAI({ apiKey, baseURL })
+  const client = new OpenAI({ apiKey, baseURL })
+  _client = client
   _clientCreatedAt = now
-  return _client
+  return client
+}
+
+export function getPreferredModel(apiKey?: string): string {
+  if (apiKey?.startsWith('sk-') || _client?.apiKey?.startsWith('sk-')) {
+    return process.env.OPENAI_MODEL || 'gpt-4o-mini'
+  }
+  return process.env.GEMINI_MODEL_FLASH || 'gemini-flash-latest'
 }
 
 export const MODELS = {
