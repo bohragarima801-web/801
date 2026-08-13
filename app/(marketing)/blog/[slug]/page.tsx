@@ -126,11 +126,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <Badge className="bg-amber-500/10 border border-amber-500/30 text-amber-700 hover:bg-amber-500/20 text-xs py-1 px-3.5 rounded-full font-bold">
             {post.category?.name || 'Spirituality'}
           </Badge>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.35] tracking-normal font-sans">
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="text-slate-500 text-lg leading-relaxed font-medium mt-4">
+            <p className="text-slate-600 text-base md:text-lg leading-[1.8] font-normal mt-4 tracking-normal">
               {post.excerpt}
             </p>
           )}
@@ -213,13 +213,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
         <div 
           className="prose prose-amber prose-lg md:prose-xl max-w-none 
-          prose-headings:font-black prose-headings:text-slate-900 prose-headings:tracking-tight 
-          prose-h1:text-4xl prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-4 prose-h2:border-amber-100 
-          prose-h3:text-2xl prose-h3:text-slate-800 
-          prose-p:text-slate-700 prose-p:leading-loose prose-p:text-lg 
+          prose-headings:font-bold prose-headings:text-slate-900 prose-headings:tracking-normal 
+          prose-h1:text-3xl md:prose-h1:text-4xl prose-h1:leading-[1.35] 
+          prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:leading-[1.35] prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-4 prose-h2:border-amber-100 
+          prose-h3:text-xl md:prose-h3:text-2xl prose-h3:leading-[1.4] prose-h3:text-slate-800 
+          prose-p:text-slate-700 prose-p:leading-[1.8] prose-p:text-base md:prose-p:text-lg prose-p:tracking-normal 
           prose-a:text-[var(--primary-color)] prose-a:font-bold prose-a:no-underline hover:prose-a:underline 
-          prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:italic prose-blockquote:shadow-sm
-          prose-li:text-slate-700 prose-li:marker:text-[var(--primary-color)]
+          prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:shadow-sm prose-blockquote:leading-[1.75]
+          prose-li:text-slate-700 prose-li:leading-[1.8] prose-li:marker:text-[var(--primary-color)]
           prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50"
         >
           {(() => {

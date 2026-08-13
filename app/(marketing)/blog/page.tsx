@@ -117,10 +117,10 @@ export default async function BlogListPage() {
                   {/* Content */}
                   <div className="p-5 flex flex-col justify-between flex-1 gap-3">
                     <div className="space-y-2">
-                      <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug hover:text-[#8B1A21] transition-colors">
+                      <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-normal hover:text-[#8B1A21] transition-colors tracking-normal">
                         <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                       </h3>
-                      <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-3 leading-relaxed">
+                      <p className="text-sm text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-3 leading-relaxed tracking-normal">
                         {post.excerpt || post.content.substring(0, 140).replace(/[#*`]/g, '') + '…'}
                       </p>
                     </div>

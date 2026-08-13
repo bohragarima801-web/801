@@ -30,12 +30,12 @@ export async function getLLM(options: { preferGemini?: boolean } = {}): Promise<
 }
 
 export function getPreferredModel(apiKey?: string): string {
-  return process.env.GEMINI_MODEL_FLASH || 'gemini-flash-latest'
+  return process.env.GEMINI_MODEL_FLASH || 'gemini-3.7-flash'
 }
 
 export const MODELS = {
-  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-flash-latest',
-  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-flash-latest',
+  FLASH: process.env.GEMINI_MODEL_FLASH || 'gemini-3.7-flash',
+  PRO: process.env.GEMINI_MODEL_PRO || 'gemini-3.7-flash',
 }
 
 export type ChatMessage = {

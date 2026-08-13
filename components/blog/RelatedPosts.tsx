@@ -48,7 +48,7 @@ export default async function RelatedPosts({ currentPostId, categoryId, category
           <BookOpen className="h-5 w-5 text-amber-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-bold text-slate-900 tracking-normal">
             इससे मिलते-जुलते लेख पढ़ें
           </h2>
           <p className="text-xs font-semibold text-slate-400 mt-0.5">
@@ -92,7 +92,7 @@ export default async function RelatedPosts({ currentPostId, categoryId, category
 
               {/* Content */}
               <div className="flex flex-col flex-1 p-5 gap-2">
-                <h3 className="text-sm font-black text-slate-900 leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors">
+                <h3 className="text-sm font-bold text-slate-900 leading-relaxed line-clamp-2 group-hover:text-amber-700 transition-colors">
                   {post.title}
                 </h3>
 

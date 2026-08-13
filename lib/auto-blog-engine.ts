@@ -150,7 +150,7 @@ Format internal links in standard Markdown link format [Anchor Text](URL) using 
 9. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
 [${existingTitles}]
 
-MUST RETURN VALID JSON ONLY with this structure:
+MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no extra text. Start your response directly with { and end with }. Keep contentMarkdown under 12000 characters to fit within token limits:
 {
   "seoTitle": "Under 60 chars Hindi SEO title with main & long-tail keyword",
   "metaDescription": "Under 155 chars meta description with high-intent keywords",
@@ -181,73 +181,94 @@ MUST RETURN VALID JSON ONLY with this structure:
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${smartForceTopic}"`
       : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, रक्षाबंधन) अथवा गूगल पर अत्यधिक सर्च किए जा रहे प्रामाणिक सनातन ज्योतिषीय/शास्त्रोक्त उपाय (जैसे कर्ज मुक्ति कनकधारा स्तोत्र, शनि ढैय्या शांति, कालसर्प दोष निवारण, महामृत्युंजय जाप लाभ) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक 100% प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
-    // Helper function with exponential backoff retry for 429 rate-limit / 503 / 500 transient errors
-    const callAIWithRetry = async (client: any, model: string, maxRetries = 4) => {
-      for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-          return await client.chat.completions.create({
-            model,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userPrompt }
-            ],
-            max_tokens: 8192,
-            temperature: 0.7,
-            response_format: { type: 'json_object' }
-          })
-        } catch (retryErr: any) {
-          if ((retryErr?.status === 429 || retryErr?.status === 503 || retryErr?.status === 500) && attempt < maxRetries) {
-            const waitSec = attempt * 4
-            console.warn(`AI API ${retryErr.status} rate-limit/transient error (attempt ${attempt}/${maxRetries}), waiting ${waitSec}s...`)
-            await new Promise(res => setTimeout(res, waitSec * 1000))
-            continue
-          }
-          throw retryErr
-        }
-      }
-    }
+    // Helper function with multi-model fallback and backoff for rate-limits
+    const candidateModels = [aiModel, 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-flash-latest']
+    // Remove duplicates while preserving order
+    const uniqueModels = Array.from(new Set(candidateModels.filter(Boolean)))
 
-    // 4. Call LLM (Gemini / OpenAI with auto-fallback)
     let completion: any
-    try {
-      completion = await callAIWithRetry(llm, aiModel)
-    } catch (err: any) {
-      if (
-        err?.status === 429 ||
-        err?.status === 401 ||
-        err?.message?.toLowerCase().includes('invalid') ||
-        err?.message?.toLowerCase().includes('credits') ||
-        err?.message?.toLowerCase().includes('billing')
-      ) {
-        console.warn('AI Provider error (401/429). Automatically falling back to Gemini Key...')
-        const fallbackLlm = await getLLM({ preferGemini: true })
-        completion = await callAIWithRetry(fallbackLlm, 'gemini-flash-latest')
-      } else {
-        throw err
+    let lastError: any = null
+
+    for (const modelToTry of uniqueModels) {
+      try {
+        console.log(`[AutoBlog] Requesting blog generation from model: ${modelToTry}...`)
+        completion = await llm.chat.completions.create({
+          model: modelToTry,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          max_tokens: 65536,
+          temperature: 0.7
+        })
+        if (completion?.choices?.[0]?.message?.content) {
+          console.log(`[AutoBlog] Successfully received response from ${modelToTry}`)
+          break
+        }
+      } catch (retryErr: any) {
+        lastError = retryErr
+        console.warn(`[AutoBlog] Model ${modelToTry} returned status ${retryErr?.status || retryErr?.message}, trying next fallback model...`)
       }
     }
 
+    if (!completion?.choices?.[0]?.message?.content) {
+      throw lastError || new Error('All AI models failed to respond. Please check your Gemini API quota.')
+    }
+
+    const finishReason = completion.choices[0]?.finish_reason
     const rawResponse = completion.choices[0]?.message?.content || '{}'
-    const firstBrace = rawResponse.indexOf('{')
-    const lastBrace = rawResponse.lastIndexOf('}')
-    let jsonCandidate = (firstBrace !== -1 && lastBrace > firstBrace)
-      ? rawResponse.substring(firstBrace, lastBrace + 1)
-      : rawResponse.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim()
+
+    // Warn if response was cut off — means max_tokens was too low
+    if (finishReason === 'length') {
+      console.warn('[AutoBlog] WARNING: AI response was truncated (finish_reason=length). Attempting JSON repair...')
+    }
+
+    // Strip markdown code fences if present, then extract JSON object
+    let jsonCandidate = rawResponse
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim()
+
+    const firstBrace = jsonCandidate.indexOf('{')
+    const lastBrace = jsonCandidate.lastIndexOf('}')
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+      jsonCandidate = jsonCandidate.substring(firstBrace, lastBrace + 1)
+    } else if (firstBrace !== -1) {
+      // Truncated — take from first brace to end
+      jsonCandidate = jsonCandidate.substring(firstBrace)
+    }
 
     let blogData: any
     try {
       blogData = JSON.parse(jsonCandidate)
-    } catch (parseErr) {
-      // Auto-repair truncated JSON by attempting to close open quotes/brackets
+    } catch {
+      // Auto-repair truncated JSON
       try {
         let repairedStr = jsonCandidate
-        if (!repairedStr.endsWith('}')) {
-          if ((repairedStr.match(/"/g) || []).length % 2 !== 0) repairedStr += '"'
-          repairedStr += '\n}'
+
+        // If contentMarkdown is the truncated field, truncate it cleanly at last safe boundary
+        const contentMatch = repairedStr.match(/("contentMarkdown"\s*:\s*")(.*)/s)
+        if (contentMatch && finishReason === 'length') {
+          // Cut the content at last complete sentence/paragraph before truncation
+          const contentStart = repairedStr.indexOf('"contentMarkdown"')
+          const safeEnd = repairedStr.lastIndexOf('\\n\\n')
+          if (safeEnd > contentStart) {
+            repairedStr = repairedStr.substring(0, safeEnd) + '...",\n"faqs": []\n}'
+          } else {
+            // Just close whatever is open
+            if ((repairedStr.match(/(?<!\\)"/g) || []).length % 2 !== 0) repairedStr += '"'
+            repairedStr = repairedStr.replace(/,\s*$/, '') + '\n}'
+          }
+        } else {
+          if ((repairedStr.match(/(?<!\\)"/g) || []).length % 2 !== 0) repairedStr += '"'
+          repairedStr = repairedStr.replace(/,\s*$/, '') + '\n}'
         }
+
         blogData = JSON.parse(repairedStr)
       } catch {
-        console.error('Raw LLM Response parsing error:', rawResponse.slice(0, 300))
+        console.error('[AutoBlog] Raw LLM Response (first 500 chars):', rawResponse.slice(0, 500))
+        console.error('[AutoBlog] finish_reason:', finishReason)
         throw new Error('Failed to parse AI blog JSON output')
       }
     }

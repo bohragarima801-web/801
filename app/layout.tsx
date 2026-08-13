@@ -122,10 +122,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="hi" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
+        {/* Google Fonts Preconnect for ultra-fast Devanagari font rendering */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Prevents Google Translate from auto-corrupting brand names & mantras */}
         <meta name="google" content="notranslate" />
       </head>
-      <body className={`${inter.className} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${notoSerifDevanagari.variable} ${notoSansDevanagari.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00]`} suppressHydrationWarning>
+      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFFBF7] text-[#111827] overflow-x-hidden selection:bg-[#FF7A00]/20 selection:text-[#FF7A00] antialiased`} suppressHydrationWarning>
         <Script
           id="schema-global-organization"
           type="application/ld+json"

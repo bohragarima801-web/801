@@ -24,12 +24,12 @@ module.exports = {
       },
       extend: {
         fontFamily: {
-          sans: ['Outfit', 'Plus Jakarta Sans', 'Inter', 'Poppins', 'Noto Sans Devanagari', 'system-ui', 'sans-serif'],
-          body: ['Inter', 'Poppins', 'Noto Sans Devanagari', 'sans-serif'],
-          heading: ['Outfit', 'Plus Jakarta Sans', 'Cinzel', 'Noto Serif Devanagari', 'serif'],
-          vip: ['Outfit', 'Plus Jakarta Sans', 'Cinzel Decorative', 'Yatra One', 'serif'],
-          hero: ['Outfit', 'Plus Jakarta Sans', 'Cinzel Decorative', 'serif'],
-          devanagari: ['Noto Serif Devanagari', 'Noto Sans Devanagari', 'Mukta', 'serif'],
+          sans: ['var(--font-noto-sans-devanagari)', 'Noto Sans Devanagari', 'Outfit', 'Plus Jakarta Sans', 'Inter', 'Poppins', 'system-ui', 'sans-serif'],
+          body: ['var(--font-noto-sans-devanagari)', 'Noto Sans Devanagari', 'Inter', 'Poppins', 'system-ui', 'sans-serif'],
+          heading: ['var(--font-noto-sans-devanagari)', 'Noto Sans Devanagari', 'Noto Serif Devanagari', 'Outfit', 'Plus Jakarta Sans', 'serif'],
+          vip: ['Outfit', 'Plus Jakarta Sans', 'Cinzel Decorative', 'Yatra One', 'var(--font-noto-sans-devanagari)', 'serif'],
+          hero: ['Outfit', 'Plus Jakarta Sans', 'Cinzel Decorative', 'var(--font-noto-sans-devanagari)', 'serif'],
+          devanagari: ['var(--font-noto-sans-devanagari)', 'Noto Sans Devanagari', 'Noto Serif Devanagari', 'Mukta', 'serif'],
         },
         boxShadow: {
           'golden-glow': '0 0 40px -8px rgba(212, 175, 55, 0.4), 0 0 80px -20px rgba(230, 81, 0, 0.2)',
