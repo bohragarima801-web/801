@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getAdminUser } from '@/lib/admin-session'
-import OpenAI from 'openai'
+import { getLLM, getPreferredModel } from '@/lib/ai'
 
 export async function POST(req: Request) {
   try {
@@ -14,29 +14,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: 'Prompt or topic is required.' }, { status: 400 })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY
-
     let generatedTitle = `${prompt} — Divine Puja & Seva 🌸🕉️`
     let generatedCaption = `Experience divine blessings with our authentic Vedic rituals and puja offerings. Receive live video darshan, yajaman sankalp, and sacred prasad delivered right to your home.\n\n✨ Perform Seva: Join hundreds of devotees in this holy ceremony.\n\n📱 Book online today at DivyaYagyam!`
     let generatedHashtags = `#DivyaYagyam #VedicPuja #SanatanDharma #PujaOnline #HarHarMahadev #BhaktiSeva #SpiritualJourney #PrasadDelivery`
 
-    if (apiKey && process.env.OPENAI_API_KEY) {
-      try {
-        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-        const response = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a high-performing Social Media Manager and SEO Copywriter for DivyaYagyam (an online Sanatan Vedic Puja and Prasad delivery platform). Generate an engaging post caption, optimized SEO title, and relevant viral hashtags in Hindi/Hinglish/English mix. Format response as JSON with keys: title, caption, hashtags.`,
-            },
-            {
-              role: 'user',
-              content: `Topic/Prompt: ${prompt}. Target Platform: ${targetPlatform || 'General'}.`,
-            },
-          ],
-          response_format: { type: 'json_object' },
-        })
+    try {
+      const llm = await getLLM()
+      const aiModel = getPreferredModel(llm.apiKey)
+      const response = await llm.chat.completions.create({
+        model: aiModel,
+        messages: [
+          {
+            role: 'system',
+            content: `You are a high-performing Social Media Manager and SEO Copywriter for DivyaYagyam (an online Sanatan Vedic Puja and Prasad delivery platform). Generate an engaging post caption, optimized SEO title, and relevant viral hashtags in Hindi/Hinglish/English mix. Format response as JSON with keys: title, caption, hashtags.`,
+          },
+          {
+            role: 'user',
+            content: `Topic/Prompt: ${prompt}. Target Platform: ${targetPlatform || 'General'}.`,
+          },
+        ],
+        response_format: { type: 'json_object' },
+      })
 
         const content = response.choices[0]?.message?.content
         if (content) {
