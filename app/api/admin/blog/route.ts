@@ -239,6 +239,11 @@ export async function DELETE(req: NextRequest) {
       where: { category: `blog-${id}` }
     })
 
+    // Clean up blog view events (analytics) to avoid FK constraint violation
+    await prisma.blogViewEvent.deleteMany({
+      where: { blogId: id }
+    })
+
     await prisma.blog.delete({
       where: { id }
     })
