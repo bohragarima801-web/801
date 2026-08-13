@@ -29,7 +29,19 @@ export async function generateAutoBlog(options: AutoBlogOptions = {}) {
     const llm = await getLLM()
     const aiModel = getPreferredModel(llm.apiKey)
 
-    // 1. Fetch recent existing blog titles to avoid duplicate topics
+    // 1. Fetch REAL published Pujas directly from database for 100% genuine internal links
+    const realPujas = await prisma.puja.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { name: true, slug: true },
+      orderBy: { createdAt: 'desc' },
+      take: 15
+    })
+
+    const realPujaDirectory = realPujas.length > 0
+      ? realPujas.map((p, i) => `${i + 1}. ${p.name}: /pujas/${p.slug}`).join('\n')
+      : `1. मां बगलामुखी मिर्ची हवन: /pujas/maa-bagalamukhi-mirchi-hawan\n2. अष्टलक्ष्मी कर्ज मुक्ति पूजा: /pujas/maa-ashta-lakshmi-karz-mukti-puja\n3. महामृत्युंजय जाप एवं रुद्राभिषेक: /pujas/mahamrityunjaya-jaap-rudrabhishekam\n4. शनि दोष शांति महापूजा: /pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya`
+
+    // 2. Fetch recent existing blog titles to avoid duplicate topics
     const existingBlogs = await prisma.blog.findMany({
       select: { title: true, slug: true },
       orderBy: { createdAt: 'desc' },
@@ -38,11 +50,11 @@ export async function generateAutoBlog(options: AutoBlogOptions = {}) {
 
     const existingTitles = existingBlogs.map(b => b.title).join(', ')
 
-    // 2. Determine target publish mode (default from database settings or options)
+    // 3. Determine target publish mode (default from database settings or options)
     const dbPublishMode = await getSetting('autoblog.publish_mode', 'PUBLISHED')
     const targetStatus = options.status || (dbPublishMode === 'DRAFT' ? 'DRAFT' : 'PUBLISHED')
 
-    // 3. Construct System & User Prompt
+    // 4. Construct System & User Prompt
     const systemPrompt = `You are "Acharya DivyaYagyam AI", an esteemed Senior Vedic Scholar, Puranic Historian, and Master Technical SEO Specialist for DivyaYagyam (divyayagyam.com).
 
 YOUR CORE MISSION:
@@ -55,11 +67,11 @@ CRITICAL BOUNDARY & SANCTITY RULES:
 4. HIGH-SEARCH MAIN & LONG-TAIL KEYWORDS: Perform real keyword strategy. Target high-volume Main Focus Keywords combined with high-intent Long-Tail Keywords currently being searched by Indian devotees on Google (e.g. "माघ गुप्त नवरात्रि घटस्थापना शुभ मुहूर्त", "कर्ज मुक्ति कनकधारा स्तोत्र पाठ विधि", "शनि ढैय्या शांति पूजा के अचूक उपाय").
 5. ZERO ROBOTIC JARGON: NEVER use robotic phrases like "इस आधुनिक दौर में", "डिजिटल युग में", "संक्षेप में कहें तो", "निष्कर्षतः", "आज के समय में". Write in natural, warm, authoritative Hindi by a respected Acharya.
 6. ABSOLUTE SPIRITUAL SANCTITY: Every word must be respectful, accurate to Shastras (Purana/Vedas), uplifting, and divine. Zero offensive, crude, or inaccurate claims.
-7. INTERNAL PUJA LINKING: Seamlessly integrate contextual links to our Pujas in the body and Call-To-Action sections:
-${AVAILABLE_PUJA_LINKS}
+7. REAL INTERNAL PUJA LINKING ONLY: Seamlessly integrate contextual links to our REAL live Pujas dynamically fetched from DB in the body and Call-To-Action sections:
+${realPujaDirectory}
 
-Format internal links in Markdown naturally:
-"👉 **[पूजा सेवा का नाम]** का ऑनलाइन संकल्प लेने हेतु यहाँ क्लिक करें: [/pujas/slug]"
+Format internal links in Markdown naturally using the EXACT slug from directory:
+"👉 **[वास्तविक पूजा सेवा का नाम]** का ऑनलाइन संकल्प लेने हेतु यहाँ क्लिक करें: [/pujas/slug]"
 
 8. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
 [${existingTitles}]
