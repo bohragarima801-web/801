@@ -13,6 +13,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { BlogViewTracker } from '@/components/blog/BlogViewTracker'
 
 export const revalidate = 3600
 
@@ -81,17 +82,12 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     orderBy: { order: 'asc' }
   });
 
-  // Increment views in background
-  prisma.blog.update({
-    where: { id: post.id },
-    data: { views: { increment: 1 } }
-  }).catch(() => {})
-
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
   const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
   return (
     <>
+      <BlogViewTracker blogId={post.id} slug={post.slug} />
       <Script
         id={`schema-blog-${post.id}`}
         type="application/ld+json"

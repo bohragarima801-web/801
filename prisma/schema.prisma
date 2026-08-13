@@ -1071,6 +1071,7 @@ model Blog {
   author   User?         @relation(fields: [authorId], references: [id])
   comments BlogComment[]
   tags     BlogTag[]
+  viewEvents BlogViewEvent[]
 
   @@index([slug])
   @@index([status])
@@ -1670,10 +1671,27 @@ model SocialPostLog {
   response     Json?
   errorMessage String?  @db.Text
   postedAt     DateTime @default(now())
-
   post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([postId])
   @@map("social_post_logs")
 }
 
+model BlogViewEvent {
+  id        BigInt   @id @default(autoincrement())
+  blogId    String   @map("blog_id")
+  sessionId String   @map("session_id")
+  ipHash    String?  @map("ip_hash")
+  userAgent String?  @map("user_agent")
+  referrer  String?  @map("referrer")
+  country   String?  @map("country")
+  isBot     Boolean  @default(false) @map("is_bot")
+  counted   Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([blogId])
+  @@map("blog_view_events")
+}

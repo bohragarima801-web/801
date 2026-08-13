@@ -52,6 +52,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Blog & CMS', slug: 'blog', icon: Newspaper, permission: 'blog.read', items: [
     { title: 'All Posts', href: '/admin/blog' }, { title: 'Add New', href: '/admin/blog/new' },
     { title: 'Categories', href: '/admin/blog/categories' }, { title: 'Comments', href: '/admin/blog/comments' },
+    { title: 'Analytics', href: '/admin/analytics/blog' },
   ]},
   { title: 'Tools Manager', slug: 'tools', icon: Wrench, items: [
     { title: 'All Tools', href: '/admin/tools' }, { title: 'Add New Tool', href: '/admin/tools/new' },

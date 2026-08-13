@@ -1,5 +1,7 @@
 import { cookies } from 'next/headers'
-import { cache } from 'react'
+import { cache as reactCache } from 'react'
+
+const cache = reactCache || (<T extends Function>(fn: T): T => fn)
 
 const COOKIE_NAME = 'dvj_admin_session'
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
