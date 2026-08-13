@@ -1,14 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image';
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-
 import { siteConfig } from '@/lib/site-config'
 
 export function Logo({ className, showText = true, size = "md" }: { className?: string; showText?: boolean; size?: "sm" | "md" | "lg" }) {
-  const [logoUrl, setLogoUrl] = useState('/logo.jpg')
+  const [logoUrl, setLogoUrl] = useState('/logo.webp')
   const [siteName, setSiteName] = useState(siteConfig.name || 'DivyaYagyam')
 
   useEffect(() => {
@@ -23,19 +21,19 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
       .catch(() => {})
   }, [])
 
-  const sizeClasses = {
-    sm: 'h-10 w-10 min-w-[40px]',
-    md: 'h-12 w-12 min-w-[48px]',
-    lg: 'h-16 w-16 min-w-[64px]',
+  const containerSize = {
+    sm: 'h-10 sm:h-12 w-auto',
+    md: 'h-12 sm:h-14 w-auto',
+    lg: 'h-16 sm:h-20 w-auto',
   }[size]
 
   return (
-    <Link href="/" className={cn('flex items-center gap-3 group shrink-0', className)}>
-      <div className={cn("relative flex items-center justify-center overflow-hidden rounded-xl bg-amber-950/20 p-0.5 group-hover:scale-105 transition-transform shrink-0 shadow-md border-2 border-[#D49B00]/40 ring-1 ring-amber-300/30", sizeClasses)}>
+    <Link href="/" className={cn('flex items-center gap-2.5 group shrink-0', className)}>
+      <div className={cn("relative flex items-center justify-center group-hover:scale-[1.03] transition-transform shrink-0 drop-shadow-md", containerSize)}>
         <img 
-          src={logoUrl || '/logo.jpg'} 
+          src={logoUrl || '/logo.webp'} 
           alt="DivyaYagyam Logo" 
-          className="h-full w-full object-contain object-center rounded-lg drop-shadow-sm"
+          className="h-full w-auto max-w-full object-contain rounded-xl"
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/logo.jpg'
           }}
@@ -44,7 +42,7 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
 
       {showText && (
         <div className="flex flex-col justify-center notranslate" translate="no">
-          <span className="text-[18px] sm:text-[21px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
+          <span className="text-[18px] sm:text-[22px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
           <span className="text-[9px] sm:text-[10px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.14em] uppercase mt-[1px]">
