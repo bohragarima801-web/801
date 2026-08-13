@@ -7,23 +7,33 @@ let _client: OpenAI | null = null
 let _clientCreatedAt = 0
 const CLIENT_TTL_MS = 5 * 60 * 1000 // Refresh client every 5 minutes to pick up key changes
 
-export async function getLLM(options: { preferGemini?: boolean } = {}): Promise<OpenAI> {
+export async function getLLM(options: { preferOpenAI?: boolean; preferGemini?: boolean } = {}): Promise<OpenAI> {
   const now = Date.now()
 
   let apiKey = ''
 
-  if (!options.preferGemini) {
+  // 1. Try Gemini first by default unless OpenAI is explicitly preferred
+  if (options.preferGemini || !options.preferOpenAI) {
+    apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
+    if (!apiKey) {
+      apiKey = await getSetting('secret.gemini_api_key')
+    }
+  }
+
+  // 2. If Gemini is empty or preferOpenAI is true, try OpenAI key
+  if (!apiKey) {
     apiKey = (process.env.OPENAI_API_KEY || '').replace(/^"|"$/g, '')
     if (!apiKey) {
       apiKey = await getSetting('secret.openai_api_key')
     }
   }
 
+  // 3. Fallback check for Gemini if OpenAI key was empty
   if (!apiKey) {
     apiKey = (process.env.GEMINI_API_KEY || '').replace(/^"|"$/g, '')
-  }
-  if (!apiKey) {
-    apiKey = await getSetting('secret.gemini_api_key')
+    if (!apiKey) {
+      apiKey = await getSetting('secret.gemini_api_key')
+    }
   }
 
   if (!apiKey) {
