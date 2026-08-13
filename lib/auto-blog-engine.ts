@@ -108,8 +108,8 @@ CRITICAL BOUNDARY & SANCTITY RULES:
 8. REAL INTERNAL PUJA LINKING ONLY: Seamlessly integrate contextual links to our REAL live Pujas dynamically fetched from DB in the body and Call-To-Action sections:
 ${realPujaDirectory}
 
-Format internal links in Markdown naturally using the EXACT slug from directory:
-"👉 **[वास्तविक पूजा सेवा का नाम]** का ऑनलाइन संकल्प लेने हेतु यहाँ क्लिक करें: [/pujas/slug]"
+Format internal links in standard Markdown link format [Anchor Text](URL) using the EXACT slug from directory:
+"👉 [**ऑनलाइन संकल्प लें — मां बगलामुखी मिर्ची हवन**](/pujas/maa-bagalamukhi-mirchi-hawan)"
 
 9. AVOID DUPLICATES: Do NOT generate articles on these topics already published:
 [${existingTitles}]

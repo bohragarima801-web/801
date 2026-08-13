@@ -254,25 +254,41 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 }
 
 
+                if (href.startsWith('/pujas/') || href.startsWith('/pujas')) {
+                  return (
+                    <Link
+                      href={href}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 my-3 rounded-2xl bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold text-sm md:text-base shadow-md hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 no-underline cursor-pointer group"
+                    >
+                      <Sparkles className="h-4 w-4 text-amber-200 animate-pulse shrink-0" />
+                      <span className="underline-offset-2">{children}</span>
+                      <span className="bg-white/20 text-white text-xs px-2.5 py-0.5 rounded-full font-black ml-1 group-hover:translate-x-0.5 transition-transform">
+                        ऑनलाइन संकल्प लें ➔
+                      </span>
+                    </Link>
+                  )
+                }
+
                 if (isExternal) {
                   return (
                     <a
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
+                      className="inline-flex items-center gap-1 px-3 py-1 my-1 rounded-xl bg-amber-50 text-amber-800 font-bold border border-amber-300/50 hover:bg-amber-100 hover:text-amber-900 transition-all cursor-pointer no-underline"
                       {...props}
                     >
-                      {children} ↗
+                      <span>{children}</span> ↗
                     </a>
                   )
                 }
+
                 return (
                   <Link
                     href={href}
-                    className="text-amber-700 font-bold underline underline-offset-4 decoration-amber-400 hover:text-amber-800 hover:decoration-amber-600 transition-colors"
+                    className="inline-flex items-center gap-1 px-3.5 py-1.5 my-1 rounded-xl bg-amber-500/10 text-amber-900 font-bold border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer no-underline"
                   >
-                    {children}
+                    <span>{children}</span> ➔
                   </Link>
                 )
               },
