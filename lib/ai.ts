@@ -65,7 +65,7 @@ Tagline: Aastha Ki Nai Pehchan (आस्था की नई पहचान)
 Contact: Phone/WhatsApp: +91-95304-01984, Email: seva@divyayagyam.com
 
 PUJAS AVAILABLE ON DIVYAYAGYAM:
-1. Kalsarp Dosh Nivaran Puja (कालसर्प दोष निवारण) - Trimbakeshwar / Ujjain (Single / Couple / VIP)
+1. Kalsarp Dosh Nivaran Puja (कालसर्प दोष निवारण) - दिव्य प्राचीन सिद्ध पीठ (Single / Couple / VIP)
 2. Mahamrityunjaya Hawan & Jaap (महामृत्युंजय हवन) - Health & Longevity
 3. Bagalamukhi Mirchi Hawan & Kavach (बगलामुखी शत्रु बाधा एवं तंत्र बाधा निवारण)
 4. Durga Saptashati Yagya (दुर्गा सप्तशती यज्ञ) - Prosperity & Victory
@@ -84,7 +84,7 @@ SACRED PRODUCTS (100% Verified & Abhimantrit):
 - Divya Chandan & Organic Dhoop Batti
 
 BHAKTI SEVA & VIP SERVICES:
-- VIP Temple Pujas: Kashi Vishwanath, Mahakaleshwar Bhasma Aarti, Somnath, Omkareshwar.
+- VIP Temple Pujas: दिव्य प्राचीन सिद्ध पीठ एवं पवित्र तीर्थ क्षेत्र।
 - Gau Seva (गौ सेवा), Annadan (अन्नदान), Deep Daan (दीप दान).
 - Prasad Delivery: Abhimantrit Prasad directly delivered to home from holy temples.
 ==============================================================
