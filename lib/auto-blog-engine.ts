@@ -86,31 +86,39 @@ MUST RETURN VALID JSON ONLY with this structure:
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${options.forceTopic}"`
       : `आज की तिथि से आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार या मुख्य ग्रह दोष निवारण उपाय पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक अत्यंत प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
+    // Helper function with retry for 503/500 transient errors
+    const callAIWithRetry = async (client: any, model: string, maxRetries = 3) => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          return await client.chat.completions.create({
+            model,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+            temperature: 0.7,
+            response_format: { type: 'json_object' }
+          })
+        } catch (retryErr: any) {
+          if ((retryErr?.status === 503 || retryErr?.status === 500) && attempt < maxRetries) {
+            console.warn(`AI Server ${retryErr.status} transient error (attempt ${attempt}/${maxRetries}), retrying in 2 seconds...`)
+            await new Promise(res => setTimeout(res, 2000))
+            continue
+          }
+          throw retryErr
+        }
+      }
+    }
+
     // 4. Call LLM (OpenAI gpt-4o-mini with fallback to Gemini if OpenAI credits are 0)
     let completion: any
     try {
-      completion = await llm.chat.completions.create({
-        model: aiModel,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.7,
-        response_format: { type: 'json_object' }
-      })
+      completion = await callAIWithRetry(llm, aiModel)
     } catch (err: any) {
       if (err?.status === 429 || err?.message?.toLowerCase().includes('credits') || err?.message?.toLowerCase().includes('billing')) {
         console.warn('OpenAI Key has 0 credits / 429. Automatically falling back to Gemini Key...')
         const fallbackLlm = await getLLM({ preferGemini: true })
-        completion = await fallbackLlm.chat.completions.create({
-          model: 'gemini-flash-latest',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt }
-          ],
-          temperature: 0.7,
-          response_format: { type: 'json_object' }
-        })
+        completion = await callAIWithRetry(fallbackLlm, 'gemini-flash-latest')
       } else {
         throw err
       }
