@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { ProductClientView } from '@/components/product-client-view'
 import { notFound, redirect } from 'next/navigation'
@@ -6,9 +7,9 @@ import { Metadata } from 'next'
 import Script from 'next/script'
 import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 
-export const revalidate = 30; // ISR: Revalidate every 30s
+export const revalidate = 3600; // ISR: Revalidate every 3600s (1 hour)
 
-const getProductBySlugOrFallback = cache(async (slug: string) => {
+const fetchProductFromDb = async (slug: string) => {
   try {
     // 1. Try exact slug match
     let product = await prisma.product.findUnique({
@@ -21,6 +22,7 @@ const getProductBySlugOrFallback = cache(async (slug: string) => {
         },
         reviews: {
           orderBy: { createdAt: 'desc' },
+          take: 10,
           include: { user: { select: { firstName: true, lastName: true } } }
         }
       }
@@ -53,6 +55,7 @@ const getProductBySlugOrFallback = cache(async (slug: string) => {
           },
           reviews: {
             orderBy: { createdAt: 'desc' },
+            take: 10,
             include: { user: { select: { firstName: true, lastName: true } } }
           }
         }
@@ -66,7 +69,72 @@ const getProductBySlugOrFallback = cache(async (slug: string) => {
     console.error("Error fetching product by slug:", err);
     return null;
   }
+}
+
+// Global cross-request Data Cache for single Product Detail (1-hour TTL)
+const getCachedProductBySlug = (slug: string) =>
+  unstable_cache(
+    async () => fetchProductFromDb(slug),
+    [`product-detail-v2-${slug}`],
+    { revalidate: 3600, tags: ['products', `product-${slug}`] }
+  )()
+
+// Per-request memoization wrapper
+const getProductBySlugOrFallback = cache(async (slug: string) => {
+  return getCachedProductBySlug(slug)
 })
+
+// Cached related products fetcher
+const getCachedRelatedProducts = (excludeId: string) =>
+  unstable_cache(
+    async () => {
+      const rawRelated = await prisma.product.findMany({
+        where: {
+          status: 'ACTIVE',
+          id: { not: excludeId }
+        },
+        take: 4,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          price: true,
+          coverImage: true,
+          category: { select: { name: true } }
+        }
+      }).catch(() => [])
+
+      return rawRelated.map(p => ({
+        id: p.id,
+        name: p.name,
+        slug: p.slug,
+        price: Number(p.price),
+        mrp: Math.round(Number(p.price) * 2.1),
+        coverImage: p.coverImage || '/placeholder.jpg',
+        category: p.category?.name || 'Sanatan Store'
+      }))
+    },
+    [`related-products-v2-${excludeId}`],
+    { revalidate: 3600, tags: ['products'] }
+  )()
+
+export async function generateStaticParams() {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [
+          { status: 'ACTIVE' },
+          { status: 'OUT_OF_STOCK' }
+        ]
+      },
+      select: { slug: true },
+      take: 50
+    })
+    return products.map((p) => ({ slug: p.slug }))
+  } catch (e) {
+    return []
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -100,25 +168,8 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     redirect(`/products/${product.slug}`);
   }
 
-  // Fetch real active related products from DB
-  const rawRelated = await prisma.product.findMany({
-    where: {
-      status: 'ACTIVE',
-      id: { not: product.id }
-    },
-    take: 4,
-    include: { category: true }
-  }).catch(() => [])
-
-  const relatedProducts = rawRelated.map(p => ({
-    id: p.id,
-    name: p.name,
-    slug: p.slug,
-    price: Number(p.price),
-    mrp: Math.round(Number(p.price) * 2.1),
-    coverImage: p.coverImage || '/placeholder.jpg',
-    category: p.category?.name || 'Sanatan Store'
-  }))
+  // Fetch cached active related products
+  const relatedProducts = await getCachedRelatedProducts(product.id)
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -150,3 +201,4 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
     </>
   )
 }
+
