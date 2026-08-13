@@ -380,7 +380,7 @@ export function PujaClientView({ puja }: { puja: any }) {
 
               <button
                 onClick={() => handleScrollTo('packages')}
-                className="w-full sm:w-auto px-8 py-3.5 text-sm sm:text-base bg-gradient-to-r from-[#f59e0b] via-[#d97706] to-[#b45309] hover:from-[#fbbf24] hover:via-[#f59e0b] hover:to-[#d97706] text-white font-extrabold shadow-[0_4px_15px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.7)] transition-all uppercase tracking-wider rounded-full border border-amber-300/50 flex items-center justify-center gap-2 cursor-pointer active:scale-95 shrink-0"
+                className="w-full sm:w-auto px-8 py-3.5 text-sm sm:text-base bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_22px_rgba(16,185,129,0.7)] transition-all uppercase tracking-wider rounded-full border border-emerald-400/50 flex items-center justify-center gap-2 cursor-pointer active:scale-95 shrink-0"
               >
                 <span>SELECT PUJA PACKAGE</span>
                 <ArrowRight className="w-4 h-4" />
@@ -512,7 +512,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                 
                 <button 
                   onClick={() => handleScrollTo('packages')}
-                  className="w-full py-3.5 text-base sm:text-lg bg-gradient-to-r from-[#f59e0b] via-[#d97706] to-[#b45309] hover:from-[#fbbf24] hover:via-[#f59e0b] hover:to-[#d97706] text-white font-extrabold shadow-[0_4px_15px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.7)] transition-all rounded-full uppercase tracking-wider border border-amber-300/50 cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-3.5 text-base sm:text-lg bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_22px_rgba(16,185,129,0.7)] transition-all rounded-full uppercase tracking-wider border border-emerald-400/50 cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>पूजा पैकेज चुनें (BOOK NOW)</span>
                   <ArrowRight className="w-5 h-5" />
@@ -768,7 +768,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                         setSelectedPackage(pkg.id);
                         handleBookNow(pkg.id);
                       }}
-                      className="w-full bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#fbbf24] hover:to-[#f59e0b] text-white font-extrabold text-sm py-3 px-4 rounded-xl shadow-[0_4px_12px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_18px_rgba(245,158,11,0.6)] transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer border-none"
+                      className="w-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold text-sm py-3 px-4 rounded-xl shadow-[0_4px_12px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_18px_rgba(16,185,129,0.6)] transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer border-none"
                     >
                       <span>BOOK PUJA NOW</span>
                       <ArrowRight className="w-4 h-4" />
@@ -1006,7 +1006,7 @@ export function PujaClientView({ puja }: { puja: any }) {
             </div>
             <button 
               onClick={() => handleBookNow()}
-              className="w-full sm:w-auto px-7 sm:px-9 py-3 text-sm sm:text-base bg-gradient-to-r from-[#f59e0b] via-[#d97706] to-[#b45309] hover:from-[#fbbf24] hover:via-[#f59e0b] hover:to-[#d97706] text-white font-extrabold shadow-[0_4px_15px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.7)] transition-all uppercase tracking-wider rounded-full border border-amber-300/50 shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-7 sm:px-9 py-3 text-sm sm:text-base bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_22px_rgba(16,185,129,0.7)] transition-all uppercase tracking-wider rounded-full border border-emerald-400/50 shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <span>पूजा बुक करें (BOOK NOW)</span>
               <ArrowRight className="w-4 h-4" />

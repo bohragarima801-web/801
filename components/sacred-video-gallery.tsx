@@ -225,13 +225,13 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                 {activeVideo?.folder || 'Divine Media'}
               </span>
               <p className="text-xs text-slate-300 mt-1">
-                घर बैठे भगवान के पावन दर्शन करें एवं विशेष पूजा सेवा में भाग लें।
+                घर बैठे भगवान के पावन दर्शन करें एवं विशेष पूजा सेवा बुक करें।
               </p>
             </div>
 
-            <Button size="lg" className="bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] hover:brightness-110 text-white font-bold px-6 shrink-0 shadow-lg" asChild>
+            <Button size="lg" className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold px-6 shrink-0 shadow-lg" asChild>
               <Link href="/pujas" onClick={() => setActiveVideo(null)}>
-                पूजा में भाग लें (Book Puja) <ArrowRight className="ml-2 h-4 w-4" />
+                पूजा बुक करें (Book Puja) <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>

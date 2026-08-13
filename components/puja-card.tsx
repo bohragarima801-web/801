@@ -117,12 +117,12 @@ export function PujaCard({ puja, idx = 0 }: PujaCardProps) {
             </span>
           </div>
 
-          {/* Solid Vibrant Saffron-Orange Button taking full width */}
+          {/* Solid Vibrant Green Button taking full width */}
           <Link
             href={pujaHref}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#FF6600] via-[#FF7A00] to-[#E65100] hover:from-[#E65100] hover:to-[#FF6600] text-white font-extrabold text-sm shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer active:scale-[0.98]"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold text-sm shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer active:scale-[0.98]"
           >
-            <span>भाग लें (Participate)</span>
+            <span>पूजा बुक करें (Book Now)</span>
             <ArrowRight className="h-4 w-4 stroke-[2.5]" />
           </Link>
         </div>
@@ -130,3 +130,4 @@ export function PujaCard({ puja, idx = 0 }: PujaCardProps) {
     </article>
   )
 }
+
