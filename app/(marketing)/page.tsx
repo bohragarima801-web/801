@@ -16,6 +16,7 @@ import { SacredTrustTestimonials } from '@/components/sacred-trust-testimonials'
 import { SacredFaqAccordion } from '@/components/sacred-faq-accordion'
 import { getDynamicSiteConfig } from '@/lib/settings'
 import { SafeImage } from '@/components/ui/safe-image'
+import { PujaCard } from '@/components/puja-card'
 import {
   getCachedPujas,
   getCachedProducts,
@@ -325,86 +326,9 @@ export default async function HomePage() {
           </div>
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
-          {displayPujas.map((p: any, idx: number) => {
-            const mediaInfo = getMediaDisplaySrc(p.coverImage)
-            const isFallback = p.id.startsWith('fp-')
-            const pujaHref = isFallback ? '/pujas' : `/pujas/${p.slug}`
-            const categoryName = p.category?.name || 'Vedic Puja'
-
-            return (
-              <Link key={p.id} href={pujaHref} className={`group relative bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#7B241C]/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.98] active:brightness-95 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}>
-
-                {/* Responsive Aspect-Ratio Image Frame (Non-cropping) */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FFF8F2] dark:bg-neutral-900/40 rounded-t-2xl flex items-center justify-center shrink-0">
-                  {p.coverImage ? (
-                    mediaInfo.isVideo && !getYouTubeId(p.coverImage) ? (
-                      <video src={p.coverImage} className="h-full w-full object-cover" muted loop autoPlay playsInline />
-                    ) : (
-                      <SafeImage
-                        src={mediaInfo.thumbUrl || p.coverImage}
-                        alt={p.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    )
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-orange-50 text-[#FF7A00]">
-                      <Sparkles className="h-10 w-10 opacity-40" />
-                    </div>
-                  )}
-
-                  {/* Pill Tag Badge */}
-                  {(() => {
-                    const badgeInfo = getPujaBadgeInfo(p)
-                    if (!badgeInfo) return null
-                    return (
-                      <div className="absolute top-3 left-3 z-20 flex gap-1.5 flex-wrap">
-                        <span className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-[#FFD700] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md border border-[#FFD700]/40 flex items-center gap-1">
-                          ✨ {badgeInfo.text}
-                        </span>
-                      </div>
-                    )
-                  })()}
-
-                  {/* Category */}
-                  <div className="absolute bottom-3 left-3 z-20">
-                    <span className="bg-[#111827]/90 backdrop-blur-md text-white text-[10px] font-semibold px-2.5 py-1 rounded-md shadow-sm">{categoryName}</span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
-                  <div className="space-y-2">
-                    <h3 className="font-heading font-bold text-lg text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-snug">
-                      {p.name}
-                    </h3>
-                    {p.location && (
-                      <p className="text-xs text-[#4B5563] flex items-center gap-1.5 font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
-                        {p.location}
-                      </p>
-                    )}
-                    <p className="text-xs text-[#4B5563] line-clamp-2 leading-relaxed font-normal">
-                      {(p.shortDescription || p.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')}
-                    </p>
-                  </div>
-
-                  {/* Price + High-CTR Emerald Green CTA Button */}
-                  <div className="pt-3 border-t border-[#F3E8DE] flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-[#4B5563] font-medium block">Booking Amount</span>
-                      <span className="text-xl font-extrabold text-[#FF7A00]">
-                        ₹{Number(p.price || 1100).toLocaleString('en-IN')}
-                      </span>
-                    </div>
-                    <span className="bg-[#00875A] hover:bg-[#00704A] text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md group-hover:shadow-lg transition-all inline-flex items-center gap-1.5 tracking-wide focus-ring-sacred">
-                      PARTICIPATE <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </div>
-
-              </Link>
-            )
-          })}
+          {displayPujas.map((p: any, idx: number) => (
+            <PujaCard key={p.id} puja={p} idx={idx} />
+          ))}
         </div>
         )}
       </section>

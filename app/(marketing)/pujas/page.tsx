@@ -7,6 +7,8 @@ import { MapPin, Calendar, Sparkles, ArrowRight, ShieldCheck } from 'lucide-reac
 import { getCachedPujas } from '@/lib/cache'
 import { SacredImageFrame } from '@/components/ui/safe-image'
 
+import { PujaCard } from '@/components/puja-card'
+
 export function generateMetadata() {
   return generatePageMeta({
     title: 'Online Puja Booking – Rudrabhishek, Havan & Dosh Nivaran | DivyaYagyam',
@@ -102,84 +104,9 @@ export default async function PujasPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
               {pujas.map((p, idx) => (
-                <article
-                  key={p.id}
-                  className={`puja-card-premium reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
-                >
-                  {/* Image */}
-                  <Link href={`/pujas/${p.slug}`} className="relative block aspect-[4/3] overflow-hidden">
-                    <SacredImageFrame
-                      src={p.coverImage}
-                      alt={p.name}
-                      aspectRatio="4/3"
-                      seoCategory="puja"
-                    />
-                    {/* Dark gradient over image */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,4,2,0.65)] via-[rgba(12,4,2,0.10)] to-transparent pointer-events-none" />
-
-                    {/* Admin Configured Card Badge */}
-                    {(p.isVip || p.isSpecial || p.badge) && (
-                      <div className="absolute top-3 left-3 z-10 flex gap-1.5 flex-wrap">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase backdrop-blur-md ${
-                          p.isVip
-                            ? 'bg-[#D49B00] text-[#2A1508] border border-[#F2C94C]'
-                            : 'bg-[#8B1A21] text-white border border-[#D49B00]'
-                        }`}>
-                          {p.isVip ? 'VIP ANUSHTHAN' : p.badge || 'FEATURED SEVA'}
-                        </span>
-                      </div>
-                    )}
-
-
-
-                    {/* Category on image bottom */}
-                    {p.category?.name && (
-                      <div className="absolute bottom-3 left-3">
-                        <span className="px-2.5 py-1 rounded-md bg-[rgba(12,4,2,0.65)] backdrop-blur-sm text-[rgba(245,235,220,0.85)] text-[10px] font-semibold border border-[rgba(245,235,220,0.12)]">
-                          {p.category.name}
-                        </span>
-                      </div>
-                    )}
-                  </Link>
-
-                  {/* Card Content */}
-                  <div className="p-5 flex-1 flex flex-col justify-between gap-4">
-                    <div className="space-y-2">
-                      <h3 className="font-heading font-bold text-lg text-[#1E120A] dark:text-[#F5EBDC] line-clamp-2 leading-snug group-hover:text-[#8B1A21] transition-colors">
-                        <Link href={`/pujas/${p.slug}`}>{p.name}</Link>
-                      </h3>
-
-                      {p.location && (
-                        <p className="text-xs text-[#8B7355] dark:text-[rgba(245,235,220,0.50)] flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5 text-[#A87C28] shrink-0" />
-                          {p.location}
-                        </p>
-                      )}
-
-                      <p className="text-xs text-[#5A4030] dark:text-[rgba(245,235,220,0.55)] line-clamp-2 leading-relaxed">
-                        {(p.shortDescription || 'Participate in this sacred puja for peace, health, and prosperity.').replace(/<[^>]*>?/gm, '')}
-                      </p>
-                    </div>
-
-                    {/* Price + CTA */}
-                    <div className="pt-3 border-t border-[rgba(168,124,40,0.12)] flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] text-[#8B7355] dark:text-[rgba(245,235,220,0.40)] font-medium">Starting from</p>
-                        <p className="text-xl font-black text-[#8B1A21] dark:text-[#E06070]">
-                          ₹{(p.price || 0).toLocaleString('en-IN')}
-                        </p>
-                      </div>
-                      <Link
-                        href={`/pujas/${p.slug}`}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-[1.03] active:scale-95 transition-all duration-200"
-                      >
-                        Book Now <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </article>
+                <PujaCard key={p.id} puja={p} idx={idx} />
               ))}
             </div>
           )}
