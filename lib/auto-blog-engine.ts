@@ -123,7 +123,7 @@ MUST RETURN VALID JSON ONLY with this structure:
   "h1": "Main Engaging H1 Title",
   "excerpt": "Short 2-3 line captivating summary for blog cards",
   "contentMarkdown": "Full 1500+ word detailed Markdown text with H2, H3 headings, bullet points, mantras, ritual steps, and internal Puja booking links",
-  "imagePrompt": "Detailed Gemini image prompt for 4K sacred visual",
+  "imagePrompt": "Detailed prompt for 4K sacred temple visual, focusing on modest traditional Indian silk clothing, brass diya lamps, hawan kund, lotus flowers, divine ancient temple architecture, strictly zero nudity and fully clothed reverent atmosphere",
   "coverImageAlt": "SEO Alt text for cover image",
   "categoryName": "Vedic Pujas & Anushthan",
   "tags": ["व्रत कथा", "वैदिक पूजा", "ज्योतिष उपाय"],
@@ -217,10 +217,14 @@ MUST RETURN VALID JSON ONLY with this structure:
       })
     }
 
-    // 6. Generate a BRAND NEW Unique Sacred AI Image for this specific Blog Topic
+    // 6. Generate a BRAND NEW Unique Sacred AI Image for this specific Blog Topic with Strict Modesty & Zero Nudity Rules
     const seed = Math.floor(Math.random() * 1000000)
-    const rawImagePrompt = blogData.imagePrompt || `Ultra realistic 8k resolution divine sacred Sanatan temple ritual for ${title}, warm golden lighting, authentic Vedic hawan and flowers`
-    const cleanPrompt = encodeURIComponent(`Divine Sanatan Vedic Sacred Temple Ritual: ${rawImagePrompt}, 8k resolution, photorealistic, warm golden divine aura, 16:9 aspect ratio, high quality`)
+    const rawImagePrompt = blogData.imagePrompt || `Sacred Sanatan temple ritual for ${title}, warm golden lighting, authentic brass diya lamps, fresh lotus flowers and Vedic hawan kund`
+
+    // Strictly enforce modest attire, fully clothed Vedic priests in traditional silk dhotis, divine architecture, no inappropriate imagery
+    const sacredSafetyFilter = "modest traditional Indian silk clothing, fully clothed reverent devotees, sacred brass diya lamps, hawan fire, fresh lotus flowers, ancient temple architecture, warm golden divine aura, 8k resolution photorealistic 16:9 aspect ratio, zero nudity, zero inappropriate content, highly respectful Sanatan aesthetic"
+
+    const cleanPrompt = encodeURIComponent(`Divine Sacred Temple Ritual: ${rawImagePrompt}, ${sacredSafetyFilter}`)
     const coverImage = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1200&height=675&seed=${seed}&nologo=true&enhance=true`
 
     // Append FAQs to content Markdown if present
