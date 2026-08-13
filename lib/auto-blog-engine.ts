@@ -114,12 +114,17 @@ MUST RETURN VALID JSON ONLY with this structure:
     }
 
     const rawResponse = completion.choices[0]?.message?.content || '{}'
-    const cleanedJson = rawResponse.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim()
+    const firstBrace = rawResponse.indexOf('{')
+    const lastBrace = rawResponse.lastIndexOf('}')
+    const jsonCandidate = (firstBrace !== -1 && lastBrace > firstBrace)
+      ? rawResponse.substring(firstBrace, lastBrace + 1)
+      : rawResponse.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim()
 
     let blogData: any
     try {
-      blogData = JSON.parse(cleanedJson)
-    } catch {
+      blogData = JSON.parse(jsonCandidate)
+    } catch (parseErr) {
+      console.error('Raw LLM Response parsing error:', rawResponse.slice(0, 300))
       throw new Error('Failed to parse AI blog JSON output')
     }
 
