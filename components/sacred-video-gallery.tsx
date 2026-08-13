@@ -186,20 +186,25 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                 )}
 
                 {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
 
-                {/* Icon Overlay (Play for Video, Eye/Zoom for Photo) */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {isVid ? (
-                    <div className="h-14 w-14 rounded-full bg-[#FF7A00] text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-[#FF6B00] transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
+                {/* Play Button Overlay (ONLY for Videos) */}
+                {isVid && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-13 w-13 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
                       <Play className="h-6 w-6 fill-white ml-1" />
                     </div>
-                  ) : (
-                    <div className="h-12 w-12 rounded-full bg-emerald-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-emerald-600 transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
-                      <Eye className="h-5 w-5 stroke-[2.5]" />
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
+
+                {/* Photo Badge (Elegant subtle badge on hover for Photos) */}
+                {!isVid && (
+                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    <span className="bg-black/80 backdrop-blur-md text-[#FFF3D6] font-bold px-2.5 py-1 rounded-lg border border-[#F5E2B8]/30 text-[10px] flex items-center gap-1 shadow-md">
+                      <Camera className="w-3 h-3 text-amber-400" /> HD फ़ोटो दर्शन
+                    </span>
+                  </div>
+                )}
 
                 {/* Category Badge */}
                 <Badge className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white font-bold border border-white/20 rounded-md px-2.5 py-1 text-[10px] tracking-wide">
