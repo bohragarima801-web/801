@@ -217,15 +217,20 @@ MUST RETURN VALID JSON ONLY with this structure:
       })
     }
 
-    // 6. Generate a BRAND NEW Unique Sacred AI Image for this specific Blog Topic with Strict Modesty & Zero Nudity Rules
+    // 6. Generate a BRAND NEW Unique Sacred AI Image with fallback to Clean Saffron/Maroon Logo & Title Banner
     const seed = Math.floor(Math.random() * 1000000)
-    const rawImagePrompt = blogData.imagePrompt || `Sacred Sanatan temple ritual for ${title}, warm golden lighting, authentic brass diya lamps, fresh lotus flowers and Vedic hawan kund`
+    let coverImage = ''
 
-    // Strictly enforce modest attire, fully clothed Vedic priests in traditional silk dhotis, divine architecture, no inappropriate imagery
-    const sacredSafetyFilter = "modest traditional Indian silk clothing, fully clothed reverent devotees, sacred brass diya lamps, hawan fire, fresh lotus flowers, ancient temple architecture, warm golden divine aura, 8k resolution photorealistic 16:9 aspect ratio, zero nudity, zero inappropriate content, highly respectful Sanatan aesthetic"
-
-    const cleanPrompt = encodeURIComponent(`Divine Sacred Temple Ritual: ${rawImagePrompt}, ${sacredSafetyFilter}`)
-    const coverImage = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1200&height=675&seed=${seed}&nologo=true&enhance=true`
+    try {
+      const rawImagePrompt = blogData.imagePrompt || `Sacred Sanatan temple ritual for ${title}, warm golden lighting, authentic brass diya lamps, fresh lotus flowers and Vedic hawan kund`
+      const sacredSafetyFilter = "modest traditional Indian silk clothing, fully clothed reverent devotees, sacred brass diya lamps, hawan fire, fresh lotus flowers, ancient temple architecture, warm golden divine aura, 8k resolution photorealistic 16:9 aspect ratio, zero nudity, zero inappropriate content, highly respectful Sanatan aesthetic"
+      const cleanPrompt = encodeURIComponent(`Divine Sacred Temple Ritual: ${rawImagePrompt}, ${sacredSafetyFilter}`)
+      coverImage = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1200&height=675&seed=${seed}&nologo=true&enhance=true`
+    } catch {
+      // Elegant Fallback: Clean Royal Saffron/Maroon background with DivyaYagyam Golden Lotus Emblem & Title Heading
+      const bannerTitlePrompt = encodeURIComponent(`Simple elegant royal saffron and maroon background with golden DivyaYagyam lotus emblem logo and title header for ${title}, clean sacred banner, 16:9, no humans, zero nudity, ultra high quality`)
+      coverImage = `https://image.pollinations.ai/prompt/${bannerTitlePrompt}?width=1200&height=675&seed=${seed}&nologo=true`
+    }
 
     // Append FAQs to content Markdown if present
     let fullMarkdown = blogData.contentMarkdown || ''
