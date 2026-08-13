@@ -142,6 +142,38 @@ export default function GalleryPage() {
     }
   }
 
+  async function handleToggleActive(id: string, currentActive: boolean) {
+    const newActive = !currentActive
+    try {
+      setItems((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, isActive: newActive } : item))
+      )
+      const res = await fetch(`/api/admin/gallery?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: newActive }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        if (newActive) {
+          toast.success('Gallery asset ACTIVE ho gaya hai! Ab website pe dikhega.')
+        } else {
+          toast.info('Gallery asset INACTIVE ho gaya hai! Website se hat gaya hai.')
+        }
+      } else {
+        setItems((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, isActive: currentActive } : item))
+        )
+        toast.error(data.error || 'Failed to toggle status')
+      }
+    } catch {
+      setItems((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, isActive: currentActive } : item))
+      )
+      toast.error('Network error toggling status')
+    }
+  }
+
   async function handleSavetitle(id: string) {
     try {
       const res = await fetch(`/api/admin/gallery?id=${id}`, {
@@ -151,7 +183,7 @@ export default function GalleryPage() {
       })
       const data = await res.json()
       if (data.ok) {
-        toast.success('title updated successfully!')
+        toast.success('Title updated successfully!')
         setEditingId(null)
         loadItems()
       } else {
@@ -190,7 +222,7 @@ export default function GalleryPage() {
     <div className="space-y-6">
       <PageHeader
         title="Sacred Gallery & Media Library"
-        description="Upload photos, videos and manage your platform's assets. Copy links to paste them anywhere on the website."
+        description="Upload photos, videos and manage your platform's assets. Toggle visibility to show or hide items on the website."
         breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Gallery' }]}
       />
 
@@ -264,84 +296,102 @@ export default function GalleryPage() {
         </Card>
       ) : (
         <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {items.map((item) => (
-            <Card key={item.id} className="overflow-hidden group relative border shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-              <div className="aspect-video relative bg-slate-100 flex items-center justify-center overflow-hidden">
-                {item.type === 'VIDEO' ? (
-                  <video
-                    src={item.coverImage}
-                    className="w-full h-full object-contain bg-black"
-                    controls
-                    preload="metadata"
-                  />
-                ) : (
-                  <img
-                    src={item.coverImage}
-                    alt={item.title}
-                    className="w-full h-full object-contain bg-slate-900 transition-transform duration-300 group-hover:scale-105"
-                  />
-                )}
-              </div>
-              <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
-                <div>
-                  {editingId === item.id ? (
-                    <div className="flex items-center gap-1">
-                      <Input
-                        value={editingtitle}
-                        onChange={(e) => setEditingtitle(e.target.value)}
-                        className="h-7 text-xs"
-                        autoFocus
-                      />
-                      <Button size="icon" variant="ghost" className="h-7 w-7 text-green-600 shrink-0" onClick={() => handleSavetitle(item.id)}>
-                        <Check className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 shrink-0" onClick={() => setEditingId(null)}>
-                        <X className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
+          {items.map((item) => {
+            const isActive = item.isActive !== false
+            return (
+              <Card key={item.id} className="overflow-hidden group relative border shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                {/* Active / Inactive Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleActive(item.id, isActive)}
+                  className={`absolute top-2 left-2 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black border shadow-md transition-all ${
+                    isActive
+                      ? 'bg-emerald-600 text-white border-emerald-400 hover:bg-emerald-700'
+                      : 'bg-slate-800 text-slate-200 border-slate-600 hover:bg-slate-900'
+                  }`}
+                  title={isActive ? 'Click to deactivate (Hide from website)' : 'Click to activate (Show on website)'}
+                >
+                  <span className={`h-2 w-2 rounded-full ${isActive ? 'bg-white animate-pulse' : 'bg-slate-400'}`} />
+                  {isActive ? 'Active (Live)' : 'Inactive (Hidden)'}
+                </button>
+
+                <div className="aspect-video relative bg-slate-100 flex items-center justify-center overflow-hidden">
+                  {item.type === 'VIDEO' ? (
+                    <video
+                      src={item.coverImage}
+                      className="w-full h-full object-contain bg-black"
+                      controls
+                      preload="metadata"
+                    />
                   ) : (
-                    <p className="text-xs font-semibold truncate" title={item.title}>
-                      {item.title || 'Unnamed Asset'}
-                    </p>
+                    <img
+                      src={item.coverImage}
+                      alt={item.title}
+                      className="w-full h-full object-contain bg-slate-900 transition-transform duration-300 group-hover:scale-105"
+                    />
                   )}
                 </div>
-                <div className="flex items-center gap-1.5 justify-between pt-1 border-t mt-2">
-                  <div className="flex gap-1.5">
+                <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                  <div>
+                    {editingId === item.id ? (
+                      <div className="flex items-center gap-1">
+                        <Input
+                          value={editingtitle}
+                          onChange={(e) => setEditingtitle(e.target.value)}
+                          className="h-7 text-xs"
+                          autoFocus
+                        />
+                        <Button size="icon" variant="ghost" className="h-7 w-7 text-green-600 shrink-0" onClick={() => handleSavetitle(item.id)}>
+                          <Check className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 shrink-0" onClick={() => setEditingId(null)}>
+                          <X className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <p className="text-xs font-semibold truncate" title={item.title}>
+                        {item.title || 'Unnamed Asset'}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1.5 justify-between pt-1 border-t mt-2">
+                    <div className="flex gap-1.5">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 text-primary"
+                        onClick={() => copyToClipboard(item.coverImage)}
+                        title="Copy URL for site use"
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 text-blue-600"
+                        onClick={() => {
+                          setEditingId(item.id)
+                          setEditingtitle(item.title || '')
+                        }}
+                        title="Edit title"
+                      >
+                        <Edit2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                     <Button
                       size="icon"
-                      variant="outline"
-                      className="h-8 w-8 text-primary"
-                      onClick={() => copyToClipboard(item.coverImage)}
-                      title="Copy URL for site use"
+                      variant="destructive"
+                      className="h-8 w-8"
+                      onClick={() => handleDelete(item.id)}
+                      title="Delete Asset"
                     >
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-8 w-8 text-blue-600"
-                      onClick={() => {
-                        setEditingId(item.id)
-                        setEditingtitle(item.title || '')
-                      }}
-                      title="Edit title"
-                    >
-                      <Edit2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </div>
-                  <Button
-                    size="icon"
-                    variant="destructive"
-                    className="h-8 w-8"
-                    onClick={() => handleDelete(item.id)}
-                    title="Delete Asset"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            )
+          })}
         </div>
       )}
     </div>

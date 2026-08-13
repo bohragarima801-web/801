@@ -64,12 +64,19 @@ export async function PUT(req: NextRequest) {
 
     const data = await req.json()
     
+    const updateData: any = {}
+    if (data.title !== undefined) updateData.title = data.title
+    if (data.isActive !== undefined) updateData.isActive = !!data.isActive
+
     const item = await prisma.gallery.update({
       where: { id },
-      data: {
-        title: data.title
-      }
+      data: updateData
     })
+
+    const { revalidateTag, revalidatePath } = await import('next/cache')
+    revalidateTag('media')
+    revalidateTag('gallery')
+    revalidatePath('/')
 
     return NextResponse.json({ ok: true, data: item });
   } catch (err: any) {

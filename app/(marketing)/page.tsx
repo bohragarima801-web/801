@@ -147,18 +147,15 @@ export default async function HomePage() {
       ['Home Video', 'Live Darshan', 'Past Puja', 'Aarti & Bhajan', 'Customer Review', 'Video Gallery'].includes(m.folder || '')
   })
 
-  const galleryVideos = dbGalleries.filter((g: any) => {
-    if (!g.coverImage) return false
-    const url = g.coverImage.toLowerCase()
-    return g.type === 'VIDEO' || url.includes('youtube.com') || url.includes('youtu.be') || url.endsWith('.mp4')
-  }).map((g: any) => ({
+  const galleryMediaItems = dbGalleries.filter((g: any) => !!g.coverImage).map((g: any) => ({
     id: g.id,
-    title: g.title,
+    filename: g.title || 'पावन पूजा दर्शन',
     url: g.coverImage,
-    folder: 'Gallery Video'
+    folder: g.type === 'PHOTO' ? 'Past Puja' : 'Live Darshan',
+    type: g.type === 'VIDEO' ? 'VIDEO' : 'IMAGE'
   }))
 
-  const dbVideos = [...allMediaVideos, ...galleryVideos]
+  const dbVideos = [...allMediaVideos, ...galleryMediaItems]
 
   // Exclude VIP pujas from homepage (they belong exclusively in VIP Section)
   const nonVipDbPujas = dbPujas.filter((p: any) => !p.isVip)

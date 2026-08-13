@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Play, Sparkles, Video, Flame, Calendar, ArrowRight, ShieldCheck, Star } from 'lucide-react'
+import { Play, Sparkles, Video, Flame, Calendar, ArrowRight, ShieldCheck, Star, Camera, Eye } from 'lucide-react'
 
 export interface VideoItem {
   id: string
@@ -22,6 +22,21 @@ interface SacredVideoGalleryProps {
   videos?: VideoItem[]
 }
 
+function checkIsVideo(url?: string, type?: string) {
+  if (type === 'VIDEO') return true
+  if (type === 'IMAGE' || type === 'PHOTO') return false
+  if (!url) return false
+  const lower = url.toLowerCase()
+  return (
+    lower.endsWith('.mp4') ||
+    lower.endsWith('.webm') ||
+    lower.endsWith('.mov') ||
+    lower.includes('youtube.com') ||
+    lower.includes('youtu.be') ||
+    lower.includes('vimeo.com')
+  )
+}
+
 export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   const displayVideos = videos || []
 
@@ -29,9 +44,9 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
 
   const categories = [
-    { id: 'ALL', label: 'सभी वीडियो (All)' },
+    { id: 'ALL', label: 'सभी मीडिया (All)' },
     { id: 'Live Darshan', label: '🎥 लाइव दर्शन' },
-    { id: 'Past Puja', label: '🕉️ बीती हुई पूजा' },
+    { id: 'Past Puja', label: '🕉️ बीती हुई पूजा (फ़ोटो व वीडियो)' },
     { id: 'Aarti & Bhajan', label: '🎵 आरती व भजन' },
     { id: 'Customer Review', label: '⭐ भक्तों का अनुभव' },
   ]
@@ -42,11 +57,11 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
     'Aarti & Bhajan': '🎵 आरती व भजन',
     'Customer Review': '⭐ भक्तों का अनुभव',
     'Home Video': '🎥 दिव्य दर्शन',
-    'General': '🎥 वीडियो',
+    'General': '📷 दर्शन एवं फ़ोटो',
   }
 
-  const getCategoryDisplayLabel = (folder?: string | null) => {
-    if (!folder) return '🎥 लाइव दर्शन'
+  const getCategoryDisplayLabel = (folder?: string | null, isVid?: boolean) => {
+    if (!folder) return isVid ? '🎥 लाइव दर्शन' : '🕉️ बीती हुई पूजा'
     return categoryLabelMap[folder] || folder
   }
 
@@ -55,7 +70,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
     : displayVideos.filter(v => {
         const folder = (v.folder || '').toLowerCase().trim()
         const targetCat = selectedCategory.toLowerCase().trim()
-        if (!folder) return selectedCategory === 'Live Darshan' || selectedCategory === 'ALL'
+        if (!folder) return selectedCategory === 'Live Darshan' || selectedCategory === 'Past Puja' || selectedCategory === 'ALL'
         return folder === targetCat || folder.includes(targetCat) || targetCat.includes(folder)
       })
 
@@ -72,11 +87,15 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   }
 
   function getThumbnail(video: VideoItem) {
-    const ytId = getYouTubeId(video.url)
-    if (ytId) {
-      return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+    const isVid = checkIsVideo(video.url, video.type)
+    if (isVid) {
+      const ytId = getYouTubeId(video.url)
+      if (ytId) {
+        return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+      }
+      return null
     }
-    return null
+    return video.url
   }
 
   return (
@@ -85,13 +104,13 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div className="space-y-3">
           <span className="kundli-badge-orange inline-flex items-center gap-1.5 font-bold">
-            <Sparkles className="h-4 w-4 text-[#FF7A00]" /> Divine Visuals & Reels
+            <Sparkles className="h-4 w-4 text-[#FF7A00]" /> Divine Visuals, Real Photos & Videos
           </span>
           <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight">
-            🎥 दिव्य दर्शन <span className="text-[#FF7A00] font-bold">एवं पूजा वीडियो</span>
+            🎥 दिव्य दर्शन <span className="text-[#FF7A00] font-bold">एवं पूजा मीडिया gallery</span>
           </h2>
           <p className="text-sm md:text-base text-[#4B5563] max-w-2xl font-medium">
-            प्रसिद्ध मंदिरों के लाइव दर्शन, संपन्न हुई महापूजाओं की झलकियां, आरती एवं भक्तों के अनुभव देखें।
+            प्रसिद्ध मंदिरों के लाइव दर्शन, संपन्न हुई महापूजाओं की असली झलकियां (फ़ोटो एवं वीडियो), आरती एवं भक्तों के अनुभव देखें।
           </p>
         </div>
 
@@ -113,25 +132,25 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
         </div>
       </div>
 
-      {/* Video Grid */}
+      {/* Media Grid */}
       {filteredVideos.length === 0 ? (
         <div className="text-center py-12 px-6 bg-white rounded-3xl border border-[#F3E8DE] space-y-4 max-w-2xl mx-auto shadow-sm">
-          <div className="h-14 w-14 mx-auto rounded-full bg-orange-50 text-[#FF7A00] flex items-center justify-center text-2xl">🎥</div>
-          <h3 className="text-xl md:text-2xl font-heading font-bold text-[#111827]">शीघ्र आ रहे हैं नए पावन दर्शन वीडियो</h3>
-          <p className="text-xs md:text-sm text-[#4B5563]">संस्थान के यूट्यूब एवं दिव्य दर्शन वीडियो शीघ्र यहाँ लाइव उपलब्ध कराए जाएंगे।</p>
+          <div className="h-14 w-14 mx-auto rounded-full bg-orange-50 text-[#FF7A00] flex items-center justify-center text-2xl">📸</div>
+          <h3 className="text-xl md:text-2xl font-heading font-bold text-[#111827]">शीघ्र आ रहे हैं नए पावन दर्शन व फ़ोटो</h3>
+          <p className="text-xs md:text-sm text-[#4B5563]">संस्थान के यूट्यूब एवं असली पूजा फ़ोटो शीघ्र यहाँ लाइव उपलब्ध कराए जाएंगे।</p>
           <a
-            href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20get%20live%20video%20updates"
+            href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20get%20live%20video%20and%20photo%20updates"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white text-xs font-bold py-2.5 px-5 rounded-full shadow-md"
           >
-            💬 WhatsApp पर वीडियो अपडेट पाएं →
+            💬 WhatsApp पर अपडेट पाएं →
           </a>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredVideos.map((video) => {
-          const ytId = getYouTubeId(video.url)
+          const isVid = checkIsVideo(video.url, video.type)
           const thumb = getThumbnail(video)
 
           return (
@@ -142,15 +161,15 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
             >
               {/* Media Aspect Ratio Container */}
               <div className="relative aspect-video w-full bg-slate-900 overflow-hidden">
-                {/* Thumbnail Image */}
+                {/* Thumbnail Image / Video Preview */}
                 {thumb ? (
                   <img
                     src={thumb}
-                    alt={video.filename || 'Sacred Video'}
+                    alt={video.filename || 'Sacred Media'}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                     loading="lazy"
                   />
-                ) : (
+                ) : isVid ? (
                   <video
                     src={video.url.includes('#') ? video.url : `${video.url}#t=0.5`}
                     className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
@@ -158,28 +177,40 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                     playsInline
                     preload="metadata"
                   />
+                ) : (
+                  <img
+                    src={video.url}
+                    alt={video.filename || 'Sacred Media'}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
                 )}
 
                 {/* Dark Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-                {/* Play Button Overlay */}
+                {/* Icon Overlay (Play for Video, Eye/Zoom for Photo) */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-14 w-14 rounded-full bg-[#FF7A00] text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-[#FF6B00] transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
-                    <Play className="h-6 w-6 fill-white ml-1" />
-                  </div>
+                  {isVid ? (
+                    <div className="h-14 w-14 rounded-full bg-[#FF7A00] text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-[#FF6B00] transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
+                      <Play className="h-6 w-6 fill-white ml-1" />
+                    </div>
+                  ) : (
+                    <div className="h-12 w-12 rounded-full bg-emerald-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-emerald-600 transition-all duration-300 ring-4 ring-white/30 backdrop-blur-sm">
+                      <Eye className="h-5 w-5 stroke-[2.5]" />
+                    </div>
+                  )}
                 </div>
 
                 {/* Category Badge */}
                 <Badge className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white font-bold border border-white/20 rounded-md px-2.5 py-1 text-[10px] tracking-wide">
-                  {getCategoryDisplayLabel(video.folder)}
+                  {getCategoryDisplayLabel(video.folder, isVid)}
                 </Badge>
               </div>
 
               {/* Card Footer Info */}
               <CardContent className="p-4 space-y-2">
                 <h3 className="font-heading font-bold text-base text-[#111827] group-hover:text-[#FF7A00] transition-colors line-clamp-2 leading-tight">
-                  {video.filename || 'पावन पूजा एवं लाइव दर्शन'}
+                  {video.filename || (isVid ? 'पावन पूजा एवं लाइव दर्शन' : 'असली पूजा दर्शन फ़ोटो')}
                 </h3>
                 <p className="text-xs text-[#4B5563] flex items-center gap-1 font-medium">
                   <Flame className="h-3.5 w-3.5 text-[#FF7A00] shrink-0" />
@@ -192,29 +223,37 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
       </div>
       )}
 
-      {/* Video Modal Player */}
+      {/* Media Modal Player / Lightbox */}
       <Dialog open={!!activeVideo} onOpenChange={(open) => !open && setActiveVideo(null)}>
         <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-950 border-orange-500/30 text-white rounded-2xl">
           <DialogHeader className="p-4 bg-slate-900 border-b border-slate-800 flex flex-row items-center justify-between">
             <DialogTitle className="text-base md:text-lg font-bold text-[#FF7A00] line-clamp-1 pr-6">
-              {activeVideo?.filename || 'पावन दर्शन वीडियो'}
+              {activeVideo?.filename || (checkIsVideo(activeVideo?.url, activeVideo?.type) ? 'पावन दर्शन वीडियो' : 'पावन पूजा असली फ़ोटो')}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="relative aspect-video w-full bg-black">
-            {activeVideo && getYouTubeEmbedUrl(activeVideo.url) ? (
-              <iframe
-                src={getYouTubeEmbedUrl(activeVideo.url)!}
-                className="w-full h-full border-none"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          <div className="relative aspect-video w-full bg-black flex items-center justify-center">
+            {activeVideo && checkIsVideo(activeVideo.url, activeVideo.type) ? (
+              getYouTubeEmbedUrl(activeVideo.url) ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(activeVideo.url)!}
+                  className="w-full h-full border-none"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={activeVideo.url}
+                  className="w-full h-full"
+                  controls
+                  autoPlay
+                />
+              )
             ) : activeVideo ? (
-              <video
+              <img
                 src={activeVideo.url}
-                className="w-full h-full"
-                controls
-                autoPlay
+                alt={activeVideo.filename || 'Sacred Photo'}
+                className="max-h-full max-w-full object-contain"
               />
             ) : null}
           </div>
