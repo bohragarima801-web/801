@@ -7,6 +7,8 @@ import { ScrollReveal } from '@/components/scroll-reveal'
 import prisma from '@/lib/prisma'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 
+export const revalidate = 3600 // ISR: Cache marketing shell at Edge CDN
+
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const siteData = await getDynamicSiteConfig()
   const mapSetting = await prisma.websiteSetting.findFirst({

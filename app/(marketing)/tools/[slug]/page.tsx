@@ -9,8 +9,7 @@ import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
 import { Metadata } from 'next'
 import { BASE_URL, generatePageMeta } from '@/lib/seo'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 3600 // ISR: Instant CDN responses for SEO crawlers
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

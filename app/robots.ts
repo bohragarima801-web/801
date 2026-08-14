@@ -15,7 +15,9 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       },
       {
         userAgent: [
-          'Googlebot', 'Bingbot', 'GPTBot', 'ChatGPT-User', 'OAI-SearchBot',
+          'Googlebot', 'Bingbot', 'AhrefsBot', 'SemrushBot', 'DotBot', 'MJ12bot',
+          'Screaming Frog SEO Spider', 'SiteAuditBot', 'rogerbot', 'DuckDuckBot',
+          'YandexBot', 'Baiduspider', 'GPTBot', 'ChatGPT-User', 'OAI-SearchBot',
           'ClaudeBot', 'Claude-User', 'Claude-SearchBot',
           'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Bytespider',
           'Applebot', 'Applebot-Extended', 'Meta-ExternalAgent'
