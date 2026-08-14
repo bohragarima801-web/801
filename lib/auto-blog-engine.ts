@@ -179,8 +179,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       ? `कृपया इस विशिष्ट विषय पर एक संपूर्ण 1500+ शब्दों का ब्लॉग तैयार करें: "${smartForceTopic}"`
       : `आज की तिथि (${todayIsoStr}) के ठीक आगे आने वाले निकटतम पौराणिक पर्व/त्यौहार (जैसे हरियाली तीज, नाग पंचमी, रक्षाबंधन) अथवा गूगल पर अत्यधिक सर्च किए जा रहे प्रामाणिक सनातन ज्योतिषीय/शास्त्रोक्त उपाय (जैसे कर्ज मुक्ति कनकधारा स्तोत्र, शनि ढैय्या शांति, कालसर्प दोष निवारण, महामृत्युंजय जाप लाभ) पर ट्रेंडिंग लॉन्ग-टेल एवं मेन कीवर्ड्स के साथ एक 100% प्रामाणिक, भव्य एवं 1500+ शब्दों का SEO-फ्रेंडली ब्लॉग लिखें। स्थान के लिए केवल 'दिव्य प्राचीन स्थानों पर' शब्द का ही प्रयोग करें।`
 
-    // Helper function with multi-model fallback and backoff for rate-limits
-    const candidateModels = [aiModel, 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-flash-latest']
+    // Helper function with multi-model fallback and backoff for rate-limits (Lite model first for fast 7s response on serverless)
+    const candidateModels = ['gemini-3.5-flash-lite', 'gemini-3.5-flash', aiModel, 'gemini-3.7-flash', 'gemini-flash-latest']
     // Remove duplicates while preserving order
     const uniqueModels = Array.from(new Set(candidateModels.filter(Boolean)))
 
