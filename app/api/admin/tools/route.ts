@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { revalidatePath } from 'next/cache'
 
 export async function GET(req: NextRequest) {
   try {
@@ -32,10 +33,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { name, slug, description, isFree, price, trialDays, thumbnail, htmlCode, cssCode, jsCode, isActive } = body
 
-    let finalSlug = slug;
-    const existing = await prisma.spiritualTool.findUnique({ where: { slug } })
+    const cleanSlug = (slug || name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    let finalSlug = cleanSlug;
+    const existing = await prisma.spiritualTool.findUnique({ where: { slug: cleanSlug } })
     if (existing) {
-      finalSlug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+      finalSlug = `${cleanSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
     const tool = await prisma.spiritualTool.create({
@@ -43,9 +45,9 @@ export async function POST(req: NextRequest) {
         name,
         slug: finalSlug,
         description,
-        isFree,
-        price,
-        trialDays: trialDays || 0,
+        isFree: isFree !== undefined ? !!isFree : true,
+        price: parseFloat(price) || 0,
+        trialDays: parseInt(trialDays) || 0,
         thumbnail,
         htmlCode,
         cssCode,
@@ -53,6 +55,13 @@ export async function POST(req: NextRequest) {
         isActive: isActive !== undefined ? !!isActive : true
       }
     })
+
+    try {
+      revalidatePath('/tools')
+      revalidatePath(`/tools/${tool.slug}`)
+      revalidatePath('/')
+      revalidatePath('/sitemap.xml')
+    } catch {}
 
     return NextResponse.json({ ok: true, data: tool })
   } catch (error: any) {
@@ -71,21 +80,36 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json()
     
-    let finalSlug = body.slug;
-    if (finalSlug) {
+    if (body.slug) {
+      const cleanSlug = body.slug.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
       const existing = await prisma.spiritualTool.findFirst({
-        where: { slug: finalSlug, NOT: { id } }
+        where: { slug: cleanSlug, NOT: { id } }
       })
       if (existing) {
-        finalSlug = `${finalSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
-        body.slug = finalSlug;
+        body.slug = `${cleanSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
+      } else {
+        body.slug = cleanSlug;
       }
+    }
+
+    if (body.price !== undefined) {
+      body.price = parseFloat(body.price) || 0
+    }
+    if (body.trialDays !== undefined) {
+      body.trialDays = parseInt(body.trialDays) || 0
     }
 
     const tool = await prisma.spiritualTool.update({
       where: { id },
       data: body
     })
+
+    try {
+      revalidatePath('/tools')
+      revalidatePath(`/tools/${tool.slug}`)
+      revalidatePath('/')
+      revalidatePath('/sitemap.xml')
+    } catch {}
 
     return NextResponse.json({ ok: true, data: tool })
   } catch (error: any) {
@@ -102,7 +126,15 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get('id')
     if (!id) return NextResponse.json({ ok: false, error: 'Missing ID' }, { status: 400 })
 
-    await prisma.spiritualTool.delete({ where: { id } })
+    const deleted = await prisma.spiritualTool.delete({ where: { id } })
+
+    try {
+      revalidatePath('/tools')
+      revalidatePath(`/tools/${deleted.slug}`)
+      revalidatePath('/')
+      revalidatePath('/sitemap.xml')
+    } catch {}
+
     return NextResponse.json({ ok: true })
   } catch (error: any) {
     console.error('Tools DELETE error:', error)

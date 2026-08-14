@@ -196,7 +196,7 @@ export default function ToolsPage() {
 
             {/* Real Active Database Tools */}
             {tools
-              .filter((t) => t.isActive)
+              .filter((t) => t.isActive && t.slug !== 'panchang' && t.slug !== 'festivals' && t.slug !== 'ask-a-pandit')
               .map((t) => {
                 const trialActive = trialStatuses[t.slug]
                 const premiumActive = activatedStatuses[t.slug]

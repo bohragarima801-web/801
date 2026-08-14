@@ -7,11 +7,11 @@ import remarkGfm from 'remark-gfm'
 import { generatePageMeta, generateBreadcrumbSchema, generateFaqSchema, BASE_URL } from '@/lib/seo'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
-export const revalidate = 3600 // ISR: Revalidate every 3600s
+export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'अक्सर पूछे जाने वाले प्रश्न (FAQ) — Online Puja & Help Desk',
+    title: 'अक्सर पूछे जाने वाले प्रश्न (FAQ) — Online Puja & Help Desk | DivyaYagyam',
     description: 'ऑनलाइन पूजा कैसे काम करती है? प्रसाद होम डिलीवरी, लाइव पूजा वीडियो प्रूफ, नाम-गोत्र संकल्प और रिफंड से जुड़े सभी प्रश्नों के उत्तर।',
     path: '/faq',
   })
@@ -27,7 +27,7 @@ export default async function FaqPage() {
     {
       id: 'faq-1',
       question: 'ऑनलाइन पूजा (Online Puja) कैसे संपन्न होती है?',
-      answer: 'DivyaYagyam पर ऑनलाइन पूजा बुक करने पर हमारे विद्वान आचार्य आपके द्वारा दिए गए नाम, गोत्र और विशिष्ट मनोकामना का स्पष्ट संकल्प (Sankalp) लेते हैं। पूजा का पूरा अनुष्ठान शास्त्रीय विधि-विधान के साथ संपन्न किया जाता है और संकल्प का वीडियो प्रूफ आपके वॉट्सऐप (WhatsApp) पर भेजा जाता है।'
+      answer: 'DivyaYagyam पर ऑनलाइन पूजा बुक करने पर हमारे विद्वान आचार्य आपके द्वारा दिए गए नाम, गोत्र और विशिष्ट मनोकामना का स्पष्ट संकल्प (Sankalp) लेते हैं। पूजा का पूरा अनुष्ठान शास्त्रीय विधि-विधान के साथ संपन्न किया जाता है और संकल्प का वीडियो प्रूफ आपके व्हाट्सएप पर भेजा जाता है।'
     },
     {
       id: 'faq-2',
@@ -37,7 +37,7 @@ export default async function FaqPage() {
     {
       id: 'faq-3',
       question: 'सिद्ध प्रसाद (Sacred Prasad) मेरे घर तक कैसे पहुंचेगा?',
-      answer: 'पूजा संपन्न होने के उपरांत मंदिर का पवित्र प्रसाद (जैसे रक्षा सूत्र, भस्म, सूखे मेवे, रुद्राक्ष आदि) सुरक्षित खाद्य-ग्रेड पैकेजिंग में पैक करके आपके दिए गए पते पर कूरियर या इंडिया पोस्ट स्पीड पोस्ट के माध्यम से 3 से 7 दिनों के भीतर डिलीवर किया जाता है।'
+      answer: 'पूजा संपन्न होने के उपरांत मंदिर का पवित्र प्रसाद (जैसे रक्षा सूत्र, भस्म, सूखे मेवे, रुद्राक्ष आदि) सुरक्षित खाद्य-ग्रेड पैकेजिंग में पैक करके आपके दिए गए पते पर कूरियर या स्पीड पोस्ट के माध्यम से 3 से 6 दिनों के भीतर डिलीवर किया जाता है।'
     },
     {
       id: 'faq-4',
@@ -57,7 +57,7 @@ export default async function FaqPage() {
     {
       id: 'faq-7',
       question: 'DivyaYagyam के पंडित जी कौन हैं और उनका अनुभव क्या है?',
-      answer: 'DivyaYagyam के आध्यात्मिक मार्गदर्शक पं. मुकेश बोहरा हैं, जिनके पास सनातन कर्मकांड और वैदिक पूजा अनुष्ठानों का 35 से अधिक वर्षों का वृहद अनुभव है। हमारे सभी आचार्य संस्कृत व्याकरण और कर्मकांड में निष्णात हैं।'
+      answer: 'DivyaYagyam के आध्यात्मिक मार्गदर्शक पं. मुकेश बोहरा हैं, जिनके पास सनातन कर्मकांड और वैदिक पूजा अनुष्ठानों का 27 से अधिक वर्षों का वृहद अनुभव है। हमारे सभी आचार्य संस्कृत व्याकरण और कर्मकांड में निष्णात हैं।'
     },
     {
       id: 'faq-8',
@@ -78,67 +78,81 @@ export default async function FaqPage() {
   }
 
   return (
-    <>
+    <div className="bg-[#FFF9EF] text-[#292321] min-h-screen notranslate" translate="no">
       <Script
         id="schema-faq-page"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-slate-50/50 min-h-screen py-12">
-        <div className="container max-w-4xl mx-auto space-y-10 px-4">
-          
-          {/* Header */}
-          <div className="text-center space-y-3">
-            <span className="text-xs uppercase tracking-wider font-bold text-[var(--primary-color)]">❓ FAQ & Help</span>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-800">Frequently Asked Questions</h1>
-            <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Find detailed answers to all your questions regarding online puja bookings, video proof updates, prasad shipping, and Vedic rituals.
-            </p>
+
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/60 to-[#FFF9EF] py-14 md:py-20 overflow-hidden border-b border-[#E6D6BE]">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[#C99A3D]/5 leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="container max-w-4xl mx-auto text-center relative z-10 px-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E6D6BE] shadow-2xs mb-4">
+            <HelpCircle className="h-3.5 w-3.5 text-[#E58A16]" />
+            <span className="text-[#E58A16] text-xs font-black uppercase tracking-wider">❓ अक्सर पूछे जाने वाले सवाल (FAQ & HELP)</span>
           </div>
-
-          {/* Dynamic or Default FAQs */}
-          <div className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6">
-            {customContent ? (
-              <div className="text-xs md:text-sm text-slate-700 leading-relaxed prose max-w-none prose-orange">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} children={customContent as string} />
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2 border-b pb-4">
-                  <HelpCircle className="h-6 w-6 text-[var(--primary-color)]" /> Common Queries & Answers
-                </h2>
-
-                <Accordion type="single" collapsible className="w-full space-y-3">
-                  {defaultFaqs.map((faq) => (
-                    <AccordionItem key={faq.id} value={faq.id} className="border rounded-2xl px-5 bg-slate-50/50 data-[state=open]:bg-white data-[state=open]:shadow-sm">
-                      <AccordionTrigger className="text-left font-bold text-sm md:text-base text-slate-800 hover:text-[var(--primary-color)] hover:no-underline py-4">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-slate-600 text-xs md:text-sm leading-relaxed pb-4">
-                        {faq.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            )}
-          </div>
-
-          {/* Bottom Help Box */}
-          <div className="bg-white p-6 md:p-8 border rounded-3xl shadow-sm text-center space-y-3">
-            <h2 className="text-lg font-bold text-slate-800">Still have questions?</h2>
-            <p className="text-xs md:text-sm text-slate-600">
-              Our support team is available on WhatsApp to answer your specific questions in real-time.
-            </p>
-            <div className="pt-2">
-              <Link href="/contact" className="inline-flex items-center gap-2 bg-[var(--primary-color)] hover:opacity-90 text-white font-bold text-xs md:text-sm px-6 py-3 rounded-xl transition-all">
-                Contact Support Desk
-              </Link>
-            </div>
-          </div>
-
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#292321] leading-tight mb-3">
+            सामान्य प्रश्न एवं <span className="text-[#E58A16]">समाधान</span>
+          </h1>
+          <p className="text-sm sm:text-base text-[#4A403C] max-w-xl mx-auto font-medium leading-relaxed">
+            ऑनलाइन पूजा बुकिंग, लाइव वीडियो प्रूफ, प्रसाद डिलीवरी एवं वेदोक्त संकल्प से जुड़े आपके सभी सवालों के स्पष्ट उत्तर।
+          </p>
         </div>
+      </section>
+
+      <div className="container max-w-4xl mx-auto space-y-8 px-4 py-10 sm:py-14">
+        
+        {/* Dynamic or Default FAQs */}
+        <div className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-4">
+          {customContent ? (
+            <div className="prose max-w-none text-xs sm:text-sm text-[#4A403C] leading-relaxed">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} children={customContent as string} />
+            </div>
+          ) : (
+            <Accordion type="single" collapsible defaultValue="faq-1" className="space-y-3">
+              {defaultFaqs.map((faq) => (
+                <AccordionItem key={faq.id} value={faq.id} className="border border-[#E6D6BE] rounded-2xl px-4 sm:px-5 shadow-2xs overflow-hidden">
+                  <AccordionTrigger className="text-left font-bold text-xs sm:text-sm text-[#292321] hover:text-[#E58A16] py-4 transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-[#4A403C] leading-relaxed pb-4 pt-1 border-t border-[#E6D6BE]">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
+        </div>
+
+        {/* Quick Contact Box */}
+        <div className="p-6 rounded-3xl bg-white border border-[#E6D6BE] text-center space-y-3 shadow-2xs">
+          <h3 className="text-base sm:text-lg font-bold text-[#292321]">
+            क्या आपका कोई अन्य प्रश्न है?
+          </h3>
+          <p className="text-xs text-[#4A403C] max-w-md mx-auto">
+            हमारी समर्पित सेवा टीम आपके हर प्रश्न का समाधान करने के लिए सदैव तत्पर है।
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 pt-1">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-bold text-xs shadow-sm transition-all"
+            >
+              <span>संपर्क केंद्र देखें ➔</span>
+            </Link>
+            <a
+              href="https://wa.me/919530401984"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs shadow-sm transition-all"
+            >
+              <span>व्हाट्सएप पर पूछें ➔</span>
+            </a>
+          </div>
+        </div>
+
       </div>
-    </>
+    </div>
   )
 }

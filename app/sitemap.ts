@@ -121,7 +121,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
 
 
-      // 5. Spiritual Tools (Active tools)
+      // 5. Spiritual Tools (Active tools with high SEO priority)
       const tools = await prisma.spiritualTool.findMany({
         where: { isActive: true },
         select: { slug: true, createdAt: true }
@@ -131,8 +131,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           sitemapEntries.push({
             url: `${baseUrl}/tools/${encodeURIComponent(t.slug.trim())}`,
             lastModified: t.createdAt || now,
-            changeFrequency: 'weekly',
-            priority: 0.7,
+            changeFrequency: 'daily',
+            priority: 0.88,
           })
         }
       })

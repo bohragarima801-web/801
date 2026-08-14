@@ -8,7 +8,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'नियम एवं शर्तें (Terms & Conditions) — Service Rules & Policies',
+    title: 'नियम एवं शर्तें (Terms & Conditions) — Service Rules & Policies | DivyaYagyam',
     description: 'DivyaYagyam नियम एवं शर्तें। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प, प्रसाद डिलीवरी, एवं सेवा उपयोग से जुड़ी संपूर्ण नियम व शर्तें।',
     path: '/terms',
   })
@@ -32,162 +32,59 @@ export default async function TermsPage() {
   }
 
   return (
-    <>
+    <div className="bg-[#FFF9EF] text-[#292321] min-h-screen notranslate" translate="no">
       <Script
         id="schema-terms-page"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-slate-50/50 min-h-screen py-12">
-      <div className="container max-w-4xl mx-auto space-y-8 px-4">
-        
-        {/* Page Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-3xl md:text-4xl font-black text-slate-800">Terms and Conditions (End User License Agreement)</h1>
-          <p className="text-xs text-slate-500">Last updated: July 17, 2026</p>
+      
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/60 to-[#FFF9EF] py-12 md:py-16 overflow-hidden border-b border-[#E6D6BE]">
+        <div className="container max-w-4xl mx-auto text-center px-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#292321] mb-2">
+            नियम एवं शर्तें (Terms & Conditions)
+          </h1>
+          <p className="text-xs text-[#665E58]">अंतिम अद्यतन: 2026 • DivyaYagyam Service Agreement</p>
         </div>
+      </section>
 
-        {/* Terms Body */}
-        <div className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6 text-xs md:text-sm text-slate-700 leading-relaxed prose max-w-none prose-orange">
-          
+      <div className="container max-w-4xl mx-auto space-y-6 px-4 py-8 sm:py-12">
+        <div className="bg-white p-5 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-5 text-xs sm:text-sm text-[#4A403C] leading-relaxed prose max-w-none">
           {customContent ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]} children={customContent as string} />
           ) : (
             <>
-              {/* 1. Introduction */}
               <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-[var(--primary-color)]" /> 1. Introduction
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. प्रस्तावना एवं स्वीकृति
                 </h2>
                 <p>
-                  Welcome to <strong>DivyaYagyam</strong> (<Link href="https://divyayagyam.com" className="text-[var(--primary-color)] hover:underline">Divyayagyam.com</Link>), a spiritual platform owned and operated by Pandit Mukesh Bohra. This document serves as a legally binding contract (EULA) between you and DivyaYagyam. By accessing or using our platform to book Vedic rituals, pujas, or spiritual services, you agree to these terms. If you do not agree, please do not use our services.
+                  दिव्ययज्ञम् (DivyaYagyam) प्लेटफॉर्म का उपयोग करने पर आप इन सेवा शर्तों से पूर्णतः सहमत होते हैं। हम सनातन वैदिक रीति-रिवाजों के अनुसार पूजा, अनुष्ठान एवं आध्यात्मिक सेवाएं उपलब्ध कराते हैं।
                 </p>
               </section>
 
-              <hr className="border-slate-100" />
-
-              {/* 2. Eligibility */}
               <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-[var(--primary-color)]" /> 2. Eligibility
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <UserCheck className="h-5 w-5 text-[#E58A16]" /> 2. नाम-गोत्र संकल्प एवं पूजा सम्पादन
                 </h2>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>You must be at least 18 years of age to book services independently.</li>
-                  <li>Minors may use our platform only under the direct supervision and with the consent of a parent or legal guardian.</li>
-                  <li>You agree to provide accurate and truthful information, including your name, Gotra, and Nakshatra, as these are essential for the performance of sacred rituals.</li>
-                </ul>
+                <p>
+                  यजमान द्वारा प्रदान किए गए नाम, गोत्र एवं विशिष्ट मनोकामना के आधार पर वैदिक आचार्यों द्वारा विधि-विधान से पूजा संपन्न की जाती है। पूजा संपन्न होने के उपरांत वीडियो प्रमाण व्हाट्सएप पर प्रेषित किया जाता है।
+                </p>
               </section>
 
-              <hr className="border-slate-100" />
-
-              {/* 3. Puja & Spiritual Services */}
               <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-[var(--primary-color)]" /> 3. Puja & Spiritual Services
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-[#E58A16]" /> 3. प्रसाद डिलीवरी एवं दायित्व
                 </h2>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li><strong>Nature of Services:</strong> DivyaYagyam facilitates authentic Vedic rituals performed by qualified priests. By booking a puja, you acknowledge that spirituality is a matter of faith, and we do not guarantee specific material or spiritual outcomes.</li>
-                  <li><strong>Platform Role:</strong> DivyaYagyam acts as a bridge between devotees and sacred traditions. While we ensure the highest standards of authenticity and transparency, the actual ritual is performed by our team of experienced priests.</li>
-                  <li><strong>Recordings:</strong> You grant us permission to record your puja for internal audit and quality assurance. We strive to provide you with the recording of your ritual; however, in rare instances of technical failure or temple restrictions on photography, we will notify you and offer appropriate rescheduling or refund options.</li>
-                </ul>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 4. Payments & Booking */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-[var(--primary-color)]" /> 4. Payments & Booking
-                </h2>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>All payments are processed securely. We do not store sensitive credit/debit card information.</li>
-                  <li>Bookings are confirmed only upon receipt of payment.</li>
-                  <li>All prices are in Indian Rupees (INR).</li>
-                </ul>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 5. Refund, Cancellation, and Rescheduling */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-[var(--primary-color)]" /> 5. Refund, Cancellation, and Rescheduling
-                </h2>
-                <p>Please refer to our <Link href="/refunds" className="text-[var(--primary-color)] hover:underline font-bold">Refund and Cancellation Policy</Link> for detailed terms. In summary:</p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li><strong>Cancellations:</strong> You may cancel before the puja commences for a full refund. Once the ritual has begun, cancellation is not possible.</li>
-                  <li><strong>Satisfaction Guarantee:</strong> We stand behind our services. If you are dissatisfied for any reason, you may contact us within 7 days of receiving your puja video, and we will work to provide a complimentary rescheduling or a full refund.</li>
-                  <li><strong>Force Majeure:</strong> In the event of unforeseen temple closures or emergencies, we will coordinate with you to reschedule your puja or process a refund.</li>
-                </ul>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 6. User Responsibilities */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-[var(--primary-color)]" /> 6. User Responsibilities
-                </h2>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li><strong>Accuracy:</strong> You are solely responsible for the accuracy of the details provided (Name, Gotra, Sankalpa).</li>
-                  <li><strong>Conduct:</strong> You agree to use our platform and communicate with our team with respect. Harassing or inappropriate behavior toward our staff or priests will result in the immediate termination of services.</li>
-                  <li><strong>Personal Use:</strong> The services provided are for your personal spiritual use and may not be resold or used for commercial purposes.</li>
-                </ul>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 7. Intellectual Property */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <Eye className="h-5 w-5 text-[var(--primary-color)]" /> 7. Intellectual Property
-                </h2>
-                <p>All content on the DivyaYagyam website—including text, graphics, and logos—is the property of DivyaYagyam. You may access this content for personal, non-commercial use only.</p>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 8. Limitation of Liability */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <ShieldAlert className="h-5 w-5 text-[var(--primary-color)]" /> 8. Limitation of Liability
-                </h2>
-                <p>To the maximum extent permitted by law, DivyaYagyam shall not be liable for any indirect or consequential damages. Our total liability shall not exceed the amount paid for the specific service in question. We do not provide medical or financial advice; our services are strictly for spiritual and religious purposes.</p>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 9. Privacy */}
-              <section className="space-y-2">
-                <h2 className="text-base md:text-lg font-black text-slate-800">9. Privacy</h2>
-                <p>Your privacy is governed by our <Link href="/privacy" className="text-[var(--primary-color)] hover:underline font-bold">Privacy Policy</Link>, which explains how we collect and protect your data. By using our site, you consent to our data practices.</p>
-              </section>
-
-              <hr className="border-slate-100" />
-
-              {/* 10. Contact Us */}
-              <section className="space-y-4 pt-4 border-t">
-                <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-[var(--primary-color)]" /> 10. Contact Us
-                </h2>
-                <div className="grid gap-4 sm:grid-cols-2 text-xs md:text-sm">
-                  <div className="space-y-2">
-                    <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-[var(--primary-color)]" /> Location: Jodhpur, Rajasthan, India</p>
-                    <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95304-01984, +91-95320-11984</p>
-                  </div>
-                  <div className="space-y-2">
-                    <p className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[var(--primary-color)]" /> Pandit: Pandit Mukesh Bohra</p>
-                    <p className="flex items-center gap-2"><Eye className="h-4 w-4 text-[var(--primary-color)]" /> Website: <a href="https://divyayagyam.com" className="hover:underline text-[var(--primary-color)]">Divyayagyam.com</a></p>
-                  </div>
-                </div>
+                <p>
+                  अभिमंत्रित प्रसाद को सुरक्षित कूरियर माध्यम से आपके पते पर भेजा जाता है। सामान्यतः 3 से 6 कार्यदिवसों में डिलीवरी पूर्ण होती है।
+                </p>
               </section>
             </>
           )}
         </div>
       </div>
     </div>
-    </>
   )
 }
-
-

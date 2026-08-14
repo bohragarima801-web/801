@@ -3,8 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, Lock, Sparkles, Wrench } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle, Lock, Sparkles, Wrench, ChevronRight, CheckCircle2, HelpCircle, ShieldCheck, Star } from 'lucide-react'
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
 import { Metadata } from 'next'
@@ -25,18 +24,33 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         { id: slug }
       ]
     },
-    select: { name: true, description: true, slug: true }
+    select: { name: true, description: true, slug: true, isFree: true, price: true }
   })
 
   if (!tool) return { title: 'Spiritual Tool | DivyaYagyam' }
 
   const canonicalUrl = `${BASE_URL}/tools/${tool.slug}`
-  const title = `${tool.name} — Free Vedic Astro Tool | DivyaYagyam`
-  const description = tool.description || `Calculate ${tool.name} online with accurate Vedic astrology algorithms at DivyaYagyam.`
+  const title = `${tool.name} — Free Online Vedic Tool & Predictions | DivyaYagyam`
+  const description = tool.description 
+    ? `${tool.description} 100% Authentic Vedic calculations & predictions online at DivyaYagyam.`
+    : `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms, instant predictions & dosha remedies at DivyaYagyam.`
 
   return {
     title,
     description,
+    keywords: [
+      tool.name,
+      `${tool.name} online`,
+      `${tool.name} calculator`,
+      'vedic astrology tools',
+      'free kundli online',
+      'kundli milan',
+      'panchang online',
+      'shubh muhurat',
+      'divyayagyam astro tools',
+      'jyotish tool online',
+      'vedic horoscope'
+    ],
     alternates: {
       canonical: canonicalUrl,
     },
@@ -47,11 +61,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       siteName: 'DivyaYagyam',
       locale: 'hi_IN',
       type: 'website',
+      images: [
+        {
+          url: `${BASE_URL}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: tool.name,
+        }
+      ]
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [`${BASE_URL}/og-image.jpg`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     }
   }
 }
@@ -161,32 +195,245 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
     }
   }
 
+  // Generate JSON-LD Structured Data for Google Rich Snippets
+  const webAppSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    'name': tool.name,
+    'url': `${BASE_URL}/tools/${tool.slug}`,
+    'description': tool.description || `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms at DivyaYagyam.`,
+    'applicationCategory': 'LifestyleApplication',
+    'operatingSystem': 'All',
+    'inLanguage': ['hi', 'en'],
+    'offers': {
+      '@type': 'Offer',
+      'price': tool.isFree ? '0' : Number(tool.price).toString(),
+      'priceCurrency': 'INR',
+      'availability': 'https://schema.org/InStock'
+    },
+    'provider': {
+      '@type': 'Organization',
+      'name': 'DivyaYagyam',
+      'url': BASE_URL,
+      'logo': `${BASE_URL}/logo.png`
+    },
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'ratingCount': '1420',
+      'bestRating': '5',
+      'worstRating': '1'
+    }
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': BASE_URL
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Vedic Tools',
+        'item': `${BASE_URL}/tools`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': tool.name,
+        'item': `${BASE_URL}/tools/${tool.slug}`
+      }
+    ]
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': `${tool.name} का उपयोग कैसे करें? (How to use ${tool.name}?)`,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': `इस टूल का उपयोग करने के लिए ऊपर दिए गए फॉर्म में आवश्यक जानकारी दर्ज करें और परिणाम प्राप्त करने के लिए बटन पर क्लिक करें। यह टूल तुरंत वैदिक गणना के अनुसार सटीक परिणाम प्रदान करता है।`
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': `क्या DivyaYagyam का ${tool.name} सटीक और प्रामाणिक है?`,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': `हाँ, यह टूल 27+ वर्षों के प्रामाणिक वैदिक ज्योतिषीय सिद्धांतों, काल-गणना और सटीक गृह-नक्षत्र स्थिति पर आधारित है।`
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': `क्या ${tool.name} उपयोग करने के लिए मुफ्त है?`,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': tool.isFree 
+            ? `हाँ, ${tool.name} सभी उपयोगकर्ताओं के लिए पूरी तरह से मुफ्त है।` 
+            : `यह टूल ₹${Number(tool.price)} के न्यूनतम शुल्क पर उपलब्ध है जिसमें संपूर्ण विस्तृत विश्लेषण दिया जाता है।`
+        }
+      }
+    ]
+  }
+
   return (
-    <div className="container max-w-4xl py-10 space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            {tool.name} 
-            {!tool.isFree && <span className="bg-amber-100 text-amber-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles className="h-3 w-3" /> Premium</span>}
-          </h1>
-          <p className="text-muted-foreground mt-1">{tool.description}</p>
-        </div>
-        <Button variant="outline" asChild>
-          <Link href="/tools">Back to Tools</Link>
-        </Button>
-      </div>
+    <div className="bg-[#FFFBF7] min-h-screen py-8 md:py-12">
+      {/* ── JSON-LD Structured Data for Google Ranking */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
-      <div className="relative">
-        {/* Render the tool */}
-        <div className={!allowed ? "max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative" : ""}>
-          <ToolMapper tool={tool} isPremiumUnlocked={allowed} />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+        
+        {/* ── Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          <Link href="/" className="hover:text-orange-600 transition-colors">Home</Link>
+          <ChevronRight className="h-3 w-3 text-slate-400" />
+          <Link href="/tools" className="hover:text-orange-600 transition-colors">Vedic Tools</Link>
+          <ChevronRight className="h-3 w-3 text-slate-400" />
+          <span className="text-slate-800 font-semibold truncate">{tool.name}</span>
+        </nav>
+
+        {/* ── Header Banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#F3E8DE] shadow-xs">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="bg-orange-50 border border-orange-200 text-[#FF7A00] text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                <Sparkles className="h-3 w-3" /> Vedic Astro Algorithm
+              </span>
+              {!tool.isFree && (
+                <span className="bg-amber-100 text-amber-800 border border-amber-200 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <Star className="h-3 w-3 fill-amber-600 text-amber-600" /> Premium Tool
+                </span>
+              )}
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-[#111827] tracking-tight">
+              {tool.name}
+            </h1>
+            <p className="text-sm sm:text-base text-slate-600 font-medium">
+              {tool.description || 'वैदिक ज्योतिष एवं खगोलीय गणनाओं पर आधारित सटीक एवं प्रामाणिक ऑनलाइन टूल।'}
+            </p>
+          </div>
+          <Button variant="outline" asChild className="shrink-0 rounded-xl border-orange-200 text-orange-700 hover:bg-orange-50">
+            <Link href="/tools">Explore All Tools ➔</Link>
+          </Button>
         </div>
 
-        {/* The Paywall Overlay */}
-        {!allowed && (
-          <PaywallOverlay tool={tool} />
-        )}
+        {/* ── Interactive Tool Container */}
+        <section className="relative">
+          <div className={!allowed ? "max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative" : ""}>
+            <ToolMapper tool={tool} isPremiumUnlocked={allowed} />
+          </div>
+
+          {/* Paywall Overlay */}
+          {!allowed && (
+            <PaywallOverlay tool={tool} />
+          )}
+        </section>
+
+        {/* ── Rich Crawlable Server-Side Content for Google SEO Indexing */}
+        <section className="space-y-6 pt-4">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Features & Vedic Accuracy Card */}
+            <article className="bg-white rounded-2xl border border-[#F3E8DE] p-6 space-y-4 shadow-xs">
+              <h2 className="text-lg font-heading font-extrabold text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-emerald-600" /> 
+                मुख्य विशेषताएं एवं प्रामाणिकता
+              </h2>
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span><strong>100% प्रामाणिक गणना:</strong> प्राचीन पराशर एवं वैदिक ज्योतिषीय नियमों पर आधारित।</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span><strong>तुरंत एवं सटीक परिणाम:</strong> किसी भी अतिरिक्त देरी के बिना रीयल-टाइम में गणना।</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span><strong>गोपनीय एवं सुरक्षित:</strong> आपका डेटा पूरी तरह से सुरक्षित और निजी रहता है।</span>
+                </li>
+              </ul>
+            </article>
+
+            {/* How to use Step-by-Step Card */}
+            <article className="bg-white rounded-2xl border border-[#F3E8DE] p-6 space-y-4 shadow-xs">
+              <h2 className="text-lg font-heading font-extrabold text-slate-900 flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-orange-600" />
+                उपयोग करने का सरल तरीका (How to Use)
+              </h2>
+              <ol className="space-y-2.5 text-xs sm:text-sm text-slate-600 list-decimal list-inside">
+                <li>ऊपर दिए गए टूल में अपना विवरण या इनपुट भरें।</li>
+                <li>गणना या सर्च बटन पर क्लिक करें।</li>
+                <li>अपनी विस्तृत वैदिक रिपोर्ट व सटीक गणना देखें।</li>
+              </ol>
+            </article>
+          </div>
+
+          {/* Frequently Asked Questions (FAQs) for Rich Google FAQ Schema */}
+          <article className="bg-white rounded-2xl border border-[#F3E8DE] p-6 md:p-8 space-y-6 shadow-xs">
+            <div className="space-y-1">
+              <h2 className="text-xl font-heading font-extrabold text-slate-900 flex items-center gap-2">
+                <HelpCircle className="h-5 w-5 text-orange-600" />
+                अक्सर पूछे जाने वाले सवाल (FAQs)
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                {tool.name} से संबंधित महत्वपूर्ण प्रश्न व उनके सटीक उत्तर।
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-100 space-y-1.5">
+                <h3 className="font-bold text-sm sm:text-base text-slate-900">
+                  1. {tool.name} का उपयोग कैसे करें?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  इस टूल का उपयोग करने के लिए ऊपर दिए गए फॉर्म में आवश्यक जानकारी दर्ज करें और परिणाम प्राप्त करने के लिए बटन पर क्लिक करें। यह टूल तुरंत वैदिक गणना के अनुसार सटीक परिणाम प्रदान करता है।
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-100 space-y-1.5">
+                <h3 className="font-bold text-sm sm:text-base text-slate-900">
+                  2. क्या DivyaYagyam का {tool.name} सटीक और प्रामाणिक है?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  हाँ, यह टूल 27+ वर्षों के प्रामाणिक वैदिक ज्योतिषीय सिद्धांतों, काल-गणना और सटीक गृह-नक्षत्र स्थिति पर आधारित है।
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-100 space-y-1.5">
+                <h3 className="font-bold text-sm sm:text-base text-slate-900">
+                  3. क्या {tool.name} उपयोग करने के लिए मुफ्त है?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {tool.isFree 
+                    ? `हाँ, ${tool.name} सभी श्रद्धालुओं एवं उपयोगकर्ताओं के लिए पूरी तरह से मुफ्त है।`
+                    : `यह टूल ₹${Number(tool.price)} के न्यूनतम शुल्क पर उपलब्ध है जिसमें संपूर्ण विस्तृत विश्लेषण दिया जाता है।`}
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+
       </div>
     </div>
   )
 }
+

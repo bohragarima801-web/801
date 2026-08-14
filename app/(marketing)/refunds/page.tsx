@@ -8,13 +8,13 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Refund and Cancellation Policy | DivyaYagyam',
+    title: 'रिफंड एवं निरस्तीकरण नीति (Refund & Cancellation) | DivyaYagyam',
     description: 'DivyaYagyam रिफंड एवं निरस्तीकरण नीति। 100% रिफंड गारंटी, पूजा निरस्तीकरण नियम, एवं रीशेड्यूलिंग प्रक्रिया की पूरी जानकारी।',
     path: '/refunds',
   })
 }
 
-export const revalidate = 3600; // ISR: Revalidate every 3600s
+export const revalidate = 3600
 
 export default async function RefundsPage() {
   const setting = await prisma.websiteSetting.findUnique({
@@ -33,146 +33,59 @@ export default async function RefundsPage() {
   }
 
   return (
-    <>
+    <div className="bg-[#FFF9EF] text-[#292321] min-h-screen notranslate" translate="no">
       <Script
         id="schema-refunds-page"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-slate-50/50 min-h-screen py-12">
-      <div className="container max-w-4xl mx-auto space-y-8 px-4">
-        
-        {/* Page Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-3xl md:text-4xl font-black text-slate-800">Refund and Cancellation Policy</h1>
-          <p className="text-xs text-slate-500">Last updated: July 17, 2026</p>
+      
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/60 to-[#FFF9EF] py-12 md:py-16 overflow-hidden border-b border-[#E6D6BE]">
+        <div className="container max-w-4xl mx-auto text-center px-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#292321] mb-2">
+            रिफंड एवं निरस्तीकरण नीति (Refund Policy)
+          </h1>
+          <p className="text-xs text-[#665E58]">अंतिम अद्यतन: 2026 • 100% भक्त संतुष्टि एवं रिफंड सुरक्षा</p>
         </div>
+      </section>
 
-        {/* Policy Body */}
-        <div className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6 text-xs md:text-sm text-slate-700 leading-relaxed prose max-w-none prose-orange">
-          
+      <div className="container max-w-4xl mx-auto space-y-6 px-4 py-8 sm:py-12">
+        <div className="bg-white p-5 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-5 text-xs sm:text-sm text-[#4A403C] leading-relaxed prose max-w-none">
           {customContent ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]} children={customContent as string} />
           ) : (
             <>
               <section className="space-y-2">
-            <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-[var(--primary-color)]" /> Overview
-            </h2>
-            <p>
-              Welcome to <strong>DivyaYagyam</strong>. We are dedicated to providing authentic Vedic spiritual services with transparency and devotion. This policy outlines the terms regarding cancellations, refunds, and rescheduling for all services booked through our platform (<Link href={BASE_URL} className="text-[var(--primary-color)] hover:underline">divyayagyam.com</Link>). By booking a service, you agree to these terms.
-            </p>
-          </section>
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. पूजा निरस्तीकरण एवं 100% रिफंड
+                </h2>
+                <p>
+                  यदि आप किसी कारणवश अपनी निर्धारित पूजा रद्द करना चाहते हैं, तो पूजा प्रारंभ होने से 2 घंटे पूर्व तक सूचना देने पर 100% पूर्ण राशि आपके मूल भुगतान खाते में 5-7 कार्यदिवसों के भीतर रिफंड कर दी जाएगी।
+                </p>
+              </section>
 
-          <hr className="border-slate-100" />
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-[#E58A16]" /> 2. पूजा तिथि में परिवर्तन (Rescheduling)
+                </h2>
+                <p>
+                  आप बिना किसी अतिरिक्त शुल्क के अपनी पूजा को किसी भी अन्य आगामी शुभ तिथि अथवा मुहूर्त में स्थानांतरित करवा सकते हैं।
+                </p>
+              </section>
 
-          {/* 1. Cancellation Policy */}
-          <section className="space-y-3">
-            <h2 className="text-base md:text-lg font-black text-slate-800">1. Cancellation Policy</h2>
-            
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-800 text-xs md:text-sm">1.1 Before Puja Performance</h3>
-              <p>You may cancel your booking at any time <strong>BEFORE</strong> the scheduled start time of the puja.</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li><strong>How to cancel:</strong> Contact us via WhatsApp at <strong>+91-95304-01984, +91-95320-11984</strong> or email <strong>Seva@divyayagyam.com</strong>.</li>
-                <li><strong>Verification:</strong> Please provide your Booking ID and registered mobile number.</li>
-                <li><strong>Confirmation:</strong> Cancellation is effective only upon receipt of a confirmation message from DivyaYagyam.</li>
-                <li><em>Note: Requests made less than 2 hours before the scheduled time may not be processed in time.</em></li>
-              </ul>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-800 text-xs md:text-sm">1.2 Refund Timelines</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li><strong>Full Refund (100%):</strong> Provided for all cancellations made before the puja commences.</li>
-                <li><strong>Processing Time:</strong> Refunds will be initiated to your original payment method within <strong>5-7 business days</strong>. Please allow an additional 2-5 business days for your bank to reflect the credit.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="font-bold text-slate-800 text-xs md:text-sm flex items-center gap-1 text-red-600">
-                <AlertCircle className="h-4.5 w-4.5 shrink-0" /> 1.3 After Puja Performance
-              </h3>
-              <p className="italic">
-                Once the puja, yajna, or ritual has been performed by our priests, it <strong>CANNOT</strong> be cancelled or refunded, as the sacred materials and priest services have already been utilized.
-              </p>
-            </div>
-          </section>
-
-          <hr className="border-slate-100" />
-
-          {/* 2. Satisfaction Guarantee */}
-          <section className="space-y-2">
-            <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-              <Heart className="h-5 w-5 text-[var(--primary-color)] fill-orange-600" /> 2. Satisfaction Guarantee
-            </h2>
-            <p>
-              At DivyaYagyam, we strive for excellence in every ritual. If you are not satisfied with the service provided, please contact us within <strong>7 days</strong> of receiving your puja documentation (photos/videos). We will review your concerns and may offer:
-            </p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Complimentary Rescheduling:</strong> Arranging the puja again at an auspicious time.</li>
-              <li><strong>Resolution:</strong> Our team will work with you to ensure your spiritual needs are met with the utmost respect and adherence to Vedic traditions.</li>
-            </ul>
-          </section>
-
-          <hr className="border-slate-100" />
-
-          {/* 3. Rescheduling */}
-          <section className="space-y-2">
-            <h2 className="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-[var(--primary-color)]" /> 3. Rescheduling
-            </h2>
-            <p>We understand that circumstances may change.</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Modification Request:</strong> You may request to reschedule your booking (change of date or time) by contacting us at least <strong>24 hours</strong> in advance.</li>
-              <li><strong>Availability:</strong> Rescheduling is subject to the availability of the Pandit and the temple schedule.</li>
-            </ul>
-          </section>
-
-          <hr className="border-slate-100" />
-
-          {/* 4. Force Majeure */}
-          <section className="space-y-2">
-            <h2 className="text-base md:text-lg font-black text-slate-800">4. Force Majeure & External Factors</h2>
-            <p>
-              DivyaYagyam acts as a platform to connect devotees with authentic Vedic services. In the event of unforeseen temple closures, Pandit emergencies, or other circumstances beyond our control (natural disasters, government orders, etc.), we will proactively contact you to offer a full refund or an alternative date for your ceremony.
-            </p>
-          </section>
-
-          <hr className="border-slate-100" />
-
-          {/* 5. Customer Responsibilities */}
-          <section className="space-y-2">
-            <h2 className="text-base md:text-lg font-black text-slate-800">5. Customer Responsibilities</h2>
-            <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Accurate Information:</strong> Provide the correct Name, Gotra, Nakshatra, and purpose of the Sankalp at the time of booking.</li>
-              <li><strong>Communication:</strong> Provide accurate contact details (WhatsApp/Email) so we can send you updates and puja confirmation.</li>
-            </ul>
-          </section>
-
-          <hr className="border-slate-100" />
-
-          {/* 6. Contact Information */}
-          <section className="space-y-4 pt-4 border-t">
-            <h2 className="text-base md:text-lg font-black text-slate-800">6. Contact Information</h2>
-            <div className="grid gap-4 sm:grid-cols-2 text-xs md:text-sm">
-              <div className="space-y-2">
-                <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-[var(--primary-color)]" /> Location: Jodhpur, Rajasthan, India</p>
-                <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-[var(--primary-color)]" /> Email: <a href="mailto:Seva@divyayagyam.com" className="hover:underline text-[var(--primary-color)]">Seva@divyayagyam.com</a></p>
-              </div>
-              <div className="space-y-2">
-                <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-[var(--primary-color)]" /> WhatsApp / Phone: +91-95304-01984, +91-95320-11984</p>
-                <p className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[var(--primary-color)]" /> Pandit: Pandit Mukesh Bohra</p>
-              </div>
-            </div>
-          </section>
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-[#E58A16]" /> 3. क्षतिग्रस्त सामग्री या पार्सल रिप्लेसमेंट
+                </h2>
+                <p>
+                  यदि कोरियर द्वारा प्राप्त प्रसाद या सामग्री में कोई क्षति होती है, तो हमें फोटो भेजते ही तुरंत नवीन अभिमंत्रित सामग्री निःशुल्क प्रेषित की जाएगी।
+                </p>
+              </section>
             </>
           )}
-
         </div>
       </div>
     </div>
-    </>
   )
 }
-

@@ -163,19 +163,19 @@ export default async function HomePage() {
   const displayPujas = nonVipDbPujas.length >= 3 ? nonVipDbPujas : [...nonVipDbPujas, ...fallbackPujas.filter(fp => !nonVipDbPujas.some((dp: any) => dp.slug === fp.slug))]
 
   return (
-    <div className="min-h-screen bg-[#FFF9EF] text-[#292321] font-sans selection:bg-[#E58A16]/20">
+    <div className="min-h-screen bg-[#FFF9EF] text-[#292321] font-sans selection:bg-[#E58A16]/20 notranslate" translate="no">
 
       {/* ============================================================
           SECTION 1: CINEMATIC HERO (Two-Part Composition & Slider)
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/40 to-[#FFF9EF] pt-8 pb-14 md:pt-12 md:pb-20 border-b border-[#E6D6BE]">
+      <section className="relative w-full bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/40 to-[#FFF9EF] pt-6 pb-10 md:pt-12 md:pb-20 border-b border-[#E6D6BE]">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center max-w-7xl mx-auto">
             
             {/* Left Content Area */}
-            <div className="lg:col-span-6 space-y-5 text-left">
+            <div className="lg:col-span-6 space-y-4 md:space-y-5 text-left">
               {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] text-xs font-bold text-[#E58A16] shadow-xs">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] text-xs font-bold text-[#E58A16] shadow-xs">
                 <span className="text-[#C99A3D]">ॐ</span>
                 <span>शास्त्रों के अनुसार वैदिक सेवा</span>
               </div>
@@ -194,34 +194,34 @@ export default async function HomePage() {
               </p>
 
               {/* 4 Trust Badges Grid */}
-              <div className="grid grid-cols-2 gap-2.5 pt-1 max-w-lg">
+              <div className="grid grid-cols-2 gap-2 pt-1 max-w-lg">
                 {[
                   { icon: <ShieldCheck className="h-4 w-4 text-[#E58A16]" />, label: '100% शास्त्रोक्त विधि' },
                   { icon: <Award className="h-4 w-4 text-[#E58A16]" />, label: 'अनुभवी विद्वान पंडित' },
                   { icon: <MapPin className="h-4 w-4 text-[#E58A16]" />, label: 'प्रमुख सिद्ध शक्तिपीठ' },
                   { icon: <CheckCircle2 className="h-4 w-4 text-[#E58A16]" />, label: '27+ वर्षों का विश्वास' },
                 ].map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-[#E6D6BE] shadow-2xs">
-                    <div className="h-6 w-6 rounded-lg bg-[#F7EBD7] flex items-center justify-center shrink-0">{f.icon}</div>
-                    <span className="text-xs font-bold text-[#292321] truncate">{f.label}</span>
+                  <div key={i} className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-white rounded-xl border border-[#E6D6BE] shadow-2xs">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-lg bg-[#F7EBD7] flex items-center justify-center shrink-0">{f.icon}</div>
+                    <span className="text-[11px] sm:text-xs font-bold text-[#292321] truncate">{f.label}</span>
                   </div>
                 ))}
               </div>
 
               {/* Dual CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <div className="grid grid-cols-2 gap-2.5 pt-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3.5">
                 <Link
                   href="/pujas"
-                  className="px-6 py-3.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center gap-2 active:scale-[0.98]"
+                  className="px-4 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center gap-1.5 active:scale-[0.98] text-center cursor-pointer"
                 >
-                  <span>अपनी पूजा बुक करें</span>
-                  <span className="text-base">➔</span>
+                  <span>पूजा बुक करें</span>
+                  <span className="text-sm">➔</span>
                 </Link>
                 <Link
                   href="/pujas"
-                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-[#F7EBD7] text-[#292321] font-bold text-sm border border-[#E6D6BE] shadow-2xs transition-all duration-200 inline-flex items-center gap-2"
+                  className="px-4 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-white hover:bg-[#F7EBD7] text-[#292321] font-bold text-xs sm:text-sm border border-[#E6D6BE] shadow-2xs transition-all duration-200 inline-flex items-center justify-center gap-1.5 text-center cursor-pointer"
                 >
-                  <span>हमारी पूजा देखें</span>
+                  <span>पूजा देखें</span>
                 </Link>
               </div>
             </div>
@@ -401,7 +401,7 @@ export default async function HomePage() {
             <p className="text-xs text-[#665E58]">संस्थान की वैदिक स्टोर सामग्री जल्द ही उपलब्ध होगी।</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {products.slice(0, 4).map((p: any) => {
               const price = Number(p.price || 501)
               const imgSrc = p.coverImage || '/product_fallback.jpg'
@@ -417,26 +417,26 @@ export default async function HomePage() {
                       alt={p.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute top-2.5 left-2.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-[#6B2635] text-white border border-[#C99A3D]">
+                    <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-[#6B2635] text-white border border-[#C99A3D]">
                       ⚡ अभिमंत्रित
                     </span>
                   </div>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between gap-3">
-                    <div className="space-y-1">
-                      <span className="text-[10px] uppercase font-bold text-[#C99A3D] tracking-wider block">
+                  <div className="p-2.5 sm:p-4 flex-1 flex flex-col justify-between gap-2 sm:gap-3">
+                    <div className="space-y-0.5 sm:space-y-1">
+                      <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#C99A3D] tracking-wider block truncate">
                         {p.category?.name || 'Vedic Product'}
                       </span>
-                      <h3 className="font-bold text-sm sm:text-base text-[#292321] group-hover:text-[#E58A16] transition-colors line-clamp-1">
+                      <h3 className="font-bold text-xs sm:text-base text-[#292321] group-hover:text-[#E58A16] transition-colors line-clamp-1">
                         {p.name}
                       </h3>
                     </div>
 
-                    <div className="pt-3 border-t border-[#E6D6BE] flex items-center justify-between">
-                      <span className="text-base font-black text-[#292321]">
+                    <div className="pt-2 sm:pt-3 border-t border-[#E6D6BE] flex items-center justify-between gap-1">
+                      <span className="text-xs sm:text-base font-black text-[#292321]">
                         ₹{price.toLocaleString('en-IN')}
                       </span>
-                      <span className="bg-[#E58A16] hover:bg-[#d4790e] text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-xs transition-all inline-flex items-center gap-1">
+                      <span className="bg-[#E58A16] hover:bg-[#d4790e] text-white text-[10px] sm:text-xs font-bold py-1 px-2 sm:py-1.5 sm:px-3 rounded-lg shadow-2xs transition-all inline-flex items-center gap-0.5 shrink-0">
                         खरीदें ➔
                       </span>
                     </div>
@@ -640,10 +640,10 @@ export default async function HomePage() {
               हमारे विद्वान पंडित आपके नाम और गोत्र से पूर्ण शास्त्रोक्त विधि से पूजा संपन्न करेंगे एवं लाइव वीडियो प्रमाण आपके व्हाट्सएप पर भेजेंगे।
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-3.5 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 max-w-sm mx-auto sm:flex sm:items-center sm:justify-center sm:max-w-none">
               <Link
                 href="/pujas"
-                className="px-7 py-3.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center gap-2 active:scale-[0.98]"
+                className="px-7 py-3.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer text-center"
               >
                 <span>पूजा बुक करें</span>
                 <span className="text-base">➔</span>
@@ -653,7 +653,7 @@ export default async function HomePage() {
                 href="https://wa.me/919530401984?text=Namaste!%20I%20want%20to%20consult%20about%20puja%20booking"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm shadow-md transition-all inline-flex items-center gap-2"
+                className="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm shadow-md transition-all inline-flex items-center justify-center gap-2 text-center"
               >
                 <span>💬 हमसे संपर्क करें</span>
               </a>

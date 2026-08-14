@@ -1,4 +1,4 @@
-import { Sparkles, BadgeCheck, Heart, Mail, Phone, MapPin, Globe } from 'lucide-react'
+import { Sparkles, BadgeCheck, Heart, Mail, Phone, MapPin, Globe, Award, ShieldCheck, CheckCircle2 } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -6,12 +6,12 @@ import rehypeRaw from 'rehype-raw'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
-export const revalidate = 3600; // ISR: Revalidate every 3600s
+export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'About DivyaYagyam – Verified Vedic Priests & Temple Pujas | DivyaYagyam',
-    description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (35+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
+    title: 'हमारे बारे में (About Us) – प्रामाणिक वैदिक परंपरा | DivyaYagyam',
+    description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (27+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
     path: '/about',
   })
 }
@@ -35,7 +35,7 @@ export default async function AboutPage() {
         '@type': 'Person',
         name: 'Pandit Mukesh Bohra',
         jobTitle: 'Vedic Priest & Astrologer',
-        description: 'Vedic Priest & Astrologer with over 35 years of experience in conducting Sanatan Vedic rituals and ceremonies.',
+        description: 'Vedic Priest & Astrologer with over 27 years of experience in conducting Sanatan Vedic rituals and ceremonies.',
         worksFor: {
           '@type': 'Organization',
           name: 'DivyaYagyam',
@@ -50,156 +50,105 @@ export default async function AboutPage() {
   }
 
   return (
-    <>
+    <div className="bg-[#FFF9EF] text-[#292321] min-h-screen notranslate" translate="no">
       <Script
         id="schema-about-page"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-[#FFFDF7] min-h-screen">
-        {/* Premium Hero Banner (Bright Sanatani Gold) */}
-        <div className="relative bg-gradient-to-b from-[#FFF8EB] via-[#FFF3D6] to-[#FFFDF7] py-16 md:py-20 overflow-hidden border-b border-[#F5E2B8]">
-          <div aria-hidden="true" className="absolute right-0 top-0 text-[25vw] font-serif text-[rgba(212,155,0,0.06)] leading-none pointer-events-none select-none">ॐ</div>
-          <div className="container max-w-4xl mx-auto px-4 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5D6] border border-[#F2C94C] shadow-xs mb-5">
-              <span className="text-[#8B5A00] text-[11px] font-extrabold uppercase tracking-[0.14em]">🙏 Our Sacred Story (हमारे बारे में)</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-[#2A1508] leading-tight mb-3">
-              हमारे <span className="bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">बारे में</span>
-            </h1>
-            <p className="text-[#4A2D1B] text-base font-medium max-w-xl mx-auto">
-              35+ years of authentic Vedic tradition, guided by Pandit Mukesh Bohra
-            </p>
+
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/60 to-[#FFF9EF] py-14 md:py-20 overflow-hidden border-b border-[#E6D6BE]">
+        <div aria-hidden="true" className="absolute right-0 top-0 text-[28vw] font-serif text-[#C99A3D]/5 leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
+        <div className="container max-w-4xl mx-auto px-4 text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E6D6BE] shadow-2xs mb-4">
+            <span className="text-[#E58A16] text-xs font-black uppercase tracking-wider">🙏 हमारी पावन परंपरा (OUR SACRED STORY)</span>
           </div>
-        </div>
-      <div className="container max-w-4xl mx-auto space-y-12 px-4 py-12">
-        
-        {/* Page Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl md:text-5xl font-black text-om-gradient">About DivyaYagyam</h1>
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
-            Preserving and promoting the sacred traditions of Sanatan Dharma with complete authenticity and devotion.
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#292321] leading-tight mb-3">
+            हमारे <span className="text-[#E58A16]">बारे में</span>
+          </h1>
+          <p className="text-sm sm:text-base text-[#4A403C] max-w-xl mx-auto font-medium leading-relaxed">
+            27+ वर्षों की प्रामाणिक वैदिक परंपरा — मुख्य वेदाचार्य पं. मुकेश बोहरा जी के पावन मार्गदर्शन में।
           </p>
         </div>
+      </section>
 
+      <div className="container max-w-4xl mx-auto space-y-8 px-4 py-10 sm:py-14">
+        
         {customContent ? (
-          <div className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6 text-xs md:text-sm text-slate-700 leading-relaxed prose max-w-none prose-orange">
+          <div className="bg-white p-6 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-6 text-xs sm:text-sm text-[#4A403C] leading-relaxed prose max-w-none">
             <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} children={customContent as string} />
           </div>
         ) : (
           <>
             {/* Introduction Section */}
-        <section className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6">
-          <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-[var(--primary-color)]" /> Welcome to DivyaYagyam
-          </h2>
-          <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-            DivyaYagyam is a trusted spiritual platform dedicated to preserving and promoting the sacred traditions of Sanatan Dharma through authentic Vedic rituals, pujas, yajnas, astrology, and spiritual guidance. Our mission is to make divine services easily accessible to devotees across India and around the world with complete transparency, authenticity, and devotion.
-          </p>
-        </section>
+            <section className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#292321] flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-[#E58A16]" /> दिव्ययज्ञम् में आपका स्वागत है
+              </h2>
+              <p className="text-[#4A403C] text-xs sm:text-sm leading-relaxed">
+                दिव्ययज्ञम् सनातन धर्म की पवित्र वैदिक परंपराओं, अनुष्ठानों, महायज्ञों एवं ज्योतिषीय परामर्श को पूर्ण प्रामाणिकता व पारदर्शिता के साथ भक्तों तक पहुँचाने के लिए समर्पित एक पावन मंच है। हमारा ध्येय भारत एवं विश्वभर के श्रद्धालुओं को सिद्ध शक्तिपीठों एवं ज्योतिर्लिंगों से सीधे जोड़ना है।
+              </p>
+            </section>
 
-        {/* Pandit Mukesh Bohra Profile */}
-        <section className="bg-white p-6 md:p-10 border rounded-3xl shadow-sm space-y-6">
-          <div className="space-y-2">
-            <span className="text-xs uppercase font-bold text-[var(--primary-color)] tracking-wider">Meet Our Spiritual Guide</span>
-            <h2 className="text-2xl md:text-3xl font-black text-slate-800">Pandit Mukesh Bohra</h2>
-            <p className="text-sm text-muted-foreground font-semibold">Vedic Priest & Astrologer • 35+ Years of Experience</p>
-          </div>
+            {/* Pandit Mukesh Bohra Profile */}
+            <section className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-5">
+              <div className="space-y-1">
+                <span className="text-xs uppercase font-bold text-[#E58A16] tracking-wider">हमारे आध्यात्मिक मार्गदर्शक</span>
+                <h2 className="text-2xl sm:text-3xl font-black text-[#292321]">पं. मुकेश बोहरा जी</h2>
+                <p className="text-xs sm:text-sm text-[#665E58] font-bold">मुख्य वेदाचार्य एवं कर्मकांड विशेषज्ञ • 27+ वर्ष अनुभव</p>
+              </div>
 
-          <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-            <strong>Pandit Mukesh Bohra</strong> is a highly respected Vedic priest and spiritual guide with <strong>over 35 years of experience</strong> in performing Sanatan Vedic rituals and religious ceremonies. 
-          </p>
-          <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-            For more than three decades, he has devoted his life to serving devotees through authentic Vedic traditions, sacred yajnas, temple rituals, spiritual consultations, and personalized puja ceremonies. His deep understanding of Vedic scriptures, Sanskrit mantras, astrology, and traditional Hindu rituals has helped thousands of families perform important religious ceremonies with faith and confidence.
-          </p>
+              <p className="text-[#4A403C] text-xs sm:text-sm leading-relaxed">
+                <strong>पं. मुकेश बोहरा जी</strong> सनातन वैदिक कर्मकांड एवं धार्मिक अनुष्ठानों के क्षेत्र में <strong>27 से अधिक वर्षों के अनुभव</strong> से समृद्ध प्रतिष्ठित आचार्य हैं। उन्होंने तीन दशकों से अधिक समय तक वेदोक्त विधि-विधान, संस्कृत मंत्रोच्चार एवं सिद्ध पीठों में महा अनुष्ठानों का संचालन किया है।
+              </p>
 
-          <div className="border-t pt-6 space-y-3">
-            <h3 className="font-bold text-slate-800 text-base">Key Religious Services Conducted:</h3>
-            <div className="grid gap-2 sm:grid-cols-2 text-xs md:text-sm text-slate-600">
-              {[
-                'Vedic Yajna & Havan', 'Grah Shanti Puja', 'Mahamrityunjaya Jaap', 'Rudrabhishek',
-                'Satyanarayan Katha', 'Navgraha Shanti', 'Pitru Dosh Nivaran', 'Kaal Sarp Dosh Puja',
-                'Vivah Sanskar', 'Griha Pravesh', 'Bhoomi Pujan', 'Mundan Sanskar',
-                'Naamkaran Sanskar', 'Rudraksha & Spiritual Guidance', 'Temple Rituals'
-              ].map((s, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <BadgeCheck className="h-4 w-4 text-[var(--primary-color)] shrink-0" />
-                  <span>{s}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Us & Values Grid */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Why Choose DivyaYagyam */}
-          <section className="bg-white p-6 border rounded-3xl shadow-sm space-y-4">
-            <h2 className="text-xl font-bold text-slate-800">Why Choose DivyaYagyam?</h2>
-            <ul className="text-xs md:text-sm text-slate-600 space-y-2">
-              <li className="flex items-center gap-2">✔ 35+ Years of Spiritual Experience</li>
-              <li className="flex items-center gap-2">✔ Authentic Vedic Rituals & Mantras</li>
-              <li className="flex items-center gap-2">✔ Experienced and Qualified Priests</li>
-              <li className="flex items-center gap-2">✔ Personalized Sankalp & WhatsApp Updates</li>
-              <li className="flex items-center gap-2">✔ Secure Online Payments & Booking</li>
-            </ul>
-          </section>
-
-          {/* Our Values */}
-          <section className="bg-white p-6 border rounded-3xl shadow-sm space-y-4">
-            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-1.5">
-              <Heart className="h-5 w-5 text-[var(--primary-color)] fill-orange-600" /> Our Values
-            </h2>
-            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
-              At DivyaYagyam, we believe that spirituality is built on faith, sincerity, and selfless service. Every puja, yajna, and religious ceremony is performed with utmost devotion, respect, and strict adherence to Vedic traditions. We are committed to maintaining honesty and transparency.
-            </p>
-          </section>
-        </div>
-
-        {/* Contact Profile Section */}
-        <section className="bg-white p-6 md:p-8 border rounded-3xl shadow-sm space-y-6">
-          <h2 className="text-xl font-bold text-slate-800">Contact Details</h2>
-          <div className="grid gap-4 sm:grid-cols-2 text-xs md:text-sm text-slate-600">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-800">Address</p>
-                  <p>Jodhpur, Rajasthan, India</p>
+              <div className="border-t border-[#E6D6BE] pt-4 space-y-3">
+                <h3 className="font-bold text-[#292321] text-sm">मुख्य धार्मिक सेवाएं एवं महा अनुष्ठान:</h3>
+                <div className="grid gap-2 sm:grid-cols-2 text-xs text-[#4A403C]">
+                  {[
+                    'वैदिक महायज्ञ एवं सर्व कार्य सिद्धि हवन', 'कालसर्प व नवग्रह दोष निवारण शांति',
+                    'महामृत्युंजय सवा लाख अखंड जाप', 'रुद्राभिषेक एवं महारुद्र अनुष्ठान',
+                    'माँ बगलामुखी मिर्ची हवन एवं शत्रु बाधा निवारण', 'वास्तु शांति एवं पितृ दोष निवारण'
+                  ].map((service) => (
+                    <div key={service} className="flex items-center gap-2">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                      <span>{service}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-800">Email</p>
-                  <a href="mailto:Seva@divyayagyam.com" className="hover:underline">Seva@divyayagyam.com</a>
+            </section>
+
+            {/* Values / Mission */}
+            <section className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-5">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#292321] flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> हमारे चार आधार स्तंभ
+              </h2>
+              
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="p-4 rounded-2xl bg-[#FFF9EF] border border-[#E6D6BE] space-y-1">
+                  <h4 className="font-bold text-xs sm:text-sm text-[#292321]">1. 100% शास्त्रीय प्रामाणिकता</h4>
+                  <p className="text-[11px] text-[#4A403C] leading-relaxed">केवल योग्य, संस्कृत पाठशाला शिक्षित विद्वान आचार्यों द्वारा ही पूजा संपन्न।</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#FFF9EF] border border-[#E6D6BE] space-y-1">
+                  <h4 className="font-bold text-xs sm:text-sm text-[#292321]">2. व्यक्तिगत नाम-गोत्र संकल्प</h4>
+                  <p className="text-[11px] text-[#4A403C] leading-relaxed">प्रत्येक यजमान के नाम, गोत्र व मनोकामना का स्पष्ट वेदोक्त संकल्प।</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#FFF9EF] border border-[#E6D6BE] space-y-1">
+                  <h4 className="font-bold text-xs sm:text-sm text-[#292321]">3. व्हाट्सएप वीडियो प्रमाण</h4>
+                  <p className="text-[11px] text-[#4A403C] leading-relaxed">पूजा संपन्न होने के उपरांत संकल्प व आहुति का वीडियो सीधे आपके फोन पर।</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#FFF9EF] border border-[#E6D6BE] space-y-1">
+                  <h4 className="font-bold text-xs sm:text-sm text-[#292321]">4. अभिमंत्रित पावन प्रसाद</h4>
+                  <p className="text-[11px] text-[#4A403C] leading-relaxed">सिद्ध भस्म, रक्षासूत्र एवं प्रसाद की सुरक्षित घर डिलीवरी।</p>
                 </div>
               </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-800">WhatsApp / Phone</p>
-                  <p>+91-95304-01984, +91-95320-11984</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Globe className="h-5 w-5 text-[var(--primary-color)] shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-800">Website</p>
-                  <a href={BASE_URL} className="hover:underline text-[var(--primary-color)]">divyayagyam.com</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+            </section>
           </>
         )}
 
       </div>
     </div>
-    </>
   )
 }
-

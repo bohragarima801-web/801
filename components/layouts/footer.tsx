@@ -51,11 +51,11 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
   const iconBgClass = 'bg-[#1E1917] text-[#C99A3D] border border-[#C99A3D]/30'
 
   return (
-    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12`}>
+    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12 notranslate`} translate="no">
       {/* ── 1. GRADIENT TOP BORDER (Sacred Antique Gold / Saffron Strip) ── */}
       <div className="h-[3px] w-full bg-gradient-to-r from-[#C99A3D] via-[#E58A16] to-[#C99A3D] shadow-sm" />
 
-      <div className="container relative z-10 pt-10 md:pt-14 pb-8">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-10 md:pt-14 pb-8">
         
         {/* ============================================================
             SECTION 1: TRUST BANNER (Top 4-Column Strip)
