@@ -306,7 +306,7 @@ export function ProductClientView({ product, relatedProducts: dynamicRelated }: 
 
           {/* Full Description */}
           {product.description && (
-            <div className="prose max-w-none text-xs sm:text-sm text-[#4A403C]">
+            <div className="w-full">
               <ProFormattedDescription content={product.description} type="product" />
             </div>
           )}

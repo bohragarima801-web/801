@@ -14,6 +14,7 @@ import {
   CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, Flame, Check, Zap, MapPin, Crown, ChevronDown
 } from 'lucide-react'
 import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
+import { ProFormattedDescription } from '@/components/pro-formatted-description'
 
 export interface SingleVipPujaProps {
   puja: {
@@ -346,6 +347,34 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             </span>
           </div>
         </div>
+
+        {/* ── SECTION: PUJA SIGNIFICANCE & DESCRIPTION ── */}
+        {(puja.description || (puja as any).longDescription) && (
+          <div className="bg-white rounded-3xl border border-[#E6D6BE] p-6 sm:p-10 shadow-xs space-y-6 text-[#292321]">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#E6D6BE] pb-4">
+              <div className="space-y-1 text-center sm:text-left">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] text-xs font-bold uppercase tracking-widest">
+                  ✨ महिमा एवं फलप्राप्ति
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#292321] tracking-wide">
+                  पूजा अनुष्ठान का महत्व एवं लाभ
+                </h2>
+              </div>
+
+              <div className="bg-[#F7EBD7] border border-[#E6D6BE] px-4 py-2 rounded-2xl text-center shrink-0">
+                <p className="text-xl font-black text-[#8B1A21] font-heading">100%</p>
+                <p className="text-[10px] text-[#665E58] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
+              </div>
+            </div>
+
+            <div className="w-full space-y-4">
+              <ProFormattedDescription 
+                content={puja.description || (puja as any).longDescription || ''} 
+                type="puja" 
+              />
+            </div>
+          </div>
+        )}
 
         {/* ── SECTION 3: VIP EXPERIENCE 3 PILLARS ── */}
         <div className="space-y-5">
