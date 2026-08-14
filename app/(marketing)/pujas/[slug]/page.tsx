@@ -85,20 +85,7 @@ const fetchPujaFromDb = async (slug: string) => {
       }
     }
 
-    // 4. Absolute Fallback: Get first published puja if still null
-    if (!puja) {
-      puja = await prisma.puja.findFirst({
-        where: { status: 'PUBLISHED' },
-        include: {
-          category: true,
-          temple: true,
-          packages: { orderBy: { price: 'asc' } },
-          images: { orderBy: { order: 'asc' } },
-          videos: { orderBy: { createdAt: 'desc' } }
-        }
-      })
-    }
-
+    // If not found by exact slug, ID, or keywords, return null (404/redirect)
     if (!puja) return null;
 
     // Deep serialize to plain JSON to prevent Decimal/Date RSC serialization crashes
@@ -159,7 +146,7 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
   const puja = await getPujaBySlugOrFallback(slug);
 
   if (!puja) {
-    redirect('/pujas')
+    notFound()
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID

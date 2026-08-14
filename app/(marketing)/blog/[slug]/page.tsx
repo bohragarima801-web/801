@@ -249,7 +249,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 remarkPlugins={[remarkGfm]} 
                 rehypePlugins={[rehypeRaw]}
                 components={{
-              a: ({ href, children, ...props }) => {
+                  h1: ({ node, ...props }) => (
+                    <h2 className="text-2xl md:text-3xl font-black text-[#292321] mt-8 mb-4 border-b border-[#E6D6BE] pb-2 leading-snug" {...props} />
+                  ),
+                  a: ({ href, children, ...props }) => {
                 if (!href) return <span className="font-semibold text-amber-700">{children}</span>
                 const lowerHref = href.toLowerCase()
                 const isDriveLink = lowerHref.includes('drive.google.com')

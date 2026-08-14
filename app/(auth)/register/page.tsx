@@ -81,7 +81,7 @@ export default function RegisterPage() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">स्वागतम</CardTitle>
+        <h1 className="text-2xl font-black text-slate-800">स्वागतम — Create Account</h1>
         <CardDescription>Create your Divyayagyam account.</CardDescription>
       </CardHeader>
       <CardContent>

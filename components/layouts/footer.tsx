@@ -131,7 +131,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <a
                   href={socials.facebook}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="Facebook"
                   className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#C99A3D]/30 flex items-center justify-center text-[#E6D6BE] hover:bg-[#E58A16] hover:text-white hover:border-[#E58A16] transition-all"
                 >
@@ -142,7 +142,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <a
                   href={socials.instagram}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="Instagram"
                   className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#C99A3D]/30 flex items-center justify-center text-[#E6D6BE] hover:bg-[#E58A16] hover:text-white hover:border-[#E58A16] transition-all"
                 >
@@ -153,7 +153,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <a
                   href={socials.youtube}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="YouTube"
                   className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#C99A3D]/30 flex items-center justify-center text-[#E6D6BE] hover:bg-[#E58A16] hover:text-white hover:border-[#E58A16] transition-all"
                 >
@@ -164,7 +164,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <a
                   href={socials.twitter}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="Twitter"
                   className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#C99A3D]/30 flex items-center justify-center text-[#E6D6BE] hover:bg-[#E58A16] hover:text-white hover:border-[#E58A16] transition-all"
                 >

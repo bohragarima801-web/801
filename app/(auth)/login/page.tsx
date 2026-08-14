@@ -83,7 +83,7 @@ function LoginContent() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">नमस्ते 🙏</CardTitle>
+        <h1 className="text-2xl font-black text-slate-800">नमस्ते 🙏 Devotee Sign In</h1>
         <CardDescription>Sign in to continue your spiritual journey.</CardDescription>
       </CardHeader>
       <CardContent>
