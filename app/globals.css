@@ -254,6 +254,26 @@
     max-width: 100vw;
     overflow-x: hidden;
   }
+
+  /* ── Dynamic Puja Visual Themes (Business Logic Mapped) ── */
+  .simple-puja-theme {
+    --puja-surface: #FFF9EF;
+    --puja-card: #FFFFFF;
+    --puja-border: #E6D6BE;
+    --puja-text: #292321;
+    --puja-text-muted: #665E58;
+    --puja-accent: #E58A16;
+  }
+
+  .vip-puja-theme {
+    --puja-surface: #FFF9EF;
+    --puja-card: #FFFFFF;
+    --puja-border: #E6D6BE;
+    --puja-text: #292321;
+    --puja-text-muted: #665E58;
+    --puja-accent: #C99A3D;
+    --puja-gold: #D4AF37;
+  }
 }
 
 /* ============================================================

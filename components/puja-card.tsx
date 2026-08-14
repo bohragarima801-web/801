@@ -44,9 +44,13 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
   const formattedDate = formatPujaDate(puja.pujaDate)
   const cleanDescription = (puja.shortDescription || puja.description || 'Participate in this sacred ceremony for divine blessings.').replace(/<[^>]*>?/gm, '')
 
+  const packagesList = (puja as any)?.packages
+  const isVip1to1 = (packagesList && Array.isArray(packagesList) && packagesList.length === 1) || puja.isVip
+  const themeClass = isVip1to1 ? 'vip-puja-theme' : 'simple-puja-theme'
+
   return (
     <article
-      className={`group relative bg-white rounded-2xl border border-[#E6D6BE] hover:border-[#E58A16] transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_-2px_rgba(80,50,20,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
+      className={`group relative ${themeClass} bg-white rounded-2xl border border-[#E6D6BE] hover:border-[#E58A16] transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_-2px_rgba(80,50,20,0.04)] hover:shadow-xl flex flex-col justify-between overflow-hidden h-full reveal reveal-delay-${Math.min(idx % 3 + 1, 5)}`}
     >
       {/* Top Image Frame (16:9 Ratio) */}
       <div className="relative aspect-[16/9] w-full overflow-hidden shrink-0 bg-slate-900">

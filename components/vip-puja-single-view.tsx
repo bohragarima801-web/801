@@ -196,7 +196,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9EF] text-[#292321] pb-28 relative overflow-hidden notranslate" translate="no">
+    <div className="vip-puja-theme min-h-screen bg-[#FFF9EF] text-[#292321] pb-28 relative overflow-hidden notranslate" translate="no">
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-10 max-w-6xl space-y-10 relative z-10">
         
         {/* ── SECTION 1: HERO CONTAINER ── */}
