@@ -1,31 +1,14 @@
 import { Metadata } from 'next'
+import { generatePageMeta } from '@/lib/seo'
 import { ShubhMuhuratFinder } from '@/components/shubh-muhurat-finder'
 import { Sparkles, HeartHandshake, Home, Car, Baby, Building2, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'शुभ मुहूर्त 2026 - 2030 (Shubh Muhurat Finder) | विवाह, गृह प्रवेश, वाहन खरीदी तिथि',
-  description:
-    'वर्ष 2026 से 2030 तक के सभी शुभ मुहूर्त - विवाह मुहूर्त, गृह प्रवेश, वाहन खरीदी, मुंडन, नामकरण एवं प्रॉपर्टी खरीदी हेतु सटीक तिथि, नक्षत्र, शुभ समय एवं तिथियां।',
-  keywords: [
-    'Shubh Muhurat 2026',
-    'Vivah Muhurat 2026',
-    'Griha Pravesh Muhurat 2026',
-    'Vahan Khareedi Muhurat',
-    'Mundan Muhurat 2026',
-    'Property Khareedi Muhurat',
-    'Naamkaran Muhurat',
-    'Shubh Muhurat 2027',
-    'Shubh Muhurat 2028',
-    'Shubh Muhurat 2029',
-    'Shubh Muhurat 2030',
-  ],
-  openGraph: {
-    title: 'शुभ मुहूर्त 2026 - 2030 | Shubh Muhurat Search & Calendar',
-    description: 'सटीक तिथि, नक्षत्र एवं समय के साथ 2026-2030 के प्रमाणित शुभ मुहूर्त खोजें।',
-    type: 'website',
-  },
-}
+export const metadata: Metadata = generatePageMeta({
+  title: 'शुभ मुहूर्त — विवाह, गृह प्रवेश व वाहन मुहूर्त',
+  description: 'वर्ष 2026 से 2030 तक के सम्पूर्ण शुभ मुहूर्त: विवाह, गृह प्रवेश, वाहन खरीदी, मुंडन, नामकरण व प्रॉपर्टी हेतु प्रमाणित वैदिक तिथियां।',
+  path: '/muhurat',
+})
 
 export default function ShubhMuhuratPage() {
   const jsonLd = {

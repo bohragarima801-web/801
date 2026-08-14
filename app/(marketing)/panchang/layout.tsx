@@ -1,42 +1,11 @@
+import { generatePageMeta } from '@/lib/seo'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'आज का पंचांग (Aaj Ka Panchang) | हिन्दू कैलेंडर, तिथि, नक्षत्र व मुहूर्त | Divyayagyam',
-  description:
-    'आज का सम्पूर्ण पंचांग (Aaj Ka Panchang Online): दैनिक तिथि, नक्षत्र, योग, करण, सूर्योदय-सूर्यास्त समय, अभिजीत मुहूर्त एवं राहुकाल की 100% सटीक वैदिक जानकारी।',
-  keywords: [
-    'आज का पंचांग',
-    'aaj ka panchang',
-    'panchang',
-    'panchang today',
-    'aaj ki tithi',
-    'aaj ka rahu kaal',
-    'abhijit muhurat today',
-    'drik panchang',
-    'vedic panchang',
-    'hindu calendar',
-    'आज का नक्षत्र',
-    'आज का शुभ मुहूर्त',
-    'दिव्ययज्ञम् पंचांग',
-  ],
-  alternates: {
-    canonical: 'https://divyayagyam.com/panchang',
-  },
-  openGraph: {
-    title: 'आज का सम्पूर्ण पंचांग | Aaj Ka Panchang Online | Divyayagyam',
-    description:
-      'दैनिक वैदिक पंचांग, तिथि, नक्षत्र, योग, करण, सूर्योदय-सूर्यास्त व शुभ-अशुभ मुहूर्त की प्रामाणिक जानकारी।',
-    url: 'https://divyayagyam.com/panchang',
-    siteName: 'Divyayagyam',
-    locale: 'hi_IN',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'आज का पंचांग (Aaj Ka Panchang) | Divyayagyam',
-    description: 'सटीक वैदिक पंचांग, तिथि, नक्षत्र व अभिजीत मुहूर्त।',
-  },
-}
+export const metadata: Metadata = generatePageMeta({
+  title: 'आज का पंचांग — तिथि, नक्षत्र व शुभ मुहूर्त',
+  description: 'आज का सम्पूर्ण वैदिक पंचांग: दैनिक तिथि, नक्षत्र, योग, करण, सूर्योदय-सूर्यास्त, अभिजीत मुहूर्त एवं राहुकाल की 100% सटीक जानकारी।',
+  path: '/panchang',
+})
 
 export default function PanchangLayout({ children }: { children: React.ReactNode }) {
   // Google Rich Snippets / FAQ & WebPage JSON-LD Structured Data

@@ -28,7 +28,7 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
   }[size]
 
   return (
-    <Link href="/" className={cn('flex items-center gap-2 sm:gap-2.5 group shrink-0', className)}>
+    <Link href="/" aria-label="DivyaYagyam Home" className={cn('flex items-center gap-2 sm:gap-2.5 group shrink-0', className)}>
       <div className={cn("relative flex items-center justify-center group-hover:scale-[1.03] transition-transform shrink-0 drop-shadow-sm", containerSize)}>
         <img 
           src={logoUrl || '/logo.webp'} 

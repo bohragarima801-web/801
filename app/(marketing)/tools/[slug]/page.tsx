@@ -7,7 +7,7 @@ import { AlertCircle, Lock, Sparkles, Wrench, ChevronRight, CheckCircle2, HelpCi
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
 import { Metadata } from 'next'
-import { BASE_URL } from '@/lib/seo'
+import { BASE_URL, generatePageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -27,17 +27,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     select: { name: true, description: true, slug: true, isFree: true, price: true }
   })
 
-  if (!tool) return { title: 'Spiritual Tool | DivyaYagyam' }
+  if (!tool) return { title: 'Spiritual Tool' }
 
-  const canonicalUrl = `${BASE_URL}/tools/${tool.slug}`
-  const title = `${tool.name} — Free Online Vedic Tool & Predictions | DivyaYagyam`
-  const description = tool.description 
-    ? `${tool.description} 100% Authentic Vedic calculations & predictions online at DivyaYagyam.`
-    : `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms, instant predictions & dosha remedies at DivyaYagyam.`
-
-  return {
-    title,
-    description,
+  return generatePageMeta({
+    title: `${tool.name} — Free Online Vedic Tool`,
+    description: tool.description 
+      ? `${tool.description} 100% Authentic Vedic calculations & predictions online at DivyaYagyam.`
+      : `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms, instant predictions & dosha remedies at DivyaYagyam.`,
+    path: `/tools/${tool.slug}`,
     keywords: [
       tool.name,
       `${tool.name} online`,
@@ -50,44 +47,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       'divyayagyam astro tools',
       'jyotish tool online',
       'vedic horoscope'
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
-      siteName: 'DivyaYagyam',
-      locale: 'hi_IN',
-      type: 'website',
-      images: [
-        {
-          url: `${BASE_URL}/og-image.jpg`,
-          width: 1200,
-          height: 630,
-          alt: tool.name,
-        }
-      ]
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [`${BASE_URL}/og-image.jpg`],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    }
-  }
+    ]
+  })
 }
 
 export default async function ToolViewPage({ params }: { params: Promise<{ slug: string }> }) {

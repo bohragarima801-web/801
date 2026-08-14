@@ -360,27 +360,47 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
             </div>
           </div>
 
-          {/* Legal Links & Copyright */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-[#C99A3D]/20 text-xs font-medium text-[#E6D6BE] text-center md:text-left">
-            <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
-              <Link href="/terms" className="text-[#E6D6BE] hover:text-[#E58A16] hover:underline transition-colors">Terms of Service</Link>
+          {/* Navigation Directory & Internal Links */}
+          <div className="pt-4 border-t border-[#C99A3D]/20 text-xs font-medium text-[#E6D6BE] space-y-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-center md:justify-start">
+              <Link href="/about" className="hover:text-[#E58A16] hover:underline">हमारे बारे में (About)</Link>
               <span>•</span>
-              <Link href="/privacy" className="text-[#E6D6BE] hover:text-[#E58A16] hover:underline transition-colors">Privacy Policy</Link>
+              <Link href="/contact" className="hover:text-[#E58A16] hover:underline">संपर्क करें (Contact)</Link>
               <span>•</span>
-              <Link href="/refunds" className="text-[#E6D6BE] hover:text-[#E58A16] hover:underline transition-colors">Refund Policy</Link>
+              <Link href="/faq" className="hover:text-[#E58A16] hover:underline">सामान्य प्रश्न (FAQ)</Link>
               <span>•</span>
-              <Link href="/shipping" className="text-[#E6D6BE] hover:text-[#E58A16] hover:underline transition-colors">Shipping Policy</Link>
+              <Link href="/support" className="hover:text-[#E58A16] hover:underline">सहायता केंद्र (Support)</Link>
+              <span>•</span>
+              <Link href="/careers" className="hover:text-[#E58A16] hover:underline">करियर (Careers)</Link>
+              <span>•</span>
+              <Link href="/blog" className="hover:text-[#E58A16] hover:underline">वैदिक ब्लॉग (Blog)</Link>
+              <span>•</span>
+              <Link href="/festivals" className="hover:text-[#E58A16] hover:underline">त्योहार कैलेंडर (Festivals)</Link>
+              <span>•</span>
+              <Link href="/events" className="hover:text-[#E58A16] hover:underline">धार्मिक उत्सव (Events)</Link>
+              <span>•</span>
+              <Link href="/bhaktiseva" className="hover:text-[#E58A16] hover:underline">भक्ति सेवा (Offerings)</Link>
+              <span>•</span>
+              <Link href="/sitemap" className="hover:text-[#E58A16] hover:underline">साइटमैप (HTML Sitemap)</Link>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start text-[11px] text-[#A89F91]">
+              <Link href="/terms" className="hover:text-[#E58A16] hover:underline">Terms of Service</Link>
+              <span>•</span>
+              <Link href="/privacy" className="hover:text-[#E58A16] hover:underline">Privacy Policy</Link>
+              <span>•</span>
+              <Link href="/refunds" className="hover:text-[#E58A16] hover:underline">Refund Policy</Link>
+              <span>•</span>
+              <Link href="/shipping" className="hover:text-[#E58A16] hover:underline">Shipping Policy</Link>
               <span>•</span>
               <Link href="/register" className="text-white font-extrabold hover:text-[#E58A16] hover:underline">अपना खाता बनाएं</Link>
             </div>
-
-            <div className="text-center md:text-right text-[#E6D6BE]">
+            <div className="text-center md:text-right text-[#E6D6BE] pt-2 border-t border-[#C99A3D]/20">
               © {new Date().getFullYear()} Divya Yagyam. All rights reserved. • सनातन सेवा ॐ 🙏
             </div>
           </div>
 
         </div>
-
       </div>
     </footer>
   )
