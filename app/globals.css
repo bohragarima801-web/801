@@ -214,6 +214,49 @@
 }
 
 /* ============================================================
+   📱 MOBILE RESPONSIVENESS & TOUCH TARGET ENGINE (SAFE OVERRIDES)
+   ============================================================ */
+@layer utilities {
+  /* 1. Mobile Touch Targets (WCAG 44x44px minimum touch area) */
+  @media (max-width: 768px) {
+    button, 
+    .btn, 
+    a.btn, 
+    input, 
+    select, 
+    textarea,
+    .touch-target {
+      min-height: 44px;
+    }
+
+    /* Safe container edge margins on mobile */
+    .container, 
+    .site-container {
+      padding-left: clamp(16px, 4vw, 24px) !important;
+      padding-right: clamp(16px, 4vw, 24px) !important;
+    }
+
+    /* Collapse multi-column desktop tool grids to single-column on mobile */
+    .mobile-col-1 {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Footer mobile vertical stack alignment & touch padding */
+    .divyayagyam-footer {
+      padding-left: clamp(16px, 4vw, 24px);
+      padding-right: clamp(16px, 4vw, 24px);
+    }
+  }
+
+  /* Safe container widths */
+  .safe-viewport {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* ============================================================
    SMOOTH SCROLL-TRIGGERED ENTRANCE ANIMATIONS (Slide-Up Effect)
    ============================================================ */
 @layer utilities {
