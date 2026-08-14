@@ -196,7 +196,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
           ],
-          max_tokens: 65536,
+          response_format: { type: 'json_object' },
+          max_tokens: 8192,
           temperature: 0.7
         })
         if (completion?.choices?.[0]?.message?.content) {
@@ -213,62 +214,61 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       throw lastError || new Error('All AI models failed to respond. Please check your Gemini API quota.')
     }
 
-    const finishReason = completion.choices[0]?.finish_reason
     const rawResponse = completion.choices[0]?.message?.content || '{}'
 
-    // Warn if response was cut off — means max_tokens was too low
-    if (finishReason === 'length') {
-      console.warn('[AutoBlog] WARNING: AI response was truncated (finish_reason=length). Attempting JSON repair...')
-    }
-
-    // Strip markdown code fences if present, then extract JSON object
-    let jsonCandidate = rawResponse
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/\s*```$/i, '')
-      .trim()
-
-    const firstBrace = jsonCandidate.indexOf('{')
-    const lastBrace = jsonCandidate.lastIndexOf('}')
-    if (firstBrace !== -1 && lastBrace > firstBrace) {
-      jsonCandidate = jsonCandidate.substring(firstBrace, lastBrace + 1)
-    } else if (firstBrace !== -1) {
-      // Truncated — take from first brace to end
-      jsonCandidate = jsonCandidate.substring(firstBrace)
-    }
-
+    // Resilient JSON parser for LLM outputs
     let blogData: any
     try {
-      blogData = JSON.parse(jsonCandidate)
-    } catch {
-      // Auto-repair truncated JSON
-      try {
-        let repairedStr = jsonCandidate
+      // 1. Strip markdown code fences
+      let cleaned = rawResponse
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/\s*```$/i, '')
+        .trim()
 
-        // If contentMarkdown is the truncated field, truncate it cleanly at last safe boundary
-        const contentMatch = repairedStr.match(/("contentMarkdown"\s*:\s*")(.*)/s)
-        if (contentMatch && finishReason === 'length') {
-          // Cut the content at last complete sentence/paragraph before truncation
-          const contentStart = repairedStr.indexOf('"contentMarkdown"')
-          const safeEnd = repairedStr.lastIndexOf('\\n\\n')
-          if (safeEnd > contentStart) {
-            repairedStr = repairedStr.substring(0, safeEnd) + '...",\n"faqs": []\n}'
+      const firstBrace = cleaned.indexOf('{')
+      const lastBrace = cleaned.lastIndexOf('}')
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        cleaned = cleaned.substring(firstBrace, lastBrace + 1)
+      } else if (firstBrace !== -1) {
+        cleaned = cleaned.substring(firstBrace)
+      }
+
+      // 2. First attempt standard JSON.parse
+      try {
+        blogData = JSON.parse(cleaned)
+      } catch {
+        // 3. Clean unescaped control characters inside string literals
+        let inString = false
+        let escaped = false
+        let fixed = ''
+        for (let i = 0; i < cleaned.length; i++) {
+          const c = cleaned[i]
+          if (c === '"' && !escaped) {
+            inString = !inString
+            fixed += c
+          } else if (inString) {
+            if (c === '\n') fixed += '\\n'
+            else if (c === '\r') fixed += '\\r'
+            else if (c === '\t') fixed += '\\t'
+            else if (c === '\b') fixed += '\\b'
+            else if (c === '\f') fixed += '\\f'
+            else fixed += c
           } else {
-            // Just close whatever is open
-            if ((repairedStr.match(/(?<!\\)"/g) || []).length % 2 !== 0) repairedStr += '"'
-            repairedStr = repairedStr.replace(/,\s*$/, '') + '\n}'
+            fixed += c
           }
-        } else {
-          if ((repairedStr.match(/(?<!\\)"/g) || []).length % 2 !== 0) repairedStr += '"'
-          repairedStr = repairedStr.replace(/,\s*$/, '') + '\n}'
+          escaped = (c === '\\' && !escaped)
         }
 
-        blogData = JSON.parse(repairedStr)
-      } catch {
-        console.error('[AutoBlog] Raw LLM Response (first 500 chars):', rawResponse.slice(0, 500))
-        console.error('[AutoBlog] finish_reason:', finishReason)
-        throw new Error('Failed to parse AI blog JSON output')
+        if (inString) fixed += '"'
+        if (!fixed.trim().endsWith('}')) fixed += '\n}'
+
+        blogData = JSON.parse(fixed)
       }
+    } catch (parseErr: any) {
+      console.error('[AutoBlog] Raw LLM Response (first 500 chars):', rawResponse.slice(0, 500))
+      console.error('[AutoBlog] Parse Error:', parseErr?.message)
+      throw new Error('Failed to parse AI blog JSON output')
     }
 
     if (!blogData.title && !blogData.h1) {
