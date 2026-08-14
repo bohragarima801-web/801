@@ -18,7 +18,7 @@ const DEFAULT_TEAM_MEMBERS = [
   {
     id: 'wa_default_2',
     name: 'Store & Prasad Helpline',
-    phone: '919532011984',
+    phone: '919530401984',
     role: 'Prasad Delivery & Spiritual Products',
     message: 'जय श्री राम! मुझे सिद्ध प्रसाद एवं प्रोडक्ट डिलीवरी की जानकारी चाहिए।',
     isPrimary: false,

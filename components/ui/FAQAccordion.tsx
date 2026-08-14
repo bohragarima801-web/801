@@ -69,7 +69,7 @@ export function FAQAccordion({
       {/* Trust Guarantee Footer */}
       <div className="flex items-center justify-center gap-2 pt-2 text-xs text-[#e5c158] font-semibold">
         <HelpCircle className="w-4 h-4 text-[#fbbf24]" />
-        <span>अन्य प्रश्न? व्हाट्सएप पर संपर्क करें: +91-95304-01984 / +91-95304-01984</span>
+        <span>अन्य प्रश्न? व्हाट्सएप पर संपर्क करें: +91 95304 01984</span>
       </div>
     </div>
   )

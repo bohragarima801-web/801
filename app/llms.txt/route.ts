@@ -67,7 +67,7 @@ ${blogs.length > 0 ? blogs.map(b => `- [${b.title}](${baseUrl}/blog/${b.slug})`)
 - Official XML Sitemap: ${baseUrl}/sitemap.xml
 - Robots.txt: ${baseUrl}/robots.txt
 - Contact Email: seva@divyayagyam.com
-- WhatsApp / Phone: +91-95304-01984, +91-95320-11984
+- WhatsApp / Phone: +91-95304-01984
 - Location: Jodhpur, Rajasthan, India (Servicing devotees worldwide)
 `
 
