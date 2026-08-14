@@ -109,11 +109,10 @@ function NewPujaPage_Content() {
   const [badgeTag, setBadgeTag] = useState('')
   const [showPanditChoice, setShowPanditChoice] = useState(true)
   const [assignedPanditName, setAssignedPanditName] = useState('पं. मुकेश बोहरा (Pt. Mukesh Bohra)')
-
-  const [assignedPanditTitle, setAssignedPanditTitle] = useState('मुख्य आचार्य एवं वेदपाठी विद्वान')
-  const [assignedPanditExperience, setAssignedPanditExperience] = useState('20+ वर्ष अनुभव')
-  const [assignedPanditLocation, setAssignedPanditLocation] = useState('उज्जैन / काशी सिद्ध पीठ')
-  const [assignedPanditPhoto, setAssignedPanditPhoto] = useState('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80')
+  const [assignedPanditTitle, setAssignedPanditTitle] = useState('मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)')
+  const [assignedPanditExperience, setAssignedPanditExperience] = useState('25+ वर्ष अनुभव')
+  const [assignedPanditLocation, setAssignedPanditLocation] = useState('माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)')
+  const [assignedPanditPhoto, setAssignedPanditPhoto] = useState('/pandit_mukesh_bohra.jpg')
   const [coverImage, setCoverImage] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [uploadingVideo, setUploadingVideo] = useState(false)
@@ -675,7 +674,7 @@ function NewPujaPage_Content() {
                   <Input 
                     value={assignedPanditName} 
                     onChange={(e) => setAssignedPanditName(e.target.value)} 
-                    placeholder="e.g. पं. कन्हैया लाल दवे" 
+                    placeholder="e.g. पं. मुकेश बोहरा (Pt. Mukesh Bohra)" 
                     className="border-amber-300 bg-white"
                   />
                 </div>
@@ -684,7 +683,7 @@ function NewPujaPage_Content() {
                   <Input 
                     value={assignedPanditTitle} 
                     onChange={(e) => setAssignedPanditTitle(e.target.value)} 
-                    placeholder="e.g. अथर्ववेद एवं महाविद्या पीठाधीश्वर" 
+                    placeholder="e.g. मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)" 
                     className="border-amber-300 bg-white"
                   />
                 </div>
@@ -696,7 +695,7 @@ function NewPujaPage_Content() {
                   <Input 
                     value={assignedPanditExperience} 
                     onChange={(e) => setAssignedPanditExperience(e.target.value)} 
-                    placeholder="e.g. 22+ वर्ष अनुभव" 
+                    placeholder="e.g. 25+ वर्ष अनुभव" 
                     className="border-amber-300 bg-white"
                   />
                 </div>
@@ -705,7 +704,7 @@ function NewPujaPage_Content() {
                   <Input 
                     value={assignedPanditLocation} 
                     onChange={(e) => setAssignedPanditLocation(e.target.value)} 
-                    placeholder="e.g. माँ बगलामुखी पीठ, दतिया" 
+                    placeholder="e.g. माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)" 
                     className="border-amber-300 bg-white"
                   />
                 </div>
@@ -729,7 +728,7 @@ function NewPujaPage_Content() {
                         alt={assignedPanditName || 'Pandit Photo'} 
                         className="h-full w-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                          e.currentTarget.src = '/pandit_mukesh_bohra.jpg';
                         }}
                       />
                     ) : (

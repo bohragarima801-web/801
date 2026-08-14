@@ -393,27 +393,25 @@ function BookingForm() {
                     checked={selectPanditChoice} 
                     onCheckedChange={(val) => setSelectPanditChoice(!!val)} 
                   />
-                  {assignedPandit?.photo && (
-                    <img 
-                      src={getSafeImageUrl(assignedPandit.photo)} 
-                      className="h-10 w-10 rounded-full object-cover border-2 border-amber-400 shrink-0" 
-                      alt="Pandit Ji" 
-                      onError={(e) => {
-                        e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
-                      }}
-                    />
-                  )}
+                  <img 
+                    src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
+                    className="h-10 w-10 rounded-full object-cover border-2 border-amber-400 shrink-0" 
+                    alt={assignedPandit?.name || 'पं. मुकेश बोहरा'} 
+                    onError={(e) => {
+                      e.currentTarget.src = '/pandit_mukesh_bohra.jpg';
+                    }}
+                  />
                   <div className="text-xs">
                     <div className="flex items-center gap-1.5">
                       <h4 className="font-bold text-slate-800">
-                        पंडित जी चॉइस (Pandit Ji Choice) — {assignedPandit?.name || 'पं. मुकेश बोहरा'}
+                        पंडित जी चॉइस (Pandit Ji Choice) — {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
                       </h4>
                       <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded-full">
                         ✓ Verified
                       </span>
                     </div>
                     <p className="text-slate-500 text-[10px]">
-                      {assignedPandit?.title || 'विद्वान वेदपाठी आचार्य द्वारा विशेष नाम-गोत्र संकल्प एवं पूजन'}
+                      {assignedPandit?.title || 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)'}
                     </p>
                   </div>
                 </div>

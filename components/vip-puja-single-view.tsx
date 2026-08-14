@@ -126,13 +126,21 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     } catch (e) {}
   }
 
-  const assignedPandit = parsedPandit || {
-    name: 'पं. मुकेश बोहरा जी',
-    title: 'मुख्य वेदाचार्य एवं कर्मकांड प्रमुख (27+ वर्ष अनुभव)',
-    experience: '27+ वर्ष वैदिक अनुभव',
-    location: templeLocation,
+  const DEFAULT_PANDIT = {
+    name: 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)',
+    title: 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)',
+    experience: '25+ वर्ष वैदिक अनुभव',
+    location: templeLocation || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)',
     photo: '/pandit_mukesh_bohra.jpg'
   }
+
+  const assignedPandit = parsedPandit ? {
+    name: parsedPandit.name || DEFAULT_PANDIT.name,
+    title: parsedPandit.title || DEFAULT_PANDIT.title,
+    experience: parsedPandit.experience || DEFAULT_PANDIT.experience,
+    location: parsedPandit.location || DEFAULT_PANDIT.location,
+    photo: (parsedPandit.photo && !parsedPandit.photo.includes('unsplash')) ? parsedPandit.photo : DEFAULT_PANDIT.photo
+  } : DEFAULT_PANDIT
 
   const defaultFaqs = [
     {

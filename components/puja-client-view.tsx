@@ -633,10 +633,10 @@ export function PujaClientView({ puja }: { puja: any }) {
                 <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border border-[#E6D6BE] shrink-0 shadow-xs bg-[#F7EBD7]">
                   <img 
                     src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
-                    alt={assignedPandit?.name || 'Pandit Ji'} 
+                    alt={assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80';
+                      e.currentTarget.src = '/pandit_mukesh_bohra.jpg';
                     }}
                   />
                 </div>
@@ -648,10 +648,10 @@ export function PujaClientView({ puja }: { puja: any }) {
                     {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#665E58] font-medium">
-                    {assignedPandit?.title || 'मुख्य वेदपाठी आचार्य एवं वैदिक अनुष्ठान विशेषज्ञ'}
+                    {assignedPandit?.title || 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)'}
                   </p>
                   <p className="text-[11px] text-[#665E58]">
-                    📍 {assignedPandit?.location || 'उज्जैन / काशी धाम'} • 📜 {assignedPandit?.experience || '20+ वर्ष अनुभव'}
+                    📍 {assignedPandit?.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'} • 📜 {assignedPandit?.experience || '25+ वर्ष अनुभव'}
                   </p>
                 </div>
               </div>
