@@ -9,211 +9,89 @@
 
 @layer base {
   :root {
-    /* ── Vibrant Sanatani Saffron Brand Palette Design Tokens ── */
-    --color-primary-saffron: #FF7A00;
-    --color-secondary-orange: #FF6B00;
-    --color-accent-gold: #FFD700;
-    --color-warm-cream: #FFF9EF;
-    --color-dark-brown: #29221D;
-    --color-body-text: #111827;
-    --color-muted-text: #4B5563;
-    --color-cta-green: #00875A;
-    --color-error-red: #B42318;
+    /* ── DIVYAYAGYAM MASTER BRAND DESIGN TOKENS (LOCKED) ── */
+    --color-ivory: #FFF9EF;
+    --color-white: #FFFFFF;
+    --color-saffron: #E58A16;
+    --color-gold: #C99A3D;
+    --color-charcoal: #292321;
+    --color-cream: #F7EBD7;
+    --color-wine: #6B2635;
+    --color-border: #E6D6BE;
+    --color-muted: #665E58;
 
-    /* ── Standardized Border Radius Tokens ── */
+    /* ── Standardized Spacing & Radius Tokens ── */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 18px;
+    --radius-card: 20px;
+    --radius-btn: 12px;
     --min-touch-target: 44px;
 
-    /* ── Global Font System Tokens ── */
-    --font-heading-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    /* ── Typography Tokens ── */
     --font-heading-hi: 'Noto Sans Devanagari', 'Noto Serif Devanagari', sans-serif;
-    --font-body-en: 'Noto Sans Devanagari', 'Inter', sans-serif;
     --font-body-hi: 'Noto Sans Devanagari', sans-serif;
-    --font-vip-en: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-    --font-vip-hi: 'Yatra One', serif;
 
-    /* ── Tier 2: Standard & Home System Tokens ── */
-    --bg-tier2: #FFFBF7;
-    --surface-tier2: #FFFFFF;
-    --primary-tier2: #FF7A00;
-    --secondary-tier2: #FF6B00;
-    --accent-tier2: #FFD700;
-    --text-heading-tier2: #111827;
-    --text-body-tier2: #4B5563;
-    --border-tier2: #F3E8DE;
-    --success-tier2: #00875A;
-  }
-}
-
-/* Custom VIP Luxury Styling Classes (DevPunya Style Royal Obsidian × Metallic Gold) */
-.vip-container {
-  background-color: #0f0c08;
-  color: #ffffff;
-  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-}
-.vip-card {
-  background: #1c160f;
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.12);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-}
-.vip-card:hover {
-  border-color: #d4af37;
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.28);
-  transition: all 0.3s ease-in-out;
-}
-.vip-gold-gradient-text {
-  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800;
-}
-.vip-cta-btn {
-  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #b38728 70%, #fbf5b7 100%);
-  color: #0f0c08;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  border: none;
-  border-radius: 12px;
-  padding: 14px 28px;
-  box-shadow: 0 4px 15px rgba(191, 149, 63, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.vip-cta-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(252, 246, 186, 0.6);
-}
-
-@layer base {
-  :root {
-
-    /* ── Tier 1: Premium (Landing & VIP Puja) System Tokens ── */
-    --bg-tier1-start: #111827;
-    --bg-tier1-end: #0B0F19;
-    --card-tier1: #1E222A;
-    --gold-primary-tier1: #FF7A00;
-    --gold-bright-tier1: #FF9433;
-    --gold-bronze-tier1: #D95D00;
-    --maroon-vip-tier1: #1E222A;
-    --text-heading-tier1: #FFFFFF;
-    --text-body-tier1: #9CA3AF;
-    --divider-glow-tier1: rgba(255, 122, 0, 0.4);
-
-    /* ── Core Palette (shadcn/Radix HSL tokens) ── */
-    --background: 33 50% 98%;               /* Soft Warm Off-White #FFFBF7 */
-    --foreground: 222 47% 11%;              /* Deep Charcoal #111827 */
-    --card: 0 0% 100%;                      /* Crisp Pure White #FFFFFF */
-    --card-foreground: 222 47% 11%;
+    /* ── Core Surfaces & Semantic Tokens ── */
+    --background: 38 70% 97%;               /* #FFF9EF - Warm Ivory */
+    --foreground: 12 10% 15%;               /* #292321 - Dark Charcoal */
+    --card: 0 0% 100%;                      /* #FFFFFF - Pure White */
+    --card-foreground: 12 10% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 28 100% 50%;                 /* Vibrant Modern Orange #FF7A00 */
+    --popover-foreground: 12 10% 15%;
+    --primary: 34 85% 49%;                  /* #E58A16 - Primary Saffron */
     --primary-foreground: 0 0% 100%;
-    --secondary: 25 100% 50%;               /* Saffron Orange #FF6B00 */
+    --secondary: 40 56% 51%;                /* #C99A3D - Antique Gold */
     --secondary-foreground: 0 0% 100%;
-    --muted: 30 30% 96%;
-    --muted-foreground: 215 16% 34%;        /* Slate Gray #4B5563 */
-    --accent: 28 100% 50%;                  /* Vibrant Orange */
+    --muted: 36 60% 92%;                    /* #F7EBD7 - Soft Cream */
+    --muted-foreground: 25 7% 37%;          /* #665E58 - Muted Text */
+    --accent: 34 85% 49%;                   /* Saffron Accent */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 347 48% 28%;             /* #6B2635 - Subtle Wine */
     --destructive-foreground: 0 0% 100%;
-    --border: 30 40% 91%;                   /* Warm Soft Border #F3E8DE */
-    --input: 30 40% 91%;
-    --ring: 28 100% 50%;                    /* Focus Ring Orange #FF7A00 */
+    --border: 36 44% 82%;                   /* #E6D6BE - Warm Subtle Border */
+    --input: 36 44% 82%;
+    --ring: 34 85% 49%;                     /* Saffron Focus Ring */
     --radius: 0.85rem;
 
-    /* Chart tokens */
-    --chart-1: 28 100% 50%;
-    --chart-2: 25 100% 50%;
-    --chart-3: 15 60% 42%;
-    --chart-4: 160 60% 40%;
-    --chart-5: 250 60% 55%;
+    /* ── Gradients & Shadows ── */
+    --gradient-primary: linear-gradient(135deg, #E58A16 0%, #D4790E 100%);
+    --gradient-gold: linear-gradient(135deg, #C99A3D 0%, #E58A16 100%);
+    --gradient-hero-light: linear-gradient(180deg, #FFF9EF 0%, #F7EBD7 50%, #FFF9EF 100%);
+    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFF9EF 100%);
 
-    /* Sidebar */
-    --sidebar-background: 33 50% 98%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 28 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 30% 96%;
-    --sidebar-accent-foreground: 215 16% 34%;
-    --sidebar-border: 30 40% 91%;
-    --sidebar-ring: 28 100% 50%;
-
-    /* ── Legacy hex aliases ── */
-    --primary-color: #FF7A00;     /* Saffron Orange */
-    --secondary-color: #FF6B00;   /* Modern Orange */
-    --bg-light: #FFFBF7;
-    --text-dark: #111827;
-    --card-bg: #FFFFFF;
-
-    /* ── Sacred Palette (KundliAPI modern vibe) ── */
-    --saffron: #FF7A00;
-    --saffron-light: #FF9433;
-    --sindoor: #FF6B00;
-    --gold: #FF7A00;
-    --gold-light: #FF9433;
-    --gold-pale: #FFF3E0;
-    --cream: #FFFBF7;
-    --ivory: #FFFBF7;
-    --charcoal: #111827;
-    --warm-brown: #111827;
-    --divine-gold: #FF7A00;
-
-    /* ── Modern Light Theme Gradients ── */
-    --gradient-primary: linear-gradient(135deg, #FF7A00 0%, #FF6B00 100%);
-    --gradient-gold: linear-gradient(90deg, #FF7A00 0%, #FF9433 100%);
-    --gradient-gold-vip: linear-gradient(135deg, #FF7A00 0%, #FF6B00 100%);
-    --gradient-sanatani-light: linear-gradient(165deg, #FFFBF7 0%, #FFF5EB 50%, #FFFBF7 100%);
-    --gradient-hero-light: linear-gradient(180deg, #FFF8F2 0%, #FFFBF7 100%);
-    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFFBF7 100%);
-
-    /* ── Shadows ── */
-    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
-    --shadow-medium: 0 10px 30px -4px rgba(0, 0, 0, 0.08);
-    --shadow-heavy: 0 20px 48px -6px rgba(0, 0, 0, 0.12);
-    --shadow-glow: 0 8px 25px -4px rgba(255, 122, 0, 0.35);
-    --shadow-gold: 0 8px 25px -4px rgba(255, 122, 0, 0.30);
-    --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+    --shadow-soft: 0 4px 20px -2px rgba(80, 50, 20, 0.04);
+    --shadow-medium: 0 8px 30px rgba(80, 50, 20, 0.06);
+    --shadow-heavy: 0 16px 40px -4px rgba(80, 50, 20, 0.10);
+    --shadow-glow: 0 8px 25px -4px rgba(229, 138, 22, 0.30);
+    --shadow-card: 0 4px 20px -2px rgba(80, 50, 20, 0.04), 0 2px 6px -1px rgba(80, 50, 20, 0.02);
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 100%;
-    --card: 217 33% 14%;
-    --card-foreground: 0 0% 100%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 28 100% 50%;
+    --background: 12 10% 12%;
+    --foreground: 38 70% 97%;
+    --card: 12 10% 16%;
+    --card-foreground: 38 70% 97%;
+    --popover: 12 10% 16%;
+    --popover-foreground: 38 70% 97%;
+    --primary: 34 85% 49%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 25 100% 50%;
+    --secondary: 40 56% 51%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 217 19% 20%;
-    --muted-foreground: 215 16% 65%;
-    --accent: 28 100% 50%;
+    --muted: 12 10% 22%;
+    --muted-foreground: 36 20% 70%;
+    --accent: 34 85% 49%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 347 48% 28%;
     --destructive-foreground: 0 0% 100%;
-    --border: 217 19% 22%;
-    --input: 217 19% 22%;
-    --ring: 28 100% 50%;
-
-    --primary-color: #FF7A00;
-    --secondary-color: #FF6B00;
-    --bg-light: #111827;
-    --text-dark: #F9FAFB;
-    --card-bg: #1E222A;
+    --border: 12 10% 24%;
+    --input: 12 10% 24%;
+    --ring: 34 85% 49%;
   }
 }
 
 /* ============================================================
-   BASE ELEMENTS & PRO-LEVEL TYPOGRAPHY (KundliAPI Style)
+   BASE ELEMENTS & PRO-LEVEL DEVANAGARI TYPOGRAPHY
    ============================================================ */
 @layer base {
   * {
@@ -229,8 +107,8 @@
   }
 
   body {
-    background-color: var(--bg-tier2);
-    color: var(--text-body-tier2);
+    background-color: var(--color-ivory);
+    color: var(--color-charcoal);
     font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', 'Inter', system-ui, -apple-system, sans-serif;
     margin: 0;
     padding: 0;
@@ -238,17 +116,17 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-    line-height: 1.7;
-    font-size: 15px;
+    line-height: 1.75;
+    font-size: 16px;
   }
 
-  /* Headings: Ample line-height, proper letter-spacing for Devanagari conjuncts */
+  /* Headings: Ample line-height (1.25-1.4), preventing Devanagari conjuncts & matras from overlapping */
   h1, h2, h3, .heading {
     font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
     letter-spacing: 0.01em;
     line-height: 1.35;
     font-weight: 700;
-    color: var(--text-heading-tier2);
+    color: var(--color-charcoal);
     word-break: break-word;
     overflow-wrap: break-word;
   }
@@ -258,7 +136,7 @@
     letter-spacing: 0.01em;
     line-height: 1.45;
     font-weight: 600;
-    color: var(--text-heading-tier2);
+    color: var(--color-charcoal);
   }
 
   p {

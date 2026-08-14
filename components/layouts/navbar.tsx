@@ -110,34 +110,40 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
     <header
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300',
-        scrolled ? 'navbar-scrolled' : 'navbar-spiritual'
+        scrolled ? 'bg-[#FFF9EF]/95 backdrop-blur-md shadow-md border-b border-[#E6D6BE]' : 'bg-[#FFF9EF] border-b border-[#E6D6BE]'
       )}
     >
-      {/* Top Announcement Bar — Sanatani Saffron Strip */}
-      <div className="w-full bg-gradient-to-r from-[#FF7A00] via-[#FF6B00] to-[#FF7A00] text-white py-1 px-4 text-center text-[11px] sm:text-xs font-bold flex items-center justify-center gap-2 shadow-sm notranslate" translate="no">
-        <Flame className="h-3.5 w-3.5 text-[#FFF3E0] animate-pulse shrink-0" />
-        <span>🚩 100% प्रामाणिक वैदिक पूजा एवं अनुष्ठान — नाम व गोत्र संकल्प से सिद्ध सेवा 🪔</span>
+      {/* Top Announcement Bar — Locked Brand Strip */}
+      <div className="w-full bg-[#6B2635] text-white py-1.5 px-4 text-center text-[11px] sm:text-xs font-semibold flex items-center justify-between shadow-xs notranslate" translate="no">
+        <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs">
+          <span className="text-[#C99A3D]">ॐ</span>
+          <span>सनातन धर्म की सेवा में समर्पित</span>
+        </div>
+        <div className="flex-1 text-center font-medium">
+          <span>शुद्ध मंत्र, शास्त्रोक्त विधि और पूर्ण श्रद्धा के साथ हर पूजा</span>
+        </div>
+        <div className="hidden md:flex items-center gap-4 text-xs font-medium">
+          <a href="tel:+919530401984" className="text-white/90 hover:text-[#C99A3D] transition-colors flex items-center gap-1">
+            <span>📞</span> {siteData?.contact?.phone || '+91 95304 01984'}
+          </a>
+        </div>
       </div>
-
-      {/* Top gold accent strip */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#A87C28]/50 to-transparent" />
 
       <div className="container flex h-16 items-center justify-between gap-4 px-4 md:px-6">
         <Logo />
 
         {/* Desktop navigation */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        <nav className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               prefetch={true}
-              className="nav-link-spiritual"
+              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7]/60 transition-all"
             >
               {item.title}
             </Link>
           ))}
-
 
           {/* Tools mega dropdown */}
           <div
@@ -148,34 +154,33 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           >
             <Link
               href="/tools"
-              className="nav-link-spiritual flex items-center gap-1"
+              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7]/60 transition-all flex items-center gap-1"
             >
-              Tools
+              <span>टूल्स</span>
               <ChevronDown
-                className={cn('h-3.5 w-3.5 opacity-50 transition-transform duration-200', toolsOpen && 'rotate-180')}
+                className={cn('h-3.5 w-3.5 opacity-60 transition-transform duration-200', toolsOpen && 'rotate-180')}
               />
             </Link>
 
             <div
               className={cn(
-                'absolute top-full left-1/2 -translate-x-1/2 pt-3 w-72 z-50 transition-all duration-200',
+                'absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 z-50 transition-all duration-200',
                 toolsOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
               )}
             >
-              <div className="bg-white dark:bg-[#1A0B05] border border-[rgba(168,124,40,0.18)] rounded-2xl shadow-2xl p-2 ring-1 ring-black/5">
-                {/* Gold top accent */}
-                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#A87C28]/40 to-transparent mb-2" />
+              <div className="bg-white border border-[#E6D6BE] rounded-2xl shadow-xl p-2 ring-1 ring-black/5">
+                <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#C99A3D]/40 to-transparent mb-2" />
                 <div className="grid grid-cols-1 gap-0.5">
                   {toolsMenu.map((t) => (
                     <Link
                       key={t.href}
                       href={t.href}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[rgba(139,26,33,0.06)] dark:hover:bg-white/5 transition-colors group"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F7EBD7] transition-colors group"
                     >
-                      <span className="text-base w-6 text-center shrink-0 opacity-80">{t.icon}</span>
+                      <span className="text-base w-6 text-center shrink-0 opacity-90">{t.icon}</span>
                       <div>
-                        <div className="text-sm font-semibold text-[#1E120A] dark:text-[#F5EBDC] group-hover:text-[#8B1A21] dark:group-hover:text-[#E06070] transition-colors">{t.title}</div>
-                        <div className="text-[11px] text-[#8B7355] dark:text-[rgba(245,235,220,0.55)] mt-0.5">{t.desc}</div>
+                        <div className="text-sm font-bold text-[#292321] group-hover:text-[#E58A16] transition-colors">{t.title}</div>
+                        <div className="text-[11px] text-[#665E58] mt-0.5">{t.desc}</div>
                       </div>
                     </Link>
                   ))}
@@ -186,19 +191,19 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         </nav>
 
         {/* Right controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           {/* Cart */}
           <Button
             variant="ghost"
             size="icon"
             aria-label="Cart"
             asChild
-            className="relative rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 transition-all"
+            className="relative rounded-full text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] transition-all h-9 w-9"
           >
             <Link href="/cart">
               <ShoppingBag className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-[#FF7A00] to-[#FF6B00] text-[9px] font-bold text-white shadow-md ring-2 ring-white">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#E58A16] text-[9px] font-bold text-white shadow-md ring-2 ring-white">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -212,23 +217,23 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1 px-2 h-8 text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50/80 rounded-full text-xs font-bold uppercase tracking-wide border border-[#F3E8DE]"
+              className="gap-1 px-2.5 h-8 text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] rounded-full text-xs font-bold uppercase tracking-wide border border-[#E6D6BE]"
               onClick={() => setLangOpen(!langOpen)}
               title="Change Language"
             >
-              <Languages className="h-3.5 w-3.5 text-[#FF7A00]" />
+              <Languages className="h-3.5 w-3.5 text-[#E58A16]" />
               <span>{currentLang === 'hi' ? 'HI' : 'EN'}</span>
               <ChevronDown className="h-3 w-3 opacity-60" />
             </Button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-white dark:bg-[#111827] border border-[#F3E8DE] dark:border-gray-800 rounded-xl shadow-xl p-1 z-50">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-[#E6D6BE] rounded-xl shadow-xl p-1 z-50">
                 {languages.map((l) => (
                   <button
                     key={l.code}
                     onClick={() => changeLang(l.code)}
                     className={cn(
-                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-orange-50 dark:hover:bg-gray-800 transition-colors font-medium',
-                      currentLang === l.code ? 'text-[#FF7A00] font-bold bg-orange-50/60' : 'text-[#111827] dark:text-gray-200'
+                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-[#F7EBD7] transition-colors font-medium',
+                      currentLang === l.code ? 'text-[#E58A16] font-bold bg-[#F7EBD7]/70' : 'text-[#292321]'
                     )}
                   >
                     {l.label}
@@ -238,13 +243,13 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — Prominent Vibrant Sanatani Saffron Pill */}
+          {/* "Book Puja" CTA — Saffron Button matching Mockup */}
           <Link
             href="/pujas"
-            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] hover:from-[#FF6B00] hover:to-[#E65100] text-white text-xs font-extrabold tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 shrink-0 whitespace-nowrap focus-ring-sacred"
+            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white text-xs font-extrabold tracking-wide shadow-md hover:shadow-lg transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
           >
-            <Flame className="h-3.5 w-3.5 text-[#FFF3E0]" />
-            <span>Book Puja</span>
+            <span>पूजा बुक करें</span>
+            <span className="text-sm">➔</span>
           </Link>
 
           {/* User Profile / Account Icon */}
@@ -255,10 +260,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-full text-[#111827] hover:text-[#FF7A00] hover:bg-orange-50 font-bold text-xs gap-1.5 px-2.5 h-8 border border-orange-200 bg-orange-50/40"
+                  className="rounded-xl text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] font-bold text-xs gap-1.5 px-3 h-9 border border-[#E6D6BE] bg-white shadow-xs"
                 >
                   <Link href="/dashboard" title="My Account">
-                    <User className="h-4 w-4 text-[#FF7A00]" />
+                    <User className="h-4 w-4 text-[#E58A16]" />
                     <span className="hidden sm:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                   </Link>
                 </Button>
@@ -267,7 +272,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     type="submit"
                     size="sm"
                     variant="ghost"
-                    className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full text-xs font-medium px-2 h-8"
+                    className="text-[#665E58] hover:text-red-600 hover:bg-red-50 rounded-xl text-xs font-medium px-2.5 h-9"
                   >
                     Logout
                   </Button>
@@ -278,16 +283,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 asChild
                 size="sm"
                 variant="ghost"
-                className="rounded-full border border-[#FF7A00]/40 text-[#FF7A00] hover:bg-orange-50 font-bold text-xs px-2.5 h-8 bg-orange-50/30"
+                className="rounded-xl border border-[#E6D6BE] text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] font-bold text-xs px-3 h-9 bg-white shadow-xs"
               >
                 <Link href="/login" title="Login / Register">
-                  <User className="h-4 w-4 mr-1 sm:mr-1.5" />
-                  <span className="hidden sm:inline">Login</span>
+                  <User className="h-4 w-4 mr-1 text-[#E58A16]" />
+                  <span className="hidden sm:inline">लॉगिन</span>
                 </Link>
               </Button>
             )
           ) : (
-            <div className="h-8 w-8 rounded-full bg-orange-50 animate-pulse" />
+            <div className="h-8 w-8 rounded-full bg-[#F7EBD7] animate-pulse" />
           )}
 
           {/* Mobile hamburger */}
@@ -297,17 +302,17 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-label={open ? "Close Navigation Menu" : "Open Navigation Menu"}
-            className="lg:hidden rounded-full text-[#111827] hover:text-[#7B241C] hover:bg-orange-50 focus-ring-sacred"
+            className="lg:hidden rounded-xl text-[#292321] hover:bg-[#F7EBD7] h-10 w-10 border border-[#E6D6BE]"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu drawer */}
       <div
         className={cn(
-          'lg:hidden absolute top-full left-0 right-0 bg-[#FFFBF5] dark:bg-[#0C0402] shadow-2xl border-b border-[rgba(168,124,40,0.15)] overflow-hidden transition-all duration-300',
+          'lg:hidden absolute top-full left-0 right-0 bg-[#FFF9EF] shadow-2xl border-b border-[#E6D6BE] overflow-hidden transition-all duration-300',
           open ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         )}
       >
@@ -318,7 +323,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               href={item.href}
               prefetch={true}
               onClick={() => setOpen(false)}
-              className="px-4 py-3 rounded-xl text-sm font-semibold text-[#2A1508]/80 dark:text-[rgba(245,235,220,0.80)] hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.05)] transition-colors"
+              className="px-4 py-3 rounded-xl text-sm font-bold text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] transition-colors"
             >
               {item.title}
             </Link>
@@ -327,33 +332,33 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             href="/tools"
             prefetch={true}
             onClick={() => setOpen(false)}
-            className="px-4 py-3 rounded-xl text-sm font-semibold text-[#2A1508]/80 dark:text-[rgba(245,235,220,0.80)] hover:text-[#8B1A21] hover:bg-[rgba(139,26,33,0.05)] transition-colors"
+            className="px-4 py-3 rounded-xl text-sm font-bold text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7] transition-colors"
           >
-            Tools
+            टूल्स (Tools)
           </Link>
-          <div className="h-px bg-gradient-to-r from-transparent via-[rgba(168,124,40,0.25)] to-transparent my-2 mx-4" />
+          <div className="h-px bg-[#E6D6BE] my-2 mx-4" />
 
           {/* Book Puja CTA — mobile */}
           <Link
             href="/pujas"
             prefetch={true}
             onClick={() => setOpen(false)}
-            className="mx-4 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-center shadow-md"
+            className="mx-4 py-3 rounded-xl text-sm font-extrabold text-white bg-[#E58A16] hover:bg-[#d4790e] text-center shadow-md flex items-center justify-center gap-2"
           >
-
-            🔥 Book a Puja Now
+            <span>पूजा बुक करें (Book Puja)</span>
+            <span>➔</span>
           </Link>
 
-          <div className="h-px bg-[rgba(168,124,40,0.12)] my-2 mx-4" />
+          <div className="h-px bg-[#E6D6BE] my-2 mx-4" />
 
           {user ? (
             <>
               <Link
                 href="/dashboard"
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 rounded-xl text-sm font-semibold text-[#2A1508] dark:text-[rgba(245,235,220,0.80)] bg-[rgba(139,26,33,0.05)] flex items-center gap-2"
+                className="px-4 py-3 rounded-xl text-sm font-bold text-[#292321] bg-[#F7EBD7] flex items-center gap-2"
               >
-                <User className="h-4 w-4 text-[#8B1A21]" /> My Dashboard
+                <User className="h-4 w-4 text-[#E58A16]" /> मेरा डैशबोर्ड (My Dashboard)
               </Link>
               <form action="/auth/signout" method="post" className="w-full">
                 <button
@@ -361,7 +366,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   onClick={() => setOpen(false)}
                   className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-red-600 hover:bg-red-50 transition-colors"
                 >
-                  Sign Out
+                  लॉगआउट (Sign Out)
                 </button>
               </form>
             </>
@@ -370,16 +375,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="px-4 py-2.5 rounded-xl text-sm font-bold text-[#8B1A21] bg-[rgba(139,26,33,0.08)] border border-[rgba(139,26,33,0.20)] text-center"
+                className="px-4 py-2.5 rounded-xl text-sm font-bold text-[#292321] bg-white border border-[#E6D6BE] text-center shadow-xs"
               >
-                Login
+                लॉगिन
               </Link>
               <Link
                 href="/register"
                 onClick={() => setOpen(false)}
-                className="px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#8B1A21] to-[#B84430] text-center shadow-sm"
+                className="px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-[#E58A16] text-center shadow-sm"
               >
-                Register
+                रजिस्टर
               </Link>
             </div>
           )}

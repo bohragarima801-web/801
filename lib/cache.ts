@@ -212,3 +212,46 @@ export const getCachedHomePageMedia = unstable_cache(
     tags: ['media']
   }
 )
+
+// Cache home page latest blogs (5-min revalidation)
+export const getCachedBlogs = unstable_cache(
+  async (limit: number = 4) => {
+    try {
+      const blogs = await prisma.blog.findMany({
+        where: {
+          status: 'PUBLISHED',
+          OR: [
+            { publishedAt: null },
+            { publishedAt: { lte: new Date() } }
+          ]
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          coverImage: true,
+          publishedAt: true,
+          createdAt: true,
+          category: {
+            select: {
+              name: true,
+              slug: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit
+      })
+      return blogs
+    } catch (err) {
+      return []
+    }
+  },
+  ['home-blogs-list-v1'],
+  {
+    revalidate: 300,
+    tags: ['blogs']
+  }
+)
+
