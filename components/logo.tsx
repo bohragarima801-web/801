@@ -22,18 +22,18 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
   }, [])
 
   const containerSize = {
-    sm: 'h-10 sm:h-12 w-auto',
-    md: 'h-12 sm:h-14 w-auto',
-    lg: 'h-16 sm:h-20 w-auto',
+    sm: 'h-8 sm:h-10 w-auto',
+    md: 'h-9 sm:h-12 w-auto',
+    lg: 'h-12 sm:h-16 w-auto',
   }[size]
 
   return (
-    <Link href="/" className={cn('flex items-center gap-2.5 group shrink-0', className)}>
-      <div className={cn("relative flex items-center justify-center group-hover:scale-[1.03] transition-transform shrink-0 drop-shadow-md", containerSize)}>
+    <Link href="/" className={cn('flex items-center gap-2 sm:gap-2.5 group shrink-0', className)}>
+      <div className={cn("relative flex items-center justify-center group-hover:scale-[1.03] transition-transform shrink-0 drop-shadow-sm", containerSize)}>
         <img 
           src={logoUrl || '/logo.webp'} 
           alt="DivyaYagyam Logo" 
-          className="h-full w-auto max-w-full object-contain rounded-xl"
+          className="h-full w-auto max-w-full object-contain rounded-lg sm:rounded-xl"
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/logo.jpg'
           }}
@@ -41,11 +41,11 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
       </div>
 
       {showText && (
-        <div className="flex flex-col justify-center notranslate" translate="no">
-          <span className="text-[18px] sm:text-[22px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
+        <div className="flex flex-col justify-center notranslate leading-tight" translate="no">
+          <span className="text-[15px] sm:text-[20px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
-          <span className="text-[9px] sm:text-[10px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.14em] uppercase mt-[1px]">
+          <span className="text-[7.5px] sm:text-[9.5px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.1em] uppercase mt-[1px]">
             दिव्ययज्ञम् — आस्था की नई पहचान
           </span>
         </div>

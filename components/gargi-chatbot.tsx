@@ -12,11 +12,11 @@ export function GargiChatbot() {
   return (
     <>
       {/* Floating Action Button (Positioned Bottom-Left to avoid overlap with WhatsApp on Bottom-Right) */}
-      <div className="fixed bottom-24 sm:bottom-8 left-4 sm:left-6 z-40 flex items-center gap-2">
+      <div className="fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-40 flex items-center gap-2">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center border-2 border-amber-300/40",
+            "h-11 w-11 sm:h-13 sm:w-13 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center border-2 border-amber-300/40",
             isOpen
               ? "bg-slate-900 hover:bg-slate-950 text-white"
               : "bg-gradient-to-r from-[#7A1F2B] via-[#8B1A21] to-[#E85D04] hover:scale-105 text-white shadow-[0_4px_20px_rgba(139,26,33,0.45)]"

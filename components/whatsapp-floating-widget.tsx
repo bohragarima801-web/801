@@ -61,7 +61,7 @@ export function WhatsAppFloatingWidget() {
   const singleMember = teamMembers.length === 1 ? teamMembers[0] : null
 
   return (
-    <div className="fixed bottom-24 right-4 sm:bottom-8 sm:right-6 z-40 flex flex-col items-end">
+    <div className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
       {/* Expanded Team Selection Popup */}
       {open && (
         <div className="mb-3 w-80 max-w-[calc(100vw-2.5rem)] rounded-3xl bg-slate-900/95 backdrop-blur-xl border border-emerald-500/30 text-white shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
