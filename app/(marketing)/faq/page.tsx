@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'अक्सर पूछे जाने वाले प्रश्न (FAQ) — Online Puja & Help Desk | DivyaYagyam',
+    title: 'सामान्य प्रश्न (FAQ) — सहायता व मार्गदर्शन',
     description: 'ऑनलाइन पूजा कैसे काम करती है? प्रसाद होम डिलीवरी, लाइव पूजा वीडियो प्रूफ, नाम-गोत्र संकल्प और रिफंड से जुड़े सभी प्रश्नों के उत्तर।',
     path: '/faq',
   })

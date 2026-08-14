@@ -142,7 +142,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   if (!product) return generatePageMeta({ title: 'Product Not Found | DivyaYagyam', description: 'The requested product is unavailable.', path: `/products/${slug}` })
   
-  const title = product.seoTitle || `${product.name} — Order Sacred Prasad | DivyaYagyam`
+  const title = product.name || product.seoTitle || 'सिद्ध सामग्री'
   const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '')
   const keywords = product.seoKeywords ? product.seoKeywords.split(',').map(k => k.trim()) : undefined
 

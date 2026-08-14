@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'हमारे बारे में (About Us) – प्रामाणिक वैदिक परंपरा | DivyaYagyam',
+    title: 'हमारे बारे में — प्रामाणिक वैदिक परंपरा',
     description: 'दिव्य यज्ञम के बारे में जानें। पं. मुकेश बोहरा (27+ वर्ष अनुभव) के मार्गदर्शन में सनातन धर्म के प्रामाणिक वैदिक पूजा, अनुष्ठान और ज्योतिष परामर्श।',
     path: '/about',
   })

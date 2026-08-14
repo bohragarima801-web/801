@@ -8,7 +8,7 @@ import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Sanatan Dharma Blog – Puja Vidhi, Mantra, Vrat & Jyotish | DivyaYagyam',
+    title: 'सनातन धर्म एवं वैदिक ज्ञान ब्लॉग',
     description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
     path: '/blog',
   })

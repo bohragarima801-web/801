@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      default: `दिव्ययज्ञम् (DivyaYagyam) — ऑनलाइन पूजा बुकिंग | Online Puja Booking India`,
+      default: `दिव्ययज्ञम् — ऑनलाइन पूजा बुकिंग व सनातन सेवा`,
       template: `%s | ${siteName}`
     },
     description: dynamicConfig.description || defaultDescription,
@@ -40,11 +40,6 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: baseUrl,
-      languages: {
-        'hi-IN': baseUrl,
-        'en-IN': baseUrl,
-        'x-default': baseUrl,
-      },
     },
     robots: {
       index: true,

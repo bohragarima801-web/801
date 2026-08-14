@@ -8,7 +8,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'रिफंड एवं निरस्तीकरण नीति (Refund & Cancellation) | DivyaYagyam',
+    title: 'रिफंड एवं निरस्तीकरण नीति',
     description: 'DivyaYagyam रिफंड एवं निरस्तीकरण नीति। 100% रिफंड गारंटी, पूजा निरस्तीकरण नियम, एवं रीशेड्यूलिंग प्रक्रिया की पूरी जानकारी।',
     path: '/refunds',
   })

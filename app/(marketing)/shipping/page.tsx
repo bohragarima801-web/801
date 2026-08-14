@@ -7,7 +7,7 @@ export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'प्रसाद शिपिंग एवं डिलीवरी नीति (Prasad Delivery Policy) | DivyaYagyam',
+    title: 'प्रसाद शिपिंग एवं डिलीवरी नीति',
     description: 'DivyaYagyam शिपिंग नीति। काशी, महाकाल एवं सिद्ध मंदिरों का अभिमंत्रित प्रसाद भारत भर में 3-5 दिनों में सुरक्षित होम डिलीवरी।',
     path: '/shipping',
   })

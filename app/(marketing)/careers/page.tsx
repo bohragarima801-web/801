@@ -7,7 +7,7 @@ export const revalidate = 3600 // ISR: Revalidate every 3600s
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'करियर (Careers) — Join Our Sanatan Seva Mission',
+    title: 'करियर (Careers) — सनातन सेवा टीम',
     description: 'DivyaYagyam में करियर के अवसर। सनातन वैदिक संस्कृति के प्रसार और तकनीकी विकास हेतु हमारी टीम से जुड़ें।',
     path: '/careers',
   })

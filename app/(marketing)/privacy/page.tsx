@@ -8,7 +8,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'गोपनीयता नीति (Privacy Policy) — Data & Sankalp Protection | DivyaYagyam',
+    title: 'गोपनीयता नीति (Privacy Policy)',
     description: 'DivyaYagyam गोपनीयता नीति। जानें कि हम आपके नाम-गोत्र संकल्प, पूजा बुकिंग डेटा और व्यक्तिगत जानकारी की सुरक्षा कैसे करते हैं।',
     path: '/privacy',
   })

@@ -6,7 +6,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'AI पंडित जी — 24x7 निःशुल्क वैदिक ज्योतिष व समाधान',
+    title: 'AI पंडित जी — निःशुल्क वैदिक समाधान',
     description: 'AI पंडित जी से पूछें अपने सभी आध्यात्मिक और ज्योतिषीय प्रश्न। कुण्डली विश्लेषण, शुभ मुहूर्त, व्रत विधि एवं वैदिक उपाय तुरंत प्राप्त करें।',
     path: '/ask-a-pandit',
   })

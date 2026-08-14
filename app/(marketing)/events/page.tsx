@@ -5,7 +5,7 @@ import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'Upcoming Hindu Puja, Yagya & Temple Events | DivyaYagyam',
+    title: 'धार्मिक उत्सव एवं महायज्ञ कैलेंडर',
     description: 'Upcoming Hindu temple events, Mahayagya, Mahashivratri, Navratri & festival Anushthan schedule. Join live or book online sankalp.',
     path: '/events',
   })

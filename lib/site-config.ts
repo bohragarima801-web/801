@@ -18,10 +18,10 @@ export const siteConfig = {
     whatsapp: '+91-95304-01984, +91-95304-01984',
   },
   socials: {
-    facebook: 'https://www.facebook.com/divyayagyam',
-    instagram: 'https://www.instagram.com/divyayagyam',
-    youtube: 'https://www.youtube.com/@divyayagyam',
-    twitter: 'https://twitter.com/divyayagyam',
+    facebook: '#',
+    instagram: '#',
+    youtube: '#',
+    twitter: '#',
   },
 }
 

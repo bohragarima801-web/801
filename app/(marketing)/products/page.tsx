@@ -8,7 +8,7 @@ import { SacredImageFrame } from '@/components/ui/safe-image'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'अभिमंत्रित रुद्राक्ष, यंत्र एवं शुद्ध पूजा सामग्री | DivyaYagyam Store',
+    title: 'अभिमंत्रित रुद्राक्ष, यंत्र व पूजा सामग्री',
     description: '100% अभिमंत्रित वैदिक सामग्री। सिद्ध रुद्राक्ष, श्री यंत्र, पूजा थाली, जप माला — सिद्ध पीठों से सीधे आपके घर। ₹999+ पर निःशुल्क होम डिलीवरी।',
     path: '/products',
   })

@@ -7,7 +7,7 @@ import { PujaCard } from '@/components/puja-card'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'ऑनलाइन पूजा अनुष्ठान – रुद्राभिषेक, हवन एवं दोष निवारण | DivyaYagyam',
+    title: 'ऑनलाइन पूजा अनुष्ठान एवं महायज्ञ',
     description: '100+ प्रामाणिक वैदिक पूजा अनुष्ठान ऑनलाइन बुक करें। रुद्राभिषेक, कालसर्प दोष निवारण, नवग्रह शांति — विद्वान आचार्यों द्वारा नाम व गोत्र संकल्प।',
     path: '/pujas',
   })

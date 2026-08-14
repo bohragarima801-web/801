@@ -7,7 +7,7 @@ export const revalidate = 3600
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'संपर्क केंद्र (Contact Us) – मार्गदर्शन एवं सहायता | DivyaYagyam',
+    title: 'संपर्क केंद्र — मार्गदर्शन एवं सहायता',
     description: 'DivyaYagyam संपर्क केंद्र। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प या ज्योतिष परामर्श हेतु संपर्क करें। WhatsApp: +91-95304-01984, Email: Seva@divyayagyam.com.',
     path: '/contact',
   })

@@ -38,27 +38,27 @@ export function generatePageMeta({
 
   // Strip any trailing site name to prevent duplication when layout title template '%s | DivyaYagyam' is applied
   let cleanTitle = title
-    ? title.replace(/\s*[|\-—]\s*DivyaYagyam(\.com)?$/i, '').trim()
+    ? title.replace(/\s*[|\-—]\s*(?:Divya\s*Yagyam|Divyayagyam)(\.com)?\s*$/gi, '').replace(/\s*[|\-—]\s*(?:Divya\s*Yagyam|Divyayagyam)(\.com)?\s*$/gi, '').trim()
     : 'Online Puja Booking & Sanatan Seva'
 
-  // Truncate clean title if necessary (aiming under 65 chars for standard search snippets)
-  if (cleanTitle.length > 65) {
-    cleanTitle = cleanTitle.substring(0, 62).trim() + '...'
+  // Truncate clean title if necessary (aiming under 44 chars so final title with ' | DivyaYagyam' is under 58 chars)
+  if (cleanTitle.length > 44) {
+    cleanTitle = cleanTitle.substring(0, 42).trim() + '...'
   }
 
-  // Clean and truncate description to 155-160 chars
+  // Clean and truncate description to 150-155 chars
   let cleanDesc = (description || '')
     .replace(/<[^>]*>?/gm, '')
     .replace(/\s+/g, ' ')
     .trim()
 
-  if (cleanDesc.length > 160) {
-    const truncated = cleanDesc.substring(0, 155)
-    cleanDesc = truncated.substring(0, Math.max(truncated.lastIndexOf(' '), 140)) + '...'
+  if (cleanDesc.length > 155) {
+    const truncated = cleanDesc.substring(0, 150)
+    cleanDesc = truncated.substring(0, Math.max(truncated.lastIndexOf(' '), 130)) + '...'
   }
 
   const metaTitle = (isAbsoluteTitle || path === '/')
-    ? { absolute: title.includes('DivyaYagyam') ? title : `${title} | ${SITE_NAME}` }
+    ? { absolute: cleanTitle.includes(SITE_NAME) ? cleanTitle : `${cleanTitle} | ${SITE_NAME}` }
     : cleanTitle
 
   const ogTitle = (isAbsoluteTitle || path === '/') ? title : `${cleanTitle} | ${SITE_NAME}`
@@ -77,11 +77,6 @@ export function generatePageMeta({
     ],
     alternates: {
       canonical: url,
-      languages: {
-        'hi-IN': url,
-        'en-IN': url,
-        'x-default': url,
-      },
     },
     openGraph: {
       title: ogTitle,

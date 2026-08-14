@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
 
   return generatePageMeta({
-    title: post.seoTitle || post.title,
+    title: post.title || post.seoTitle || 'वैदिक लेख',
     description: post.seoDescription || post.excerpt || '',
     path: `/blog/${cleanSlug}`,
     image: post.coverImage || undefined,

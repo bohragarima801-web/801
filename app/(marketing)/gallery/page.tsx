@@ -8,7 +8,7 @@ import { Camera, Sparkles, Video, Lock } from 'lucide-react'
 
 export function generateMetadata() {
   return generatePageMeta({
-    title: 'दिव्य दर्शन व गैलरी — Sacred Temple Photos & Videos',
+    title: 'दिव्य दर्शन एवं सिद्ध फोटो गैलरी',
     description: 'काशी विश्वनाथ, महाकालेश्वर एवं सिद्ध मंदिरों के पावन पूजा अनुष्ठानों, आरती एवं धार्मिक कार्यक्रमों के लाइव फोटो व वीडियो दर्शन।',
     path: '/gallery',
   })
