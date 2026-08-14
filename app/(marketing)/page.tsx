@@ -181,16 +181,16 @@ export default async function HomePage() {
               </div>
 
               {/* High-Contrast Devanagari Main Heading */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#292321] leading-[1.25] tracking-tight">
-                पवित्र पूजा – प्रामाणिक विधि –{' '}
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#292321] leading-[1.3] notranslate" translate="no">
+                पवित्र पूजा • प्रामाणिक विधि •{' '}
                 <span className="text-[#E58A16]">
                   सच्चे परिणाम
                 </span>
               </h1>
 
               {/* Supporting Subtitle */}
-              <p className="text-sm sm:text-base text-[#665E58] font-medium leading-relaxed max-w-xl">
-                भारत के प्रमुख शक्तिपीठों एवं सिद्ध स्थानों में पंडितों द्वारा आपके नाम और गोत्र से पूजा, जाप, हवन एवं अनुष्ठान।
+              <p className="text-xs sm:text-base text-[#4A403C] font-medium leading-[1.8] max-w-xl notranslate" translate="no">
+                भारत के प्रमुख शक्तिपीठों एवं सिद्ध धामों में विद्वान पंडितों द्वारा आपके नाम और गोत्र से विधिपूर्वक पूजा, जाप, हवन एवं अनुष्ठान।
               </p>
 
               {/* 4 Trust Badges Grid */}

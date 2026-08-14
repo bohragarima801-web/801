@@ -122,29 +122,29 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         </Link>
       </Button>
 
-      <article className="space-y-6 bg-white border border-gray-100 p-6 md:p-10 rounded-3xl shadow-sm">
+      <article className="space-y-6 bg-white border border-[#E6D6BE] p-6 md:p-10 rounded-3xl shadow-sm notranslate" translate="no">
         <div className="space-y-3 text-center md:text-left">
-          <Badge className="bg-amber-500/10 border border-amber-500/30 text-amber-700 hover:bg-amber-500/20 text-xs py-1 px-3.5 rounded-full font-bold">
-            {post.category?.name || 'Spirituality'}
+          <Badge className="bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] hover:bg-[#F7EBD7]/80 text-xs py-1 px-3.5 rounded-full font-bold">
+            {post.category?.name || 'सनातन ज्ञान'}
           </Badge>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.35] tracking-normal font-sans">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#292321] leading-[1.3] tracking-normal font-sans">
             {post.title}
           </h1>
           {post.excerpt && (
-            <p className="text-slate-600 text-base md:text-lg leading-[1.8] font-normal mt-4 tracking-normal">
+            <p className="text-[#4A403C] text-base md:text-lg leading-[1.8] font-normal mt-4 tracking-normal">
               {post.excerpt}
             </p>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-center md:justify-start border-t border-b border-gray-100/60 py-4 gap-6 text-sm font-bold text-slate-500">
-          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-[var(--primary-color)]" /> {post.author?.fullName || 'Admin'}</span>
-          <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4 text-[var(--primary-color)]" /> {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown Date'}</span>
-          <span className="flex items-center gap-1.5"><Eye className="h-4 w-4 text-[var(--primary-color)]" /> {post.views} views</span>
+        <div className="flex flex-wrap items-center justify-center md:justify-start border-t border-b border-[#E6D6BE]/70 py-4 gap-6 text-sm font-bold text-[#665E58]">
+          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-[#E58A16]" /> {post.author?.fullName || 'आचार्य जी'}</span>
+          <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4 text-[#E58A16]" /> {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</span>
+          <span className="flex items-center gap-1.5"><Eye className="h-4 w-4 text-[#E58A16]" /> {post.views} views</span>
         </div>
 
         {post.isVideoEnabled && embedVideoUrl ? (
-          <div className="my-8 aspect-video w-full rounded-2xl overflow-hidden shadow-lg border-4 border-amber-50">
+          <div className="my-8 aspect-video w-full rounded-2xl overflow-hidden shadow-lg border border-[#E6D6BE]">
             <iframe 
               src={embedVideoUrl} 
               className="w-full h-full" 
@@ -157,7 +157,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
-          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border-2 border-amber-300/40 bg-gradient-to-b from-[#2A1508] to-[#120703]">
+          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-gradient-to-b from-[#2A1508] to-[#120703]">
             <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
               <img 
                 src={getSafeImageUrl(post.coverImage)} 
@@ -175,7 +175,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 className="relative z-10 w-full h-full max-h-[500px] object-contain p-1 sm:p-2" 
               />
             </div>
-            <figcaption className="p-3 text-center text-xs font-semibold text-amber-900/90 bg-amber-50/90 border-t border-amber-100 italic">
+            <figcaption className="p-3 text-center text-xs font-semibold text-[#665E58] bg-[#F7EBD7] border-t border-[#E6D6BE] italic">
               📷 {coverAlt}
             </figcaption>
           </figure>
@@ -196,17 +196,17 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             : post.pdfUrl
           const isDriveEmbed = safePdfUrl.includes('/preview')
           return (
-            <div className="my-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white shadow-xl border border-emerald-500/30 relative overflow-hidden group">
-              <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="my-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#292321] via-[#3D302B] to-[#292321] text-white shadow-xl border border-[#C99A3D]/40 relative overflow-hidden group">
+              <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-[#E58A16]/20 rounded-full blur-3xl pointer-events-none" />
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
                 <div className="space-y-2">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 backdrop-blur-md">
-                    <FileText className="h-3.5 w-3.5 text-emerald-400" /> Free PDF Download
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#E58A16]/20 text-[#FFF9EF] border border-[#C99A3D]/40 backdrop-blur-md">
+                    <FileText className="h-3.5 w-3.5 text-[#E58A16]" /> Free PDF Download
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
                     {post.pdfTitle || 'निःशुल्क पीडीएफ पुस्तक / सामग्री डाउनलोड करें'}
                   </h3>
-                  <p className="text-xs sm:text-sm text-emerald-100/80 font-medium">
+                  <p className="text-xs sm:text-sm text-[#E6D6BE] font-medium">
                     सुरक्षित डायरेक्ट लिंक से मुफ्त पीडीएफ प्राप्त करें।
                   </p>
                 </div>
@@ -216,7 +216,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                   target="_blank"
                   rel="noopener noreferrer"
                   download={!isDriveEmbed && !safePdfUrl.includes('mega.nz')}
-                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-sm md:text-base shadow-lg hover:shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 w-full sm:w-auto text-center no-underline"
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm md:text-base shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 w-full sm:w-auto text-center no-underline"
                 >
                   <Download className="h-5 w-5" /> {isDriveEmbed ? 'View / Download PDF' : 'Download PDF Now'}
                 </a>
@@ -225,18 +225,18 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           )
         })()}
 
-
         <div 
-          className="prose prose-amber prose-lg md:prose-xl max-w-none 
-          prose-headings:font-bold prose-headings:text-slate-900 prose-headings:tracking-normal 
+          className="prose prose-amber prose-lg md:prose-xl max-w-none notranslate
+          prose-headings:font-black prose-headings:text-[#292321] prose-headings:tracking-normal 
           prose-h1:text-3xl md:prose-h1:text-4xl prose-h1:leading-[1.35] 
-          prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:leading-[1.35] prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-4 prose-h2:border-amber-100 
-          prose-h3:text-xl md:prose-h3:text-2xl prose-h3:leading-[1.4] prose-h3:text-slate-800 
-          prose-p:text-slate-700 prose-p:leading-[1.8] prose-p:text-base md:prose-p:text-lg prose-p:tracking-normal 
-          prose-a:text-[var(--primary-color)] prose-a:font-bold prose-a:no-underline hover:prose-a:underline 
-          prose-blockquote:border-l-4 prose-blockquote:border-[var(--primary-color)] prose-blockquote:bg-amber-50/50 prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:shadow-sm prose-blockquote:leading-[1.75]
-          prose-li:text-slate-700 prose-li:leading-[1.8] prose-li:marker:text-[var(--primary-color)]
-          prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-3xl prose-img:shadow-xl prose-img:border-4 prose-img:border-amber-50"
+          prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:leading-[1.35] prose-h2:mt-10 prose-h2:mb-5 prose-h2:border-b prose-h2:pb-3 prose-h2:border-[#E6D6BE] prose-h2:text-[#292321]
+          prose-h3:text-xl md:prose-h3:text-2xl prose-h3:leading-[1.4] prose-h3:text-[#292321]
+          prose-p:text-[#3D3533] prose-p:leading-[1.85] prose-p:text-base md:prose-p:text-lg prose-p:tracking-normal 
+          prose-a:text-[#E58A16] prose-a:font-bold prose-a:no-underline hover:prose-a:underline 
+          prose-blockquote:border-l-4 prose-blockquote:border-[#E58A16] prose-blockquote:bg-[#F7EBD7]/50 prose-blockquote:py-3.5 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-[#292321] prose-blockquote:shadow-2xs prose-blockquote:leading-[1.8]
+          prose-li:text-[#3D3533] prose-li:leading-[1.85] prose-li:marker:text-[#E58A16]
+          prose-img:max-h-[500px] prose-img:w-auto prose-img:mx-auto prose-img:object-contain prose-img:rounded-2xl prose-img:shadow-md prose-img:border prose-img:border-[#E6D6BE]"
+          translate="no"
         >
           {(() => {
             const sanitizedContent = (post.content || '')

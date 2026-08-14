@@ -109,39 +109,41 @@
   body {
     background-color: var(--color-ivory);
     color: var(--color-charcoal);
-    font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), var(--font-poppins), 'Noto Sans Devanagari', -apple-system, sans-serif;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-    line-height: 1.75;
+    line-height: 1.8;
     font-size: 16px;
+    letter-spacing: 0;
   }
 
-  /* Headings: Ample line-height (1.25-1.4), preventing Devanagari conjuncts & matras from overlapping */
+  /* Headings: Ample line-height (1.35-1.45), preventing Devanagari conjuncts & matras from overlapping */
   h1, h2, h3, .heading {
-    font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
-    letter-spacing: 0.01em;
-    line-height: 1.35;
-    font-weight: 700;
+    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), var(--font-poppins), 'Noto Sans Devanagari', sans-serif;
+    letter-spacing: 0;
+    line-height: 1.38;
+    font-weight: 800;
     color: var(--color-charcoal);
-    word-break: break-word;
+    word-break: normal;
     overflow-wrap: break-word;
   }
 
   h4, h5, h6 {
-    font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
-    letter-spacing: 0.01em;
+    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), var(--font-poppins), 'Noto Sans Devanagari', sans-serif;
+    letter-spacing: 0;
     line-height: 1.45;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-charcoal);
   }
 
   p {
-    line-height: 1.75;
-    letter-spacing: 0.01em;
+    line-height: 1.8;
+    letter-spacing: 0;
+    color: #3D3533;
   }
 
   .font-vip, .vip-text {
@@ -149,9 +151,9 @@
   }
 
   :lang(hi), .text-hindi, .devanagari {
-    font-family: var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', var(--font-heading-hi), sans-serif;
-    line-height: 1.8;
-    letter-spacing: 0.01em;
+    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), 'Noto Sans Devanagari', sans-serif;
+    line-height: 1.85;
+    letter-spacing: 0;
   }
 
   img {
@@ -159,8 +161,8 @@
   }
 
   ::selection {
-    background: rgba(255, 122, 0, 0.20);
-    color: #FF7A00;
+    background: rgba(229, 138, 22, 0.20);
+    color: #E58A16;
   }
 }
 
