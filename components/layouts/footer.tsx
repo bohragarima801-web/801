@@ -205,11 +205,13 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
             <ul className="space-y-2.5 text-xs font-medium">
               {[
                 { label: '🤖 AI पंडित जी', href: '/ask-a-pandit' },
-                { label: '♑ वैदिक जन्म कुंडली', href: '/tools' },
+                { label: '☀️ मुफ्त जन्म कुंडली', href: '/tools/kundali' },
                 { label: '📅 दैनिक पंचांग', href: '/panchang' },
+                { label: '💖 कुंडली गुण मिलान', href: '/tools/milan' },
                 { label: '⏰ शुभ मुहूर्त खोजक', href: '/muhurat' },
-                { label: '🔮 ज्योतिष परामर्श', href: '/astro' },
-                { label: '🖼️ सिद्ध फोटो गैलरी', href: '/gallery' },
+                { label: '🕉️ श्री गणेश प्रश्नावली', href: '/tools/shree-ganesh-siddha-prashnavali' },
+                { label: '📿 डिजिटल जाप माला', href: '/tools/mala' },
+                { label: '🌟 सभी वैदिक टूल्स (All)', href: '/tools' },
               ].map((l) => (
                 <li key={l.label}>
                   <Link

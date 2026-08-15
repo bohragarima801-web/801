@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone } from 'lucide-react'
+import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone, Sparkles, Bot, Calendar, Heart, Clock, Zap, Gem, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -31,12 +31,70 @@ const navItems = [
 ]
 
 const toolsMenu = [
-  { title: '🤖 AI पंडित जी', href: '/ask-a-pandit', desc: 'तुरंत वैदिक मार्गदर्शन व सहायता', icon: '🤖' },
-  { title: '♑ वैदिक जन्म कुंडली', href: '/tools', desc: 'निःशुल्क जन्मपत्रिका व फलादेश', icon: '♑' },
-  { title: '📅 दैनिक पंचांग', href: '/panchang', desc: 'तिथि, नक्षत्र व चौघड़िया', icon: '📅' },
-  { title: '⏰ शुभ मुहूर्त खोजक', href: '/muhurat', desc: 'विवाह, गृह प्रवेश व वाहन मुहूर्त', icon: '⏰' },
-  { title: '🔮 ज्योतिष परामर्श', href: '/astro', desc: 'विद्वान ज्योतिषियों से सीधी बात', icon: '🔮' },
-  { title: '🖼️ सिद्ध फोटो गैलरी', href: '/gallery', desc: 'मंदिर दर्शन व पावन चित्र', icon: '🖼️' },
+  {
+    title: 'AI पंडित जी',
+    href: '/ask-a-pandit',
+    desc: 'पूजा विधि व ज्योतिष संबंधी तुरंत समाधान',
+    icon: Bot,
+    badge: 'LIVE FREE',
+    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+  },
+  {
+    title: 'मुफ्त जन्म कुंडली',
+    href: '/tools/kundali',
+    desc: 'वैदिक जन्म पत्रिका, ग्रह स्थिति व फल',
+    icon: Sun,
+    badge: '100% FREE',
+    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
+  },
+  {
+    title: 'दैनिक पंचांग',
+    href: '/panchang',
+    desc: 'तिथि, नक्षत्र, योग व चौघड़िया मुहूर्त',
+    icon: Calendar,
+    badge: 'DAILY',
+    badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
+  },
+  {
+    title: 'कुंडली गुण मिलान',
+    href: '/tools/milan',
+    desc: 'विवाह हेतु 36 गुण मिलान विश्लेषण',
+    icon: Heart,
+    badge: '36 GUNA',
+    badgeColor: 'bg-rose-50 text-rose-700 border-rose-200'
+  },
+  {
+    title: 'शुभ मुहूर्त खोजक',
+    href: '/muhurat',
+    desc: 'विवाह, वाहन व गृह प्रवेश का शुभ समय',
+    icon: Clock,
+    badge: 'MUHURAT',
+    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
+  },
+  {
+    title: 'श्री गणेश प्रश्नावली',
+    href: '/tools/shree-ganesh-siddha-prashnavali',
+    desc: 'सिद्ध कोष्ठकों से अपनी शंका का समाधान',
+    icon: Flame,
+    badge: 'ORACLE',
+    badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
+  },
+  {
+    title: 'डिजिटल जाप माला',
+    href: '/tools/mala',
+    desc: '108 मंत्र जाप हेतु डिजिटल काउंटर',
+    icon: Zap,
+    badge: '108 JAPA',
+    badgeColor: 'bg-blue-50 text-blue-700 border-blue-200'
+  },
+  {
+    title: 'रत्न व अंक ज्योतिष',
+    href: '/tools/numerology',
+    desc: 'मूलांक, भाग्यांक व शुभ रत्न परामर्श',
+    icon: Gem,
+    badge: 'NUMBERS',
+    badgeColor: 'bg-purple-50 text-purple-700 border-purple-200'
+  },
 ]
 
 export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?: any } = {}) {
@@ -164,32 +222,62 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 toolsOpen ? 'text-[#E58A16] bg-[#F7EBD7]' : 'text-[#292321] hover:text-[#E58A16] hover:bg-[#F7EBD7]/60'
               )}
             >
-              <span>ज्योतिष व टूल्स</span>
+              <Sparkles className="h-3.5 w-3.5 text-[#E58A16]" />
+              <span>टूल्स</span>
               <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#E58A16]')} />
             </button>
 
-            {/* Desktop dropdown */}
+            {/* Desktop dropdown — High Aesthetic 2-Column Mega Menu */}
             <div
               className={cn(
-                'absolute left-1/2 -translate-x-1/2 top-full mt-1 w-80 rounded-2xl bg-white border border-[#E6D6BE] shadow-2xl p-2.5 transition-all duration-200 z-50',
+                'absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-[560px] lg:w-[600px] rounded-2xl bg-white border border-[#E6D6BE] shadow-[0_20px_50px_rgba(41,35,33,0.15)] p-3 transition-all duration-200 z-50',
                 toolsOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
               )}
             >
-              <div className="grid grid-cols-1 gap-1">
-                {toolsMenu.map((t) => (
-                  <Link
-                    key={t.href}
-                    href={t.href}
-                    onClick={() => setToolsOpen(false)}
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7EBD7]/70 transition-colors group"
-                  >
-                    <span className="text-base w-6 text-center shrink-0 opacity-90">{t.icon}</span>
-                    <div>
-                      <div className="text-sm font-bold text-[#292321] group-hover:text-[#E58A16] transition-colors">{t.title}</div>
-                      <div className="text-[11px] text-[#665E58] mt-0.5">{t.desc}</div>
-                    </div>
-                  </Link>
-                ))}
+              <div className="grid grid-cols-2 gap-2">
+                {toolsMenu.map((t) => {
+                  const IconComp = t.icon
+                  return (
+                    <Link
+                      key={t.href}
+                      href={t.href}
+                      onClick={() => setToolsOpen(false)}
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#FFF9EF] border border-transparent hover:border-[#E6D6BE] transition-all group"
+                    >
+                      <div className="h-10 w-10 rounded-xl bg-[#F7EBD7] text-[#E58A16] flex items-center justify-center shrink-0 border border-[#E6D6BE]/60 group-hover:bg-[#E58A16] group-hover:text-white transition-all shadow-2xs">
+                        <IconComp className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span className="text-xs font-bold text-[#292321] group-hover:text-[#E58A16] transition-colors truncate">
+                            {t.title}
+                          </span>
+                          <span className={cn('text-[9px] font-black px-1.5 py-0.5 rounded border shrink-0', t.badgeColor)}>
+                            {t.badge}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#665E58] truncate font-normal mt-0.5">
+                          {t.desc}
+                        </p>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+
+              {/* Bottom Explore All Bar */}
+              <div className="mt-2.5 pt-2.5 border-t border-[#E6D6BE]/60 flex items-center justify-between px-2">
+                <span className="text-[11px] font-semibold text-[#665E58] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#E58A16]" /> 100% प्रामाणिक वैदिक काल-गणना टूल्स
+                </span>
+                <Link
+                  href="/tools"
+                  onClick={() => setToolsOpen(false)}
+                  className="text-xs font-extrabold text-[#E58A16] hover:text-[#c4710b] flex items-center gap-1 hover:gap-1.5 transition-all bg-[#F7EBD7]/60 hover:bg-[#F7EBD7] px-3 py-1 rounded-lg"
+                >
+                  <span>सभी टूल्स देखें ({toolsMenu.length}+)</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
           </div>
@@ -329,23 +417,38 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             </Link>
           ))}
 
-          {/* Astro & Tools Submenu */}
+          {/* Vedic Tools Submenu */}
           <div className="pt-2">
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#C99A3D] px-2 block mb-1.5">
-              ज्योतिष व वैदिक टूल्स
-            </span>
+            <div className="flex items-center justify-between px-2 mb-2">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#C99A3D] block">
+                वैदिक टूल्स (Vedic Tools)
+              </span>
+              <Link
+                href="/tools"
+                onClick={() => setOpen(false)}
+                className="text-[11px] font-bold text-[#E58A16] hover:underline flex items-center gap-1"
+              >
+                <span>सभी देखें</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
             <div className="grid grid-cols-2 gap-2">
-              {toolsMenu.map((t) => (
-                <Link
-                  key={t.href}
-                  href={t.href}
-                  onClick={() => setOpen(false)}
-                  className="p-2.5 bg-white rounded-xl border border-[#E6D6BE]/60 text-xs font-bold text-[#292321] hover:text-[#E58A16] flex items-center gap-2 shadow-2xs"
-                >
-                  <span className="text-base">{t.icon}</span>
-                  <span className="truncate">{t.title.replace(/^[^\s]+\s/, '')}</span>
-                </Link>
-              ))}
+              {toolsMenu.map((t) => {
+                const IconComp = t.icon
+                return (
+                  <Link
+                    key={t.href}
+                    href={t.href}
+                    onClick={() => setOpen(false)}
+                    className="p-2.5 bg-white rounded-xl border border-[#E6D6BE]/60 text-xs font-bold text-[#292321] hover:text-[#E58A16] flex items-center gap-2.5 shadow-2xs group"
+                  >
+                    <div className="h-7 w-7 rounded-lg bg-[#F7EBD7] text-[#E58A16] flex items-center justify-center shrink-0 border border-[#E6D6BE]/50">
+                      <IconComp className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="truncate">{t.title}</span>
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
