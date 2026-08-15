@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Sparkles, Calendar, Sun, Heart, Compass, ArrowRight, Bot, Repeat, ChevronRight } from 'lucide-react'
 
-export function SacredAstroTools({ limit = 3 }: { limit?: number }) {
+export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
   const toolsList = [
     {
       title: 'AI पंडित जी (AI Pandit)',
@@ -90,20 +90,20 @@ export function SacredAstroTools({ limit = 3 }: { limit?: number }) {
           return (
             <Link href={t.slug} key={idx} prefetch={true} className="block group">
               <Card className="p-3.5 border border-[#E6D6BE] rounded-2xl bg-white text-[#292321] shadow-2xs hover:shadow-md hover:border-[#E58A16] transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-[#E6D6BE] bg-[#F7EBD7] text-[#E58A16] shrink-0 font-bold">
                     <IconComp className="h-5 w-5" />
                   </div>
-                  <div className="min-w-0 space-y-0.5">
-                    <div className="flex items-center gap-1.5">
-                      <h3 className="font-bold text-xs sm:text-sm text-[#292321] group-hover:text-[#E58A16] transition-colors truncate">
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <h3 className="font-bold text-xs sm:text-sm text-[#292321] group-hover:text-[#E58A16] transition-colors line-clamp-1">
                         {t.title}
                       </h3>
                       <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-bold text-[#E58A16] border-[#E6D6BE] bg-[#F7EBD7] shrink-0">
                         {t.tag}
                       </Badge>
                     </div>
-                    <p className="text-[11px] text-[#665E58] truncate font-normal">
+                    <p className="text-[11px] text-[#665E58] font-normal leading-snug line-clamp-1">
                       {t.desc}
                     </p>
                   </div>

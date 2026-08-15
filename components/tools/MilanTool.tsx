@@ -8,9 +8,9 @@ import { Label } from '@/components/ui/label'
 import { Heart, Sparkles, ShieldCheck, ArrowRight, User } from 'lucide-react'
 
 const NAKSHATRAS = [
-  'Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha',
-  'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta', 'Chitra', 'Swati', 'Vishakha', 'Anuradha', 'Jyeshtha',
-  'Mula', 'Purva Ashadha', 'Uttara Ashadha', 'Shravana', 'Dhanishta', 'Shatabhisha', 'Purva Bhadrapada', 'Uttara Bhadrapada', 'Revati'
+  'Ashwini (अश्विनी)', 'Bharani (भरणी)', 'Krittika (कृत्तिका)', 'Rohini (रोहिणी)', 'Mrigashira (मृगशिरा)', 'Ardra (आर्द्रा)', 'Punarvasu (पुनर्वसु)', 'Pushya (पुष्य)', 'Ashlesha (आश्लेषा)',
+  'Magha (मघा)', 'Purva Phalguni (पूर्वा फाल्गुनी)', 'Uttara Phalguni (उत्तरा फाल्गुनी)', 'Hasta (हस्त)', 'Chitra (चित्रा)', 'Swati (स्वाती)', 'Vishakha (विशाखा)', 'Anuradha (अनुराधा)', 'Jyeshtha (ज्येष्ठा)',
+  'Mula (मूल)', 'Purva Ashadha (पूर्वाषाढ़ा)', 'Uttara Ashadha (उत्तराषाढ़ा)', 'Shravana (श्रवण)', 'Dhanishta (धनिष्ठा)', 'Shatabhisha (शतभिषा)', 'Purva Bhadrapada (पूर्वाभाद्रपद)', 'Uttara Bhadrapada (उत्तराभाद्रपद)', 'Revati (रेवती)'
 ]
 
 export default function MilanTool() {

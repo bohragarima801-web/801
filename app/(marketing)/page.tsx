@@ -670,7 +670,7 @@ export default async function HomePage() {
       </section>
 
       <section className="w-full bg-[#FFF9EF] py-8 border-t border-[#E6D6BE]">
-        <SacredAstroTools limit={3} />
+        <SacredAstroTools limit={6} />
       </section>
 
       {/* ============================================================

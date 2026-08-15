@@ -46,8 +46,16 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUn
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'DIVYA_TOOL_RESIZE' && typeof event.data.height === 'number') {
-        const h = Math.max(540, Math.ceil(event.data.height) + 30)
-        setIframeHeight(h)
+        const rawH = Math.ceil(event.data.height)
+        if (rawH >= 250 && rawH <= 5000) {
+          setIframeHeight((prev) => {
+            // Only update if difference is more than 16px to prevent infinite expanding feedback loop
+            if (Math.abs(prev - rawH) > 16) {
+              return rawH
+            }
+            return prev
+          })
+        }
       }
     }
     window.addEventListener('message', handleMessage)
@@ -79,8 +87,15 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUn
   if (hasCustomCode) {
     const isFullDocument = rawHtml.toLowerCase().includes('<!doctype html') || rawHtml.toLowerCase().includes('<html')
 
-    // Rock-solid Lifecycle Hook & Auto-Resizer Preamble Script
+    // Rock-solid Lifecycle Hook & Auto-Resizer Preamble Script (Without infinite expansion feedback loops)
     const lifecyclePreamble = `
+      <style id="divya-height-resizer-reset">
+        html, body {
+          height: auto !important;
+          min-height: 0 !important;
+          max-height: none !important;
+        }
+      </style>
       <script>
         (function() {
           // 1. Hook window.onload & Event Listeners so they ALWAYS execute inside srcDoc iframe
@@ -126,24 +141,50 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUn
             }
           };
 
-          // 2. High-precision dynamic Height Notifier
-          function notifyHeight() {
+          // 2. High-precision dynamic Height Notifier (measuring ACTUAL content, not window viewport)
+          var lastReportedHeight = 0;
+          var debounceTimer = null;
+
+          function measureContentHeight() {
             try {
-              var body = document.body;
-              var html = document.documentElement;
-              var container = document.getElementById('tool-root') || document.querySelector('.container') || body;
-              var height = Math.max(
-                body ? body.scrollHeight : 0,
-                html ? html.scrollHeight : 0,
-                body ? body.offsetHeight : 0,
-                html ? html.offsetHeight : 0,
-                container ? container.scrollHeight : 0,
-                container ? container.offsetHeight : 0
-              );
-              if (height > 100) {
-                window.parent.postMessage({ type: 'DIVYA_TOOL_RESIZE', height: height }, '*');
+              var container = document.getElementById('tool-root') || 
+                              document.querySelector('.wrap') || 
+                              document.querySelector('.container') || 
+                              document.querySelector('.main-card') || 
+                              document.body;
+              
+              var contentHeight = 0;
+              if (container) {
+                var rect = container.getBoundingClientRect();
+                contentHeight = Math.max(container.scrollHeight, Math.ceil(rect.height));
+              }
+
+              // Scan bottom edge of all direct children
+              var children = document.body ? document.body.children : [];
+              var maxBottom = 0;
+              for (var i = 0; i < children.length; i++) {
+                var el = children[i];
+                if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' && el.id !== 'divya-height-resizer-reset') {
+                  var r = el.getBoundingClientRect();
+                  var b = (window.pageYOffset || document.documentElement.scrollTop || 0) + r.bottom;
+                  if (b > maxBottom) maxBottom = Math.ceil(b);
+                }
+              }
+
+              var measured = Math.max(contentHeight, maxBottom);
+              if (measured > 250) {
+                var targetHeight = measured + 15;
+                if (Math.abs(targetHeight - lastReportedHeight) > 16) {
+                  lastReportedHeight = targetHeight;
+                  window.parent.postMessage({ type: 'DIVYA_TOOL_RESIZE', height: targetHeight }, '*');
+                }
               }
             } catch(e) {}
+          }
+
+          function notifyHeight() {
+            if (debounceTimer) clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(measureContentHeight, 60);
           }
 
           window.addEventListener('load', function() {
@@ -153,28 +194,21 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUn
             }
           });
           window.addEventListener('resize', notifyHeight);
-          document.addEventListener('click', function() { setTimeout(notifyHeight, 100); setTimeout(notifyHeight, 400); });
+          document.addEventListener('click', function() { setTimeout(notifyHeight, 100); setTimeout(notifyHeight, 350); });
           document.addEventListener('input', function() { setTimeout(notifyHeight, 50); });
           document.addEventListener('change', function() { setTimeout(notifyHeight, 50); });
 
           if (window.ResizeObserver) {
-            var ro = new ResizeObserver(function() { notifyHeight(); });
-            if (document.body) ro.observe(document.body);
-            else {
-              document.addEventListener('DOMContentLoaded', function() {
-                if (document.body) ro.observe(document.body);
-              });
+            var targetEl = document.getElementById('tool-root') || document.querySelector('.wrap') || document.querySelector('.container') || document.body;
+            if (targetEl) {
+              var ro = new ResizeObserver(function() { notifyHeight(); });
+              ro.observe(targetEl);
             }
           }
-          setInterval(notifyHeight, 1500);
 
-          // Force trigger any queued load handlers after initial parse
-          setTimeout(function() {
-            if (typeof window.onload === 'function') {
-              try { window.onload.call(window, new Event('load')); } catch(e) {}
-            }
-            notifyHeight();
-          }, 200);
+          // Trigger on load
+          setTimeout(notifyHeight, 200);
+          setTimeout(notifyHeight, 800);
         })();
       </script>
     `
