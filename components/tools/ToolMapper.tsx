@@ -206,6 +206,65 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUn
             }
           }
 
+          // 3. Universal Vedic Prashnavali Dynamic Randomizer Engine
+          // Ensures ANY Prashnavali tool (existing or newly added) always gives a dynamic random answer on each click
+          (function setupUniversalPrashnavaliRandomizer() {
+            var lastPickedKey = null;
+
+            function getRandomItem(collection) {
+              if (!collection) return null;
+              var keys = Object.keys(collection).filter(function(k) {
+                return k !== '__isRandomizedProxy' && typeof collection[k] !== 'function';
+              });
+              if (keys.length === 0) return null;
+              var filtered = keys.filter(function(k) { return k !== lastPickedKey; });
+              if (filtered.length === 0) filtered = keys;
+              var chosenKey = filtered[Math.floor(Math.random() * filtered.length)];
+              lastPickedKey = chosenKey;
+              return { key: chosenKey, value: collection[chosenKey] };
+            }
+
+            function patchGlobalData() {
+              try {
+                var oracleObjNames = ['divineData', 'answersData', 'answers', 'answersList', 'prashnavaliData', 'oracleAnswers', 'oracleData', 'ramShalakaData'];
+                oracleObjNames.forEach(function(varName) {
+                  if (window[varName] && typeof window[varName] === 'object' && !window[varName].__isRandomizedProxy) {
+                    var target = window[varName];
+                    var keys = Object.keys(target);
+                    if (keys.length > 1) {
+                      try {
+                        window[varName] = new Proxy(target, {
+                          get: function(t, prop, receiver) {
+                            if (prop === '__isRandomizedProxy') return true;
+                            if (prop === 'length' || prop === 'slice' || prop === 'forEach' || prop === 'map' || prop === 'filter' || prop === 'includes' || prop === 'find' || prop === 'indexOf') {
+                              return Reflect.get(t, prop, receiver);
+                            }
+                            if (typeof prop === 'symbol' || prop === 'constructor' || prop === 'prototype' || prop === 'toString' || prop === 'valueOf') {
+                              return Reflect.get(t, prop, receiver);
+                            }
+                            // If user accesses an ank or key
+                            if (prop in t || (!isNaN(Number(prop)) && keys.length > 0)) {
+                              var res = getRandomItem(t);
+                              return res ? res.value : t[prop];
+                            }
+                            return Reflect.get(t, prop, receiver);
+                          }
+                        });
+                      } catch(e) {}
+                    }
+                  }
+                });
+              } catch(e) {}
+            }
+
+            window.addEventListener('DOMContentLoaded', patchGlobalData);
+            window.addEventListener('load', patchGlobalData);
+            document.addEventListener('click', function() { setTimeout(patchGlobalData, 10); }, true);
+            setTimeout(patchGlobalData, 100);
+            setTimeout(patchGlobalData, 400);
+            setTimeout(patchGlobalData, 1200);
+          })();
+
           // Trigger on load
           setTimeout(notifyHeight, 200);
           setTimeout(notifyHeight, 800);

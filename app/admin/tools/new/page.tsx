@@ -65,35 +65,69 @@ const STARTER_TEMPLATES: Record<string, { name: string; html: string; css: strin
     name: 'Prashnavali / Oracle Grid Template (प्रश्नावली)',
     html: `<div class="container max-w-xl mx-auto p-6 bg-slate-900 text-white rounded-3xl shadow-2xl border border-amber-500/30 text-center">
   <h2 class="text-2xl font-bold text-amber-400 mb-1">✦ श्री सिद्ध प्रश्नावली ✦</h2>
-  <p class="text-xs text-amber-200/80 mb-6">ईश्वर का ध्यान कर किसी एक संख्या पर क्लिक करें</p>
+  <p class="text-xs text-amber-200/80 mb-6">ईश्वर का ध्यान कर किसी भी एक अंक (कोष्ठक) पर क्लिक करें</p>
 
-  <div class="grid grid-cols-4 gap-3 mb-6" id="beadGrid">
-    <div class="bead p-4 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-xl cursor-pointer hover:scale-105 transition-all shadow-md">01</div>
-    <div class="bead p-4 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-xl cursor-pointer hover:scale-105 transition-all shadow-md">02</div>
-    <div class="bead p-4 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-xl cursor-pointer hover:scale-105 transition-all shadow-md">03</div>
-    <div class="bead p-4 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-xl cursor-pointer hover:scale-105 transition-all shadow-md">04</div>
+  <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 mb-6" id="beadGrid">
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">01</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">02</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">03</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">04</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">05</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">06</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">07</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">08</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">09</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">10</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">11</div>
+    <div class="bead p-3.5 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl font-black text-lg cursor-pointer hover:scale-105 transition-all shadow-md">12</div>
   </div>
 
-  <div id="oracleResult" class="p-4 bg-amber-950/80 border border-amber-500/50 rounded-2xl text-left hidden">
+  <div id="oracleResult" class="p-4 bg-amber-950/90 border border-amber-500/50 rounded-2xl text-left hidden transition-all">
     <h4 id="oracleHeading" class="font-bold text-amber-400 text-sm mb-1"></h4>
     <p id="oracleMessage" class="text-xs text-amber-100 leading-relaxed"></p>
   </div>
 </div>`,
-    css: `.bead:hover { background: #f59e0b; color: #1e1b4b; }`,
-    js: `const answers = {
-  "01": "आपका कार्य निश्चित रूप से सफल होगा। धैर्य रखें और शुभ कार्य आरंभ करें।",
-  "02": "कार्य में थोड़ा विलंब हो सकता है, परंतु परिणाम आपके पक्ष में रहेगा।",
-  "03": "ईष्ट देव की आराधना करें, रुका हुआ धन व मार्ग शीघ्र प्रशस्त होगा।",
-  "04": "शुभ समय प्रारंभ हो चुका है, बड़े निर्णय लेने के लिए यह अनुकूल समय है।"
-};
+    css: `.bead:hover { background: #f59e0b; color: #1e1b4b; transform: scale(1.06); }
+.bead.active { outline: 3px solid #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }`,
+    js: `// ईश्वरीय मार्गदर्शन उत्तरों का दिव्य संग्रह
+const answersList = [
+  "आपका कार्य निश्चित रूप से सिद्ध होगा। धैर्य रखें और प्रभु पर पूर्ण विश्वास रखें।",
+  "कार्य में थोड़ा विलंब हो सकता है, परंतु अंतिम परिणाम आपके पक्ष में और अत्यंत शुभ रहेगा।",
+  "ईष्ट देव की आराधना करें। रुका हुआ धन व सफलता का मार्ग शीघ्र प्रशस्त होगा।",
+  "शुभ समय प्रारंभ हो चुका है। आत्मविश्वास के साथ आगे बढ़ें, बड़े निर्णय लेने का यह अनुकूल समय है।",
+  "किसी अनुभवी व बड़े-बुजुर्ग की सलाह से कार्य करें, बिगड़े हुए काम भी तुरंत बन जाएंगे।",
+  "मन से सभी प्रकार के भय और संशय को त्याग दें। ईश्वर की कृपा से सब मंगलमय होगा।",
+  "अभी थोड़ा शांत व सावधान रहने का समय है। क्रोध से बचें, विजय आपकी ही होगी।",
+  "आर्थिक स्थिति में सुधार होगा और किसी नए शुभ समाचार की प्राप्ति होने का प्रबल योग है।",
+  "प्रभु श्रीराम व हनुमान जी का ध्यान करें। आपकी मनोकामना शीघ्र पूर्ण होने वाली है।",
+  "योजना बनाकर कार्य करें। आपकी मेहनत का पूरा और उत्तम फल आपको मिलने वाला है।",
+  "सकारात्मक सोच रखें। गुप्त शत्रुओं व बाधाओं का स्वतः ही निवारण हो जाएगा।",
+  "परम सिद्धि योग! आपके सोचे हुए सभी मांगलिक कार्य बिना किसी रुकावट के संपन्न होंगे।"
+];
 
+// प्रत्येक क्लिक पर रैंडम उत्तर जनरेट करने का नियम (Dynamic Random on Every Click)
+var lastSelectedIndex = -1;
 document.querySelectorAll('.bead').forEach(function(el) {
   el.addEventListener('click', function() {
+    document.querySelectorAll('.bead').forEach(function(b) { b.classList.remove('active'); });
+    el.classList.add('active');
+
     const num = el.innerText.trim();
     const box = document.getElementById('oracleResult');
+    
+    // हर बार एक नया रैंडम उत्तर चुनें
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * answersList.length);
+    } while (answersList.length > 1 && randomIndex === lastSelectedIndex);
+    lastSelectedIndex = randomIndex;
+
     document.getElementById('oracleHeading').innerText = 'कोष्ठक ' + num + ' का ईश्वरीय संकेत:';
-    document.getElementById('oracleMessage').innerText = answers[num] || 'आपकी मनोकामना पूर्ण होगी।';
+    document.getElementById('oracleMessage').innerText = answersList[randomIndex];
+    
     box.classList.remove('hidden');
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 });`
   }
