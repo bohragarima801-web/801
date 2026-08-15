@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { Sparkles, Maximize2, Minimize2, RotateCcw, Share2, Check, ExternalLink } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
-// Define the signature of a Tool Component
 type ToolComponentProps = {
   tool: any
   isPremiumUnlocked: boolean
@@ -17,7 +17,7 @@ import MilanTool from './MilanTool'
 import RatnaTool from './RatnaTool'
 import ShubhSamayTool from './ShubhSamayTool'
 
-// MAP SLUGS TO BUILT-IN REACT COMPONENTS (Used as fallback if no custom HTML is provided)
+// MAP SLUGS TO BUILT-IN REACT COMPONENTS (Fallback if no custom HTML in DB)
 const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
   kundali: KundaliTool,
   'free-kundali': KundaliTool,
@@ -33,52 +33,148 @@ const TOOL_REGISTRY: Record<string, React.FC<ToolComponentProps>> = {
   'shubh-samay': ShubhSamayTool,
 }
 
-export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUnlocked: boolean }) {
+export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any; isPremiumUnlocked: boolean }) {
   const slug = (tool?.slug || '').toLowerCase().trim()
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [iframeHeight, setIframeHeight] = useState<number>(680)
+  const [iframeHeight, setIframeHeight] = useState<number>(720)
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false)
+  const [copied, setCopied] = useState<boolean>(false)
+  const [iframeKey, setIframeKey] = useState<number>(1)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
-  // Listen for dynamic iframe resizing from the child document
+  // Listen for dynamic auto-resizing messages from the iframe child document
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'DIVYA_TOOL_RESIZE' && typeof event.data.height === 'number') {
-        setIframeHeight(Math.max(500, event.data.height + 40))
+        const h = Math.max(540, Math.ceil(event.data.height) + 30)
+        setIframeHeight(h)
       }
     }
     window.addEventListener('message', handleMessage)
     return () => window.removeEventListener('message', handleMessage)
   }, [])
 
-  // 1. Check if custom HTML/JS code has been provided in the Admin Panel
-  const rawHtml = (tool.htmlCode || '').trim()
-  const hasCustomCode = rawHtml.length > 0 && rawHtml !== '<p></p>'
+  const handleReload = useCallback(() => {
+    setIsLoaded(false)
+    setIframeKey((prev) => prev + 1)
+    toast.success('टूल रीलोड किया गया (Tool reloaded)')
+  }, [])
 
-  // If custom code is entered in backend, render it with full runtime environment
+  const handleShare = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      const url = window.location.href
+      navigator.clipboard.writeText(url)
+      setCopied(true)
+      toast.success('लिंक कॉपी हो गया! (Tool link copied to clipboard)')
+      setTimeout(() => setCopied(false), 2500)
+    }
+  }, [])
+
+  // 1. Check if custom HTML/JS/CSS code is provided
+  const rawHtml = (tool.htmlCode || '').trim()
+  const rawCss = (tool.cssCode || '').trim()
+  const rawJs = (tool.jsCode || '').trim()
+  const hasCustomCode = (rawHtml.length > 0 && rawHtml !== '<p></p>') || rawCss.length > 0 || rawJs.length > 0
+
   if (hasCustomCode) {
     const isFullDocument = rawHtml.toLowerCase().includes('<!doctype html') || rawHtml.toLowerCase().includes('<html')
-    
-    // Injected auto-resizer and bridge script
-    const autoResizeScript = `
+
+    // Rock-solid Lifecycle Hook & Auto-Resizer Preamble Script
+    const lifecyclePreamble = `
       <script>
         (function() {
+          // 1. Hook window.onload & Event Listeners so they ALWAYS execute inside srcDoc iframe
+          var originalOnload = null;
+          try {
+            Object.defineProperty(window, 'onload', {
+              get: function() { return originalOnload; },
+              set: function(fn) {
+                originalOnload = fn;
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                  setTimeout(function() {
+                    try { if (typeof fn === 'function') fn.call(window, new Event('load')); } catch(e) { console.error('Error in window.onload:', e); }
+                  }, 50);
+                }
+              },
+              configurable: true
+            });
+          } catch(e) {}
+
+          var origAddEventListener = window.addEventListener;
+          window.addEventListener = function(type, listener, options) {
+            origAddEventListener.call(window, type, listener, options);
+            if ((type === 'load' || type === 'DOMContentLoaded') && (document.readyState === 'complete' || document.readyState === 'interactive')) {
+              setTimeout(function() {
+                try {
+                  if (typeof listener === 'function') listener.call(window, new Event(type));
+                  else if (listener && typeof listener.handleEvent === 'function') listener.handleEvent(new Event(type));
+                } catch(e) { console.error('Error in listener:', e); }
+              }, 50);
+            }
+          };
+
+          var origDocAddEventListener = document.addEventListener;
+          document.addEventListener = function(type, listener, options) {
+            origDocAddEventListener.call(document, type, listener, options);
+            if (type === 'DOMContentLoaded' && (document.readyState === 'complete' || document.readyState === 'interactive')) {
+              setTimeout(function() {
+                try {
+                  if (typeof listener === 'function') listener.call(document, new Event(type));
+                  else if (listener && typeof listener.handleEvent === 'function') listener.handleEvent(new Event(type));
+                } catch(e) { console.error('Error in doc listener:', e); }
+              }, 50);
+            }
+          };
+
+          // 2. High-precision dynamic Height Notifier
           function notifyHeight() {
             try {
+              var body = document.body;
+              var html = document.documentElement;
+              var container = document.getElementById('tool-root') || document.querySelector('.container') || body;
               var height = Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                document.documentElement.offsetHeight
+                body ? body.scrollHeight : 0,
+                html ? html.scrollHeight : 0,
+                body ? body.offsetHeight : 0,
+                html ? html.offsetHeight : 0,
+                container ? container.scrollHeight : 0,
+                container ? container.offsetHeight : 0
               );
-              window.parent.postMessage({ type: 'DIVYA_TOOL_RESIZE', height: height }, '*');
+              if (height > 100) {
+                window.parent.postMessage({ type: 'DIVYA_TOOL_RESIZE', height: height }, '*');
+              }
             } catch(e) {}
           }
-          window.addEventListener('load', notifyHeight);
+
+          window.addEventListener('load', function() {
+            notifyHeight();
+            if (typeof originalOnload === 'function') {
+              try { originalOnload.call(window, new Event('load')); } catch(e) {}
+            }
+          });
           window.addEventListener('resize', notifyHeight);
+          document.addEventListener('click', function() { setTimeout(notifyHeight, 100); setTimeout(notifyHeight, 400); });
+          document.addEventListener('input', function() { setTimeout(notifyHeight, 50); });
+          document.addEventListener('change', function() { setTimeout(notifyHeight, 50); });
+
           if (window.ResizeObserver) {
-            var ro = new ResizeObserver(notifyHeight);
-            ro.observe(document.body);
+            var ro = new ResizeObserver(function() { notifyHeight(); });
+            if (document.body) ro.observe(document.body);
+            else {
+              document.addEventListener('DOMContentLoaded', function() {
+                if (document.body) ro.observe(document.body);
+              });
+            }
           }
-          setInterval(notifyHeight, 1000);
+          setInterval(notifyHeight, 1500);
+
+          // Force trigger any queued load handlers after initial parse
+          setTimeout(function() {
+            if (typeof window.onload === 'function') {
+              try { window.onload.call(window, new Event('load')); } catch(e) {}
+            }
+            notifyHeight();
+          }, 200);
         })();
       </script>
     `
@@ -87,34 +183,45 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
 
     if (isFullDocument) {
       srcDoc = rawHtml
-      if (tool.cssCode) {
+
+      // Inject preamble at the start of <head> or at very beginning
+      if (srcDoc.includes('<head>')) {
+        srcDoc = srcDoc.replace('<head>', `<head>${lifecyclePreamble}`)
+      } else if (srcDoc.includes('<head ')) {
+        srcDoc = srcDoc.replace(/<head[^>]*>/, `$&${lifecyclePreamble}`)
+      } else if (srcDoc.includes('<html>')) {
+        srcDoc = srcDoc.replace('<html>', `<html><head>${lifecyclePreamble}</head>`)
+      } else {
+        srcDoc = lifecyclePreamble + srcDoc
+      }
+
+      // Inject custom CSS if present
+      if (rawCss) {
         if (srcDoc.includes('</head>')) {
-          srcDoc = srcDoc.replace('</head>', `<style>${tool.cssCode}</style></head>`)
+          srcDoc = srcDoc.replace('</head>', `<style>${rawCss}</style></head>`)
         } else {
-          srcDoc = `<style>${tool.cssCode}</style>` + srcDoc
+          srcDoc = `<style>${rawCss}</style>` + srcDoc
         }
       }
-      if (tool.jsCode) {
+
+      // Inject custom JS if present
+      if (rawJs) {
         if (srcDoc.includes('</body>')) {
-          srcDoc = srcDoc.replace('</body>', `<script>${tool.jsCode}</script>${autoResizeScript}</body>`)
+          srcDoc = srcDoc.replace('</body>', `<script>${rawJs}</script></body>`)
         } else {
-          srcDoc = srcDoc + `<script>${tool.jsCode}</script>${autoResizeScript}`
-        }
-      } else {
-        if (srcDoc.includes('</body>')) {
-          srcDoc = srcDoc.replace('</body>', `${autoResizeScript}</body>`)
-        } else {
-          srcDoc = srcDoc + autoResizeScript
+          srcDoc = srcDoc + `<script>${rawJs}</script>`
         }
       }
     } else {
+      // Partial snippet mode: wrap with rich UI defaults
       srcDoc = `<!DOCTYPE html>
       <html lang="hi">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${tool.name || 'Spiritual Tool'}</title>
-        <!-- Tailwind CSS & Lucide / FontAwesome CDNs -->
+        ${lifecyclePreamble}
+        <!-- Tailwind CSS & FontAwesome CDNs -->
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Yantramanav:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -122,7 +229,7 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
           * { box-sizing: border-box; }
           body { 
             font-family: 'Plus Jakarta Sans', 'Yantramanav', system-ui, -apple-system, sans-serif; 
-            padding: 20px; 
+            padding: 24px; 
             background: #ffffff; 
             color: #0f172a;
             line-height: 1.6;
@@ -152,36 +259,101 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
           th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
           th { background-color: #f8fafc; font-weight: 600; color: #475569; font-size: 0.875rem; }
           
-          /* User's custom CSS below */
-          ${tool.cssCode || ''}
+          /* Custom User CSS */
+          ${rawCss}
         </style>
       </head>
       <body>
         <div id="tool-root">
-          ${tool.htmlCode || ''}
+          ${rawHtml}
         </div>
         <script>
           try {
-            ${tool.jsCode || ''}
+            ${rawJs}
           } catch(e) {
             console.error("Tool Script Error:", e);
           }
         </script>
-        ${autoResizeScript}
       </body>
       </html>`
     }
 
     return (
-      <div className="w-full bg-white border border-[#F3E8DE] rounded-2xl shadow-sm overflow-hidden relative transition-all duration-300">
-        <iframe 
-          ref={iframeRef}
-          srcDoc={srcDoc}
-          style={{ height: `${iframeHeight}px`, width: '100%' }}
-          className="w-full border-0 transition-all duration-300"
-          sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
-          title={tool.name || 'Spiritual Tool'}
-        />
+      <div className={`w-full transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 sm:p-8 flex flex-col justify-center items-center overflow-y-auto' : 'relative'}`}>
+        <div className={`w-full bg-white border border-[#F3E8DE] rounded-2xl shadow-sm overflow-hidden flex flex-col transition-all duration-300 ${isFullscreen ? 'max-w-5xl max-h-[90vh] shadow-2xl my-auto' : ''}`}>
+          
+          {/* Top Control Bar */}
+          <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-[#FFFBF7] to-white border-b border-[#F3E8DE] text-xs font-semibold text-slate-700 select-none">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="font-bold text-[#FF7A00] flex items-center gap-1">
+                <Sparkles className="h-3.5 w-3.5" /> {tool.name || 'Live Vedic Tool'}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleReload}
+                className="h-8 px-2 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg text-xs"
+                title="रीलोड करें (Reset & Reload)"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                <span className="hidden sm:inline">Reload</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleShare}
+                className="h-8 px-2 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg text-xs"
+                title="शेयर करें (Copy Link)"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-emerald-600 mr-1" /> : <Share2 className="h-3.5 w-3.5 mr-1" />}
+                <span className="hidden sm:inline">{copied ? 'Copied' : 'Share'}</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                className="h-8 px-2 text-slate-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg text-xs"
+                title={isFullscreen ? 'सामान्य दृश्य (Exit Fullscreen)' : 'फुल स्क्रीन (Fullscreen Mode)'}
+              >
+                {isFullscreen ? <Minimize2 className="h-3.5 w-3.5 mr-1" /> : <Maximize2 className="h-3.5 w-3.5 mr-1" />}
+                <span className="hidden sm:inline">{isFullscreen ? 'Exit' : 'Fullscreen'}</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Iframe Viewport with loading indicator */}
+          <div className="relative w-full overflow-hidden bg-white">
+            {!isLoaded && (
+              <div className="absolute inset-0 bg-white/90 backdrop-blur-xs flex items-center justify-center z-10">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-xs font-semibold text-slate-500">वैदिक टूल लोड हो रहा है...</span>
+                </div>
+              </div>
+            )}
+
+            <iframe
+              key={iframeKey}
+              ref={iframeRef}
+              srcDoc={srcDoc}
+              onLoad={() => setIsLoaded(true)}
+              style={{ height: isFullscreen ? '78vh' : `${iframeHeight}px`, width: '100%' }}
+              className="w-full border-0 transition-all duration-300 block"
+              sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals allow-downloads"
+              title={tool.name || 'Spiritual Tool'}
+            />
+          </div>
+
+        </div>
       </div>
     )
   }
@@ -245,4 +417,3 @@ export function ToolMapper({ tool, isPremiumUnlocked }: { tool: any, isPremiumUn
     </div>
   )
 }
-

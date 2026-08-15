@@ -3,25 +3,34 @@ import { prisma } from '@/lib/prisma'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, Lock, Sparkles, Wrench, ChevronRight, CheckCircle2, HelpCircle, ShieldCheck, Star } from 'lucide-react'
+import {
+  AlertCircle,
+  Lock,
+  Sparkles,
+  Wrench,
+  ChevronRight,
+  CheckCircle2,
+  HelpCircle,
+  ShieldCheck,
+  Star,
+  ArrowRight,
+  Compass
+} from 'lucide-react'
 import { ToolMapper } from '@/components/tools/ToolMapper'
 import { PaywallOverlay } from '@/components/tools/PaywallOverlay'
 import { Metadata } from 'next'
 import { BASE_URL, generatePageMeta } from '@/lib/seo'
+import { slugify } from '@/lib/slugify'
 
 export const revalidate = 3600 // ISR: Instant CDN responses for SEO crawlers
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params
   const normalizedSlug = decodeURIComponent(slug).toLowerCase().trim()
 
   const tool = await prisma.spiritualTool.findFirst({
     where: {
-      OR: [
-        { slug: slug },
-        { slug: normalizedSlug },
-        { id: slug }
-      ]
+      OR: [{ slug: slug }, { slug: normalizedSlug }, { id: slug }]
     },
     select: { name: true, description: true, slug: true, isFree: true, price: true }
   })
@@ -30,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return generatePageMeta({
     title: `${tool.name} — Free Online Vedic Tool`,
-    description: tool.description 
+    description: tool.description
       ? `${tool.description} 100% Authentic Vedic calculations & predictions online at DivyaYagyam.`
       : `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms, instant predictions & dosha remedies at DivyaYagyam.`,
     path: `/tools/${tool.slug}`,
@@ -51,17 +60,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ToolViewPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const { slug } = await params
   const normalizedSlug = decodeURIComponent(slug).toLowerCase().trim()
 
   // 1. Try exact slug match
   let tool = await prisma.spiritualTool.findFirst({
     where: {
-      OR: [
-        { slug: slug },
-        { slug: normalizedSlug },
-        { id: slug }
-      ]
+      OR: [{ slug: slug }, { slug: normalizedSlug }, { id: slug }]
     }
   })
 
@@ -74,13 +79,16 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
     })
   }
 
-  // 3. Fallback: match by name slugified
+  // 3. Fallback: match by name slugified or transliterated
   if (!tool) {
     const allTools = await prisma.spiritualTool.findMany()
-    tool = allTools.find(t => 
-      t.slug.toLowerCase().trim() === normalizedSlug ||
-      t.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === normalizedSlug
-    ) || null
+    tool =
+      allTools.find(
+        (t) =>
+          t.slug.toLowerCase().trim() === normalizedSlug ||
+          slugify(t.slug) === normalizedSlug ||
+          slugify(t.name) === normalizedSlug
+      ) || null
   }
 
   if (!tool) {
@@ -100,13 +108,23 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
     )
   }
 
+  // Fetch other related tools for recommendations
+  const relatedTools = await prisma.spiritualTool.findMany({
+    where: {
+      isActive: true,
+      id: { not: tool.id }
+    },
+    take: 3,
+    orderBy: { createdAt: 'desc' }
+  })
+
   const headersList = await headers()
   const ip = headersList.get('x-forwarded-for') || '127.0.0.1'
 
   let allowed = tool.isFree
 
   if (!allowed) {
-    // 1. Check if there is a valid free trial for this IP
+    // Check if there is a valid free trial for this IP
     const trialLog = await prisma.toolUsageLog.findFirst({
       where: {
         toolId: tool.id,
@@ -126,21 +144,16 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
       const { getCurrentUser } = await import('@/lib/auth')
       const user = await getCurrentUser()
       if (user) {
-        // Admin gets access to all tools
         if (user.role === 'super_admin' || user.role === 'store_manager') {
           allowed = true
         } else {
-          // Check if user has a PAID order for this tool
           const userOrder = await prisma.order.findFirst({
             where: {
               userId: user.id,
               paymentStatus: 'SUCCESS',
               items: {
                 some: {
-                  OR: [
-                    { name: { contains: tool.name } },
-                    { productId: `tool-${tool.id}` }
-                  ]
+                  OR: [{ name: { contains: tool.name } }, { productId: `tool-${tool.id}` }]
                 }
               }
             }
@@ -159,54 +172,55 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   const webAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    'name': tool.name,
-    'url': `${BASE_URL}/tools/${tool.slug}`,
-    'description': tool.description || `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms at DivyaYagyam.`,
-    'applicationCategory': 'LifestyleApplication',
-    'operatingSystem': 'All',
-    'inLanguage': ['hi', 'en'],
-    'offers': {
+    name: tool.name,
+    url: `${BASE_URL}/tools/${tool.slug}`,
+    description:
+      tool.description || `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms at DivyaYagyam.`,
+    applicationCategory: 'LifestyleApplication',
+    operatingSystem: 'All',
+    inLanguage: ['hi', 'en'],
+    offers: {
       '@type': 'Offer',
-      'price': tool.isFree ? '0' : Number(tool.price).toString(),
-      'priceCurrency': 'INR',
-      'availability': 'https://schema.org/InStock'
+      price: tool.isFree ? '0' : Number(tool.price).toString(),
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock'
     },
-    'provider': {
+    provider: {
       '@type': 'Organization',
-      'name': 'DivyaYagyam',
-      'url': BASE_URL,
-      'logo': `${BASE_URL}/logo.png`
+      name: 'DivyaYagyam',
+      url: BASE_URL,
+      logo: `${BASE_URL}/logo.png`
     },
-    'aggregateRating': {
+    aggregateRating: {
       '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'ratingCount': '1420',
-      'bestRating': '5',
-      'worstRating': '1'
+      ratingValue: '4.9',
+      ratingCount: '1420',
+      bestRating: '5',
+      worstRating: '1'
     }
   }
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    'itemListElement': [
+    itemListElement: [
       {
         '@type': 'ListItem',
-        'position': 1,
-        'name': 'Home',
-        'item': BASE_URL
+        position: 1,
+        name: 'Home',
+        item: BASE_URL
       },
       {
         '@type': 'ListItem',
-        'position': 2,
-        'name': 'Vedic Tools',
-        'item': `${BASE_URL}/tools`
+        position: 2,
+        name: 'Vedic Tools',
+        item: `${BASE_URL}/tools`
       },
       {
         '@type': 'ListItem',
-        'position': 3,
-        'name': tool.name,
-        'item': `${BASE_URL}/tools/${tool.slug}`
+        position: 3,
+        name: tool.name,
+        item: `${BASE_URL}/tools/${tool.slug}`
       }
     ]
   }
@@ -214,30 +228,30 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    'mainEntity': [
+    mainEntity: [
       {
         '@type': 'Question',
-        'name': `${tool.name} का उपयोग कैसे करें? (How to use ${tool.name}?)`,
-        'acceptedAnswer': {
+        name: `${tool.name} का उपयोग कैसे करें? (How to use ${tool.name}?)`,
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': `इस टूल का उपयोग करने के लिए ऊपर दिए गए फॉर्म में आवश्यक जानकारी दर्ज करें और परिणाम प्राप्त करने के लिए बटन पर क्लिक करें। यह टूल तुरंत वैदिक गणना के अनुसार सटीक परिणाम प्रदान करता है।`
+          text: `इस टूल का उपयोग करने के लिए ऊपर दिए गए फॉर्म में आवश्यक जानकारी दर्ज करें और परिणाम प्राप्त करने के लिए बटन पर क्लिक करें। यह टूल तुरंत वैदिक गणना के अनुसार सटीक परिणाम प्रदान करता है।`
         }
       },
       {
         '@type': 'Question',
-        'name': `क्या DivyaYagyam का ${tool.name} सटीक और प्रामाणिक है?`,
-        'acceptedAnswer': {
+        name: `क्या DivyaYagyam का ${tool.name} सटीक और प्रामाणिक है?`,
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': `हाँ, यह टूल 27+ वर्षों के प्रामाणिक वैदिक ज्योतिषीय सिद्धांतों, काल-गणना और सटीक गृह-नक्षत्र स्थिति पर आधारित है।`
+          text: `हाँ, यह टूल 27+ वर्षों के प्रामाणिक वैदिक ज्योतिषीय सिद्धांतों, काल-गणना और सटीक गृह-नक्षत्र स्थिति पर आधारित है।`
         }
       },
       {
         '@type': 'Question',
-        'name': `क्या ${tool.name} उपयोग करने के लिए मुफ्त है?`,
-        'acceptedAnswer': {
+        name: `क्या ${tool.name} उपयोग करने के लिए मुफ्त है?`,
+        acceptedAnswer: {
           '@type': 'Answer',
-          'text': tool.isFree 
-            ? `हाँ, ${tool.name} सभी उपयोगकर्ताओं के लिए पूरी तरह से मुफ्त है।` 
+          text: tool.isFree
+            ? `हाँ, ${tool.name} सभी उपयोगकर्ताओं के लिए पूरी तरह से मुफ्त है।`
             : `यह टूल ₹${Number(tool.price)} के न्यूनतम शुल्क पर उपलब्ध है जिसमें संपूर्ण विस्तृत विश्लेषण दिया जाता है।`
         }
       }
@@ -247,26 +261,20 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   return (
     <div className="bg-[#FFFBF7] min-h-screen py-8 md:py-12">
       {/* ── JSON-LD Structured Data for Google Ranking */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
-        
         {/* ── Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-slate-500">
-          <Link href="/" className="hover:text-orange-600 transition-colors">Home</Link>
+          <Link href="/" className="hover:text-orange-600 transition-colors">
+            Home
+          </Link>
           <ChevronRight className="h-3 w-3 text-slate-400" />
-          <Link href="/tools" className="hover:text-orange-600 transition-colors">Vedic Tools</Link>
+          <Link href="/tools" className="hover:text-orange-600 transition-colors">
+            Vedic Tools
+          </Link>
           <ChevronRight className="h-3 w-3 text-slate-400" />
           <span className="text-slate-800 font-semibold truncate">{tool.name}</span>
         </nav>
@@ -291,21 +299,27 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
               {tool.description || 'वैदिक ज्योतिष एवं खगोलीय गणनाओं पर आधारित सटीक एवं प्रामाणिक ऑनलाइन टूल।'}
             </p>
           </div>
-          <Button variant="outline" asChild className="shrink-0 rounded-xl border-orange-200 text-orange-700 hover:bg-orange-50">
+          <Button
+            variant="outline"
+            asChild
+            className="shrink-0 rounded-xl border-orange-200 text-orange-700 hover:bg-orange-50"
+          >
             <Link href="/tools">Explore All Tools ➔</Link>
           </Button>
         </div>
 
         {/* ── Interactive Tool Container */}
         <section className="relative">
-          <div className={!allowed ? "max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative" : ""}>
+          <div
+            className={
+              !allowed ? 'max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative' : ''
+            }
+          >
             <ToolMapper tool={tool} isPremiumUnlocked={allowed} />
           </div>
 
           {/* Paywall Overlay */}
-          {!allowed && (
-            <PaywallOverlay tool={tool} />
-          )}
+          {!allowed && <PaywallOverlay tool={tool} />}
         </section>
 
         {/* ── Rich Crawlable Server-Side Content for Google SEO Indexing */}
@@ -314,21 +328,27 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
             {/* Features & Vedic Accuracy Card */}
             <article className="bg-white rounded-2xl border border-[#F3E8DE] p-6 space-y-4 shadow-xs">
               <h2 className="text-lg font-heading font-extrabold text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-emerald-600" /> 
+                <ShieldCheck className="h-5 w-5 text-emerald-600" />
                 मुख्य विशेषताएं एवं प्रामाणिकता
               </h2>
               <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span><strong>100% प्रामाणिक गणना:</strong> प्राचीन पराशर एवं वैदिक ज्योतिषीय नियमों पर आधारित।</span>
+                  <span>
+                    <strong>100% प्रामाणिक गणना:</strong> प्राचीन पराशर एवं वैदिक ज्योतिषीय नियमों पर आधारित।
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span><strong>तुरंत एवं सटीक परिणाम:</strong> किसी भी अतिरिक्त देरी के बिना रीयल-टाइम में गणना।</span>
+                  <span>
+                    <strong>तुरंत एवं सटीक परिणाम:</strong> किसी भी अतिरिक्त देरी के बिना रीयल-टाइम में गणना।
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span><strong>गोपनीय एवं सुरक्षित:</strong> आपका डेटा पूरी तरह से सुरक्षित और निजी रहता है।</span>
+                  <span>
+                    <strong>गोपनीय एवं सुरक्षित:</strong> आपका डेटा पूरी तरह से सुरक्षित और निजी रहता है।
+                  </span>
                 </li>
               </ul>
             </article>
@@ -383,17 +403,57 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
                   3. क्या {tool.name} उपयोग करने के लिए मुफ्त है?
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {tool.isFree 
+                  {tool.isFree
                     ? `हाँ, ${tool.name} सभी श्रद्धालुओं एवं उपयोगकर्ताओं के लिए पूरी तरह से मुफ्त है।`
                     : `यह टूल ₹${Number(tool.price)} के न्यूनतम शुल्क पर उपलब्ध है जिसमें संपूर्ण विस्तृत विश्लेषण दिया जाता है।`}
                 </p>
               </div>
             </div>
           </article>
-        </section>
 
+          {/* Related Tools Recommendation Section */}
+          {relatedTools.length > 0 && (
+            <section className="space-y-4 pt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-heading font-extrabold text-slate-900 flex items-center gap-2">
+                  <Compass className="h-5 w-5 text-orange-600" />
+                  अन्य उपयोगी वैदिक टूल्स (Explore Related Tools)
+                </h3>
+                <Link href="/tools" className="text-xs font-bold text-orange-600 hover:text-orange-700">
+                  View All Tools ➔
+                </Link>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                {relatedTools.map((rt) => (
+                  <Link
+                    key={rt.id}
+                    href={`/tools/${rt.slug}`}
+                    className="p-4 bg-white rounded-2xl border border-[#F3E8DE] hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between group"
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-100">
+                          {rt.isFree ? 'FREE' : `₹${Number(rt.price)}`}
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-sm text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
+                        {rt.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 line-clamp-2">{rt.description}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 mt-3 flex items-center justify-between text-xs font-bold text-orange-600">
+                      <span>Open Tool</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </section>
       </div>
     </div>
   )
 }
-

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
 import { revalidatePath } from 'next/cache'
+import { slugify } from '@/lib/slugify'
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,7 +34,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { name, slug, description, isFree, price, trialDays, thumbnail, htmlCode, cssCode, jsCode, isActive } = body
 
-    const cleanSlug = (slug || name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    if (!name || !name.trim()) {
+      return NextResponse.json({ ok: false, error: 'Tool Name is required' }, { status: 400 });
+    }
+
+    const cleanSlug = slug && slug.trim() ? slugify(slug) : slugify(name)
     let finalSlug = cleanSlug;
     const existing = await prisma.spiritualTool.findUnique({ where: { slug: cleanSlug } })
     if (existing) {
@@ -42,16 +47,16 @@ export async function POST(req: NextRequest) {
 
     const tool = await prisma.spiritualTool.create({
       data: {
-        name,
+        name: name.trim(),
         slug: finalSlug,
-        description,
+        description: description ? description.trim() : null,
         isFree: isFree !== undefined ? !!isFree : true,
         price: parseFloat(price) || 0,
         trialDays: parseInt(trialDays) || 0,
-        thumbnail,
-        htmlCode,
-        cssCode,
-        jsCode,
+        thumbnail: thumbnail || null,
+        htmlCode: htmlCode || null,
+        cssCode: cssCode || null,
+        jsCode: jsCode || null,
         isActive: isActive !== undefined ? !!isActive : true
       }
     })
@@ -80,8 +85,12 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json()
     
-    if (body.slug) {
-      const cleanSlug = body.slug.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    if (body.name) {
+      body.name = body.name.trim()
+    }
+
+    if (body.slug || body.name) {
+      const cleanSlug = body.slug && body.slug.trim() ? slugify(body.slug) : slugify(body.name)
       const existing = await prisma.spiritualTool.findFirst({
         where: { slug: cleanSlug, NOT: { id } }
       })
@@ -91,6 +100,7 @@ export async function PUT(req: NextRequest) {
         body.slug = cleanSlug;
       }
     }
+
 
     if (body.price !== undefined) {
       body.price = parseFloat(body.price) || 0
