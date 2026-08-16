@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ============================================================
-   🕉️  DIVYAYAGYAM — LUXURY PREMIUM SPIRITUAL DESIGN SYSTEM v2.0
+   🕉️  DIVYAYAGYAM — LUXURY PREMIUM SPIRITUAL DESIGN SYSTEM v3.0
    Brand: Deep Maroon × Antique Gold × Sacred Ivory
    ============================================================ */
 
@@ -201,6 +201,15 @@
   .text-sm {
     font-size: 0.875rem !important;
     line-height: 1.6;
+  }
+
+  .card h1, .card h2, .card h3, .card h4,
+  [data-slot="card"] h1,
+  [data-slot="card"] h2,
+  [data-slot="card"] h3,
+  [data-slot="card"] h4 {
+    margin-top: 0;
+  }
   }
 
   img {
@@ -402,7 +411,7 @@
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #8B1A21 0%, #C47F00 50%, #8B1A21 100%);
+  background: linear-gradient(135deg, #8B1A21 0%, #C4920A 50%, #8B1A21 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -412,7 +421,7 @@
 }
 
 .sanatani-gold-text {
-  background: linear-gradient(90deg, #996B00 0%, #D49B00 40%, #E6A100 70%, #996B00 100%);
+  background: linear-gradient(90deg, #7A5200 0%, #C4920A 40%, #D4A820 70%, #8A5C00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -500,8 +509,8 @@
 
 .premium-badge-dark {
   background: rgba(255, 220, 100, 0.08);
-  color: #F5C842;
-  border-color: rgba(245, 200, 66, 0.20);
+  color: #E8B830;
+  border-color: rgba(232, 184, 48, 0.20);
 }
 
 /* ============================================================
@@ -579,8 +588,8 @@
 /* Dark hero variant */
 .btn-gold-outline-dark {
   background: transparent;
-  color: #F5C842;
-  border: 1.5px solid rgba(245, 200, 66, 0.45);
+  color: #E8B830;
+  border: 1.5px solid rgba(232, 184, 48, 0.45);
   padding: 13px 32px;
   border-radius: 60px;
   font-weight: 600;
@@ -593,8 +602,8 @@
   cursor: pointer;
 }
 .btn-gold-outline-dark:hover {
-  background: rgba(245, 200, 66, 0.12);
-  border-color: rgba(245, 200, 66, 0.70);
+  background: rgba(232, 184, 48, 0.12);
+  border-color: rgba(232, 184, 48, 0.70);
   transform: translateY(-2px);
 }
 
@@ -651,7 +660,7 @@
   background: rgba(26, 10, 5, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 200, 66, 0.18);
+  border: 1px solid rgba(232, 184, 48, 0.18);
   border-radius: 16px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
@@ -700,19 +709,33 @@
    FOOTER
    ============================================================ */
 .footer-spiritual {
+<<<<<<< HEAD
   background: #0A0302;
   color: rgba(245, 235, 220, 0.85);
   border-top: 1px solid rgba(168, 124, 40, 0.20);
+=======
+  background: linear-gradient(180deg, #FFFDF0 0%, #FEF9E6 40%, #FAF0D4 100%) !important;
+  color: #3D1E10 !important;
+  border-top: 3px solid #8B1A21 !important;
+>>>>>>> 5868bd1 (fix(all): comprehensive audit fix - payment speed, CORS security, typography and design overhaul)
   position: relative;
+  box-shadow: 0 -4px 20px rgba(139, 26, 33, 0.05);
 }
+
 .footer-spiritual::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+<<<<<<< HEAD
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.60), transparent);
+=======
+  height: 4px;
+  background: linear-gradient(90deg, #8B1A21 0%, #C89B3C 35%, #C4920A 65%, #8B1A21 100%);
+  z-index: 10;
+>>>>>>> 5868bd1 (fix(all): comprehensive audit fix - payment speed, CORS security, typography and design overhaul)
 }
 
 /* ============================================================
@@ -786,6 +809,7 @@
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 700;
   margin-bottom: 14px;
+  margin-top: 0;
   line-height: 1.20;
 }
 
@@ -831,10 +855,11 @@
 .stat-badge-dark {
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
-  border-color: rgba(245, 200, 66, 0.18);
+  border-color: rgba(232, 184, 48, 0.18);
   color: rgba(245, 235, 220, 0.90);
 }
 
+<<<<<<< HEAD
 /* ============================================================
    SANATANI REDDISH-BROWN & MAROON FOOTER SYSTEM (#501d0c & #3a1408)
    ============================================================ */
@@ -886,6 +911,8 @@
   z-index: 10;
 }
 
+=======
+>>>>>>> 5868bd1 (fix(all): comprehensive audit fix - payment speed, CORS security, typography and design overhaul)
 .divine-glow {
   position: relative;
 }
@@ -933,6 +960,7 @@
   overflow: hidden;
   color: #FFFFFF;
 }
+<<<<<<< HEAD
 .vedic-gold-text {
   background: linear-gradient(135deg, #8B1A21 0%, #C47F00 50%, #8B1A21 100%);
   -webkit-background-clip: text;
@@ -942,20 +970,95 @@
   display: inline-block;
   line-height: 1.30;
 }
+=======
+>>>>>>> 5868bd1 (fix(all): comprehensive audit fix - payment speed, CORS security, typography and design overhaul)
 .vedic-glass-chip {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 200, 66, 0.18);
+  border: 1px solid rgba(232, 184, 48, 0.18);
   border-radius: 12px;
 }
 .vedic-card-glow {
   background: rgba(26, 10, 6, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 200, 66, 0.28);
-  box-shadow: 0 20px 60px rgba(245, 200, 66, 0.14);
+  border: 1px solid rgba(232, 184, 48, 0.28);
+  box-shadow: 0 20px 60px rgba(232, 184, 48, 0.14);
   border-radius: 16px;
+}
+
+/* ============================================================
+   CHECKOUT PAGE — BRAND CONSISTENT DESIGN
+   ============================================================ */
+.checkout-page {
+  background: linear-gradient(165deg, #FFFDF7 0%, #FFF5E0 50%, #FFFDF7 100%);
+  min-height: 100vh;
+}
+
+.checkout-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px 4px 4px;
+  background: rgba(139, 26, 33, 0.08);
+  border: 1px solid rgba(139, 26, 33, 0.16);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8B1A21;
+  letter-spacing: 0.04em;
+}
+
+.checkout-step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #8B1A21;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-card {
+  background: white;
+  border: 1px solid rgba(196, 146, 10, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(42, 21, 8, 0.06);
+}
+
+.checkout-pay-btn {
+  background: linear-gradient(135deg, #8B1A21 0%, #B84430 50%, #8B1A21 100%);
+  background-size: 200% auto;
+  color: white !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  transition: background-position 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: 0 6px 24px rgba(139, 26, 33, 0.32) !important;
+}
+.checkout-pay-btn:hover:not(:disabled) {
+  background-position: right center !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 32px rgba(139, 26, 33, 0.42) !important;
+}
+.checkout-pay-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Payment loading skeleton */
+.payment-skeleton {
+  background: linear-gradient(90deg, #f3ede4 25%, #faf3ea 50%, #f3ede4 75%);
+  background-size: 200% 100%;
+  animation: paymentShimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+@keyframes paymentShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ============================================================
@@ -1092,4 +1195,8 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* Consistent maroon brand color utility for checkout */
+  .text-brand { color: #8B1A21 !important; }
+  .bg-brand { background-color: #8B1A21 !important; }
+  .border-brand { border-color: rgba(139, 26, 33, 0.25) !important; }
 }

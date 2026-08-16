@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { publishSocialPost } from '@/lib/social-publisher'
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  // Cron authorization check
+  const authHeader = req.headers.get('authorization')
+  const secret = process.env.CRON_SECRET
+  if (!secret || authHeader !== `Bearer ${secret}`) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
   try {
     const now = new Date()
 
@@ -54,6 +61,6 @@ export async function GET(req: Request) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   return GET(req)
 }

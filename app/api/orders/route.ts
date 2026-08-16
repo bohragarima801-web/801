@@ -3,6 +3,28 @@ import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 import { getSetting } from '@/lib/settings'
 import { ensureDbUser } from '@/lib/user-resolver'
+import { checkRateLimit } from '@/lib/api-security'
+import { z } from 'zod'
+import crypto from 'crypto'
+
+// Zod schema for shipping address validation
+const ShippingAddressSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(100),
+  phone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
+  pincode: z.string().regex(/^\d{6}$/, 'Enter a valid 6-digit pincode'),
+  street: z.string().min(3, 'Street address required').max(300).optional().or(z.literal('')),
+  line1: z.string().max(300).optional().or(z.literal('')),
+  city: z.string().min(2).max(100),
+  state: z.string().min(2).max(100),
+})
+
+/** Generate collision-resistant order number: ORD-<timestamp>-<4 random hex chars> */
+function generateOrderNumber(): string {
+  const ts = Date.now().toString(36).toUpperCase()
+  const rand = crypto.randomBytes(2).toString('hex').toUpperCase()
+  return `ORD-${ts}-${rand}`
+}
+
 
 export async function GET(req: NextRequest) {
   try {
@@ -75,12 +97,15 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: max 10 orders per minute per IP
+  const rateLimited = checkRateLimit(req, { limit: 10, prefix: 'orders' })
+  if (rateLimited) return rateLimited
+
   try {
     const user = await getCurrentUser().catch(() => null)
     if (!user) {
       return NextResponse.json({ ok: false, error: 'You must be logged in to place an order' }, { status: 401 });
     }
-
 
     const body = await req.json()
     const { items = [], shippingAddress, notes, couponCode } = body
@@ -89,10 +114,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Cart is empty or invalid' }, { status: 400 });
     }
 
-
-    if (!shippingAddress?.name || !shippingAddress?.phone || !shippingAddress?.pincode) {
-      return NextResponse.json({ ok: false, error: 'Incomplete shipping address' }, { status: 400 });
+    // Validate and sanitize shipping address with Zod
+    const addressValidation = ShippingAddressSchema.safeParse(shippingAddress)
+    if (!addressValidation.success) {
+      const firstError = addressValidation.error.errors[0]
+      return NextResponse.json({ ok: false, error: firstError?.message || 'Invalid shipping address' }, { status: 400 });
     }
+    const validatedAddress = addressValidation.data
 
     // 1. Secure Price Calculation from DB
     const productIds = items.filter((i: any) => !i.id.startsWith('puja-') && !i.id.startsWith('addon-') && !i.id.startsWith('tool-')).map((i: any) => i.id)
@@ -286,7 +314,7 @@ export async function POST(req: NextRequest) {
     })
 
     // 3. Create Order
-    const orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000)
+    const orderNumber = generateOrderNumber()
     const dbOrder = await prisma.order.create({
       data: {
         orderNumber,

@@ -12,7 +12,7 @@ import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusinessSchema } from '@/lib/seo'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter', display: 'swap' })
-const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap' })
+const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap', preload: true })
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-cinzel', display: 'swap' })
 const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
 const notoSansDevanagari = Noto_Sans_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-sans-devanagari', display: 'swap' })
@@ -124,6 +124,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="google" content="notranslate" />
       </head>
       <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFF9EF] text-[#292321] overflow-x-hidden selection:bg-[#E58A16]/20 selection:text-[#E58A16] antialiased notranslate`} translate="no" suppressHydrationWarning>
+        {/* 
+          Razorpay: afterInteractive = loads right after page hydration.
+          Previously lazyOnload caused 2-5 second delays when clicking Pay.
+        */}
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="afterInteractive"
+        />
         <Script
           id="schema-global-organization"
           type="application/ld+json"
