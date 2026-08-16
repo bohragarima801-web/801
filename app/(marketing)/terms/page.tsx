@@ -57,28 +57,62 @@ export default async function TermsPage() {
             <>
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. प्रस्तावना एवं स्वीकृति
+                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. प्रस्तावना एवं नियम स्वीकृति (Introduction & Acceptance)
                 </h2>
                 <p>
-                  दिव्ययज्ञम् (DivyaYagyam) प्लेटफॉर्म का उपयोग करने पर आप इन सेवा शर्तों से पूर्णतः सहमत होते हैं। हम सनातन वैदिक रीति-रिवाजों के अनुसार पूजा, अनुष्ठान एवं आध्यात्मिक सेवाएं उपलब्ध कराते हैं।
+                  दिव्ययज्ञम् (DivyaYagyam) प्लेटफॉर्म (वेबसाइट एवं मोबाइल इंटरफेस) का उपयोग करने पर आप इन सेवा शर्तों, गोपनीयता नीति एवं रिफंड नीति से पूर्णतः सहमत होते हैं। दिव्ययज्ञम् सनातन वैदिक रीति-रिवाजों, आगम शास्त्रों एवं कर्मकांड पद्धतियों के अनुसार ऑनलाइन पूजा, अनुष्ठान, अभिमंत्रित प्रसाद एवं प्रामाणिक आध्यात्मिक सेवाएं उपलब्ध कराता है।
                 </p>
               </section>
 
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-[#E58A16]" /> 2. नाम-गोत्र संकल्प एवं पूजा सम्पादन
+                  <UserCheck className="h-5 w-5 text-[#E58A16]" /> 2. नाम-गोत्र संकल्प एवं पूजा सम्पादन (Sankalp & Ritual Execution)
                 </h2>
                 <p>
-                  यजमान द्वारा प्रदान किए गए नाम, गोत्र एवं विशिष्ट मनोकामना के आधार पर वैदिक आचार्यों द्वारा विधि-विधान से पूजा संपन्न की जाती है। पूजा संपन्न होने के उपरांत वीडियो प्रमाण व्हाट्सएप पर प्रेषित किया जाता है।
+                  यजमान द्वारा फॉर्म में प्रदान किए गए नाम, गोत्र, कुलदेवी/देवता एवं विशिष्ट मनोकामना के आधार पर सिद्ध पीठों एवं तीर्थ क्षेत्रों में उपस्थित वैदिक विद्वानों द्वारा शास्त्रसम्मत संकल्प लिया जाता है। पूजा संपन्न होने के उपरांत यजमान के पंजीकृत व्हाट्सएप नंबर पर पूजा का वीडियो प्रमाण (नाम-गोत्र उच्चारण सहित) प्रेषित किया जाता है।
                 </p>
               </section>
 
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-[#E58A16]" /> 3. प्रसाद डिलीवरी एवं दायित्व
+                  <Sparkles className="h-5 w-5 text-[#E58A16]" /> 3. ऑनलाइन भुगतान एवं सुरक्षा (Payment Terms & Security)
                 </h2>
                 <p>
-                  अभिमंत्रित प्रसाद को सुरक्षित कूरियर माध्यम से आपके पते पर भेजा जाता है। सामान्यतः 3 से 6 कार्यदिवसों में डिलीवरी पूर्ण होती है।
+                  सभी वित्तीय लेनदेन (UPI, डेबिट/क्रेडिट कार्ड, नेटबैंकिंग) भारतीय रिज़र्व बैंक (RBI) द्वारा अधिकृत सुरक्षित पेमेंट गेटवे (Razorpay) के माध्यम से 256-बिट SSL एन्क्रिप्शन के अंतर्गत प्रोसेस होते हैं। हम किसी भी यजमान का कार्ड नंबर, सीवीवी या यूपीआई पिन कभी संग्रहित (store) नहीं करते हैं।
+                </p>
+              </section>
+
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-[#E58A16]" /> 4. आध्यात्मिक व आस्था अस्वीकरण (Faith & Spiritual Disclaimer)
+                </h2>
+                <p className="text-[#4A403C] leading-relaxed">
+                  वैदिक पूजा, अनुष्ठान, हवन, रुद्राक्ष एवं ज्योतिषीय परामर्श सनातन धर्म की आस्था, शास्त्रों एवं पारंपरिक विश्वास पर आधारित हैं। ये सेवाएं मानसिक शांति, आध्यात्मिक उन्नति एवं सकारात्मक ऊर्जा हेतु की जाती हैं। इन्हें किसी भी प्रकार की चिकित्सीय (Medical), कानूनी (Legal) या वित्तीय (Financial) सलाह का विकल्प नहीं माना जाना चाहिए।
+                </p>
+              </section>
+
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-[#E58A16]" /> 5. शिकायत निवारण अधिकारी (Grievance Redressal Mechanism)
+                </h2>
+                <p>
+                  सूचना प्रौद्योगिकी अधिनियम (IT Act 2000) एवं उपभोक्ता संरक्षण (ई-कॉमर्स) नियम 2020 के अंतर्गत शिकायत निवारण हेतु अधिकारी का विवरण निम्नवत है:
+                </p>
+                <div className="bg-[#FFF9EF] p-3.5 rounded-xl border border-[#E6D6BE] text-xs space-y-1">
+                  <p><strong>शिकायत अधिकारी:</strong> Grievance Officer, DivyaYagyam</p>
+                  <p><strong>ईमेल:</strong> <a href="mailto:grievance@divyayagyam.com" className="text-[#E58A16] font-bold hover:underline">grievance@divyayagyam.com</a> / <a href="mailto:Seva@divyayagyam.com" className="text-[#E58A16] font-bold hover:underline">Seva@divyayagyam.com</a></p>
+                  <p><strong>हेल्पलाइन:</strong> +91-95304-01984 (प्रातः 9:00 से सायं 8:00)</p>
+                  <p><strong>पता:</strong> जोधपुर, राजस्थान, भारत (342001)</p>
+                  <p className="text-[11px] text-[#665E58] pt-1">किसी भी शिकायत की पावती (Acknowledgement) 48 घंटे के भीतर एवं समाधान 30 दिनों के भीतर किया जाता है।</p>
+                </div>
+              </section>
+
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <ShieldAlert className="h-5 w-5 text-[#E58A16]" /> 6. क्षेत्राधिकार (Governing Law & Jurisdiction)
+                </h2>
+                <p>
+                  ये नियम व शर्तें भारतीय कानूनों के अनुसार शासित होंगी और किसी भी विवाद की स्थिति में न्यायिक क्षेत्राधिकार जोधपुर, राजस्थान (भारत) की अदालतों का होगा।
                 </p>
               </section>
             </>

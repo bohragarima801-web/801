@@ -58,29 +58,42 @@ export default async function RefundsPage() {
             <>
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. पूजा निरस्तीकरण एवं 100% रिफंड
+                  <ShieldCheck className="h-5 w-5 text-[#E58A16]" /> 1. पूजा निरस्तीकरण एवं 100% रिफंड (Puja Cancellation & Refund)
                 </h2>
                 <p>
-                  यदि आप किसी कारणवश अपनी निर्धारित पूजा रद्द करना चाहते हैं, तो पूजा प्रारंभ होने से 2 घंटे पूर्व तक सूचना देने पर 100% पूर्ण राशि आपके मूल भुगतान खाते में 5-7 कार्यदिवसों के भीतर रिफंड कर दी जाएगी।
+                  यदि आप किसी अपरिहार्य कारणवश अपनी निर्धारित पूजा रद्द करना चाहते हैं, तो पूजा प्रारंभ होने से 2 घंटे पूर्व तक व्हाट्सएप (+91-95304-01984) अथवा ईमेल (Seva@divyayagyam.com) पर सूचित करने पर 100% पूर्ण राशि आपके मूल भुगतान खाते (UPI, बैंक खाता या कार्ड) में 5 से 7 कार्यदिवसों के भीतर बिना किसी कटौती के स्वतः रिफंड कर दी जाती है।
                 </p>
               </section>
 
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-[#E58A16]" /> 2. पूजा तिथि में परिवर्तन (Rescheduling)
+                  <Calendar className="h-5 w-5 text-[#E58A16]" /> 2. पूजा तिथि में निःशुल्क परिवर्तन (Free Rescheduling)
                 </h2>
                 <p>
-                  आप बिना किसी अतिरिक्त शुल्क के अपनी पूजा को किसी भी अन्य आगामी शुभ तिथि अथवा मुहूर्त में स्थानांतरित करवा सकते हैं।
+                  आप बिना किसी अतिरिक्त शुल्क के अपनी पूजा को किसी भी अन्य आगामी शुभ तिथि, पर्व अथवा अनुकूल मुहूर्त में स्थानांतरित (Reschedule) करवा सकते हैं। इसके लिए हमारे सहायता केंद्र से संपर्क करें।
                 </p>
               </section>
 
               <section className="space-y-2">
                 <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-[#E58A16]" /> 3. क्षतिग्रस्त सामग्री या पार्सल रिप्लेसमेंट
+                  <AlertCircle className="h-5 w-5 text-[#E58A16]" /> 3. स्टोर उत्पाद वापसी एवं रिप्लेसमेंट (Store Returns & Replacements)
                 </h2>
                 <p>
-                  यदि कोरियर द्वारा प्राप्त प्रसाद या सामग्री में कोई क्षति होती है, तो हमें फोटो भेजते ही तुरंत नवीन अभिमंत्रित सामग्री निःशुल्क प्रेषित की जाएगी।
+                  सनातन स्टोर से खरीदे गए रुद्राक्ष, सिद्ध यंत्र अथवा पूजा सामग्री यदि पार्सल प्राप्ति के समय क्षतिग्रस्त (damaged) अथवा गलत पाई जाती है, तो डिलीवरी के 48 घंटे के भीतर फोटो भेजते ही हम तुरंत निःशुल्क नवीन अभिमंत्रित सामग्री प्रेषित करते हैं या यजमान की इच्छा अनुसार पूर्ण राशि रिफंड करते हैं।
                 </p>
+              </section>
+
+              <section className="space-y-2">
+                <h2 className="text-base sm:text-lg font-bold text-[#292321] flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-[#E58A16]" /> 4. रिफंड प्रक्रिया एवं समय-सीमा (Refund Mode & Timelines)
+                </h2>
+                <p>
+                  सभी स्वीकृत रिफंड सीधे उसी पेमेंट माध्यम (Original Source) में क्रेडिट किए जाते हैं जिससे भुगतान किया गया था।
+                </p>
+                <ul className="list-disc pl-5 space-y-1 text-xs">
+                  <li><strong>UPI / Google Pay / PhonePe / Paytm:</strong> 2 से 4 कार्यदिवस</li>
+                  <li><strong>नेटबैंकिंग / डेबिट कार्ड / क्रेडिट कार्ड:</strong> 5 से 7 कार्यदिवस (बैंक साइकिल अनुसार)</li>
+                </ul>
               </section>
             </>
           )}
