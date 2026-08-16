@@ -1,8 +1,9 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -11,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { 
   Sparkles, Award, UserCheck, Calendar, Clock, Video, Truck, ShieldCheck, 
-  CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, Flame, Check, Zap, MapPin, Crown, ChevronDown
+  CheckCircle2, ArrowRight, PhoneCall, MessageCircle, Star, Flame, Check, Zap, MapPin, Crown, ChevronDown, Loader2, Lock
 } from 'lucide-react'
 import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
@@ -92,7 +93,9 @@ function VipPujaCountdownTimer({ puja }: { puja: any }) {
 }
 
 export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
+  const router = useRouter()
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false)
+  const [bookingLoading, setBookingLoading] = useState(false)
   const [devoteeName, setDevoteeName] = useState('')
   const [whatsappPhone, setWhatsappPhone] = useState('')
   const [gotra, setGotra] = useState('')
@@ -165,8 +168,8 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
   const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!devoteeName || !whatsappPhone) {
-      alert('कृपया अपना नाम एवं व्हाट्सएप नंबर दर्ज करें।')
+    if (!devoteeName.trim() || !whatsappPhone.trim()) {
+      toast.error('कृपया अपना नाम एवं व्हाट्सएप नंबर दर्ज करें।')
       return
     }
 
@@ -174,33 +177,119 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
     const slotText = slotObj ? slotObj.label : 'Default Auspicious Timing'
     const dateText = selectedDate ? selectedDate : 'Auspicious Date Recommended by Priest'
 
+    const finalSankalp = [
+      sankalpWish || 'Overall Victory & Health',
+      `[Preferred Date: ${dateText}]`,
+      `[Time Slot: ${slotText}]`,
+      `[Assigned Priest: ${assignedPandit.name}]`
+    ].filter(Boolean).join(' | ')
+
+    setBookingLoading(true)
+
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pujaId: puja.id,
-          devoteeName,
-          phone: whatsappPhone,
-          gotra: gotra || 'Kashyap',
-          sankalpPurpose: sankalpWish || 'Overall Victory & Health',
+          devoteeName: devoteeName.trim(),
+          phone: whatsappPhone.trim(),
+          gotra: gotra.trim() || 'Kashyap',
+          sankalpPurpose: finalSankalp,
           amount: displayPrice,
           isVipBooking: true
         })
       })
 
       const data = await res.json()
-      const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
-      const enc = encodeURIComponent
-      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${enc(bookingNo)}%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}`
+      if (!data.ok) {
+        toast.error(data.error || 'बुकिंग शुरू करने में त्रुटि हुई। कृपया पुनः प्रयास करें।')
+        setBookingLoading(false)
+        return
+      }
 
-      window.open(`https://wa.me/919530401984?text=${message}`, '_blank')
+      // If Razorpay gateway payment data is available
+      if (data.paymentData && data.paymentData.orderId) {
+        const { orderId, amount, currency, razorpayKeyId, paymentId } = data.paymentData
+
+        if (typeof window === 'undefined' || !(window as any).Razorpay) {
+          toast.error('Payment gateway is loading. Please try again in a few seconds.')
+          setBookingLoading(false)
+          return
+        }
+
+        const rzp = new (window as any).Razorpay({
+          key: razorpayKeyId,
+          amount,
+          currency,
+          name: 'DivyaYagyam (दिव्ययज्ञम्)',
+          description: `VIP महा अनुष्ठान: ${puja.name}`,
+          order_id: orderId,
+          prefill: {
+            name: devoteeName,
+            contact: whatsappPhone,
+          },
+          theme: { color: '#E58A16' },
+          modal: {
+            ondismiss: () => {
+              setBookingLoading(false)
+              toast.info('भुगतान रद्द कर दिया गया। आपकी बुकिंग पेंडिंग में सुरक्षित है।')
+            },
+          },
+          handler: async (response: any) => {
+            try {
+              toast.loading('भुगतान सत्यापित किया जा रहा है...', { id: 'vip-verify' })
+              const verifyRes = await fetch('/api/payments/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  paymentId,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              })
+              const verifyData = await verifyRes.json()
+              toast.dismiss('vip-verify')
+
+              if (verifyRes.ok && verifyData.ok && verifyData.verified) {
+                toast.success('🎉 VIP अनुष्ठान बुकिंग व दक्षिणा भुगतान सफल!')
+                setBookingDialogOpen(false)
+                const params = new URLSearchParams()
+                params.set('type', 'booking')
+                if (data.data?.bookingNumber) params.set('order', data.data.bookingNumber)
+                if (verifyData.razorpay_payment_id) params.set('payment', verifyData.razorpay_payment_id)
+                window.location.href = `/checkout/thank-you?${params.toString()}`
+              } else {
+                toast.error('भुगतान सत्यापन विफल रहा। यदि राशि कट गई है तो कृपया संपर्क करें: ' + data.data?.bookingNumber)
+                setBookingLoading(false)
+              }
+            } catch {
+              toast.dismiss('vip-verify')
+              toast.error('सत्यापन के समय नेटवर्क त्रुटि हुई।')
+              setBookingLoading(false)
+            }
+          },
+        })
+
+        rzp.on('payment.failed', (response: any) => {
+          setBookingLoading(false)
+          toast.error(response.error?.description || 'भुगतान असफल रहा')
+        })
+
+        rzp.open()
+      } else {
+        // Fallback to WhatsApp if offline/manual mode
+        const bookingNo = data?.data?.bookingNumber || 'DY-VIP-' + Math.floor(100000 + Math.random() * 900000)
+        const enc = encodeURIComponent
+        const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Booking ID:* ${enc(bookingNo)}%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}`
+        window.open(`https://wa.me/919530401984?text=${message}`, '_blank')
+        setBookingDialogOpen(false)
+        setBookingLoading(false)
+      }
     } catch (err) {
-      const enc = encodeURIComponent
-      const message = `Namaste DivyaYagyam Team!%0A%0A*VIP Puja Booking Request:*%0A- *Puja:* ${enc(puja.name)}%0A- *Price:* ₹${displayPrice}%0A- *Devotee Name:* ${enc(devoteeName)}%0A- *WhatsApp Phone:* ${enc(whatsappPhone)}%0A- *Gotra:* ${enc(gotra || 'Kashyap')}%0A- *Preferred Date:* ${enc(dateText)}%0A- *Time Slot:* ${enc(slotText)}%0A- *Assigned Priest:* ${enc(assignedPandit.name)}%0A- *Sankalp Intention:* ${enc(sankalpWish || 'Overall Victory & Health')}`
-      window.open(`https://wa.me/919530401984?text=${message}`, '_blank')
-    } finally {
-      setBookingDialogOpen(false)
+      toast.error('बुकिंग के समय नेटवर्क त्रुटि हुई।')
+      setBookingLoading(false)
     }
   }
 
@@ -578,17 +667,44 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
             <Button
               type="submit"
-              className="w-full bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm py-3 mt-2 rounded-xl shadow-md cursor-pointer"
+              disabled={bookingLoading}
+              className="w-full bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm py-3.5 mt-2 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2"
             >
-              👑 बुकिंग की पुष्टि करें ➔
+              {bookingLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Razorpay सुरक्षित पेमेंट गेटवे खुल रहा है...</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="h-4 w-4" />
+                  <span>सुरक्षित ऑनलाइन दक्षिणा भुगतान करें (₹{displayPrice.toLocaleString('en-IN')}) ➔</span>
+                </>
+              )}
             </Button>
 
-            <p className="text-[10px] text-[#665E58] text-center">
-              🔒 100% सुरक्षित सेवा। हमारे मुख्य आचार्य सीधे व्हाट्सएप पर संपर्क करेंगे।
-            </p>
+            <div className="flex items-center justify-center gap-2 text-[10px] text-[#665E58] pt-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              <span>Razorpay 256-Bit SSL एन्क्रिप्टेड • UPI / Cards / NetBanking</span>
+            </div>
+
+            <div className="pt-2 text-center border-t border-[#E6D6BE]">
+              <p className="text-[11px] text-[#665E58] mb-1 font-medium">
+                ऑनलाइन दक्षिणा से पूर्व मुख्य आचार्य से बात करना चाहते हैं?
+              </p>
+              <a
+                href={`https://wa.me/919530401984?text=${encodeURIComponent(`Namaste! I want to discuss details for VIP Puja: ${puja.name}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1.5"
+              >
+                <span>💬 मुख्य आचार्य से व्हाट्सएप पर चर्चा करें ➔</span>
+              </a>
+            </div>
           </form>
         </DialogContent>
       </Dialog>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
     </div>
   )
 }
