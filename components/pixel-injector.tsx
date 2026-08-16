@@ -25,9 +25,9 @@ export function PixelInjector() {
         // Check master toggle — if disabled, do not inject any pixels
         if (s['pixel.events_enabled'] === 'false') return
 
-        // Inject FB Pixel if present and not loaded
+        // Inject FB Pixel if present and not already initialized
         const fbId = s['pixel.facebook_id']
-        if (fbId && !(window as any)._fb_pixel_injected) {
+        if (fbId && !(window as any)._fb_pixel_injected && !(window as any).fbq) {
           ;(window as any)._fb_pixel_injected = true
           const fbScript = document.createElement('script')
           fbScript.innerHTML = `
