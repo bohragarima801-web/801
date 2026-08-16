@@ -137,6 +137,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Suspense fallback={null}>
             <PixelInjector />
           </Suspense>
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: 'none' }}
+              src="https://www.facebook.com/tr?id=3076518582679648&ev=PageView&noscript=1"
+              alt=""
+            />
+          </noscript>
           <TranslationProvider />
           <WhatsAppFloatingWidget />
         </Providers>

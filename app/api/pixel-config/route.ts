@@ -34,8 +34,8 @@ export async function GET() {
     })
 
     const data: Record<string, any> = {
-      'pixel.facebook_id': raw['pixel.facebook_id'] || raw['marketing.metaPixelId'] || '',
-      'pixel.google_analytics_id': raw['pixel.google_analytics_id'] || raw['marketing.googleAnalyticsId'] || '',
+      'pixel.facebook_id': raw['pixel.facebook_id'] || raw['marketing.metaPixelId'] || process.env.NEXT_PUBLIC_FB_PIXEL_ID || process.env.FB_PIXEL_ID || '',
+      'pixel.google_analytics_id': raw['pixel.google_analytics_id'] || raw['marketing.googleAnalyticsId'] || process.env.NEXT_PUBLIC_GA_ID || '',
       'pixel.google_ads_id': raw['pixel.google_ads_id'] || raw['marketing.googleAdsId'] || '',
       'pixel.google_tag_manager_id': raw['pixel.google_tag_manager_id'] || '',
       'pixel.tiktok_id': raw['pixel.tiktok_id'] || '',
