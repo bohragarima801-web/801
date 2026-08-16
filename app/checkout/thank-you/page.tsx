@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -50,6 +50,8 @@ function ThankYouContent() {
     }))
   }, [])
 
+  const hasFiredPurchaseRef = useRef(false)
+
   useEffect(() => {
     if (!orderNumber && !razorpayPaymentId) { setLoading(false); return }
     const url = orderNumber
@@ -76,6 +78,49 @@ function ThankYouContent() {
             paymentId: data.paymentRef || razorpayPaymentId || null,
             createdAt: data.createdAt || new Date().toISOString(),
           })
+
+          // Trigger Meta Pixel Purchase Event
+          if (!hasFiredPurchaseRef.current) {
+            hasFiredPurchaseRef.current = true
+            const val = Number(data.total || 0)
+            const ordId = data.orderNumber || orderNumber
+
+            if (typeof window !== 'undefined' && (window as any).fbq) {
+              try {
+                (window as any).fbq('track', 'Purchase', {
+                  value: val,
+                  currency: 'INR',
+                  content_name: data.items?.map((i: any) => i.name).join(', ') || 'Puja / Order',
+                  content_type: data.type === 'booking' ? 'puja' : 'product',
+                  num_items: data.items?.length || 1,
+                  order_id: ordId,
+                })
+              } catch (e) {
+                console.warn('[Pixel] Purchase tracking error:', e)
+              }
+            }
+
+            // Server-side CAPI event via /api/analytics/event
+            fetch('/api/analytics/event', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                eventName: 'Purchase',
+                eventId: `pur_${ordId}_${Date.now()}`,
+                pageUrl: window.location.href,
+                userData: {
+                  fullName: data.customerName,
+                  phone: data.phone,
+                },
+                metadata: {
+                  value: val,
+                  currency: 'INR',
+                  order_id: ordId,
+                  content_type: data.type === 'booking' ? 'puja' : 'product',
+                }
+              })
+            }).catch(() => {})
+          }
         }
       })
       .catch(() => {})

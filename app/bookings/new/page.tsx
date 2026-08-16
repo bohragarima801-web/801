@@ -226,6 +226,16 @@ function BookingForm() {
         return
       }
 
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        try {
+          (window as any).fbq('track', 'InitiateCheckout', {
+            value: Math.round(amount / 100),
+            currency: 'INR',
+            content_name: puja.name,
+          })
+        } catch (e) {}
+      }
+
       const rzp = new (window as any).Razorpay({
         key: razorpayKeyId,
         amount,

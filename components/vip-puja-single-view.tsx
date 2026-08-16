@@ -218,6 +218,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
           return
         }
 
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          try {
+            (window as any).fbq('track', 'InitiateCheckout', {
+              value: Number(displayPrice),
+              currency: 'INR',
+              content_name: puja.name,
+            })
+          } catch (e) {}
+        }
+
         const rzp = new (window as any).Razorpay({
           key: razorpayKeyId,
           amount,

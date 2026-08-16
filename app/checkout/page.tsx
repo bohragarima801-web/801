@@ -226,9 +226,18 @@ export default function CheckoutPage() {
         return
       }
 
-      // Stop the processing spinner before opening Razorpay popup
       // (Razorpay popup is async — it stays open until user acts)
       setProcessing(false)
+
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        try {
+          (window as any).fbq('track', 'InitiateCheckout', {
+            value: Math.round(amount / 100),
+            currency: 'INR',
+            num_items: items.length,
+          })
+        } catch (e) {}
+      }
 
       const options = {
         key: razorpayKeyId,
