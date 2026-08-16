@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
+import { ensureDbUser } from '@/lib/user-resolver'
 
 // POST /api/bhaktiseva/buy
 // Standalone BhaktiSeva purchase (outside of puja booking)
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser().catch(() => null)
-    if (!user) {
-      return NextResponse.json({ ok: false, error: 'Please login to continue' }, { status: 401 })
-    }
-
     const body = await req.json()
     const { offeringIds, shippingAddress, notes } = body
 
@@ -34,22 +31,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Resolve DB user ID
-    let dbUserId = user.id
-    if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
-      let dbUser = await prisma.user.findFirst({ where: { email: user.email } })
-      if (!dbUser) {
-        const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
-        dbUser = await prisma.user.create({
-          data: {
-            email: user.email,
-            fullName: user.fullName || 'Devotee',
-            supabaseId: user.supabaseId || user.id,
-            roleId: defaultRole?.id ?? null,
-          },
-        })
-      }
-      dbUserId = dbUser.id
-    }
+    const dbUser = await ensureDbUser(user, {
+      email: shippingAddress?.email || user?.email,
+      phone: shippingAddress?.phone,
+      name: shippingAddress?.name || user?.fullName
+    })
+    const dbUserId = dbUser.id
 
     // Save shipping address if provided
     let savedAddressId: string | null = null
@@ -98,9 +85,20 @@ export async function POST(req: NextRequest) {
     })
 
     // Resolve default temple to satisfy schema constraint
-    const defaultTemple = await prisma.temple.findFirst({ where: { isActive: true } })
+    let defaultTemple = await prisma.temple.findFirst({ where: { isActive: true } })
     if (!defaultTemple) {
-      return NextResponse.json({ ok: false, error: 'No active temple found to host BhaktiSeva' }, { status: 400 })
+      defaultTemple = await prisma.temple.findFirst()
+    }
+    if (!defaultTemple) {
+      defaultTemple = await prisma.temple.create({
+        data: {
+          name: 'माँ कात्यायनी शक्तिपीठ',
+          slug: 'katyayani-shakti-peeth',
+          city: 'जोधपुर',
+          state: 'राजस्थान',
+          isActive: true
+        }
+      })
     }
 
     // Create BhaktiSeva records

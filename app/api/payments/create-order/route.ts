@@ -57,25 +57,29 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // Persist Payment record (best-effort — skip if DB unreachable)
+    // Persist Payment record (best-effort)
     let paymentId: string | null = null
     try {
-      if (user) {
-        const record = await prisma.payment.create({
-          data: {
-            userId: user.id,
-            amount: amountInRupees,
-            currency: 'INR',
-            gateway: 'RAZORPAY',
-            gatewayOrderId: order.id,
-            status: 'PENDING',
-            metadata: { paymentType, referenceId, description, receipt, customer, notes },
-          },
-        })
-        paymentId = record.id
-      }
+      const { ensureDbUser } = await import('@/lib/user-resolver')
+      const dbUser = await ensureDbUser(user, {
+        email: customer?.email,
+        phone: customer?.contact,
+        name: customer?.name || 'Devotee',
+      })
+      const record = await prisma.payment.create({
+        data: {
+          userId: dbUser.id,
+          amount: amountInRupees,
+          currency: 'INR',
+          gateway: 'RAZORPAY',
+          gatewayOrderId: order.id,
+          status: 'PENDING',
+          metadata: { paymentType, referenceId, description, receipt, customer, notes },
+        },
+      })
+      paymentId = record.id
     } catch (dbErr: any) {
-// console.warn('[create-order] DB persistence skipped:', dbErr?.message) (removed for production)
+      console.warn('[create-order] DB persistence skipped:', dbErr?.message)
     }
 
     return cors(NextResponse.json({

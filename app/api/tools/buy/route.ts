@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
+import { ensureDbUser } from '@/lib/user-resolver'
 
 // POST /api/tools/buy
 // Purchase a paid spiritual tool
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser().catch(() => null)
-    if (!user) {
-      return NextResponse.json({ ok: false, error: 'Please login to purchase tools' }, { status: 401 })
-    }
-
     const body = await req.json()
     const { toolId } = body
 
@@ -44,22 +41,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Resolve DB user
-    let dbUserId = user.id
-    if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
-      let dbUser = await prisma.user.findFirst({ where: { email: user.email } })
-      if (!dbUser) {
-        const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
-        dbUser = await prisma.user.create({
-          data: {
-            email: user.email,
-            fullName: user.fullName || 'Devotee',
-            supabaseId: user.supabaseId || user.id,
-            roleId: defaultRole?.id ?? null,
-          },
-        })
-      }
-      dbUserId = dbUser.id
-    }
+    const dbUser = await ensureDbUser(user, {
+      email: user?.email,
+      name: user?.fullName || 'Devotee'
+    })
+    const dbUserId = dbUser.id
 
     // Create order for the tool
     const orderNumber = 'TOOL-' + Math.floor(100000 + Math.random() * 900000)

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
-
+import { ensureDbUser } from '@/lib/user-resolver'
 import { withSafeApi } from '@/lib/safe-api'
 
 export const GET = withSafeApi(async (req: NextRequest) => {
@@ -12,8 +12,13 @@ export const GET = withSafeApi(async (req: NextRequest) => {
     return NextResponse.json({ ok: false, error: 'Puja ID is required' }, { status: 400 });
   }
 
-  const puja = await prisma.puja.findUnique({
-    where: { id: pujaId },
+  const puja = await prisma.puja.findFirst({
+    where: {
+      OR: [
+        { id: pujaId },
+        { slug: pujaId }
+      ]
+    },
     include: { temple: true, packages: true },
   })
 
@@ -47,39 +52,29 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     return NextResponse.json({ ok: false, error: 'Mandatory fields missing: pujaId and devoteeName are required' }, { status: 400 });
   }
 
-  // Resolve logged in user or guest user
-  let user = await getCurrentUser().catch(() => null)
-  
-  if (!user) {
-    const guestEmail = email || `devotee-${Date.now()}@divyayagyam.com`
-    const guestPhone = phone || `+91${Date.now().toString().slice(-10)}`
-    
-    let dbGuestUser = await prisma.user.findFirst({
-      where: { OR: [{ email: guestEmail }, { phone: guestPhone }] }
-    })
-
-    if (!dbGuestUser) {
-      const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
-      dbGuestUser = await prisma.user.create({
-        data: {
-          email: guestEmail,
-          phone: guestPhone,
-          fullName: devoteeName,
-          roleId: defaultRole?.id ?? null
-        }
-      })
-    }
-    user = { id: dbGuestUser.id, email: dbGuestUser.email, fullName: dbGuestUser.fullName } as any
-  }
-
-  const puja = await prisma.puja.findUnique({
-    where: { id: pujaId },
+  // 1. Resolve Puja by ID or Slug
+  const puja = await prisma.puja.findFirst({
+    where: {
+      OR: [
+        { id: pujaId },
+        { slug: pujaId }
+      ]
+    },
     include: { packages: true },
   })
 
   if (!puja) {
     return NextResponse.json({ ok: false, error: 'Puja not found' }, { status: 404 });
   }
+
+  // 2. Resolve guaranteed valid User record in DB
+  const authUser = await getCurrentUser().catch(() => null)
+  const dbUser = await ensureDbUser(authUser, {
+    email: email || authUser?.email,
+    phone: phone || (authUser as any)?.phone,
+    name: devoteeName || authUser?.fullName || 'Devotee'
+  })
+  const dbUserId = dbUser.id
 
   // 1. SECURE PRICE CALCULATION
   const finalIsVip = Boolean(isVipBooking || puja.isVip)
@@ -134,29 +129,6 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       relation: 'Family'
     }))
   ]
-
-  // Ensure active user ID
-  let dbUserId = user?.id || 'guest-devotee-id'
-  const userEmail = user?.email || email || `devotee-${Date.now()}@divyayagyam.com`
-  const userFullName = devoteeName || user?.fullName || 'Devotee'
-
-  if (dbUserId === 'admin-system-id' || dbUserId.length > 36 || !user?.id) {
-    let dbUser = await prisma.user.findFirst({
-      where: { OR: [{ email: userEmail }, { id: dbUserId }] }
-    })
-    if (!dbUser) {
-      const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
-      dbUser = await prisma.user.create({
-        data: {
-          email: userEmail,
-          fullName: userFullName,
-          supabaseId: dbUserId,
-          roleId: defaultRole?.id ?? null
-        }
-      })
-    }
-    dbUserId = dbUser.id
-  }
 
   const booking = await prisma.booking.create({
     data: {

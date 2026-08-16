@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 import { getSetting } from '@/lib/settings'
+import { ensureDbUser } from '@/lib/user-resolver'
 
 export async function GET(req: NextRequest) {
   try {
@@ -261,24 +262,12 @@ export async function POST(req: NextRequest) {
 
 
     // 2. Resolve or Upsert DB User Record
-    let dbUserId = user.id
-    if (dbUserId === 'admin-system-id' || dbUserId.length > 36) {
-      let dbUser = await prisma.user.findFirst({
-        where: { OR: [{ email: user.email }, { id: user.id }] }
-      })
-      if (!dbUser) {
-        const defaultRole = await prisma.role.findFirst({ where: { isSystem: true } })
-        dbUser = await prisma.user.create({
-          data: {
-            email: user.email,
-            fullName: user.fullName || 'Devotee',
-            supabaseId: user.supabaseId || user.id,
-            roleId: defaultRole?.id ?? null
-          }
-        })
-      }
-      dbUserId = dbUser.id
-    }
+    const dbUser = await ensureDbUser(user, {
+      email: shippingAddress?.email || user?.email,
+      phone: shippingAddress?.phone,
+      name: shippingAddress?.name || user?.fullName
+    })
+    const dbUserId = dbUser.id
 
     // Save Address
     const savedAddress = await prisma.address.create({
