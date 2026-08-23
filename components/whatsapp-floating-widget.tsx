@@ -13,10 +13,22 @@ interface TeamMember {
   isActive?: boolean
 }
 
+const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
+  {
+    id: 'pt-mukesh',
+    name: 'पं. मुकेश बोहरा / संस्थान सेवा',
+    phone: '+919530401984',
+    role: 'मुख्य आचार्य एवं सहायता डेस्क',
+    message: 'प्रणाम पंडित जी! मुझे पूजा एवं अनुष्ठान के संबंध में जानकारी चाहिए।',
+    isPrimary: true,
+    isActive: true,
+  }
+]
+
 export function WhatsAppFloatingWidget() {
   const [enabled, setEnabled] = useState(true)
-  const [title, setTitle] = useState('DivyaYagyam WhatsApp Seva')
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [title, setTitle] = useState('दिव्ययज्ञम् व्हाट्सएप सेवा')
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(DEFAULT_TEAM_MEMBERS)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {

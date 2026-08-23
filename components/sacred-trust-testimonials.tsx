@@ -53,7 +53,7 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
             भक्तों का विश्वास एवं पावन अनुभव
           </h2>
           <p className="text-sm text-[#665E58]">
-            देश-विदेश के 50,000+ से अधिक यजमानों का दिव्ययज्ञम् पर अटूट भरोसा
+            पवित्र सनातन वैदिक परंपरा एवं आचार्यों के सान्निध्य में संपन्न अनुष्ठानों पर श्रद्धालुओं का अटूट भरोसा
           </p>
         </div>
 

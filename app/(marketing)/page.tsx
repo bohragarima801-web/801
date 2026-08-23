@@ -61,8 +61,8 @@ const fallbackPujas = [
   {
     id: 'fp-1',
     slug: 'maa-bagalamukhi-mirchi-hawan',
-    name: 'माँ बगलामुखी मिर्ची हवन व विशेष शत्रुनिवारण अनुष्ठान',
-    shortDescription: 'कोर्ट-कचहरी मुकदमों में विजय, शत्रु स्तंभन, तंत्र बाधा एवं व्यापारिक रुकावटों के सर्वनाश हेतु विशेष तीक्ष्ण मिर्ची महायज्ञ।',
+    name: 'माँ बगलामुखी मिर्ची हवन व विशेष विघ्न शांति अनुष्ठान',
+    shortDescription: 'मानसिक शांति, कार्य सिद्धि, व्यापारिक प्रगति, पारिवारिक सुरक्षा व सकारात्मक ऊर्जा हेतु विशेष शास्त्रोक्त महायज्ञ।',
     location: 'माँ बगलामुखी धाम, दतिया',
     price: 1100,
     badge: 'सर्वाधिक लोकप्रिय',
@@ -74,7 +74,7 @@ const fallbackPujas = [
     id: 'fp-2',
     slug: 'mahamrityunjaya-jaap-rudrabhishekam',
     name: 'काशी विश्वनाथ महामृत्युंजय सवा लाख मंत्र जाप एवं रुद्राभिषेक',
-    shortDescription: 'अकाल मृत्यु निवारण, असाध्य रोग मुक्ति, दीर्घायु एवं शिव कृपा प्राप्ति हेतु काशी के विद्वान ब्राह्मणों द्वारा सवा लाख महामृत्युंजय जाप।',
+    shortDescription: 'स्वास्थ्य रक्षा, दीर्घायु, मानसिक शांति एवं शिव कृपा प्राप्ति हेतु काशी के विद्वान ब्राह्मणों द्वारा सवा लाख महामृत्युंजय जाप।',
     location: 'काशी विश्वनाथ, वाराणसी',
     price: 2100,
     badge: 'विशेष अनुष्ठान',
@@ -86,7 +86,7 @@ const fallbackPujas = [
     id: 'fp-3',
     slug: 'shani-saadesati-dhaiya-dosh-nivaran-yagya',
     name: 'शनि साढ़ेसाती, ढैय्या व शनि दोष निवारण महापूजा एवं शांति यज्ञ',
-    shortDescription: 'शनि साढ़ेसाती, अष्टम ढैय्या, शनि महादशा, व्यापारिक घाटा व वात रोगों के शमन हेतु विशेष तैलभिषेक व शमी पत्र यज्ञ।',
+    shortDescription: 'शनि साढ़ेसाती, अष्टम ढैय्या, शनि महादशा में शांति, सुख-समृद्धि व अनुकूलता हेतु विशेष तैलभिषेक व शमी पत्र यज्ञ।',
     location: 'माँ कात्यायनी शक्तिपीठ, जोधपुर',
     price: 901,
     badge: 'नवग्रह शांति',
@@ -98,7 +98,7 @@ const fallbackPujas = [
     id: 'fp-4',
     slug: 'navgrah-shanti-sarva-graha-dosh-nivaran-puja',
     name: 'नवग्रह शांति व सर्व ग्रह दोष निवारण महापूजा',
-    shortDescription: 'सूर्य, चंद्र, मंगल, बुध, गुरु, शुक्र, शनि, राहु एवं केतु की अशुभ दशा व ग्रह पीड़ा के सर्वथा शमन हेतु 9 समिधा हवन।',
+    shortDescription: 'सूर्य, चंद्र, मंगल, बुध, गुरु, शुक्र, शनि, राहु एवं केतु की अनुकूलता व ग्रह शांति हेतु 9 समिधा वेदोक्त हवन।',
     location: 'माँ कात्यायनी शक्तिपीठ, जोधपुर',
     price: 901,
     badge: 'ग्रह शांति',
@@ -110,7 +110,7 @@ const fallbackPujas = [
     id: 'fp-5',
     slug: 'pitra-shanti-vishesh-sarva-pitra-tarpan-puja',
     name: 'पितृ शांति विशेष एवं सर्व पितृ तर्पण महापूजा',
-    shortDescription: 'पितृ दोष शांति, पूर्वजों की तृप्ति, वंश वृद्धि व पारिवारिक सुख-शांति हेतु कुशा जल, काले तिल व जौ द्वारा सर्व पितृ तर्पण एवं ब्राह्मण भोजन।',
+    shortDescription: 'पितृ दोष शांति, पूर्वजों का आशीर्वाद, वंश वृद्धि व पारिवारिक सुख-शांति हेतु कुशा जल, काले तिल व जौ द्वारा सर्व पितृ तर्पण एवं ब्राह्मण भोजन।',
     location: 'माँ कात्यायनी शक्तिपीठ, जोधपुर',
     price: 901,
     badge: 'पितृ दोष शांति',
@@ -236,10 +236,10 @@ export default async function HomePage() {
           {/* Floating 4-Column Trust Stats Card */}
           <div className="mt-10 md:mt-14 p-5 sm:p-7 rounded-2xl bg-white border border-[#E6D6BE] grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center shadow-[0_8px_30px_rgba(80,50,20,0.06)] max-w-6xl mx-auto">
             {[
-              { val: "50,000+", label: "संतुष्ट श्रद्धालु", sub: "Happy Devotees" },
-              { val: "27+ वर्ष", label: "सेवा का अनुभव", sub: "Vedic Experience" },
-              { val: "100%", label: "शास्त्रोक्त सेवा", sub: "Veda Compliant" },
-              { val: "4.9 ★", label: "ग्राहक रेटिंग", sub: "User Rating" }
+              { val: "27+ वर्ष", label: "पावन सेवा (1997 से)", sub: "Vedic Experience" },
+              { val: "100%", label: "शास्त्रोक्त संकल्प", sub: "Name & Gotra Sankalp" },
+              { val: "HD Video", label: "व्हाट्सएप लाइव प्रमाण", sub: "Live WhatsApp Proof" },
+              { val: "100%", label: "सुरक्षित भुगतान", sub: "Razorpay Encrypted" }
             ].map((stat, i) => (
               <div key={i} className="space-y-0.5 border-r last:border-r-0 border-[#E6D6BE]/60 pr-2">
                 <div className="text-xl sm:text-3xl font-black text-[#E58A16] tracking-tight">{stat.val}</div>
@@ -319,6 +319,88 @@ export default async function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 2.5: MEET PANDIT MUKESH BOHRA (Authentic Ashram Face)
+          ============================================================ */}
+      <section className="w-full bg-gradient-to-b from-[#FFF9EF] via-[#F7EBD7]/50 to-[#FFF9EF] py-14 md:py-20 border-b border-[#E6D6BE]">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl">
+          <div className="bg-white rounded-3xl border border-[#E6D6BE] p-6 sm:p-10 shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Pandit Ji Photo */}
+            <div className="lg:col-span-5 flex flex-col items-center text-center space-y-4">
+              <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-3xl overflow-hidden border-4 border-[#C99A3D]/40 shadow-xl bg-[#F7EBD7]">
+                <img
+                  src="/pandit_mukesh_bohra.jpg"
+                  alt="पं. मुकेश बोहरा - मुख्य वेदाचार्य"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 text-white">
+                  <p className="font-bold text-sm">पं. मुकेश बोहरा</p>
+                  <p className="text-[11px] text-[#C99A3D] font-semibold">1997 से वैदिक सेवा • 27+ वर्ष अनुभव</p>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7EBD7] text-xs font-bold text-[#6B2635] border border-[#E6D6BE]">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                <span>मुख्य पीठाधीश्वर (माँ कात्यायनी शक्ति पीठ)</span>
+              </div>
+            </div>
+
+            {/* Content & Story */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] text-xs font-bold text-[#E58A16]">
+                <Award className="h-3.5 w-3.5 text-[#E58A16]" />
+                <span>व्यक्तिगत सान्निध्य व प्रामाणिक परंपरा</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-black text-[#292321] leading-tight">
+                "हमारा आश्रम छोटा है, लेकिन हर पूजा मैं स्वयं विधिपूर्वक करवाता हूँ"
+              </h2>
+
+              <p className="text-xs sm:text-sm text-[#4A403C] leading-relaxed font-medium">
+                बड़ी अनाम वेबसाइटों पर जहाँ यह पता नहीं होता कि आपकी पूजा कौन कर रहा है, दिव्ययज्ञम् में प्रत्येक पूजा व संकल्प <strong>पं. मुकेश बोहरा जी (27+ वर्ष अनुभवी वेदाचार्य)</strong> के सान्निध्य में संपन्न होता है। 
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                {[
+                  { icon: "🕉️", title: "1997 से काशी परंपरा", desc: "शास्त्रोक्त मंत्रोच्चार व वैदिक विधि" },
+                  { icon: "📹", title: "लाइव वीडियो प्रमाण", desc: "संकल्प का वीडियो सीधे व्हाट्सएप पर" },
+                  { icon: "📿", title: "प्रत्यक्ष नाम-गोत्र संकल्प", desc: "कोई अनाम या ऑटोमेटेड कर्म नहीं" },
+                  { icon: "📦", title: "अभिमंत्रित पावन प्रसाद", desc: "सुरक्षित होम डिलीवरी" },
+                ].map((item, i) => (
+                  <div key={i} className="p-3 bg-[#FFF9EF] rounded-xl border border-[#E6D6BE] flex items-start gap-2.5">
+                    <span className="text-lg">{item.icon}</span>
+                    <div>
+                      <h4 className="text-xs font-bold text-[#292321]">{item.title}</h4>
+                      <p className="text-[10px] text-[#665E58]">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-3 flex flex-wrap gap-3 items-center">
+                <Link
+                  href="/about"
+                  className="px-5 py-2.5 rounded-xl bg-[#6B2635] hover:bg-[#521c28] text-white font-bold text-xs shadow-md transition-all inline-flex items-center gap-1.5"
+                >
+                  <span>पं. मुकेश जी एवं आश्रम की कथा पढ़ें</span>
+                  <span>➔</span>
+                </Link>
+                <a
+                  href="https://wa.me/919530401984?text=Namaste%20Pandit%20ji,%20mujhe%20puja%20ke%20bare%20me%20jankari%20chahiye"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs shadow-2xs transition-all inline-flex items-center gap-1.5"
+                >
+                  <span>💬 सीधे पंडित जी से बात करें</span>
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>

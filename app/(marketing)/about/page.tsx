@@ -92,16 +92,37 @@ export default async function AboutPage() {
             </section>
 
             {/* Pandit Mukesh Bohra Profile */}
-            <section className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-5">
-              <div className="space-y-1">
-                <span className="text-xs uppercase font-bold text-[#E58A16] tracking-wider">हमारे आध्यात्मिक मार्गदर्शक</span>
-                <h2 className="text-2xl sm:text-3xl font-black text-[#292321]">पं. मुकेश बोहरा जी</h2>
-                <p className="text-xs sm:text-sm text-[#665E58] font-bold">मुख्य वेदाचार्य एवं कर्मकांड विशेषज्ञ • 27+ वर्ष अनुभव</p>
-              </div>
+            <section className="bg-white p-6 sm:p-8 md:p-10 border border-[#E6D6BE] rounded-3xl shadow-2xs space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                <div className="md:col-span-4 flex flex-col items-center">
+                  <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-3xl overflow-hidden border-4 border-[#C99A3D]/40 shadow-lg bg-[#F7EBD7]">
+                    <img
+                      src="/pandit_mukesh_bohra.jpg"
+                      alt="पं. मुकेश बोहरा - मुख्य वेदाचार्य"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="mt-3 text-[11px] font-bold text-[#6B2635] bg-[#F7EBD7] px-3 py-1 rounded-full border border-[#E6D6BE]">
+                    ✓ माँ कात्यायनी शक्ति पीठ पीठाधीश्वर
+                  </span>
+                </div>
 
-              <p className="text-[#4A403C] text-xs sm:text-sm leading-relaxed">
-                <strong>पं. मुकेश बोहरा जी</strong> सनातन वैदिक कर्मकांड एवं धार्मिक अनुष्ठानों के क्षेत्र में <strong>27 से अधिक वर्षों के अनुभव</strong> से समृद्ध प्रतिष्ठित आचार्य हैं। उन्होंने तीन दशकों से अधिक समय तक वेदोक्त विधि-विधान, संस्कृत मंत्रोच्चार एवं सिद्ध पीठों में महा अनुष्ठानों का संचालन किया है।
-              </p>
+                <div className="md:col-span-8 space-y-3">
+                  <div className="space-y-1">
+                    <span className="text-xs uppercase font-bold text-[#E58A16] tracking-wider">हमारे आध्यात्मिक मार्गदर्शक</span>
+                    <h2 className="text-2xl sm:text-3xl font-black text-[#292321]">पं. मुकेश बोहरा जी</h2>
+                    <p className="text-xs sm:text-sm text-[#665E58] font-bold">मुख्य वेदाचार्य एवं कर्मकांड विशेषज्ञ • 27+ वर्ष अनुभव (1997 से)</p>
+                  </div>
+
+                  <p className="text-[#4A403C] text-xs sm:text-sm leading-relaxed">
+                    <strong>पं. मुकेश बोहरा जी</strong> सनातन वैदिक कर्मकांड एवं धार्मिक अनुष्ठानों के क्षेत्र में <strong>1997 से (27 से अधिक वर्षों के अनुभव)</strong> से समृद्ध प्रतिष्ठित आचार्य हैं। उन्होंने तीन दशकों में हजारों यजमानों के लिए वेदोक्त विधि-विधान, संस्कृत मंत्रोच्चार एवं सिद्ध पीठों में महा अनुष्ठानों का संचालन किया है।
+                  </p>
+
+                  <p className="text-[#4A403C] text-xs sm:text-sm leading-relaxed">
+                    "हमारा उद्देश्य किसी बड़े कॉरपोरेट या अनाम प्लेटफॉर्म की तरह काम करना नहीं, बल्कि हर यजमान को सीधा और प्रामाणिक आध्यात्मिक सान्निध्य देना है।"
+                  </p>
+                </div>
+              </div>
 
               <div className="border-t border-[#E6D6BE] pt-4 space-y-3">
                 <h3 className="font-bold text-[#292321] text-sm">मुख्य धार्मिक सेवाएं एवं महा अनुष्ठान:</h3>
@@ -109,7 +130,7 @@ export default async function AboutPage() {
                   {[
                     'वैदिक महायज्ञ एवं सर्व कार्य सिद्धि हवन', 'कालसर्प व नवग्रह दोष निवारण शांति',
                     'महामृत्युंजय सवा लाख अखंड जाप', 'रुद्राभिषेक एवं महारुद्र अनुष्ठान',
-                    'माँ बगलामुखी मिर्ची हवन एवं शत्रु बाधा निवारण', 'वास्तु शांति एवं पितृ दोष निवारण'
+                    'माँ बगलामुखी मिर्ची हवन एवं विशेष विघ्न शांति', 'वास्तु शांति एवं पितृ दोष निवारण'
                   ].map((service) => (
                     <div key={service} className="flex items-center gap-2">
                       <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
