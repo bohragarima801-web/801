@@ -154,11 +154,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
       .catch(() => setUserLoaded(true))
   }, [])
 
-  useState(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      setCurrentLang(localStorage.getItem('lang') || 'en')
+      // Always initialize to clean English by default unless explicitly chosen
+      localStorage.setItem('lang', 'en')
+      setCurrentLang('en')
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + window.location.hostname
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname
     }
-  })
+  }, [])
 
   const changeLang = (code: string) => {
     localStorage.setItem('lang', code)
@@ -177,33 +182,34 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
     >
       {/* Top Announcement Bar — Royal Vedic Maroon Strip */}
       <div className="w-full bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-white py-1.5 px-3 sm:px-4 text-center text-[11px] sm:text-xs font-semibold flex items-center justify-between shadow-xs notranslate" translate="no">
-        <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs">
+        <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs notranslate" translate="no">
           <span className="text-[#F5C542]">ॐ</span>
           <span>Dedicated to Sacred Vedic Pujas & Services</span>
         </div>
-        <div className="flex-1 text-center font-medium truncate px-1 text-[#FFE8CC]">
+        <div className="flex-1 text-center font-medium truncate px-1 text-[#FFE8CC] notranslate" translate="no">
           <span>Pure Mantras, Name & Gotra Sankalp & Live WhatsApp Video Proof</span>
         </div>
-        <div className="hidden md:flex items-center gap-4 text-xs font-medium">
+        <div className="hidden md:flex items-center gap-4 text-xs font-medium notranslate" translate="no">
           <a href="tel:+919530401984" className="text-white hover:text-[#F5C542] transition-colors flex items-center gap-1">
             <span>📞</span> {siteData?.contact?.phone || '+91 95304 01984'}
           </a>
         </div>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6">
-        <div className="shrink-0 max-w-[200px] sm:max-w-none">
+      <div className="w-full max-w-7xl mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6 notranslate" translate="no">
+        <div className="shrink-0 max-w-[200px] sm:max-w-none notranslate" translate="no">
           <Logo />
         </div>
 
         {/* Desktop navigation (hidden on mobile) */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1 notranslate" translate="no">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               prefetch={true}
-              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-all"
+              translate="no"
+              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-all notranslate"
             >
               {item.title}
             </Link>
@@ -212,19 +218,21 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* Tools mega dropdown */}
           <div
             ref={toolsRef}
-            className="relative"
+            className="relative notranslate"
+            translate="no"
             onMouseEnter={() => setToolsOpen(true)}
             onMouseLeave={() => setToolsOpen(false)}
           >
             <button
               onClick={() => setToolsOpen(!toolsOpen)}
+              translate="no"
               className={cn(
-                'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all',
+                'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all notranslate',
                 toolsOpen ? 'text-[#FF6600] bg-[#FFF3E8]' : 'text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8]'
               )}
             >
               <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
-              <span>Tools</span>
+              <span className="notranslate" translate="no">Tools</span>
               <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#FF6600]')} />
             </button>
 
