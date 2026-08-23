@@ -7,7 +7,7 @@ import { ScrollReveal } from '@/components/scroll-reveal'
 import prisma from '@/lib/prisma'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 
-export const revalidate = 3600 // ISR: Cache marketing shell at Edge CDN
+export const dynamic = 'force-dynamic'
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const siteData = await getDynamicSiteConfig()
@@ -45,14 +45,14 @@ export default async function MarketingLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen flex flex-col pb-16 md:pb-0">
+    <div className="min-h-screen flex flex-col pb-16 md:pb-0 notranslate" translate="no">
       <PwaInstallBanner />
       {activeCoupon && (
-        <div className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-amber-100 py-1.5 px-3 text-center text-xs font-medium flex flex-wrap justify-center items-center gap-2 shadow-sm relative z-50 border-b border-[#FFD700]/30">
-          <span className="animate-pulse text-[#FFD700]">⚡</span>
+        <div className="bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-amber-100 py-1.5 px-3 text-center text-xs font-medium flex flex-wrap justify-center items-center gap-2 shadow-sm relative z-50 border-b border-[#D4AF37]/30 notranslate" translate="no">
+          <span className="animate-pulse text-[#D4AF37]">⚡</span>
           <span>
-            विशेष ऑफर: Use code{' '}
-            <span className="bg-black/25 text-[#FFD700] border border-[#FFD700]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
+            Special Offer: Use code{' '}
+            <span className="bg-black/25 text-[#D4AF37] border border-[#D4AF37]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
               {activeCoupon.code}
             </span>{' '}
             for <strong className="text-white font-extrabold">{activeCoupon.discountType === 'PERCENTAGE' ? `${activeCoupon.discountValue}% OFF` : `₹${activeCoupon.discountValue} OFF`}</strong>!
