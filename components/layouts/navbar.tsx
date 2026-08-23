@@ -25,7 +25,7 @@ const navItems = [
   { title: 'Home', href: '/' },
   { title: 'Book Puja', href: '/pujas' },
   { title: 'Chadhawa', href: '/book-chadhawa' },
-  { title: 'VIP Anushthan', href: '/vip-pujas' },
+  { title: 'VIP Puja', href: '/vip-pujas' },
   { title: 'Store', href: '/products' },
   { title: 'About Us', href: '/about' },
   { title: 'Blogs', href: '/blog' },
@@ -179,10 +179,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
       <div className="w-full bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-white py-1.5 px-3 sm:px-4 text-center text-[11px] sm:text-xs font-semibold flex items-center justify-between shadow-xs notranslate" translate="no">
         <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs">
           <span className="text-[#F5C542]">ॐ</span>
-          <span>सनातन धर्म की सेवा में समर्पित</span>
+          <span>Dedicated to Sacred Vedic Pujas & Services</span>
         </div>
         <div className="flex-1 text-center font-medium truncate px-1 text-[#FFE8CC]">
-          <span>शुद्ध मंत्र, शास्त्रोक्त विधि और पूर्ण श्रद्धा के साथ हर पूजा</span>
+          <span>Pure Mantras, Name & Gotra Sankalp & Live WhatsApp Video Proof</span>
         </div>
         <div className="hidden md:flex items-center gap-4 text-xs font-medium">
           <a href="tel:+919530401984" className="text-white hover:text-[#F5C542] transition-colors flex items-center gap-1">
