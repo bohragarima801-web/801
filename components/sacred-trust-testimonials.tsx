@@ -47,13 +47,13 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
         <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
             <span>✨</span>
-            <span>श्रद्धालुओं के अनुभव</span>
+            <span>Devotee Experiences</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614]">
-            भक्तों का विश्वास एवं पावन अनुभव
+            Trust & Blessings from Devotees
           </h2>
           <p className="text-sm text-[#6B5E57]">
-            पवित्र सनातन वैदिक परंपरा एवं आचार्यों के सान्निध्य में संपन्न अनुष्ठानों पर श्रद्धालुओं का अटूट भरोसा
+            Devotees across India and abroad share their sacred experience with DivyaYagyam.
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
                       ))}
                     </div>
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A1521] bg-[#FFF3E8] px-2 py-0.5 rounded-full border border-[#EFE4D6]">
-                      <CheckCircle2 className="h-3 w-3 text-[#FF6600]" /> सत्यापित यजमान
+                      <CheckCircle2 className="h-3 w-3 text-[#FF6600]" /> Verified Devotee
                     </span>
                   </div>
 

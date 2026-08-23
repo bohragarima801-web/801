@@ -114,16 +114,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="hi" translate="no" className="notranslate" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        {/* Google Fonts Preconnect for ultra-fast Devanagari font rendering */}
+        {/* Google Fonts Preconnect for ultra-fast font rendering */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Prevents Google Translate from auto-corrupting brand names & mantras */}
-        <meta name="google" content="notranslate" />
       </head>
-      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${poppins.variable} ${cinzel.variable} ${outfit.variable} ${mukta.variable} ${inter.variable} font-sans bg-[#FAF8F5] text-[#1C1614] overflow-x-hidden selection:bg-[#FF6600]/20 selection:text-[#FF6600] antialiased notranslate`} translate="no" suppressHydrationWarning>
+      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${poppins.variable} ${cinzel.variable} ${outfit.variable} ${mukta.variable} ${inter.variable} font-sans bg-[#FAF8F5] text-[#1C1614] overflow-x-hidden selection:bg-[#FF6600]/20 selection:text-[#FF6600] antialiased`} suppressHydrationWarning>
         {/* 
           Razorpay: afterInteractive = loads right after page hydration.
           Previously lazyOnload caused 2-5 second delays when clicking Pay.

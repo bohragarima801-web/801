@@ -66,8 +66,8 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <ShieldCheck className="h-5 w-5 text-[#D4AF37]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-white">100% प्रामाणिक पंडित</div>
-              <div className="text-[11px] text-[#EFE4D6]">शास्त्रोक्त विधि व शुद्ध संकल्प</div>
+              <div className="text-xs md:text-sm font-bold text-white">100% Authentic Pandits</div>
+              <div className="text-[11px] text-[#EFE4D6]">Vedic Shastrokta Vidhi & Sankalp</div>
             </div>
           </div>
 
@@ -77,7 +77,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
             </div>
             <div>
               <div className="text-xs md:text-sm font-bold text-white">Live Video Proof</div>
-              <div className="text-[11px] text-[#EFE4D6]">व्हाट्सएप पर लाइव प्रमाण</div>
+              <div className="text-[11px] text-[#EFE4D6]">Direct HD Video on WhatsApp</div>
             </div>
           </div>
 
@@ -86,8 +86,8 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <PackageCheck className="h-5 w-5 text-[#D4AF37]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-white">अभिमंत्रित प्रसाद</div>
-              <div className="text-[11px] text-[#EFE4D6]">घर द्वार पावन डिलीवरी</div>
+              <div className="text-xs md:text-sm font-bold text-white">Sanctified Prasad</div>
+              <div className="text-[11px] text-[#EFE4D6]">Safe Doorstep Delivery</div>
             </div>
           </div>
 
@@ -96,8 +96,8 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <Award className="h-5 w-5 text-[#D4AF37]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-white">27+ वर्ष पावन सेवा</div>
-              <div className="text-[11px] text-[#EFE4D6]">1997 से काशी व शक्तिपीठ परंपरा</div>
+              <div className="text-xs md:text-sm font-bold text-white">27+ Years Sacred Service</div>
+              <div className="text-[11px] text-[#EFE4D6]">Vedic Parampara Since 1997</div>
             </div>
           </div>
         </div>
@@ -111,17 +111,17 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
           <div className="lg:col-span-3 space-y-5">
             <Logo />
             <p className={`text-xs leading-relaxed max-w-xs font-medium ${textBodyClass}`}>
-              {siteData?.description || 'भारत का सबसे भरोसेमंद ऑनलाइन वैदिक पूजा एवं अभिमंत्रित सामग्री संस्थान। शास्त्रोक्त विधि, नाम-गोत्र संकल्प एवं प्रामाणिक सेवा।'}
+              {siteData?.description || 'India’s most trusted online Vedic puja & sanctified spiritual store. Authentic shastrokta vidhi, name-gotra sankalp & live video updates.'}
             </p>
 
             {/* Certification Badges */}
             <div className="space-y-2 pt-1">
               <div className="footer-badge-box inline-flex items-center gap-2 bg-[#1E1917] border border-[#D4AF37]/40 px-3.5 py-2 rounded-xl text-[#FAF8F5] text-xs font-semibold shadow-sm">
-                <span>🛡️</span> 100% वेद सम्मत वैदिक सेवा
+                <span>🛡️</span> 100% Vedic Shastrokta Service
               </div>
               <div className="flex items-center gap-2 text-[11px] font-semibold text-[#EFE4D6]">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span>सनातन सेवा ॐ — दिव्ययज्ञम् पहल 🇮🇳</span>
+                <span>Sanatan Seva ॐ — DivyaYagyam 🇮🇳</span>
               </div>
             </div>
 
@@ -176,15 +176,15 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
           {/* Col 2: Quick Puja Booking */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className={headingClass}>पूजा सेवाएँ</h4>
+            <h4 className={headingClass}>Puja Services</h4>
             <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { label: 'रुद्राभिषेक महापूजा', href: '/pujas/mahamrityunjaya-jaap-rudrabhishekam' },
-                { label: 'बगलामुखी मिर्ची हवन', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
-                { label: 'पितृ शांति तर्पण पूजा', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
-                { label: 'कालसर्प दोष शांति', href: '/pujas/kalsarp-dosh-shanti-puja' },
-                { label: 'नवग्रह शांति अनुष्ठान', href: '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja' },
-                { label: 'VIP सिद्ध महापूजा', href: '/vip-pujas' },
+                { label: 'Rudrabhishekam Mahapuja', href: '/pujas/mahamrityunjaya-jaap-rudrabhishekam' },
+                { label: 'Baglamukhi Hawan', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
+                { label: 'Pitra Shanti Tarpan', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
+                { label: 'Kalsarp Dosh Shanti', href: '/pujas/kalsarp-dosh-shanti-puja' },
+                { label: 'Navgrah Shanti Yagya', href: '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja' },
+                { label: 'VIP Sacred Pujas', href: '/vip-pujas' },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
@@ -201,17 +201,17 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
           {/* Col 3: Spiritual Tools */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className={headingClass}>वैदिक टूल्स</h4>
+            <h4 className={headingClass}>Vedic Tools</h4>
             <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { label: '🤖 AI पंडित जी', href: '/ask-a-pandit' },
-                { label: '☀️ मुफ्त जन्म कुंडली', href: '/tools/kundali' },
-                { label: '📅 दैनिक पंचांग', href: '/panchang' },
-                { label: '💖 कुंडली गुण मिलान', href: '/tools/milan' },
-                { label: '⏰ शुभ मुहूर्त खोजक', href: '/muhurat' },
-                { label: '🕉️ श्री गणेश प्रश्नावली', href: '/tools/shree-ganesh-siddha-prashnavali' },
-                { label: '📿 डिजिटल जाप माला', href: '/tools/mala' },
-                { label: '🌟 सभी वैदिक टूल्स (All)', href: '/tools' },
+                { label: '🤖 AI Pandit Ji', href: '/ask-a-pandit' },
+                { label: '☀️ Free Kundali', href: '/tools/kundali' },
+                { label: '📅 Daily Panchang', href: '/panchang' },
+                { label: '💖 Kundali Matching', href: '/tools/milan' },
+                { label: '⏰ Shubh Muhurat', href: '/muhurat' },
+                { label: '🕉️ Ganesh Prashnavali', href: '/tools/shree-ganesh-siddha-prashnavali' },
+                { label: '📿 Digital Jaap Mala', href: '/tools/mala' },
+                { label: '🌟 Explore All Tools', href: '/tools' },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
@@ -228,7 +228,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
           {/* Col 4: Support & Location */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className={headingClass}>सहायता व संपर्क</h4>
+            <h4 className={headingClass}>Support & Contact</h4>
             <div className="space-y-2.5 text-xs font-medium">
               <a
                 href={`tel:${(contact?.phone || '').replace(/[^0-9+]/g, '').split(',')[0]}`}
@@ -254,7 +254,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
                   <MapPin className="h-3 w-3" />
                 </div>
-                <span>जोधपुर, राजस्थान • भारत</span>
+                <span>Jodhpur, Rajasthan • India</span>
               </div>
 
               <div className={`flex items-center gap-2 ${textBodyClass}`}>
@@ -271,23 +271,23 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold shadow-sm transition-all"
               >
-                <span>💬 WhatsApp सहायता</span>
+                <span>💬 WhatsApp Support</span>
               </a>
             </div>
           </div>
 
           {/* Col 5: Newsletter & Panchang Updates */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className={headingClass}>पंचांग व मुहूर्त अपडेट्स</h4>
+            <h4 className={headingClass}>Panchang & Updates</h4>
             <p className={`text-xs leading-relaxed font-medium ${textBodyClass}`}>
-              दैनिक पंचांग, शुभ मुहूर्त व सिद्ध त्योहार अपडेट्स सीधे व्हाट्सएप पर पाएं:
+              Receive daily panchang, auspicious muhurat and festival updates directly on WhatsApp:
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="अपना व्हाट्सएप / ईमेल दर्ज करें"
+                  placeholder="Enter your WhatsApp / Email"
                   value={subInput}
                   onChange={(e) => setSubInput(e.target.value)}
                   className="w-full pl-3 pr-10 py-2.5 rounded-xl text-xs bg-[#1E1917] border border-[#D4AF37]/40 text-white placeholder:text-[#EFE4D6]/60 focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
@@ -302,7 +302,7 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               </div>
               {subSuccess && (
                 <p className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
-                  ✓ धन्यवाद! आप पंचांग अपडेट्स से जुड़ चुके हैं।
+                  ✓ Thank you! You are now subscribed to Vedic updates.
                 </p>
               )}
             </form>
@@ -365,25 +365,25 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
           {/* Navigation Directory & Internal Links */}
           <div className="pt-4 border-t border-[#D4AF37]/20 text-xs font-medium text-[#EFE4D6] space-y-3">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-center md:justify-start">
-              <Link href="/about" className="hover:text-[#FF6600] hover:underline">हमारे बारे में (About)</Link>
+              <Link href="/about" className="hover:text-[#FF6600] hover:underline">About Us</Link>
               <span>•</span>
-              <Link href="/contact" className="hover:text-[#FF6600] hover:underline">संपर्क करें (Contact)</Link>
+              <Link href="/contact" className="hover:text-[#FF6600] hover:underline">Contact Us</Link>
               <span>•</span>
-              <Link href="/faq" className="hover:text-[#FF6600] hover:underline">सामान्य प्रश्न (FAQ)</Link>
+              <Link href="/faq" className="hover:text-[#FF6600] hover:underline">FAQs</Link>
               <span>•</span>
-              <Link href="/support" className="hover:text-[#FF6600] hover:underline">सहायता केंद्र (Support)</Link>
+              <Link href="/support" className="hover:text-[#FF6600] hover:underline">Support Center</Link>
               <span>•</span>
-              <Link href="/careers" className="hover:text-[#FF6600] hover:underline">करियर (Careers)</Link>
+              <Link href="/careers" className="hover:text-[#FF6600] hover:underline">Careers</Link>
               <span>•</span>
-              <Link href="/blog" className="hover:text-[#FF6600] hover:underline">वैदिक ब्लॉग (Blog)</Link>
+              <Link href="/blog" className="hover:text-[#FF6600] hover:underline">Vedic Blog</Link>
               <span>•</span>
-              <Link href="/festivals" className="hover:text-[#FF6600] hover:underline">त्योहार कैलेंडर (Festivals)</Link>
+              <Link href="/festivals" className="hover:text-[#FF6600] hover:underline">Festivals Calendar</Link>
               <span>•</span>
-              <Link href="/events" className="hover:text-[#FF6600] hover:underline">धार्मिक उत्सव (Events)</Link>
+              <Link href="/events" className="hover:text-[#FF6600] hover:underline">Events</Link>
               <span>•</span>
-              <Link href="/bhaktiseva" className="hover:text-[#FF6600] hover:underline">भक्ति सेवा (Offerings)</Link>
+              <Link href="/bhaktiseva" className="hover:text-[#FF6600] hover:underline">Bhakti Seva</Link>
               <span>•</span>
-              <Link href="/sitemap" className="hover:text-[#FF6600] hover:underline">साइटमैप (HTML Sitemap)</Link>
+              <Link href="/sitemap" className="hover:text-[#FF6600] hover:underline">HTML Sitemap</Link>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start text-[11px] text-[#A89F91]">
@@ -395,10 +395,10 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
               <span>•</span>
               <Link href="/shipping" className="hover:text-[#FF6600] hover:underline">Shipping Policy</Link>
               <span>•</span>
-              <Link href="/register" className="text-white font-extrabold hover:text-[#FF6600] hover:underline">अपना खाता बनाएं</Link>
+              <Link href="/register" className="text-white font-extrabold hover:text-[#FF6600] hover:underline">Create Account</Link>
             </div>
             <div className="text-center md:text-right text-[#EFE4D6] pt-2 border-t border-[#D4AF37]/20">
-              © {new Date().getFullYear()} Divya Yagyam. All rights reserved. • सनातन सेवा ॐ 🙏
+              © {new Date().getFullYear()} Divya Yagyam. All rights reserved. • Sanatan Seva ॐ 🙏
             </div>
           </div>
 

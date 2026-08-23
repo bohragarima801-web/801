@@ -180,51 +180,51 @@ export default async function HomePage() {
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3.5 max-w-5xl mx-auto pt-1">
             {[
               {
-                title: "ऑनलाइन पूजाएं",
-                subtitle: "शास्त्रोक्त अनुष्ठान",
+                title: "Online Pujas",
+                subtitle: "Vedic Anushthan",
                 icon: "🪔",
                 href: "/pujas",
-                badge: "लोकप्रिय",
+                badge: "Popular",
                 badgeColor: "bg-[#7A1521] text-white"
               },
               {
-                title: "चढ़ावा सेवा",
-                subtitle: "प्रत्यक्ष अर्पण",
+                title: "Chadhawa",
+                subtitle: "Direct Offering",
                 icon: "🌸",
                 href: "/book-chadhawa",
-                badge: "नया",
+                badge: "New",
                 badgeColor: "bg-[#FF6600] text-white"
               },
               {
-                title: "पं. मुकेश बोहरा",
-                subtitle: "27+ वर्ष अनुभव",
+                title: "Pt. Mukesh Bohra",
+                subtitle: "27+ Yrs Experience",
                 icon: "🙏",
                 href: "/about",
-                badge: "आचार्य",
+                badge: "Acharya",
                 badgeColor: "bg-[#D4AF37] text-[#1C1614]"
               },
               {
-                title: "मार्गदर्शन लें",
-                subtitle: "WhatsApp सहायता",
+                title: "Get Guidance",
+                subtitle: "24x7 WhatsApp",
                 icon: "💬",
-                href: "https://wa.me/919530401984?text=%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A3%E0%A4%BE%E0%A4%AE%20%E0%A4%AA%E0%A4%82%E0%A4%A1%E0%A4%BF%E0%A4%A4%20%E0%A4%9C%E0%A5%80%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9C%E0%A5%87%20%E0%A4%AA%E0%A5%82%E0%A4%9C%E0%A4%BE%20%E0%A4%B9%E0%A5%87%E0%A4%A4%E0%A5%81%20%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%97%E0%A4%A6%E0%A4%B0%E0%A5%8D%E0%A4%B6%E0%A4%A8%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F",
+                href: "https://wa.me/919530401984?text=Namaste%20Pandit%20ji,%20I%20need%20guidance%20for%20puja%20booking",
                 badge: "24x7",
                 badgeColor: "bg-emerald-600 text-white"
               },
               {
-                title: "वैदिक टूल्स",
-                subtitle: "कुंडली व गणना",
+                title: "Vedic Tools",
+                subtitle: "Kundali & Muhurat",
                 icon: "🔮",
                 href: "/tools",
-                badge: "मुफ्त",
+                badge: "Free",
                 badgeColor: "bg-[#7A1521] text-white"
               },
               {
-                title: "पूजा सामग्री",
-                subtitle: "सिद्ध प्रसाद व माला",
+                title: "Puja Store",
+                subtitle: "Prasad & Samagri",
                 icon: "🛍️",
                 href: "/products",
-                badge: "स्टोर",
+                badge: "Store",
                 badgeColor: "bg-[#FF6600] text-white"
               },
             ].map((service, i) => (
@@ -256,10 +256,10 @@ export default async function HomePage() {
           {/* Floating 4-Column Authentic Trust Stats */}
           <div className="p-4 sm:p-6 rounded-2xl bg-white border border-[#EFE4D6] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center shadow-[0_8px_30px_rgba(28,22,20,0.05)] max-w-5xl mx-auto">
             {[
-              { val: "27+ वर्ष", label: "पावन सेवा (1997 से)", sub: "Vedic Parampara" },
-              { val: "100%", label: "शास्त्रोक्त संकल्प", sub: "Name & Gotra Sankalp" },
-              { val: "HD Video", label: "व्हाट्सएप लाइव प्रमाण", sub: "Live Video Proof" },
-              { val: "100%", label: "सुरक्षित भुगतान", sub: "Razorpay Encrypted" }
+              { val: "27+ Years", label: "Vedic Experience (Since 1997)", sub: "Authentic Tradition" },
+              { val: "100%", label: "Name & Gotra Sankalp", sub: "Individual Recitation" },
+              { val: "HD Video", label: "WhatsApp Live Proof", sub: "Direct Video Update" },
+              { val: "100%", label: "Secure Payment", sub: "Razorpay Encrypted" }
             ].map((stat, i) => (
               <div key={i} className="space-y-0.5 border-r last:border-r-0 border-[#EFE4D6] pr-2">
                 <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#FF6600] tracking-tight">{stat.val}</div>
@@ -273,20 +273,20 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 2: "पूजा कैसे होती है?" 4-STEP PROCESS FLOW
+          SECTION 2: "HOW ONLINE PUJA WORKS" (4-STEP PROCESS FLOW)
           ============================================================ */}
       <section className="w-full bg-[#FAF8F5] py-14 md:py-20 border-b border-[#EFE4D6]">
         <div className="container mx-auto px-4 md:px-6 max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
               <span>🪔</span>
-              <span>सरल एवं शास्त्रोक्त प्रक्रिया</span>
+              <span>Simple & Authentic Process</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614]">
-              पूजा कैसे होती है?
+              How Online Puja Works
             </h2>
             <p className="text-sm text-[#6B5E57]">
-              घर बैठे 4 सरल चरणों में अपनी पूजा संपन्न कराएं एवं लाइव संकल्प वीडियो प्राप्त करें।
+              Participate in sacred Vedic pujas in 4 simple steps and receive live video proof on WhatsApp.
             </p>
           </div>
 
@@ -295,26 +295,26 @@ export default async function HomePage() {
               {
                 step: "01",
                 icon: "🪔",
-                title: "अपनी पूजा चुनें",
-                desc: "काशी, उज्जैन, कामाख्या आदि सिद्ध पीठों में अपनी मनोकामना अनुसार पूजा चुनें।"
+                title: "Select Your Puja",
+                desc: "Choose from authentic pujas at Kashi, Ujjain, Jodhpur and renowned Shaktipeeths."
               },
               {
                 step: "02",
                 icon: "✍️",
-                title: "जानकारी भरें",
-                desc: "अपना व परिवार का नाम, गोत्र व विशेष संकल्प दर्ज करें।"
+                title: "Submit Sankalp Details",
+                desc: "Provide devotee name, family gotra, and specific prayer intentions for sankalp."
               },
               {
                 step: "03",
                 icon: "🔥",
-                title: "पूजा सम्पन्न",
-                desc: "विद्वान पंडितों द्वारा शास्त्रोक्त विधि से मंत्र जाप व हवन संपन्न होगा।"
+                title: "Vedic Puja Performed",
+                desc: "Revered Vedic Pandits perform sacred mantras, hawan and personalized sankalp recitation."
               },
               {
                 step: "04",
                 icon: "📦",
-                title: "प्रसाद एवं रिपोर्ट",
-                desc: "व्हाट्सएप पर वीडियो संकल्प व घर पर अभिमंत्रित पावन प्रसाद प्राप्त करें।"
+                title: "Video Proof & Prasad",
+                desc: "Receive HD video proof of your sankalp on WhatsApp and sanctified prasad at your doorstep."
               }
             ].map((st) => (
               <div
@@ -355,18 +355,18 @@ export default async function HomePage() {
               <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-3xl overflow-hidden border-4 border-[#D4AF37]/40 shadow-xl bg-[#FFF3E8]">
                 <img
                   src="/pandit_mukesh_bohra.jpg"
-                  alt="पं. मुकेश बोहरा - मुख्य वेदाचार्य"
+                  alt="Pt. Mukesh Bohra - Head Acharya"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 text-white">
-                  <p className="font-bold text-sm">पं. मुकेश बोहरा</p>
-                  <p className="text-[11px] text-[#D4AF37] font-semibold">1997 से वैदिक सेवा • 27+ वर्ष अनुभव</p>
+                  <p className="font-bold text-sm">Pt. Mukesh Bohra</p>
+                  <p className="text-[11px] text-[#D4AF37] font-semibold">Vedic Service Since 1997 • 27+ Yrs Exp</p>
                 </div>
               </div>
 
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF3E8] text-xs font-bold text-[#7A1521] border border-[#EFE4D6]">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                <span>मुख्य पीठाधीश्वर (माँ कात्यायनी शक्ति पीठ)</span>
+                <span>Head Acharya (Maa Katyayani Peeth)</span>
               </div>
             </div>
 
@@ -374,23 +374,23 @@ export default async function HomePage() {
             <div className="lg:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
                 <Award className="h-3.5 w-3.5 text-[#FF6600]" />
-                <span>व्यक्तिगत सान्निध्य व प्रामाणिक परंपरा</span>
+                <span>Personal Guidance & Sacred Tradition</span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-black text-[#1C1614] leading-tight">
-                "हमारा आश्रम छोटा है, लेकिन हर पूजा मैं स्वयं विधिपूर्वक करवाता हूँ"
+                "Our ashram is humble, but every puja is performed with pure Vedic sanctity."
               </h2>
 
               <p className="text-xs sm:text-sm text-[#4A3E39] leading-relaxed font-medium">
-                बड़ी अनाम वेबसाइटों पर जहाँ यह पता नहीं होता कि आपकी पूजा कौन कर रहा है, दिव्ययज्ञम् में प्रत्येक पूजा व संकल्प <strong>पं. मुकेश बोहरा जी (27+ वर्ष अनुभवी वेदाचार्य)</strong> के सान्निध्य में संपन्न होता है। 
+                Unlike impersonal online platforms where you don't know who is performing your ritual, at DivyaYagyam every puja and sankalp is personally guided by <strong>Pt. Mukesh Bohra (27+ years Vedic experience)</strong>.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                 {[
-                  { icon: "🕉️", title: "1997 से काशी परंपरा", desc: "शास्त्रोक्त मंत्रोच्चार व वैदिक विधि" },
-                  { icon: "📹", title: "लाइव वीडियो प्रमाण", desc: "संकल्प का वीडियो सीधे व्हाट्सएप पर" },
-                  { icon: "📿", title: "प्रत्यक्ष नाम-गोत्र संकल्प", desc: "कोई अनाम या ऑटोमेटेड कर्म नहीं" },
-                  { icon: "📦", title: "अभिमंत्रित पावन प्रसाद", desc: "सुरक्षित होम डिलीवरी" },
+                  { icon: "🕉️", title: "Vedic Parampara Since 1997", desc: "Authentic mantra chanting and Vedic rituals" },
+                  { icon: "📹", title: "Live Video Proof", desc: "Personalized sankalp video sent on WhatsApp" },
+                  { icon: "📿", title: "Direct Name & Gotra Sankalp", desc: "No automated or simulated ceremonies" },
+                  { icon: "📦", title: "Consecrated Sacred Prasad", desc: "Safe home delivery to your address" },
                 ].map((item, i) => (
                   <div key={i} className="p-3 bg-[#FAF8F5] rounded-xl border border-[#EFE4D6] flex items-start gap-2.5">
                     <span className="text-lg">{item.icon}</span>
@@ -407,16 +407,16 @@ export default async function HomePage() {
                   href="/about"
                   className="px-5 py-2.5 rounded-xl bg-[#7A1521] hover:bg-[#580E17] text-white font-bold text-xs shadow-md transition-all inline-flex items-center gap-1.5"
                 >
-                  <span>पं. मुकेश जी एवं आश्रम की कथा पढ़ें</span>
+                  <span>Read About Pandit Ji & Ashram</span>
                   <span>➔</span>
                 </Link>
                 <a
-                  href="https://wa.me/919530401984?text=Namaste%20Pandit%20ji,%20mujhe%20puja%20ke%20bare%20me%20jankari%20chahiye"
+                  href="https://wa.me/919530401984?text=Namaste%20Pandit%20ji,%20I%20want%20to%20consult%20about%20puja%20booking"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs shadow-2xs transition-all inline-flex items-center gap-1.5"
                 >
-                  <span>💬 सीधे पंडित जी से बात करें</span>
+                  <span>💬 Talk to Pandit Ji Directly</span>
                 </a>
               </div>
             </div>
@@ -426,7 +426,7 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 3: "लोकप्रिय पूजा एवं अनुष्ठान" (POPULAR PUJAS GRID)
+          SECTION 3: "POPULAR PUJAS & ANUSHTHANS" (PUJAS GRID)
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-b border-[#EFE4D6]">
         {/* Section Header */}
@@ -434,13 +434,13 @@ export default async function HomePage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
               <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
-              <span>दिव्य अनुष्ठान</span>
+              <span>Sacred Anushthans</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614] tracking-tight">
-              लोकप्रिय पूजा एवं अनुष्ठान
+              Popular Pujas & Sacred Hawan
             </h2>
             <p className="text-sm text-[#6B5E57] max-w-xl">
-              काशी विश्वनाथ, माँ बगलामुखी, महाकालेश्वर आदि सिद्ध शक्तिपीठों से प्रामाणिक वैदिक पूजा।
+              Authentic Vedic rituals from Kashi Vishwanath, Maa Baglamukhi, Mahakaleshwar and sacred peeths.
             </p>
           </div>
 
@@ -448,7 +448,7 @@ export default async function HomePage() {
             href="/pujas"
             className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF3E8] text-[#1C1614] hover:text-[#FF6600] font-bold text-xs sm:text-sm border border-[#EFE4D6] shadow-2xs transition-all shrink-0"
           >
-            <span>सभी पूजा देखें</span>
+            <span>View All Pujas</span>
             <span>➔</span>
           </Link>
         </div>
@@ -457,8 +457,8 @@ export default async function HomePage() {
         {displayPujas.length === 0 ? (
           <div className="text-center py-16 px-6 bg-white rounded-2xl border border-[#EFE4D6] space-y-4 max-w-2xl mx-auto shadow-sm">
             <div className="h-14 w-14 mx-auto rounded-full bg-[#FFF3E8] text-[#FF6600] flex items-center justify-center text-3xl">🪔</div>
-            <h3 className="text-xl font-bold text-[#1C1614]">शीघ्र आ रही हैं दिव्य पूजाएँ</h3>
-            <p className="text-xs text-[#6B5E57]">संस्थान द्वारा नई पूजाएँ जल्द ही उपलब्ध कराई जा रही हैं।</p>
+            <h3 className="text-xl font-bold text-[#1C1614]">Sacred Pujas Coming Soon</h3>
+            <p className="text-xs text-[#6B5E57]">New authentic pujas are being scheduled by the Ashram.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -470,20 +470,20 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 4: "अभिमंत्रित सामग्री" (SACRED PRODUCTS & STORE)
+          SECTION 4: "SANCTIFIED STORE & SAMAGRI"
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-b border-[#EFE4D6]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#EFE4D6]">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
               <span>⚡</span>
-              <span>सिद्ध एवं प्राण प्रतिष्ठित</span>
+              <span>Consecrated & Energized</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614] tracking-tight">
-              अभिमंत्रित सामग्री एवं पावन स्टोर
+              Sanctified Items & Spiritual Store
             </h2>
             <p className="text-sm text-[#6B5E57] max-w-xl">
-              100% अभिमंत्रित सिद्ध रुद्राक्ष, पावन भस्म, शंख, पूजा थाली व प्रामाणिक सामग्री सीधे आपके घर।
+              100% energized Rudraksha, sacred bhasma, shankh, puja thali & authentic items delivered to your home.
             </p>
           </div>
 
@@ -499,8 +499,8 @@ export default async function HomePage() {
         {products.length === 0 ? (
           <div className="text-center py-12 px-6 bg-white rounded-2xl border border-[#EFE4D6] space-y-3 max-w-xl mx-auto shadow-xs">
             <div className="h-12 w-12 mx-auto rounded-full bg-[#FFF3E8] text-[#FF6600] flex items-center justify-center text-2xl">🛍️</div>
-            <h3 className="text-lg font-bold text-[#1C1614]">शीघ्र आ रही है अभिमंत्रित सामग्री</h3>
-            <p className="text-xs text-[#6B5E57]">संस्थान की वैदिक स्टोर सामग्री जल्द ही उपलब्ध होगी।</p>
+            <h3 className="text-lg font-bold text-[#1C1614]">Sacred Store Coming Soon</h3>
+            <p className="text-xs text-[#6B5E57]">Authentic Vedic store items will be available shortly.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
@@ -520,7 +520,7 @@ export default async function HomePage() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 text-[8px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-[#7A1521] text-white border border-[#D4AF37]">
-                      ⚡ अभिमंत्रित
+                      ⚡ Consecrated
                     </span>
                   </div>
 
@@ -539,7 +539,7 @@ export default async function HomePage() {
                         ₹{price.toLocaleString('en-IN')}
                       </span>
                       <span className="bg-[#FF6600] hover:bg-[#E65C00] text-white text-[10px] sm:text-xs font-bold py-1 px-2 sm:py-1.5 sm:px-3 rounded-lg shadow-2xs transition-all inline-flex items-center gap-0.5 shrink-0">
-                        खरीदें ➔
+                        Buy Now ➔
                       </span>
                     </div>
                   </div>
@@ -551,7 +551,7 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 5: "हमें क्यों चुनें?" (WHY CHOOSE DIVYAYAGYAM)
+          SECTION 5: "WHY CHOOSE US?" (VALUE PROPOSITIONS)
           ============================================================ */}
       <section className="relative py-14 md:py-20 bg-[#FFF3E8]/60 text-[#1C1614] overflow-hidden border-b border-[#EFE4D6]">
         <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-6xl">
@@ -560,13 +560,13 @@ export default async function HomePage() {
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
               <ShieldCheck className="h-3.5 w-3.5 text-[#FF6600]" />
-              <span>सनातन मर्यादा व विश्वास</span>
+              <span>Sacred Trust & Sanctity</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614]">
-              हमें क्यों चुनें?
+              Why Choose DivyaYagyam?
             </h2>
             <p className="text-sm text-[#6B5E57]">
-              शुद्ध सनातन परंपरा, 27+ वर्षों का आध्यात्मिक अनुभव, प्रत्यक्ष नाम-गोत्र संकल्प एवं दिव्य सामग्री प्रसाद।
+              Pure Vedic tradition, 27+ years spiritual experience, direct sankalp & consecrated prasad delivery.
             </p>
           </div>
 
@@ -575,33 +575,33 @@ export default async function HomePage() {
             {[
               {
                 icon: "🕉️",
-                title: "शास्त्रोक्त एवं प्रमाणिक",
-                desc: "सभी पूजाएँ वेदोक्त विधि एवं सनातन शास्त्रों के नियमों के अनुसार पूर्ण शुद्धता से संपन्न की जाती हैं।"
+                title: "Shastrokta & Authentic",
+                desc: "All pujas are conducted strictly in accordance with Vedic scriptures and shastrokta traditions."
               },
               {
                 icon: "📜",
-                title: "व्यक्तिगत नाम व गोत्र संकल्प",
-                desc: "पूजा आरंभ में मुख्य आचार्य द्वारा आपके तथा आपके परिवार के सदस्यों का स्पष्ट नाम व गोत्र बोलकर संकल्प कराया जाता है।"
+                title: "Personal Name & Gotra Sankalp",
+                desc: "The head acharya personally chants your name and gotra at the commencement of your puja."
               },
               {
                 icon: "🎥",
-                title: "HD लाइव वीडियो व व्हाट्सएप प्रमाण",
-                desc: "पूजा संकल्प एवं मुख्य आहुति का स्पष्ट वीडियो व्हाट्सएप पर भेजा जाता है ताकि आप घर बैठे दर्शन कर सकें।"
+                title: "HD Video Proof on WhatsApp",
+                desc: "Clear HD video recording of your sankalp and main aahuti is sent directly to your WhatsApp."
               },
               {
                 icon: "🎁",
-                title: "अभिमंत्रित पावन प्रसाद",
-                desc: "विशेष आशीर्वाद स्वरूप सिद्ध पीठों से पावन अक्षत, रक्षासूत्र, भस्म एवं दिव्य प्रसाद आपके घर कोरियर से।"
+                title: "Consecrated Sacred Prasad",
+                desc: "Blessed prasad, sacred rakshasutra, bhasma and akshat are dispatched to your doorstep."
               },
               {
                 icon: "🏛️",
-                title: "प्रमुख सिद्ध शक्तिपीठ",
-                desc: "काशी विश्वनाथ, माँ बगलामुखी धाम, महाकालेश्वर, कामाख्या एवं सिद्ध मंदिरों से सीधे प्रामाणिक अनुष्ठान।"
+                title: "Revered Sacred Peeths",
+                desc: "Pujas organized at Kashi Vishwanath, Maa Baglamukhi, Mahakaleshwar and renowned ashrams."
               },
               {
                 icon: "🤝",
-                title: "100% पारदर्शी एवं सुरक्षित सेवा",
-                desc: "कोई गुप्त शुल्क नहीं। 24/7 आचार्य मार्गदर्शन एवं सहायता उपलब्ध — सनातन धर्म की मर्यादा के साथ अटूट विश्वास।"
+                title: "100% Transparent & Secure",
+                desc: "No hidden charges. 24/7 support and guidance available — upholding complete sanctity."
               }
             ].map((item, i) => (
               <div
@@ -621,7 +621,7 @@ export default async function HomePage() {
                 </div>
 
                 <div className="pt-3 mt-3 border-t border-[#EFE4D6] flex items-center justify-between text-xs font-bold text-[#FF6600]">
-                  <span>100% प्रामाणिक सेवा</span>
+                  <span>100% Authentic Service</span>
                   <span className="text-[#7A1521] font-extrabold">✓ Verified</span>
                 </div>
               </div>
@@ -632,27 +632,27 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 6: "श्रद्धालुओं के अनुभव" (TESTIMONIALS)
+          SECTION 6: "DEVOTEE REVIEWS & TRUST"
           ============================================================ */}
       <section className="w-full bg-[#FAF8F5] border-b border-[#EFE4D6]">
         <SacredTrustTestimonials testimonials={dbTestimonials} />
       </section>
 
       {/* ============================================================
-          SECTION 7: "नवीनतम लेख" (LATEST BLOG ARTICLES)
+          SECTION 7: "LATEST ARTICLES & BLOGS"
           ============================================================ */}
       <section className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-b border-[#EFE4D6]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#EFE4D6]">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
               <BookOpen className="h-3.5 w-3.5 text-[#FF6600]" />
-              <span>सनातन ज्ञान व पंचांग</span>
+              <span>Vedic Knowledge & Insights</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614] tracking-tight">
-              नवीनतम लेख एवं आध्यात्मिक ज्ञान
+              Latest Articles & Spiritual Insights
             </h2>
             <p className="text-sm text-[#6B5E57] max-w-xl">
-              पूजा विधि, व्रत त्योहार, ज्योतिष ज्ञान एवं वैदिक अनुष्ठानों का प्रामाणिक मार्गदर्शन।
+              Authentic guidance on puja vidhi, festivals, Vedic astrology, and sacred anushthans.
             </p>
           </div>
 
@@ -660,7 +660,7 @@ export default async function HomePage() {
             href="/blog"
             className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF3E8] text-[#1C1614] hover:text-[#FF6600] font-bold text-xs sm:text-sm border border-[#EFE4D6] shadow-2xs transition-all shrink-0"
           >
-            <span>सभी लेख देखें</span>
+            <span>Explore All Articles</span>
             <span>➔</span>
           </Link>
         </div>
@@ -668,8 +668,8 @@ export default async function HomePage() {
         {latestBlogs.length === 0 ? (
           <div className="text-center py-12 px-6 bg-white rounded-2xl border border-[#EFE4D6] space-y-3 max-w-xl mx-auto shadow-xs">
             <div className="h-12 w-12 mx-auto rounded-full bg-[#FFF3E8] text-[#FF6600] flex items-center justify-center text-2xl">📚</div>
-            <h3 className="text-lg font-bold text-[#1C1614]">शीघ्र आ रहे हैं आध्यात्मिक लेख</h3>
-            <p className="text-xs text-[#6B5E57]">हमारे विद्वान आचार्य नए वैदिक लेख शीघ्र यहाँ प्रकाशित कर रहे हैं।</p>
+            <h3 className="text-lg font-bold text-[#1C1614]">Spiritual Articles Coming Soon</h3>
+            <p className="text-xs text-[#6B5E57]">Our revered acharyas are publishing new insights shortly.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -708,7 +708,7 @@ export default async function HomePage() {
                     </div>
 
                     <div className="pt-2 border-t border-[#EFE4D6] text-xs font-bold text-[#FF6600] flex items-center gap-1">
-                      <span>पढ़ें</span>
+                      <span>Read More</span>
                       <span>➔</span>
                     </div>
                   </div>
@@ -731,15 +731,15 @@ export default async function HomePage() {
           <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E1917] border border-[#D4AF37]/50 text-xs font-bold text-[#FAF8F5]">
               <span className="text-[#D4AF37]">🪔</span>
-              <span>शुभ संकल्प व मंगल कामना</span>
+              <span>Auspicious Blessings & Sankalp</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-snug">
-              आज ही अपनी पूजा बुक करें
+              Book Your Sacred Puja Today
             </h2>
 
             <p className="text-xs sm:text-sm text-[#EFE4D6] leading-relaxed font-normal">
-              हमारे विद्वान पंडित आपके नाम और गोत्र से पूर्ण शास्त्रोक्त विधि से पूजा संपन्न करेंगे एवं लाइव वीडियो प्रमाण आपके व्हाट्सएप पर भेजेंगे।
+              Our revered pandits will perform your personalized name and gotra sankalp with complete Vedic sanctity and deliver live video proof to your WhatsApp.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 max-w-sm mx-auto sm:flex sm:items-center sm:justify-center sm:max-w-none">
@@ -747,7 +747,7 @@ export default async function HomePage() {
                 href="/pujas"
                 className="px-7 py-3.5 rounded-xl bg-[#FF6600] hover:bg-[#E65C00] text-white font-extrabold text-sm shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer text-center"
               >
-                <span>पूजा बुक करें</span>
+                <span>Book Puja</span>
                 <span className="text-base">➔</span>
               </Link>
 
@@ -757,7 +757,7 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm shadow-md transition-all inline-flex items-center justify-center gap-2 text-center"
               >
-                <span>💬 हमसे संपर्क करें</span>
+                <span>💬 Talk to Us on WhatsApp</span>
               </a>
             </div>
           </div>
