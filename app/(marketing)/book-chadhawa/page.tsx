@@ -129,23 +129,23 @@ export default function BookChadhawaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9EF] text-[#292321] py-10 md:py-16 notranslate" translate="no">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#1C1614] py-10 md:py-16 notranslate" translate="no">
       <div className="container max-w-5xl mx-auto px-4 space-y-10">
 
         {/* ── Page Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] shadow-2xs">
-            <span className="text-[#C99A3D]">ॐ</span>
-            <span className="text-[#E58A16] text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] shadow-2xs">
+            <span className="text-[#D4AF37]">ॐ</span>
+            <span className="text-[#FF6600] text-xs font-bold uppercase tracking-wider">
               पावन धाम चढ़ावा सेवा
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#292321] leading-tight">
-            घर बैठे चढ़ाएं <span className="text-[#E58A16]">अपने आराध्य को चढ़ावा</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1C1614] leading-tight">
+            घर बैठे चढ़ाएं <span className="text-[#FF6600]">अपने आराध्य को चढ़ावा</span>
           </h1>
 
-          <p className="text-xs sm:text-base text-[#665E58] font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xs sm:text-base text-[#6B5E57] font-medium leading-relaxed max-w-2xl mx-auto">
             काशी विश्वनाथ, महाकालेश्वर, माँ कात्यायनी शक्तिपीठ आदि पावन धामों में अपने नाम और गोत्र से पवित्र पुष्पमाला, नारियल, पंचामृत एवं भोग अर्पण कराएं। व्हाट्सएप पर लाइव वीडियो प्रमाण।
           </p>
         </div>
@@ -158,10 +158,10 @@ export default function BookChadhawaPage() {
             { icon: "🏛️", title: "सिद्ध शक्तिपीठ", desc: "काशी, उज्जैन, जोधपुर" },
             { icon: "🔒", title: "100% सुरक्षित", desc: "Razorpay गेटवे" },
           ].map((item, i) => (
-            <div key={i} className="bg-white p-3.5 rounded-2xl border border-[#E6D6BE] text-center space-y-1 shadow-2xs">
+            <div key={i} className="bg-white p-3.5 rounded-2xl border border-[#EFE4D6] text-center space-y-1 shadow-2xs">
               <span className="text-2xl">{item.icon}</span>
-              <h4 className="text-xs font-bold text-[#292321]">{item.title}</h4>
-              <p className="text-[10px] text-[#665E58]">{item.desc}</p>
+              <h4 className="text-xs font-bold text-[#1C1614]">{item.title}</h4>
+              <p className="text-[10px] text-[#6B5E57]">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -175,8 +175,8 @@ export default function BookChadhawaPage() {
             {/* Step 1: Select Temple */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <span className="h-6 w-6 rounded-full bg-[#6B2635] text-white text-xs font-bold flex items-center justify-center">1</span>
-                <h3 className="font-bold text-base text-[#292321]">पवित्र मंदिर / शक्तिपीठ चुनें</h3>
+                <span className="h-6 w-6 rounded-full bg-[#7A1521] text-white text-xs font-bold flex items-center justify-center">1</span>
+                <h3 className="font-bold text-base text-[#1C1614]">पवित्र मंदिर / शक्तिपीठ चुनें</h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -188,20 +188,20 @@ export default function BookChadhawaPage() {
                       onClick={() => setSelectedTemple(temple.id)}
                       className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 flex items-center gap-3.5 ${
                         isSelected
-                          ? 'border-[#E58A16] bg-[#F7EBD7]/60 shadow-md ring-1 ring-[#E58A16]'
-                          : 'border-[#E6D6BE] bg-white hover:border-[#E58A16]/50'
+                          ? 'border-[#FF6600] bg-[#FFF3E8]/60 shadow-md ring-1 ring-[#FF6600]'
+                          : 'border-[#EFE4D6] bg-white hover:border-[#FF6600]/50'
                       }`}
                     >
-                      <div className="h-14 w-14 rounded-xl overflow-hidden bg-[#F7EBD7] shrink-0 border border-[#E6D6BE]">
+                      <div className="h-14 w-14 rounded-xl overflow-hidden bg-[#FFF3E8] shrink-0 border border-[#EFE4D6]">
                         <img src={temple.image} alt={temple.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="min-w-0 flex-1 space-y-0.5">
-                        <h4 className="text-xs font-bold text-[#292321] truncate">{temple.name}</h4>
-                        <p className="text-[11px] text-[#665E58] truncate">📍 {temple.city}</p>
-                        <p className="text-[10px] text-[#E58A16] font-semibold">{temple.deity}</p>
+                        <h4 className="text-xs font-bold text-[#1C1614] truncate">{temple.name}</h4>
+                        <p className="text-[11px] text-[#6B5E57] truncate">📍 {temple.city}</p>
+                        <p className="text-[10px] text-[#FF6600] font-semibold">{temple.deity}</p>
                       </div>
                       <div className={`h-5 w-5 rounded-full border flex items-center justify-center text-[10px] shrink-0 ${
-                        isSelected ? 'bg-[#E58A16] border-[#E58A16] text-white font-bold' : 'border-slate-300'
+                        isSelected ? 'bg-[#FF6600] border-[#FF6600] text-white font-bold' : 'border-slate-300'
                       }`}>
                         {isSelected ? '✓' : ''}
                       </div>
@@ -214,8 +214,8 @@ export default function BookChadhawaPage() {
             {/* Step 2: Select Chadhawa Offering */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <span className="h-6 w-6 rounded-full bg-[#6B2635] text-white text-xs font-bold flex items-center justify-center">2</span>
-                <h3 className="font-bold text-base text-[#292321]">चढ़ावे का प्रकार चुनें</h3>
+                <span className="h-6 w-6 rounded-full bg-[#7A1521] text-white text-xs font-bold flex items-center justify-center">2</span>
+                <h3 className="font-bold text-base text-[#1C1614]">चढ़ावे का प्रकार चुनें</h3>
               </div>
 
               <div className="space-y-3">
@@ -227,31 +227,31 @@ export default function BookChadhawaPage() {
                       onClick={() => setSelectedOffering(offering.id)}
                       className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 flex items-center justify-between gap-4 ${
                         isSelected
-                          ? 'border-[#E58A16] bg-[#F7EBD7]/60 shadow-md ring-1 ring-[#E58A16]'
-                          : 'border-[#E6D6BE] bg-white hover:border-[#E58A16]/50'
+                          ? 'border-[#FF6600] bg-[#FFF3E8]/60 shadow-md ring-1 ring-[#FF6600]'
+                          : 'border-[#EFE4D6] bg-white hover:border-[#FF6600]/50'
                       }`}
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="h-12 w-12 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] flex items-center justify-center text-2xl shrink-0">
+                        <div className="h-12 w-12 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] flex items-center justify-center text-2xl shrink-0">
                           {offering.icon}
                         </div>
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-bold text-[#292321]">{offering.title}</h4>
+                            <h4 className="text-sm font-bold text-[#1C1614]">{offering.title}</h4>
                             {offering.popular && (
-                              <Badge className="bg-[#6B2635] text-white text-[9px] px-2 py-0.2">
+                              <Badge className="bg-[#7A1521] text-white text-[9px] px-2 py-0.2">
                                 सर्वाधिक लोकप्रिय
                               </Badge>
                             )}
                           </div>
-                          <p className="text-xs text-[#665E58] line-clamp-1">{offering.desc}</p>
+                          <p className="text-xs text-[#6B5E57] line-clamp-1">{offering.desc}</p>
                         </div>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <span className="text-base font-black text-[#E58A16]">₹{offering.price}</span>
+                        <span className="text-base font-black text-[#FF6600]">₹{offering.price}</span>
                         <div className={`mt-1 h-5 w-5 ml-auto rounded-full border flex items-center justify-center text-[10px] ${
-                          isSelected ? 'bg-[#E58A16] border-[#E58A16] text-white font-bold' : 'border-slate-300'
+                          isSelected ? 'bg-[#FF6600] border-[#FF6600] text-white font-bold' : 'border-slate-300'
                         }`}>
                           {isSelected ? '✓' : ''}
                         </div>
@@ -266,10 +266,10 @@ export default function BookChadhawaPage() {
 
           {/* Right Column: Devotee Details & Checkout Form */}
           <div className="lg:col-span-5">
-            <Card className="border border-[#E6D6BE] rounded-3xl bg-white shadow-lg sticky top-20 overflow-hidden">
-              <div className="bg-[#6B2635] text-white p-5 space-y-1">
+            <Card className="border border-[#EFE4D6] rounded-3xl bg-white shadow-lg sticky top-20 overflow-hidden">
+              <div className="bg-[#7A1521] text-white p-5 space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#C99A3D]">🌸 संकल्प पत्र</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">🌸 संकल्प पत्र</span>
                   <span className="text-xs text-white/80">चरण 3</span>
                 </div>
                 <h3 className="text-lg font-black text-white">यजमान विवरण भरें</h3>
@@ -277,36 +277,36 @@ export default function BookChadhawaPage() {
 
               <CardContent className="p-6 space-y-5">
                 {/* Summary Box */}
-                <div className="p-3.5 bg-[#F7EBD7]/60 rounded-2xl border border-[#E6D6BE] space-y-1.5 text-xs">
+                <div className="p-3.5 bg-[#FFF3E8]/60 rounded-2xl border border-[#EFE4D6] space-y-1.5 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-[#665E58]">चयनित मंदिर:</span>
-                    <span className="font-bold text-[#292321]">{currentTemple.name}</span>
+                    <span className="text-[#6B5E57]">चयनित मंदिर:</span>
+                    <span className="font-bold text-[#1C1614]">{currentTemple.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#665E58]">चढ़ावा सेवा:</span>
-                    <span className="font-bold text-[#292321]">{currentOffering.title}</span>
+                    <span className="text-[#6B5E57]">चढ़ावा सेवा:</span>
+                    <span className="font-bold text-[#1C1614]">{currentOffering.title}</span>
                   </div>
-                  <div className="flex justify-between pt-1.5 border-t border-[#E6D6BE] font-bold text-sm">
-                    <span className="text-[#292321]">कुल दक्षिणा:</span>
-                    <span className="text-[#E58A16] font-black text-base">₹{currentOffering.price}</span>
+                  <div className="flex justify-between pt-1.5 border-t border-[#EFE4D6] font-bold text-sm">
+                    <span className="text-[#1C1614]">कुल दक्षिणा:</span>
+                    <span className="text-[#FF6600] font-black text-base">₹{currentOffering.price}</span>
                   </div>
                 </div>
 
                 <form onSubmit={handleProceedToChadhawa} className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-[#292321]">आपका पूरा नाम (Devotee Full Name) *</Label>
+                    <Label className="text-xs font-bold text-[#1C1614]">आपका पूरा नाम (Devotee Full Name) *</Label>
                     <Input
                       placeholder="उदा. रमेश बोहरा"
                       value={devoteeName}
                       onChange={(e) => setDevoteeName(e.target.value)}
                       required
-                      className="h-10 border-[#E6D6BE]"
+                      className="h-10 border-[#EFE4D6]"
                     />
                   </div>
 
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs font-bold text-[#292321]">WhatsApp मोबाइल नंबर *</Label>
+                      <Label className="text-xs font-bold text-[#1C1614]">WhatsApp मोबाइल नंबर *</Label>
                       <span className="text-[10px] text-emerald-700 font-semibold">✓ वीडियो प्रमाण हेतु</span>
                     </div>
                     <Input
@@ -315,32 +315,32 @@ export default function BookChadhawaPage() {
                       value={devoteePhone}
                       onChange={(e) => setDevoteePhone(e.target.value)}
                       required
-                      className="h-10 border-[#E6D6BE]"
+                      className="h-10 border-[#EFE4D6]"
                     />
-                    <p className="text-[10px] text-[#665E58]">चढ़ावे का संकल्प वीडियो इसी नंबर पर व्हाट्सएप किया जाएगा।</p>
+                    <p className="text-[10px] text-[#6B5E57]">चढ़ावे का संकल्प वीडियो इसी नंबर पर व्हाट्सएप किया जाएगा।</p>
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-[#292321]">गोत्र (Gotra) *</Label>
+                    <Label className="text-xs font-bold text-[#1C1614]">गोत्र (Gotra) *</Label>
                     <Input
                       placeholder="Kashyap"
                       value={gotra}
                       onChange={(e) => setGotra(e.target.value)}
-                      className="h-10 border-[#E6D6BE]"
+                      className="h-10 border-[#EFE4D6]"
                     />
-                    <p className="text-[10px] text-[#665E58]">यदि गोत्र ज्ञात न हो तो 'Kashyap' रहने दें।</p>
+                    <p className="text-[10px] text-[#6B5E57]">यदि गोत्र ज्ञात न हो तो 'Kashyap' रहने दें।</p>
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full h-12 text-sm font-black bg-[#E58A16] hover:bg-[#d4790e] text-white rounded-xl shadow-md flex items-center justify-center gap-2"
+                    className="w-full h-12 text-sm font-black bg-[#FF6600] hover:bg-[#E65C00] text-white rounded-xl shadow-md flex items-center justify-center gap-2"
                   >
                     <span>चढ़ावा संकल्प पूरा करें (₹{currentOffering.price})</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </form>
 
-                <div className="flex items-center justify-center gap-1 text-[11px] text-[#665E58] pt-2">
+                <div className="flex items-center justify-center gap-1 text-[11px] text-[#6B5E57] pt-2">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   <span>100% सुरक्षित भुगतान • Razorpay अधिकृत</span>
                 </div>

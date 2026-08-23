@@ -123,7 +123,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Prevents Google Translate from auto-corrupting brand names & mantras */}
         <meta name="google" content="notranslate" />
       </head>
-      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFF9EF] text-[#292321] overflow-x-hidden selection:bg-[#E58A16]/20 selection:text-[#E58A16] antialiased notranslate`} translate="no" suppressHydrationWarning>
+      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${poppins.variable} ${cinzel.variable} ${outfit.variable} ${mukta.variable} ${inter.variable} font-sans bg-[#FAF8F5] text-[#1C1614] overflow-x-hidden selection:bg-[#FF6600]/20 selection:text-[#FF6600] antialiased notranslate`} translate="no" suppressHydrationWarning>
         {/* 
           Razorpay: afterInteractive = loads right after page hydration.
           Previously lazyOnload caused 2-5 second delays when clicking Pay.

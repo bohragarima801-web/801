@@ -262,7 +262,7 @@ function BookingForm() {
           contact: devoteePhone,
           email: devoteeEmail,
         },
-        theme: { color: '#E58A16' },
+        theme: { color: '#FF6600' },
         modal: {
           ondismiss: () => {
             setBooking(false)

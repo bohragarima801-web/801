@@ -85,8 +85,8 @@ function VipPujaCountdownTimer({ puja }: { puja: any }) {
   }, [puja?.id, puja?.name])
 
   return (
-    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#E6D6BE] bg-[#F7EBD7] text-[#292321] text-xs font-bold font-mono shadow-2xs">
-      <Clock className="w-3.5 h-3.5 text-[#E58A16]" />
+    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#EFE4D6] bg-[#FFF3E8] text-[#1C1614] text-xs font-bold font-mono shadow-2xs">
+      <Clock className="w-3.5 h-3.5 text-[#FF6600]" />
       <span>प्रारंभ समय: {String(timeLeft.days).padStart(2, '0')}d : {String(timeLeft.hours).padStart(2, '0')}h : {String(timeLeft.minutes).padStart(2, '0')}m : {String(timeLeft.seconds).padStart(2, '0')}s</span>
     </div>
   )
@@ -239,7 +239,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             name: devoteeName,
             contact: whatsappPhone,
           },
-          theme: { color: '#E58A16' },
+          theme: { color: '#FF6600' },
           modal: {
             ondismiss: () => {
               setBookingLoading(false)
@@ -304,16 +304,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
   }
 
   return (
-    <div className="vip-puja-theme min-h-screen bg-[#FFF9EF] text-[#292321] pb-28 relative overflow-hidden notranslate" translate="no">
+    <div className="vip-puja-theme min-h-screen bg-[#FAF8F5] text-[#1C1614] pb-28 relative overflow-hidden notranslate" translate="no">
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-10 max-w-6xl space-y-10 relative z-10">
         
         {/* ── SECTION 1: HERO CONTAINER ── */}
-        <div className="bg-white rounded-3xl border border-[#E6D6BE] p-5 sm:p-8 md:p-10 shadow-sm space-y-8">
+        <div className="bg-white rounded-3xl border border-[#EFE4D6] p-5 sm:p-8 md:p-10 shadow-sm space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left Media */}
             <div className="lg:col-span-5 relative space-y-3">
-              <div className="relative aspect-[4/3] sm:aspect-[4/5] rounded-2xl overflow-hidden border border-[#E6D6BE] bg-slate-900 shadow-md group">
+              <div className="relative aspect-[4/3] sm:aspect-[4/5] rounded-2xl overflow-hidden border border-[#EFE4D6] bg-slate-900 shadow-md group">
                 <Image 
                   src={currentVipImage} 
                   alt={puja.name} 
@@ -323,20 +323,20 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                 />
                 
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-[#6B2635] text-white text-[10px] font-black uppercase tracking-wide shadow-xs border border-[#C99A3D]">
-                    <Crown className="h-3 w-3 text-[#C99A3D]" /> VIP LIVE PUJA
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-[#7A1521] text-white text-[10px] font-black uppercase tracking-wide shadow-xs border border-[#D4AF37]">
+                    <Crown className="h-3 w-3 text-[#D4AF37]" /> VIP LIVE PUJA
                   </span>
-                  <span className="bg-[#292321]/80 backdrop-blur-xs text-[#FFF9EF] text-[10px] font-bold px-2.5 py-1 rounded-md border border-white/10">
+                  <span className="bg-[#1C1614]/80 backdrop-blur-xs text-[#FAF8F5] text-[10px] font-bold px-2.5 py-1 rounded-md border border-white/10">
                     {categoryName}
                   </span>
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex flex-col justify-end p-4 text-left pointer-events-none">
-                  <span className="text-[#E58A16] font-bold text-xs flex items-center gap-1">
+                  <span className="text-[#FF6600] font-bold text-xs flex items-center gap-1">
                     <Sparkles className="h-3.5 w-3.5" /> व्यक्तिगत 1-on-1 महा अनुष्ठान
                   </span>
-                  <p className="text-xs text-[#FFF9EF] font-semibold flex items-center gap-1 mt-0.5">
-                    <MapPin className="h-3.5 w-3.5 text-[#C99A3D]" /> {templeLocation}
+                  <p className="text-xs text-[#FAF8F5] font-semibold flex items-center gap-1 mt-0.5">
+                    <MapPin className="h-3.5 w-3.5 text-[#D4AF37]" /> {templeLocation}
                   </p>
                 </div>
               </div>
@@ -349,7 +349,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                       key={i}
                       onClick={() => setActiveMediaIndex(i)}
                       className={`relative h-12 w-12 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                        activeMediaIndex === i ? 'border-[#E58A16] scale-105 shadow-xs' : 'border-[#E6D6BE] opacity-70 hover:opacity-100'
+                        activeMediaIndex === i ? 'border-[#FF6600] scale-105 shadow-xs' : 'border-[#EFE4D6] opacity-70 hover:opacity-100'
                       }`}
                     >
                       <Image src={img} alt={`Gallery ${i + 1}`} fill className="object-cover" />
@@ -363,21 +363,21 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             <div className="lg:col-span-7 space-y-5 text-left">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EBD7] text-[#E58A16] text-xs font-bold border border-[#E6D6BE]">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] text-[#FF6600] text-xs font-bold border border-[#EFE4D6]">
                     <Sparkles className="h-3.5 w-3.5" /> शास्त्रोक्त विशिष्ट सेवा
                   </div>
                   <VipPujaCountdownTimer puja={puja} />
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#292321] leading-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#1C1614] leading-tight">
                   {puja.name}
                 </h1>
 
-                <p className="text-xs sm:text-sm text-[#4A403C] leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-[#4A3E39] leading-relaxed font-normal">
                   {puja.shortDescription || '27+ वर्षों के अनुभवी वरिष्ठ आचार्यों द्वारा आपके परिवार के लिए व्यक्तिगत नाम-गोत्र संकल्प, समर्पित 5 वेदाचार्य दल एवं 1-on-1 लाइव व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।'}
                 </p>
 
-                <div className="pt-1 border-t border-[#E6D6BE]">
+                <div className="pt-1 border-t border-[#EFE4D6]">
                   <DevoteeSocialProof pujaId={puja.id} pujaName={puja.name} />
                 </div>
               </div>
@@ -385,12 +385,12 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               {/* 4 Feature Badges */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 {[
-                  { icon: <Video className="h-4 w-4 text-[#E58A16]" />, label: '1-on-1 लाइव वीडियो' },
-                  { icon: <ShieldCheck className="h-4 w-4 text-[#E58A16]" />, label: 'समर्पित निजी अनुष्ठान' },
-                  { icon: <UserCheck className="h-4 w-4 text-[#E58A16]" />, label: 'आचार्य परामर्श' },
-                  { icon: <Award className="h-4 w-4 text-[#E58A16]" />, label: 'नाम-गोत्र संकल्प' },
+                  { icon: <Video className="h-4 w-4 text-[#FF6600]" />, label: '1-on-1 लाइव वीडियो' },
+                  { icon: <ShieldCheck className="h-4 w-4 text-[#FF6600]" />, label: 'समर्पित निजी अनुष्ठान' },
+                  { icon: <UserCheck className="h-4 w-4 text-[#FF6600]" />, label: 'आचार्य परामर्श' },
+                  { icon: <Award className="h-4 w-4 text-[#FF6600]" />, label: 'नाम-गोत्र संकल्प' },
                 ].map((chip) => (
-                  <div key={chip.label} className="p-2.5 rounded-xl bg-[#F7EBD7]/50 border border-[#E6D6BE] flex items-center gap-2 text-xs font-bold text-[#292321]">
+                  <div key={chip.label} className="p-2.5 rounded-xl bg-[#FFF3E8]/50 border border-[#EFE4D6] flex items-center gap-2 text-xs font-bold text-[#1C1614]">
                     {chip.icon}
                     <span className="truncate">{chip.label}</span>
                   </div>
@@ -398,10 +398,10 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               </div>
 
               {/* Price & CTA Button Box */}
-              <div className="w-full p-4 sm:p-5 rounded-2xl bg-[#FFF9EF] border border-[#E6D6BE] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+              <div className="w-full p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFE4D6] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
                 <div className="space-y-0.5">
-                  <span className="text-[11px] text-[#665E58] block uppercase font-bold tracking-wide">न्यूनतम दक्षिणा राशि:</span>
-                  <div className="text-2xl sm:text-3xl font-black text-[#292321] tracking-tight">
+                  <span className="text-[11px] text-[#6B5E57] block uppercase font-bold tracking-wide">न्यूनतम दक्षिणा राशि:</span>
+                  <div className="text-2xl sm:text-3xl font-black text-[#1C1614] tracking-tight">
                     ₹{displayPrice.toLocaleString('en-IN')}
                   </div>
                   <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
@@ -411,7 +411,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
                 <button
                   onClick={() => setBookingDialogOpen(true)}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#FF6600] hover:bg-[#E65C00] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
                 >
                   <Crown className="h-4 w-4" /> VIP पूजा बुक करें ➔
                 </button>
@@ -422,9 +422,9 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         </div>
 
         {/* ── SECTION 2: PANDIT CREDIBILITY BOX ── */}
-        <div className="bg-white rounded-2xl border border-[#E6D6BE] p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-5 shadow-2xs">
+        <div className="bg-white rounded-2xl border border-[#EFE4D6] p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-5 shadow-2xs">
           <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-            <div className="relative h-16 w-16 rounded-full overflow-hidden border-2 border-[#E58A16] shadow-sm shrink-0">
+            <div className="relative h-16 w-16 rounded-full overflow-hidden border-2 border-[#FF6600] shadow-sm shrink-0">
               <Image 
                 src={assignedPandit.photo || '/pandit_mukesh_bohra.jpg'} 
                 alt={assignedPandit.name}
@@ -433,23 +433,23 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               />
             </div>
             <div className="space-y-0.5">
-              <span className="text-xs text-[#E58A16] font-bold uppercase tracking-wider block">
+              <span className="text-xs text-[#FF6600] font-bold uppercase tracking-wider block">
                 👑 मुख्य विद्वान आचार्य
               </span>
-              <h3 className="text-base sm:text-lg font-bold text-[#292321]">
+              <h3 className="text-base sm:text-lg font-bold text-[#1C1614]">
                 {assignedPandit.name}
               </h3>
-              <p className="text-xs text-[#665E58] font-normal">
+              <p className="text-xs text-[#6B5E57] font-normal">
                 {assignedPandit.title} • {assignedPandit.experience}
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center md:justify-end">
-            <span className="px-3 py-1.5 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] text-[#292321] text-xs font-bold flex items-center gap-1.5">
+            <span className="px-3 py-1.5 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] text-[#1C1614] text-xs font-bold flex items-center gap-1.5">
               📜 वेद प्रमाणित आचार्य
             </span>
-            <span className="px-3 py-1.5 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] text-[#292321] text-xs font-bold flex items-center gap-1.5">
+            <span className="px-3 py-1.5 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] text-[#1C1614] text-xs font-bold flex items-center gap-1.5">
               🏛️ सिद्ध पीठ प्रामाणिकता
             </span>
           </div>
@@ -457,20 +457,20 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
         {/* ── SECTION: PUJA SIGNIFICANCE & DESCRIPTION ── */}
         {(puja.description || (puja as any).longDescription) && (
-          <div className="bg-white rounded-3xl border border-[#E6D6BE] p-6 sm:p-10 shadow-xs space-y-6 text-[#292321]">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#E6D6BE] pb-4">
+          <div className="bg-white rounded-3xl border border-[#EFE4D6] p-6 sm:p-10 shadow-xs space-y-6 text-[#1C1614]">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#EFE4D6] pb-4">
               <div className="space-y-1 text-center sm:text-left">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] text-xs font-bold uppercase tracking-widest">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
                   ✨ महिमा एवं फलप्राप्ति
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#292321] tracking-wide">
+                <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1C1614] tracking-wide">
                   पूजा अनुष्ठान का महत्व एवं लाभ
                 </h2>
               </div>
 
-              <div className="bg-[#F7EBD7] border border-[#E6D6BE] px-4 py-2 rounded-2xl text-center shrink-0">
+              <div className="bg-[#FFF3E8] border border-[#EFE4D6] px-4 py-2 rounded-2xl text-center shrink-0">
                 <p className="text-xl font-black text-[#8B1A21] font-heading">100%</p>
-                <p className="text-[10px] text-[#665E58] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
+                <p className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
               </div>
             </div>
 
@@ -486,41 +486,41 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         {/* ── SECTION 3: VIP EXPERIENCE 3 PILLARS ── */}
         <div className="space-y-5">
           <div className="text-center space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#E58A16]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#FF6600]">
               🌟 विशिष्ट अनुभव
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#292321]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1C1614]">
               VIP महा अनुष्ठान के पावन लाभ
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div className="bg-white rounded-2xl border border-[#E6D6BE] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
-              <div className="h-11 w-11 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] flex items-center justify-center font-bold">
+            <div className="bg-white rounded-2xl border border-[#EFE4D6] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
+              <div className="h-11 w-11 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] flex items-center justify-center font-bold">
                 <UserCheck className="h-5 w-5" />
               </div>
-              <h4 className="font-bold text-base text-[#292321]">आचार्य से सीधा परामर्श</h4>
-              <p className="text-xs text-[#4A403C] leading-relaxed">
+              <h4 className="font-bold text-base text-[#1C1614]">आचार्य से सीधा परामर्श</h4>
+              <p className="text-xs text-[#4A3E39] leading-relaxed">
                 अनुष्ठान से पूर्व मुख्य वेदाचार्य द्वारा व्यक्तिगत मार्गदर्शन व विशेष संकल्प की रूपरेखा।
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E6D6BE] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
-              <div className="h-11 w-11 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] flex items-center justify-center font-bold">
+            <div className="bg-white rounded-2xl border border-[#EFE4D6] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
+              <div className="h-11 w-11 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] flex items-center justify-center font-bold">
                 <Video className="h-5 w-5" />
               </div>
-              <h4 className="font-bold text-base text-[#292321]">1-on-1 लाइव वीडियो दर्शन</h4>
-              <p className="text-xs text-[#4A403C] leading-relaxed">
+              <h4 className="font-bold text-base text-[#1C1614]">1-on-1 लाइव वीडियो दर्शन</h4>
+              <p className="text-xs text-[#4A3E39] leading-relaxed">
                 व्हाट्सएप वीडियो लिंक के माध्यम से परिवार सहित लाइव संकल्प व मुख्य आहुति के प्रत्यक्ष दर्शन।
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E6D6BE] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
-              <div className="h-11 w-11 rounded-xl bg-[#F7EBD7] border border-[#E6D6BE] text-[#E58A16] flex items-center justify-center font-bold">
+            <div className="bg-white rounded-2xl border border-[#EFE4D6] p-5 space-y-2.5 text-center flex flex-col items-center shadow-2xs">
+              <div className="h-11 w-11 rounded-xl bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] flex items-center justify-center font-bold">
                 <Award className="h-5 w-5" />
               </div>
-              <h4 className="font-bold text-base text-[#292321]">नाम-गोत्र संकल्प व राजप्रसाद</h4>
-              <p className="text-xs text-[#4A403C] leading-relaxed">
+              <h4 className="font-bold text-base text-[#1C1614]">नाम-गोत्र संकल्प व राजप्रसाद</h4>
+              <p className="text-xs text-[#4A3E39] leading-relaxed">
                 पूर्ण मंत्र जाप के साथ विशेष अभिमंत्रित प्रसाद एवं यंत्र सुरक्षित कोरियर से घर डिलीवरी।
               </p>
             </div>
@@ -530,10 +530,10 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         {/* ── SECTION 4: 5-STEP TIMELINE ── */}
         <div className="space-y-5">
           <div className="text-center space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#E58A16]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#FF6600]">
               📋 सरल एवं पारदर्शी प्रक्रिया
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#292321]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1C1614]">
               5 चरणों में VIP अनुष्ठान यात्रा
             </h2>
           </div>
@@ -546,10 +546,10 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               { step: '04', title: 'लाइव संकल्प दर्शन', desc: '1-on-1 वीडियो कॉल में मंत्रोच्चार के साथ जुड़ें।' },
               { step: '05', title: 'प्रसाद घर प्राप्ति', desc: 'अभिमंत्रित पावन प्रसाद व रक्षासूत्र प्राप्त करें।' },
             ].map((st, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-[#E6D6BE] p-4 space-y-1.5 text-center shadow-2xs">
-                <div className="text-lg font-black text-[#E58A16]">Step {st.step}</div>
-                <h4 className="font-bold text-xs sm:text-sm text-[#292321]">{st.title}</h4>
-                <p className="text-[11px] text-[#665E58] leading-snug">{st.desc}</p>
+              <div key={i} className="bg-white rounded-2xl border border-[#EFE4D6] p-4 space-y-1.5 text-center shadow-2xs">
+                <div className="text-lg font-black text-[#FF6600]">Step {st.step}</div>
+                <h4 className="font-bold text-xs sm:text-sm text-[#1C1614]">{st.title}</h4>
+                <p className="text-[11px] text-[#6B5E57] leading-snug">{st.desc}</p>
               </div>
             ))}
           </div>
@@ -558,10 +558,10 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
         {/* ── SECTION 5: FAQ ACCORDION ── */}
         <div className="space-y-5 max-w-3xl mx-auto">
           <div className="text-center space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#E58A16]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#FF6600]">
               ❓ सामान्य प्रश्न
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#292321]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1C1614]">
               अक्सर पूछे जाने वाले सवाल
             </h2>
           </div>
@@ -570,16 +570,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
             {faqList.map((faq, idx) => {
               const isOpen = openFaqIndex === idx
               return (
-                <div key={idx} className="bg-white rounded-2xl border border-[#E6D6BE] overflow-hidden text-left shadow-2xs">
+                <div key={idx} className="bg-white rounded-2xl border border-[#EFE4D6] overflow-hidden text-left shadow-2xs">
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full p-4 text-left flex items-center justify-between gap-3 font-bold text-[#292321] hover:text-[#E58A16] transition-colors cursor-pointer"
+                    className="w-full p-4 text-left flex items-center justify-between gap-3 font-bold text-[#1C1614] hover:text-[#FF6600] transition-colors cursor-pointer"
                   >
                     <span className="text-xs sm:text-sm font-bold">{faq.question}</span>
-                    <ChevronDown className={`h-4 w-4 text-[#E58A16] transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-4 w-4 text-[#FF6600] transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {isOpen && (
-                    <div className="px-4 pb-4 text-xs sm:text-sm text-[#4A403C] leading-relaxed border-t border-[#E6D6BE] pt-3 bg-[#FFF9EF]/50">
+                    <div className="px-4 pb-4 text-xs sm:text-sm text-[#4A3E39] leading-relaxed border-t border-[#EFE4D6] pt-3 bg-[#FAF8F5]/50">
                       {faq.answer}
                     </div>
                   )}
@@ -592,16 +592,16 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
       </div>
 
       {/* ── STICKY MOBILE BOTTOM BAR ── */}
-      <div className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-[#E6D6BE] p-3 z-40 sm:hidden flex items-center justify-between gap-3 shadow-lg">
+      <div className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] p-3 z-40 sm:hidden flex items-center justify-between gap-3 shadow-lg">
         <div className="min-w-0 shrink-0">
-          <span className="text-[9px] text-[#665E58] uppercase font-bold block">VIP दक्षिणा राशि</span>
-          <span className="text-lg font-black text-[#292321]">
+          <span className="text-[9px] text-[#6B5E57] uppercase font-bold block">VIP दक्षिणा राशि</span>
+          <span className="text-lg font-black text-[#1C1614]">
             ₹{displayPrice.toLocaleString('en-IN')}
           </span>
         </div>
         <button
           onClick={() => setBookingDialogOpen(true)}
-          className="px-5 py-2.5 rounded-xl bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-xs shadow-md transition-all shrink-0 cursor-pointer"
+          className="px-5 py-2.5 rounded-xl bg-[#FF6600] hover:bg-[#E65C00] text-white font-extrabold text-xs shadow-md transition-all shrink-0 cursor-pointer"
         >
           VIP पूजा बुक करें ➔
         </button>
@@ -609,76 +609,76 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
       {/* ── BOOKING MODAL DIALOG ── */}
       <Dialog open={bookingDialogOpen} onOpenChange={setBookingDialogOpen}>
-        <DialogContent className="max-w-lg bg-white border border-[#E6D6BE] text-[#292321] rounded-3xl p-6 shadow-2xl notranslate" translate="no">
-          <DialogHeader className="text-left space-y-1.5 border-b border-[#E6D6BE] pb-3">
-            <DialogTitle className="text-lg font-black text-[#292321] flex items-center gap-2">
-              <Crown className="h-5 w-5 text-[#E58A16]" /> VIP पूजा संकल्प विवरण
+        <DialogContent className="max-w-lg bg-white border border-[#EFE4D6] text-[#1C1614] rounded-3xl p-6 shadow-2xl notranslate" translate="no">
+          <DialogHeader className="text-left space-y-1.5 border-b border-[#EFE4D6] pb-3">
+            <DialogTitle className="text-lg font-black text-[#1C1614] flex items-center gap-2">
+              <Crown className="h-5 w-5 text-[#FF6600]" /> VIP पूजा संकल्प विवरण
             </DialogTitle>
-            <DialogDescription className="text-xs text-[#665E58]">
-              {puja.name} • दक्षिणा: <span className="text-[#292321] font-bold">₹{displayPrice.toLocaleString('en-IN')}</span>
+            <DialogDescription className="text-xs text-[#6B5E57]">
+              {puja.name} • दक्षिणा: <span className="text-[#1C1614] font-bold">₹{displayPrice.toLocaleString('en-IN')}</span>
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleConfirmBooking} className="space-y-3.5 pt-2 text-left">
             <div className="space-y-1">
-              <Label className="text-xs font-bold text-[#292321]">मुख्य यजमान का नाम (Devotee Full Name) *</Label>
+              <Label className="text-xs font-bold text-[#1C1614]">मुख्य यजमान का नाम (Devotee Full Name) *</Label>
               <Input
                 required
                 placeholder="उदा. रमेश कुमार शर्मा"
                 value={devoteeName}
                 onChange={(e) => setDevoteeName(e.target.value)}
-                className="bg-[#FFF9EF] border-[#E6D6BE] text-[#292321] placeholder:text-gray-400 focus:border-[#E58A16]"
+                className="bg-[#FAF8F5] border-[#EFE4D6] text-[#1C1614] placeholder:text-gray-400 focus:border-[#FF6600]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs font-bold text-[#292321]">व्हाट्सएप नंबर (WhatsApp No) *</Label>
+                <Label className="text-xs font-bold text-[#1C1614]">व्हाट्सएप नंबर (WhatsApp No) *</Label>
                 <Input
                   required
                   type="tel"
                   placeholder="उदा. 9876543210"
                   value={whatsappPhone}
                   onChange={(e) => setWhatsappPhone(e.target.value)}
-                  className="bg-[#FFF9EF] border-[#E6D6BE] text-[#292321] placeholder:text-gray-400 focus:border-[#E58A16]"
+                  className="bg-[#FAF8F5] border-[#EFE4D6] text-[#1C1614] placeholder:text-gray-400 focus:border-[#FF6600]"
                 />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs font-bold text-[#292321]">गोत्र (Gotra)</Label>
+                <Label className="text-xs font-bold text-[#1C1614]">गोत्र (Gotra)</Label>
                 <Input
                   placeholder="उदा. कश्यप / भारद्वाज"
                   value={gotra}
                   onChange={(e) => setGotra(e.target.value)}
-                  className="bg-[#FFF9EF] border-[#E6D6BE] text-[#292321] placeholder:text-gray-400 focus:border-[#E58A16]"
+                  className="bg-[#FAF8F5] border-[#EFE4D6] text-[#1C1614] placeholder:text-gray-400 focus:border-[#FF6600]"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-bold text-[#292321]">पसंदीदा तिथि (Preferred Date)</Label>
+              <Label className="text-xs font-bold text-[#1C1614]">पसंदीदा तिथि (Preferred Date)</Label>
               <Input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-[#FFF9EF] border-[#E6D6BE] text-[#292321] focus:border-[#E58A16]"
+                className="bg-[#FAF8F5] border-[#EFE4D6] text-[#1C1614] focus:border-[#FF6600]"
               />
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-bold text-[#292321]">विशेष संकल्प / मनोकामना (Intention)</Label>
+              <Label className="text-xs font-bold text-[#1C1614]">विशेष संकल्प / मनोकामना (Intention)</Label>
               <Input
                 placeholder="उदा. कार्य सिद्धि, स्वास्थ्य लाभ, पारिवारिक सुख"
                 value={sankalpWish}
                 onChange={(e) => setSankalpWish(e.target.value)}
-                className="bg-[#FFF9EF] border-[#E6D6BE] text-[#292321] placeholder:text-gray-400 focus:border-[#E58A16]"
+                className="bg-[#FAF8F5] border-[#EFE4D6] text-[#1C1614] placeholder:text-gray-400 focus:border-[#FF6600]"
               />
             </div>
 
             <Button
               type="submit"
               disabled={bookingLoading}
-              className="w-full bg-[#E58A16] hover:bg-[#d4790e] text-white font-extrabold text-sm py-3.5 mt-2 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2"
+              className="w-full bg-[#FF6600] hover:bg-[#E65C00] text-white font-extrabold text-sm py-3.5 mt-2 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2"
             >
               {bookingLoading ? (
                 <>
@@ -693,13 +693,13 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               )}
             </Button>
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-[#665E58] pt-1">
+            <div className="flex items-center justify-center gap-2 text-[10px] text-[#6B5E57] pt-1">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
               <span>Razorpay 256-Bit SSL एन्क्रिप्टेड • UPI / Cards / NetBanking</span>
             </div>
 
-            <div className="pt-2 text-center border-t border-[#E6D6BE]">
-              <p className="text-[11px] text-[#665E58] mb-1 font-medium">
+            <div className="pt-2 text-center border-t border-[#EFE4D6]">
+              <p className="text-[11px] text-[#6B5E57] mb-1 font-medium">
                 ऑनलाइन दक्षिणा से पूर्व मुख्य आचार्य से बात करना चाहते हैं?
               </p>
               <a

@@ -9,62 +9,66 @@
 
 @layer base {
   :root {
-    /* ── DIVYAYAGYAM MASTER BRAND DESIGN TOKENS (LOCKED) ── */
-    --color-ivory: #FFF9EF;
+    /* ── DIVYAYAGYAM MASTER BRAND DESIGN TOKENS (PREMIUM VIBRANT SPIRITUAL) ── */
+    --color-ivory: #FAF8F5;
     --color-white: #FFFFFF;
-    --color-saffron: #E58A16;
-    --color-gold: #C99A3D;
-    --color-charcoal: #292321;
-    --color-cream: #F7EBD7;
-    --color-wine: #6B2635;
-    --color-border: #E6D6BE;
-    --color-muted: #665E58;
+    --color-saffron: #FF6600;
+    --color-saffron-hover: #E65C00;
+    --color-gold: #D4AF37;
+    --color-charcoal: #1C1614;
+    --color-cream: #FBF4EA;
+    --color-maroon: #7A1521;
+    --color-maroon-dark: #580E17;
+    --color-border: #EFE4D6;
+    --color-muted: #6B5E57;
 
     /* ── Standardized Spacing & Radius Tokens ── */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 18px;
     --radius-card: 20px;
-    --radius-btn: 12px;
+    --radius-btn: 14px;
     --min-touch-target: 44px;
 
     /* ── Typography Tokens ── */
-    --font-heading-hi: 'Noto Sans Devanagari', 'Noto Serif Devanagari', sans-serif;
-    --font-body-hi: 'Noto Sans Devanagari', sans-serif;
+    --font-heading-hi: var(--font-noto-serif-devanagari), 'Noto Serif Devanagari', 'Cinzel', serif;
+    --font-body-hi: var(--font-poppins), var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', sans-serif;
 
     /* ── Core Surfaces & Semantic Tokens ── */
-    --background: 38 70% 97%;               /* #FFF9EF - Warm Ivory */
-    --foreground: 12 10% 15%;               /* #292321 - Dark Charcoal */
-    --card: 0 0% 100%;                      /* #FFFFFF - Pure White */
-    --card-foreground: 12 10% 15%;
+    --background: 35 25% 98%;               /* #FAF8F5 - Pure Soft Pearl Warm White */
+    --foreground: 15 15% 12%;               /* #1C1614 - Rich Velvet Charcoal */
+    --card: 0 0% 100%;                      /* #FFFFFF - Pure Snow White */
+    --card-foreground: 15 15% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 12 10% 15%;
-    --primary: 34 85% 49%;                  /* #E58A16 - Primary Saffron */
+    --popover-foreground: 15 15% 12%;
+    --primary: 24 100% 50%;                 /* #FF6600 - Radiant Sacred Kesariya */
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 56% 51%;                /* #C99A3D - Antique Gold */
+    --secondary: 355 70% 28%;               /* #7A1521 - Royal Vedic Maroon */
     --secondary-foreground: 0 0% 100%;
-    --muted: 36 60% 92%;                    /* #F7EBD7 - Soft Cream */
-    --muted-foreground: 25 7% 37%;          /* #665E58 - Muted Text */
-    --accent: 34 85% 49%;                   /* Saffron Accent */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 347 48% 28%;             /* #6B2635 - Subtle Wine */
+    --muted: 35 25% 94%;                    /* #F5EFE6 - Soft Pearl */
+    --muted-foreground: 20 10% 40%;         /* #6B5E57 - Muted Text */
+    --accent: 43 74% 53%;                   /* #D4AF37 - Radiant Temple Gold */
+    --accent-foreground: 15 15% 12%;
+    --destructive: 355 70% 28%;             /* #7A1521 */
     --destructive-foreground: 0 0% 100%;
-    --border: 36 44% 82%;                   /* #E6D6BE - Warm Subtle Border */
-    --input: 36 44% 82%;
-    --ring: 34 85% 49%;                     /* Saffron Focus Ring */
-    --radius: 0.85rem;
+    --border: 30 25% 89%;                   /* #EFE4D6 - Subtle Champagne Border */
+    --input: 30 25% 89%;
+    --ring: 24 100% 50%;                    /* Saffron Focus Ring */
+    --radius: 1rem;
 
     /* ── Gradients & Shadows ── */
-    --gradient-primary: linear-gradient(135deg, #E58A16 0%, #D4790E 100%);
-    --gradient-gold: linear-gradient(135deg, #C99A3D 0%, #E58A16 100%);
-    --gradient-hero-light: linear-gradient(180deg, #FFF9EF 0%, #F7EBD7 50%, #FFF9EF 100%);
-    --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #FFF9EF 100%);
+    --gradient-primary: linear-gradient(135deg, #FF6600 0%, #FF8500 100%);
+    --gradient-saffron: linear-gradient(135deg, #FF5500 0%, #FF8500 100%);
+    --gradient-maroon: linear-gradient(135deg, #7A1521 0%, #9B1B2A 100%);
+    --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #F5C542 50%, #D4AF37 100%);
+    --gradient-hero-light: linear-gradient(180deg, #FFFDF9 0%, #FDF6EE 50%, #FAF8F5 100%);
+    --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%);
 
-    --shadow-soft: 0 4px 20px -2px rgba(80, 50, 20, 0.04);
-    --shadow-medium: 0 8px 30px rgba(80, 50, 20, 0.06);
-    --shadow-heavy: 0 16px 40px -4px rgba(80, 50, 20, 0.10);
-    --shadow-glow: 0 8px 25px -4px rgba(229, 138, 22, 0.30);
-    --shadow-card: 0 4px 20px -2px rgba(80, 50, 20, 0.04), 0 2px 6px -1px rgba(80, 50, 20, 0.02);
+    --shadow-soft: 0 4px 20px -2px rgba(122, 21, 33, 0.04);
+    --shadow-medium: 0 8px 30px rgba(122, 21, 33, 0.07);
+    --shadow-heavy: 0 16px 40px -4px rgba(122, 21, 33, 0.12);
+    --shadow-glow: 0 8px 25px -4px rgba(255, 102, 0, 0.35);
+    --shadow-card: 0 4px 20px -2px rgba(122, 21, 33, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
   }
 
   .dark {
@@ -74,24 +78,24 @@
     --card-foreground: 38 70% 97%;
     --popover: 12 10% 16%;
     --popover-foreground: 38 70% 97%;
-    --primary: 34 85% 49%;
+    --primary: 24 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 56% 51%;
+    --secondary: 355 70% 28%;
     --secondary-foreground: 0 0% 100%;
     --muted: 12 10% 22%;
     --muted-foreground: 36 20% 70%;
-    --accent: 34 85% 49%;
+    --accent: 43 74% 53%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 347 48% 28%;
+    --destructive: 355 70% 28%;
     --destructive-foreground: 0 0% 100%;
     --border: 12 10% 24%;
     --input: 12 10% 24%;
-    --ring: 34 85% 49%;
+    --ring: 24 100% 50%;
   }
 }
 
 /* ============================================================
-   BASE ELEMENTS & PRO-LEVEL DEVANAGARI TYPOGRAPHY
+   BASE ELEMENTS & ROYAL DEVANAGARI TYPOGRAPHY
    ============================================================ */
 @layer base {
   * {
@@ -116,8 +120,8 @@
 
   body {
     background-color: var(--color-ivory);
-    color: #1F1A18;
-    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), var(--font-poppins), 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1C1614;
+    font-family: var(--font-poppins), var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.75;
@@ -125,15 +129,15 @@
     letter-spacing: 0.01em;
   }
 
-  /* Zero-Clash Heading Engine: Ample line-height (1.32-1.48), preventing Devanagari conjuncts & matras from crashing */
-  h1, h2, h3, h4, h5, h6, .heading {
-    font-family: var(--font-noto-sans-devanagari), var(--font-mukta), var(--font-poppins), 'Noto Sans Devanagari', sans-serif;
-    color: #1F1A18;
+  /* Royal & Majestic Heading Engine */
+  h1, h2, h3, h4, h5, h6, .heading, .font-heading {
+    font-family: var(--font-noto-serif-devanagari), var(--font-cinzel), 'Noto Serif Devanagari', 'Cinzel', serif;
+    color: #1C1614;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     text-wrap: balance;
     overflow-wrap: break-word;
     word-break: normal;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.01em;
     margin-top: 0;
   }
 
