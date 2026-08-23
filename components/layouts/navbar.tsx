@@ -22,75 +22,76 @@ const languages = [
 ]
 
 const navItems = [
-  { title: 'मुख्य पृष्ठ', href: '/' },
-  { title: 'पूजा सेवा', href: '/pujas' },
-  { title: 'VIP अनुष्ठान', href: '/vip-pujas' },
-  { title: 'सिद्ध स्टोर', href: '/products' },
-  { title: 'भक्ति सेवा', href: '/bhaktiseva' },
-  { title: 'ब्लॉग', href: '/blog' },
+  { title: 'Home', href: '/' },
+  { title: 'Book Puja', href: '/pujas' },
+  { title: 'Chadhawa', href: '/book-chadhawa' },
+  { title: 'VIP Anushthan', href: '/vip-pujas' },
+  { title: 'Store', href: '/products' },
+  { title: 'About Us', href: '/about' },
+  { title: 'Blogs', href: '/blog' },
 ]
 
 const toolsMenu = [
   {
-    title: 'AI पंडित जी',
+    title: 'AI Pandit Ji',
     href: '/ask-a-pandit',
-    desc: 'पूजा विधि व ज्योतिष संबंधी तुरंत समाधान',
+    desc: 'Instant Vedic Astrology & Puja Guidance',
     icon: Bot,
     badge: 'LIVE FREE',
     badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
   },
   {
-    title: 'मुफ्त जन्म कुंडली',
+    title: 'Free Kundali',
     href: '/tools/kundali',
-    desc: 'वैदिक जन्म पत्रिका, ग्रह स्थिति व फल',
+    desc: 'Vedic Birth Chart & Planetary Analysis',
     icon: Sun,
     badge: '100% FREE',
     badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
   },
   {
-    title: 'दैनिक पंचांग',
+    title: 'Daily Panchang',
     href: '/panchang',
-    desc: 'तिथि, नक्षत्र, योग व चौघड़िया मुहूर्त',
+    desc: 'Tithi, Nakshatra, Yoga & Choghadiya',
     icon: Calendar,
     badge: 'DAILY',
     badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
   },
   {
-    title: 'कुंडली गुण मिलान',
+    title: 'Kundali Milan',
     href: '/tools/milan',
-    desc: 'विवाह हेतु 36 गुण मिलान विश्लेषण',
+    desc: '36 Guna Horoscope Matching for Marriage',
     icon: Heart,
     badge: '36 GUNA',
     badgeColor: 'bg-rose-50 text-rose-700 border-rose-200'
   },
   {
-    title: 'शुभ मुहूर्त खोजक',
+    title: 'Shubh Muhurat',
     href: '/muhurat',
-    desc: 'विवाह, वाहन व गृह प्रवेश का शुभ समय',
+    desc: 'Auspicious Timings for Events & Griha Pravesh',
     icon: Clock,
     badge: 'MUHURAT',
     badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
   },
   {
-    title: 'श्री गणेश प्रश्नावली',
+    title: 'Ganesh Prashnavali',
     href: '/tools/shree-ganesh-siddha-prashnavali',
-    desc: 'सिद्ध कोष्ठकों से अपनी शंका का समाधान',
+    desc: 'Divine Answers to Your Questions',
     icon: Flame,
     badge: 'ORACLE',
     badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
   },
   {
-    title: 'डिजिटल जाप माला',
+    title: 'Digital Jaap Mala',
     href: '/tools/mala',
-    desc: '108 मंत्र जाप हेतु डिजिटल काउंटर',
+    desc: '108 Sacred Mantra Digital Counter',
     icon: Zap,
     badge: '108 JAPA',
     badgeColor: 'bg-blue-50 text-blue-700 border-blue-200'
   },
   {
-    title: 'रत्न व अंक ज्योतिष',
+    title: 'Numerology & Gems',
     href: '/tools/numerology',
-    desc: 'मूलांक, भाग्यांक व शुभ रत्न परामर्श',
+    desc: 'Life Path Number & Gemstone Suggestions',
     icon: Gem,
     badge: 'NUMBERS',
     badgeColor: 'bg-purple-50 text-purple-700 border-purple-200'
@@ -223,7 +224,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               )}
             >
               <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
-              <span>टूल्स</span>
+              <span>Tools</span>
               <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#FF6600]')} />
             </button>
 
@@ -268,14 +269,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               {/* Bottom Explore All Bar */}
               <div className="mt-2.5 pt-2.5 border-t border-[#EFE4D6] flex items-center justify-between px-2">
                 <span className="text-[11px] font-semibold text-[#6B5E57] flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" /> 100% प्रामाणिक वैदिक काल-गणना टूल्स
+                  <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" /> 100% Authentic Vedic Calculation Tools
                 </span>
                 <Link
                   href="/tools"
                   onClick={() => setToolsOpen(false)}
                   className="text-xs font-extrabold text-[#FF6600] hover:text-[#E65C00] flex items-center gap-1 hover:gap-1.5 transition-all bg-[#FFF3E8] hover:bg-[#FFE6D0] px-3 py-1 rounded-lg border border-[#FFD2B0]"
                 >
-                  <span>सभी टूल्स देखें ({toolsMenu.length}+)</span>
+                  <span>Explore All Tools ({toolsMenu.length}+)</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -344,7 +345,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             href="/pujas"
             className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF7700] text-white text-xs font-extrabold tracking-wide shadow-[0_4px_14px_rgba(255,102,0,0.32)] hover:shadow-[0_6px_20px_rgba(255,102,0,0.45)] transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
           >
-            <span>पूजा बुक करें</span>
+            <span>Book Puja</span>
             <span className="text-sm">➔</span>
           </Link>
 
@@ -374,7 +375,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 >
                   <Link href="/login" title="Login / Register">
                     <User className="h-4 w-4 mr-1 text-[#FF6600]" />
-                    <span>लॉगिन</span>
+                    <span>Login</span>
                   </Link>
                 </Button>
               )
@@ -421,14 +422,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           <div className="pt-2">
             <div className="flex items-center justify-between px-2 mb-2">
               <span className="text-[11px] font-black uppercase tracking-wider text-[#D4AF37] block">
-                वैदिक टूल्स (Vedic Tools)
+                Vedic Tools
               </span>
               <Link
                 href="/tools"
                 onClick={() => setOpen(false)}
                 className="text-[11px] font-bold text-[#FF6600] hover:underline flex items-center gap-1"
               >
-                <span>सभी देखें</span>
+                <span>View All</span>
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
@@ -457,7 +458,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* Language Selection Row */}
           <div className="bg-white p-3 rounded-xl border border-[#EFE4D6] space-y-2">
             <span className="text-[11px] font-bold text-[#6B5E57] flex items-center gap-1">
-              <Languages className="h-3.5 w-3.5 text-[#FF6600]" /> भाषा चुनें (Language)
+              <Languages className="h-3.5 w-3.5 text-[#FF6600]" /> Select Language
             </span>
             <div className="flex flex-wrap gap-1.5">
               {languages.map((l) => (
@@ -488,7 +489,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 >
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-[#FF6600]" />
-                    <span>मेरा डैशबोर्ड ({user.fullName?.split(' ')[0]})</span>
+                    <span>My Dashboard ({user.fullName?.split(' ')[0]})</span>
                   </div>
                   <span>➔</span>
                 </Link>
@@ -498,7 +499,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     onClick={() => setOpen(false)}
                     className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors text-center"
                   >
-                    लॉगआउट (Logout)
+                    Logout
                   </button>
                 </form>
               </div>
@@ -509,14 +510,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   onClick={() => setOpen(false)}
                   className="py-3 px-4 rounded-xl text-sm font-bold text-[#1C1614] bg-white border border-[#EFE4D6] text-center shadow-xs"
                 >
-                  लॉगिन (Login)
+                  Login
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setOpen(false)}
-                  className="py-3 px-4 rounded-xl text-sm font-bold text-white bg-[#FF6600] text-center shadow-sm"
+                  className="py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#FF6600] to-[#FF8500] text-center shadow-sm"
                 >
-                  रजिस्टर (Sign Up)
+                  Sign Up
                 </Link>
               </div>
             )}
@@ -526,7 +527,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         {/* Mobile Drawer Bottom Helpline */}
         <div className="p-4 bg-[#FFF3E8] border-t border-[#EFE4D6] text-center text-xs text-[#6B5E57] safe-area-padding">
           <a href="tel:+919530401984" className="font-bold text-[#1C1614] hover:text-[#FF6600] inline-flex items-center gap-1.5">
-            <Phone className="h-3.5 w-3.5 text-[#FF6600]" /> सहायता: +91 95304 01984
+            <Phone className="h-3.5 w-3.5 text-[#FF6600]" /> Helpline: +91 95304 01984
           </a>
         </div>
       </div>
