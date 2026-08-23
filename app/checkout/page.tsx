@@ -82,12 +82,6 @@ export default function CheckoutPage() {
           fetch('/api/bhaktiseva').catch(() => null)
         ])
 
-        if (profileRes && profileRes.status === 401) {
-          toast.error('Please login to complete your order')
-          router.push('/login?callbackUrl=/checkout')
-          return
-        }
-
         if (profileRes && profileRes.ok) {
           const data = await profileRes.json()
           if (data.ok && data.user && isMounted) {
@@ -710,9 +704,9 @@ export default function CheckoutPage() {
                 {/* Trust badges */}
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { icon: <Shield className="w-4 h-4" />, text: 'Secure Delivery' },
-                    { icon: <Lock className="w-4 h-4" />, text: 'SSL Encrypted' },
-                    { icon: <Star className="w-4 h-4" />, text: '10,000+ Happy Devotees' },
+                    { icon: <Shield className="w-4 h-4" />, text: '100% शास्त्रोक्त संकल्प' },
+                    { icon: <Lock className="w-4 h-4" />, text: 'सुरक्षित भुगतान' },
+                    { icon: <Star className="w-4 h-4" />, text: '27+ वर्ष पावन सेवा' },
                   ].map((b, i) => (
                     <div key={i} className="flex flex-col items-center gap-1.5 p-3 bg-white rounded-xl border border-amber-100 text-center">
                       <div className="text-[#8B1A21]">{b.icon}</div>

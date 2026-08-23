@@ -34,10 +34,12 @@ function BookingForm() {
 
   // Devotee details
   const [devoteeName, setDevoteeName] = useState('')
+  const [devoteePhone, setDevoteePhone] = useState('')
+  const [devoteeEmail, setDevoteeEmail] = useState('')
   const [gotra, setGotra] = useState('Kashyap')
   const [fatherHusbandName, setFatherHusbandName] = useState('')
   const [sankalpPurpose, setSankalpPurpose] = useState('')
-  const [acceptTerms, setAcceptTerms] = useState(false)
+  const [acceptTerms, setAcceptTerms] = useState(true)
   
   // Dynamic family members list (based on packageKey count)
   const memberCount = Number(packageKey) || 1
@@ -60,13 +62,19 @@ function BookingForm() {
 
     const loadData = async () => {
       try {
-        // 1. Auth check
-        const profileRes = await fetch('/api/profile')
-        if (profileRes.status === 401) {
-          toast.error('Please login to continue with your booking.')
-          router.push(`/login?callbackUrl=/bookings/new?pujaId=${pujaId}&package=${packageKey}`)
-          return
-        }
+        // 1. Optional User Profile Auto-fill (Guest allowed, never blocks)
+        try {
+          const profileRes = await fetch('/api/profile')
+          if (profileRes.ok) {
+            const profileData = await profileRes.json()
+            if (profileData?.ok && profileData.user) {
+              if (profileData.user.fullName) setDevoteeName(profileData.user.fullName)
+              if (profileData.user.phone) setDevoteePhone(profileData.user.phone)
+              if (profileData.user.email) setDevoteeEmail(profileData.user.email)
+              if (profileData.user.customerProfile?.gotra) setGotra(profileData.user.customerProfile.gotra)
+            }
+          }
+        } catch {}
 
         // 2. Load Puja Data
         const pujaRes = await fetch(`/api/bookings?pujaId=${pujaId}`)
@@ -164,6 +172,10 @@ function BookingForm() {
       toast.error('Devotee Name is required')
       return
     }
+    if (!devoteePhone.trim() || devoteePhone.trim().replace(/\D/g, '').length < 10) {
+      toast.error('कृपया 10 अंकों का वैध व्हाट्सएप नंबर दर्ज करें।')
+      return
+    }
     if (!fatherHusbandName.trim()) {
       toast.error('Father / Husband Name is required')
       return
@@ -192,9 +204,11 @@ function BookingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pujaId: puja.id,
-          devoteeName: devoteeName,
-          fatherHusbandName: fatherHusbandName || 'N/A',
-          gotra,
+          devoteeName: devoteeName.trim(),
+          phone: devoteePhone.trim(),
+          email: devoteeEmail.trim() || undefined,
+          fatherHusbandName: fatherHusbandName.trim() || 'Self',
+          gotra: gotra.trim() || 'Kashyap',
           sankalpPurpose: finalSankalpPurpose,
           members: membersList,
           selectedOfferingIds,
@@ -240,13 +254,15 @@ function BookingForm() {
         key: razorpayKeyId,
         amount,
         currency,
-        name: 'Divyayagyam',
+        name: 'DivyaYagyam (दिव्ययज्ञम्)',
         description: `Payment for ${puja.name || 'Puja Booking'}`,
         order_id: orderId,
         prefill: {
           name: devoteeName,
+          contact: devoteePhone,
+          email: devoteeEmail,
         },
-        theme: { color: '#ea580c' },
+        theme: { color: '#E58A16' },
         modal: {
           ondismiss: () => {
             setBooking(false)
@@ -505,6 +521,12 @@ function BookingForm() {
                     <span>Devotee Name:</span>
                     <span className="font-bold text-slate-800">{devoteeName}</span>
                   </div>
+                  {devoteePhone && (
+                    <div className="flex justify-between">
+                      <span>WhatsApp Number:</span>
+                      <span className="font-bold text-slate-800">{devoteePhone}</span>
+                    </div>
+                  )}
                   {familyNames.filter(Boolean).length > 0 && (
                     <div className="flex justify-between">
                       <span>Family Members:</span>
@@ -566,6 +588,22 @@ function BookingForm() {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold">WhatsApp Phone Number * (व्हाट्सएप नंबर)</Label>
+                    <span className="text-[10px] text-emerald-700 font-semibold">✓ वीडियो प्रमाण हेतु</span>
+                  </div>
+                  <Input
+                    placeholder="e.g. 9530401984"
+                    type="tel"
+                    value={devoteePhone}
+                    onChange={(e) => setDevoteePhone(e.target.value)}
+                    required
+                    className="h-10"
+                  />
+                  <p className="text-[10px] text-slate-500">पूजा संकल्प का लाइव वीडियो प्रमाण इसी नंबर पर भेजा जाएगा।</p>
+                </div>
+
                 {memberCount > 1 && (
                   <div className="space-y-3 border-t pt-3">
                     <span className="text-xs font-bold text-slate-700">Family Members' Names</span>
@@ -608,9 +646,9 @@ function BookingForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-xs font-bold">Sankalp Purpose / Description (संकल्प का उद्देश्य / विवरण)</Label>
+                  <Label className="text-xs font-bold">Sankalp Purpose / Wish (संकल्प का उद्देश्य / विशेष मनोकामना)</Label>
                   <Textarea
-                    placeholder="उदा. उत्तम स्वास्थ्य, मनोकामना पूर्ति, व्यापार वृद्धि, कोर्ट केस सफलता या सुख-शांति..."
+                    placeholder="उदा. उत्तम स्वास्थ्य, मनोकामना पूर्ति, व्यापार वृद्धि, परिवार कल्याण व सुख-शांति..."
                     value={sankalpPurpose}
                     onChange={(e) => setSankalpPurpose(e.target.value)}
                     rows={2}

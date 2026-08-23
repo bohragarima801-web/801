@@ -103,9 +103,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const user = await getCurrentUser().catch(() => null)
-    if (!user) {
-      return NextResponse.json({ ok: false, error: 'You must be logged in to place an order' }, { status: 401 });
-    }
 
     const body = await req.json()
     const { items = [], shippingAddress, notes, couponCode } = body

@@ -105,11 +105,11 @@ function getDynamicPujaBenefits(puja: any) {
   // 2. If Baglamukhi / Shatru Samhara / Victory Puja
   if (name.includes('बगलामुखी') || name.includes('Bagalamukhi') || name.includes('शत्रु') || desc.includes('court') || desc.includes('enemy')) {
     return [
-      { icon: ShieldCheck, title: 'Court Case Victory & Legal Dispute Defense', desc: 'Neutralizes enemy actions, legal disputes, court cases, and workplace harassment through Maa Baglamukhi divine shield.' },
-      { icon: HandHeart, title: 'Protection from Evil Eye & Negative Badha', desc: 'Destroys unseen dark energies, black magic, jealousy obstacles, and protects family peace and reputation.' },
-      { icon: Sparkles, title: 'Business Triumph & Financial Dominance', desc: 'Removes severe trade stagnation, competitor hostility, and grants overwhelming victory in business ventures.' },
-      { icon: Award, title: 'Courage, Focus & Speech Mastery', desc: 'Empowers internal courage, clarity of thought, and persuasive speech during crucial life confrontations.' },
-      { icon: Flame, title: 'Maha Kavach for Family Security', desc: 'Establishes an impenetrable protective Kavach over your home, assets, and family members.' }
+      { icon: ShieldCheck, title: 'मानसिक संबल, सुरक्षा व बाधा शांति', desc: 'माँ बगलामुखी की पावन कृपा से जीवन के अवरोधों, विवादों व विपरीत परिस्थितियों में मानसिक बल व शांति प्राप्त होती है।' },
+      { icon: HandHeart, title: 'पारिवारिक सुरक्षा व सकारात्मक ऊर्जा', desc: 'घर-परिवार में नकारात्मकता दूर होकर शुभ व सकारात्मक वातावरण का निर्माण होता है।' },
+      { icon: Sparkles, title: 'व्यापारिक उन्नति व कार्य सिद्धि', desc: 'व्यापार में आने वाली रुकावटें शांत होकर समृद्धि व उन्नति के नए मार्ग प्रशस्त होते हैं।' },
+      { icon: Award, title: 'आत्मविश्वास व वाणी प्रभाव', desc: 'कठिन परिस्थितियों में स्पष्ट विचार, आत्मविश्वास और धैर्य की शक्ति मिलती है।' },
+      { icon: Flame, title: 'पावन रक्षा कवच एवं आशीर्वाद', desc: 'माँ पीताम्बरी की असीम कृपा से परिवार व कार्यक्षेत्र में रक्षा कवच स्थापित होता है।' }
     ]
   }
 

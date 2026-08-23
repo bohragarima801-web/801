@@ -93,11 +93,11 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
 
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-[#292321] border border-[#C99A3D]/30 text-[#C99A3D] flex items-center justify-center shrink-0 font-bold">
-              <Star className="h-5 w-5 fill-[#C99A3D] text-[#C99A3D]" />
+              <Award className="h-5 w-5 text-[#C99A3D]" />
             </div>
             <div>
-              <div className="text-xs md:text-sm font-bold text-white">4.9 / 5 Rating</div>
-              <div className="text-[11px] text-[#E6D6BE]">50,000+ संतुष्ट यजमान</div>
+              <div className="text-xs md:text-sm font-bold text-white">27+ वर्ष पावन सेवा</div>
+              <div className="text-[11px] text-[#E6D6BE]">1997 से काशी व शक्तिपीठ परंपरा</div>
             </div>
           </div>
         </div>
