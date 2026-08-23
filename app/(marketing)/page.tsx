@@ -166,83 +166,103 @@ export default async function HomePage() {
     <div className="min-h-screen bg-[#FAF8F5] text-[#1C1614] font-sans selection:bg-[#FF6600]/20 notranslate" translate="no">
 
       {/* ============================================================
-          SECTION 1: CINEMATIC HERO (Two-Part Composition & Slider)
+          SECTION 1: FULL-WIDTH CINEMATIC HERO SLIDER & QUICK SERVICES
           ============================================================ */}
-      <section className="relative w-full bg-gradient-to-b from-[#FAF8F5] via-[#FFF3E8]/40 to-[#FAF8F5] pt-6 pb-10 md:pt-12 md:pb-20 border-b border-[#EFE4D6]">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center max-w-7xl mx-auto">
-            
-            {/* Left Content Area */}
-            <div className="lg:col-span-6 space-y-4 md:space-y-5 text-left">
-              {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600] shadow-xs">
-                <span className="text-[#D4AF37]">ॐ</span>
-                <span>शास्त्रों के अनुसार वैदिक सेवा</span>
-              </div>
-
-              {/* High-Contrast Devanagari Main Heading */}
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#1C1614] leading-[1.3] notranslate" translate="no">
-                पवित्र पूजा • प्रामाणिक विधि •{' '}
-                <span className="text-[#FF6600]">
-                  सच्चे परिणाम
-                </span>
-              </h1>
-
-              {/* Supporting Subtitle */}
-              <p className="text-xs sm:text-base text-[#4A3E39] font-medium leading-[1.8] max-w-xl notranslate" translate="no">
-                भारत के प्रमुख शक्तिपीठों एवं सिद्ध धामों में विद्वान पंडितों द्वारा आपके नाम और गोत्र से विधिपूर्वक पूजा, जाप, हवन एवं अनुष्ठान।
-              </p>
-
-              {/* 4 Trust Badges Grid */}
-              <div className="grid grid-cols-2 gap-2 pt-1 max-w-lg">
-                {[
-                  { icon: <ShieldCheck className="h-4 w-4 text-[#FF6600]" />, label: '100% शास्त्रोक्त विधि' },
-                  { icon: <Award className="h-4 w-4 text-[#FF6600]" />, label: 'अनुभवी विद्वान पंडित' },
-                  { icon: <MapPin className="h-4 w-4 text-[#FF6600]" />, label: 'प्रमुख सिद्ध शक्तिपीठ' },
-                  { icon: <CheckCircle2 className="h-4 w-4 text-[#FF6600]" />, label: '27+ वर्षों का विश्वास' },
-                ].map((f, i) => (
-                  <div key={i} className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-white rounded-xl border border-[#EFE4D6] shadow-2xs">
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-lg bg-[#FFF3E8] flex items-center justify-center shrink-0">{f.icon}</div>
-                    <span className="text-[11px] sm:text-xs font-bold text-[#1C1614] truncate">{f.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Dual CTA Buttons */}
-              <div className="grid grid-cols-2 gap-2.5 pt-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3.5">
-                <Link
-                  href="/pujas"
-                  className="px-4 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-[#FF6600] hover:bg-[#E65C00] text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center gap-1.5 active:scale-[0.98] text-center cursor-pointer"
-                >
-                  <span>पूजा बुक करें</span>
-                  <span className="text-sm">➔</span>
-                </Link>
-                <Link
-                  href="/pujas"
-                  className="px-4 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-white hover:bg-[#FFF3E8] text-[#1C1614] font-bold text-xs sm:text-sm border border-[#EFE4D6] shadow-2xs transition-all duration-200 inline-flex items-center justify-center gap-1.5 text-center cursor-pointer"
-                >
-                  <span>पूजा देखें</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Slider / Visual Presentation Area */}
-            <div className="lg:col-span-6 w-full">
-              <HeroPujaSlider slides={heroSlides} />
-            </div>
-
+      <section className="relative w-full bg-gradient-to-b from-[#FAF8F5] via-[#FFF3E8]/30 to-[#FAF8F5] pt-3 sm:pt-5 pb-8 md:pb-14 border-b border-[#EFE4D6]">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-7xl space-y-6 md:space-y-8">
+          
+          {/* Full-Width Top Banner Slider */}
+          <div className="w-full">
+            <HeroPujaSlider slides={heroSlides} />
           </div>
 
-          {/* Floating 4-Column Trust Stats Card */}
-          <div className="mt-10 md:mt-14 p-5 sm:p-7 rounded-2xl bg-white border border-[#EFE4D6] grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center shadow-[0_8px_30px_rgba(80,50,20,0.06)] max-w-6xl mx-auto">
+          {/* Quick Action Spiritual Services Grid (InstaAstro Style) */}
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3.5 max-w-5xl mx-auto pt-1">
             {[
-              { val: "27+ वर्ष", label: "पावन सेवा (1997 से)", sub: "Vedic Experience" },
+              {
+                title: "ऑनलाइन पूजाएं",
+                subtitle: "शास्त्रोक्त अनुष्ठान",
+                icon: "🪔",
+                href: "/pujas",
+                badge: "लोकप्रिय",
+                badgeColor: "bg-[#7A1521] text-white"
+              },
+              {
+                title: "चढ़ावा सेवा",
+                subtitle: "प्रत्यक्ष अर्पण",
+                icon: "🌸",
+                href: "/book-chadhawa",
+                badge: "नया",
+                badgeColor: "bg-[#FF6600] text-white"
+              },
+              {
+                title: "पं. मुकेश बोहरा",
+                subtitle: "27+ वर्ष अनुभव",
+                icon: "🙏",
+                href: "/about",
+                badge: "आचार्य",
+                badgeColor: "bg-[#D4AF37] text-[#1C1614]"
+              },
+              {
+                title: "मार्गदर्शन लें",
+                subtitle: "WhatsApp सहायता",
+                icon: "💬",
+                href: "https://wa.me/919530401984?text=%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A3%E0%A4%BE%E0%A4%AE%20%E0%A4%AA%E0%A4%82%E0%A4%A1%E0%A4%BF%E0%A4%A4%20%E0%A4%9C%E0%A5%80%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9C%E0%A5%87%20%E0%A4%AA%E0%A5%82%E0%A4%9C%E0%A4%BE%20%E0%A4%B9%E0%A5%87%E0%A4%A4%E0%A5%81%20%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%97%E0%A4%A6%E0%A4%B0%E0%A5%8D%E0%A4%B6%E0%A4%A8%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F",
+                badge: "24x7",
+                badgeColor: "bg-emerald-600 text-white"
+              },
+              {
+                title: "वैदिक टूल्स",
+                subtitle: "कुंडली व गणना",
+                icon: "🔮",
+                href: "/tools",
+                badge: "मुफ्त",
+                badgeColor: "bg-[#7A1521] text-white"
+              },
+              {
+                title: "पूजा सामग्री",
+                subtitle: "सिद्ध प्रसाद व माला",
+                icon: "🛍️",
+                href: "/products",
+                badge: "स्टोर",
+                badgeColor: "bg-[#FF6600] text-white"
+              },
+            ].map((service, i) => (
+              <Link
+                key={i}
+                href={service.href}
+                className="flex flex-col items-center justify-between p-2.5 sm:p-3.5 bg-white rounded-2xl border border-[#EFE4D6] shadow-xs hover:border-[#FF6600] hover:shadow-md hover:-translate-y-0.5 transition-all text-center group relative overflow-hidden"
+              >
+                {service.badge && (
+                  <span className={`absolute top-1.5 right-1.5 text-[8px] font-black px-1.5 py-0.2 rounded-full ${service.badgeColor}`}>
+                    {service.badge}
+                  </span>
+                )}
+                <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-[#FFF3E8] border border-[#FFD2B0] text-2xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#FF6600] group-hover:text-white transition-all shadow-2xs">
+                  <span>{service.icon}</span>
+                </div>
+                <div className="mt-2 space-y-0.5 w-full">
+                  <h4 className="text-xs sm:text-sm font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors truncate">
+                    {service.title}
+                  </h4>
+                  <p className="text-[10px] text-[#6B5E57] truncate hidden sm:block">
+                    {service.subtitle}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Floating 4-Column Authentic Trust Stats */}
+          <div className="p-4 sm:p-6 rounded-2xl bg-white border border-[#EFE4D6] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center shadow-[0_8px_30px_rgba(28,22,20,0.05)] max-w-5xl mx-auto">
+            {[
+              { val: "27+ वर्ष", label: "पावन सेवा (1997 से)", sub: "Vedic Parampara" },
               { val: "100%", label: "शास्त्रोक्त संकल्प", sub: "Name & Gotra Sankalp" },
-              { val: "HD Video", label: "व्हाट्सएप लाइव प्रमाण", sub: "Live WhatsApp Proof" },
+              { val: "HD Video", label: "व्हाट्सएप लाइव प्रमाण", sub: "Live Video Proof" },
               { val: "100%", label: "सुरक्षित भुगतान", sub: "Razorpay Encrypted" }
             ].map((stat, i) => (
-              <div key={i} className="space-y-0.5 border-r last:border-r-0 border-[#EFE4D6]/60 pr-2">
-                <div className="text-xl sm:text-3xl font-black text-[#FF6600] tracking-tight">{stat.val}</div>
+              <div key={i} className="space-y-0.5 border-r last:border-r-0 border-[#EFE4D6] pr-2">
+                <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#FF6600] tracking-tight">{stat.val}</div>
                 <div className="text-xs sm:text-sm font-bold text-[#1C1614]">{stat.label}</div>
                 <div className="text-[10px] text-[#6B5E57] hidden sm:block">{stat.sub}</div>
               </div>
