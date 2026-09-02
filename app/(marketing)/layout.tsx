@@ -52,7 +52,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
           <span className="animate-pulse text-[#D4AF37]">⚡</span>
           <span>
             Special Offer: Use code{' '}
-            <span className="bg-black/25 text-[#FFD700] border border-[#FFD700]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
+            <span className="bg-black/25 text-[#D4AF37] border border-[#D4AF37]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
               {activeCoupon.code}
             </span>{' '}
             for <strong className="text-white font-extrabold">{activeCoupon.discountType === 'PERCENTAGE' ? `${activeCoupon.discountValue}% OFF` : `₹${activeCoupon.discountValue} OFF`}</strong>!

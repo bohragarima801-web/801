@@ -1,12 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/logo'
 import { siteConfig } from '@/lib/site-config'
 import {
   Facebook, Instagram, Youtube, Twitter, Mail, Phone, MapPin, ArrowRight,
-  ShieldCheck, Lock, CheckCircle2, MessageCircle
+  ShieldCheck, Video, PackageCheck, Star, Award, Lock, CheckCircle2, Send, Languages, Clock
 } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 interface FooterProps {
   mapUrl?: string
@@ -14,216 +16,393 @@ interface FooterProps {
   isDark?: boolean
 }
 
-export function Footer({ siteData }: FooterProps) {
+export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
+  const pathname = usePathname()
+  const isDarkTheme = isDark !== undefined ? isDark : (pathname === '/' || pathname?.startsWith('/vip-pujas'))
+  const [subInput, setSubInput] = useState('')
+  const [subSuccess, setSubSuccess] = useState(false)
+  const [currentLang, setCurrentLang] = useState('hi')
+
   const socials = siteData?.socials || siteConfig.socials
   const contact = siteData?.contact || siteConfig.contact
 
-  return (
-    <footer className="relative z-10 bg-[#0B0D11] text-zinc-300 border-t border-amber-500/20 pt-12 pb-24 md:pb-10 notranslate" translate="no">
-      {/* ── Subtitle hairline gold glow ── */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!subInput.trim()) return
+    setSubSuccess(true)
+    setTimeout(() => {
+      setSubInput('')
+      setSubSuccess(false)
+    }, 4000)
+  }
 
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+  const toggleLanguage = (lang: string) => {
+    setCurrentLang(lang)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('lang', lang)
+    }
+  }
+
+  // Locked Brand Theme Match: Dark Charcoal (#1C1614) + Antique Gold Headings (#D4AF37) + High Contrast Light Ivory Text (#FAF8F5)
+  const bgClass = 'bg-[#1C1614] text-[#FAF8F5] border-t border-[#D4AF37]/30'
+  const textBodyClass = 'text-[#EFE4D6]'
+  const headingClass = 'text-[#D4AF37] font-heading font-extrabold text-xs uppercase tracking-[0.14em]'
+  const linkHoverClass = 'hover:text-[#FF6600] transition-colors duration-200 hover:underline'
+  const iconBgClass = 'bg-[#1E1917] text-[#D4AF37] border border-[#D4AF37]/30'
+
+  return (
+    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12 notranslate`} translate="no">
+      {/* ── 1. GRADIENT TOP BORDER (Sacred Antique Gold / Saffron Strip) ── */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#FF6600] to-[#D4AF37] shadow-sm" />
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-10 md:pt-14 pb-8">
+        
         {/* ============================================================
-            MAIN 4-COLUMN PRO-LEVEL GRID
+            SECTION 1: TRUST BANNER (Top 4-Column Strip)
             ============================================================ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-zinc-800">
+        <div className="mb-12 p-6 rounded-2xl bg-[#1E1917] border border-[#D4AF37]/25 shadow-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-[#1C1614] border border-[#D4AF37]/30 text-[#D4AF37] flex items-center justify-center shrink-0 font-bold">
+              <ShieldCheck className="h-5 w-5 text-[#D4AF37]" />
+            </div>
+            <div>
+              <div className="text-xs md:text-sm font-bold text-white">100% Authentic Pandits</div>
+              <div className="text-[11px] text-[#EFE4D6]">Vedic Shastrokta Vidhi & Sankalp</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-[#1C1614] border border-[#D4AF37]/30 text-[#D4AF37] flex items-center justify-center shrink-0 font-bold">
+              <Video className="h-5 w-5 text-[#D4AF37]" />
+            </div>
+            <div>
+              <div className="text-xs md:text-sm font-bold text-white">Live Video Proof</div>
+              <div className="text-[11px] text-[#EFE4D6]">Direct HD Video on WhatsApp</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-[#1C1614] border border-[#D4AF37]/30 text-[#D4AF37] flex items-center justify-center shrink-0 font-bold">
+              <PackageCheck className="h-5 w-5 text-[#D4AF37]" />
+            </div>
+            <div>
+              <div className="text-xs md:text-sm font-bold text-white">Sanctified Prasad</div>
+              <div className="text-[11px] text-[#EFE4D6]">Safe Doorstep Delivery</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-[#1C1614] border border-[#D4AF37]/30 text-[#D4AF37] flex items-center justify-center shrink-0 font-bold">
+              <Award className="h-5 w-5 text-[#D4AF37]" />
+            </div>
+            <div>
+              <div className="text-xs md:text-sm font-bold text-white">27+ Years Sacred Service</div>
+              <div className="text-[11px] text-[#EFE4D6]">Vedic Parampara Since 1997</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ============================================================
+            SECTION 2: MAIN FOOTER GRID (5 Columns)
+            ============================================================ */}
+        <div className="grid gap-8 lg:grid-cols-12 pb-12 border-b border-[#D4AF37]/20">
           
-          {/* Col 1: Brand & Credibility (4 cols) */}
-          <div className="lg:col-span-4 space-y-4">
+          {/* Col 1: Brand & Belief */}
+          <div className="lg:col-span-3 space-y-5">
             <Logo />
-            
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-sm font-normal">
-              भारत का प्रामाणिक ऑनलाइन वैदिक पूजा, महायज्ञ एवं पावन संकल्प मंच। काशी, उज्जैन व सिद्ध शक्तिपीठों से वरिष्ठ वेदाचार्यों द्वारा शास्त्रसम्मत अनुष्ठान व WhatsApp वीडियो प्रमाण।
+            <p className={`text-xs leading-relaxed max-w-xs font-medium ${textBodyClass}`}>
+              {siteData?.description || 'India’s most trusted online Vedic puja & sanctified spiritual store. Authentic shastrokta vidhi, name-gotra sankalp & live video updates.'}
             </p>
 
-            {/* Micro-Trust Highlights */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-bold text-amber-400">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25">
-                <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
-                <span>100% वैदिक विधि</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+            {/* Certification Badges */}
+            <div className="space-y-2 pt-1">
+              <div className="footer-badge-box inline-flex items-center gap-2 bg-[#1E1917] border border-[#D4AF37]/40 px-3.5 py-2 rounded-xl text-[#FAF8F5] text-xs font-semibold shadow-sm">
+                <span>🛡️</span> 100% Vedic Shastrokta Service
+              </div>
+              <div className="flex items-center gap-2 text-[11px] font-semibold text-[#EFE4D6]">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span>नाम-गोत्र संकल्प</span>
-              </span>
+                <span>Sanatan Seva ॐ — DivyaYagyam 🇮🇳</span>
+              </div>
             </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-3 pt-2">
-              {socials?.facebook && (
+            {/* Social Links */}
+            <div className="flex gap-2.5 pt-2">
+              {socials?.facebook && socials.facebook !== '#' && (
                 <a
                   href={socials.facebook}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="Facebook"
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-amber-600 hover:border-amber-600 transition-all"
+                  className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#D4AF37]/30 flex items-center justify-center text-[#EFE4D6] hover:bg-[#FF6600] hover:text-white hover:border-[#FF6600] transition-all"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Facebook className="h-3.5 w-3.5" />
                 </a>
               )}
-              {socials?.instagram && (
+              {socials?.instagram && socials.instagram !== '#' && (
                 <a
                   href={socials.instagram}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="Instagram"
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-amber-600 hover:border-amber-600 transition-all"
+                  className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#D4AF37]/30 flex items-center justify-center text-[#EFE4D6] hover:bg-[#FF6600] hover:text-white hover:border-[#FF6600] transition-all"
                 >
-                  <Instagram className="h-4 w-4" />
+                  <Instagram className="h-3.5 w-3.5" />
                 </a>
               )}
-              {socials?.youtube && (
+              {socials?.youtube && socials.youtube !== '#' && (
                 <a
                   href={socials.youtube}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   aria-label="YouTube"
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-amber-600 hover:border-amber-600 transition-all"
+                  className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#D4AF37]/30 flex items-center justify-center text-[#EFE4D6] hover:bg-[#FF6600] hover:text-white hover:border-[#FF6600] transition-all"
                 >
-                  <Youtube className="h-4 w-4" />
+                  <Youtube className="h-3.5 w-3.5" />
+                </a>
+              )}
+              {socials?.twitter && socials.twitter !== '#' && (
+                <a
+                  href={socials.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  aria-label="Twitter"
+                  className="w-8 h-8 rounded-full bg-[#1E1917] border border-[#D4AF37]/30 flex items-center justify-center text-[#EFE4D6] hover:bg-[#FF6600] hover:text-white hover:border-[#FF6600] transition-all"
+                >
+                  <Twitter className="h-3.5 w-3.5" />
                 </a>
               )}
             </div>
           </div>
 
-          {/* Col 2: मुख्य पूजा सेवाएँ (3 cols) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-black text-amber-400 uppercase tracking-widest">
-              पवित्र पूजा सेवाएँ
-            </h4>
-            <ul className="space-y-2 text-xs font-medium text-zinc-400">
+          {/* Col 2: Quick Puja Booking */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className={headingClass}>Puja Services</h4>
+            <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { label: 'महामृत्युंजय मंत्र जाप व रुद्राभिषेक', href: '/pujas/mahamrityunjaya-jaap-rudrabhishekam' },
-                { label: 'माँ बगलामुखी मिर्ची हवन', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
-                { label: 'कालसर्प दोष शांति पूजा (₹901)', href: '/pujas/kalsarp-dosh-nivaran-puja' },
-                { label: 'पितृ शांति विशेष एवं तर्पण महापूजा', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
-                { label: 'शनि साढ़ेसाती व ढैय्या शांति यज्ञ', href: '/pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya' },
-                { label: 'विशिष्ट VIP एकल महा अनुष्ठान', href: '/vip-pujas' },
+                { label: 'Rudrabhishekam Mahapuja', href: '/pujas/mahamrityunjaya-jaap-rudrabhishekam' },
+                { label: 'Baglamukhi Hawan', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
+                { label: 'Pitra Shanti Tarpan', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
+                { label: 'Kalsarp Dosh Shanti', href: '/pujas/kalsarp-dosh-shanti-puja' },
+                { label: 'Navgrah Shanti Yagya', href: '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja' },
+                { label: 'VIP Sacred Pujas', href: '/vip-pujas' },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="hover:text-amber-400 transition-colors flex items-center gap-1.5 group"
+                    className={`${textBodyClass} ${linkHoverClass} transition-all flex items-center gap-1.5 group`}
                   >
-                    <ArrowRight className="h-3 w-3 text-amber-500/60 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0" />
-                    <span>{l.label}</span>
+                    <ArrowRight className="h-3 w-3 text-[#FF6600] opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0" />
+                    {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3: वैदिक साधन व सेवाएँ (2 cols) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-black text-amber-400 uppercase tracking-widest">
-              साधन व सेवाएँ
-            </h4>
-            <ul className="space-y-2 text-xs font-medium text-zinc-400">
+          {/* Col 3: Spiritual Tools */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className={headingClass}>Vedic Tools</h4>
+            <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { label: '🤖 AI पंडित जी (फ्री)', href: '/ask-a-pandit' },
-                { label: '☀️ निःशुल्क जन्म कुंडली', href: '/tools/kundali' },
-                { label: '📅 दैनिक पंचांग', href: '/panchang' },
-                { label: '💖 कुंडली मिलान', href: '/tools/milan' },
-                { label: '⏰ शुभ मुहूर्त', href: '/muhurat' },
-                { label: '⚡ अभिमंत्रित सामग्री स्टोर', href: '/products' },
+                { label: '🤖 AI Pandit Ji', href: '/ask-a-pandit' },
+                { label: '☀️ Free Kundali', href: '/tools/kundali' },
+                { label: '📅 Daily Panchang', href: '/panchang' },
+                { label: '💖 Kundali Matching', href: '/tools/milan' },
+                { label: '⏰ Shubh Muhurat', href: '/muhurat' },
+                { label: '🕉️ Ganesh Prashnavali', href: '/tools/shree-ganesh-siddha-prashnavali' },
+                { label: '📿 Digital Jaap Mala', href: '/tools/mala' },
+                { label: '🌟 Explore All Tools', href: '/tools' },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="hover:text-amber-400 transition-colors flex items-center gap-1.5 group"
+                    className={`${textBodyClass} ${linkHoverClass} transition-all flex items-center gap-1.5 group`}
                   >
-                    <ArrowRight className="h-3 w-3 text-amber-500/60 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0" />
-                    <span>{l.label}</span>
+                    <ArrowRight className="h-3 w-3 text-[#FF6600] opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 shrink-0" />
+                    {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 4: संपर्क एवं सहायता (3 cols) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-black text-amber-400 uppercase tracking-widest">
-              सहायता एवं संपर्क
-            </h4>
-            <div className="space-y-2.5 text-xs text-zinc-400 font-medium">
+          {/* Col 4: Support & Location */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className={headingClass}>Support & Contact</h4>
+            <div className="space-y-2.5 text-xs font-medium">
               <a
-                href="tel:+919530401984"
-                className="hover:text-amber-400 transition-colors flex items-center gap-2"
+                href={`tel:${(contact?.phone || '').replace(/[^0-9+]/g, '').split(',')[0]}`}
+                className={`${textBodyClass} ${linkHoverClass} transition-colors flex items-center gap-2`}
               >
-                <div className="w-6 h-6 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center shrink-0 text-amber-400">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
                   <Phone className="h-3 w-3" />
                 </div>
-                <span className="font-bold text-white">+91 95304 01984</span>
+                <span className="font-bold">{contact?.phone || '+91 95304 01984'}</span>
               </a>
 
               <a
-                href="mailto:seva@divyayagyam.com"
-                className="hover:text-amber-400 transition-colors flex items-center gap-2"
+                href={`mailto:${contact?.email || 'seva@divyayagyam.com'}`}
+                className={`${textBodyClass} ${linkHoverClass} transition-colors flex items-center gap-2`}
               >
-                <div className="w-6 h-6 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center shrink-0 text-amber-400">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
                   <Mail className="h-3 w-3" />
                 </div>
-                <span className="truncate">seva@divyayagyam.com</span>
+                <span className="font-bold truncate">{contact?.email || 'seva@divyayagyam.com'}</span>
               </a>
 
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-zinc-900 border border-zinc-700/60 flex items-center justify-center shrink-0 text-amber-400">
+              <div className={`flex items-center gap-2 ${textBodyClass}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
                   <MapPin className="h-3 w-3" />
                 </div>
-                <span className="text-[11px]">माँ कात्यायनी शक्तिपीठ, जोधपुर (राज.)</span>
+                <span>Jodhpur, Rajasthan • India</span>
               </div>
 
-              {/* Direct WhatsApp Button */}
-              <div className="pt-1">
-                <a
-                  href="https://wa.me/919530401984?text=जय%20श्री%20राम!%20मुझे%20पूजा%20हेतु%20सहायता%20चाहिए।"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all"
-                >
-                  <MessageCircle className="h-3.5 w-3.5 fill-white" />
-                  <span>WhatsApp सहायता</span>
-                </a>
+              <div className={`flex items-center gap-2 ${textBodyClass}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${iconBgClass}`}>
+                  <Clock className="h-3 w-3" />
+                </div>
+                <span className="text-[11px]">9:00 AM - 8:00 PM IST</span>
               </div>
+
+              {/* Direct WhatsApp Chat Button */}
+              <a
+                href="https://wa.me/919530401984?text=Namaste!%20I%20need%20help%20with%20puja%20booking"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold shadow-sm transition-all"
+              >
+                <span>💬 WhatsApp Support</span>
+              </a>
             </div>
+          </div>
+
+          {/* Col 5: Newsletter & Panchang Updates */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className={headingClass}>Panchang & Updates</h4>
+            <p className={`text-xs leading-relaxed font-medium ${textBodyClass}`}>
+              Receive daily panchang, auspicious muhurat and festival updates directly on WhatsApp:
+            </p>
+
+            <form onSubmit={handleSubscribe} className="space-y-2">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Enter your WhatsApp / Email"
+                  value={subInput}
+                  onChange={(e) => setSubInput(e.target.value)}
+                  className="w-full pl-3 pr-10 py-2.5 rounded-xl text-xs bg-[#1E1917] border border-[#D4AF37]/40 text-white placeholder:text-[#EFE4D6]/60 focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 top-1 bottom-1 px-3 bg-[#FF6600] hover:bg-[#E65C00] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              {subSuccess && (
+                <p className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                  ✓ Thank you! You are now subscribed to Vedic updates.
+                </p>
+              )}
+            </form>
           </div>
 
         </div>
 
         {/* ============================================================
-            BOTTOM BAR: TRUST + LEGAL + COPYRIGHT
+            SECTION 3: SEO, LEGAL & SECURITY FOOTER
             ============================================================ */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left text-xs text-zinc-500">
-          
-          {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-zinc-400">
-            <span className="px-2.5 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">Razorpay Verified</span>
-            <span className="px-2.5 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">UPI / Cards / NetBanking</span>
-            <span className="px-2.5 py-0.5 rounded-md bg-zinc-900 border border-emerald-900/60 text-emerald-400 inline-flex items-center gap-1">
-              <Lock className="h-3 w-3" /> 256-Bit SSL
-            </span>
+        <div className="divyayagyam-footer-bottom bg-[#1E1917] rounded-2xl mt-8 p-6 space-y-6 border border-[#D4AF37]/25 shadow-lg">
+          {/* Keyword Rich Tagline */}
+          <div className="text-center text-xs font-bold text-[#D4AF37] tracking-wider uppercase">
+            India's Most Trusted Online Vedic Puja & Abhimantrit Samagri Platform
           </div>
 
-          {/* Legal Links */}
-          <div className="flex flex-wrap items-center justify-center gap-3 text-[11px]">
-            <Link href="/about" className="hover:text-amber-400 transition-colors">हमारे बारे में</Link>
-            <span>•</span>
-            <Link href="/terms" className="hover:text-amber-400 transition-colors">नियम व शर्तें</Link>
-            <span>•</span>
-            <Link href="/privacy" className="hover:text-amber-400 transition-colors">प्राइवेसी पॉलिसी</Link>
-            <span>•</span>
-            <Link href="/refunds" className="hover:text-amber-400 transition-colors">रिफंड पॉलिसी</Link>
-            <span>•</span>
-            <Link href="/contact" className="hover:text-amber-400 transition-colors">संपर्क</Link>
+          {/* Payment & Security Strip */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-2 border-t border-[#D4AF37]/20 text-center md:text-left">
+            {/* Payment Logos */}
+            <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap text-xs">
+              <span className="font-bold text-[#EFE4D6] text-[11px] uppercase tracking-wider">Payments:</span>
+              <div className="px-2.5 py-1 rounded bg-[#1C1614] border border-[#D4AF37]/30 text-[11px] font-bold text-[#EFE4D6]">
+                Razorpay
+              </div>
+              <div className="px-2.5 py-1 rounded bg-[#1C1614] border border-[#D4AF37]/30 text-[11px] font-bold text-white">
+                UPI / GPay
+              </div>
+              <div className="px-2.5 py-1 rounded bg-[#1C1614] border border-[#D4AF37]/30 text-[11px] font-bold text-white">
+                PhonePe
+              </div>
+              <div className="px-2.5 py-1 rounded bg-[#1C1614] border border-[#D4AF37]/30 text-[11px] font-bold text-white">
+                Cards & NetBanking
+              </div>
+              <div className="px-2.5 py-1 rounded bg-[#1C1614] border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center gap-1">
+                <Lock className="h-3 w-3 text-emerald-400" />
+                <span>256-Bit SSL Encrypted</span>
+              </div>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="flex items-center justify-center gap-2">
+              <Languages className="h-3.5 w-3.5 text-[#FF6600]" />
+              <div className="inline-flex rounded-lg p-0.5 bg-[#1C1614] border border-[#D4AF37]/30 text-[11px] font-bold">
+                <button
+                  onClick={() => toggleLanguage('hi')}
+                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'hi' ? 'bg-[#FF6600] text-white font-bold shadow-sm' : 'text-[#EFE4D6] hover:text-white'}`}
+                >
+                  हिन्दी
+                </button>
+                <button
+                  onClick={() => toggleLanguage('en')}
+                  className={`px-2.5 py-0.5 rounded-md transition-all ${currentLang === 'en' ? 'bg-[#FF6600] text-white font-bold shadow-sm' : 'text-[#EFE4D6] hover:text-white'}`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Copyright */}
-          <div className="text-[11px] text-zinc-500">
-            © {new Date().getFullYear()} DivyaYagyam. All rights reserved. • सनातन सेवा ॐ 🙏
+          {/* Navigation Directory & Internal Links */}
+          <div className="pt-4 border-t border-[#D4AF37]/20 text-xs font-medium text-[#EFE4D6] space-y-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-center md:justify-start">
+              <Link href="/about" className="hover:text-[#FF6600] hover:underline">About Us</Link>
+              <span>•</span>
+              <Link href="/contact" className="hover:text-[#FF6600] hover:underline">Contact Us</Link>
+              <span>•</span>
+              <Link href="/faq" className="hover:text-[#FF6600] hover:underline">FAQs</Link>
+              <span>•</span>
+              <Link href="/support" className="hover:text-[#FF6600] hover:underline">Support Center</Link>
+              <span>•</span>
+              <Link href="/careers" className="hover:text-[#FF6600] hover:underline">Careers</Link>
+              <span>•</span>
+              <Link href="/blog" className="hover:text-[#FF6600] hover:underline">Vedic Blog</Link>
+              <span>•</span>
+              <Link href="/festivals" className="hover:text-[#FF6600] hover:underline">Festivals Calendar</Link>
+              <span>•</span>
+              <Link href="/events" className="hover:text-[#FF6600] hover:underline">Events</Link>
+              <span>•</span>
+              <Link href="/bhaktiseva" className="hover:text-[#FF6600] hover:underline">Bhakti Seva</Link>
+              <span>•</span>
+              <Link href="/sitemap" className="hover:text-[#FF6600] hover:underline">HTML Sitemap</Link>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start text-[11px] text-[#A89F91]">
+              <Link href="/terms" className="hover:text-[#FF6600] hover:underline">Terms of Service</Link>
+              <span>•</span>
+              <Link href="/privacy" className="hover:text-[#FF6600] hover:underline">Privacy Policy</Link>
+              <span>•</span>
+              <Link href="/refunds" className="hover:text-[#FF6600] hover:underline">Refund Policy</Link>
+              <span>•</span>
+              <Link href="/shipping" className="hover:text-[#FF6600] hover:underline">Shipping Policy</Link>
+              <span>•</span>
+              <Link href="/register" className="text-white font-extrabold hover:text-[#FF6600] hover:underline">Create Account</Link>
+            </div>
+            <div className="text-center md:text-right text-[#EFE4D6] pt-2 border-t border-[#D4AF37]/20">
+              © {new Date().getFullYear()} Divya Yagyam. All rights reserved. • Sanatan Seva ॐ 🙏
+            </div>
           </div>
+
         </div>
-
       </div>
     </footer>
   )

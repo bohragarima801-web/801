@@ -77,19 +77,30 @@ export default function CheckoutPage() {
     let isMounted = true
     const loadCheckoutData = async () => {
       try {
-        const res = await fetch('/api/profile').catch(() => null)
-        if (res && res.ok) {
-          const data = await res.json()
-          if (data.ok && data.user) {
+        const [profileRes, bhaktiRes] = await Promise.all([
+          fetch('/api/profile').catch(() => null),
+          fetch('/api/bhaktiseva').catch(() => null)
+        ])
+
+        if (profileRes && profileRes.ok) {
+          const data = await profileRes.json()
+          if (data.ok && data.user && isMounted) {
             setUser(data.user)
             setAddress(prev => ({
               ...prev,
-              name: data.user.fullName || '',
-              phone: data.user.phone || ''
+              name: data.user.fullName || prev.name,
+              phone: data.user.phone || prev.phone
             }))
             if (data.user.customerProfile?.gotra) {
-               setSankalp(prev => ({ ...prev, gotra: data.user.customerProfile.gotra }))
+              setSankalp(prev => ({ ...prev, gotra: data.user.customerProfile.gotra }))
             }
+          }
+        }
+
+        if (bhaktiRes && bhaktiRes.ok) {
+          const bhaktiData = await bhaktiRes.json()
+          if (bhaktiData.offerings && isMounted) {
+            setBhaktiSevaOfferings(bhaktiData.offerings)
           }
         }
       } catch (err) {

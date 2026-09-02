@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone, Sparkles, Bot, Calendar, Heart, Clock, Zap, Gem, ArrowRight } from 'lucide-react'
+import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone, Sparkles, Bot, Calendar, Heart, Clock, Zap, Gem, ArrowRight, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -23,19 +23,19 @@ const languages = [
 
 const navItems = [
   { title: 'Home', href: '/' },
-  { title: 'Puja Services', href: '/pujas' },
-  { title: 'VIP Pujas', href: '/vip-pujas' },
-  { title: 'Horoscope', href: '/horoscope' },
+  { title: 'Book Puja', href: '/pujas' },
+  { title: 'Chadhawa', href: '/book-chadhawa' },
+  { title: 'VIP Puja', href: '/vip-pujas' },
   { title: 'Store', href: '/products' },
-  { title: 'Bhakti Seva', href: '/bhaktiseva' },
-  { title: 'Blog', href: '/blog' },
+  { title: 'About Us', href: '/about' },
+  { title: 'Blogs', href: '/blog' },
 ]
 
 const toolsMenu = [
   {
     title: 'AI Pandit Ji',
     href: '/ask-a-pandit',
-    desc: 'Instant puja rituals & astrological guidance',
+    desc: 'Instant Vedic Astrology & Puja Guidance',
     icon: Bot,
     badge: 'LIVE FREE',
     badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -43,7 +43,7 @@ const toolsMenu = [
   {
     title: 'Free Kundali',
     href: '/tools/kundali',
-    desc: 'Vedic birth chart, planetary positions & analysis',
+    desc: 'Vedic Birth Chart & Planetary Analysis',
     icon: Sun,
     badge: '100% FREE',
     badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
@@ -51,15 +51,15 @@ const toolsMenu = [
   {
     title: 'Daily Panchang',
     href: '/panchang',
-    desc: 'Tithi, Nakshatra, Yog & Choghadiya Muhurat',
+    desc: 'Tithi, Nakshatra, Yoga & Choghadiya',
     icon: Calendar,
     badge: 'DAILY',
     badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
   },
   {
-    title: 'Kundali Matching',
+    title: 'Kundali Milan',
     href: '/tools/milan',
-    desc: '36 Guna Milan analysis for marriage',
+    desc: '36 Guna Horoscope Matching for Marriage',
     icon: Heart,
     badge: '36 GUNA',
     badgeColor: 'bg-rose-50 text-rose-700 border-rose-200'
@@ -67,23 +67,23 @@ const toolsMenu = [
   {
     title: 'Shubh Muhurat',
     href: '/muhurat',
-    desc: 'Auspicious times for marriage, vehicle & Griha Pravesh',
+    desc: 'Auspicious Timings for Events & Griha Pravesh',
     icon: Clock,
     badge: 'MUHURAT',
     badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
   },
   {
-    title: 'Shree Ganesh Prashnavali',
+    title: 'Ganesh Prashnavali',
     href: '/tools/shree-ganesh-siddha-prashnavali',
-    desc: 'Divine answers and solutions to your questions',
+    desc: 'Divine Answers to Your Questions',
     icon: Flame,
     badge: 'ORACLE',
     badgeColor: 'bg-orange-50 text-orange-700 border-orange-200'
   },
   {
-    title: 'Digital Japa Mala',
+    title: 'Digital Jaap Mala',
     href: '/tools/mala',
-    desc: 'Digital counter for 108 mantra chanting',
+    desc: '108 Sacred Mantra Digital Counter',
     icon: Zap,
     badge: '108 JAPA',
     badgeColor: 'bg-blue-50 text-blue-700 border-blue-200'
@@ -91,7 +91,7 @@ const toolsMenu = [
   {
     title: 'Numerology & Gems',
     href: '/tools/numerology',
-    desc: 'Mulank, destiny numbers & gemstone consultation',
+    desc: 'Life Path Number & Gemstone Suggestions',
     icon: Gem,
     badge: 'NUMBERS',
     badgeColor: 'bg-purple-50 text-purple-700 border-purple-200'
@@ -111,9 +111,24 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
   const { theme, setTheme } = useTheme()
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
+  const [showAnnouncement, setShowAnnouncement] = useState(true)
+  const lastScrollY = useRef(0)
+
   // Scroll detection & Accessibility keyboard/scroll lock handlers
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10)
+    const onScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 10)
+
+      if (currentScrollY > 50 && currentScrollY > lastScrollY.current) {
+        // Scrolling down -> smoothly collapse announcement bar
+        setShowAnnouncement(false)
+      } else {
+        // Scrolling up or top -> reveal announcement bar
+        setShowAnnouncement(true)
+      }
+      lastScrollY.current = currentScrollY
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -172,49 +187,76 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
     window.location.reload()
   }
 
+  // Pre-filled WhatsApp consultation URL
+  const waHeaderUrl = `https://wa.me/919530401984?text=${encodeURIComponent('प्रणाम पंडित जी, मुझे दिव्ययज्ञम् सेवा के बारे में जानकारी चाहिए।')}`
+
   return (
     <header
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300 notranslate',
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-zinc-200' : 'bg-white border-b border-zinc-200'
+        scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-[#EFE4D6]' : 'bg-white border-b border-[#EFE4D6]'
       )}
       translate="no"
     >
-      {/* Top Announcement Bar — Locked Brand Strip */}
-      <div className="w-full bg-[#0F1117] text-white py-1.5 px-3 sm:px-4 text-center text-[11px] sm:text-xs font-semibold flex items-center justify-between shadow-xs notranslate" translate="no">
-        <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs">
-          <span className="text-amber-500">ॐ</span>
-          <span>Dedicated to Sanatan Dharma</span>
+      {/* 1. Compact Announcement Bar — Collapses on scroll down, reveals on scroll up */}
+      <div
+        className={cn(
+          'w-full bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-white text-[11px] font-semibold flex items-center justify-between shadow-xs transition-all duration-300 overflow-hidden notranslate',
+          showAnnouncement ? 'max-h-[24px] py-0.5 px-3 sm:px-4 opacity-100' : 'max-h-0 py-0 opacity-0 border-none'
+        )}
+        translate="no"
+      >
+        <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs notranslate" translate="no">
+          <span className="text-[#F5C542]">ॐ</span>
+          <span>Dedicated to Sacred Vedic Pujas & Services</span>
         </div>
-        <div className="flex-1 text-center font-medium truncate px-1">
-          <span>Authentic Vedic Pujas with Vedic Rituals & Pure Devotion</span>
+        <div className="flex-1 text-center font-medium truncate px-1 text-[#FFE8CC] notranslate" translate="no">
+          <span>Pure Mantras, Name & Gotra Sankalp & Live WhatsApp Video Proof</span>
         </div>
-        <div className="hidden md:flex items-center gap-4 text-xs font-medium">
-          <a href="tel:+919530401984" className="text-white/90 hover:text-amber-500 transition-colors flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-4 text-xs font-medium notranslate" translate="no">
+          <a href="tel:+919530401984" className="text-white hover:text-[#F5C542] transition-colors flex items-center gap-1">
             <span>📞</span> {siteData?.contact?.phone || '+91 95304 01984'}
           </a>
         </div>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6 notranslate" translate="no">
-        <div className="shrink-0 max-w-[200px] sm:max-w-none notranslate" translate="no">
+      {/* 2. Main Header Bar — Strictly 56px on Mobile (h-[56px]), 64px on Desktop */}
+      <div className="w-full max-w-7xl mx-auto flex h-[56px] md:h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6 notranslate" translate="no">
+        
+        {/* Left Item on Mobile: Clean Hamburger Icon Button (Touch-optimized 44px min target) */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setOpen(true)}
+            aria-expanded={open}
+            aria-label="Open Navigation Menu"
+            className="shrink-0 rounded-xl bg-[#FFF3E8] text-[#7A1521] hover:text-[#FF6600] hover:bg-[#FFE6D0] h-9 w-9 border border-[#FFD2B0] shadow-2xs active:scale-95 transition-transform"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Center Logo on Mobile, Left on Desktop */}
+        <div className="shrink-0 flex items-center justify-center max-w-[180px] sm:max-w-none notranslate" translate="no">
           <Logo />
         </div>
 
-        {/* Desktop navigation (hidden on mobile) */}
+        {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1 notranslate" translate="no">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               prefetch={true}
-              className="px-3.5 py-2 rounded-xl text-sm font-bold text-zinc-800 hover:text-amber-600 hover:bg-amber-50 transition-all"
+              translate="no"
+              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-all notranslate"
             >
               {item.title}
             </Link>
           ))}
 
-          {/* Tools mega dropdown */}
+          {/* Tools Mega Dropdown on Desktop */}
           <div
             ref={toolsRef}
             className="relative notranslate"
@@ -226,19 +268,19 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               onClick={() => setToolsOpen(!toolsOpen)}
               translate="no"
               className={cn(
-                'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all',
-                toolsOpen ? 'text-amber-600 bg-amber-50' : 'text-zinc-800 hover:text-amber-600 hover:bg-amber-50'
+                'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all notranslate',
+                toolsOpen ? 'text-[#FF6600] bg-[#FFF3E8]' : 'text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8]'
               )}
             >
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-              <span>Tools</span>
-              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-amber-600')} />
+              <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
+              <span className="notranslate" translate="no">Tools</span>
+              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#FF6600]')} />
             </button>
 
             {/* Desktop dropdown — High Aesthetic 2-Column Mega Menu */}
             <div
               className={cn(
-                'absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-[560px] lg:w-[600px] rounded-2xl bg-white border border-zinc-200 shadow-[0_20px_50px_rgba(41,35,33,0.15)] p-3 transition-all duration-200 z-50',
+                'absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-[560px] lg:w-[600px] rounded-2xl bg-white border border-[#EFE4D6] shadow-[0_20px_50px_rgba(28,22,20,0.12)] p-3 transition-all duration-200 z-50',
                 toolsOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
               )}
             >
@@ -250,21 +292,21 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                       key={t.href}
                       href={t.href}
                       onClick={() => setToolsOpen(false)}
-                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white border border-transparent hover:border-zinc-200 transition-all group"
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#FFF3E8] border border-transparent hover:border-[#FFD2B0] transition-all group"
                     >
-                      <div className="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-zinc-200 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-2xs">
+                      <div className="h-10 w-10 rounded-xl bg-[#FFF3E8] text-[#FF6600] flex items-center justify-center shrink-0 border border-[#FFD2B0] group-hover:bg-[#FF6600] group-hover:text-white transition-all shadow-2xs">
                         <IconComp className="h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-xs font-bold text-zinc-800 group-hover:text-amber-600 transition-colors truncate">
+                          <span className="text-xs font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors truncate">
                             {t.title}
                           </span>
                           <span className={cn('text-[9px] font-black px-1.5 py-0.5 rounded border shrink-0', t.badgeColor)}>
                             {t.badge}
                           </span>
                         </div>
-                        <p className="text-[11px] text-zinc-500 truncate font-normal mt-0.5">
+                        <p className="text-[11px] text-[#6B5E57] truncate font-normal mt-0.5">
                           {t.desc}
                         </p>
                       </div>
@@ -274,16 +316,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               </div>
 
               {/* Bottom Explore All Bar */}
-              <div className="mt-2.5 pt-2.5 border-t border-zinc-200 flex items-center justify-between px-2">
-                <span className="text-[11px] font-semibold text-zinc-500 flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-amber-600" /> 100% Authentic Vedic Astrology Tools
+              <div className="mt-2.5 pt-2.5 border-t border-[#EFE4D6] flex items-center justify-between px-2">
+                <span className="text-[11px] font-semibold text-[#6B5E57] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" /> 100% Authentic Vedic Calculation Tools
                 </span>
                 <Link
                   href="/tools"
                   onClick={() => setToolsOpen(false)}
-                  className="text-xs font-extrabold text-amber-600 hover:text-[#c4710b] flex items-center gap-1 hover:gap-1.5 transition-all bg-amber-50 hover:bg-amber-50 px-3 py-1 rounded-lg"
+                  className="text-xs font-extrabold text-[#FF6600] hover:text-[#E65C00] flex items-center gap-1 hover:gap-1.5 transition-all bg-[#FFF3E8] hover:bg-[#FFE6D0] px-3 py-1 rounded-lg border border-[#FFD2B0]"
                 >
-                  <span>View All Tools ({toolsMenu.length}+)</span>
+                  <span>Explore All Tools ({toolsMenu.length}+)</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -291,53 +333,60 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           </div>
         </nav>
 
-        {/* Right controls */}
+        {/* Right controls: Zero Button Stacking on Mobile */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Cart Icon (Desktop & Tablet) */}
+          
+          {/* Mobile WhatsApp Quick Icon (Visible on screens < 768px) */}
+          <a
+            href={waHeaderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Direct WhatsApp Consultation"
+            className="md:hidden flex items-center justify-center h-9 w-9 rounded-xl bg-emerald-50 text-[#25D366] hover:bg-[#25D366] hover:text-white border border-emerald-200 shadow-2xs transition-all active:scale-95 shrink-0"
+          >
+            <MessageCircle className="h-4 w-4 fill-current" />
+          </a>
+
+          {/* Cart Icon Button (Mobile & Desktop) */}
           <Button
             variant="ghost"
             size="icon"
             aria-label="Cart"
             asChild
-            className="hidden sm:inline-flex relative rounded-full text-zinc-800 hover:text-amber-600 hover:bg-amber-50 transition-all h-9 w-9"
+            className="relative rounded-xl text-[#1C1614] bg-[#FFF3E8] md:bg-transparent hover:text-[#FF6600] hover:bg-[#FFE6D0] border border-[#FFD2B0] md:border-transparent transition-all h-9 w-9 active:scale-95 shrink-0"
           >
             <Link href="/cart">
-              <ShoppingBag className="h-5 w-5" />
+              <ShoppingBag className="h-4 w-4 text-[#7A1521] md:h-5 md:w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-600 text-[9px] font-bold text-white shadow-md ring-2 ring-white">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF6600] text-[9px] font-black text-white shadow-xs ring-1 ring-white">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
             </Link>
           </Button>
 
-          {/* Theme Toggle (Desktop only, available in mobile drawer) */}
-          <div className="hidden sm:inline-flex">
-            <ThemeToggle />
-          </div>
-
-          {/* Language Switcher (Desktop only, available in mobile drawer) */}
+          {/* Desktop Language Switcher */}
           <div className="hidden sm:inline-flex relative">
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1 px-2.5 h-8 text-zinc-800 hover:text-amber-600 hover:bg-amber-50 rounded-full text-xs font-bold uppercase tracking-wide border border-zinc-200"
+              className="gap-1 px-2.5 h-8 text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] rounded-full text-xs font-bold uppercase tracking-wide border border-[#EFE4D6]"
               onClick={() => setLangOpen(!langOpen)}
               title="Change Language"
             >
-              <Languages className="h-3.5 w-3.5 text-amber-600" />
+              <Languages className="h-3.5 w-3.5 text-[#FF6600]" />
               <span>{currentLang === 'hi' ? 'HI' : 'EN'}</span>
               <ChevronDown className="h-3 w-3 opacity-60" />
             </Button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-zinc-200 rounded-xl shadow-xl p-1 z-50">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-[#EFE4D6] rounded-xl shadow-xl p-1 z-50">
                 {languages.map((l) => (
                   <button
                     key={l.code}
                     onClick={() => changeLang(l.code)}
                     className={cn(
-                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-amber-50 transition-colors font-medium',
-                      currentLang === l.code ? 'text-amber-600 font-bold bg-amber-50' : 'text-zinc-800'
+                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-[#FFF3E8] transition-colors font-medium',
+                      currentLang === l.code ? 'text-[#FF6600] font-bold bg-[#FFF3E8]' : 'text-[#1C1614]'
                     )}
                   >
                     {l.label}
@@ -347,16 +396,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — Radiant Saffron Button (Desktop) */}
+          {/* "Book Puja" Button — Hidden on Mobile to prevent button stacking */}
           <Link
             href="/pujas"
-            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#B85C24] to-[#D97706] hover:from-[#a04e1c] hover:to-[#b45309] text-white text-xs font-bold tracking-wide shadow-md hover:shadow-lg transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
+            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF7700] text-white text-xs font-extrabold tracking-wide shadow-[0_4px_14px_rgba(255,102,0,0.32)] hover:shadow-[0_6px_20px_rgba(255,102,0,0.45)] transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
           >
-            <span>🔱 पूजा बुक करें</span>
+            <span>Book Puja</span>
             <span className="text-sm">➔</span>
           </Link>
 
-          {/* User Profile / Account Icon (Desktop) */}
+          {/* Desktop User Profile / Account Button */}
           <div className="hidden sm:flex items-center">
             {userLoaded ? (
               user ? (
@@ -365,10 +414,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     asChild
                     size="sm"
                     variant="ghost"
-                    className="rounded-xl text-zinc-800 hover:text-amber-600 hover:bg-amber-50 font-bold text-xs gap-1.5 px-3 h-9 border border-zinc-200 bg-white shadow-xs"
+                    className="rounded-xl text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] font-bold text-xs gap-1.5 px-3 h-9 border border-[#EFE4D6] bg-white shadow-2xs"
                   >
                     <Link href="/dashboard" title="My Account">
-                      <User className="h-4 w-4 text-amber-600" />
+                      <User className="h-4 w-4 text-[#FF6600]" />
                       <span className="hidden md:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                     </Link>
                   </Button>
@@ -378,69 +427,106 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-xl border border-zinc-200 text-zinc-800 hover:text-amber-600 hover:bg-amber-50 font-bold text-xs px-3 h-9 bg-white shadow-xs"
+                  className="rounded-xl border border-[#EFE4D6] text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] font-bold text-xs px-3 h-9 bg-white shadow-2xs"
                 >
                   <Link href="/login" title="Login / Register">
-                    <User className="h-4 w-4 mr-1 text-amber-600" />
+                    <User className="h-4 w-4 mr-1 text-[#FF6600]" />
                     <span>Login</span>
                   </Link>
                 </Button>
               )
             ) : null}
           </div>
-
-          {/* Mobile Hamburger Menu Button — ALWAYS PROMINENT ON MOBILE */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-label={open ? "Close Navigation Menu" : "Open Navigation Menu"}
-            className="lg:hidden shrink-0 rounded-xl bg-white text-zinc-800 hover:text-amber-600 hover:bg-amber-50 h-10 w-10 border border-zinc-200 shadow-xs active:scale-95"
-          >
-            {open ? <X className="h-6 w-6 text-amber-600" /> : <Menu className="h-6 w-6 text-zinc-800" />}
-          </Button>
         </div>
       </div>
 
-      {/* Mobile menu drawer — Full Screen & Scrollable */}
+      {/* 3. Slide-Over Mobile Drawer (85% Viewport Width Max, Sleek & Compact) */}
+      {/* Backdrop */}
       <div
         className={cn(
-          'lg:hidden fixed inset-x-0 top-[calc(40px+4rem)] bottom-0 bg-white z-40 overflow-y-auto transition-all duration-300 flex flex-col justify-between border-t border-zinc-200',
+          'lg:hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-[9998] transition-opacity duration-300',
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
-      >
-        <nav className="container px-4 py-4 flex flex-col gap-1.5 max-w-md mx-auto">
-          {/* Main Navigation Links */}
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              prefetch={true}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between px-4 py-3 rounded-xl text-base font-bold text-zinc-800 hover:text-amber-600 bg-white border border-zinc-200 shadow-2xs transition-colors"
-            >
-              <span>{item.title}</span>
-              <span className="text-xs text-amber-500">➔</span>
-            </Link>
-          ))}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
 
-          {/* Vedic Tools Submenu */}
-          <div className="pt-2">
-            <div className="flex items-center justify-between px-2 mb-2">
-              <span className="text-[11px] font-black uppercase tracking-wider text-amber-500 block">
-                Vedic Tools
+      {/* Slide Drawer Panel */}
+      <aside
+        aria-label="Mobile Navigation Drawer"
+        className={cn(
+          'lg:hidden fixed top-0 left-0 bottom-0 w-[85vw] max-w-[340px] bg-white z-[9999] shadow-2xl flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-in-out border-r border-[#EFE4D6]',
+          open ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
+        {/* Drawer Top Bar: Pinned User Profile + Close Button */}
+        <div className="p-4 bg-gradient-to-b from-[#FFF3E8] to-white border-b border-[#EFE4D6] flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-full bg-[#7A1521] text-white flex items-center justify-center font-black text-sm shadow-xs">
+              {user ? (user.fullName?.[0]?.toUpperCase() || 'U') : 'ॐ'}
+            </div>
+            <div className="leading-tight">
+              <p className="text-xs font-black text-[#1C1614]">
+                {user ? user.fullName || 'Devotee' : 'दिव्ययज्ञम् सनातन सेवा'}
+              </p>
+              <p className="text-[10px] text-[#6B5E57] font-semibold">
+                {user ? user.email : 'स्वागतम् • प्रामाणिक पूजा सेवा'}
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setOpen(false)}
+            aria-label="Close Drawer"
+            className="h-8 w-8 rounded-full hover:bg-black/5 text-[#6B5E57] hover:text-[#1C1614]"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Scrollable Drawer Body */}
+        <div className="p-3.5 space-y-4 flex-1 overflow-y-auto">
+          
+          {/* Main Navigation Links */}
+          <div className="space-y-1">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1521] px-2 block">
+              मुख्य पृष्ठ व सेवाएं
+            </span>
+            <div className="grid grid-cols-1 gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={true}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-colors border border-transparent hover:border-[#FFD2B0]"
+                >
+                  <span>{item.title}</span>
+                  <span className="text-xs text-[#D4AF37]">➔</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* 4. Vedic Tools: 4-Column Compact Icon Tile Grid (Specification #4) */}
+          <div className="space-y-2 pt-1 border-t border-[#EFE4D6]">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1521] flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-[#FF6600]" /> वैदिक टूल्स ग्रिड
               </span>
               <Link
                 href="/tools"
                 onClick={() => setOpen(false)}
-                className="text-[11px] font-bold text-amber-600 hover:underline flex items-center gap-1"
+                className="text-[10px] font-extrabold text-[#FF6600] hover:underline"
               >
-                <span>View All</span>
-                <ArrowRight className="h-3 w-3" />
+                सभी 8+ टूल्स ➔
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+
+            {/* 4-Column Tile Grid: 44x44px icon container + 11px label */}
+            <div className="grid grid-cols-4 gap-1.5">
               {toolsMenu.map((t) => {
                 const IconComp = t.icon
                 return (
@@ -448,35 +534,35 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     key={t.href}
                     href={t.href}
                     onClick={() => setOpen(false)}
-                    className="p-2.5 bg-white rounded-xl border border-zinc-200 text-xs font-bold text-zinc-800 hover:text-amber-600 flex items-center gap-2.5 shadow-2xs group"
+                    className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-[#FFF9F3] hover:bg-[#FFF3E8] border border-[#FFD2B0]/60 active:scale-95 transition-all text-center group"
                   >
-                    <div className="h-7 w-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-zinc-200/50">
-                      <IconComp className="h-3.5 w-3.5" />
+                    <div className="h-10 w-10 rounded-xl bg-white text-[#FF6600] group-hover:bg-[#FF6600] group-hover:text-white flex items-center justify-center shadow-2xs border border-[#FFD2B0] transition-colors mb-1">
+                      <IconComp className="h-5 w-5" />
                     </div>
-                    <span className="truncate">{t.title}</span>
+                    <span className="text-[10px] font-bold text-[#1C1614] leading-tight line-clamp-1 w-full">
+                      {t.title}
+                    </span>
                   </Link>
                 )
               })}
             </div>
           </div>
 
-          <div className="h-px bg-[#EFE4D6] my-2" />
-
-          {/* Language Selection Row */}
-          <div className="bg-white p-3 rounded-xl border border-zinc-200 space-y-2">
-            <span className="text-[11px] font-bold text-zinc-500 flex items-center gap-1">
-              <Languages className="h-3.5 w-3.5 text-amber-600" /> Select Language
+          {/* Language Selector in Drawer */}
+          <div className="p-2.5 rounded-xl bg-[#FFF9F3] border border-[#EFE4D6] space-y-1.5">
+            <span className="text-[10px] font-bold text-[#6B5E57] flex items-center gap-1">
+              <Languages className="h-3.5 w-3.5 text-[#FF6600]" /> भाषा चुनें / Select Language
             </span>
-            <div className="flex flex-wrap gap-1.5">
-              {languages.map((l) => (
+            <div className="flex gap-1.5">
+              {languages.slice(0, 4).map((l) => (
                 <button
                   key={l.code}
                   onClick={() => changeLang(l.code)}
                   className={cn(
-                    'px-2.5 py-1 rounded-lg text-xs font-bold transition-all',
+                    'flex-1 py-1 rounded-lg text-[11px] font-black transition-all text-center',
                     currentLang === l.code
-                      ? 'bg-amber-600 text-white shadow-xs'
-                      : 'bg-amber-50 text-zinc-800 hover:bg-[#E6D6BE]'
+                      ? 'bg-[#FF6600] text-white shadow-xs'
+                      : 'bg-white text-[#1C1614] border border-[#EFE4D6]'
                   )}
                 >
                   {l.label}
@@ -485,59 +571,61 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             </div>
           </div>
 
-          {/* User Account / Login Section */}
-          <div className="pt-1 pb-4">
+          {/* Auth Action in Drawer */}
+          <div className="pt-1">
             {user ? (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="w-full py-3 px-4 rounded-xl text-sm font-bold text-zinc-800 bg-amber-50 border border-zinc-200 flex items-center justify-between"
+                  className="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#7A1521] to-[#901323] flex items-center justify-between shadow-xs"
                 >
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-amber-600" />
-                    <span>My Dashboard ({user.fullName?.split(' ')[0]})</span>
-                  </div>
+                  <span className="flex items-center gap-2">
+                    <User className="h-4 w-4" /> मेरी पूजा व संकल्प डैशबोर्ड
+                  </span>
                   <span>➔</span>
                 </Link>
                 <form action="/auth/signout" method="post" className="w-full">
                   <button
                     type="submit"
                     onClick={() => setOpen(false)}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors text-center"
+                    className="w-full py-2 px-3 rounded-xl text-[11px] font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors text-center"
                   >
-                    Logout
+                    खाते से लॉगआउट
                   </button>
                 </form>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <Link
                   href="/login"
                   onClick={() => setOpen(false)}
-                  className="py-3 px-4 rounded-xl text-sm font-bold text-zinc-800 bg-white border border-zinc-200 text-center shadow-xs"
+                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-[#1C1614] bg-[#FFF3E8] border border-[#FFD2B0] text-center shadow-2xs"
                 >
-                  Login
+                  लॉगिन करें
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setOpen(false)}
-                  className="py-3 px-4 rounded-xl text-sm font-bold text-white bg-amber-600 text-center shadow-sm"
+                  className="py-2.5 px-3 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#FF6600] to-[#FF8500] text-center shadow-sm"
                 >
-                  Sign Up
+                  साइन अप
                 </Link>
               </div>
             )}
           </div>
-        </nav>
+        </div>
 
-        {/* Mobile Drawer Bottom Helpline */}
-        <div className="p-4 bg-amber-50 border-t border-zinc-200 text-center text-xs text-zinc-500 safe-area-padding">
-          <a href="tel:+919530401984" className="font-bold text-zinc-800 hover:text-amber-600 inline-flex items-center gap-1.5">
-            <Phone className="h-3.5 w-3.5 text-amber-600" /> Helpline: +91 95304 01984
+        {/* Pinned Bottom Helpline in Drawer */}
+        <div className="p-3 bg-[#FFF3E8] border-t border-[#EFE4D6] text-center text-xs text-[#6B5E57] shrink-0">
+          <a
+            href="tel:+919530401984"
+            className="font-black text-[#7A1521] hover:text-[#FF6600] inline-flex items-center gap-1.5 text-xs"
+          >
+            <Phone className="h-3.5 w-3.5 text-[#FF6600]" /> सहायता हेल्पलाइन: +91 95304 01984
           </a>
         </div>
-      </div>
+      </aside>
     </header>
   )
 }

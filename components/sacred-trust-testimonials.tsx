@@ -18,14 +18,14 @@ const defaultTestimonials: Testimonial[] = [
     name: "Rajesh Sharma",
     location: "Mumbai, Maharashtra",
     rating: 5,
-    message: "Received the sankalp video of Kashi Vishwanath Rudrabhishek on WhatsApp. Name and gotra were clearly recited. Prasad also arrived home in 4 days. Extremely satisfying experience!",
+    message: "काशी विश्वनाथ रुद्राभिषेक का संकल्प वीडियो व्हाट्सएप पर मिला। नाम और गोत्र स्पष्ट रूप से उच्चारित किया गया। 4 दिन में प्रसाद भी घर आ गया। अत्यंत संतोषजनक अनुभव!",
     pujaName: "Kashi Vishwanath Rudrabhishekam"
   },
   {
     name: "Sunita Verma",
     location: "Delhi NCR",
     rating: 5,
-    message: "Had Kalsarp Dosh Puja performed at Mahakaleshwar Ujjain. The online process was so transparent that I felt complete satisfaction right from home. Thank you DivyaYagyam!",
+    message: "महाकालेश्वर उज्जैन में कालसर्प दोष पूजा करवाई। ऑनलाइन व्यवस्था इतनी पारदर्शी थी कि घर बैठे ही पूरी संतुष्टि मिली। धन्यवाद दिव्ययज्ञम् संस्थान!",
     pujaName: "Mahakaleshwar Ujjain Puja"
   },
   {
@@ -41,53 +41,53 @@ export function SacredTrustTestimonials({ testimonials = defaultTestimonials }: 
   const displayReviews = testimonials.length > 0 ? testimonials.slice(0, 3) : defaultTestimonials
 
   return (
-    <section className="w-full py-14 md:py-20 bg-white text-zinc-900">
+    <section className="w-full py-14 md:py-20 bg-[#FAF8F5] text-[#1C1614]">
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-zinc-200 text-xs font-bold text-amber-600">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-xs font-bold text-[#FF6600]">
             <span>✨</span>
             <span>Devotee Experiences</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900">
-            Devotees' Trust & Sacred Experiences
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1C1614]">
+            Trust & Blessings from Devotees
           </h2>
-          <p className="text-sm text-zinc-500">
-            Unwavering trust of 50,000+ devotees across India and abroad in DivyaYagyam
+          <p className="text-sm text-[#6B5E57]">
+            Devotees across India and abroad share their sacred experience with DivyaYagyam.
           </p>
         </div>
 
         {/* 3-Card Testimonials Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {displayReviews.map((t, i) => (
-            <Card key={i} className="border border-zinc-200 rounded-2xl bg-white text-zinc-900 shadow-[0_4px_20px_-2px_rgba(80,50,20,0.04)] hover:border-[#E58A16] hover:shadow-xl transition-all duration-300 flex flex-col justify-between reveal">
+            <Card key={i} className="border border-[#EFE4D6] rounded-2xl bg-white text-[#1C1614] shadow-[0_4px_20px_-2px_rgba(80,50,20,0.04)] hover:border-[#FF6600] hover:shadow-xl transition-all duration-300 flex flex-col justify-between reveal">
               <CardContent className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex gap-1 text-amber-500">
+                    <div className="flex gap-1 text-[#D4AF37]">
                       {Array.from({ length: t.rating || 5 }).map((_, j) => (
-                        <Star key={j} className="h-4 w-4 fill-[#C99A3D] text-amber-500" />
+                        <Star key={j} className="h-4 w-4 fill-[#D4AF37] text-[#D4AF37]" />
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#6B2635] bg-amber-50 px-2 py-0.5 rounded-full border border-zinc-200">
-                      <CheckCircle2 className="h-3 w-3 text-amber-600" /> Verified Devotee
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A1521] bg-[#FFF3E8] px-2 py-0.5 rounded-full border border-[#EFE4D6]">
+                      <CheckCircle2 className="h-3 w-3 text-[#FF6600]" /> Verified Devotee
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed italic">
+                  <p className="text-xs sm:text-sm text-[#6B5E57] leading-relaxed italic">
                     "{t.message}"
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-zinc-200 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-amber-50 text-amber-600 font-bold text-sm flex items-center justify-center border border-zinc-200">
+                <div className="pt-4 border-t border-[#EFE4D6] flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-[#FFF3E8] text-[#FF6600] font-bold text-sm flex items-center justify-center border border-[#EFE4D6]">
                     {t.name ? t.name.charAt(0) : '🙏'}
                   </div>
                   <div>
-                    <h5 className="font-bold text-sm text-zinc-900">{t.name}</h5>
-                    <p className="text-[11px] text-zinc-500">{t.location || 'India'}</p>
+                    <h5 className="font-bold text-sm text-[#1C1614]">{t.name}</h5>
+                    <p className="text-[11px] text-[#6B5E57]">{t.location || 'India'}</p>
                     {t.pujaName && (
-                      <span className="inline-block text-[10px] text-amber-600 font-semibold mt-0.5">
+                      <span className="inline-block text-[10px] text-[#FF6600] font-semibold mt-0.5">
                         🪔 {t.pujaName}
                       </span>
                     )}

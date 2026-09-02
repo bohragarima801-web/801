@@ -13,31 +13,22 @@ interface TeamMember {
   isActive?: boolean
 }
 
-const DEFAULT_MEMBERS: TeamMember[] = [
+const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
-    id: 'wa_1',
-    name: 'Pandit Seva Desk (पं. सेवा केंद्र)',
-    phone: '919530401984',
-    role: 'Online Puja & Sankalp Booking',
-    message: 'जय श्री राम! मुझे पूजा एवं नाम-गोत्र संकल्प के बारे में जानकारी चाहिए।',
+    id: 'pt-mukesh',
+    name: 'पं. मुकेश बोहरा / संस्थान सेवा',
+    phone: '+919530401984',
+    role: 'मुख्य आचार्य एवं सहायता डेस्क',
+    message: 'प्रणाम पंडित जी, मुझे अपनी समस्या अनुसार पूजा संकल्प और अनुष्ठान के बारे में मार्गदर्शन चाहिए।',
     isPrimary: true,
     isActive: true,
-  },
-  {
-    id: 'wa_2',
-    name: 'Prasad & Order Helpline',
-    phone: '919530401984',
-    role: 'Prasad Delivery & Support',
-    message: 'जय श्री राम! मुझे सिद्ध प्रसाद एवं बुकिंग की जानकारी चाहिए।',
-    isPrimary: false,
-    isActive: true,
-  },
+  }
 ]
 
 export function WhatsAppFloatingWidget() {
   const [enabled, setEnabled] = useState(true)
-  const [title, setTitle] = useState('DivyaYagyam WhatsApp Seva')
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(DEFAULT_MEMBERS)
+  const [title, setTitle] = useState('दिव्ययज्ञम् व्हाट्सएप सेवा')
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(DEFAULT_TEAM_MEMBERS)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -56,7 +47,15 @@ export function WhatsAppFloatingWidget() {
       } catch {}
     }
 
-    loadConfig()
+    const loadWhatsApp = () => {
+      loadConfig()
+    }
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(loadWhatsApp, { timeout: 1500 })
+    } else {
+      setTimeout(loadWhatsApp, 1000)
+    }
   }, [])
 
   if (!enabled || teamMembers.length === 0) return null
@@ -64,7 +63,7 @@ export function WhatsAppFloatingWidget() {
   const handleDirectChat = (member: TeamMember) => {
     let cleanPhone = member.phone.replace(/[^\d]/g, '')
     if (cleanPhone.length === 10) cleanPhone = `91${cleanPhone}`
-    const msg = member.message || 'Jai Shree Ram! I would like more information.'
+    const msg = member.message || 'जय श्री राम! मुझे जानकारी चाहिए।'
     const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`
     window.open(url, '_blank', 'noopener,noreferrer')
     setOpen(false)
@@ -132,25 +131,39 @@ export function WhatsAppFloatingWidget() {
         </div>
       )}
 
-      {/* Main Floating Trigger Button */}
-      <button
-        onClick={() => {
-          if (singleMember) {
-            handleDirectChat(singleMember)
-          } else {
-            setOpen(!open)
-          }
-        }}
-        className="relative group flex items-center justify-center h-11 w-11 sm:h-13 sm:w-13 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 ring-2 sm:ring-4 ring-emerald-500/20"
-        aria-label="WhatsApp Support"
-      >
-        <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-amber-400 border-2 border-white animate-bounce" />
-        {open ? (
-          <X className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-        ) : (
-          <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white fill-white/20" />
+      {/* Main Floating Trigger Button with Label */}
+      <div className="flex items-center">
+        {!open && (
+          <span
+            onClick={() => {
+              if (singleMember) handleDirectChat(singleMember)
+              else setOpen(true)
+            }}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-emerald-800 text-xs font-bold shadow-lg border border-emerald-200 mr-2.5 cursor-pointer hover:bg-emerald-50 transition-all select-none animate-pulse"
+          >
+            <span>💬</span> पंडित जी से बात करें
+          </span>
         )}
-      </button>
+
+        <button
+          onClick={() => {
+            if (singleMember) {
+              handleDirectChat(singleMember)
+            } else {
+              setOpen(!open)
+            }
+          }}
+          className="relative group flex items-center justify-center h-12 w-12 sm:h-13 sm:w-13 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 ring-2 sm:ring-4 ring-emerald-500/20"
+          aria-label="WhatsApp Support"
+        >
+          <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-amber-400 border-2 border-white animate-bounce" />
+          {open ? (
+            <X className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+          ) : (
+            <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white fill-white/20" />
+          )}
+        </button>
+      </div>
     </div>
   )
 }

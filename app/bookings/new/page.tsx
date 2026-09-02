@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
-import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard, MessageCircle, Phone } from 'lucide-react'
+import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
@@ -34,7 +34,8 @@ function BookingForm() {
 
   // Devotee details
   const [devoteeName, setDevoteeName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [devoteePhone, setDevoteePhone] = useState('')
+  const [devoteeEmail, setDevoteeEmail] = useState('')
   const [gotra, setGotra] = useState('Kashyap')
   const [fatherHusbandName, setFatherHusbandName] = useState('')
   const [sankalpPurpose, setSankalpPurpose] = useState('')
@@ -61,16 +62,19 @@ function BookingForm() {
 
     const loadData = async () => {
       try {
-        // 1. Auth check
-        const profileRes = await fetch('/api/profile').catch(() => null)
-        if (profileRes && profileRes.ok) {
-          const data = await profileRes.json()
-          if (data?.ok && data?.user) {
-            if (data.user.fullName) setDevoteeName(data.user.fullName)
-            if (data.user.phone) setPhone(data.user.phone)
-            if (data.user.customerProfile?.gotra) setGotra(data.user.customerProfile.gotra)
+        // 1. Optional User Profile Auto-fill (Guest allowed, never blocks)
+        try {
+          const profileRes = await fetch('/api/profile')
+          if (profileRes.ok) {
+            const profileData = await profileRes.json()
+            if (profileData?.ok && profileData.user) {
+              if (profileData.user.fullName) setDevoteeName(profileData.user.fullName)
+              if (profileData.user.phone) setDevoteePhone(profileData.user.phone)
+              if (profileData.user.email) setDevoteeEmail(profileData.user.email)
+              if (profileData.user.customerProfile?.gotra) setGotra(profileData.user.customerProfile.gotra)
+            }
           }
-        }
+        } catch {}
 
         // 2. Load Puja Data
         const pujaRes = await fetch(`/api/bookings?pujaId=${pujaId}`)
@@ -161,31 +165,19 @@ function BookingForm() {
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault()
     if (!acceptTerms) {
-      toast.error('कृपया नियम एवं शर्तें स्वीकार करें।')
+      toast.error('कृपया आगे बढ़ने के लिए नियमों व शर्तों को स्वीकार करें।')
       return
     }
     if (!devoteeName.trim()) {
-      toast.error('कृपया यजमान का नाम दर्ज करें (Devotee Name is required)')
+      toast.error('कृपया यजमान का नाम दर्ज करें।')
       return
     }
-    const cleanPhone = phone.replace(/[^\d]/g, '')
-    if (!cleanPhone || cleanPhone.length < 10) {
-      toast.error('कृपया 10 अंकों का वैध WhatsApp / Mobile नंबर दर्ज करें (WhatsApp number is required)')
+    if (!devoteePhone.trim() || devoteePhone.trim().replace(/\D/g, '').length < 10) {
+      toast.error('कृपया 10 अंकों का वैध व्हाट्सएप नंबर दर्ज करें।')
       return
     }
     setStep('payment')
-    toast.success('संकल्प विवरण सुरक्षित किया गया। कृपया भुगतान पूरा करें।')
-  }
-
-  // Direct 1-Click WhatsApp Booking (for devotees preferring WhatsApp assistance)
-  const handleWhatsAppBooking = () => {
-    if (!puja) return
-    const cleanSupportNumber = '919530401984'
-    const nameStr = devoteeName.trim() || 'भक्त'
-    const gotraStr = gotra.trim() || 'कश्यप'
-    const userPhoneStr = phone.trim() ? ` (WhatsApp: ${phone.trim()})` : ''
-    const msg = `जय श्री राम! 🙏\n\nमैं *${puja.name}* बुक करना चाहता/चाहती हूँ।\n\n• यजमान: ${nameStr}${userPhoneStr}\n• गोत्र: ${gotraStr}\n• चयनित पैकेज: ₹${packagePrice}\n• कुल दक्षिणा: ₹${finalTotal}\n\nकृपया संकल्प विधि एवं दक्षिणा (UPI) की जानकारी प्रदान करें।`
-    window.open(`https://wa.me/${cleanSupportNumber}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer')
+    toast.success('संकल्प विवरण सुरक्षित हो गया। कृपया दक्षिणा भुगतान संपन्न करें।')
   }
 
   // Final booking execution
@@ -209,7 +201,8 @@ function BookingForm() {
         body: JSON.stringify({
           pujaId: puja.id,
           devoteeName: devoteeName.trim(),
-          phone: phone.trim(),
+          phone: devoteePhone.trim(),
+          email: devoteeEmail.trim() || undefined,
           fatherHusbandName: fatherHusbandName.trim() || 'Self',
           gotra: gotra.trim() || 'Kashyap',
           sankalpPurpose: finalSankalpPurpose,
@@ -261,8 +254,9 @@ function BookingForm() {
         description: `Payment for ${puja.name || 'Puja Booking'}`,
         order_id: orderId,
         prefill: {
-          name: devoteeName.trim(),
-          contact: phone.trim(),
+          name: devoteeName,
+          contact: devoteePhone,
+          email: devoteeEmail,
         },
         theme: { color: '#FF6600' },
         modal: {
@@ -373,17 +367,17 @@ function BookingForm() {
       {/* Left Column: Booking details & Add-ons */}
       <div className="lg:col-span-7 space-y-6">
         <div className="flex justify-between items-center">
-          <Button variant="ghost" size="sm" className="gap-1" onClick={() => {
+          <Button variant="ghost" size="sm" className="gap-1 text-xs font-bold text-slate-700 hover:text-orange-600" onClick={() => {
             if (step === 'payment') setStep('sankalp')
             else router.back()
           }}>
-            <ArrowLeft className="h-4 w-4" /> {step === 'payment' ? 'Edit Sankalp' : 'Back to Details'}
+            <ArrowLeft className="h-4 w-4" /> {step === 'payment' ? 'संकल्प विवरण बदलें' : 'वापस जाएं'}
           </Button>
 
-          <div className="flex items-center gap-2 text-xs font-bold">
-            <span className={step === 'sankalp' ? 'text-orange-600' : 'text-slate-400'}>1. Sankalp Form</span>
+          <div className="flex items-center gap-1.5 text-xs font-bold">
+            <span className={`px-2.5 py-1 rounded-full ${step === 'sankalp' ? 'bg-[#FF6600] text-white shadow-2xs' : 'bg-slate-100 text-slate-500'}`}>1. संकल्प विवरण</span>
             <ChevronRight className="h-3 w-3 text-slate-400" />
-            <span className={step === 'payment' ? 'text-orange-600' : 'text-slate-400'}>2. Payment Gateway</span>
+            <span className={`px-2.5 py-1 rounded-full ${step === 'payment' ? 'bg-[#FF6600] text-white shadow-2xs' : 'bg-slate-100 text-slate-500'}`}>2. सुरक्षित दक्षिणा</span>
           </div>
         </div>
 
@@ -523,10 +517,10 @@ function BookingForm() {
                     <span>Devotee Name:</span>
                     <span className="font-bold text-slate-800">{devoteeName}</span>
                   </div>
-                  {phone && (
+                  {devoteePhone && (
                     <div className="flex justify-between">
                       <span>WhatsApp Number:</span>
-                      <span className="font-bold text-slate-800">{phone}</span>
+                      <span className="font-bold text-slate-800">{devoteePhone}</span>
                     </div>
                   )}
                   {familyNames.filter(Boolean).length > 0 && (
@@ -579,202 +573,141 @@ function BookingForm() {
             {step === 'sankalp' ? (
               <form onSubmit={handleProceedToPayment} className="space-y-4">
                 
-                {/* 1. Devotee Full Name */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-bold text-slate-800">
-                    यजमान का पूरा नाम * (Devotee Full Name)
-                  </Label>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-800">मुख्य यजमान का नाम * (Devotee Name)</Label>
                   <Input
-                    placeholder="उदा. रमेश शर्मा / Ramesh Sharma"
+                    placeholder="उदा. राहुल शर्मा"
                     value={devoteeName}
                     onChange={(e) => setDevoteeName(e.target.value)}
                     required
-                    className="h-10 text-sm font-medium"
+                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600]"
                   />
                 </div>
 
-                {/* 2. WhatsApp / Mobile Number - CRITICAL FOR PROOF & RE-ENGAGEMENT */}
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600 fill-emerald-100" />
-                      <span>WhatsApp / मोबाइल नंबर *</span>
-                    </Label>
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
-                      वीडियो प्रूफ हेतु
-                    </span>
+                    <Label className="text-xs font-bold text-slate-800">व्हाट्सएप मोबाइल नंबर * (WhatsApp Number)</Label>
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">✓ लाइव वीडियो प्रमाण</span>
                   </div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">
-                      🇮🇳 +91
-                    </span>
-                    <Input
-                      type="tel"
-                      maxLength={10}
-                      placeholder="9876543210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/[^\d]/g, '').slice(0, 10))}
-                      required
-                      className="h-10 pl-14 text-sm font-bold tracking-wider"
-                    />
-                  </div>
-                  <p className="text-[10px] text-emerald-700 font-medium">
-                    ✓ संकल्प का लाइव वीडियो एवं प्रसाद ट्रैकिंग इसी WhatsApp नंबर पर भेजी जाएगी।
-                  </p>
+                  <Input
+                    placeholder="उदा. 9876543210"
+                    type="tel"
+                    value={devoteePhone}
+                    onChange={(e) => setDevoteePhone(e.target.value)}
+                    required
+                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600]"
+                  />
+                  <p className="text-[10px] text-slate-500">आपके नाम-गोत्र के संकल्प का HD वीडियो इसी व्हाट्सएप नंबर पर भेजा जाएगा।</p>
                 </div>
 
                 {memberCount > 1 && (
-                  <div className="space-y-3 border-t pt-3">
-                    <span className="text-xs font-bold text-slate-700">परिवार के अन्य सदस्यों के नाम</span>
+                  <div className="space-y-3 border-t border-[#EFE4D6] pt-3">
+                    <span className="text-xs font-bold text-slate-700">परिवार के अन्य सदस्य (संकल्प में सम्मिलित करने हेतु)</span>
                     {Array.from({ length: memberCount - 1 }).map((_, index) => (
                       <div key={index} className="space-y-1">
                         <Label className="text-[10px] text-muted-foreground">सदस्य {index + 2} का नाम</Label>
                         <Input
-                          placeholder={`उदा. सदस्य ${index + 2}`}
+                          placeholder={`उदा. सदस्य ${index + 2} का नाम`}
                           value={familyNames[index] || ''}
                           onChange={(e) => handleMemberNameChange(index, e.target.value)}
-                          required
-                          className="h-9 text-xs"
+                          className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
                         />
                       </div>
                     ))}
                   </div>
                 )}
 
-                {/* 3. Gotra */}
-                <div className="space-y-1.5 border-t pt-3">
+                <div className="space-y-2 border-t border-[#EFE4D6] pt-3">
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-800">गोत्र (Gotra) *</Label>
-                    <span className="text-[10px] text-slate-500">अज्ञात होने पर 'Kashyap' रहने दें</span>
+                    <Label className="text-xs font-bold text-slate-800">पिता / पति का नाम (Father / Husband Name)</Label>
+                    <span className="text-[10px] text-slate-400">वैकल्पिक</span>
                   </div>
                   <Input
-                    placeholder="Kashyap"
+                    placeholder="उदा. श्री सुरेश शर्मा (यदि उपलब्ध हो)"
+                    value={fatherHusbandName}
+                    onChange={(e) => setFatherHusbandName(e.target.value)}
+                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-800">गोत्र (Gotra) *</Label>
+                  <Input
+                    placeholder="कश्यप / Kashyap"
                     value={gotra}
                     onChange={(e) => setGotra(e.target.value)}
                     required
-                    className="h-10 text-sm"
+                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
                   />
-                </div>
-
-                {/* 4. Father / Husband Name (OPTIONAL) */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-700">पिता / पति का नाम (Father / Husband Name)</Label>
-                    <span className="text-[10px] text-slate-400 font-semibold">ऐच्छिक (Optional)</span>
-                  </div>
-                  <Input
-                    placeholder="उदा. सुरेश शर्मा"
-                    value={fatherHusbandName}
-                    onChange={(e) => setFatherHusbandName(e.target.value)}
-                    className="h-9 text-xs"
-                  />
-                </div>
-
-                {/* 5. Sankalp Purpose (OPTIONAL) */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-700">विशेष मनोकामना / उद्देश्य (Sankalp Wish)</Label>
-                    <span className="text-[10px] text-slate-400 font-semibold">ऐच्छिक (Optional)</span>
-                  </div>
-                  <Textarea
-                    placeholder="उदा. उत्तम स्वास्थ्य, व्यापार वृद्धि, सुख-शांति, शीघ्र विवाह या कोर्ट केस सफलता..."
-                    value={sankalpPurpose}
-                    onChange={(e) => setSankalpPurpose(e.target.value)}
-                    rows={2}
-                    className="text-xs bg-white"
-                  />
-                </div>
-
-                {/* Terms and Conditions Checkbox */}
-                <div className="flex items-start gap-2 border-t pt-3 pb-1 text-left">
-                  <Checkbox id="termsAccept" checked={acceptTerms} onCheckedChange={(val) => setAcceptTerms(!!val)} />
-                  <Label htmlFor="termsAccept" className="text-[11px] leading-tight text-slate-600 cursor-pointer">
-                    मैं दिव्ययज्ञम् के <Link href="/terms" target="_blank" className="text-orange-600 hover:underline font-bold">नियम एवं शर्तों</Link> से सहमत हूँ।
-                  </Label>
-                </div>
-
-                {/* Primary Proceed CTA */}
-                <Button type="submit" className="w-full h-12 text-sm font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white rounded-2xl shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                  <span>भुगतान के लिए आगे बढ़ें (₹{finalTotal})</span>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-
-                {/* 1-Click WhatsApp Booking Option */}
-                <div className="pt-2 text-center">
-                  <div className="relative flex py-1 items-center">
-                    <div className="flex-grow border-t border-slate-200"></div>
-                    <span className="flex-shrink mx-3 text-[11px] text-slate-400 font-bold uppercase">या (OR)</span>
-                    <div className="flex-grow border-t border-slate-200"></div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleWhatsAppBooking}
-                    className="w-full mt-1.5 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all cursor-pointer"
-                  >
-                    <MessageCircle className="h-4 w-4 fill-white" />
-                    <span>WhatsApp पर सीधे संकल्प लिखाएं व बुक करें</span>
-                  </button>
-                  <p className="text-[10px] text-slate-500 mt-1">
-                    हमारे आचार्य सीधे WhatsApp पर आपका संकल्प दर्ज करेंगे
+                  <p className="text-[10px] text-[#7A1521] font-medium bg-[#FFF3E8] p-2 rounded-xl border border-[#EFE4D6]">
+                    शास्त्रोक्त नियम: यदि अपना गोत्र ज्ञात न हो तो 'कश्यप' (Kashyap) गोत्र से संकल्प शास्त्र-सम्मत होता है।
                   </p>
                 </div>
 
-                {/* Micro Trust Guarantee Strip */}
-                <div className="pt-3 border-t border-slate-100 grid grid-cols-3 gap-1 text-center text-[10px] font-semibold text-slate-600">
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="text-amber-600">🕉️</span>
-                    <span>100% वैदिक विधि</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="text-emerald-600">📹</span>
-                    <span>WhatsApp वीडियो प्रूफ</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="text-blue-600">🔒</span>
-                    <span>सुरक्षित पेमेंट</span>
-                  </div>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-800">संकल्प का उद्देश्य / विशेष मनोकामना (वैकल्पिक)</Label>
+                  <Textarea
+                    placeholder="उदा. उत्तम स्वास्थ्य, व्यापार वृद्धि, शीघ्र विवाह, परिवार कल्याण व सुख-शांति..."
+                    value={sankalpPurpose}
+                    onChange={(e) => setSankalpPurpose(e.target.value)}
+                    rows={2}
+                    className="text-base sm:text-sm rounded-xl border-[#EFE4D6] bg-white"
+                  />
+                  <p className="text-[10px] text-slate-500">अपनी विशेष मनोकामना या प्रार्थना यहाँ लिख सकते हैं।</p>
                 </div>
+
+                {/* Terms and Conditions Checkbox */}
+                <div className="flex items-start gap-2 border-t border-[#EFE4D6] pt-3 pb-1 text-left">
+                  <Checkbox id="termsAccept" checked={acceptTerms} onCheckedChange={(val) => setAcceptTerms(!!val)} className="mt-0.5" />
+                  <Label htmlFor="termsAccept" className="text-xs leading-tight text-slate-600 cursor-pointer">
+                    मैं दिव्ययज्ञम् के <Link href="/terms" target="_blank" className="text-[#FF6600] hover:underline font-bold">नियम व शर्तों</Link> से सहमत हूँ।
+                  </Label>
+                </div>
+
+                <Button type="submit" className="w-full h-12 text-sm font-black bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] text-white rounded-xl shadow-md transition-all active:scale-[0.98]">
+                  <span>सुरक्षित दक्षिणा भुगतान हेतु आगे बढ़ें (₹{finalTotal})</span>
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
 
               </form>
             ) : (
               <div className="space-y-4">
                 <div className="p-4 bg-orange-50/40 rounded-2xl text-center space-y-1">
-                  <span className="text-xs text-slate-500">कुल देय दक्षिणा (Total Amount)</span>
-                  <div className="text-3xl font-black text-orange-600 font-heading">₹{finalTotal}</div>
-                  <p className="text-[11px] text-slate-600 font-medium">
-                    यजमान: <strong>{devoteeName}</strong> ({phone})
-                  </p>
+                  <span className="text-xs text-slate-500 font-medium">कुल संकल्प दक्षिणा (Total Payable)</span>
+                  <div className="text-3xl font-black text-[#FF6600]">₹{finalTotal}</div>
                 </div>
 
-                <Button onClick={handleConfirmBooking} disabled={booking} className="w-full h-12 text-sm font-black bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-2xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                {/* UPI Quick Badges for Mobile Trust */}
+                <div className="p-3 bg-white rounded-xl border border-[#EFE4D6] space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block text-center">
+                    Instant One-Click UPI & Card Payment
+                  </span>
+                  <div className="flex items-center justify-center gap-2 text-xs font-black text-slate-700">
+                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">GPay</span>
+                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">PhonePe</span>
+                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">Paytm</span>
+                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">BHIM UPI</span>
+                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">Cards</span>
+                  </div>
+                </div>
+
+                <Button onClick={handleConfirmBooking} disabled={booking} className="w-full h-12 text-sm font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]">
                   {booking ? (
-                    <span className="flex items-center justify-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> पेमेंट गेटवे खुल रहा है…
+                    <span className="flex items-center justify-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> भुगतान प्रक्रियाधीन है...
                     </span>
                   ) : (
                     <>
-                      <Wallet className="h-4 w-4" /> अभी सुरक्षित भुगतान करें (PAY NOW)
+                      <Wallet className="h-4 w-4" /> सुरक्षित दक्षिणा भुगतान करें (₹{finalTotal}) 🔒
                     </>
                   )}
                 </Button>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" className="h-10 text-xs font-bold rounded-xl" onClick={() => setStep('sankalp')}>
-                    विवरण बदलें
-                  </Button>
-                  <button
-                    type="button"
-                    onClick={handleWhatsAppBooking}
-                    className="h-10 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <MessageCircle className="h-3.5 w-3.5 fill-emerald-600 text-emerald-600" />
-                    <span>WhatsApp सहायता</span>
-                  </button>
-                </div>
+                <Button variant="outline" className="w-full h-11 text-xs font-bold rounded-xl" onClick={() => setStep('sankalp')}>
+                  ← संकल्प विवरण बदलें (Edit Sankalp)
+                </Button>
 
-                <div className="flex items-center justify-center gap-1.5 text-[11px] text-emerald-800 font-bold bg-emerald-50/80 border border-emerald-200 py-2.5 px-3 rounded-xl">
-                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
-                  <span>256-Bit SSL सुरक्षित भुगतान • 100% संकल्प गारंटी</span>
+                <div className="flex items-center justify-center gap-1 text-[10px] text-emerald-800 font-semibold bg-emerald-50 py-2 rounded-lg border border-emerald-200">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" /> 100% सुरक्षित भुगतान • व्हाट्सएप लाइव वीडियो संकल्प • पावन प्रसाद
                 </div>
               </div>
             )}

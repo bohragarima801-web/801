@@ -103,8 +103,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const user = await getCurrentUser().catch(() => null)
-    // Guest orders allowed
-
 
     const body = await req.json()
     const { items = [], shippingAddress, notes, couponCode } = body
@@ -391,7 +389,7 @@ export async function POST(req: NextRequest) {
       const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
       sendWhatsAppNotification({
         type: 'ORDER_SUCCESS',
-        phone: shippingAddress.phone || (user as any)?.phone || user?.email || '',
+        phone: shippingAddress.phone || user?.email || '',
         name: shippingAddress.name || user?.fullName || 'Devotee',
         details: {
           orderNumber: dbOrder.orderNumber,

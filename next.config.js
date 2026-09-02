@@ -110,6 +110,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/book-chadawa',
+        destination: '/book-chadhawa',
+        permanent: true,
+      },
+      {
+        source: '/chadhawa',
+        destination: '/book-chadhawa',
+        permanent: true,
+      },
+      {
         source: '/home',
         destination: '/',
         permanent: true,
