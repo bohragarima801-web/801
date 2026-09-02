@@ -389,8 +389,8 @@ export async function POST(req: NextRequest) {
       const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
       sendWhatsAppNotification({
         type: 'ORDER_SUCCESS',
-        phone: shippingAddress.phone || user.email,
-        name: shippingAddress.name || user.fullName || 'Devotee',
+        phone: shippingAddress.phone || user?.email || '',
+        name: shippingAddress.name || user?.fullName || 'Devotee',
         details: {
           orderNumber: dbOrder.orderNumber,
           amount: total,

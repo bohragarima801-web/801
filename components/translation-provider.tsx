@@ -30,18 +30,18 @@ export function TranslationProvider() {
 
     if (pathname?.startsWith('/admin')) return
 
-    // 1. Read language from localStorage
+    // 1. Read language from localStorage (defaults to English)
     const lang = localStorage.getItem('lang')
 
-    // 2. Clear auto-translate cookie for Hindi and English to preserve 100% authentic typography
-    if (!lang || lang === 'hi' || lang === 'en' || lang === 'default') {
+    // 2. If English or default, clear cookie to show clean native English
+    if (!lang || lang === 'en' || lang === 'default') {
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + window.location.hostname
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname
       return
     } else {
-      document.cookie = `googtrans=/hi/${lang}; path=/`
-      document.cookie = `googtrans=/hi/${lang}; path=/; domain=.${window.location.hostname}`
+      document.cookie = `googtrans=/en/${lang}; path=/`
+      document.cookie = `googtrans=/en/${lang}; path=/; domain=.${window.location.hostname}`
     }
 
 

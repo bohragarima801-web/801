@@ -114,16 +114,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="hi" translate="no" className="notranslate" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        {/* Google Fonts Preconnect for ultra-fast Devanagari font rendering */}
+        {/* Google Fonts Preconnect for ultra-fast font rendering */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Prevents Google Translate from auto-corrupting brand names & mantras */}
-        <meta name="google" content="notranslate" />
       </head>
-      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${inter.variable} ${outfit.variable} ${cinzel.variable} ${mukta.variable} ${poppins.variable} font-sans bg-[#FFF9EF] text-[#292321] overflow-x-hidden selection:bg-[#E58A16]/20 selection:text-[#E58A16] antialiased notranslate`} translate="no" suppressHydrationWarning>
+      <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${poppins.variable} ${cinzel.variable} ${outfit.variable} ${mukta.variable} ${inter.variable} font-sans bg-[#FAF8F5] text-[#1C1614] overflow-x-hidden selection:bg-[#FF6600]/20 selection:text-[#FF6600] antialiased`} suppressHydrationWarning>
         {/* 
           Razorpay: afterInteractive = loads right after page hydration.
           Previously lazyOnload caused 2-5 second delays when clicking Pay.
@@ -137,34 +135,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalSchema) }}
         />
-        {/* Meta Pixel Official Direct Injection */}
-        <Script
-          id="meta-pixel"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '3076518582679648');
-              fbq('track', 'PageView');
-            `,
-          }}
-        />
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: 'none' }}
-            src="https://www.facebook.com/tr?id=3076518582679648&ev=PageView&noscript=1"
-            alt=""
-          />
-        </noscript>
+
         <Providers>
           {children}
           <div id="__dvj_slot" />

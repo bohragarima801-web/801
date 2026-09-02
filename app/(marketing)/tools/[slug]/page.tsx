@@ -322,6 +322,104 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
           {!allowed && <PaywallOverlay tool={tool} />}
         </section>
 
+        {/* ── HIGH-CONVERTING CRO PUJA UPSELL & REMEDY SECTION ── */}
+        <section className="bg-gradient-to-b from-[#FFF3E8]/80 via-white to-[#FFF3E8]/50 rounded-3xl border-2 border-[#FFD2B0] p-5 sm:p-7 shadow-md space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#EFE4D6] pb-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#7A1521] text-white text-[11px] font-bold shadow-2xs">
+                <span>🪔</span>
+                <span>दोष निवारण एवं शास्त्रोक्त उपाय</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-[#1C1614] tracking-tight">
+                कुंडली दोष, साढ़ेसाती या जीवन बाधा निवारण हेतु पावन अनुष्ठान
+              </h2>
+              <p className="text-xs sm:text-sm text-[#6B5E57]">
+                यदि आपकी गणना या कुंडली में कोई दोष (मांगलिक, कालसर्प, साढ़ेसाती, पितृ दोष) है, तो अपने नाम से सिद्ध पीठों में संकल्प करवाएं।
+              </p>
+            </div>
+
+            <a
+              href={`https://wa.me/919530401984?text=${encodeURIComponent(`प्रणाम पंडित जी, मैंने दिव्ययज्ञम् पर ${tool.name} देखा है। मुझे अपनी कुंडली के अनुसार उचित पूजा व दोष निवारण का मार्गदर्शन चाहिए।`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold shadow-sm hover:shadow-md transition-all shrink-0"
+            >
+              <span>💬 पंडित जी से मुफ्त सलाह</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                title: "शनि साढ़ेसाती व नवग्रह शांति यज्ञ",
+                desc: "शनि महादशा, ढैय्या एवं नवग्रह दोष शांति हेतु 9 समिधा वेदोक्त हवन।",
+                price: "₹901",
+                badge: "ग्रह दोष शांति",
+                href: "/pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya"
+              },
+              {
+                title: "माँ बगलामुखी मिर्ची हवन व रक्षा कवच",
+                desc: "शत्रु बाधा, कोर्ट-कचहरी, नजर दोष व व्यापारिक अवरोध मुक्ति हेतु महायज्ञ।",
+                price: "₹1,100",
+                badge: "महाविद्या अनुष्ठान",
+                href: "/pujas/maa-bagalamukhi-mirchi-hawan"
+              },
+              {
+                title: "महामृत्युंजय जाप एवं रुद्राभिषेक",
+                desc: "स्वास्थ्य रक्षा, असाध्य रोग निवारण, दीर्घायु एवं मानसिक शांति हेतु शिव आराधना।",
+                price: "₹2,100",
+                badge: "स्वास्थ्य व दीर्घायु",
+                href: "/pujas/mahamrityunjaya-jaap-rudrabhishekam"
+              }
+            ].map((remedy, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl border border-[#EFE4D6] p-4 flex flex-col justify-between space-y-3 shadow-2xs hover:shadow-md hover:border-[#FF6600] transition-all group"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#FFF3E8] text-[#FF6600] border border-[#FFD2B0]">
+                      {remedy.badge}
+                    </span>
+                    <span className="text-xs font-extrabold text-[#1C1614]">
+                      {remedy.price} <span className="text-[10px] font-normal text-[#6B5E57]">से शुरू</span>
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors line-clamp-1">
+                    {remedy.title}
+                  </h3>
+
+                  <p className="text-[11px] text-[#6B5E57] line-clamp-2 leading-relaxed">
+                    {remedy.desc}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-[#EFE4D6] flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-semibold text-emerald-700">✓ लाइव वीडियो प्रमाण</span>
+                  <Link
+                    href={remedy.href}
+                    className="px-3 py-1.5 rounded-lg bg-[#FF6600] hover:bg-[#E65C00] text-white text-[11px] font-bold shadow-2xs transition-all flex items-center gap-1 shrink-0"
+                  >
+                    <span>संकल्प करें</span>
+                    <span>➔</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-[#FAF8F5] rounded-xl p-3 border border-[#EFE4D6] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#4A3E39]">
+            <div className="flex items-center gap-2">
+              <span className="text-base">📜</span>
+              <span><strong>नाम-गोत्र संकल्प:</strong> सभी अनुष्ठान 27+ वर्षों के अनुभवी आचार्यों द्वारा विधि-विधान से संपन्न होते हैं।</span>
+            </div>
+            <Link href="/pujas" className="text-[#FF6600] font-bold hover:underline shrink-0">
+              सभी 12+ वैदिक पूजाएं देखें ➔
+            </Link>
+          </div>
+        </section>
+
         {/* ── Rich Crawlable Server-Side Content for Google SEO Indexing */}
         <section className="space-y-6 pt-4">
           <div className="grid md:grid-cols-2 gap-6">
