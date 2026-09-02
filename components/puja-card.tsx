@@ -52,7 +52,7 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
     <>
       {/* ── MOBILE COMPACT LIST CARD (< 640px) ─────────────────────────── */}
       <article
-        className={`sm:hidden group relative ${themeClass} bg-white rounded-2xl border border-[#E6D6BE] hover:border-[#FF6600] shadow-xs active:scale-[0.98] transition-all duration-200 overflow-hidden p-2.5 flex items-center gap-3 w-full`}
+        className={`sm:hidden group relative ${themeClass} bg-white rounded-2xl border border-[#EFE4D6] hover:border-[#FF6A00]/50 shadow-xs active:scale-[0.98] transition-all duration-200 overflow-hidden p-2.5 flex items-center gap-3 w-full`}
       >
         {/* 80x80px Square Thumbnail */}
         <Link href={pujaHref} className="relative h-[80px] w-[80px] rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-[#EFE4D6] shadow-2xs">
@@ -66,7 +66,7 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
           {(puja.isVip || puja.isSpecial || puja.badge) && (
             <div className="absolute top-1 left-1">
               <span className={`px-1 py-0.2 rounded text-[8px] font-black tracking-tight uppercase ${
-                puja.isVip ? 'bg-[#D4AF37] text-[#1C1614]' : 'bg-[#7A1521] text-white'
+                puja.isVip ? 'bg-[#D4AF37] text-[#1A1412]' : 'bg-[#7A1521] text-white'
               }`}>
                 {puja.isVip ? 'VIP' : 'विशेष'}
               </span>
@@ -76,11 +76,11 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
 
         {/* Center Details: Title clamped to 2 lines, Meta, Price */}
         <div className="flex-1 min-w-0 space-y-1">
-          <h3 className="font-black text-[13px] text-[#1C1614] leading-snug line-clamp-2 group-hover:text-[#FF6600] transition-colors">
+          <h3 className="font-heading font-black text-[13px] text-[#1A1412] leading-snug line-clamp-2 group-hover:text-[#FF6A00] transition-colors">
             <Link href={pujaHref}>{puja.name}</Link>
           </h3>
 
-          <div className="flex items-center gap-2 text-[10px] font-semibold text-[#6B5E57] truncate">
+          <div className="flex items-center gap-2 text-[10px] font-semibold text-[#5C4E46] truncate">
             {puja.location && (
               <span className="flex items-center gap-0.5 truncate">
                 <MapPin className="h-3 w-3 text-[#D4AF37] shrink-0" />
@@ -93,9 +93,9 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
 
           {!hidePrice && (
             <div className="flex items-baseline gap-1">
-              <span className="text-[10px] text-[#6B5E57] font-bold">दक्षिणा:</span>
+              <span className="text-[10px] text-[#5C4E46] font-bold">दक्षिणा:</span>
               <span className="text-xs font-black text-[#7A1521]">
-                ₹{displayPrice} <span className="text-[9px] font-normal text-[#6B5E57]">से</span>
+                ₹{displayPrice} <span className="text-[9px] font-normal text-[#5C4E46]">से</span>
               </span>
             </div>
           )}
@@ -104,7 +104,7 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
         {/* Right: Compact "बुक करें" Saffron Button */}
         <Link
           href={pujaHref}
-          className="h-9 px-3 rounded-xl bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] active:scale-95 text-white font-black text-[11px] shrink-0 flex items-center justify-center gap-1 shadow-xs transition-all whitespace-nowrap"
+          className="h-9 px-3 rounded-xl bg-gradient-to-r from-[#FF6A00] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6A00] active:scale-95 text-white font-black text-[11px] shrink-0 flex items-center justify-center gap-1 shadow-xs transition-all whitespace-nowrap"
         >
           <span>बुक करें</span>
           <span className="text-xs">➔</span>
@@ -154,32 +154,32 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
         {/* Card Body */}
         <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3 bg-white">
           <div className="space-y-2">
-            {/* Title in High Contrast Dark Charcoal */}
-            <h3 className="font-bold text-base sm:text-lg text-[#292321] line-clamp-2 leading-snug group-hover:text-[#FF6600] transition-colors">
+            {/* Title in High Contrast Dark Obsidian */}
+            <h3 className="font-heading font-black text-base sm:text-lg text-[#1A1412] line-clamp-2 leading-snug group-hover:text-[#FF6A00] transition-colors">
               <Link href={pujaHref}>{puja.name}</Link>
             </h3>
 
             {/* Meta Details (Date & Location) */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-[#665E58]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-[#5C4E46]">
               {puja.location && (
                 <div className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 text-[#C99A3D] shrink-0" />
+                  <MapPin className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
                   <span className="truncate max-w-[130px]">{puja.location}</span>
                 </div>
               )}
               <div className="flex items-center gap-1">
-                <Calendar className="h-3.5 w-3.5 text-[#C99A3D] shrink-0" />
+                <Calendar className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
                 <span>{formattedDate}</span>
               </div>
             </div>
 
             {/* Short Description */}
-            <p className="text-xs text-[#665E58] line-clamp-2 leading-relaxed font-normal">
+            <p className="text-xs text-[#5C4E46] line-clamp-2 leading-relaxed font-normal">
               {cleanDescription}
             </p>
 
             {/* 3 High-Trust Micro-Bullets */}
-            <div className="pt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold text-[#7A1521]">
+            <div className="pt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-black text-[#7A1521]">
               <span className="inline-flex items-center gap-1 bg-[#FFF3E8] px-2 py-0.5 rounded-md border border-[#EFE4D6]">
                 🕉️ नाम-गोत्र संकल्प
               </span>
@@ -193,12 +193,12 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
           </div>
 
           {/* Price & Primary Saffron CTA Button */}
-          <div className="pt-3 border-t border-[#E6D6BE] space-y-2.5">
+          <div className="pt-3 border-t border-[#EFE4D6] space-y-2.5">
             {!hidePrice && (
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#665E58] font-bold">संकल्प दक्षिणा:</span>
-                <span className="text-base sm:text-lg font-black text-[#292321]">
-                  ₹{displayPrice} <span className="text-xs font-semibold text-[#665E58]">से शुरू</span>
+                <span className="text-xs text-[#5C4E46] font-bold">संकल्प दक्षिणा:</span>
+                <span className="text-base sm:text-lg font-black text-[#1A1412]">
+                  ₹{displayPrice} <span className="text-xs font-semibold text-[#5C4E46]">से शुरू</span>
                 </span>
               </div>
             )}
@@ -206,7 +206,7 @@ export function PujaCard({ puja, idx = 0, hidePrice = false }: PujaCardProps) {
             {/* High-Contrast Saffron CTA Button */}
             <Link
               href={pujaHref}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#FF6600] hover:bg-[#E65C00] text-white font-extrabold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#FF6A00] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6A00] text-white font-black text-xs sm:text-sm shadow-[0_4px_14px_rgba(255,106,0,0.25)] hover:shadow-[0_6px_20px_rgba(255,106,0,0.38)] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
             >
               <span>पूजा व संकल्प देखें</span>
               <span className="text-sm">➔</span>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Outfit, Cinzel, Noto_Sans_Devanagari } from 'next/font/google'
+import { Inter, Outfit, Cinzel, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
@@ -11,13 +11,12 @@ import { TranslationProvider } from '@/components/translation-provider'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusinessSchema } from '@/lib/seo'
 
-const notoSansDevanagari = Noto_Sans_Devanagari({ subsets: ['devanagari'], weight: ['400', '600', '700', '800'], variable: '--font-noto-sans-devanagari', display: 'swap' })
+const notoSansDevanagari = Noto_Sans_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-sans-devanagari', display: 'swap' })
+const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
 const outfit = Outfit({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-outfit', display: 'swap' })
-const cinzel = Cinzel({ subsets: ['latin'], weight: ['700'], variable: '--font-cinzel', display: 'swap' })
-const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-inter', display: 'swap' })
+const cinzel = Cinzel({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-cinzel', display: 'swap' })
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter', display: 'swap' })
 
-// High-speed variable aliases to eliminate 15+ redundant font file downloads while preserving CSS variables
-const notoSerifDevanagari = notoSansDevanagari
 const mukta = notoSansDevanagari
 const poppins = inter
 
