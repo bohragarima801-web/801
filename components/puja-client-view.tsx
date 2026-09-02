@@ -315,10 +315,10 @@ export function PujaClientView({ puja }: { puja: any }) {
         {/* Subtle Ambient Pattern */}
         <div aria-hidden="true" className="absolute right-0 top-0 text-[26vw] font-serif text-[#D4AF37]/5 leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-12">
           
           {/* Main Title & Details */}
-          <div className="flex-1 space-y-4 text-center lg:text-left">
+          <div className="flex-1 space-y-4 text-center lg:text-left w-full">
             
             {/* Countdown Timer & Category Badge */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
@@ -985,27 +985,34 @@ export function PujaClientView({ puja }: { puja: any }) {
       </div>
 
       {/* 10. Floating Sticky Mobile/Desktop Bottom Bar */}
-      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-3 sm:p-4 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] shadow-[0_-6px_20px_rgba(0,0,0,0.08)] z-40">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-2.5 sm:p-4 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] shadow-[0_-6px_20px_rgba(0,0,0,0.08)] z-40 pb-[calc(0.6rem+env(safe-area-inset-bottom,0px))]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
           <div className="hidden md:block">
             <p className="text-sm font-extrabold text-[#1C1614] truncate max-w-md font-heading">{puja.name}</p>
             <p className="text-xs font-semibold text-[#6B5E57]">
               चयनित पैकेज: <span className="text-[#FF6600] font-black">{currentSelectedPkgObj?.name} (₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')})</span>
             </p>
           </div>
+          
           <div className="w-full md:w-auto flex items-center gap-3 justify-between">
-            <div className="md:hidden flex flex-col">
-              <span className="text-[9px] text-[#6B5E57] uppercase font-extrabold">पूजा संकल्प शुल्क:</span>
-              <span className="text-lg font-black text-[#1C1614] font-heading">
+            <div className="md:hidden flex flex-col min-w-0">
+              <span className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-tight truncate">
+                {currentSelectedPkgObj?.name || 'संकल्प दक्षिणा'}:
+              </span>
+              <span className="text-lg font-black text-[#FF6600] font-heading leading-tight">
                 ₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')}
               </span>
             </div>
+            
             <button 
               onClick={() => handleBookNow()}
-              className="w-full sm:w-auto px-7 sm:px-9 py-3 text-sm sm:text-base bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold shadow-md hover:shadow-lg transition-all uppercase tracking-wider rounded-full border border-emerald-400/50 shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="flex-1 sm:flex-none sm:w-auto px-6 sm:px-9 py-3 text-xs sm:text-sm bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] text-white font-black shadow-md hover:shadow-lg transition-all rounded-xl border border-[#FFD2B0] shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
             >
-              <span>पूजा बुक करें (BOOK NOW)</span>
-              <ArrowRight className="w-4 h-4" />
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-200"></span>
+              </span>
+              <span>संकल्प लें व बुक करें ➔</span>
             </button>
           </div>
         </div>

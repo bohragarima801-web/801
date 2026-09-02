@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
-import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard } from 'lucide-react'
+import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
@@ -362,361 +362,495 @@ function BookingForm() {
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-    <div className="max-w-5xl mx-auto py-10 px-4 grid gap-8 lg:grid-cols-12 items-start">
-      
-      {/* Left Column: Booking details & Add-ons */}
-      <div className="lg:col-span-7 space-y-6">
-        <div className="flex justify-between items-center">
-          <Button variant="ghost" size="sm" className="gap-1 text-xs font-bold text-slate-700 hover:text-orange-600" onClick={() => {
-            if (step === 'payment') setStep('sankalp')
-            else router.back()
-          }}>
-            <ArrowLeft className="h-4 w-4" /> {step === 'payment' ? 'संकल्प विवरण बदलें' : 'वापस जाएं'}
+    <div className="min-h-screen bg-[#FAF8F5] pb-24 md:pb-12 text-[#1C1614]">
+      {/* Top Sacred Trust Header Bar */}
+      <div className="bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-white py-2 px-4 text-center text-xs font-semibold shadow-xs">
+        <span>ॐ श्री गणेशाय नमः • पावन नाम-गोत्र संकल्प पत्र</span>
+      </div>
+
+      <div className="max-w-4xl mx-auto py-5 sm:py-8 px-3 sm:px-4 space-y-5">
+        
+        {/* Navigation & Stepper Header */}
+        <div className="flex items-center justify-between gap-2 bg-white p-3 sm:p-4 rounded-2xl border border-[#EFE4D6] shadow-2xs">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="gap-1.5 text-xs font-bold text-[#7A1521] hover:text-[#FF6600] hover:bg-[#FFF3E8] rounded-xl px-2.5 h-9 shrink-0" 
+            onClick={() => {
+              if (step === 'payment') setStep('sankalp')
+              else router.back()
+            }}
+          >
+            <ArrowLeft className="h-4 w-4" /> 
+            <span>{step === 'payment' ? 'विवरण बदलें' : 'वापस'}</span>
           </Button>
 
-          <div className="flex items-center gap-1.5 text-xs font-bold">
-            <span className={`px-2.5 py-1 rounded-full ${step === 'sankalp' ? 'bg-[#FF6600] text-white shadow-2xs' : 'bg-slate-100 text-slate-500'}`}>1. संकल्प विवरण</span>
+          {/* Stepper Pills */}
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-black">
+            <span className={`px-3 py-1 rounded-full transition-all flex items-center gap-1 ${
+              step === 'sankalp' 
+                ? 'bg-[#FF6600] text-white shadow-xs' 
+                : 'bg-emerald-100 text-emerald-800'
+            }`}>
+              {step === 'payment' ? '✓' : '1.'} संकल्प विवरण
+            </span>
             <ChevronRight className="h-3 w-3 text-slate-400" />
-            <span className={`px-2.5 py-1 rounded-full ${step === 'payment' ? 'bg-[#FF6600] text-white shadow-2xs' : 'bg-slate-100 text-slate-500'}`}>2. सुरक्षित दक्षिणा</span>
+            <span className={`px-3 py-1 rounded-full transition-all flex items-center gap-1 ${
+              step === 'payment' 
+                ? 'bg-[#FF6600] text-white shadow-xs' 
+                : 'bg-slate-100 text-slate-500'
+            }`}>
+              2. सुरक्षित दक्षिणा
+            </span>
           </div>
         </div>
 
         {/* Selected Puja Summary Card */}
-        <Card className="border shadow-sm rounded-2xl overflow-hidden">
-          <CardContent className="p-5 flex gap-4 items-center">
-            {puja.coverImage && (
-              <img src={getSafeImageUrl(puja.coverImage)} className="h-16 w-20 rounded-lg object-cover border" alt="Puja" />
-            )}
-            <div className="space-y-1">
-              <h2 className="font-black text-slate-800 text-base">{puja.name}</h2>
-              <p className="text-[11px] text-muted-foreground">📍 {puja.temple?.name || 'Holy Pilgrimage'}</p>
-              <Badge variant="secondary" className="text-[10px] bg-orange-100 text-orange-800">
-                {memberCount} Member Package — ₹{packagePrice}
-              </Badge>
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#EFE4D6] shadow-2xs flex items-center gap-3.5">
+          {puja.coverImage && (
+            <img 
+              src={getSafeImageUrl(puja.coverImage)} 
+              className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl object-cover border border-[#EFE4D6] shrink-0 bg-slate-900" 
+              alt={puja.name} 
+            />
+          )}
+          <div className="flex-1 min-w-0 space-y-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#7A1521] text-white">
+                {puja.isVip ? '👑 VIP महापूजा' : '🪔 पावन अनुष्ठान'}
+              </span>
+              <span className="text-[11px] font-semibold text-[#6B5E57] truncate">
+                📍 {puja.temple?.name || 'सिद्ध शक्ति पीठ'}
+              </span>
             </div>
-          </CardContent>
-        </Card>
+            <h2 className="font-black text-[#1C1614] text-sm sm:text-base leading-tight line-clamp-2">
+              {puja.name}
+            </h2>
+            <div className="flex items-center justify-between gap-2 pt-0.5">
+              <span className="text-xs font-bold text-[#FF6600] bg-[#FFF3E8] px-2 py-0.5 rounded-md border border-[#FFD2B0]">
+                {memberCount} यजमान पैकेज • ₹{packagePrice}
+              </span>
+              <span className="text-xs font-bold text-emerald-700 hidden sm:inline-flex items-center gap-1">
+                <CheckCircle2 className="h-3.5 w-3.5" /> 100% शास्त्रोक्त संकल्प
+              </span>
+            </div>
+          </div>
+        </div>
 
-        {/* Dynamic BhaktiSeva Offerings */}
+        {/* ── STEP 1: SANKALP FORM (PRIORITY: Form fields first on mobile) ── */}
         {step === 'sankalp' && (
-          <div className="space-y-4">
-            <h3 className="font-bold text-sm uppercase text-slate-700 tracking-wider">Enhance your Puja (अतिरिक्त सेवा)</h3>
+          <div className="space-y-5">
+            
+            {/* Primary Devotee Form Card */}
+            <form onSubmit={handleProceedToPayment} id="sankalp-form" className="space-y-5">
+              <Card className="border border-[#EFE4D6] shadow-sm rounded-3xl overflow-hidden bg-white">
+                <CardHeader className="bg-gradient-to-r from-[#FFF3E8] to-white border-b border-[#EFE4D6] py-3.5 px-4 sm:px-6">
+                  <CardTitle className="text-sm sm:text-base font-black flex items-center gap-2 text-[#1C1614]">
+                    <Heart className="h-4 w-4 text-[#FF6600] fill-[#FF6600]" /> 
+                    <span>मुख्य यजमान संकल्प विवरण (Sankalp Details)</span>
+                  </CardTitle>
+                  <CardDescription className="text-[11px] text-[#6B5E57]">
+                    आचार्यों द्वारा इसी नाम और गोत्र से पवित्र मन्त्रोच्चार व आहुति दी जाएगी।
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="p-4 sm:p-6 space-y-4">
+                  {/* Name Input */}
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-[#1C1614]">
+                      मुख्य यजमान का पूरा नाम * (Devotee Full Name)
+                    </Label>
+                    <Input
+                      placeholder="उदा. रमेश शर्मा / Ramesh Sharma"
+                      value={devoteeName}
+                      onChange={(e) => setDevoteeName(e.target.value)}
+                      required
+                      className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600] bg-[#FFFDF9]"
+                    />
+                  </div>
 
-            {/* Admin Controlled Pandit Ji Choice Tick Box */}
-            {showPanditChoice && (
-              <div 
-                className={`p-4 border-2 rounded-2xl flex items-center justify-between cursor-pointer transition-all ${
-                  selectPanditChoice ? 'border-amber-500 bg-amber-50/40 shadow-sm' : 'border-slate-200 bg-white'
-                }`}
-                onClick={() => setSelectPanditChoice(!selectPanditChoice)}
-              >
-                <div className="flex items-center gap-3">
-                  <Checkbox 
-                    checked={selectPanditChoice} 
-                    onCheckedChange={(val) => setSelectPanditChoice(!!val)} 
-                  />
-                  <img 
-                    src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
-                    className="h-10 w-10 rounded-full object-cover border-2 border-amber-400 shrink-0" 
-                    alt={assignedPandit?.name || 'पं. मुकेश बोहरा'} 
-                    onError={(e) => {
-                      e.currentTarget.src = '/pandit_mukesh_bohra.jpg';
-                    }}
-                  />
-                  <div className="text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <h4 className="font-bold text-slate-800">
-                        पंडित जी चॉइस (Pandit Ji Choice) — {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
-                      </h4>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded-full">
-                        ✓ Verified
+                  {/* WhatsApp Phone Number */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs font-bold text-[#1C1614]">
+                        व्हाट्सएप मोबाइल नंबर * (WhatsApp Phone)
+                      </Label>
+                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        📹 वीडियो प्रमाण हेतु
                       </span>
                     </div>
-                    <p className="text-slate-500 text-[10px]">
-                      {assignedPandit?.title || 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)'}
+                    <Input
+                      placeholder="उदा. 9876543210 (10 अंक)"
+                      type="tel"
+                      value={devoteePhone}
+                      onChange={(e) => setDevoteePhone(e.target.value)}
+                      required
+                      className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600] bg-[#FFFDF9]"
+                    />
+                    <p className="text-[10px] text-[#6B5E57]">
+                      आपके संकल्प का व्यक्तिगत HD वीडियो इसी व्हाट्सएप नंबर पर प्रेषित किया जाएगा।
                     </p>
                   </div>
-                </div>
-                <Badge className={selectPanditChoice ? "bg-amber-500 text-slate-950 font-black text-[10px]" : "bg-slate-200 text-slate-700 font-bold text-[10px]"}>
-                  {selectPanditChoice ? '✓ Selected' : 'Select'}
-                </Badge>
-              </div>
-            )}
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className={`p-4 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${addCourier ? 'border-orange-500 bg-orange-50/20' : 'bg-white'}`} onClick={() => setAddCourier(!addCourier)}>
-                <div className="flex items-center gap-3">
-                  <Checkbox checked={addCourier} onCheckedChange={() => setAddCourier(!addCourier)} />
-                  <div className="text-xs">
-                    <h4 className="font-bold text-slate-800">Prasad Courier Fee</h4>
-                    <p className="text-slate-500 text-[10px]">Pure home delivery</p>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-orange-600">₹99</span>
-              </div>
-
-              <div className={`p-4 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${addDakshina ? 'border-orange-500 bg-orange-50/20' : 'bg-white'}`} onClick={() => setAddDakshina(!addDakshina)}>
-                <div className="flex items-center gap-3">
-                  <Checkbox checked={addDakshina} onCheckedChange={() => setAddDakshina(!addDakshina)} />
-                  <div className="text-xs">
-                    <h4 className="font-bold text-slate-800">Pandit Dakshina</h4>
-                    <p className="text-slate-500 text-[10px]">Offer special dakshina</p>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-orange-600">₹251</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <span className="text-xs font-bold text-slate-600">Sacred Offerings & Yantras</span>
-
-              {dbOfferings.length === 0 ? (
-                <p className="text-[10px] text-muted-foreground italic">No extra offerings added yet.</p>
-              ) : (
-                dbOfferings.map((offering) => {
-                  const isSelected = selectedOfferingIds.includes(offering.id)
-                  return (
-                    <div
-                      key={offering.id}
-                      className={`p-4 border rounded-2xl flex items-start justify-between cursor-pointer transition-all ${isSelected ? 'border-orange-500 bg-orange-50/20' : 'bg-white'}`}
-                      onClick={() => toggleOffering(offering.id)}
-                    >
-                      <div className="flex gap-3 items-start max-w-[80%]">
-                        <Checkbox checked={isSelected} onCheckedChange={() => toggleOffering(offering.id)} className="mt-1" />
-                        <div className="text-xs space-y-1">
-                          <h4 className="font-bold text-slate-800">{offering.name}</h4>
-                          <p className="text-[10px] text-slate-500 leading-snug">{offering.description || 'Sacred offering blessed at the temple.'}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-bold text-orange-600 shrink-0">₹{Number(offering.price)}</span>
+                  {/* Gotra with Instant Kashyap Suggestion Pill */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs font-bold text-[#1C1614]">गोत्र (Gotra) *</Label>
+                      <button
+                        type="button"
+                        onClick={() => setGotra('कश्यप (Kashyap)')}
+                        className="text-[10px] text-[#FF6600] font-black hover:underline cursor-pointer bg-[#FFF3E8] px-2 py-0.5 rounded border border-[#FFD2B0]"
+                      >
+                        + कश्यप गोत्र चुनें
+                      </button>
                     </div>
-                  )
-                })
+                    <Input
+                      placeholder="कश्यप / भारद्वाज / गर्ग / वशिष्ठ..."
+                      value={gotra}
+                      onChange={(e) => setGotra(e.target.value)}
+                      required
+                      className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600] bg-[#FFFDF9]"
+                    />
+                    <p className="text-[10px] text-[#7A1521] font-medium bg-[#FFF3E8] p-2 rounded-xl border border-[#EFE4D6]">
+                      शास्त्रोक्त नियम: यदि अपना गोत्र ज्ञात न हो तो 'कश्यप' गोत्र से संकल्प पूर्णतः शास्त्र-सम्मत होता है।
+                    </p>
+                  </div>
+
+                  {/* Multi-member names if package includes family */}
+                  {memberCount > 1 && (
+                    <div className="space-y-3 border-t border-[#EFE4D6] pt-3">
+                      <span className="text-xs font-bold text-[#1C1614]">
+                        परिवार के अन्य सदस्य ({memberCount - 1} सदस्य संकल्प में सम्मिलित)
+                      </span>
+                      {Array.from({ length: memberCount - 1 }).map((_, index) => (
+                        <div key={index} className="space-y-1">
+                          <Label className="text-[10px] text-[#6B5E57]">सदस्य {index + 2} का नाम</Label>
+                          <Input
+                            placeholder={`सदस्य ${index + 2} का नाम`}
+                            value={familyNames[index] || ''}
+                            onChange={(e) => handleMemberNameChange(index, e.target.value)}
+                            className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] bg-[#FFFDF9]"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Father/Husband Name (Optional) */}
+                  <div className="space-y-1.5 border-t border-[#EFE4D6] pt-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs font-bold text-[#1C1614]">पिता / पति का नाम</Label>
+                      <span className="text-[10px] text-[#6B5E57]">वैकल्पिक</span>
+                    </div>
+                    <Input
+                      placeholder="उदा. श्री सुरेश शर्मा (यदि उपलब्ध हो)"
+                      value={fatherHusbandName}
+                      onChange={(e) => setFatherHusbandName(e.target.value)}
+                      className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] bg-[#FFFDF9]"
+                    />
+                  </div>
+
+                  {/* Sankalp Purpose / Wish */}
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold text-[#1C1614]">
+                      विशेष मनोकामना / संकल्प उद्देश्य (वैकल्पिक)
+                    </Label>
+                    <Textarea
+                      placeholder="उदा. व्यापार वृद्धि, रोग निवारण, परिवार कल्याण, शीघ्र विवाह व सुख-शांति..."
+                      value={sankalpPurpose}
+                      onChange={(e) => setSankalpPurpose(e.target.value)}
+                      rows={2}
+                      className="text-base sm:text-sm rounded-xl border-[#EFE4D6] bg-[#FFFDF9]"
+                    />
+                  </div>
+
+                  {/* Terms Checkbox */}
+                  <div className="flex items-start gap-2 border-t border-[#EFE4D6] pt-3">
+                    <Checkbox 
+                      id="termsAccept" 
+                      checked={acceptTerms} 
+                      onCheckedChange={(val) => setAcceptTerms(!!val)} 
+                      className="mt-0.5" 
+                    />
+                    <Label htmlFor="termsAccept" className="text-xs leading-tight text-[#4A3E39] cursor-pointer">
+                      मैं दिव्ययज्ञम् के <Link href="/terms" target="_blank" className="text-[#FF6600] font-bold hover:underline">नियमों व शर्तों</Link> से सहमत हूँ।
+                    </Label>
+                  </div>
+
+                  {/* Desktop Submit Button (Hidden on Mobile, handled by Sticky Bar) */}
+                  <div className="hidden md:block pt-2">
+                    <Button 
+                      type="submit" 
+                      className="w-full h-12 text-sm font-black bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] text-white rounded-xl shadow-md transition-all active:scale-[0.98]"
+                    >
+                      <span>सुरक्षित दक्षिणा भुगतान हेतु आगे बढ़ें (₹{finalTotal})</span>
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </form>
+
+            {/* Optional Enhancements & Add-ons Section (Cleanly placed below the form) */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="font-black text-xs uppercase tracking-wider text-[#7A1521] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
+                  <span>अतिरिक्त शुभ सेवा व अर्पण (Optional Add-ons)</span>
+                </h3>
+                <span className="text-[10px] text-[#6B5E57] font-semibold">इच्छानुसार जोड़ें</span>
+              </div>
+
+              {/* Pandit Ji Choice Option */}
+              {showPanditChoice && (
+                <div 
+                  className={`p-3.5 sm:p-4 border-2 rounded-2xl flex items-center justify-between cursor-pointer transition-all ${
+                    selectPanditChoice ? 'border-[#FF6600] bg-[#FFF3E8]/60 shadow-xs' : 'border-[#EFE4D6] bg-white'
+                  }`}
+                  onClick={() => setSelectPanditChoice(!selectPanditChoice)}
+                >
+                  <div className="flex items-center gap-3">
+                    <Checkbox 
+                      checked={selectPanditChoice} 
+                      onCheckedChange={(val) => setSelectPanditChoice(!!val)} 
+                    />
+                    <img 
+                      src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
+                      className="h-11 w-11 rounded-full object-cover border-2 border-amber-400 shrink-0" 
+                      alt={assignedPandit?.name || 'पं. मुकेश बोहरा'} 
+                      onError={(e) => { e.currentTarget.src = '/pandit_mukesh_bohra.jpg' }}
+                    />
+                    <div className="text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-black text-[#1C1614]">
+                          पंडित जी चॉइस — {assignedPandit?.name || 'पं. मुकेश बोहरा'}
+                        </h4>
+                        <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded-full">
+                          ✓ मुख्य आचार्य
+                        </span>
+                      </div>
+                      <p className="text-[#6B5E57] text-[10px]">
+                        27+ वर्ष अनुभवी पीठाधीश्वर द्वारा विशेष संकल्प
+                      </p>
+                    </div>
+                  </div>
+                  <Badge className={selectPanditChoice ? "bg-[#FF6600] text-white font-black text-[10px]" : "bg-slate-100 text-slate-700 text-[10px]"}>
+                    {selectPanditChoice ? '✓ चयनित' : 'जोड़ें'}
+                  </Badge>
+                </div>
+              )}
+
+              {/* Courier & Dakshina 2-Col Grid */}
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                <div 
+                  className={`p-3.5 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${addCourier ? 'border-[#FF6600] bg-[#FFF3E8]/40 shadow-2xs' : 'border-[#EFE4D6] bg-white'}`} 
+                  onClick={() => setAddCourier(!addCourier)}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Checkbox checked={addCourier} onCheckedChange={() => setAddCourier(!addCourier)} />
+                    <div className="text-xs">
+                      <h4 className="font-bold text-[#1C1614]">📦 पावन प्रसाद कूरियर</h4>
+                      <p className="text-[#6B5E57] text-[10px]">घर पर सुरक्षित डिलीवरी</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-black text-[#FF6600]">+₹99</span>
+                </div>
+
+                <div 
+                  className={`p-3.5 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${addDakshina ? 'border-[#FF6600] bg-[#FFF3E8]/40 shadow-2xs' : 'border-[#EFE4D6] bg-white'}`} 
+                  onClick={() => setAddDakshina(!addDakshina)}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Checkbox checked={addDakshina} onCheckedChange={() => setAddDakshina(!addDakshina)} />
+                    <div className="text-xs">
+                      <h4 className="font-bold text-[#1C1614]">🙏 पंडित दक्षिणा</h4>
+                      <p className="text-[#6B5E57] text-[10px]">वेदाचार्यों को विशेष दक्षिणा</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-black text-[#FF6600]">+₹251</span>
+                </div>
+              </div>
+
+              {/* Extra Offerings List */}
+              {dbOfferings.length > 0 && (
+                <div className="space-y-2 pt-2">
+                  <span className="text-[11px] font-bold text-[#6B5E57] block px-1">
+                    सिद्ध यंत्र व पावन अर्पण (Temple Offerings):
+                  </span>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {dbOfferings.map((offering) => {
+                      const isSelected = selectedOfferingIds.includes(offering.id)
+                      return (
+                        <div
+                          key={offering.id}
+                          className={`p-3 border rounded-2xl flex items-center justify-between cursor-pointer transition-all ${
+                            isSelected ? 'border-[#FF6600] bg-[#FFF3E8]/50 shadow-2xs' : 'border-[#EFE4D6] bg-white'
+                          }`}
+                          onClick={() => toggleOffering(offering.id)}
+                        >
+                          <div className="flex gap-2.5 items-center">
+                            <Checkbox checked={isSelected} onCheckedChange={() => toggleOffering(offering.id)} />
+                            <div className="text-xs">
+                              <h4 className="font-bold text-[#1C1614] line-clamp-1">{offering.name}</h4>
+                              <p className="text-[10px] text-[#6B5E57] line-clamp-1">{offering.description || 'सिद्ध शक्तिपीठ अर्पण'}</p>
+                            </div>
+                          </div>
+                          <span className="text-xs font-black text-[#FF6600] shrink-0">+₹{Number(offering.price)}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               )}
             </div>
+
+            {/* Mobile Fixed Bottom Action Bar for Step 1 */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] px-4 py-2.5 shadow-[0_-6px_20px_rgba(0,0,0,0.08)] pb-[calc(0.6rem+env(safe-area-inset-bottom,0px))]">
+              <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-[#6B5E57] font-bold uppercase tracking-tight">कुल दक्षिणा:</span>
+                  <span className="text-xl font-black text-[#FF6600]">₹{finalTotal}</span>
+                </div>
+                <Button 
+                  type="submit" 
+                  form="sankalp-form"
+                  className="h-11 px-5 text-xs font-black bg-gradient-to-r from-[#FF6600] to-[#FF8500] active:scale-95 text-white rounded-xl shadow-md flex items-center gap-1.5"
+                >
+                  <span>भुगतान हेतु आगे बढ़ें</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
           </div>
         )}
 
-        {/* Step 2: Payment Method Interface */}
+        {/* ── STEP 2: PAYMENT INTERFACE ── */}
         {step === 'payment' && (
-          <div className="space-y-4">
-            <h3 className="font-bold text-sm uppercase text-slate-700 tracking-wider">Select Payment Gateway</h3>
-            <Card className="border shadow-sm rounded-2xl p-6 space-y-4">
-              <div className="flex items-center gap-3 p-4 border border-orange-500 bg-orange-50/20 rounded-xl">
-                <CreditCard className="h-6 w-6 text-orange-600" />
-                <div className="text-xs">
-                  <h4 className="font-bold text-slate-800">Online Payment (UPI, Card, NetBanking)</h4>
-                  <p className="text-slate-500">Pay securely via Razorpay payment gateway.</p>
-                </div>
-              </div>
+          <div className="space-y-5">
+            <Card className="border border-[#EFE4D6] shadow-sm rounded-3xl overflow-hidden bg-white">
+              <CardHeader className="bg-gradient-to-r from-[#FFF3E8] to-white border-b border-[#EFE4D6] py-3.5 px-4 sm:px-6">
+                <CardTitle className="text-sm sm:text-base font-black flex items-center gap-2 text-[#1C1614]">
+                  <CreditCard className="h-4 w-4 text-[#FF6600]" /> 
+                  <span>सुरक्षित दक्षिणा भुगतान (Confirm & Pay)</span>
+                </CardTitle>
+                <CardDescription className="text-[11px] text-[#6B5E57]">
+                  विवरण सत्यापित करें और UPI / कार्ड द्वारा सुरक्षित दक्षिणा अर्पित करें।
+                </CardDescription>
+              </CardHeader>
 
-              <div className="p-4 bg-slate-50 rounded-2xl space-y-3 text-xs">
-                <h4 className="font-bold text-slate-800">Sankalp Summary (संकल्प सारांश)</h4>
-                <div className="space-y-1.5 text-slate-600">
-                  <div className="flex justify-between">
-                    <span>Devotee Name:</span>
-                    <span className="font-bold text-slate-800">{devoteeName}</span>
-                  </div>
-                  {devoteePhone && (
-                    <div className="flex justify-between">
-                      <span>WhatsApp Number:</span>
-                      <span className="font-bold text-slate-800">{devoteePhone}</span>
-                    </div>
-                  )}
-                  {familyNames.filter(Boolean).length > 0 && (
-                    <div className="flex justify-between">
-                      <span>Family Members:</span>
-                      <span className="font-bold text-slate-800">{familyNames.filter(Boolean).join(', ')}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span>Gotra:</span>
-                    <span className="font-bold text-slate-800">{gotra}</span>
-                  </div>
-                  {sankalpPurpose && (
-                    <div className="flex justify-between">
-                      <span>Sankalp Purpose:</span>
-                      <span className="font-bold text-slate-800 line-clamp-1 max-w-[150px]">{sankalpPurpose}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span>Puja Package Rate:</span>
-                    <span className="font-bold text-slate-800">₹{packagePrice}</span>
-                  </div>
-                  {addOnsTotal > 0 && (
-                    <div className="flex justify-between">
-                      <span>Add-ons & Offerings:</span>
-                      <span className="font-bold text-slate-800">₹{addOnsTotal}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Card>
-          </div>
-        )}
-
-      </div>
-
-      {/* Right Column: Dynamic Form Switcher */}
-      <div className="lg:col-span-5 space-y-6">
-        <Card className="border shadow-md rounded-3xl overflow-hidden sticky top-6">
-          <CardHeader className="bg-orange-50/40 border-b">
-            <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-800">
-              <Heart className="h-5 w-5 text-orange-600 fill-orange-600" /> 
-              {step === 'sankalp' ? 'Sankalp Patra (संकल्प पत्र)' : 'Confirm Booking (भुगतान करें)'}
-            </CardTitle>
-            <CardDescription className="text-[11px]">
-              {step === 'sankalp' ? 'पूजा संकल्प के लिए अपनी गोत्र और नाम की सही जानकारी भरें।' : 'विवरण सत्यापित करें और भुगतान पूरा करें।'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-5">
-            {step === 'sankalp' ? (
-              <form onSubmit={handleProceedToPayment} className="space-y-4">
+              <CardContent className="p-4 sm:p-6 space-y-4">
                 
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-800">मुख्य यजमान का नाम * (Devotee Name)</Label>
-                  <Input
-                    placeholder="उदा. राहुल शर्मा"
-                    value={devoteeName}
-                    onChange={(e) => setDevoteeName(e.target.value)}
-                    required
-                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600]"
-                  />
+                {/* Devotee Summary Pill */}
+                <div className="p-4 bg-[#FFF9F3] rounded-2xl border border-[#FFD2B0] space-y-2 text-xs">
+                  <div className="flex items-center justify-between border-b border-[#FFD2B0]/60 pb-2">
+                    <span className="font-black text-[#7A1521]">संकल्प यजमान सारांश:</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setStep('sankalp')} 
+                      className="text-[11px] font-bold text-[#FF6600] hover:underline"
+                    >
+                      संशोधन करें (Edit)
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[#1C1614]">
+                    <div>
+                      <span className="text-[10px] text-[#6B5E57] block">यजमान नाम:</span>
+                      <span className="font-bold">{devoteeName}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#6B5E57] block">व्हाट्सएप नंबर:</span>
+                      <span className="font-bold">{devoteePhone}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#6B5E57] block">गोत्र:</span>
+                      <span className="font-bold">{gotra}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#6B5E57] block">पैकेज दक्षिणा:</span>
+                      <span className="font-bold text-[#FF6600]">₹{packagePrice}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-800">व्हाट्सएप मोबाइल नंबर * (WhatsApp Number)</Label>
-                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">✓ लाइव वीडियो प्रमाण</span>
-                  </div>
-                  <Input
-                    placeholder="उदा. 9876543210"
-                    type="tel"
-                    value={devoteePhone}
-                    onChange={(e) => setDevoteePhone(e.target.value)}
-                    required
-                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6] focus:border-[#FF6600]"
-                  />
-                  <p className="text-[10px] text-slate-500">आपके नाम-गोत्र के संकल्प का HD वीडियो इसी व्हाट्सएप नंबर पर भेजा जाएगा।</p>
-                </div>
-
-                {memberCount > 1 && (
-                  <div className="space-y-3 border-t border-[#EFE4D6] pt-3">
-                    <span className="text-xs font-bold text-slate-700">परिवार के अन्य सदस्य (संकल्प में सम्मिलित करने हेतु)</span>
-                    {Array.from({ length: memberCount - 1 }).map((_, index) => (
-                      <div key={index} className="space-y-1">
-                        <Label className="text-[10px] text-muted-foreground">सदस्य {index + 2} का नाम</Label>
-                        <Input
-                          placeholder={`उदा. सदस्य ${index + 2} का नाम`}
-                          value={familyNames[index] || ''}
-                          onChange={(e) => handleMemberNameChange(index, e.target.value)}
-                          className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="space-y-2 border-t border-[#EFE4D6] pt-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-800">पिता / पति का नाम (Father / Husband Name)</Label>
-                    <span className="text-[10px] text-slate-400">वैकल्पिक</span>
-                  </div>
-                  <Input
-                    placeholder="उदा. श्री सुरेश शर्मा (यदि उपलब्ध हो)"
-                    value={fatherHusbandName}
-                    onChange={(e) => setFatherHusbandName(e.target.value)}
-                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-800">गोत्र (Gotra) *</Label>
-                  <Input
-                    placeholder="कश्यप / Kashyap"
-                    value={gotra}
-                    onChange={(e) => setGotra(e.target.value)}
-                    required
-                    className="h-11 text-base sm:text-sm rounded-xl border-[#EFE4D6]"
-                  />
-                  <p className="text-[10px] text-[#7A1521] font-medium bg-[#FFF3E8] p-2 rounded-xl border border-[#EFE4D6]">
-                    शास्त्रोक्त नियम: यदि अपना गोत्र ज्ञात न हो तो 'कश्यप' (Kashyap) गोत्र से संकल्प शास्त्र-सम्मत होता है।
+                {/* Total Payable Box */}
+                <div className="p-4 bg-[#FFF3E8] rounded-2xl text-center space-y-1 border border-[#FFD2B0]">
+                  <span className="text-xs text-[#6B5E57] font-bold">कुल संकल्प दक्षिणा (Total Amount)</span>
+                  <div className="text-3xl sm:text-4xl font-black text-[#FF6600]">₹{finalTotal}</div>
+                  <p className="text-[10px] text-[#7A1521] font-semibold">
+                    (पूजा सामग्री, वैदिक आहुति, वीडियो प्रमाण एवं पावन प्रसाद सम्मिलित)
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-800">संकल्प का उद्देश्य / विशेष मनोकामना (वैकल्पिक)</Label>
-                  <Textarea
-                    placeholder="उदा. उत्तम स्वास्थ्य, व्यापार वृद्धि, शीघ्र विवाह, परिवार कल्याण व सुख-शांति..."
-                    value={sankalpPurpose}
-                    onChange={(e) => setSankalpPurpose(e.target.value)}
-                    rows={2}
-                    className="text-base sm:text-sm rounded-xl border-[#EFE4D6] bg-white"
-                  />
-                  <p className="text-[10px] text-slate-500">अपनी विशेष मनोकामना या प्रार्थना यहाँ लिख सकते हैं।</p>
-                </div>
-
-                {/* Terms and Conditions Checkbox */}
-                <div className="flex items-start gap-2 border-t border-[#EFE4D6] pt-3 pb-1 text-left">
-                  <Checkbox id="termsAccept" checked={acceptTerms} onCheckedChange={(val) => setAcceptTerms(!!val)} className="mt-0.5" />
-                  <Label htmlFor="termsAccept" className="text-xs leading-tight text-slate-600 cursor-pointer">
-                    मैं दिव्ययज्ञम् के <Link href="/terms" target="_blank" className="text-[#FF6600] hover:underline font-bold">नियम व शर्तों</Link> से सहमत हूँ।
-                  </Label>
-                </div>
-
-                <Button type="submit" className="w-full h-12 text-sm font-black bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] text-white rounded-xl shadow-md transition-all active:scale-[0.98]">
-                  <span>सुरक्षित दक्षिणा भुगतान हेतु आगे बढ़ें (₹{finalTotal})</span>
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-
-              </form>
-            ) : (
-              <div className="space-y-4">
-                <div className="p-4 bg-orange-50/40 rounded-2xl text-center space-y-1">
-                  <span className="text-xs text-slate-500 font-medium">कुल संकल्प दक्षिणा (Total Payable)</span>
-                  <div className="text-3xl font-black text-[#FF6600]">₹{finalTotal}</div>
-                </div>
-
-                {/* UPI Quick Badges for Mobile Trust */}
+                {/* UPI Quick Trust Badges */}
                 <div className="p-3 bg-white rounded-xl border border-[#EFE4D6] space-y-1.5">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block text-center">
-                    Instant One-Click UPI & Card Payment
+                  <span className="text-[10px] font-bold text-[#6B5E57] uppercase tracking-wider block text-center">
+                    Instant 1-Click UPI & Card Payment
                   </span>
                   <div className="flex items-center justify-center gap-2 text-xs font-black text-slate-700">
-                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">GPay</span>
-                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">PhonePe</span>
-                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">Paytm</span>
-                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">BHIM UPI</span>
-                    <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-200">Cards</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200">GPay</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200">PhonePe</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200">Paytm</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200">BHIM</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200">Cards</span>
                   </div>
                 </div>
 
-                <Button onClick={handleConfirmBooking} disabled={booking} className="w-full h-12 text-sm font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]">
+                {/* Desktop Pay Button */}
+                <div className="hidden md:block">
+                  <Button 
+                    onClick={handleConfirmBooking} 
+                    disabled={booking} 
+                    className="w-full h-12 text-sm font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                  >
+                    {booking ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" /> भुगतान प्रक्रियाधीन है...
+                      </span>
+                    ) : (
+                      <>
+                        <Wallet className="h-4 w-4" /> सुरक्षित दक्षिणा भुगतान करें (₹{finalTotal}) 🔒
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                <div className="flex items-center justify-center gap-1.5 text-[11px] text-emerald-800 font-bold bg-emerald-50 py-2.5 px-3 rounded-xl border border-emerald-200 text-center">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" /> 
+                  <span>100% सुरक्षित भुगतान • व्हाट्सएप लाइव वीडियो संकल्प • पावन प्रसाद डिलीवरी</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Mobile Fixed Bottom Action Bar for Step 2 */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] px-4 py-2.5 shadow-[0_-6px_20px_rgba(0,0,0,0.08)] pb-[calc(0.6rem+env(safe-area-inset-bottom,0px))]">
+              <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-[#6B5E57] font-bold uppercase tracking-tight">कुल देय:</span>
+                  <span className="text-xl font-black text-emerald-700">₹{finalTotal}</span>
+                </div>
+                <Button 
+                  onClick={handleConfirmBooking} 
+                  disabled={booking} 
+                  className="h-11 px-5 text-xs font-black bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl shadow-md flex items-center gap-1.5"
+                >
                   {booking ? (
-                    <span className="flex items-center justify-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> भुगतान प्रक्रियाधीन है...
-                    </span>
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <>
-                      <Wallet className="h-4 w-4" /> सुरक्षित दक्षिणा भुगतान करें (₹{finalTotal}) 🔒
+                      <Wallet className="h-4 w-4" />
+                      <span>दक्षिणा भुगतान करें 🔒</span>
                     </>
                   )}
                 </Button>
-
-                <Button variant="outline" className="w-full h-11 text-xs font-bold rounded-xl" onClick={() => setStep('sankalp')}>
-                  ← संकल्प विवरण बदलें (Edit Sankalp)
-                </Button>
-
-                <div className="flex items-center justify-center gap-1 text-[10px] text-emerald-800 font-semibold bg-emerald-50 py-2 rounded-lg border border-emerald-200">
-                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" /> 100% सुरक्षित भुगतान • व्हाट्सएप लाइव वीडियो संकल्प • पावन प्रसाद
-                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+
+          </div>
+        )}
 
         <PaymentTrustBadge className="mt-4" />
       </div>
-
     </div>
     </>
   )
