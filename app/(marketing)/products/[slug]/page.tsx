@@ -2,7 +2,7 @@ import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { ProductClientView } from '@/components/product-client-view'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, redirect, permanentRedirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import { generateProductSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
@@ -140,7 +140,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlugOrFallback(slug);
   
-  if (!product) return generatePageMeta({ title: 'Product Not Found | DivyaYagyam', description: 'The requested product is unavailable.', path: `/products/${slug}` })
+  if (!product) return generatePageMeta({ title: 'Spiritual Products | DivyaYagyam', description: 'Redirecting to authentic energized items at DivyaYagyam.', path: `/products`, noIndex: true })
   
   const title = product.name || product.seoTitle || 'सिद्ध सामग्री'
   const description = (product.seoDescription || product.shortDescription || product.description || `Buy authentic ${product.name} online from sacred temples at DivyaYagyam.`).replace(/<[^>]*>?/gm, '')
@@ -160,7 +160,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   const product = await getProductBySlugOrFallback(slug);
 
   if (!product) {
-    notFound()
+    permanentRedirect('/products')
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID

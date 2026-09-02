@@ -78,6 +78,8 @@ export async function DELETE(req: NextRequest) {
     try {
       revalidateTag('products')
       revalidatePath('/products')
+      revalidatePath('/sitemap.xml')
+      revalidatePath('/sitemap')
       revalidatePath('/')
     } catch {}
 
@@ -212,6 +214,9 @@ export async function POST(req: NextRequest) {
     try {
       revalidateTag('products')
       revalidatePath('/products')
+      if (product?.slug) revalidatePath(`/products/${product.slug}`)
+      revalidatePath('/sitemap.xml')
+      revalidatePath('/sitemap')
       revalidatePath('/')
     } catch {}
 

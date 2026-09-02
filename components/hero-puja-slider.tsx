@@ -19,7 +19,7 @@ export interface HeroSlide {
 const defaultHeroSlides: HeroSlide[] = [
   {
     id: 'slide-1',
-    title: 'माँ अष्टलक्ष्मी 16 दिवसीय महा अनुष्ठान एवं सर्व कर्ज मुक्ति महायज्ञ',
+    title: 'Maa Ashta Lakshmi 16-Day Maha Anushthan & Debt Relief Mahayagya',
     subtitle: 'Chamunda Mata Temple, Jodhpur',
     image: '/ashta_lakshmi_16days.webp',
     ctaText: 'Book Anushthan',
@@ -27,7 +27,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 'slide-2',
-    title: 'माँ बगलामुखी मिर्ची हवन एवं सर्व कार्य सिद्धि महायज्ञ',
+    title: 'Maa Baglamukhi Mirchi Havan & All Endeavor Success Mahayagya',
     subtitle: 'Mata Baglamukhi Dham, Datia',
     image: '/bagalamukhi_kavach_yagya.webp',
     ctaText: 'Participate Now',
@@ -35,7 +35,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 'slide-3',
-    title: 'काशी विश्वनाथ महामृत्युंजय सवा लाख मंत्र जाप एवं रुद्राभिषेक',
+    title: 'Kashi Vishwanath Mahamrityunjaya 1.25 Lakh Chants & Rudrabhishek',
     subtitle: 'Kashi Vishwanath Temple, Varanasi',
     image: '/mahamrityunjaya_hawan.webp',
     ctaText: 'Book Puja',
@@ -43,7 +43,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 'slide-4',
-    title: 'शनि साढ़ेसाती, ढैय्या व शनि दोष निवारण महापूजा एवं शांति यज्ञ',
+    title: 'Shani Sade Sati, Dhaiya & Shani Dosh Nivaran Maha Puja & Shanti Yagya',
     subtitle: 'Sacred Dham Anushthan',
     image: '/shani_dosh_yagya.webp',
     ctaText: 'View Details',

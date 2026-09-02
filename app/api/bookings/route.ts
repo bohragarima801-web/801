@@ -139,8 +139,8 @@ export const POST = withSafeApi(async (req: NextRequest) => {
       subtotal: total, // For now, total and subtotal are same, tax is 0
       total: total,
       gotra: gotra || 'Kashyap',
-      sankalpText: `Devotee: ${devoteeName}, Relation: ${fatherHusbandName || 'Self'}, Purpose: ${sankalpPurpose || 'N/A'}, Details: ${descriptionText}`,
-      specialInstructions: `Father/Husband: ${fatherHusbandName || 'Self'}${sankalpPurpose ? ` | Purpose: ${sankalpPurpose}` : ''}`,
+      sankalpText: `Devotee: ${devoteeName}, WhatsApp: ${phone || 'N/A'}, Relation: ${fatherHusbandName || 'Self'}, Purpose: ${sankalpPurpose || 'N/A'}, Details: ${descriptionText}`,
+      specialInstructions: `WhatsApp/Phone: ${phone || 'N/A'}${fatherHusbandName && fatherHusbandName !== 'Self' ? ` | Father/Husband: ${fatherHusbandName}` : ''}${sankalpPurpose ? ` | Purpose: ${sankalpPurpose}` : ''}`,
       status: 'PENDING',
       paymentStatus: 'PENDING',
       members: {

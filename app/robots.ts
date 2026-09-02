@@ -11,7 +11,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart', '/bookings/', '/auth/'],
       },
       {
         userAgent: [
@@ -23,7 +23,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
           'Applebot', 'Applebot-Extended', 'Meta-ExternalAgent'
         ],
         allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart'],
+        disallow: ['/admin/', '/api/', '/checkout/', '/dashboard/', '/cart', '/bookings/', '/auth/'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

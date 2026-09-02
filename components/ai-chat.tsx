@@ -17,7 +17,7 @@ export function AiChat({
   mode = 'pandit',
   placeholder = 'Type your question…',
   suggestions = [],
-  emptyTitle = 'नमस्ते 🙏',
+  emptyTitle = 'Namaste 🙏',
   emptyDescription = 'Ask anything about pujas, festivals, mantras, temples…',
   className,
   streamHeight = 'h-[500px]',

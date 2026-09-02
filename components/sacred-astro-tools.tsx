@@ -9,51 +9,51 @@ import { Sparkles, Calendar, Sun, Heart, Compass, ArrowRight, Bot, Repeat, Chevr
 export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
   const toolsList = [
     {
-      title: 'AI पंडित जी (AI Pandit)',
-      desc: 'पूजा विधि व ज्योतिष संबंधी सवाल पूछें।',
+      title: 'AI Pandit Ji',
+      desc: 'Ask questions regarding puja rituals and astrology.',
       icon: Bot,
       slug: '/ask-a-pandit',
-      tag: 'मुफ्त चैट',
+      tag: 'Free Chat',
       color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
     },
     {
-      title: 'मुफ्त जन्म कुंडली (Kundali)',
-      desc: 'वैदिक जन्म पत्रिका, ग्रह स्थिति व फल देखें।',
+      title: 'Free Janam Kundali',
+      desc: 'View Vedic birth chart, planetary positions, and predictions.',
       icon: Sun,
       slug: '/tools/kundali',
-      tag: 'फ्री सर्विस',
+      tag: 'Free Service',
       color: 'bg-amber-500/10 text-amber-600 border-amber-500/20'
     },
     {
-      title: 'दैनिक पंचांग (Panchang)',
-      desc: 'आज की तिथि, नक्षत्र व शुभ मुहूर्त।',
+      title: 'Daily Panchang',
+      desc: 'Today\'s Tithi, Nakshatra, and auspicious Muhurat.',
       icon: Calendar,
       slug: '/tools/panchang',
-      tag: 'दैनिक अपडेट',
+      tag: 'Daily Update',
       color: 'bg-orange-500/10 text-orange-600 border-orange-500/20'
     },
     {
-      title: 'कुंडली गुण मिलान (Milan)',
-      desc: 'विवाह हेतु 36 गुण मिलान विश्लेषण।',
+      title: 'Kundali Guna Matching',
+      desc: '36 Guna Milan compatibility analysis for marriage.',
       icon: Heart,
       slug: '/tools/milan',
-      tag: 'विवाह मिलान',
+      tag: 'Marriage Matching',
       color: 'bg-rose-500/10 text-rose-600 border-rose-500/20'
     },
     {
-      title: 'शुभ मुहूर्त (Shubh Muhurat)',
-      desc: 'विवाह, वाहन व गृह प्रवेश का शुभ समय।',
+      title: 'Shubh Muhurat',
+      desc: 'Auspicious timings for marriage, vehicle purchase, and Griha Pravesh.',
       icon: Compass,
       slug: '/tools/muhurat',
-      tag: 'शुभ समय',
+      tag: 'Auspicious Time',
       color: 'bg-purple-500/10 text-purple-600 border-purple-500/20'
     },
     {
-      title: 'जाप माला (Japa Counter)',
-      desc: '108 मंत्र जाप हेतु डिजिटल काउंटर।',
+      title: 'Digital Japa Mala',
+      desc: 'Digital counter for 108 mantra chanting.',
       icon: Repeat,
       slug: '/tools/mala',
-      tag: 'भक्ति साधना',
+      tag: 'Devotional Practice',
       color: 'bg-blue-500/10 text-blue-600 border-blue-500/20'
     }
   ]
@@ -61,24 +61,24 @@ export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
   const displayTools = limit ? toolsList.slice(0, limit) : toolsList
 
   return (
-    <section className="container mx-auto px-4 md:px-6 py-10 md:py-14 bg-[#FFF9EF] text-[#292321] notranslate" translate="no">
+    <section className="container mx-auto px-4 md:px-6 py-10 md:py-14 bg-white text-zinc-900 notranslate" translate="no">
       {/* Compact Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-[#E6D6BE] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-200 pb-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#F7EBD7] text-[#E58A16] font-bold text-xs border border-[#E6D6BE]">
-            <Sparkles className="h-3 w-3" /> वैदिक ज्योतिष एवं पंचांग
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
+            <Sparkles className="h-3 w-3" /> Vedic Astrology & Panchang
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#292321] tracking-tight">
-            🔮 पावन वैदिक <span className="text-[#E58A16]">एवं ज्योतिष टूल्स</span>
+          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 tracking-tight">
+            🔮 Sacred Vedic <span className="text-amber-600">& Astrology Tools</span>
           </h2>
         </div>
 
         <Link
           href="/tools"
           prefetch={true}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-[#F7EBD7] text-[#292321] hover:text-[#E58A16] font-bold text-xs border border-[#E6D6BE] shadow-2xs transition-all self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-amber-50 text-zinc-900 hover:text-amber-600 font-bold text-xs border border-zinc-200 shadow-2xs transition-all self-start sm:self-auto"
         >
-          <span>सभी टूल्स ({toolsList.length})</span>
+          <span>All Tools ({toolsList.length})</span>
           <span>➔</span>
         </Link>
       </div>
@@ -89,27 +89,27 @@ export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
           const IconComp = t.icon
           return (
             <Link href={t.slug} key={idx} prefetch={true} className="block group">
-              <Card className="p-3.5 border border-[#E6D6BE] rounded-2xl bg-white text-[#292321] shadow-2xs hover:shadow-md hover:border-[#E58A16] transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
+              <Card className="p-3.5 border border-zinc-200 rounded-2xl bg-white text-zinc-900 shadow-2xs hover:shadow-md hover:border-[#E58A16] transition-all duration-200 flex items-center justify-between gap-3 group-hover:-translate-y-0.5">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-[#E6D6BE] bg-[#F7EBD7] text-[#E58A16] shrink-0 font-bold">
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center border border-zinc-200 bg-amber-50 text-amber-600 shrink-0 font-bold">
                     <IconComp className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <h3 className="font-bold text-xs sm:text-sm text-[#292321] group-hover:text-[#E58A16] transition-colors line-clamp-1">
+                      <h3 className="font-bold text-xs sm:text-sm text-zinc-900 group-hover:text-amber-600 transition-colors line-clamp-1">
                         {t.title}
                       </h3>
-                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-bold text-[#E58A16] border-[#E6D6BE] bg-[#F7EBD7] shrink-0">
+                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 font-bold text-amber-600 border-zinc-200 bg-amber-50 shrink-0">
                         {t.tag}
                       </Badge>
                     </div>
-                    <p className="text-[11px] text-[#665E58] font-normal leading-snug line-clamp-1">
+                    <p className="text-[11px] text-zinc-500 font-normal leading-snug line-clamp-1">
                       {t.desc}
                     </p>
                   </div>
                 </div>
 
-                <ChevronRight className="h-4 w-4 text-[#E58A16] group-hover:translate-x-1 transition-all shrink-0" />
+                <ChevronRight className="h-4 w-4 text-amber-600 group-hover:translate-x-1 transition-all shrink-0" />
               </Card>
             </Link>
           )

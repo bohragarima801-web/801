@@ -178,6 +178,8 @@ export async function POST(req: NextRequest) {
     revalidatePath('/pujas')
     revalidatePath('/vip-pujas')
     if (puja?.slug) revalidatePath(`/pujas/${puja.slug}`)
+    revalidatePath('/sitemap.xml')
+    revalidatePath('/sitemap')
     revalidatePath('/')
 
     return NextResponse.json({ ok: true, puja });
@@ -206,6 +208,9 @@ export async function DELETE(req: NextRequest) {
 
     revalidateTag('pujas')
     revalidatePath('/pujas')
+    revalidatePath('/vip-pujas')
+    revalidatePath('/sitemap.xml')
+    revalidatePath('/sitemap')
     revalidatePath('/')
 
     return NextResponse.json({ ok: true, message: 'Puja deleted successfully' });
@@ -244,6 +249,8 @@ export async function PATCH(req: NextRequest) {
     revalidatePath('/pujas')
     revalidatePath('/vip-pujas')
     if (updatedPuja?.slug) revalidatePath(`/pujas/${updatedPuja.slug}`)
+    revalidatePath('/sitemap.xml')
+    revalidatePath('/sitemap')
     revalidatePath('/')
 
     return NextResponse.json({ ok: true, puja: updatedPuja });

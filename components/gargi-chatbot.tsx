@@ -45,7 +45,7 @@ export function GargiChatbot() {
             </div>
             <div>
               <h3 className="font-bold text-sm sm:text-base flex items-center gap-1.5 leading-tight">
-                गार्गी (Gargi AI)
+                Gargi AI
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping inline-block" />
               </h3>
               <p className="text-[10px] sm:text-[11px] text-amber-100 font-medium">Customer Support Assistant</p>
@@ -58,10 +58,10 @@ export function GargiChatbot() {
         
         <AiChat 
           mode="gargi"
-          emptyTitle="हरि ओम्! 🙏"
-          emptyDescription="मैं गार्गी, आपकी सहायता के लिए यहाँ हूँ। पूजा, उत्पाद या बुकिंग से जुड़ा कोई भी सवाल पूछें।"
-          placeholder="अपना प्रश्न पूछें..."
-          suggestions={['पूजा कैसे बुक करें?', 'मेरे ऑर्डर का स्टेटस?', 'रुद्राक्ष की कीमत?']}
+          emptyTitle="Hari Om! 🙏"
+          emptyDescription="I am Gargi, here to assist you. Ask any questions regarding pujas, products, or bookings."
+          placeholder="Type your question..."
+          suggestions={['How to book a puja?', 'My order status?', 'Rudraksha price?']}
           streamHeight="flex-1 min-h-[300px]"
           className="border-none shadow-none rounded-none flex-1 overflow-hidden"
         />

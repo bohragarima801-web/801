@@ -59,7 +59,7 @@ export function PwaInstallBanner() {
 
     if (!deferredPrompt) {
       // Fallback: If prompt not captured, show tip
-      alert('ऐप इंस्टॉल करने के लिए अपने ब्राउज़र मेनू (3 डॉट्स) में "Add to Home Screen" या "Install App" चुनें।')
+      alert('To install the app, select "Add to Home Screen" or "Install App" in your browser menu (3 dots).')
       return
     }
 
@@ -99,7 +99,7 @@ export function PwaInstallBanner() {
                 </span>
               </div>
               <p className="text-[11px] text-amber-100/90 truncate leading-tight mt-0.5">
-                तेज़ एवं आसान अनुभव के लिए ऐप इंस्टॉल करें
+                Install the app for a faster and smoother experience
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export function PwaInstallBanner() {
               className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-1.5 active:scale-95 transition-all duration-300 border border-amber-300/50"
             >
               <Download className="h-3.5 w-3.5" />
-              <span>इंस्टॉल करें</span>
+              <span>Install App</span>
             </button>
 
             <button
@@ -132,7 +132,7 @@ export function PwaInstallBanner() {
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Smartphone className="h-5 w-5 text-amber-400" />
-                <h3 className="font-bold text-base text-amber-300">iPhone में ऐप इंस्टॉल करें</h3>
+                <h3 className="font-bold text-base text-amber-300">Install App on iPhone</h3>
               </div>
               <button onClick={() => setShowIosTip(false)} className="text-slate-400 hover:text-white">
                 <X className="h-5 w-5" />
@@ -140,16 +140,16 @@ export function PwaInstallBanner() {
             </div>
 
             <ol className="space-y-3 text-xs text-slate-200 list-decimal pl-4 leading-relaxed font-medium">
-              <li>सफारी (Safari) में सबसे नीचे <Share className="inline h-4 w-4 text-blue-400 mx-1" /> <strong>Share</strong> बटन पर क्लिक करें।</li>
-              <li>नीचे स्क्रॉल करें और <strong>"Add to Home Screen"</strong> (होम स्क्रीन में जोड़ें) चुनें।</li>
-              <li>ऊपर <strong>"Add"</strong> पर क्लिक करें। अब DivyaYagyam आपके मोबाइल में ऐप बन जाएगी!</li>
+              <li>Tap the <Share className="inline h-4 w-4 text-blue-400 mx-1" /> <strong>Share</strong> button at the bottom of Safari.</li>
+              <li>Scroll down and select <strong>"Add to Home Screen"</strong>.</li>
+              <li>Tap <strong>"Add"</strong> at top right. DivyaYagyam is now installed on your phone!</li>
             </ol>
 
             <button
               onClick={() => setShowIosTip(false)}
               className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs py-2.5 rounded-xl transition-colors"
             >
-              समझ गया (Got It)
+              Got It
             </button>
           </div>
         </div>
