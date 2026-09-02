@@ -43,17 +43,17 @@ export function Footer({ mapUrl, siteData, isDark }: FooterProps) {
     }
   }
 
-  // Locked Brand Theme Match: Dark Charcoal (#1C1614) + Antique Gold Headings (#D4AF37) + High Contrast Light Ivory Text (#FAF8F5)
-  const bgClass = 'bg-[#1C1614] text-[#FAF8F5] border-t border-[#D4AF37]/30'
+  // Locked Brand Theme Match: Sacred Temple Ebony (#140E0C) + Antique Gold Headings (#D4AF37) + High Contrast Light Ivory Text (#FAF8F5)
+  const bgClass = 'bg-[#140E0C] text-[#FAF8F5] border-t border-[#D4AF37]/30'
   const textBodyClass = 'text-[#EFE4D6]'
   const headingClass = 'text-[#D4AF37] font-heading font-extrabold text-xs uppercase tracking-[0.14em]'
-  const linkHoverClass = 'hover:text-[#FF6600] transition-colors duration-200 hover:underline'
-  const iconBgClass = 'bg-[#1E1917] text-[#D4AF37] border border-[#D4AF37]/30'
+  const linkHoverClass = 'hover:text-[#FF6A00] transition-colors duration-200 hover:underline'
+  const iconBgClass = 'bg-[#1E1614] text-[#D4AF37] border border-[#D4AF37]/30'
 
   return (
-    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12 notranslate`} translate="no">
+    <footer className={`divyayagyam-footer relative z-10 transition-colors ${bgClass} pb-28 md:pb-12 notranslate bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(212,175,55,0.08),rgba(20,14,12,1))]`} translate="no">
       {/* ── 1. GRADIENT TOP BORDER (Sacred Antique Gold / Saffron Strip) ── */}
-      <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#FF6600] to-[#D4AF37] shadow-sm" />
+      <div className="h-[3px] w-full bg-gradient-to-r from-[#D4AF37] via-[#FF6A00] to-[#D4AF37] shadow-[0_0_15px_rgba(255,106,0,0.35)]" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-10 md:pt-14 pb-8">
         
