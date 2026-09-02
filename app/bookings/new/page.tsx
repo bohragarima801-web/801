@@ -523,10 +523,10 @@ function BookingForm() {
                     <span>Devotee Name:</span>
                     <span className="font-bold text-slate-800">{devoteeName}</span>
                   </div>
-                  {devoteePhone && (
+                  {phone && (
                     <div className="flex justify-between">
                       <span>WhatsApp Number:</span>
-                      <span className="font-bold text-slate-800">{devoteePhone}</span>
+                      <span className="font-bold text-slate-800">{phone}</span>
                     </div>
                   )}
                   {familyNames.filter(Boolean).length > 0 && (
