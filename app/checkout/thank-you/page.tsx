@@ -155,7 +155,7 @@ function ThankYouContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FFF9EE] via-[#FFF3D6] to-[#FFFDF7] text-[#1E120A] relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#1A1412] relative overflow-hidden font-sans">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes floatPetal {
           0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
@@ -165,8 +165,8 @@ function ThankYouContent() {
         }
         .floating-petal { position: absolute; top: -5%; pointer-events: none; user-select: none; z-index: 1; animation: floatPetal linear infinite; }
         @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 25px rgba(212,155,0,0.35), 0 0 60px rgba(139,26,33,0.15); }
-          50% { box-shadow: 0 0 45px rgba(212,155,0,0.65), 0 0 90px rgba(242,201,76,0.4); }
+          0%, 100% { box-shadow: 0 0 25px rgba(212,175,55,0.35), 0 0 60px rgba(122,21,33,0.15); }
+          50% { box-shadow: 0 0 45px rgba(212,175,55,0.65), 0 0 90px rgba(255,106,0,0.35); }
         }
         .ring-glow { animation: pulseGlow 3s infinite ease-in-out; }
       ` }} />
@@ -180,7 +180,7 @@ function ThankYouContent() {
         ))}
       </div>
 
-      <div aria-hidden="true" className="absolute right-[-5%] top-[-2%] text-[38vw] font-serif text-[rgba(212,155,0,0.04)] leading-none pointer-events-none select-none overflow-hidden z-0">ॐ</div>
+      <div aria-hidden="true" className="absolute right-[-5%] top-[-2%] text-[38vw] font-serif text-[rgba(212,175,55,0.03)] leading-none pointer-events-none select-none overflow-hidden z-0">ॐ</div>
 
       <main className="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10 max-w-4xl">
 
@@ -188,9 +188,9 @@ function ThankYouContent() {
         <div className="text-center space-y-6">
           <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex items-center justify-center">
-            <div className="relative flex items-center justify-center h-28 w-28 sm:h-32 sm:w-32 rounded-full bg-gradient-to-br from-[#FFFDF7] via-[#FFF3D6] to-[#FFE8A3] p-1.5 border-2 border-[#D49B00] ring-glow">
-              <div className="absolute inset-0 rounded-full border border-[#F2C94C]/60 animate-ping opacity-25" />
-              <div className="h-full w-full rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] flex items-center justify-center shadow-inner">
+            <div className="relative flex items-center justify-center h-28 w-28 sm:h-32 sm:w-32 rounded-full bg-white p-1.5 border-2 border-[#D4AF37] ring-glow shadow-xl">
+              <div className="absolute inset-0 rounded-full border border-[#D4AF37]/60 animate-ping opacity-25" />
+              <div className="h-full w-full rounded-full bg-gradient-to-br from-[#7A1521] via-[#FF6A00] to-[#D4AF37] flex items-center justify-center shadow-inner">
                 <CheckCircle2 className="h-14 w-14 sm:h-16 sm:w-16 text-white stroke-[2.2]" />
               </div>
             </div>
@@ -198,22 +198,22 @@ function ThankYouContent() {
 
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] shadow-sm">
-            <Sparkles className="h-4 w-4 text-[#B37B00] fill-[#B37B00]" />
-            <span className="text-[#8B1A21] text-xs sm:text-sm font-black tracking-wide uppercase">
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF3E8] border border-[#FFD2B0] shadow-sm">
+            <Sparkles className="h-4 w-4 text-[#FF6A00] fill-[#FF6A00]" />
+            <span className="text-[#7A1521] text-xs sm:text-sm font-black tracking-wide uppercase">
               {isCod ? '📦 COD Order Confirmed' : '✅ Payment Successful'}
             </span>
           </motion.div>
 
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }} className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-[#2A1508] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-[#1A1412] tracking-tight">
               🙏 धन्यवाद!
             </h1>
-            <p className="text-xl sm:text-2xl font-heading font-extrabold bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] bg-clip-text text-transparent">
+            <p className="text-xl sm:text-2xl font-heading font-extrabold bg-gradient-to-r from-[#7A1521] via-[#FF6A00] to-[#D4AF37] bg-clip-text text-transparent">
               {isCod ? 'आपका ऑर्डर COD कन्फर्म हो गया है!' : 'भुगतान सफल — ऑर्डर दर्ज हो गया!'}
             </p>
-            <p className="text-sm sm:text-base text-[#4A2D1B] font-semibold max-w-lg mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-[#5C4E46] font-semibold max-w-lg mx-auto leading-relaxed">
               {isCod ? 'डिलीवरी के समय कैश/UPI से भुगतान करें।' : 'हमारी टीम शीघ्र ही आपसे संपर्क करेगी।'}
             </p>
           </motion.div>
@@ -222,67 +222,67 @@ function ThankYouContent() {
         {/* ORDER RECEIPT */}
         <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }} className="mt-10 sm:mt-12">
-          <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-[0_15px_50px_rgba(212,155,0,0.10)] relative overflow-hidden">
-            <div className="h-1.5 w-full bg-gradient-to-r from-[#8B1A21] via-[#D49B00] to-[#8B1A21] absolute top-0 left-0 right-0" />
+          <div className="bg-white rounded-3xl border border-[#EFE4D6] p-6 sm:p-8 shadow-[0_4px_20px_-2px_rgba(122,21,33,0.04)] relative overflow-hidden">
+            <div className="h-1.5 w-full bg-gradient-to-r from-[#7A1521] via-[#FF6A00] to-[#D4AF37] absolute top-0 left-0 right-0" />
 
-            <div className="flex items-center justify-between border-b border-[#F5E2B8] pb-4 mb-6">
+            <div className="flex items-center justify-between border-b border-[#EFE4D6] pb-4 mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-xl bg-[#FFF5D6] border border-[#F2C94C] flex items-center justify-center">
-                  <Receipt className="h-5 w-5 text-[#8B1A21]" />
+                <div className="h-9 w-9 rounded-xl bg-[#FFF3E8] border border-[#FFD2B0] flex items-center justify-center">
+                  <Receipt className="h-5 w-5 text-[#7A1521]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-extrabold text-[#2A1508] leading-none">ऑर्डर रसीद (Receipt)</h3>
-                  <p className="text-xs text-[#6A4D3B] font-bold mt-1">Divyayagyam — Official</p>
+                  <h3 className="text-base font-extrabold text-[#1A1412] leading-none">ऑर्डर रसीद (Receipt)</h3>
+                  <p className="text-xs text-[#5C4E46] font-bold mt-1">Divyayagyam — Official</p>
                 </div>
               </div>
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${isCod ? 'bg-amber-100 border border-amber-300 text-amber-800' : 'bg-emerald-100 border border-emerald-300 text-emerald-800'}`}>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${isCod ? 'bg-[#FFF3E8] border border-[#FFD2B0] text-[#7A1521]' : 'bg-emerald-100 border border-emerald-300 text-emerald-800'}`}>
                 <ShieldCheck className="h-3.5 w-3.5" />
                 {isCod ? '📦 COD' : '✅ Paid'}
               </span>
             </div>
 
             {loading ? (
-              <div className="flex items-center justify-center py-10 gap-3 text-[#8B1A21]">
-                <Loader2 className="h-6 w-6 animate-spin" />
+              <div className="flex items-center justify-center py-10 gap-3 text-[#7A1521]">
+                <Loader2 className="h-6 w-6 animate-spin text-[#FF6A00]" />
                 <span className="font-bold text-sm">ऑर्डर विवरण लोड हो रहा है...</span>
               </div>
             ) : (
               <div className="space-y-4">
                 {/* Info Grid */}
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">Order ID</p>
-                    <p className="text-sm font-black text-[#8B1A21] font-mono">{orderNumber || '—'}</p>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6]">
+                    <p className="text-[10px] text-[#5C4E46] font-bold uppercase tracking-wider mb-1">Order ID</p>
+                    <p className="text-sm font-black text-[#7A1521] font-mono">{orderNumber || '—'}</p>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">ग्राहक नाम</p>
-                    <p className="text-sm font-extrabold text-[#2A1508]">{customerName || '—'}</p>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6]">
+                    <p className="text-[10px] text-[#5C4E46] font-bold uppercase tracking-wider mb-1">ग्राहक नाम</p>
+                    <p className="text-sm font-extrabold text-[#1A1412]">{customerName || '—'}</p>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">दिनांक एवं समय</p>
-                    <p className="text-xs font-extrabold text-[#2A1508]">{currentTime || '—'}</p>
+                  <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6]">
+                    <p className="text-[10px] text-[#5C4E46] font-bold uppercase tracking-wider mb-1">दिनांक एवं समय</p>
+                    <p className="text-xs font-extrabold text-[#1A1412]">{currentTime || '—'}</p>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-[#FFFBF5] border border-[#F5E2B8]">
-                    <p className="text-[10px] text-[#6A4D3B] font-bold uppercase tracking-wider mb-1">भुगतान विधि</p>
-                    <p className="text-xs font-black text-[#2A1508]">{isCod ? '📦 Cash on Delivery' : '💳 Online (Razorpay)'}</p>
-                    {isOnline && razorpayPaymentId && <p className="text-[9px] font-mono text-[#6A4D3B] mt-0.5 break-all">ID: {razorpayPaymentId}</p>}
+                  <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6]">
+                    <p className="text-[10px] text-[#5C4E46] font-bold uppercase tracking-wider mb-1">भुगतान विधि</p>
+                    <p className="text-xs font-black text-[#1A1412]">{isCod ? '📦 Cash on Delivery' : '💳 Online (Razorpay)'}</p>
+                    {isOnline && razorpayPaymentId && <p className="text-[9px] font-mono text-[#5C4E46] mt-0.5 break-all">ID: {razorpayPaymentId}</p>}
                   </div>
                 </div>
 
                 {/* Items */}
                 {order?.items && order.items.length > 0 && (
-                  <div className="rounded-2xl overflow-hidden border border-[#F5E2B8]">
-                    <div className="bg-[#FFF8E8] px-4 py-2.5 border-b border-[#F5E2B8]">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-[#6A4D3B]">🛒 ऑर्डर आइटम</p>
+                  <div className="rounded-2xl overflow-hidden border border-[#EFE4D6]">
+                    <div className="bg-[#FFF3E8] px-4 py-2.5 border-b border-[#EFE4D6]">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[#7A1521]">🛒 ऑर्डर आइटम</p>
                     </div>
-                    <div className="divide-y divide-[#F5E2B8]">
+                    <div className="divide-y divide-[#EFE4D6]">
                       {order.items.map((item, idx) => (
                         <div key={idx} className="flex items-center justify-between px-4 py-3 bg-white">
                           <div className="flex-1 min-w-0 pr-3">
-                            <p className="text-sm font-bold text-[#1E120A] leading-snug">{item.name}</p>
-                            <p className="text-[11px] text-[#6A4D3B] mt-0.5">₹{Number(item.price).toLocaleString('en-IN')} × {item.quantity}</p>
+                            <p className="text-sm font-bold text-[#1A1412] leading-snug">{item.name}</p>
+                            <p className="text-[11px] text-[#5C4E46] mt-0.5">₹{Number(item.price).toLocaleString('en-IN')} × {item.quantity}</p>
                           </div>
-                          <p className="text-sm font-black text-[#8B1A21] shrink-0">₹{Number(item.total).toLocaleString('en-IN')}</p>
+                          <p className="text-sm font-black text-[#7A1521] shrink-0">₹{Number(item.total).toLocaleString('en-IN')}</p>
                         </div>
                       ))}
                     </div>
@@ -290,37 +290,37 @@ function ThankYouContent() {
                 )}
 
                 {/* Bill Summary */}
-                <div className="rounded-2xl bg-gradient-to-r from-[#FFF5D6] via-[#FFF0C2] to-[#FFF5D6] border-2 border-[#D49B00]/40 p-4">
+                <div className="rounded-2xl bg-[#FFF3E8] border border-[#FFD2B0] p-4">
                   {order && (
                     <div className="space-y-1.5 text-sm mb-3">
-                      <div className="flex justify-between text-[#4A2D1B]">
+                      <div className="flex justify-between text-[#5C4E46]">
                         <span>Subtotal</span>
-                        <span className="font-bold">₹{Number(order.subtotal).toLocaleString('en-IN')}</span>
+                        <span className="font-bold text-[#1A1412]">₹{Number(order.subtotal).toLocaleString('en-IN')}</span>
                       </div>
                       {Number(order.discount) > 0 && (
-                        <div className="flex justify-between text-emerald-700">
+                        <div className="flex justify-between text-emerald-700 font-semibold">
                           <span>Discount</span>
                           <span className="font-bold">-₹{Number(order.discount).toLocaleString('en-IN')}</span>
                         </div>
                       )}
-                      <div className="flex justify-between text-[#4A2D1B]">
+                      <div className="flex justify-between text-[#5C4E46]">
                         <span>Delivery Fee</span>
                         {Number(order.shipping) > 0
-                          ? <span className="font-bold">₹{Number(order.shipping).toLocaleString('en-IN')}</span>
+                          ? <span className="font-bold text-[#1A1412]">₹{Number(order.shipping).toLocaleString('en-IN')}</span>
                           : <span className="font-bold text-emerald-700">FREE ✅</span>
                         }
                       </div>
-                      <div className="border-t border-[#D49B00]/30 my-2" />
+                      <div className="border-t border-[#FFD2B0] my-2" />
                     </div>
                   )}
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-[#6A4D3B] font-bold">{isCod ? '💰 COD राशि (डिलीवरी पर)' : '✅ कुल भुगतान'}</p>
-                      <p className="text-2xl font-black text-[#8B1A21] leading-none mt-1">
+                      <p className="text-xs text-[#5C4E46] font-bold">{isCod ? '💰 COD राशि (डिलीवरी पर)' : '✅ कुल भुगतान'}</p>
+                      <p className="text-2xl font-black text-[#7A1521] leading-none mt-1">
                         {displayTotal ? `₹${displayTotal}` : '—'}
                       </p>
                     </div>
-                    <span className={`text-xs font-black px-3 py-2 rounded-xl text-center ${isCod ? 'text-amber-800 bg-amber-100 border border-amber-300' : 'text-emerald-800 bg-emerald-100 border border-emerald-300'}`}>
+                    <span className={`text-xs font-black px-3 py-2 rounded-xl text-center ${isCod ? 'text-[#7A1521] bg-[#FFF3E8] border border-[#FFD2B0]' : 'text-emerald-800 bg-emerald-100 border border-emerald-300'}`}>
                       {isCod ? '📦 Pay at\nDelivery' : '✅ Paid via\nRazorpay'}
                     </span>
                   </div>
@@ -333,21 +333,21 @@ function ThankYouContent() {
         {/* PROGRESS */}
         <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }} className="mt-8">
-          <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-xl">
-            <h3 className="text-lg font-heading font-black text-[#2A1508] mb-6 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-[#8B1A21]" /> ऑर्डर प्रगति (Progress)
+          <div className="bg-white rounded-3xl border border-[#EFE4D6] p-6 sm:p-8 shadow-[0_4px_20px_-2px_rgba(122,21,33,0.04)]">
+            <h3 className="text-lg font-heading font-black text-[#1A1412] mb-6 flex items-center gap-2">
+              <Clock className="h-5 w-5 text-[#FF6A00]" /> ऑर्डर प्रगति (Progress)
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {timelineSteps.map((step, idx) => {
                 const isDone = step.status === 'completed'
                 const isProgress = step.status === 'in-progress'
                 return (
-                  <div key={idx} className={`p-3 rounded-2xl border flex flex-col gap-1 ${isDone ? 'bg-emerald-50 border-emerald-200' : isProgress ? 'bg-amber-50 border-amber-200' : 'bg-[#FAFAFA] border-[#F0F0F0]'}`}>
-                    <div className={`h-7 w-7 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 ${isDone ? 'bg-emerald-500' : isProgress ? 'bg-amber-500' : 'bg-gray-300'}`}>
+                  <div key={idx} className={`p-3 rounded-2xl border flex flex-col gap-1 ${isDone ? 'bg-emerald-50 border-emerald-200' : isProgress ? 'bg-[#FFF3E8] border-[#FFD2B0]' : 'bg-[#FAF8F5] border-[#EFE4D6]'}`}>
+                    <div className={`h-7 w-7 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 ${isDone ? 'bg-emerald-500' : isProgress ? 'bg-[#FF6A00]' : 'bg-gray-300'}`}>
                       {isDone ? '✓' : isProgress ? '⏳' : String(idx + 1)}
                     </div>
-                    <p className={`text-xs font-black leading-snug ${isDone ? 'text-emerald-800' : isProgress ? 'text-amber-800' : 'text-gray-500'}`}>{step.label}</p>
-                    <p className="text-[10px] text-gray-500 leading-snug">{step.desc}</p>
+                    <p className={`text-xs font-black leading-snug ${isDone ? 'text-emerald-800' : isProgress ? 'text-[#7A1521]' : 'text-gray-500'}`}>{step.label}</p>
+                    <p className="text-[10px] text-[#5C4E46] leading-snug">{step.desc}</p>
                   </div>
                 )
               })}
@@ -358,9 +358,9 @@ function ThankYouContent() {
         {/* NEXT STEPS */}
         <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }} className="mt-8">
-          <div className="bg-white/95 backdrop-blur-xl border-2 border-[#F0D695] rounded-3xl p-6 sm:p-8 shadow-xl">
-            <h3 className="text-lg font-heading font-black text-[#2A1508] mb-5 flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#D49B00] fill-[#D49B00]" /> अब आगे क्या होगा?
+          <div className="bg-white rounded-3xl border border-[#EFE4D6] p-6 sm:p-8 shadow-[0_4px_20px_-2px_rgba(122,21,33,0.04)]">
+            <h3 className="text-lg font-heading font-black text-[#1A1412] mb-5 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#FF6A00]" /> अब आगे क्या होगा?
             </h3>
             <ol className="space-y-4">
               {(isCod ? [
@@ -375,8 +375,8 @@ function ThankYouContent() {
                 'नीचे Invoice बटन से अपनी रसीद सुरक्षित PDF में डाउनलोड करें।',
               ]).map((step, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 h-6 w-6 rounded-full bg-gradient-to-br from-[#8B1A21] to-[#D49B00] text-white font-black text-xs flex items-center justify-center">{idx + 1}</span>
-                  <p className="text-sm text-[#4A2D1B] font-semibold leading-relaxed">{step}</p>
+                  <span className="flex-shrink-0 h-6 w-6 rounded-full bg-gradient-to-br from-[#7A1521] to-[#FF6A00] text-white font-black text-xs flex items-center justify-center">{idx + 1}</span>
+                  <p className="text-sm text-[#5C4E46] font-semibold leading-relaxed">{step}</p>
                 </li>
               ))}
             </ol>
@@ -390,26 +390,26 @@ function ThankYouContent() {
 
           {orderNumber && (
             <a href={`/api/invoice/order/${orderNumber}`} target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#8B1A21] via-[#A8232B] to-[#D49B00] text-white font-black text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 border border-amber-300/40">
+              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#7A1521] to-[#9B1B2A] hover:from-[#580E17] hover:to-[#7A1521] text-white font-black text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200">
               <Download className="h-4 w-4" />
               Invoice / रसीद PDF
             </a>
           )}
 
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200">
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200">
             <MessageCircle className="h-4 w-4 fill-white/20" />
             WhatsApp Support
           </a>
 
           <Link href="/dashboard/orders"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white border-2 border-[#D49B00] text-[#8B1A21] font-black text-sm shadow-sm hover:bg-[#FFF8EA] hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
-            <FileText className="h-4 w-4" />
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white border-2 border-[#EFE4D6] hover:border-[#FF6A00] text-[#1A1412] font-black text-sm shadow-xs hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
+            <FileText className="h-4 w-4 text-[#FF6A00]" />
             मेरे ऑर्डर
           </Link>
 
           <Link href="/"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/80 border border-[#F5E2B8] text-[#2A1508] font-extrabold text-sm hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FF6A00] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6A00] text-white font-black text-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all duration-200 text-center">
             <ArrowLeft className="h-4 w-4" />
             Home
           </Link>
@@ -418,29 +418,29 @@ function ThankYouContent() {
         {/* QUOTE */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-14 text-center space-y-3 border-t border-[#F5E2B8] pt-10">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#FFF5D6] border-2 border-[#F2C94C] text-[#8B1A21] font-serif text-xl font-bold mx-auto">ॐ</div>
-          <p className="text-lg sm:text-xl font-heading font-black text-[#8B1A21] italic">"आपकी श्रद्धा ही हमारी सबसे बड़ी प्रेरणा है।"</p>
-          <p className="text-xs sm:text-sm font-extrabold text-[#8B5A00] tracking-[0.2em] uppercase">सनातन सेवा • दिव्य अनुभूति • दिव्ययज्ञम्</p>
+          className="mt-14 text-center space-y-3 border-t border-[#EFE4D6] pt-10">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#FFF3E8] border border-[#FFD2B0] text-[#7A1521] font-serif text-xl font-bold mx-auto">ॐ</div>
+          <p className="text-lg sm:text-xl font-heading font-black text-[#7A1521] italic">"आपकी श्रद्धा ही हमारी सबसे बड़ी प्रेरणा है।"</p>
+          <p className="text-xs sm:text-sm font-extrabold text-[#5C4E46] tracking-[0.2em] uppercase">सनातन सेवा • दिव्य अनुभूति • दिव्ययज्ञम्</p>
         </motion.div>
       </main>
 
-      <footer className="footer-spiritual py-8 mt-12 text-[#3D1E10] relative z-10">
+      <footer className="footer-spiritual py-8 mt-12 text-[#5C4E46] relative z-10 border-t border-[#EFE4D6]">
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center space-y-4">
-          <div className="flex flex-wrap justify-center items-center gap-6 text-xs sm:text-sm font-bold text-[#6A4D3B]">
-            <a href="tel:+919530401984" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
-              <Phone className="h-3.5 w-3.5 text-[#8B1A21]" /> +91 95304-01984
+          <div className="flex flex-wrap justify-center items-center gap-6 text-xs sm:text-sm font-bold text-[#1A1412]">
+            <a href="tel:+919530401984" className="hover:text-[#FF6A00] flex items-center gap-1.5 transition-colors">
+              <Phone className="h-3.5 w-3.5 text-[#FF6A00]" /> +91 95304-01984
             </a>
-            <a href="mailto:support@divyayagyam.com" className="hover:text-[#8B1A21] flex items-center gap-1.5 transition-colors">
-              <Mail className="h-3.5 w-3.5 text-[#8B1A21]" /> support@divyayagyam.com
+            <a href="mailto:support@divyayagyam.com" className="hover:text-[#FF6A00] flex items-center gap-1.5 transition-colors">
+              <Mail className="h-3.5 w-3.5 text-[#FF6A00]" /> support@divyayagyam.com
             </a>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-semibold text-[#8B7355]">
-            <Link href="/privacy" className="hover:text-[#8B1A21] transition-colors">Privacy Policy</Link>
+          <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-semibold text-[#5C4E46]">
+            <Link href="/privacy" className="hover:text-[#FF6A00] transition-colors">Privacy Policy</Link>
             <span>•</span>
-            <Link href="/terms" className="hover:text-[#8B1A21] transition-colors">Terms & Conditions</Link>
+            <Link href="/terms" className="hover:text-[#FF6A00] transition-colors">Terms & Conditions</Link>
           </div>
-          <p className="text-[11px] text-[#8B7355] font-medium pt-2">
+          <p className="text-[11px] text-[#5C4E46]/80 font-medium pt-2">
             © {new Date().getFullYear()} Divyayagyam. All Rights Reserved.
           </p>
         </div>

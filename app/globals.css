@@ -861,35 +861,37 @@
 }
 
 /* ============================================================
-   SANATANI CHARCOAL & ANTIQUE GOLD FOOTER SYSTEM
+   SANATANI CHARCOAL & SACRED TEMPLE GOLD FOOTER SYSTEM
    ============================================================ */
 .divyayagyam-footer {
-  background-color: #292321 !important; /* Main Footer Background */
-  color: #FFF9EF !important;             /* Text color */
+  background-color: #140E0C !important; /* Rich Temple Ebony */
+  color: #FAF8F5 !important;             /* High contrast pearl text */
 }
 
 /* Headings inside footer */
 .divyayagyam-footer h2, 
 .divyayagyam-footer h3, 
 .divyayagyam-footer h4 {
-  color: #C99A3D !important;
+  color: #D4AF37 !important;             /* Antique Temple Gold */
+  font-family: var(--font-noto-serif-devanagari), var(--font-cinzel), serif !important;
+  letter-spacing: 0.04em !important;
 }
 
 /* Footer Links */
 .divyayagyam-footer a {
-  color: #E6D6BE;
-  transition: color 0.3s ease, text-decoration 0.3s ease;
+  color: #EFE4D6;
+  transition: color 0.2s ease;
 }
 
 .divyayagyam-footer a:hover {
-  color: #E58A16 !important;
+  color: #FF6A00 !important;             /* Radiant Kesariya Saffron */
   text-decoration: underline;
 }
 
 /* Bottom copyright bar */
 .divyayagyam-footer-bottom {
-  background-color: #1E1917 !important;
-  color: #E6D6BE;
+  background-color: #0E0908 !important;
+  color: #A89F91;
 }
 
 .divine-glow {
@@ -966,10 +968,10 @@
 }
 
 /* ============================================================
-   CHECKOUT PAGE — BRAND CONSISTENT DESIGN
+   CHECKOUT PAGE — SENIOR LUXURY VEDIC SYSTEM
    ============================================================ */
 .checkout-page {
-  background: linear-gradient(165deg, #FFFDF7 0%, #FFF5E0 50%, #FFFDF7 100%);
+  background-color: #FAF8F5 !important;
   min-height: 100vh;
 }
 
@@ -978,20 +980,20 @@
   align-items: center;
   gap: 6px;
   padding: 4px 14px 4px 4px;
-  background: rgba(139, 26, 33, 0.08);
-  border: 1px solid rgba(139, 26, 33, 0.16);
+  background: rgba(122, 21, 33, 0.06);
+  border: 1px solid rgba(122, 21, 33, 0.15);
   border-radius: 100px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #8B1A21;
-  letter-spacing: 0.04em;
+  color: #7A1521;
+  letter-spacing: 0.02em;
 }
 
 .checkout-step-num {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #8B1A21;
+  background: #7A1521;
   color: white;
   font-size: 0.65rem;
   font-weight: 800;
@@ -1001,28 +1003,31 @@
 }
 
 .checkout-card {
-  background: white;
-  border: 1px solid rgba(196, 146, 10, 0.15);
-  border-radius: 16px;
-  box-shadow: 0 2px 16px rgba(42, 21, 8, 0.06);
+  background: #FFFFFF !important;
+  border: 1px solid #EFE4D6 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 20px -2px rgba(122, 21, 33, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
 }
 
 .checkout-pay-btn {
-  background: linear-gradient(135deg, #8B1A21 0%, #B84430 50%, #8B1A21 100%);
-  background-size: 200% auto;
-  color: white !important;
-  font-weight: 800 !important;
-  border-radius: 12px !important;
-  transition: background-position 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
-  box-shadow: 0 6px 24px rgba(139, 26, 33, 0.32) !important;
+  background: linear-gradient(135deg, #FF6A00 0%, #FF8500 100%) !important;
+  background-size: 100% auto !important;
+  color: #FFFFFF !important;
+  font-weight: 900 !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+  box-shadow: 0 6px 20px rgba(255, 106, 0, 0.35) !important;
 }
 .checkout-pay-btn:hover:not(:disabled) {
-  background-position: right center !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 32px rgba(139, 26, 33, 0.42) !important;
+  filter: brightness(1.04) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 28px rgba(255, 106, 0, 0.45) !important;
+}
+.checkout-pay-btn:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 .checkout-pay-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 

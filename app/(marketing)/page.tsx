@@ -275,11 +275,11 @@ export default async function HomePage() {
               ============================================================ */}
           <div className="pt-2 max-w-5xl mx-auto space-y-3">
             <div className="flex items-center justify-between gap-2 px-1">
-              <span className="text-xs sm:text-sm font-bold text-[#1C1614] flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-black text-[#1A1412] flex items-center gap-1.5">
                 <span>🎯</span>
                 <span>अपनी समस्या अनुसार पावन अनुष्ठान चुनें:</span>
               </span>
-              <Link href="/pujas" className="text-xs font-bold text-[#FF6600] hover:underline flex items-center gap-0.5">
+              <Link href="/pujas" className="text-xs font-black text-[#FF6A00] hover:underline flex items-center gap-0.5">
                 <span>सभी पूजाएं</span>
                 <span>➔</span>
               </Link>
@@ -287,7 +287,7 @@ export default async function HomePage() {
             
             <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none sm:grid sm:grid-cols-5 sm:overflow-visible">
               {[
-                { label: "विवाह व दांपत्य बाधा", sub: "शीघ्र विवाह व शांति", icon: "🌸", href: "/pujas?category=vivah", color: "hover:border-[#FF6600]" },
+                { label: "विवाह व दांपत्य बाधा", sub: "शीघ्र विवाह व शांति", icon: "🌸", href: "/pujas?category=vivah", color: "hover:border-[#FF6A00]" },
                 { label: "शत्रु, कोर्ट व नजर दोष", sub: "माँ बगलामुखी रक्षा", icon: "🛡️", href: "/pujas?category=bagalamukhi", color: "hover:border-[#7A1521]" },
                 { label: "स्वास्थ्य व महामृत्युंजय", sub: "रोग मुक्ति व दीर्घायु", icon: "🌿", href: "/pujas?category=health", color: "hover:border-emerald-600" },
                 { label: "धन, व्यापार व समृद्धि", sub: "लक्ष्मी-कुबेर महायज्ञ", icon: "💰", href: "/pujas?category=wealth", color: "hover:border-[#D4AF37]" },
@@ -296,12 +296,12 @@ export default async function HomePage() {
                 <Link
                   key={idx}
                   href={chip.href}
-                  className={`shrink-0 flex items-center gap-2 px-3 py-2 bg-white rounded-2xl border border-[#EFE4D6] shadow-2xs hover:shadow-md transition-all group ${chip.color}`}
+                  className={`shrink-0 flex items-center gap-2 px-3 py-2.5 bg-white rounded-2xl border border-[#EFE4D6] shadow-[0_2px_8px_rgba(122,21,33,0.03)] hover:shadow-md transition-all group ${chip.color}`}
                 >
                   <span className="text-xl shrink-0 group-hover:scale-110 transition-transform">{chip.icon}</span>
                   <div className="text-left whitespace-nowrap sm:whitespace-normal">
-                    <p className="text-xs font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors leading-tight">{chip.label}</p>
-                    <p className="text-[10px] text-[#6B5E57] font-normal leading-tight mt-0.5">{chip.sub}</p>
+                    <p className="text-xs font-black text-[#1A1412] group-hover:text-[#FF6A00] transition-colors leading-tight">{chip.label}</p>
+                    <p className="text-[10px] text-[#5C4E46] font-normal leading-tight mt-0.5">{chip.sub}</p>
                   </div>
                 </Link>
               ))}
