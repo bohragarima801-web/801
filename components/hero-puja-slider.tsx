@@ -119,7 +119,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full aspect-[16/9] sm:aspect-[16/8] md:h-[440px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-xl border border-[#E6D6BE] select-none group flex items-center"
+      className="relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-[2.4/1] md:h-[440px] lg:h-[480px] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-950 shadow-[0_12px_40px_rgba(28,22,20,0.15)] border border-[#EFE4D6] select-none group flex items-center"
     >
       {/* Slides Loop */}
       {slideList.map((slide, idx) => {
@@ -168,14 +168,14 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/60 hover:bg-[#E58A16] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6600] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Previous Slide"
           >
             <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/60 hover:bg-[#E58A16] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6600] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Next Slide"
           >
             <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -185,7 +185,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
 
       {/* ── 4. INDICATOR DOTS (Z-INDEX 30) ── */}
       {slideList.length > 1 && (
-        <div className="absolute top-3 right-3 sm:bottom-3 sm:top-auto sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-1.5 z-30 pointer-events-auto">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-30 pointer-events-auto bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
           {slideList.map((_, idx) => (
             <button
               key={idx}
@@ -195,7 +195,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
               }}
               className={`rounded-full transition-all duration-300 ${
                 currentIndex === idx
-                  ? 'w-6 h-2 bg-[#E58A16] shadow-md'
+                  ? 'w-6 h-2 bg-[#FF6600] shadow-md'
                   : 'w-2 h-2 bg-white/70 hover:bg-white'
               }`}
               aria-label={`Slide ${idx + 1}`}

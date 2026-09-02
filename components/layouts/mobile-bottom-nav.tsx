@@ -23,7 +23,7 @@ export function MobileBottomNav() {
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#FFF9EF]/95 backdrop-blur-xl border-t border-[#E6D6BE] shadow-[0_-4px_25px_rgba(41,35,33,0.08)] px-2 py-2 safe-area-padding notranslate" translate="no">
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-[#EFE4D6] shadow-[0_-4px_25px_rgba(28,22,20,0.08)] px-2 py-2 safe-area-padding notranslate" translate="no">
       <div className="grid grid-cols-5 items-center justify-items-center max-w-md mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon
@@ -36,29 +36,29 @@ export function MobileBottomNav() {
               prefetch={true}
               className={`relative flex flex-col items-center justify-center w-full py-1 rounded-xl transition-all duration-200 active:scale-95 ${
                 isActive
-                  ? 'text-[#E58A16] font-black'
-                  : 'text-[#665E58] hover:text-[#E58A16] font-bold'
+                  ? 'text-[#FF6600] font-black'
+                  : 'text-[#6B5E57] hover:text-[#FF6600] font-bold'
               }`}
             >
               {/* Active Tab Indicator */}
               {isActive && (
-                <span className="absolute -top-2 w-6 h-1 bg-[#E58A16] rounded-full shadow-[0_2px_8px_rgba(229,138,22,0.4)]" />
+                <span className="absolute -top-2 w-6 h-1 bg-gradient-to-r from-[#FF6600] to-[#FF8500] rounded-full shadow-[0_2px_8px_rgba(255,102,0,0.4)]" />
               )}
 
               {/* Icon Container */}
               <div className="relative flex items-center justify-center h-6 w-6">
-                <Icon className={`h-5 w-5 transition-transform duration-200 ${isActive ? 'scale-110 text-[#E58A16]' : 'opacity-90'}`} />
+                <Icon className={`h-5 w-5 transition-transform duration-200 ${isActive ? 'scale-110 text-[#FF6600]' : 'opacity-90'}`} />
                 
                 {/* Cart Badge Counter */}
                 {typeof item.badge === 'number' && item.badge > 0 ? (
-                  <span className="absolute -top-1.5 -right-2 bg-[#E58A16] text-white text-[9px] font-black h-4 min-w-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-1.5 -right-2 bg-gradient-to-r from-[#FF6600] to-[#FF8500] text-white text-[9px] font-black h-4 min-w-[16px] px-1 rounded-full flex items-center justify-center shadow-sm">
                     {item.badge}
                   </span>
                 ) : null}
               </div>
 
               {/* Label */}
-              <span className={`text-[10px] leading-tight mt-1 tracking-tight text-center ${isActive ? 'font-black text-[#E58A16]' : 'font-bold text-[#292321]'}`}>
+              <span className={`text-[10px] leading-tight mt-1 tracking-tight text-center ${isActive ? 'font-black text-[#FF6600]' : 'font-bold text-[#1C1614]'}`}>
                 {item.label}
               </span>
             </Link>

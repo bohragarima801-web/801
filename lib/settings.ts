@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma'
 
 const cache: Record<string, { value: string; expiry: number }> = {}
-const CACHE_TTL_MS = 60000 // 1 minute cache
+const CACHE_TTL_MS = 300000 // 5 minute cache (reduced DB pressure)
 
 export async function getSetting(key: string, envFallback?: string): Promise<string> {
   const now = Date.now()

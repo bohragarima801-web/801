@@ -257,14 +257,14 @@ function BookingForm() {
         key: razorpayKeyId,
         amount,
         currency,
-        name: 'Divyayagyam',
+        name: 'DivyaYagyam (दिव्ययज्ञम्)',
         description: `Payment for ${puja.name || 'Puja Booking'}`,
         order_id: orderId,
         prefill: {
           name: devoteeName.trim(),
           contact: phone.trim(),
         },
-        theme: { color: '#ea580c' },
+        theme: { color: '#FF6600' },
         modal: {
           ondismiss: () => {
             setBooking(false)
@@ -523,6 +523,12 @@ function BookingForm() {
                     <span>Devotee Name:</span>
                     <span className="font-bold text-slate-800">{devoteeName}</span>
                   </div>
+                  {devoteePhone && (
+                    <div className="flex justify-between">
+                      <span>WhatsApp Number:</span>
+                      <span className="font-bold text-slate-800">{devoteePhone}</span>
+                    </div>
+                  )}
                   {familyNames.filter(Boolean).length > 0 && (
                     <div className="flex justify-between">
                       <span>Family Members:</span>

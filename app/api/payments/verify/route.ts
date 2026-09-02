@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
-
 import { getSetting } from '@/lib/settings'
+import { withCors, corsPreflightResponse, checkRateLimit } from '@/lib/api-security'
 
-function cors(res: NextResponse) {
-  res.headers.set('Access-Control-Allow-Origin', '*')
-  res.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.headers.set('Access-Control-Allow-Headers', 'Content-Type')
-  return res
-}
-
-export async function OPTIONS() {
-  return cors(new NextResponse(null, { status: 200 }))
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflightResponse(req)
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: max 15 payment verifications per minute per IP
+  const rateLimited = checkRateLimit(req, { limit: 15, prefix: 'verify' })
+  if (rateLimited) return withCors(req, rateLimited)
+
   try {
     const forwardedFor = req.headers.get('x-forwarded-for') || ''
     const clientIp = forwardedFor.split(',')[0].trim() || req.headers.get('x-real-ip') || undefined
@@ -32,7 +29,7 @@ export async function POST(req: NextRequest) {
     } = body || {}
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return cors(NextResponse.json({ ok: false, error: 'Missing verification fields' }, { status: 400 }))
+      return withCors(req, NextResponse.json({ ok: false, error: 'Missing verification fields' }, { status: 400 }))
     }
 
     // ENV var has priority; DB/Admin Settings is fallback
@@ -41,7 +38,7 @@ export async function POST(req: NextRequest) {
       secret = (await getSetting('secret.razorpay_key_secret')).replace(/^["']|["']$/g, '').trim()
     }
     if (!secret) {
-      return cors(NextResponse.json({ ok: false, error: 'RAZORPAY_KEY_SECRET not configured' }, { status: 500 }))
+      return withCors(req, NextResponse.json({ ok: false, error: 'RAZORPAY_KEY_SECRET not configured' }, { status: 500 }))
     }
 
     const expected = crypto
@@ -231,21 +228,21 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch (dbErr: any) {
-// console.warn('[verify] DB update skipped:', dbErr?.message) (removed for production)
+      console.warn('[verify] DB update skipped:', dbErr?.message)
     }
 
     if (!isValid) {
-      return cors(NextResponse.json({ ok: false, verified: false, error: 'Invalid signature' }, { status: 400 }))
+      return withCors(req, NextResponse.json({ ok: false, verified: false, error: 'Invalid signature' }, { status: 400 }))
     }
 
-    return cors(NextResponse.json({
+    return withCors(req, NextResponse.json({
       ok: true,
       verified: true,
       razorpay_payment_id,
       razorpay_order_id,
     }))
   } catch (err: any) {
-// console.error('[verify] error:', err) (removed for production)
-    return cors(NextResponse.json({ ok: false, error: err?.message || 'Verification failed' }, { status: 500 }))
+    console.error('[verify] error:', err)
+    return withCors(req, NextResponse.json({ ok: false, error: err?.message || 'Verification failed' }, { status: 500 }))
   }
 }

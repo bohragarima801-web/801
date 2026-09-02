@@ -373,7 +373,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
                   {puja.name}
                 </h1>
 
-                <p className="text-xs sm:text-sm text-[#4A403C] leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-[#4A3E39] leading-relaxed font-normal">
                   {puja.shortDescription || '27+ वर्षों के अनुभवी वरिष्ठ आचार्यों द्वारा आपके परिवार के लिए व्यक्तिगत नाम-गोत्र संकल्प, समर्पित 5 वेदाचार्य दल एवं 1-on-1 लाइव व्हाट्सएप वीडियो स्ट्रीमिंग के साथ।'}
                 </p>
 
@@ -439,7 +439,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               <h3 className="text-base sm:text-lg font-bold text-[#151311]">
                 {assignedPandit.name}
               </h3>
-              <p className="text-xs text-[#665E58] font-normal">
+              <p className="text-xs text-[#6B5E57] font-normal">
                 {assignedPandit.title} • {assignedPandit.experience}
               </p>
             </div>
@@ -470,7 +470,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
 
               <div className="bg-[#EFE7D8] border border-[#E8E1D5] px-4 py-2 rounded-2xl text-center shrink-0">
                 <p className="text-xl font-black text-[#8B1A21] font-heading">100%</p>
-                <p className="text-[10px] text-[#665E58] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
+                <p className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
               </div>
             </div>
 
@@ -693,7 +693,7 @@ export function VipPujaSingleView({ puja }: SingleVipPujaProps) {
               )}
             </Button>
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-[#665E58] pt-1">
+            <div className="flex items-center justify-center gap-2 text-[10px] text-[#6B5E57] pt-1">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
               <span>Razorpay 256-Bit SSL एन्क्रिप्टेड • UPI / Cards / NetBanking</span>
             </div>

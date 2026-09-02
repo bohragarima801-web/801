@@ -105,11 +105,11 @@ function getDynamicPujaBenefits(puja: any) {
   // 2. If Baglamukhi / Shatru Samhara / Victory Puja
   if (name.includes('बगलामुखी') || name.includes('Bagalamukhi') || name.includes('शत्रु') || desc.includes('court') || desc.includes('enemy')) {
     return [
-      { icon: ShieldCheck, title: 'Court Case Victory & Legal Dispute Defense', desc: 'Neutralizes enemy actions, legal disputes, court cases, and workplace harassment through Maa Baglamukhi divine shield.' },
-      { icon: HandHeart, title: 'Protection from Evil Eye & Negative Badha', desc: 'Destroys unseen dark energies, black magic, jealousy obstacles, and protects family peace and reputation.' },
-      { icon: Sparkles, title: 'Business Triumph & Financial Dominance', desc: 'Removes severe trade stagnation, competitor hostility, and grants overwhelming victory in business ventures.' },
-      { icon: Award, title: 'Courage, Focus & Speech Mastery', desc: 'Empowers internal courage, clarity of thought, and persuasive speech during crucial life confrontations.' },
-      { icon: Flame, title: 'Maha Kavach for Family Security', desc: 'Establishes an impenetrable protective Kavach over your home, assets, and family members.' }
+      { icon: ShieldCheck, title: 'मानसिक संबल, सुरक्षा व बाधा शांति', desc: 'माँ बगलामुखी की पावन कृपा से जीवन के अवरोधों, विवादों व विपरीत परिस्थितियों में मानसिक बल व शांति प्राप्त होती है।' },
+      { icon: HandHeart, title: 'पारिवारिक सुरक्षा व सकारात्मक ऊर्जा', desc: 'घर-परिवार में नकारात्मकता दूर होकर शुभ व सकारात्मक वातावरण का निर्माण होता है।' },
+      { icon: Sparkles, title: 'व्यापारिक उन्नति व कार्य सिद्धि', desc: 'व्यापार में आने वाली रुकावटें शांत होकर समृद्धि व उन्नति के नए मार्ग प्रशस्त होते हैं।' },
+      { icon: Award, title: 'आत्मविश्वास व वाणी प्रभाव', desc: 'कठिन परिस्थितियों में स्पष्ट विचार, आत्मविश्वास और धैर्य की शक्ति मिलती है।' },
+      { icon: Flame, title: 'पावन रक्षा कवच एवं आशीर्वाद', desc: 'माँ पीताम्बरी की असीम कृपा से परिवार व कार्यक्षेत्र में रक्षा कवच स्थापित होता है।' }
     ]
   }
 
@@ -338,7 +338,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                 {puja.name}
               </h1>
 
-              <p className="text-[#4A403C] text-xs sm:text-sm font-normal leading-relaxed max-w-2xl">
+              <p className="text-[#4A3E39] text-xs sm:text-sm font-normal leading-relaxed max-w-2xl">
                 {puja.shortDescription || '27+ वर्षों के अनुभवी वैदिक आचार्यों द्वारा नाम-गोत्र संकल्प, वेदोक्त मंत्रोच्चार, लाइव वीडियो प्रमाण एवं घर पर पावन प्रसाद डिलीवरी।'}
               </p>
             </div>
@@ -514,7 +514,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                   <ArrowRight className="w-5 h-5" />
                 </button>
 
-                <p className="text-center text-xs text-[#665E58] flex items-center justify-center gap-1.5 font-medium">
+                <p className="text-center text-xs text-[#6B5E57] flex items-center justify-center gap-1.5 font-medium">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   अनुभवी वेदपाठी आचार्यों द्वारा संकल्पित
                 </p>
@@ -647,10 +647,10 @@ export function PujaClientView({ puja }: { puja: any }) {
                   <h3 className="text-xl sm:text-2xl font-black text-[#171513] font-heading">
                     {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#665E58] font-medium">
+                  <p className="text-xs sm:text-sm text-[#6B5E57] font-medium">
                     {assignedPandit?.title || 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)'}
                   </p>
-                  <p className="text-[11px] text-[#665E58]">
+                  <p className="text-[11px] text-[#6B5E57]">
                     📍 {assignedPandit?.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'} • 📜 {assignedPandit?.experience || '25+ वर्ष अनुभव'}
                   </p>
                 </div>
@@ -676,7 +676,7 @@ export function PujaClientView({ puja }: { puja: any }) {
             <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#171513] tracking-wide pt-1">
               पूजा सेवा पैकेज का चयन करें
             </h2>
-            <p className="text-[#665E58] text-xs sm:text-sm leading-relaxed font-medium">
+            <p className="text-[#6B5E57] text-xs sm:text-sm leading-relaxed font-medium">
               आपके और आपके परिजनों के नाम व गोत्र से वेदमंत्रों द्वारा विशेष आहुतियाँ दी जाएंगी।
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-[#8B1A21] to-[#B85C24] mx-auto mt-3 rounded-full"></div>
@@ -741,7 +741,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                       </div>
                     </div>
                     
-                    <ul className="space-y-2.5 text-xs text-[#4A403C]">
+                    <ul className="space-y-2.5 text-xs text-[#4A3E39]">
                       {pkg.desc ? pkg.desc.split('. ').map((feat: string, i: number) => feat.trim() && (
                         <li key={i} className="flex gap-2 items-start leading-relaxed font-medium">
                           <span className="text-[#B85C24] font-bold text-sm shrink-0">ॐ</span>
@@ -791,7 +791,7 @@ export function PujaClientView({ puja }: { puja: any }) {
 
               <div className="bg-[#EFE7D8] border border-[#E8E1D5] px-4 py-2 rounded-2xl text-center shrink-0">
                 <p className="text-xl font-black text-[#8B1A21] font-heading">100%</p>
-                <p className="text-[10px] text-[#665E58] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
+                <p className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
               </div>
             </div>
 
@@ -873,7 +873,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                 <h3 className="text-xl sm:text-2xl font-heading font-extrabold text-[#171513]">
                   {puja.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'}
                 </h3>
-                <p className="text-[#665E58] text-xs sm:text-sm">
+                <p className="text-[#6B5E57] text-xs sm:text-sm">
                   संस्कृत विश्वविद्यालय एवं वेद पाठशाला से शिक्षित आचार्यों द्वारा अनुष्ठान
                 </p>
               </div>

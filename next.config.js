@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  typescript: { ignoreBuildErrors: true },
+  // Removed: typescript: { ignoreBuildErrors: true } — TypeScript errors should not be silently ignored
   eslint: { ignoreDuringBuilds: true },
   compress: true,
   images: {
@@ -34,14 +34,14 @@ const nextConfig = {
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
           { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; img-src 'self' data: blob: https: http:; font-src 'self' data: https: http:; connect-src 'self' https: http: wss: ws:; frame-src 'self' https: http:; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https: http:; font-src 'self' data: https:; connect-src 'self' https: http: wss: ws:; frame-src 'self' https: http:; object-src 'none'; base-uri 'self'; form-action 'self';"
           }
         ]
       }
@@ -97,6 +97,16 @@ const nextConfig = {
       {
         source: '/pujas/rudrabhishek',
         destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/book-chadawa',
+        destination: '/book-chadhawa',
+        permanent: true,
+      },
+      {
+        source: '/chadhawa',
+        destination: '/book-chadhawa',
         permanent: true,
       },
       {

@@ -3,19 +3,17 @@ import { getRazorpay } from '@/lib/razorpay'
 import prisma from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
 import { getSetting } from '@/lib/settings'
+import { withCors, corsPreflightResponse, checkRateLimit } from '@/lib/api-security'
 
-function cors(res: NextResponse) {
-  res.headers.set('Access-Control-Allow-Origin', '*')
-  res.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  return res
-}
-
-export async function OPTIONS() {
-  return cors(new NextResponse(null, { status: 200 }))
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflightResponse(req)
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: max 10 order creations per minute per IP
+  const rateLimited = checkRateLimit(req, { limit: 10, prefix: 'create-order' })
+  if (rateLimited) return withCors(req, rateLimited)
+
   try {
     const body = await req.json()
     const {
@@ -28,10 +26,10 @@ export async function POST(req: NextRequest) {
     } = body || {}
 
     if (!amountInRupees || typeof amountInRupees !== 'number' || amountInRupees <= 0) {
-      return cors(NextResponse.json({ ok: false, error: 'Invalid amount' }, { status: 400 }))
+      return withCors(req, NextResponse.json({ ok: false, error: 'Invalid amount' }, { status: 400 }))
     }
     if (amountInRupees < 1) {
-      return cors(NextResponse.json({ ok: false, error: 'Minimum ₹1 required' }, { status: 400 }))
+      return withCors(req, NextResponse.json({ ok: false, error: 'Minimum ₹1 required' }, { status: 400 }))
     }
 
     const amountInPaise = Math.round(amountInRupees * 100)
@@ -82,7 +80,7 @@ export async function POST(req: NextRequest) {
       console.warn('[create-order] DB persistence skipped:', dbErr?.message)
     }
 
-    return cors(NextResponse.json({
+    return withCors(req, NextResponse.json({
       ok: true,
       orderId: order.id,
       amount: order.amount,
@@ -98,7 +96,7 @@ export async function POST(req: NextRequest) {
     }))
   } catch (err: any) {
     console.error('[Create Order API] Error creating Razorpay order:', err?.message || err)
-    return cors(NextResponse.json({
+    return withCors(req, NextResponse.json({
       ok: false,
       error: `Razorpay Error: ${err?.error?.description || err?.message || 'Failed to create Razorpay order'}`,
     }, { status: 500 }))

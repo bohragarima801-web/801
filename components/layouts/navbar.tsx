@@ -156,7 +156,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setCurrentLang(localStorage.getItem('lang') || 'en')
+      // Always initialize to clean English by default unless explicitly chosen
+      localStorage.setItem('lang', 'en')
+      setCurrentLang('en')
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + window.location.hostname
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname
     }
   }, [])
 
@@ -191,13 +196,13 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         </div>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6">
-        <div className="shrink-0 max-w-[200px] sm:max-w-none">
+      <div className="w-full max-w-7xl mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 md:px-6 notranslate" translate="no">
+        <div className="shrink-0 max-w-[200px] sm:max-w-none notranslate" translate="no">
           <Logo />
         </div>
 
         {/* Desktop navigation (hidden on mobile) */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1 notranslate" translate="no">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -212,12 +217,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* Tools mega dropdown */}
           <div
             ref={toolsRef}
-            className="relative"
+            className="relative notranslate"
+            translate="no"
             onMouseEnter={() => setToolsOpen(true)}
             onMouseLeave={() => setToolsOpen(false)}
           >
             <button
               onClick={() => setToolsOpen(!toolsOpen)}
+              translate="no"
               className={cn(
                 'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all',
                 toolsOpen ? 'text-amber-600 bg-amber-50' : 'text-zinc-800 hover:text-amber-600 hover:bg-amber-50'
@@ -340,7 +347,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             )}
           </div>
 
-          {/* "Book Puja" CTA — Saffron Button matching Mockup (Desktop) */}
+          {/* "Book Puja" CTA — Radiant Saffron Button (Desktop) */}
           <Link
             href="/pujas"
             className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#B85C24] to-[#D97706] hover:from-[#a04e1c] hover:to-[#b45309] text-white text-xs font-bold tracking-wide shadow-md hover:shadow-lg transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
@@ -453,7 +460,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             </div>
           </div>
 
-          <div className="h-px bg-[#E6D6BE] my-2" />
+          <div className="h-px bg-[#EFE4D6] my-2" />
 
           {/* Language Selection Row */}
           <div className="bg-white p-3 rounded-xl border border-zinc-200 space-y-2">

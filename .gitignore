@@ -84,6 +84,7 @@ node_modules/@next/swc-linux-arm64-musl/next-swc.linux-arm64-musl.node
 .env
 .env.*
 *.env
+!.env.example
 credentials.json
 *.key
 .credentials
@@ -93,12 +94,5 @@ tsc_output.txt
 tsc_output_utf8.txt
 scratch/
 
-.env*
-
-.vercel
-.env*
-
-.vercel
-
-.env*
+!.env.example
 .vercel
