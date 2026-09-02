@@ -2,7 +2,7 @@ import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { PujaClientView } from '@/components/puja-client-view'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, redirect, permanentRedirect } from 'next/navigation'
 import { Metadata } from 'next'
 import { generatePageMeta } from '@/lib/seo'
 import { PujaSchema } from '@/components/seo/PujaSchema'
@@ -126,7 +126,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const puja = await getPujaBySlugOrFallback(slug);
 
-  if (!puja) return generatePageMeta({ title: 'Puja Booking | DivyaYagyam', description: 'Book online Vedic pujas at sacred temples with WhatsApp video proof and prasad delivery.', path: `/pujas` });
+  if (!puja) return generatePageMeta({ title: 'Online Pujas | DivyaYagyam', description: 'Redirecting to authentic Vedic online pujas at DivyaYagyam.', path: `/pujas`, noIndex: true });
 
   const title = puja.name || puja.seoTitle || 'वैदिक पूजा'
   const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
@@ -146,7 +146,7 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
   const puja = await getPujaBySlugOrFallback(slug);
 
   if (!puja) {
-    notFound()
+    permanentRedirect('/pujas')
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID

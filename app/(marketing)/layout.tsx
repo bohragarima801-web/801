@@ -51,7 +51,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
         <div className="bg-gradient-to-r from-[#8B1A21] via-[#B84430] to-[#8B1A21] text-amber-100 py-1.5 px-3 text-center text-xs font-medium flex flex-wrap justify-center items-center gap-2 shadow-sm relative z-50 border-b border-[#FFD700]/30">
           <span className="animate-pulse text-[#FFD700]">⚡</span>
           <span>
-            विशेष ऑफर: Use code{' '}
+            Special Offer: Use code{' '}
             <span className="bg-black/25 text-[#FFD700] border border-[#FFD700]/40 px-2 py-0.5 rounded-full font-bold tracking-wider mx-1 inline-block text-[11px]">
               {activeCoupon.code}
             </span>{' '}

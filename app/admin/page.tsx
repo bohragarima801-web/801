@@ -8,7 +8,7 @@ import Link from 'next/link'
 import {
   Wallet, Calendar, Package, Users, Flame, Clock, CheckCircle2, TrendingUp,
   HandCoins, Activity, Zap, BarChart3, ArrowUpRight, Receipt, ShoppingBag,
-  Plus, RefreshCw, XCircle, AlertCircle, Star, ArrowRight
+  Plus, RefreshCw, XCircle, AlertCircle, Star, ArrowRight, CreditCard, Compass
 } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { toast } from 'sonner'
@@ -45,21 +45,22 @@ export default function AdminDashboardPage() {
   const [period, setPeriod] = useState(30)
 
   const loadAnalytics = async () => {
-    setLoading(true)
     try {
       const [res, rtRes] = await Promise.all([
         fetch(`/api/admin/analytics?period=${period}`),
-        fetch(`/api/admin/analytics/realtime`),
+        fetch(`/api/admin/analytics/realtime`).catch(() => null),
       ])
       const json = await res.json()
-      const rtJson = await rtRes.json()
+      if (json?.ok) {
+        setData(json.data)
+      }
 
-      if (json.ok) setData(json.data)
-      else toast.error('Analytics load failed: ' + json.error)
-
-      if (rtJson.ok) setRealtime(rtJson.data)
+      if (rtRes) {
+        const rtJson = await rtRes.json().catch(() => null)
+        if (rtJson?.ok) setRealtime(rtJson.data)
+      }
     } catch (e) {
-      toast.error('Could not load analytics')
+      console.warn('Dashboard fetch notice:', e)
     } finally {
       setLoading(false)
     }
@@ -328,6 +329,77 @@ export default function AdminDashboardPage() {
               </Card>
             )}
           </div>
+
+          {/* ── RECENT PAYMENTS (EXACTLY 5 TRANSACTIONS AS REQUESTED) ── */}
+          <Card className="rounded-2xl border shadow-sm bg-white overflow-hidden">
+            <CardHeader className="pb-3 flex flex-row items-center justify-between border-b border-slate-100">
+              <div>
+                <CardTitle className="text-sm font-bold flex items-center gap-2 text-slate-900">
+                  <CreditCard className="h-4 w-4 text-emerald-600" /> Recent Payments (Top 5 Transactions)
+                </CardTitle>
+                <p className="text-[11px] text-slate-500 mt-0.5">Showing last 5 completed & pending payment transactions</p>
+              </div>
+              <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-200">
+                Top 5 Payments Only
+              </span>
+            </CardHeader>
+            <CardContent className="p-0">
+              {(!data.recentPayments || data.recentPayments.length === 0) ? (
+                <p className="text-xs text-slate-400 italic py-6 text-center">No payment transactions recorded yet.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead className="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-100">
+                      <tr>
+                        <th className="py-2.5 px-4">Transaction / Ref</th>
+                        <th className="py-2.5 px-4">Devotee / Customer</th>
+                        <th className="py-2.5 px-4">Purpose</th>
+                        <th className="py-2.5 px-4">Amount</th>
+                        <th className="py-2.5 px-4">Status</th>
+                        <th className="py-2.5 px-4 text-right">Date & Time</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {data.recentPayments.slice(0, 5).map((p: any) => (
+                        <tr key={p.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-3 px-4 font-mono font-bold text-slate-700 text-[11px]">
+                            {p.gatewayRef || p.id.slice(0, 12)}
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="font-bold text-slate-900">{p.customer}</div>
+                            {p.phone && <div className="text-[10px] text-slate-500 font-mono">{p.phone}</div>}
+                          </td>
+                          <td className="py-3 px-4 text-slate-700 max-w-[220px] truncate font-medium">
+                            {p.purpose}
+                          </td>
+                          <td className="py-3 px-4 font-black text-slate-900">
+                            ₹{Number(p.amount).toLocaleString('en-IN')}
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge
+                              variant="outline"
+                              className={`text-[9px] font-bold ${
+                                p.status === 'SUCCESS' || p.status === 'PAID'
+                                  ? 'border-emerald-500 text-emerald-700 bg-emerald-50'
+                                  : p.status === 'PENDING'
+                                  ? 'border-amber-500 text-amber-700 bg-amber-50'
+                                  : 'border-red-500 text-red-600 bg-red-50'
+                              }`}
+                            >
+                              {p.status}
+                            </Badge>
+                          </td>
+                          <td className="py-3 px-4 text-right text-[10px] text-slate-400 font-mono">
+                            {new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Recent Bookings + Recent Orders */}
           <div className="grid gap-4 lg:grid-cols-2">

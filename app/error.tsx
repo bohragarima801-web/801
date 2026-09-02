@@ -31,9 +31,14 @@ export default function ErrorBoundary({
         </div>
         
         <h1 className="text-2xl font-black text-slate-900 mb-3">Auto-Healing in Progress</h1>
-        <p className="text-slate-600 text-sm mb-8 leading-relaxed">
+        <p className="text-slate-600 text-sm mb-4 leading-relaxed">
           हरि ओम्! एक तकनीकी बाधा आई है, लेकिन हमारे रोबोट्स इसे ठीक कर रहे हैं। कृपया पेज को रीफ्रेश करें या होमपेज पर वापस जाएँ।
         </p>
+        <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl font-mono text-left mb-6 break-words border border-red-200">
+          <div><strong>Error:</strong> {String(error?.message || error || 'Unknown Error')}</div>
+          {error?.digest && <div className="mt-1 text-[11px] text-red-500"><strong>Digest:</strong> {error.digest}</div>}
+          {error?.stack && <pre className="text-[10px] mt-2 max-h-40 overflow-y-auto whitespace-pre-wrap">{error.stack}</pre>}
+        </div>
         
         <div className="flex flex-col gap-3">
           <Button 

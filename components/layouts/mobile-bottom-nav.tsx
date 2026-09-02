@@ -15,11 +15,11 @@ export function MobileBottomNav() {
   }
 
   const navItems = [
-    { label: 'मुख्य पृष्ठ', href: '/', icon: Home },
-    { label: 'पूजाएं', href: '/pujas', icon: Flame },
-    { label: 'स्टोर', href: '/products', icon: ShoppingBag },
-    { label: 'ज्योतिष', href: '/tools', icon: Sparkles },
-    { label: 'कार्ट', href: '/cart', icon: ShoppingCart, badge: totalItems },
+    { label: 'Home', href: '/', icon: Home },
+    { label: 'Pujas', href: '/pujas', icon: Flame },
+    { label: 'Store', href: '/products', icon: ShoppingBag },
+    { label: 'Tools', href: '/tools', icon: Sparkles },
+    { label: 'Cart', href: '/cart', icon: ShoppingCart, badge: totalItems },
   ]
 
   return (

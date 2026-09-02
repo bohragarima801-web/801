@@ -225,6 +225,8 @@ export function generateServiceSchema({
       '@type': 'Brand',
       name: SITE_NAME,
     },
+    sku: slug,
+    mpn: slug,
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: (rating || 4.9).toString(),
@@ -242,6 +244,25 @@ export function generateServiceSchema({
       seller: {
         '@type': 'Organization',
         name: SITE_NAME,
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'IN',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 7,
+        returnMethod: 'https://schema.org/ReturnByMail',
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'INR',
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'IN',
+        },
       },
     },
     ...(location ? {
@@ -436,6 +457,9 @@ export function generatePujaGraphSchema({
     return rest
   }
 
+  const startDate = puja.pujaDate ? new Date(puja.pujaDate) : new Date()
+  const endDate = new Date(startDate.getTime() + 3 * 60 * 60 * 1000)
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -444,9 +468,14 @@ export function generatePujaGraphSchema({
         name: puja.name,
         description: descriptionText,
         image: puja.coverImage ? [puja.coverImage] : [DEFAULT_OG_IMAGE],
-        startDate: puja.pujaDate ? new Date(puja.pujaDate).toISOString() : new Date().toISOString(),
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
         eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
         eventStatus: 'https://schema.org/EventScheduled',
+        performer: {
+          '@type': 'PerformingGroup',
+          name: 'Learned Vedic Acharyas & Priests',
+        },
         location: {
           '@type': 'VirtualLocation',
           url: pujaUrl,

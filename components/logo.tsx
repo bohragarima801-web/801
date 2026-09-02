@@ -46,7 +46,7 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
             {siteName}
           </span>
           <span className="text-[7.5px] sm:text-[9.5px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.1em] uppercase mt-[1px]">
-            दिव्ययज्ञम् — आस्था की नई पहचान
+            Online Vedic Pujas & Seva
           </span>
         </div>
       )}

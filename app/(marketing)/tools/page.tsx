@@ -21,20 +21,24 @@ import {
   HelpCircle,
   Gem,
   Flame,
-  SunMedium
+  SunMedium,
+  Lock,
+  Crown,
+  Play,
+  ChevronRight
 } from 'lucide-react'
 import Link from 'next/link'
 import { processToolPurchase } from '@/lib/tool-purchase'
 
 // Category definitions with icons and matching keywords
 const CATEGORIES = [
-  { id: 'all', label: 'सभी टूल्स (All)', icon: Sparkles },
-  { id: 'kundli', label: '🔮 कुंडली व ज्योतिष', icon: Compass },
-  { id: 'oracle', label: '🕉️ सिद्ध प्रश्नावली', icon: Flame },
-  { id: 'panchang', label: '📅 पंचांग व मुहूर्त', icon: Calendar },
-  { id: 'sadhana', label: '📿 साधना व जाप', icon: Zap },
-  { id: 'gemstone', label: '💎 रत्न व अंक', icon: Gem },
-  { id: 'ai', label: '🤖 AI पंडित जी', icon: Bot }
+  { id: 'all', label: 'All Tools', icon: Sparkles },
+  { id: 'kundli', label: 'Kundali & Astrology', icon: Compass },
+  { id: 'oracle', label: 'Sacred Oracle', icon: Flame },
+  { id: 'panchang', label: 'Panchang & Muhurat', icon: Calendar },
+  { id: 'sadhana', label: 'Sadhana & Japa', icon: Zap },
+  { id: 'gemstone', label: 'Gems & Numerology', icon: Gem },
+  { id: 'ai', label: 'AI Pandit Ji', icon: Bot }
 ]
 
 export default function ToolsPage() {
@@ -108,59 +112,63 @@ export default function ToolsPage() {
     const staticPortalTools = [
       {
         id: 'static-ai-pandit',
-        name: 'AI पंडित जी (Sacred Vedic AI Chat)',
+        name: 'AI Pandit Ji — Sacred Vedic AI Chat',
         slug: 'ask-a-pandit',
         href: '/ask-a-pandit',
-        description: 'पूजा विधि, कुंडली दोष, व्रत नियम व ज्योतिष संबंधी सवाल 24x7 पूछें। तुरंत सटीक शास्त्रीय उत्तर।',
+        description: 'Get instant answers on puja vidhi, kundali dosh, vrat niyam & astrology queries 24x7. Accurate scriptural guidance powered by AI.',
         isFree: true,
         price: 0,
         trialDays: 0,
         category: 'ai',
         icon: Bot,
-        badge: '⚡ AI LIVE • 100% FREE',
-        badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        badge: 'AI LIVE',
+        badgeColor: 'emerald',
+        featured: true
       },
       {
         id: 'static-panchang',
-        name: 'आज का पंचांग (Dainik Panchang)',
+        name: 'Daily Panchang — Dainik Panchang',
         slug: 'panchang',
         href: '/panchang',
-        description: '5-वर्षीय दैनिक पंचांग: तिथि, नक्षत्र, करण, योग, अभिजित मुहूर्त, राहुकाल एवं सूर्योदय/सूर्यास्त समय।',
+        description: '5-year daily Panchang with Tithi, Nakshatra, Karan, Yoga, Abhijit Muhurat, Rahukaal & sunrise/sunset timings.',
         isFree: true,
         price: 0,
         trialDays: 0,
         category: 'panchang',
         icon: Calendar,
-        badge: '📅 DAILY PANCHANG',
-        badgeColor: 'bg-amber-50 text-amber-800 border-amber-200'
+        badge: 'DAILY',
+        badgeColor: 'amber',
+        featured: false
       },
       {
         id: 'static-festivals',
-        name: 'व्रत व त्योहार कैलेंडर (Festival Calendar)',
+        name: 'Festival Calendar — Vrat & Tyohar',
         slug: 'festivals',
         href: '/festivals',
-        description: 'संपूर्ण हिंदू व्रत व त्योहार, एकादशी, प्रदोष, पूर्णिमा, अमावस्या तिथियां व पौराणिक महात्म्य।',
+        description: 'Complete Hindu festival & vrat calendar — Ekadashi, Pradosh, Purnima, Amavasya dates with detailed significance.',
         isFree: true,
         price: 0,
         trialDays: 0,
         category: 'panchang',
         icon: Sparkle,
-        badge: '🎉 FESTIVALS 2024-2030',
-        badgeColor: 'bg-orange-50 text-orange-800 border-orange-200'
+        badge: '2024-2030',
+        badgeColor: 'orange',
+        featured: false
       },
       {
         id: 'static-muhurat',
-        name: 'शुभ मुहूर्त फाइंडर (Shubh Muhurat Finder)',
+        name: 'Shubh Muhurat Finder',
         slug: 'muhurat',
         href: '/muhurat',
-        description: 'विवाह, गृह प्रवेश, वाहन क्रय, नामकरण व व्यापार शुभारंभ हेतु सर्वश्रेष्ठ शुभ मुहूर्त व चौघड़िया।',
+        description: 'Find the most auspicious muhurats & Choghadiya for weddings, Griha Pravesh, vehicle purchase, Namkaran & business launches.',
         isFree: true,
         price: 0,
         trialDays: 0,
         category: 'panchang',
         icon: Clock,
-        badge: '⏳ SHUBH MUHURAT',
-        badgeColor: 'bg-amber-50 text-amber-800 border-amber-200'
+        badge: 'MUHURAT',
+        badgeColor: 'amber',
+        featured: false
       }
     ]
 
@@ -196,14 +204,15 @@ export default function ToolsPage() {
           name: t.name,
           slug: t.slug,
           href: `/tools/${t.slug}`,
-          description: t.description || 'वैदिक ज्योतिष एवं खगोलीय गणनाओं पर आधारित सटीक एवं प्रामाणिक ऑनलाइन टूल।',
+          description: t.description || 'Accurate & authentic online tool based on Vedic astrology and astronomical calculations.',
           isFree: t.isFree,
           price: Number(t.price) || 0,
           trialDays: t.trialDays || 0,
           category: cat,
           icon: IconComp,
-          badge: t.isFree ? '100% FREE' : `PREMIUM ₹${Number(t.price)}`,
-          badgeColor: t.isFree ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-200'
+          badge: t.isFree ? 'FREE' : `₹${Number(t.price)}`,
+          badgeColor: t.isFree ? 'emerald' : 'amber',
+          featured: false
         }
       })
 
@@ -226,48 +235,85 @@ export default function ToolsPage() {
   }, [allPortalTools, selectedCategory, searchQuery])
 
   return (
-    <div className="bg-[#FFFBF7] text-[#111827] min-h-screen py-10 md:py-16">
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 space-y-10">
-        
-        {/* ── Page Hero Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-orange-100/70 border border-orange-200 text-[#FF7A00] text-xs font-black tracking-wide shadow-2xs">
-            <Sparkles className="h-3.5 w-3.5" /> 100% प्रामाणिक वैदिक एवं ज्योतिषीय टूल्स
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl md:text-5xl font-heading font-extrabold text-[#111827] tracking-tight leading-[1.15]">
-            पावन ज्योतिष <span className="bg-gradient-to-r from-[#FF7A00] via-[#E65100] to-[#FF6B00] bg-clip-text text-transparent">एवं साधना टूल्स</span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
-            27+ वर्षों के प्रामाणिक वैदिक ज्ञान, काल-गणना व आधुनिक AI तकनीक द्वारा आपकी कुंडली, पंचांग, साधना व शंका समाधान हेतु।
-          </p>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-orange-50/30">
+      
+      {/* ══════════════════════════════════════════════════════════════ */}
+      {/* ── PREMIUM HERO SECTION ── */}
+      {/* ══════════════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] pt-12 pb-16 md:pt-16 md:pb-20">
+        {/* Animated background orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-400/5 rounded-full blur-3xl" />
+          {/* Grid pattern overlay */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aDItdjJoLTJ6TTAgMzRoMnYyaC0yek0zNiAwaDJ2MmgtMnpNMCAwaDJ2MmgtMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
         </div>
 
-        {/* ── Search Bar & Category Filter Bar */}
-        <div className="space-y-4 max-w-4xl mx-auto">
-          {/* Live Search Input */}
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
+          {/* Premium badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-orange-300 text-xs font-bold tracking-wider uppercase">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>100% Authentic Vedic & Astrology Tools</span>
+          </div>
+
+          {/* Main heading */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
+            <span className="text-white">Sacred Vedic</span>
+            <br />
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
+              & Astrology Tools
+            </span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-slate-300/90 leading-relaxed max-w-2xl mx-auto font-medium">
+            Powered by 27+ years of Vedic wisdom & modern AI — access Kundali, Panchang, Muhurat, Japa Mala & more, all in one place.
+          </p>
+
+          {/* Stats row */}
+          <div className="flex items-center justify-center gap-6 sm:gap-10 pt-2">
+            {[
+              { num: '8+', label: 'Vedic Tools' },
+              { num: '100%', label: 'Free Access' },
+              { num: '24/7', label: 'Available' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-2xl sm:text-3xl font-black text-white">{stat.num}</div>
+                <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════════════ */}
+      {/* ── SEARCH & FILTER BAR ── */}
+      {/* ══════════════════════════════════════════════════════════════ */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-7 relative z-10">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-4 sm:p-5 space-y-4">
+          {/* Search Input */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <Input
               type="text"
-              placeholder="टूल खोजें... (जैसे: गणेश प्रश्नावली, कुंडली मिलान, पंचांग, शुभ समय, जाप माला)"
+              placeholder="Search tools... (e.g., Kundali, Panchang, Muhurat, Japa Mala)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 h-13 bg-white rounded-2xl border border-[#F3E8DE] shadow-xs text-sm sm:text-base font-medium placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
+              className="w-full pl-12 pr-4 h-12 bg-slate-50 rounded-xl border-slate-200 text-sm font-medium placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded-md"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg font-semibold transition-colors"
               >
                 Clear
               </button>
             )}
           </div>
 
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none no-scrollbar justify-start sm:justify-center">
+          {/* Category Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
               const isSelected = selectedCategory === cat.id
@@ -275,10 +321,10 @@ export default function ToolsPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                  className={`shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
                     isSelected
-                      ? 'bg-[#FF7A00] text-white shadow-md scale-102'
-                      : 'bg-white text-slate-700 border border-[#F3E8DE] hover:bg-orange-50/60 hover:text-orange-700 shadow-2xs'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-[1.02]'
+                      : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200'
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -288,91 +334,124 @@ export default function ToolsPage() {
             })}
           </div>
         </div>
+      </div>
 
-        {/* ── Main Tools Grid */}
+
+      {/* ══════════════════════════════════════════════════════════════ */}
+      {/* ── TOOLS GRID ── */}
+      {/* ══════════════════════════════════════════════════════════════ */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 space-y-3">
-            <Loader2 className="h-10 w-10 animate-spin text-[#FF7A00]" />
-            <p className="text-xs font-bold text-slate-500">वैदिक टूल्स लोड हो रहे हैं...</p>
+          <div className="flex flex-col items-center justify-center py-24 space-y-4">
+            <div className="relative">
+              <div className="h-14 w-14 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
+            </div>
+            <p className="text-sm font-semibold text-slate-500">Loading Vedic Tools...</p>
           </div>
         ) : filteredTools.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-[#F3E8DE] p-8 max-w-lg mx-auto shadow-xs">
-            <div className="h-16 w-16 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="h-8 w-8" />
+          <div className="text-center py-20 max-w-md mx-auto">
+            <div className="h-20 w-20 bg-gradient-to-br from-orange-100 to-amber-100 rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <Search className="h-9 w-9 text-orange-500" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">कोई टूल नहीं मिला</h3>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">No tools found</h3>
             <p className="text-sm text-slate-500 mb-6">
-              आपके खोज शब्द <strong>"{searchQuery}"</strong> से संबंधित कोई टूल उपलब्ध नहीं है। कृपया दूसरा कीवर्ड आज़माएँ।
+              No tools match <strong>"{searchQuery}"</strong>. Try a different keyword.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('')
                 setSelectedCategory('all')
               }}
-              className="px-6 py-2.5 bg-orange-600 text-white rounded-xl font-bold text-xs hover:bg-orange-700 transition-all shadow-md"
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-orange-500/25 transition-all"
             >
-              सभी टूल्स देखें (View All)
+              View All Tools
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-stretch">
-            {filteredTools.map((t) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {filteredTools.map((t, index) => {
               const Icon = t.icon
               const trialActive = trialStatuses[t.slug]
               const premiumActive = activatedStatuses[t.slug]
               const isUnlocked = t.isFree || premiumActive || trialActive
+              const isFeatured = (t as any).featured
+
+              // Dynamic gradient for icon backgrounds
+              const iconGradients = [
+                'from-orange-500 to-amber-500',
+                'from-violet-500 to-purple-500',
+                'from-emerald-500 to-teal-500',
+                'from-blue-500 to-cyan-500',
+                'from-rose-500 to-pink-500',
+                'from-amber-500 to-yellow-500',
+              ]
+              const gradientClass = iconGradients[index % iconGradients.length]
 
               return (
                 <article
                   key={t.id}
-                  className="group relative flex flex-col justify-between bg-white rounded-2xl border border-[#F3E8DE] hover:border-[#FF7A00]/50 p-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5"
+                  className={`group relative flex flex-col bg-white rounded-2xl border transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
+                    isFeatured
+                      ? 'border-orange-200 shadow-lg shadow-orange-500/10 ring-1 ring-orange-100'
+                      : 'border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-200/60'
+                  }`}
                 >
-                  <div className="space-y-4 flex-1 flex flex-col justify-between">
-                    {/* Top Icon & Status Pill */}
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="h-13 w-13 rounded-2xl bg-gradient-to-br from-[#FFF3E0] to-[#FFE0B2] border border-orange-200 text-[#FF7A00] flex items-center justify-center shadow-xs shrink-0 group-hover:scale-105 transition-transform">
-                        <Icon className="h-7 w-7" />
+                  {/* Featured ribbon */}
+                  {isFeatured && (
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500" />
+                  )}
+
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                    {/* Top: Icon + Status Badge */}
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${gradientClass} text-white flex items-center justify-center shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300`}>
+                        <Icon className="h-6 w-6" />
                       </div>
 
                       {t.isFree ? (
-                        <span className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                          ⚡ LIVE NOW • FREE
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold uppercase tracking-wider">
+                          <Zap className="h-2.5 w-2.5" />
+                          Free
                         </span>
                       ) : premiumActive ? (
-                        <span className="bg-green-50 border border-green-200 text-green-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                          ✓ VIP ACTIVE
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-green-50 border border-green-200 text-green-700 text-[10px] font-bold uppercase tracking-wider">
+                          <CheckCircle2 className="h-2.5 w-2.5" />
+                          Active
                         </span>
                       ) : trialActive ? (
-                        <span className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                          ⏳ TRIAL ACTIVE
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold uppercase tracking-wider">
+                          <Clock className="h-2.5 w-2.5" />
+                          Trial
                         </span>
                       ) : (
-                        <span className="bg-amber-50 border border-amber-200 text-amber-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
-                          <Star className="h-2.5 w-2.5 fill-amber-600 text-amber-600" /> Premium ₹{t.price}
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold uppercase tracking-wider">
+                          <Crown className="h-2.5 w-2.5" />
+                          ₹{t.price}
                         </span>
                       )}
                     </div>
 
                     {/* Title & Description */}
-                    <div className="space-y-2">
-                      <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[#111827] group-hover:text-[#FF7A00] transition-colors leading-snug">
+                    <div className="space-y-2 flex-1">
+                      <h3 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-orange-600 transition-colors leading-snug line-clamp-2">
                         {t.name}
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed font-medium line-clamp-3">
+                      <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-2">
                         {t.description}
                       </p>
                     </div>
                   </div>
 
-                  {/* Action Button Container (Fixed Baseline at Bottom) */}
-                  <div className="mt-auto pt-5 border-t border-[#F3E8DE] w-full">
+                  {/* CTA Button */}
+                  <div className="px-5 sm:px-6 pb-5 sm:pb-6 mt-auto">
                     {isUnlocked ? (
                       <Link
                         href={t.href}
-                        className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all min-h-[44px] inline-flex items-center justify-center gap-2 group-hover:gap-3"
+                        className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-md hover:shadow-lg hover:shadow-orange-500/20 transition-all inline-flex items-center justify-center gap-2 group/btn"
                       >
-                        <span>टूल खोलें (Open Tool)</span>
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        <Play className="h-4 w-4 fill-white" />
+                        <span>Open Tool</span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
                       </Link>
                     ) : (
                       <div className="flex items-center gap-2 w-full">
@@ -380,17 +459,19 @@ export default function ToolsPage() {
                           <button
                             type="button"
                             onClick={() => startTrial(t.slug, t.trialDays, t.id)}
-                            className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 font-bold text-xs py-3 px-2 rounded-xl transition-all min-h-[44px] inline-flex items-center justify-center"
+                            className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold text-xs py-3 px-2 rounded-xl transition-all inline-flex items-center justify-center gap-1"
                           >
-                            {t.trialDays} Days Trial
+                            <Play className="h-3 w-3" />
+                            {t.trialDays}d Trial
                           </button>
                         )}
                         <button
                           type="button"
                           onClick={() => buyActivation(t.slug, t.id, t.name)}
-                          className="flex-1 bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-bold text-xs sm:text-sm py-3 px-3 rounded-xl shadow-md hover:shadow-lg transition-all min-h-[44px] inline-flex items-center justify-center gap-1.5"
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm py-3 px-3 rounded-xl shadow-md hover:shadow-lg transition-all inline-flex items-center justify-center gap-1.5"
                         >
-                          <span>अनलॉक करें (₹{t.price})</span>
+                          <Lock className="h-3.5 w-3.5" />
+                          <span>Unlock ₹{t.price}</span>
                         </button>
                       </div>
                     )}
@@ -400,55 +481,60 @@ export default function ToolsPage() {
             })}
           </div>
         )}
+      </div>
 
-        {/* ── Vedic Authenticity Guarantee Banner */}
-        <section className="bg-white rounded-3xl border border-[#F3E8DE] p-6 md:p-8 shadow-xs">
-          <div className="grid sm:grid-cols-3 gap-6 text-center sm:text-left">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3.5">
-              <div className="h-12 w-12 rounded-2xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center shrink-0">
+
+      {/* ══════════════════════════════════════════════════════════════ */}
+      {/* ── TRUST GUARANTEE SECTION ── */}
+      {/* ══════════════════════════════════════════════════════════════ */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
+        <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-2xl p-8 md:p-10 shadow-xl">
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div className="flex items-start gap-4">
+              <div className="h-12 w-12 rounded-xl bg-orange-500/15 border border-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-heading font-extrabold text-sm sm:text-base text-slate-900">
-                  100% प्रामाणिक वैदिक गणना
+                <h4 className="font-bold text-sm text-white">
+                  100% Authentic Vedic Calculations
                 </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  पराशर, वराहमिहिर एवं सूर्य सिद्धांत के मूल ज्योतिषीय सूत्रों पर आधारित।
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Based on Parashar, Varahamihir & Surya Siddhant's core astronomical formulas.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3.5">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="flex items-start gap-4">
+              <div className="h-12 w-12 rounded-xl bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                 <Zap className="h-6 w-6" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-heading font-extrabold text-sm sm:text-base text-slate-900">
-                  रीयल-टाइम तुरंत परिणाम
+                <h4 className="font-bold text-sm text-white">
+                  Real-Time Instant Results
                 </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  सटीक खगोलीय गणित द्वारा बिना किसी प्रतीक्षा के तुरंत विस्तृत रिपोर्ट।
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Precise astronomical calculations deliver detailed reports without any wait.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3.5">
-              <div className="h-12 w-12 rounded-2xl bg-sky-50 border border-sky-200 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="flex items-start gap-4">
+              <div className="h-12 w-12 rounded-xl bg-sky-500/15 border border-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-heading font-extrabold text-sm sm:text-base text-slate-900">
-                  निजी व पूर्णतः सुरक्षित
+                <h4 className="font-bold text-sm text-white">
+                  Private & Fully Secure
                 </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  आपकी जन्म जानकारी व इनपुट पूरी तरह गोपनीय और सुरक्षित रहते हैं।
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Your birth details and all inputs remain completely confidential and secure.
                 </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-      </div>
     </div>
   )
 }

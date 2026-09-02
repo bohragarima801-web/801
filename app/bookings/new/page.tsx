@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
-import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard } from 'lucide-react'
+import { Loader2, Heart, CheckCircle2, ChevronRight, ArrowLeft, ShieldCheck, Wallet, CreditCard, MessageCircle, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
@@ -34,10 +34,11 @@ function BookingForm() {
 
   // Devotee details
   const [devoteeName, setDevoteeName] = useState('')
+  const [phone, setPhone] = useState('')
   const [gotra, setGotra] = useState('Kashyap')
   const [fatherHusbandName, setFatherHusbandName] = useState('')
   const [sankalpPurpose, setSankalpPurpose] = useState('')
-  const [acceptTerms, setAcceptTerms] = useState(false)
+  const [acceptTerms, setAcceptTerms] = useState(true)
   
   // Dynamic family members list (based on packageKey count)
   const memberCount = Number(packageKey) || 1
@@ -61,11 +62,14 @@ function BookingForm() {
     const loadData = async () => {
       try {
         // 1. Auth check
-        const profileRes = await fetch('/api/profile')
-        if (profileRes.status === 401) {
-          toast.error('Please login to continue with your booking.')
-          router.push(`/login?callbackUrl=/bookings/new?pujaId=${pujaId}&package=${packageKey}`)
-          return
+        const profileRes = await fetch('/api/profile').catch(() => null)
+        if (profileRes && profileRes.ok) {
+          const data = await profileRes.json()
+          if (data?.ok && data?.user) {
+            if (data.user.fullName) setDevoteeName(data.user.fullName)
+            if (data.user.phone) setPhone(data.user.phone)
+            if (data.user.customerProfile?.gotra) setGotra(data.user.customerProfile.gotra)
+          }
         }
 
         // 2. Load Puja Data
@@ -157,19 +161,31 @@ function BookingForm() {
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault()
     if (!acceptTerms) {
-      toast.error('Please agree to the Terms & Conditions to proceed.')
+      toast.error('कृपया नियम एवं शर्तें स्वीकार करें।')
       return
     }
     if (!devoteeName.trim()) {
-      toast.error('Devotee Name is required')
+      toast.error('कृपया यजमान का नाम दर्ज करें (Devotee Name is required)')
       return
     }
-    if (!fatherHusbandName.trim()) {
-      toast.error('Father / Husband Name is required')
+    const cleanPhone = phone.replace(/[^\d]/g, '')
+    if (!cleanPhone || cleanPhone.length < 10) {
+      toast.error('कृपया 10 अंकों का वैध WhatsApp / Mobile नंबर दर्ज करें (WhatsApp number is required)')
       return
     }
     setStep('payment')
-    toast.success('Sankalp details captured. Please confirm payment.')
+    toast.success('संकल्प विवरण सुरक्षित किया गया। कृपया भुगतान पूरा करें।')
+  }
+
+  // Direct 1-Click WhatsApp Booking (for devotees preferring WhatsApp assistance)
+  const handleWhatsAppBooking = () => {
+    if (!puja) return
+    const cleanSupportNumber = '919530401984'
+    const nameStr = devoteeName.trim() || 'भक्त'
+    const gotraStr = gotra.trim() || 'कश्यप'
+    const userPhoneStr = phone.trim() ? ` (WhatsApp: ${phone.trim()})` : ''
+    const msg = `जय श्री राम! 🙏\n\nमैं *${puja.name}* बुक करना चाहता/चाहती हूँ।\n\n• यजमान: ${nameStr}${userPhoneStr}\n• गोत्र: ${gotraStr}\n• चयनित पैकेज: ₹${packagePrice}\n• कुल दक्षिणा: ₹${finalTotal}\n\nकृपया संकल्प विधि एवं दक्षिणा (UPI) की जानकारी प्रदान करें।`
+    window.open(`https://wa.me/${cleanSupportNumber}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer')
   }
 
   // Final booking execution
@@ -192,9 +208,10 @@ function BookingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pujaId: puja.id,
-          devoteeName: devoteeName,
-          fatherHusbandName: fatherHusbandName || 'N/A',
-          gotra,
+          devoteeName: devoteeName.trim(),
+          phone: phone.trim(),
+          fatherHusbandName: fatherHusbandName.trim() || 'Self',
+          gotra: gotra.trim() || 'Kashyap',
           sankalpPurpose: finalSankalpPurpose,
           members: membersList,
           selectedOfferingIds,
@@ -244,7 +261,8 @@ function BookingForm() {
         description: `Payment for ${puja.name || 'Puja Booking'}`,
         order_id: orderId,
         prefill: {
-          name: devoteeName,
+          name: devoteeName.trim(),
+          contact: phone.trim(),
         },
         theme: { color: '#ea580c' },
         modal: {
@@ -555,25 +573,58 @@ function BookingForm() {
             {step === 'sankalp' ? (
               <form onSubmit={handleProceedToPayment} className="space-y-4">
                 
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold">Devotee Full Name * (मुख्य यजमान नाम)</Label>
+                {/* 1. Devotee Full Name */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold text-slate-800">
+                    यजमान का पूरा नाम * (Devotee Full Name)
+                  </Label>
                   <Input
-                    placeholder="e.g. Ramesh Bohra"
+                    placeholder="उदा. रमेश शर्मा / Ramesh Sharma"
                     value={devoteeName}
                     onChange={(e) => setDevoteeName(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-10 text-sm font-medium"
                   />
+                </div>
+
+                {/* 2. WhatsApp / Mobile Number - CRITICAL FOR PROOF & RE-ENGAGEMENT */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600 fill-emerald-100" />
+                      <span>WhatsApp / मोबाइल नंबर *</span>
+                    </Label>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+                      वीडियो प्रूफ हेतु
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">
+                      🇮🇳 +91
+                    </span>
+                    <Input
+                      type="tel"
+                      maxLength={10}
+                      placeholder="9876543210"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/[^\d]/g, '').slice(0, 10))}
+                      required
+                      className="h-10 pl-14 text-sm font-bold tracking-wider"
+                    />
+                  </div>
+                  <p className="text-[10px] text-emerald-700 font-medium">
+                    ✓ संकल्प का लाइव वीडियो एवं प्रसाद ट्रैकिंग इसी WhatsApp नंबर पर भेजी जाएगी।
+                  </p>
                 </div>
 
                 {memberCount > 1 && (
                   <div className="space-y-3 border-t pt-3">
-                    <span className="text-xs font-bold text-slate-700">Family Members' Names</span>
+                    <span className="text-xs font-bold text-slate-700">परिवार के अन्य सदस्यों के नाम</span>
                     {Array.from({ length: memberCount - 1 }).map((_, index) => (
                       <div key={index} className="space-y-1">
-                        <Label className="text-[10px] text-muted-foreground">Member {index + 2} Name</Label>
+                        <Label className="text-[10px] text-muted-foreground">सदस्य {index + 2} का नाम</Label>
                         <Input
-                          placeholder={`e.g. Family Member ${index + 2}`}
+                          placeholder={`उदा. सदस्य ${index + 2}`}
                           value={familyNames[index] || ''}
                           onChange={(e) => handleMemberNameChange(index, e.target.value)}
                           required
@@ -584,78 +635,140 @@ function BookingForm() {
                   </div>
                 )}
 
-                <div className="space-y-2 border-t pt-3">
-                  <Label className="text-xs font-bold">Father / Husband Name *</Label>
-                  <Input
-                    placeholder="e.g. Suresh Bohra"
-                    value={fatherHusbandName}
-                    onChange={(e) => setFatherHusbandName(e.target.value)}
-                    required
-                    className="h-10"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold">Gotra (गोत्र) *</Label>
+                {/* 3. Gotra */}
+                <div className="space-y-1.5 border-t pt-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-800">गोत्र (Gotra) *</Label>
+                    <span className="text-[10px] text-slate-500">अज्ञात होने पर 'Kashyap' रहने दें</span>
+                  </div>
                   <Input
                     placeholder="Kashyap"
                     value={gotra}
                     onChange={(e) => setGotra(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-10 text-sm"
                   />
-                  <p className="text-[10px] text-slate-500">यदि गोत्र ज्ञात न हो तो 'Kashyap' ही रहने दें।</p>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold">Sankalp Purpose / Description (संकल्प का उद्देश्य / विवरण)</Label>
+                {/* 4. Father / Husband Name (OPTIONAL) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-700">पिता / पति का नाम (Father / Husband Name)</Label>
+                    <span className="text-[10px] text-slate-400 font-semibold">ऐच्छिक (Optional)</span>
+                  </div>
+                  <Input
+                    placeholder="उदा. सुरेश शर्मा"
+                    value={fatherHusbandName}
+                    onChange={(e) => setFatherHusbandName(e.target.value)}
+                    className="h-9 text-xs"
+                  />
+                </div>
+
+                {/* 5. Sankalp Purpose (OPTIONAL) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-700">विशेष मनोकामना / उद्देश्य (Sankalp Wish)</Label>
+                    <span className="text-[10px] text-slate-400 font-semibold">ऐच्छिक (Optional)</span>
+                  </div>
                   <Textarea
-                    placeholder="उदा. उत्तम स्वास्थ्य, मनोकामना पूर्ति, व्यापार वृद्धि, कोर्ट केस सफलता या सुख-शांति..."
+                    placeholder="उदा. उत्तम स्वास्थ्य, व्यापार वृद्धि, सुख-शांति, शीघ्र विवाह या कोर्ट केस सफलता..."
                     value={sankalpPurpose}
                     onChange={(e) => setSankalpPurpose(e.target.value)}
                     rows={2}
                     className="text-xs bg-white"
                   />
-                  <p className="text-[10px] text-slate-500">अपनी विशेष मनोकामना या संकल्प का मुख्य उद्देश्य यहाँ लिखें।</p>
                 </div>
 
                 {/* Terms and Conditions Checkbox */}
                 <div className="flex items-start gap-2 border-t pt-3 pb-1 text-left">
                   <Checkbox id="termsAccept" checked={acceptTerms} onCheckedChange={(val) => setAcceptTerms(!!val)} />
                   <Label htmlFor="termsAccept" className="text-[11px] leading-tight text-slate-600 cursor-pointer">
-                    I agree to the <Link href="/terms" target="_blank" className="text-orange-600 hover:underline font-bold">Terms & Conditions</Link> of DivyaYagyam.com
+                    मैं दिव्ययज्ञम् के <Link href="/terms" target="_blank" className="text-orange-600 hover:underline font-bold">नियम एवं शर्तों</Link> से सहमत हूँ।
                   </Label>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-sm font-black bg-orange-600 hover:bg-orange-700 text-white rounded-xl shadow">
-                  Proceed to Payment (₹{finalTotal}) <ChevronRight className="ml-1 h-4 w-4" />
+                {/* Primary Proceed CTA */}
+                <Button type="submit" className="w-full h-12 text-sm font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white rounded-2xl shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                  <span>भुगतान के लिए आगे बढ़ें (₹{finalTotal})</span>
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
+
+                {/* 1-Click WhatsApp Booking Option */}
+                <div className="pt-2 text-center">
+                  <div className="relative flex py-1 items-center">
+                    <div className="flex-grow border-t border-slate-200"></div>
+                    <span className="flex-shrink mx-3 text-[11px] text-slate-400 font-bold uppercase">या (OR)</span>
+                    <div className="flex-grow border-t border-slate-200"></div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppBooking}
+                    className="w-full mt-1.5 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all cursor-pointer"
+                  >
+                    <MessageCircle className="h-4 w-4 fill-white" />
+                    <span>WhatsApp पर सीधे संकल्प लिखाएं व बुक करें</span>
+                  </button>
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    हमारे आचार्य सीधे WhatsApp पर आपका संकल्प दर्ज करेंगे
+                  </p>
+                </div>
+
+                {/* Micro Trust Guarantee Strip */}
+                <div className="pt-3 border-t border-slate-100 grid grid-cols-3 gap-1 text-center text-[10px] font-semibold text-slate-600">
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-amber-600">🕉️</span>
+                    <span>100% वैदिक विधि</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-emerald-600">📹</span>
+                    <span>WhatsApp वीडियो प्रूफ</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-blue-600">🔒</span>
+                    <span>सुरक्षित पेमेंट</span>
+                  </div>
+                </div>
 
               </form>
             ) : (
               <div className="space-y-4">
                 <div className="p-4 bg-orange-50/40 rounded-2xl text-center space-y-1">
-                  <span className="text-xs text-slate-500">Total Payable Amount</span>
-                  <div className="text-3xl font-black text-orange-600">₹{finalTotal}</div>
+                  <span className="text-xs text-slate-500">कुल देय दक्षिणा (Total Amount)</span>
+                  <div className="text-3xl font-black text-orange-600 font-heading">₹{finalTotal}</div>
+                  <p className="text-[11px] text-slate-600 font-medium">
+                    यजमान: <strong>{devoteeName}</strong> ({phone})
+                  </p>
                 </div>
 
-                <Button onClick={handleConfirmBooking} disabled={booking} className="w-full h-12 text-sm font-black bg-green-600 hover:bg-green-700 text-white rounded-xl shadow flex items-center justify-center gap-1.5">
+                <Button onClick={handleConfirmBooking} disabled={booking} className="w-full h-12 text-sm font-black bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-2xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
                   {booking ? (
-                    <span className="flex items-center justify-center"><Loader2 className="h-4 w-4 animate-spin" /> Processing Payment…
+                    <span className="flex items-center justify-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> पेमेंट गेटवे खुल रहा है…
                     </span>
                   ) : (
                     <>
-                      <Wallet className="h-4 w-4" /> Pay Now & Confirm (भुगतान करें)
+                      <Wallet className="h-4 w-4" /> अभी सुरक्षित भुगतान करें (PAY NOW)
                     </>
                   )}
                 </Button>
 
-                <Button variant="outline" className="w-full h-11 text-xs font-bold rounded-xl" onClick={() => setStep('sankalp')}>
-                  Edit Sankalp Details
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" className="h-10 text-xs font-bold rounded-xl" onClick={() => setStep('sankalp')}>
+                    विवरण बदलें
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppBooking}
+                    className="h-10 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5 fill-emerald-600 text-emerald-600" />
+                    <span>WhatsApp सहायता</span>
+                  </button>
+                </div>
 
-                <div className="flex items-center justify-center gap-1 text-[10px] text-green-700 font-semibold bg-green-50 py-2 rounded-lg">
-                  <ShieldCheck className="h-4 w-4 shrink-0" /> Safe & Secure Payments • Divyayagyam Promise
+                <div className="flex items-center justify-center gap-1.5 text-[11px] text-emerald-800 font-bold bg-emerald-50/80 border border-emerald-200 py-2.5 px-3 rounded-xl">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+                  <span>256-Bit SSL सुरक्षित भुगतान • 100% संकल्प गारंटी</span>
                 </div>
               </div>
             )}

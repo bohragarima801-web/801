@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,8 +12,11 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter()
+  const params = useSearchParams()
+  const redirectTo = params?.get('redirect') || params?.get('callbackUrl') || '/dashboard'
+
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -65,13 +68,13 @@ export default function RegisterPage() {
         const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password })
         if (!signInError && signInData.session) {
           toast.success('Welcome to Divyayagyam!')
-          window.location.href = '/dashboard'
+          window.location.href = redirectTo
         } else {
           toast.success('Check your email to verify your account.')
         }
       } else {
         toast.success('Welcome to Divyayagyam!')
-        window.location.href = '/dashboard'
+        window.location.href = redirectTo
       }
     } catch (err: any) {
       toast.error(err?.message || 'Registration failed')
@@ -119,5 +122,13 @@ export default function RegisterPage() {
         </p>
       </CardContent>
     </Card>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center p-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+      <RegisterContent />
+    </Suspense>
   )
 }

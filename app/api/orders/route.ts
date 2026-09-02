@@ -77,9 +77,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser().catch(() => null)
-    if (!user) {
-      return NextResponse.json({ ok: false, error: 'You must be logged in to place an order' }, { status: 401 });
-    }
+    // Guest orders allowed
 
 
     const body = await req.json()
@@ -364,8 +362,8 @@ export async function POST(req: NextRequest) {
       const { sendWhatsAppNotification } = await import('@/lib/whatsapp')
       sendWhatsAppNotification({
         type: 'ORDER_SUCCESS',
-        phone: shippingAddress.phone || user.email,
-        name: shippingAddress.name || user.fullName || 'Devotee',
+        phone: shippingAddress.phone || (user as any)?.phone || user?.email || '',
+        name: shippingAddress.name || user?.fullName || 'Devotee',
         details: {
           orderNumber: dbOrder.orderNumber,
           amount: total,

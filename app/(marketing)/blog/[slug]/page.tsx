@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Image from 'next/image';
 import Script from 'next/script'
 import { generateArticleSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true, coverImageAlt: true }
   });
 
-  if (!post) return generatePageMeta({ title: 'Blog Post Not Found | DivyaYagyam', description: 'The requested article could not be found.', path: `/blog/${cleanSlug}` });
+  if (!post) return generatePageMeta({ title: 'Vedic Articles | DivyaYagyam', description: 'Redirecting to authentic Vedic articles at DivyaYagyam.', path: `/blog`, noIndex: true });
 
   const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
 
@@ -76,7 +76,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   })
 
   if (!post || post.status !== 'PUBLISHED' || (post.publishedAt && new Date(post.publishedAt) > new Date())) {
-    notFound()
+    permanentRedirect('/blog')
   }
 
   const faqs = await prisma.fAQ.findMany({

@@ -80,22 +80,19 @@ export default function CheckoutPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/profile')
-        if (res.status === 401) {
-          toast.error('Please login to complete your order')
-          router.push('/login?callbackUrl=/checkout')
-          return
-        }
-        const data = await res.json()
-        if (data.ok && data.user) {
-          setUser(data.user)
-          setAddress(prev => ({
-            ...prev,
-            name: data.user.fullName || '',
-            phone: data.user.phone || ''
-          }))
-          if (data.user.customerProfile?.gotra) {
-             setSankalp(prev => ({ ...prev, gotra: data.user.customerProfile.gotra }))
+        const res = await fetch('/api/profile').catch(() => null)
+        if (res && res.ok) {
+          const data = await res.json()
+          if (data.ok && data.user) {
+            setUser(data.user)
+            setAddress(prev => ({
+              ...prev,
+              name: data.user.fullName || '',
+              phone: data.user.phone || ''
+            }))
+            if (data.user.customerProfile?.gotra) {
+               setSankalp(prev => ({ ...prev, gotra: data.user.customerProfile.gotra }))
+            }
           }
         }
       } catch (err) {

@@ -4,7 +4,7 @@ import {
   Building2, Flame, Ticket, ShoppingBag, HandCoins, Sparkles, Sparkle,
   Newspaper, ImageIcon, MessageSquare, Bell, Megaphone, LineChart,
   Palette, Search, CreditCard, HardDrive, Settings, Lock, DatabaseBackup,
-  Code2, Bot, FileText, Package, ClipboardList, Layers, CalendarDays, Wand2, Video,
+  Code2, Bot, FileText, Package, ClipboardList, Layers, CalendarDays, Wand2, Video, Compass,
 } from 'lucide-react'
 
 export type AdminNavItem = { title: string; href: string; icon?: any; badge?: string | number }
@@ -43,6 +43,8 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'Delivered', href: '/admin/orders?tab=delivered' }, { title: 'Cancelled', href: '/admin/orders?tab=cancelled' },
     { title: 'Returned', href: '/admin/orders?tab=returned' }, { title: 'Refunds', href: '/admin/orders?tab=refunds' },
   ]},
+
+  { title: '🔮 Horoscope Orders', slug: 'horoscope-orders', icon: Compass, href: '/admin/horoscope-orders' },
 
   { title: 'BhaktiSeva', slug: 'bhaktiSeva', icon: Sparkles, permission: 'bhaktiSeva.read', items: [
     { title: 'All', href: '/admin/bhaktiseva' }, { title: 'Flowers', href: '/admin/bhaktiseva?tab=flowers' },

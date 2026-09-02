@@ -13,10 +13,31 @@ interface TeamMember {
   isActive?: boolean
 }
 
+const DEFAULT_MEMBERS: TeamMember[] = [
+  {
+    id: 'wa_1',
+    name: 'Pandit Seva Desk (पं. सेवा केंद्र)',
+    phone: '919530401984',
+    role: 'Online Puja & Sankalp Booking',
+    message: 'जय श्री राम! मुझे पूजा एवं नाम-गोत्र संकल्प के बारे में जानकारी चाहिए।',
+    isPrimary: true,
+    isActive: true,
+  },
+  {
+    id: 'wa_2',
+    name: 'Prasad & Order Helpline',
+    phone: '919530401984',
+    role: 'Prasad Delivery & Support',
+    message: 'जय श्री राम! मुझे सिद्ध प्रसाद एवं बुकिंग की जानकारी चाहिए।',
+    isPrimary: false,
+    isActive: true,
+  },
+]
+
 export function WhatsAppFloatingWidget() {
   const [enabled, setEnabled] = useState(true)
   const [title, setTitle] = useState('DivyaYagyam WhatsApp Seva')
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(DEFAULT_MEMBERS)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -35,15 +56,7 @@ export function WhatsAppFloatingWidget() {
       } catch {}
     }
 
-    const loadWhatsApp = () => {
-      loadConfig()
-    }
-
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(loadWhatsApp, { timeout: 1500 })
-    } else {
-      setTimeout(loadWhatsApp, 1000)
-    }
+    loadConfig()
   }, [])
 
   if (!enabled || teamMembers.length === 0) return null
@@ -51,7 +64,7 @@ export function WhatsAppFloatingWidget() {
   const handleDirectChat = (member: TeamMember) => {
     let cleanPhone = member.phone.replace(/[^\d]/g, '')
     if (cleanPhone.length === 10) cleanPhone = `91${cleanPhone}`
-    const msg = member.message || 'जय श्री राम! मुझे जानकारी चाहिए।'
+    const msg = member.message || 'Jai Shree Ram! I would like more information.'
     const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`
     window.open(url, '_blank', 'noopener,noreferrer')
     setOpen(false)

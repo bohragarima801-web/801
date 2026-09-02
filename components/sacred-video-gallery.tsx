@@ -64,26 +64,26 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   }
 
   return (
-    <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-[#E6D6BE] notranslate" translate="no">
-      {/* DevPunya Style Ultra-Attractive Clean Header */}
+    <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-zinc-200 notranslate" translate="no">
+      {/* DivyaYagyam Luxury Ultra-Attractive Clean Header */}
       <div className="space-y-2.5 mb-10 text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EBD7] text-[#E58A16] font-bold text-xs border border-[#E6D6BE]">
-          <Sparkles className="h-3.5 w-3.5" /> पावन दर्शन व प्रमाण
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
+          <Sparkles className="h-3.5 w-3.5" /> Sacred Darshan & Proof
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#292321] tracking-tight">
-          पवित्र पूजा दर्शन एवं लाइव वीडियो
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">
+          Sacred Puja Darshan & Live Videos
         </h2>
-        <p className="text-xs sm:text-sm text-[#665E58] font-medium max-w-xl mx-auto">
-          विभिन्न सिद्ध शक्तिपीठों में यजमानों के नाम-गोत्र से संपन्न पूजाओं का प्रामाणिक वीडियो एवं दर्शन।
+        <p className="text-xs sm:text-sm text-zinc-500 font-medium max-w-xl mx-auto">
+          Authentic videos and darshan of pujas performed with devotees' name and gotra across various sacred shrines.
         </p>
       </div>
 
       {/* Media Grid - Vertical Portrait Cards */}
       {displayVideos.length === 0 ? (
-        <div className="text-center py-12 px-6 bg-white rounded-2xl border border-[#E6D6BE] space-y-3 max-w-xl mx-auto shadow-xs">
-          <div className="h-12 w-12 mx-auto rounded-full bg-[#F7EBD7] text-[#E58A16] flex items-center justify-center text-2xl">🎥</div>
-          <h3 className="text-lg font-bold text-[#292321]">पावन पूजा वीडियो एवं दर्शन</h3>
-          <p className="text-xs text-[#665E58]">सिद्ध धामों के पावन अनुष्ठानों के वीडियो शीघ्र यहाँ उपलब्ध होंगे।</p>
+        <div className="text-center py-12 px-6 bg-white rounded-2xl border border-zinc-200 space-y-3 max-w-xl mx-auto shadow-xs">
+          <div className="h-12 w-12 mx-auto rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl">🎥</div>
+          <h3 className="text-lg font-bold text-zinc-900">Sacred Puja Videos & Darshan</h3>
+          <p className="text-xs text-zinc-500">Videos of sacred rituals from holy shrines will be available here soon.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
@@ -95,7 +95,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
               <div
                 key={video.id}
                 onClick={() => setActiveVideo(video)}
-                className="group relative cursor-pointer overflow-hidden rounded-2xl border border-[#E6D6BE] shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-slate-900 flex flex-col justify-between"
+                className="group relative cursor-pointer overflow-hidden rounded-2xl border border-zinc-200 shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-slate-900 flex flex-col justify-between"
               >
                 {/* Vertical Aspect Ratio Frame */}
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-900">
@@ -128,7 +128,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                   {/* Play Button */}
                   {isVid && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 group-hover:bg-[#E58A16] text-[#292321] group-hover:text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 backdrop-blur-md">
+                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 group-hover:bg-amber-600 text-zinc-900 group-hover:text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 backdrop-blur-md">
                         <Play className="h-4 w-4 sm:h-5 sm:w-5 fill-current ml-0.5" />
                       </div>
                     </div>
@@ -137,7 +137,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
                   {/* Title & Verified Tag at Bottom */}
                   <div className="absolute bottom-0 left-0 right-0 p-3 z-10 space-y-0.5">
                     <h3 className="font-sans font-bold text-xs sm:text-sm text-white line-clamp-2 leading-snug drop-shadow-md">
-                      {video.filename || 'पावन अनुष्ठान दर्शन'}
+                      {video.filename || 'Sacred Ritual Darshan'}
                     </h3>
                     <p className="text-[10px] text-amber-300 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" /> Verified Seva
@@ -154,8 +154,8 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
       <Dialog open={!!activeVideo} onOpenChange={(open) => !open && setActiveVideo(null)}>
         <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-950 border-[#E58A16]/30 text-white rounded-3xl">
           <DialogHeader className="p-4 bg-slate-900 border-b border-slate-800 flex flex-row items-center justify-between">
-            <DialogTitle className="text-base md:text-lg font-bold text-[#E58A16] line-clamp-1 pr-6">
-              {activeVideo?.filename || 'पावन पूजा दर्शन'}
+            <DialogTitle className="text-base md:text-lg font-bold text-amber-600 line-clamp-1 pr-6">
+              {activeVideo?.filename || 'Sacred Puja Darshan'}
             </DialogTitle>
           </DialogHeader>
 
@@ -197,7 +197,7 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
 
             <Button size="lg" className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold px-6 shrink-0 shadow-lg rounded-full" asChild>
               <Link href="/pujas" onClick={() => setActiveVideo(null)}>
-                पूजा बुक करें (Book Puja) <ArrowRight className="ml-2 h-4 w-4" />
+                Book Puja <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>

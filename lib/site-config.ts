@@ -10,7 +10,7 @@ export const siteConfig = {
     'Temple Booking', 'Sanatan Seva', 'Kashi Vishwanath Puja', 'Mahakaleshwar Bhasma Aarti',
     'Somnath Puja', 'Kalsarp Dosh Nivaran', 'Rudrabhishek Puja', 'Online Prasad Delivery',
     'Bhakti Seva', 'Pandit Ji Online', 'Astrology', 'Kundali Milan', 'Panchang',
-    'ऑनलाइन पूजा बुकिंग', 'दिव्य यज्ञम्', 'काशी विश्वनाथ पूजा', 'महाकालेश्वर भस्म आरती', 'प्रसाद होम डिलीवरी'
+    'Online Puja Booking', 'Divya Yagyam', 'Kashi Vishwanath Puja', 'Mahakaleshwar Bhasma Aarti', 'Prasad Home Delivery'
   ],
   contact: {
     email: 'seva@divyayagyam.com',

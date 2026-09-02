@@ -12,33 +12,33 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     question: "How does online puja booking work?",
-    questionHi: "ऑनलाइन पूजा बुकिंग कैसे संपन्न होती है?",
-    answer: "आप अपनी इच्छानुसार पूजा का चयन करते हैं, अपना नाम, गोत्र व संकल्प विवरण दर्ज करते हैं। हमारे प्रामाणिक वैदिक आचार्यों द्वारा सिद्ध मंदिरों में पूर्ण शास्त्रोक्त विधि से पूजन किया जाता है। व्हाट्सएप पर वीडियो प्रमाण व घर पर सिद्ध प्रसाद प्राप्त होता है।"
+    questionHi: "How does online puja booking work?",
+    answer: "You select your desired puja, enter your name, gotra, and sankalp details. Our authentic Vedic priests perform the puja in sacred shrines following complete scriptural rituals. You receive video proof on WhatsApp and consecrated prasad at home."
   },
   {
     question: "How do I know priests are genuine and verified?",
-    questionHi: "मुझे कैसे पता चलेगा कि आचार्य व पंडितजी प्रामाणिक हैं?",
-    answer: "दिव्ययज्ञम् से जुड़े सभी विद्वान आचार्य वैदिक पीठों एवं सिद्ध मंदिरों से अनुप्रमाणित हैं। हर अनुष्ठान पूर्ण मंत्रोच्चार व वैदिक मर्यादा के साथ ही संपन्न होता है।"
+    questionHi: "How do I know the priests and acharyas are authentic?",
+    answer: "All learned acharyas associated with DivyaYagyam are certified from Vedic shrines and sacred temples. Every ritual is conducted with complete mantra recitation and Vedic sanctity."
   },
   {
     question: "What proof do I receive after the puja is completed?",
-    questionHi: "पूजा संपन्न होने के बाद मुझे क्या प्रमाण प्राप्त होता है?",
-    answer: "आपको संकल्प का HD वीडियो प्राप्त होता है जिसमें आपका नाम व गोत्र स्पष्ट रूप से उच्चारित किया जाता है। यह वीडियो प्रमाण आपके व्हाट्सएप नंबर पर 24 घंटे के भीतर भेजा जाता है।"
+    questionHi: "What proof do I receive after the puja is completed?",
+    answer: "You receive an HD video of the sankalp clearly chanting your name and gotra. This video proof is sent to your WhatsApp number within 24 hours."
   },
   {
     question: "Can I request a custom puja or specific muhurat?",
-    questionHi: "क्या मैं विशेष मुहूर्त या व्यक्तिगत अनुष्ठान का अनुरोध कर सकता हूँ?",
-    answer: "हाँ! आप व्हाट्सएप या AI पंडित जी के माध्यम से हमारे आचार्य परामर्शदाताओं से संपर्क करके अपनी जन्म नक्षत्र व आवश्यकतानुसार व्यक्तिगत पूजा या जाप बुक करवा सकते हैं।"
+    questionHi: "Can I request a custom ritual or specific auspicious muhurat?",
+    answer: "Yes! You can contact our acharya consultants via WhatsApp or AI Pandit Ji to book personalized pujas or japas tailored to your birth star and requirements."
   },
   {
     question: "What is the refund and cancellation policy?",
-    questionHi: "रिफंड एवं निरस्तीकरण की क्या नीति है?",
-    answer: "यदि किसी मंदिर में अपरिहार्य स्थिति के कारण पूजा संपन्न न हो पाए, तो 100% पूर्ण रिफंड या अन्य शुभ तिथि पर पूजा पुनर्निधारित की जाती है।"
+    questionHi: "What is the refund and cancellation policy?",
+    answer: "If a puja cannot be performed due to unavoidable circumstances at a temple, a 100% full refund is issued or the puja is rescheduled to another auspicious date."
   },
   {
     question: "How is the Prasad delivered to my home?",
-    questionHi: "सिद्ध प्रसाद मेरे घर तक कैसे पहुँचेगा?",
-    answer: "पूजन में अभिमंत्रित प्रसाद (पावन अक्षत, भस्म, रक्षासूत्र, रुद्राक्ष एवं कलावा) सुरक्षित पैकिंग के साथ 3 से 5 कार्यदिवसों के भीतर एक्सप्रेस कोरियर से आपके पते पर पहुँचाया जाता है।"
+    questionHi: "How will the consecrated prasad reach my home?",
+    answer: "Consecrated prasad from the puja (holy akshat, bhasma, sacred thread, rudraksha, and kalawa) is delivered to your address via express courier in secure packaging within 3 to 5 business days."
   }
 ]
 
@@ -50,17 +50,17 @@ export function SacredFaqAccordion() {
   }
 
   return (
-    <section className="w-full py-12 md:py-20 bg-[#FFF9EF] text-[#292321] notranslate" translate="no">
+    <section className="w-full py-12 md:py-20 bg-white text-zinc-900 notranslate" translate="no">
       <div className="container mx-auto px-4 md:px-6 max-w-3xl">
         <div className="text-center space-y-2.5 mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EBD7] text-[#E58A16] font-bold text-xs border border-[#E6D6BE]">
-            <HelpCircle className="h-3.5 w-3.5" /> अक्सर पूछे जाने वाले सवाल
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
+            <HelpCircle className="h-3.5 w-3.5" /> Frequently Asked Questions
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#292321] tracking-tight">
-            सामान्य प्रश्न एवं <span className="text-[#E58A16]">समाधान (FAQ)</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">
+            Frequently Asked Questions & <span className="text-amber-600">Answers (FAQ)</span>
           </h2>
-          <p className="text-xs sm:text-sm text-[#665E58] font-medium max-w-xl mx-auto">
-            पूजा विधि, संकल्प वीडियो प्रमाण व प्रसाद डिलीवरी से जुड़े आपके सभी प्रश्नों के उत्तर।
+          <p className="text-xs sm:text-sm text-zinc-500 font-medium max-w-xl mx-auto">
+            Answers to all your questions regarding puja rituals, sankalp video proof, and prasad delivery.
           </p>
         </div>
 
@@ -70,26 +70,26 @@ export function SacredFaqAccordion() {
             return (
               <div
                 key={idx}
-                className="bg-white border border-[#E6D6BE] rounded-2xl shadow-2xs overflow-hidden transition-all duration-200 hover:border-[#E58A16]"
+                className="bg-white border border-zinc-200 rounded-2xl shadow-2xs overflow-hidden transition-all duration-200 hover:border-[#E58A16]"
               >
                 <button
                   type="button"
                   onClick={() => toggle(idx)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 font-semibold text-[#292321] hover:text-[#E58A16] transition-colors focus:outline-none cursor-pointer"
+                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 font-semibold text-zinc-900 hover:text-amber-600 transition-colors focus:outline-none cursor-pointer"
                   aria-expanded={isOpen}
                 >
-                  <span className="text-sm sm:text-base font-bold text-[#292321]">
+                  <span className="text-sm sm:text-base font-bold text-zinc-900">
                     {faq.questionHi}
                   </span>
-                  <div className={`h-7 w-7 rounded-full bg-[#F7EBD7] text-[#E58A16] flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+                  <div className={`h-7 w-7 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                     <ChevronDown className="h-4 w-4" />
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-[#4A403C] text-xs sm:text-sm leading-relaxed border-t border-[#E6D6BE] pt-3 bg-[#FFF9EF]/50">
+                  <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-[#4A403C] text-xs sm:text-sm leading-relaxed border-t border-zinc-200 pt-3 bg-white/50">
                     <p className="flex items-start gap-2">
-                      <Sparkles className="h-4 w-4 text-[#E58A16] shrink-0 mt-0.5" />
+                      <Sparkles className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                       <span>{faq.answer}</span>
                     </p>
                   </div>
