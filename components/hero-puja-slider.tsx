@@ -168,14 +168,14 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6A00] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl active:scale-95"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6600] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Previous Slide"
           >
             <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6A00] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl active:scale-95"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FF6600] text-white flex items-center justify-center backdrop-blur-md transition-all z-30 border border-white/20 shadow-xl"
             aria-label="Next Slide"
           >
             <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -183,26 +183,7 @@ export function HeroPujaSlider({ slides = [] }: { slides?: HeroSlide[]; children
         </>
       )}
 
-      {/* ── 4. INDICATOR DOTS (Z-INDEX 30) ── */}
-      {slideList.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-30 pointer-events-auto bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15">
-          {slideList.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={(e) => {
-                e.preventDefault()
-                setCurrentIndex(idx)
-              }}
-              className={`rounded-full transition-all duration-300 ${
-                currentIndex === idx
-                  ? 'w-6 h-2 bg-gradient-to-r from-[#FF6A00] to-[#FF8500] shadow-[0_0_10px_rgba(255,106,0,0.6)]'
-                  : 'w-2 h-2 bg-white/70 hover:bg-white'
-              }`}
-              aria-label={`Slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      )}
+
     </div>
   )
 }
