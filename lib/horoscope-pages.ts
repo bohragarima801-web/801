@@ -2,6 +2,20 @@ import fs from 'fs'
 import path from 'path'
 import prisma from '@/lib/prisma'
 
+export interface HoroscopeMediaItem {
+  id: string
+  url: string
+  title?: string
+  type?: 'image' | 'video'
+}
+
+export interface HoroscopeRazorpayConfig {
+  enabled: boolean
+  amount?: number
+  paymentLink?: string
+  buttonText?: string
+}
+
 export interface HoroscopeCustomPage {
   id: string
   title: string
@@ -12,6 +26,9 @@ export interface HoroscopeCustomPage {
   headerBanner: boolean
   showBookingBar: boolean
   whatsappNumber?: string
+  images?: HoroscopeMediaItem[]
+  videos?: HoroscopeMediaItem[]
+  razorpay?: HoroscopeRazorpayConfig
   status: 'PUBLISHED' | 'DRAFT'
   createdAt: string
   updatedAt: string
@@ -114,6 +131,9 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
         ...all[existingIndex],
         ...data,
         slug,
+        images: data.images || all[existingIndex].images || [],
+        videos: data.videos || all[existingIndex].videos || [],
+        razorpay: data.razorpay || all[existingIndex].razorpay || { enabled: false },
         updatedAt: now
       }
       all[existingIndex] = page
@@ -128,6 +148,9 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
         headerBanner: data.headerBanner ?? true,
         showBookingBar: data.showBookingBar ?? true,
         whatsappNumber: data.whatsappNumber || '919530401984',
+        images: data.images || [],
+        videos: data.videos || [],
+        razorpay: data.razorpay || { enabled: false },
         status: data.status || 'PUBLISHED',
         createdAt: now,
         updatedAt: now
@@ -152,6 +175,9 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
       headerBanner: data.headerBanner ?? true,
       showBookingBar: data.showBookingBar ?? true,
       whatsappNumber: data.whatsappNumber || '919530401984',
+      images: data.images || [],
+      videos: data.videos || [],
+      razorpay: data.razorpay || { enabled: false },
       status: data.status || 'PUBLISHED',
       createdAt: now,
       updatedAt: now

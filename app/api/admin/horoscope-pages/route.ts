@@ -45,6 +45,9 @@ export async function POST(req: NextRequest) {
       headerBanner: body.headerBanner ?? true,
       showBookingBar: body.showBookingBar ?? true,
       whatsappNumber: body.whatsappNumber || '919530401984',
+      images: body.images || [],
+      videos: body.videos || [],
+      razorpay: body.razorpay || { enabled: false },
       status: body.status || 'PUBLISHED',
     })
 
@@ -72,6 +75,9 @@ export async function PUT(req: NextRequest) {
       headerBanner: body.headerBanner ?? true,
       showBookingBar: body.showBookingBar ?? true,
       whatsappNumber: body.whatsappNumber || '919530401984',
+      images: body.images || [],
+      videos: body.videos || [],
+      razorpay: body.razorpay || { enabled: false },
       status: body.status || 'PUBLISHED',
     })
 
