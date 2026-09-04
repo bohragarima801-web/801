@@ -63,7 +63,7 @@ export default function SupportPage() {
                   Fastest way to update Gotra, check puja timings, or receive video proof links directly on WhatsApp.
                 </p>
               </div>
-              <p className="text-xs font-bold text-slate-800 pt-2 border-t">+91-95304-01984, +91-95320-11984</p>
+              <p className="text-xs font-bold text-slate-800 pt-2 border-t">+91-95304-01984</p>
             </div>
 
             {/* Email Support */}

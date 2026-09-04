@@ -92,10 +92,34 @@ export function CustomInjector() {
           if (pageData?.js) new Function(pageData.js)()
         } catch (err) { console.warn('[customizer:pageJs]', err) }
 
-        // Page HTML injection into #__dvj_slot if present
-        if (pageData?.html) {
-          const slot = document.getElementById('__dvj_slot')
-          if (slot) slot.innerHTML = pageData.html
+        // Page HTML injection - create slot if not present so code always shows!
+        if (pageData?.html && pageData.html.trim()) {
+          let slot = document.getElementById('__dvj_slot')
+          if (!slot) {
+            slot = document.createElement('div')
+            slot.id = '__dvj_slot'
+            slot.className = 'w-full custom-page-html-slot'
+            const main = document.querySelector('main') || document.body
+            if (main.firstChild) {
+              main.insertBefore(slot, main.firstChild)
+            } else {
+              main.appendChild(slot)
+            }
+          }
+          slot.innerHTML = pageData.html
+
+          // Re-execute scripts for dynamic widgets & tracking
+          const scripts = slot.querySelectorAll('script')
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script')
+            Array.from(oldScript.attributes).forEach((attr) => {
+              newScript.setAttribute(attr.name, attr.value)
+            })
+            if (oldScript.innerHTML) {
+              newScript.innerHTML = oldScript.innerHTML
+            }
+            oldScript.parentNode?.replaceChild(newScript, oldScript)
+          })
         }
       } catch (err) {
 // console.warn('[customizer] load failed', err) (removed for production)

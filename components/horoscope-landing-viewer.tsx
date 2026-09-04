@@ -226,7 +226,11 @@ export function HoroscopeLandingViewer({ page }: { page: HoroscopeCustomPage }) 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-8">
             <div className="bg-white rounded-3xl border border-[#E8DDD0] shadow-[0_4px_24px_rgba(36,26,24,0.04)] p-5 sm:p-8 md:p-12 space-y-8 overflow-hidden">
               {/* Pasted Custom Code */}
-              <div ref={containerRef} className="w-full text-[#241A18] leading-relaxed" />
+              <div
+                ref={containerRef}
+                dangerouslySetInnerHTML={{ __html: page.customCode }}
+                className="w-full text-[#241A18] leading-relaxed"
+              />
 
               {/* Separate Images Section if provided */}
               {page.images && page.images.length > 0 && (
@@ -293,7 +297,11 @@ export function HoroscopeLandingViewer({ page }: { page: HoroscopeCustomPage }) 
           </div>
         ) : (
           <div className={`${page.layout === 'fullwidth' ? 'max-w-7xl mx-auto' : 'w-full'} px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-8`}>
-            <div ref={containerRef} className="w-full text-[#241A18] leading-relaxed" />
+            <div
+              ref={containerRef}
+              dangerouslySetInnerHTML={{ __html: page.customCode }}
+              className="w-full text-[#241A18] leading-relaxed"
+            />
 
             {/* Separate Images Section */}
             {page.images && page.images.length > 0 && (

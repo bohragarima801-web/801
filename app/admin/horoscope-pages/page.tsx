@@ -6,7 +6,8 @@ import {
   FileText, Plus, ExternalLink, Copy, Check, Trash2, Edit,
   Eye, Code2, Sparkles, Layout, MessageCircle, ShieldCheck,
   RefreshCw, CheckCircle2, AlertCircle, Upload, CreditCard,
-  Image as ImageIcon, Video, Play, Link2, Loader2, ArrowRight
+  Image as ImageIcon, Video, Play, Link2, Loader2, ArrowRight,
+  Tag, IndianRupee, Layers, CheckSquare, Square, Info
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { HoroscopeLandingViewer } from '@/components/horoscope-landing-viewer'
 import type { HoroscopeCustomPage, HoroscopeMediaItem, HoroscopeRazorpayConfig } from '@/lib/horoscope-pages'
+
+const ALL_AVAILABLE_CATEGORIES = ['Life', 'Career', 'Marriage', 'Finance', 'Health']
 
 const CODE_TEMPLATES = {
   vedicCard: `<div style="text-align: center; max-width: 700px; margin: 0 auto; padding: 20px;">
@@ -30,14 +33,14 @@ const CODE_TEMPLATES = {
     27+ वर्षों के अनुभवी वैदिक आचार्यों द्वारा जन्म-समय व स्थान के आधार पर विस्तृत फलादेश तैयार किया जाता है।
   </p>
   <div style="margin-top: 24px;">
-    <button data-razorpay-amount="501" data-purpose="कुंडली विश्लेषण दक्षिणा" class="razorpay-pay-btn" style="display: inline-block; padding: 12px 28px; background: #7A1F2B; color: #ffffff; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 14px rgba(122,31,43,0.3); cursor: pointer;">
-      💳 दक्षिणा भुगतान करें (₹501) ➔
+    <button data-razorpay-amount="501" data-purpose="कुंडली विश्लेषण दक्षिणा" class="razorpay-pay-btn" style="display: inline-block; padding: 12px 28px; background: #7A1F2B; color: #ffffff; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 14px rgba(122,31,43,0.25); cursor: pointer;">
+      अभी दक्षिणा देकर बुक करें (₹501) ➔
     </button>
   </div>
 </div>`,
 
-  bookingBox: `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 24px 0;">
-  <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+  dualPricingCards: `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 24px 0;">
+  <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
     <h3 style="font-size: 18px; font-weight: bold; color: #241A18; margin-bottom: 8px;">🌟 1 वर्ष विस्तृत भविष्यफल</h3>
     <p style="font-size: 13px; color: #6F625D; margin-bottom: 16px;">करियर, स्वास्थ्य, विवाह व धन संबंधित संपूर्ण गणना।</p>
     <div style="font-size: 24px; font-weight: 900; color: #7A1F2B; margin-bottom: 16px;">₹501 <span style="font-size: 14px; color: #999; text-decoration: line-through;">₹1,500</span></div>
@@ -61,9 +64,11 @@ export default function AdminHoroscopePagesPage() {
   const [pages, setPages] = useState<HoroscopeCustomPage[]>([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<'editor' | 'razorpay' | 'images' | 'videos' | 'preview'>('editor')
+  const [activeTab, setActiveTab] = useState<'details' | 'editor' | 'razorpay' | 'media' | 'preview'>('details')
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null)
   const [uploadingMedia, setUploadingMedia] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterCategory, setFilterCategory] = useState('All')
 
   const htmlFileInputRef = useRef<HTMLInputElement>(null)
   const imageUploadInputRef = useRef<HTMLInputElement>(null)
@@ -81,6 +86,12 @@ export default function AdminHoroscopePagesPage() {
     title: string
     slug: string
     subtitle: string
+    description: string
+    price: number
+    originalPrice: number
+    pages: number
+    categories: string[]
+    badge: string
     customCode: string
     layout: 'container' | 'fullwidth' | 'clean'
     headerBanner: boolean
@@ -94,6 +105,12 @@ export default function AdminHoroscopePagesPage() {
     title: '',
     slug: '',
     subtitle: '',
+    description: '',
+    price: 199,
+    originalPrice: 499,
+    pages: 24,
+    categories: ['All', 'Life'],
+    badge: '',
     customCode: '',
     layout: 'container',
     headerBanner: true,
@@ -102,10 +119,10 @@ export default function AdminHoroscopePagesPage() {
     images: [],
     videos: [],
     razorpay: {
-      enabled: false,
-      amount: 501,
+      enabled: true,
+      amount: 199,
       paymentLink: '',
-      buttonText: 'सुरक्षित दक्षिणा / भुगतान करें (₹501)'
+      buttonText: 'सुरक्षित दक्षिणा / भुगतान करें (₹199)'
     },
     status: 'PUBLISHED'
   })
@@ -119,7 +136,7 @@ export default function AdminHoroscopePagesPage() {
         setPages(json.data || [])
       }
     } catch {
-      toast.error('Failed to load horoscope landing pages')
+      toast.error('Failed to load horoscope reports')
     } finally {
       setLoading(false)
     }
@@ -135,7 +152,13 @@ export default function AdminHoroscopePagesPage() {
       title: '',
       slug: '',
       subtitle: '',
-      customCode: CODE_TEMPLATES.vedicCard,
+      description: '',
+      price: 199,
+      originalPrice: 499,
+      pages: 24,
+      categories: ['All', 'Life'],
+      badge: '',
+      customCode: '',
       layout: 'container',
       headerBanner: true,
       showBookingBar: true,
@@ -143,14 +166,14 @@ export default function AdminHoroscopePagesPage() {
       images: [],
       videos: [],
       razorpay: {
-        enabled: false,
-        amount: 501,
+        enabled: true,
+        amount: 199,
         paymentLink: '',
-        buttonText: 'सुरक्षित दक्षिणा / भुगतान करें (₹501)'
+        buttonText: 'सुरक्षित दक्षिणा / भुगतान करें (₹199)'
       },
       status: 'PUBLISHED'
     })
-    setActiveTab('editor')
+    setActiveTab('details')
     setModalOpen(true)
   }
 
@@ -160,22 +183,28 @@ export default function AdminHoroscopePagesPage() {
       title: page.title,
       slug: page.slug,
       subtitle: page.subtitle || '',
-      customCode: page.customCode,
+      description: page.description || page.subtitle || '',
+      price: page.price !== undefined ? page.price : 199,
+      originalPrice: page.originalPrice !== undefined ? page.originalPrice : 499,
+      pages: page.pages !== undefined ? page.pages : 24,
+      categories: page.categories?.length ? page.categories : ['All', 'Life'],
+      badge: page.badge || '',
+      customCode: page.customCode || '',
       layout: page.layout || 'container',
-      headerBanner: page.headerBanner,
-      showBookingBar: page.showBookingBar,
+      headerBanner: page.headerBanner ?? true,
+      showBookingBar: page.showBookingBar ?? true,
       whatsappNumber: page.whatsappNumber || '919530401984',
       images: page.images || [],
       videos: page.videos || [],
       razorpay: page.razorpay || {
-        enabled: false,
-        amount: 501,
+        enabled: true,
+        amount: page.price || 199,
         paymentLink: '',
-        buttonText: 'सुरक्षित दक्षिणा / भुगतान करें (₹501)'
+        buttonText: `सुरक्षित दक्षिणा / भुगतान करें (₹${page.price || 199})`
       },
-      status: page.status
+      status: page.status || 'PUBLISHED'
     })
-    setActiveTab('editor')
+    setActiveTab('details')
     setModalOpen(true)
   }
 
@@ -185,6 +214,18 @@ export default function AdminHoroscopePagesPage() {
         ? val.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
         : prev.slug
       return { ...prev, title: val, slug: autoSlug }
+    })
+  }
+
+  const toggleCategory = (cat: string) => {
+    setFormData(prev => {
+      const current = prev.categories || ['All']
+      if (current.includes(cat)) {
+        const next = current.filter(c => c !== cat)
+        return { ...prev, categories: next.length > 0 ? next : ['All'] }
+      } else {
+        return { ...prev, categories: [...current, cat] }
+      }
     })
   }
 
@@ -214,12 +255,14 @@ export default function AdminHoroscopePagesPage() {
       toast.error('Failed to read HTML file')
     }
     reader.readAsText(file)
-    // reset input
     if (htmlFileInputRef.current) htmlFileInputRef.current.value = ''
   }
 
-  // Media file upload handler (Image or Video)
-  const handleMediaUpload = async (file: File, type: 'image' | 'video') => {
+  // Media file upload handler (Images or Videos)
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, mediaType: 'image' | 'video') => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
     try {
       setUploadingMedia(true)
       const data = new FormData()
@@ -230,387 +273,429 @@ export default function AdminHoroscopePagesPage() {
         body: data
       })
       const json = await res.json()
-      if (json?.ok && json.url) {
-        const newItem: HoroscopeMediaItem = {
-          id: `med_${Date.now()}`,
-          url: json.url,
-          title: file.name.replace(/\.[^/.]+$/, ''),
-          type
-        }
-        if (type === 'image') {
-          setFormData(prev => ({ ...prev, images: [...prev.images, newItem] }))
-        } else {
-          setFormData(prev => ({ ...prev, videos: [...prev.videos, newItem] }))
-        }
-        toast.success(`${file.name} uploaded successfully!`)
-      } else {
-        toast.error(json?.error || 'Upload failed')
+
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error || 'Upload failed')
       }
-    } catch {
-      toast.error('Upload error')
+
+      const newItem: HoroscopeMediaItem = {
+        id: `med_${Date.now()}`,
+        url: json.url,
+        title: file.name,
+        type: mediaType
+      }
+
+      if (mediaType === 'image') {
+        setFormData(prev => ({ ...prev, images: [...(prev.images || []), newItem] }))
+      } else {
+        setFormData(prev => ({ ...prev, videos: [...(prev.videos || []), newItem] }))
+      }
+
+      toast.success(`${file.name} uploaded successfully!`)
+    } catch (err: any) {
+      toast.error(err.message || 'File upload error')
     } finally {
       setUploadingMedia(false)
+      if (mediaType === 'image' && imageUploadInputRef.current) imageUploadInputRef.current.value = ''
+      if (mediaType === 'video' && videoUploadInputRef.current) videoUploadInputRef.current.value = ''
     }
   }
 
-  // Add Image via URL
   const handleAddImageUrl = () => {
-    if (!newImageUrl.trim()) {
-      toast.error('Please enter an image URL')
-      return
-    }
+    if (!newImageUrl.trim()) return
     const newItem: HoroscopeMediaItem = {
       id: `img_${Date.now()}`,
       url: newImageUrl.trim(),
-      title: newImageTitle.trim() || undefined,
+      title: newImageTitle.trim() || 'Image',
       type: 'image'
     }
-    setFormData(prev => ({ ...prev, images: [...prev.images, newItem] }))
+    setFormData(prev => ({ ...prev, images: [...(prev.images || []), newItem] }))
     setNewImageUrl('')
     setNewImageTitle('')
     toast.success('Image link added!')
   }
 
-  // Add Video via URL
   const handleAddVideoUrl = () => {
-    if (!newVideoUrl.trim()) {
-      toast.error('Please enter a video URL')
-      return
-    }
+    if (!newVideoUrl.trim()) return
     const newItem: HoroscopeMediaItem = {
       id: `vid_${Date.now()}`,
       url: newVideoUrl.trim(),
-      title: newVideoTitle.trim() || undefined,
+      title: newVideoTitle.trim() || 'Video',
       type: 'video'
     }
-    setFormData(prev => ({ ...prev, videos: [...prev.videos, newItem] }))
+    setFormData(prev => ({ ...prev, videos: [...(prev.videos || []), newItem] }))
     setNewVideoUrl('')
     setNewVideoTitle('')
     toast.success('Video link added!')
   }
 
-  // Remove Image
-  const handleRemoveImage = async (id: string, url: string) => {
-    setFormData(prev => ({ ...prev, images: prev.images.filter(img => img.id !== id) }))
-    // If it was an uploaded file, delete from server
-    if (url.includes('/uploads/horoscope/')) {
-      const filename = url.split('/uploads/horoscope/')[1]
-      await fetch(`/api/admin/horoscope-media?filename=${encodeURIComponent(filename)}`, { method: 'DELETE' }).catch(() => null)
-    }
-    toast.info('Image removed')
+  const handleRemoveImage = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter(img => img.id !== id)
+    }))
   }
 
-  // Remove Video
-  const handleRemoveVideo = async (id: string, url: string) => {
-    setFormData(prev => ({ ...prev, videos: prev.videos.filter(vid => vid.id !== id) }))
-    if (url.includes('/uploads/horoscope/')) {
-      const filename = url.split('/uploads/horoscope/')[1]
-      await fetch(`/api/admin/horoscope-media?filename=${encodeURIComponent(filename)}`, { method: 'DELETE' }).catch(() => null)
-    }
-    toast.info('Video removed')
+  const handleRemoveVideo = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      videos: prev.videos.filter(vid => vid.id !== id)
+    }))
   }
 
-  // Insert Image into HTML
-  const insertImageIntoHtml = (url: string, title?: string) => {
-    const imgSnippet = `\n<div style="text-align: center; margin: 20px 0;"><img src="${url}" alt="${title || ''}" style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);" /></div>\n`
-    setFormData(prev => ({ ...prev, customCode: prev.customCode + imgSnippet }))
-    toast.success('Image HTML snippet inserted into Code Editor!')
-  }
-
-  // Insert Video into HTML
-  const insertVideoIntoHtml = (url: string) => {
-    let vidSnippet = ''
-    if (url.endsWith('.mp4') || url.endsWith('.webm')) {
-      vidSnippet = `\n<div style="margin: 20px 0; border-radius: 16px; overflow: hidden;"><video src="${url}" controls style="width: 100%; border-radius: 16px;"></video></div>\n`
-    } else {
-      let embed = url
-      if (url.includes('watch?v=')) embed = `https://www.youtube.com/embed/${url.split('watch?v=')[1]?.split('&')[0]}`
-      if (url.includes('youtu.be/')) embed = `https://www.youtube.com/embed/${url.split('youtu.be/')[1]?.split('?')[0]}`
-      vidSnippet = `\n<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin: 20px 0; border: 1px solid #E8DDD0;"><iframe src="${embed}" style="position: absolute; top:0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe></div>\n`
-    }
-    setFormData(prev => ({ ...prev, customCode: prev.customCode + vidSnippet }))
-    toast.success('Video embed inserted into Code Editor!')
-  }
-
-  // Insert Razorpay Button into HTML
   const insertRazorpayButton = () => {
-    const amt = formData.razorpay.amount || 501
-    const text = formData.razorpay.buttonText || `सुरक्षित दक्षिणा / भुगतान करें (₹${amt})`
-    const btnSnippet = `\n<div style="text-align: center; margin: 24px 0;">
-  <button data-razorpay-amount="${amt}" data-purpose="${formData.title || 'Horoscope Booking'}" class="razorpay-pay-btn" style="padding: 14px 32px; background: #7A1F2B; color: #ffffff; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 4px 18px rgba(122,31,43,0.35); transition: all 0.2s;">
-    💳 ${text} ➔
+    const amount = formData.razorpay.amount || 501
+    const text = formData.razorpay.buttonText || `सुरक्षित दक्षिणा / भुगतान करें (₹${amount})`
+    const snippet = `\n<div style="text-align: center; margin: 24px 0;">
+  <button data-razorpay-amount="${amount}" data-purpose="${formData.title || 'Horoscope दक्षिणा'}" class="razorpay-pay-btn" style="display: inline-block; padding: 14px 32px; background: #7A1F2B; color: #ffffff; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 14px rgba(122,31,43,0.3);">
+    ${text} ➔
   </button>
 </div>\n`
-    setFormData(prev => ({ ...prev, customCode: prev.customCode + btnSnippet }))
-    toast.success('Razorpay Pay Button inserted into HTML!')
+    setFormData(prev => ({
+      ...prev,
+      customCode: (prev.customCode || '') + snippet,
+      razorpay: { ...prev.razorpay, enabled: true }
+    }))
+    setActiveTab('editor')
+    toast.success('Razorpay button code inserted into HTML editor!')
+  }
+
+  const insertImageSnippet = (img: HoroscopeMediaItem) => {
+    const snippet = `\n<div style="text-align: center; margin: 20px 0;">
+  <img src="${img.url}" alt="${img.title || 'Horoscope Image'}" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: inline-block;" />
+  ${img.title ? `<p style="font-size: 13px; color: #6F625D; margin-top: 6px;">${img.title}</p>` : ''}
+</div>\n`
+    setFormData(prev => ({ ...prev, customCode: (prev.customCode || '') + snippet }))
+    setActiveTab('editor')
+    toast.success('Image snippet added to HTML editor!')
+  }
+
+  const insertVideoSnippet = (vid: HoroscopeMediaItem) => {
+    let snippet = ''
+    if (vid.url.includes('youtube.com') || vid.url.includes('youtu.be')) {
+      let embedUrl = vid.url
+      if (vid.url.includes('watch?v=')) {
+        embedUrl = vid.url.replace('watch?v=', 'embed/')
+      } else if (vid.url.includes('youtu.be/')) {
+        embedUrl = vid.url.replace('youtu.be/', 'www.youtube.com/embed/')
+      }
+      snippet = `\n<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin: 20px 0; border: 1px solid #E8DDD0;">
+  <iframe src="${embedUrl}" style="position: absolute; top:0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
+</div>\n`
+    } else {
+      snippet = `\n<div style="text-align: center; margin: 20px 0;">
+  <video src="${vid.url}" controls style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);"></video>
+</div>\n`
+    }
+    setFormData(prev => ({ ...prev, customCode: (prev.customCode || '') + snippet }))
+    setActiveTab('editor')
+    toast.success('Video snippet added to HTML editor!')
   }
 
   const handleSave = async () => {
     if (!formData.title.trim()) {
-      toast.error('Please enter a Page Title')
+      toast.error('Page Title is required')
       return
     }
 
     try {
-      const method = editingId ? 'PUT' : 'POST'
-      const payload = editingId ? { ...formData, id: editingId } : formData
+      const payload = {
+        ...(editingId ? { id: editingId } : {}),
+        title: formData.title.trim(),
+        slug: formData.slug.trim(),
+        subtitle: formData.subtitle.trim(),
+        description: formData.description.trim() || formData.subtitle.trim(),
+        price: Number(formData.price) || 199,
+        originalPrice: Number(formData.originalPrice) || 499,
+        pages: Number(formData.pages) || 24,
+        categories: formData.categories,
+        badge: formData.badge.trim(),
+        customCode: formData.customCode,
+        layout: formData.layout,
+        headerBanner: formData.headerBanner,
+        showBookingBar: formData.showBookingBar,
+        whatsappNumber: formData.whatsappNumber || '919530401984',
+        images: formData.images,
+        videos: formData.videos,
+        razorpay: formData.razorpay,
+        status: formData.status
+      }
+
       const res = await fetch('/api/admin/horoscope-pages', {
-        method,
+        method: editingId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
+
       const json = await res.json()
-      if (json?.ok) {
-        toast.success(editingId ? 'Page updated successfully!' : 'New Landing Page created!')
-        setModalOpen(false)
-        loadPages()
-      } else {
-        toast.error(json?.error || 'Failed to save page')
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error || 'Failed to save')
       }
-    } catch {
-      toast.error('Network error saving page')
+
+      toast.success(editingId ? 'Horoscope report updated!' : 'Horoscope report created!')
+      setModalOpen(false)
+      loadPages()
+    } catch (err: any) {
+      toast.error(err.message || 'Error saving report')
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this custom landing page?')) return
+  const handleDelete = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to remove "${title}"? It will disappear from the frontend.`)) {
+      return
+    }
+
     try {
       const res = await fetch(`/api/admin/horoscope-pages?id=${id}`, { method: 'DELETE' })
       const json = await res.json()
-      if (json?.ok) {
-        toast.success('Page deleted')
-        loadPages()
-      } else {
-        toast.error('Failed to delete')
-      }
-    } catch {
-      toast.error('Network error deleting')
+      if (!res.ok || !json.ok) throw new Error(json.error || 'Delete failed')
+      toast.success('Report removed successfully!')
+      loadPages()
+    } catch (err: any) {
+      toast.error(err.message || 'Error deleting report')
     }
   }
 
-  const handleCopyLink = (slug: string) => {
+  const copyUrl = (slug: string) => {
     const url = `${window.location.origin}/horoscope/${slug}`
     navigator.clipboard.writeText(url)
     setCopiedSlug(slug)
-    toast.success('Landing page link copied to clipboard!')
-    setTimeout(() => setCopiedSlug(null), 2000)
+    toast.success('Public URL copied to clipboard!')
+    setTimeout(() => setCopiedSlug(null), 2500)
   }
 
+  // Filtered reports in table
+  const filteredPages = pages.filter(p => {
+    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.slug.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesCat = filterCategory === 'All' || (p.categories || []).includes(filterCategory)
+    return matchesSearch && matchesCat
+  })
+
   return (
-    <div className="space-y-8 p-4 sm:p-8 max-w-7xl mx-auto">
-      
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E8DDD0] pb-6">
+    <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8 notranslate" translate="no">
+
+      {/* ── HEADER & ACTIONS ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FAF6ED] border border-[#E8DDD0] text-[#7A1F2B] text-xs font-bold mb-1">
-            <Sparkles className="h-3.5 w-3.5 text-[#C89B3C]" />
-            <span>Horoscope Landing Page & Code Embed Studio</span>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 font-heading">
+              Horoscope Reports & Landing Pages
+            </h1>
+            <Badge variant="outline" className="bg-[#FAF6ED] text-[#7A1F2B] border-[#E8DDD0]">
+              Full Frontend Control
+            </Badge>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#241A18] tracking-tight">
-            🔮 Custom Horoscope Pages, File Upload & Razorpay
-          </h1>
-          <p className="text-xs sm:text-sm text-[#6F625D] mt-1">
-            HTML फ़ाइल अपलोड करें या कोड पेस्ट करें, Razorpay पेमेंट लिंक लगाएं/हटाएं, और इमेज/वीडियो आसानी से जोड़ें।
+          <p className="text-sm text-slate-500 mt-1 max-w-2xl">
+            कंट्रोल सेंटर: यहाँ से आप फ्रंटएंड पर दिखने वाली किसी भी रिपोर्ट को <strong>Add</strong>, <strong>Remove</strong> या <strong>Edit</strong> कर सकते हैं, उसकी कीमत बदल सकते हैं और उसका अपना <strong>कस्टम लैंडिंग पेज HTML कोड</strong> डाल सकते हैं।
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={loadPages}
-            variant="outline"
-            size="sm"
-            className="rounded-xl border-[#E8DDD0] text-[#241A18] hover:bg-[#FAF6ED]"
-          >
-            <RefreshCw className={`h-4 w-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={loadPages} disabled={loading} className="gap-2">
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <span>रिफ्रेश</span>
           </Button>
 
-          <Button
-            onClick={handleOpenCreate}
-            className="rounded-xl bg-[#7A1F2B] hover:bg-[#631822] text-white font-bold gap-2 shadow-sm"
-          >
+          <Button onClick={handleOpenCreate} className="bg-[#7A1F2B] hover:bg-[#962837] text-white gap-2 shadow-sm font-bold">
             <Plus className="h-4 w-4" />
-            <span>New Landing Page</span>
+            <span>+ नई रिपोर्ट / लैंडिंग पेज जोड़ें</span>
           </Button>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="rounded-2xl border-[#E8DDD0] bg-white shadow-2xs">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-[#6F625D]">Total Pages</p>
-              <p className="text-2xl font-black text-[#241A18] mt-1">{pages.length}</p>
-            </div>
-            <div className="h-10 w-10 rounded-xl bg-[#FAF6ED] text-[#7A1F2B] flex items-center justify-center font-bold">
-              <FileText className="h-5 w-5" />
-            </div>
-          </CardContent>
-        </Card>
+      {/* ── SEARCH & FILTER CONTROLS ── */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-2 w-full sm:w-80">
+          <Input
+            placeholder="रिपोर्ट खोजें (नाम या slug)..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full text-sm"
+          />
+        </div>
 
-        <Card className="rounded-2xl border-[#E8DDD0] bg-white shadow-2xs">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-[#6F625D]">Published & Active</p>
-              <p className="text-2xl font-black text-emerald-700 mt-1">
-                {pages.filter(p => p.status === 'PUBLISHED').length}
-              </p>
-            </div>
-            <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-[#E8DDD0] bg-white shadow-2xs">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-[#6F625D]">Razorpay Enabled Pages</p>
-              <p className="text-2xl font-black text-[#7A1F2B] mt-1">
-                {pages.filter(p => p.razorpay?.enabled).length}
-              </p>
-            </div>
-            <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-              <CreditCard className="h-5 w-5" />
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
+          <span className="text-xs font-bold text-slate-500">Category:</span>
+          {['All', ...ALL_AVAILABLE_CATEGORIES].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilterCategory(cat)}
+              className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                filterCategory === cat
+                  ? 'bg-[#151311] text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Pages Table */}
-      <Card className="rounded-2xl border-[#E8DDD0] bg-white shadow-2xs overflow-hidden">
-        <CardHeader className="border-b border-[#E8DDD0] bg-[#FFF9F1]/50 px-6 py-4">
-          <CardTitle className="text-base font-bold text-[#241A18] flex items-center gap-2">
-            <Layout className="h-4 w-4 text-[#7A1F2B]" />
-            <span>Active Horoscope Landing Pages</span>
-          </CardTitle>
-          <CardDescription className="text-xs text-[#6F625D]">
-            सभी पृष्ठ <code>/horoscope/[slug]</code> पर लाइव उपलब्ध होते हैं।
-          </CardDescription>
+      {/* ── REPORTS LIST TABLE ── */}
+      <Card className="shadow-xs border-slate-200">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg font-bold">कुल रिपोर्ट्स ({filteredPages.length})</CardTitle>
+              <CardDescription>
+                ये सभी रिपोर्ट्स फ्रंटएंड पर /horoscope पेज पर लाइव दिखती हैं
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
 
         <CardContent className="p-0">
-          {loading && pages.length === 0 ? (
-            <div className="p-12 text-center text-[#6F625D]">
-              <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-[#7A1F2B]" />
-              <p className="text-xs font-semibold">Loading landing pages...</p>
+          {loading ? (
+            <div className="flex items-center justify-center py-16 gap-3 text-slate-500">
+              <Loader2 className="h-6 w-6 animate-spin text-[#7A1F2B]" />
+              <span className="text-sm font-bold">लोड हो रहा है...</span>
             </div>
-          ) : pages.length === 0 ? (
-            <div className="p-12 text-center space-y-3">
-              <div className="h-14 w-14 rounded-2xl bg-[#FAF6ED] text-[#7A1F2B] flex items-center justify-center mx-auto">
-                <Code2 className="h-7 w-7" />
-              </div>
-              <h3 className="text-base font-bold text-[#241A18]">No custom landing pages created yet</h3>
-              <p className="text-xs text-[#6F625D] max-w-md mx-auto">
-                "New Landing Page" पर क्लिक करके कोई भी HTML फाइल अपलोड करें या कोड पेस्ट करें और तुरंत लाइव पेज बनाएं।
+          ) : filteredPages.length === 0 ? (
+            <div className="text-center py-16 px-4 space-y-3">
+              <FileText className="h-10 w-10 text-slate-300 mx-auto" />
+              <p className="text-base font-bold text-slate-700">कोई रिपोर्ट नहीं मिली</p>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                ऊपर दिए गए "+ नई रिपोर्ट जोड़ें" बटन से नया फलादेश या लैंडिंग पेज बनाएं।
               </p>
-              <Button
-                onClick={handleOpenCreate}
-                className="rounded-xl bg-[#7A1F2B] hover:bg-[#631822] text-white font-bold text-xs"
-              >
-                <Plus className="h-3.5 w-3.5 mr-1" /> Create First Page
+              <Button onClick={handleOpenCreate} className="bg-[#7A1F2B] text-white font-bold">
+                + नई रिपोर्ट जोड़ें
               </Button>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-[#E8DDD0] bg-[#FAF6ED]/40 text-[#6F625D] font-bold">
-                    <th className="py-3.5 px-4">Title & URL</th>
-                    <th className="py-3.5 px-4">Layout Mode</th>
-                    <th className="py-3.5 px-4">Razorpay</th>
-                    <th className="py-3.5 px-4">Media</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
+              <table className="w-full text-left text-sm">
+                <thead className="bg-[#FAF6ED] text-[#241A18] text-xs font-bold uppercase border-y border-[#E8DDD0]">
+                  <tr>
+                    <th className="py-3.5 px-4">रिपोर्ट नाम व विवरण</th>
+                    <th className="py-3.5 px-4">कैटेगरी व बैज</th>
+                    <th className="py-3.5 px-4">मूल्य (दक्षिणा)</th>
+                    <th className="py-3.5 px-4">पेज प्रकार</th>
+                    <th className="py-3.5 px-4">स्थिति</th>
+                    <th className="py-3.5 px-4 text-right">कार्रवाई</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E8DDD0]">
-                  {pages.map((p) => (
-                    <tr key={p.id} className="hover:bg-[#FAF6ED]/20 transition-colors">
-                      <td className="py-4 px-4 space-y-1">
-                        <div className="font-bold text-[#241A18] text-sm">{p.title}</div>
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#6F625D]">
-                          <span className="font-mono bg-zinc-100 px-1.5 py-0.5 rounded text-zinc-700">
-                            /horoscope/{p.slug}
-                          </span>
-                          <button
-                            onClick={() => handleCopyLink(p.slug)}
-                            className="text-[#7A1F2B] hover:text-[#52131D] ml-1 p-0.5 rounded"
-                            title="Copy Live Link"
-                          >
-                            {copiedSlug === p.slug ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
-                          </button>
-                        </div>
-                      </td>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredPages.map((page) => {
+                    const hasCustomCode = Boolean(page.customCode && page.customCode.trim().length > 0)
+                    return (
+                      <tr key={page.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-4 px-4 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900 text-sm">
+                              {page.title}
+                            </span>
+                            {page.badge && (
+                              <Badge className="bg-amber-100 text-amber-900 border-amber-300 text-[10px] font-black">
+                                {page.badge}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">
+                              /horoscope/{page.slug}
+                            </span>
+                            <button
+                              onClick={() => copyUrl(page.slug)}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 rounded transition-colors"
+                              title="Copy URL"
+                            >
+                              {copiedSlug === page.slug ? (
+                                <Check className="h-3.5 w-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="h-3.5 w-3.5" />
+                              )}
+                            </button>
+                          </div>
+                          {page.subtitle && (
+                            <p className="text-xs text-slate-500 line-clamp-1 max-w-md">
+                              {page.subtitle}
+                            </p>
+                          )}
+                        </td>
 
-                      <td className="py-4 px-4">
-                        <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wide border-[#E8DDD0] bg-white">
-                          {p.layout === 'container' ? '🛡️ Vedic Card' : p.layout === 'fullwidth' ? '↔️ Full Width' : '🎨 Clean'}
-                        </Badge>
-                      </td>
+                        <td className="py-4 px-4">
+                          <div className="flex flex-wrap gap-1 max-w-[180px]">
+                            {(page.categories || ['Life']).map(cat => (
+                              <span key={cat} className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded font-bold text-slate-600">
+                                {cat}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
 
-                      <td className="py-4 px-4">
-                        {p.razorpay?.enabled ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            <CreditCard className="h-3 w-3 text-emerald-600" /> ₹{p.razorpay.amount || 501}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-[#6F625D]">Disabled</span>
-                        )}
-                      </td>
+                        <td className="py-4 px-4">
+                          <div className="space-y-0.5">
+                            <span className="font-black text-slate-900 text-sm">
+                              ₹{page.price ?? 199}
+                            </span>
+                            {page.originalPrice && (
+                              <span className="text-[11px] text-slate-400 line-through block">
+                                ₹{page.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                        </td>
 
-                      <td className="py-4 px-4 text-[11px] text-[#6F625D] space-y-0.5">
-                        <div>🖼️ {(p.images || []).length} images</div>
-                        <div>🎥 {(p.videos || []).length} videos</div>
-                      </td>
+                        <td className="py-4 px-4">
+                          {hasCustomCode ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                              <Code2 className="h-3 w-3" /> कस्टम लैंडिंग कोड
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
+                              <Sparkles className="h-3 w-3" /> वैदिक रिपोर्ट फॉर्म
+                            </span>
+                          )}
+                        </td>
 
-                      <td className="py-4 px-4">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          p.status === 'PUBLISHED'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
-                        }`}>
-                          {p.status}
-                        </span>
-                      </td>
-
-                      <td className="py-4 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <Button
-                            asChild
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 px-2 text-[#7A1F2B] hover:bg-[#FAF6ED] rounded-lg"
-                          >
-                            <Link href={`/horoscope/${p.slug}`} target="_blank" title="View Live Page">
-                              <ExternalLink className="h-3.5 w-3.5 mr-1" /> Live
-                            </Link>
-                          </Button>
-
-                          <Button
-                            onClick={() => handleOpenEdit(p)}
-                            size="sm"
+                        <td className="py-4 px-4">
+                          <Badge
                             variant="outline"
-                            className="h-8 px-2 rounded-lg border-[#E8DDD0] hover:bg-[#FAF6ED]"
-                            title="Edit Code & Settings"
+                            className={page.status === 'PUBLISHED'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-bold'
+                              : 'bg-amber-50 text-amber-700 border-amber-300 font-bold'
+                            }
                           >
-                            <Edit className="h-3.5 w-3.5 mr-1" /> Edit
-                          </Button>
+                            {page.status}
+                          </Badge>
+                        </td>
 
-                          <Button
-                            onClick={() => handleDelete(p.id)}
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 px-2 text-rose-600 hover:bg-rose-50 rounded-lg"
-                            title="Delete"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="py-4 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Link
+                              href={`/horoscope/${page.slug}`}
+                              target="_blank"
+                              className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-md transition-colors"
+                              title="फ्रंटएंड पर देखें"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Link>
+
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleOpenEdit(page)}
+                              className="h-8 px-2 text-[#7A1F2B] hover:text-[#7A1F2B] hover:bg-[#FAF6ED]"
+                              title="एडिट करें व कोड बदलें"
+                            >
+                              <Edit className="h-4 w-4 mr-1" /> एडिट
+                            </Button>
+
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(page.id, page.title)}
+                              className="h-8 px-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                              title="हटाएं"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
@@ -618,550 +703,543 @@ export default function AdminHoroscopePagesPage() {
         </CardContent>
       </Card>
 
-      {/* Editor & Studio Modal */}
+      {/* ── CREATE / EDIT MODAL ── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto border-[#E8DDD0] p-6">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-6 space-y-6">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-[#241A18] flex items-center justify-between gap-2">
-              <span className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-[#C89B3C]" />
-                <span>{editingId ? 'Edit Horoscope Landing Page' : 'Create New Horoscope Landing Page'}</span>
-              </span>
+            <DialogTitle className="text-xl font-black text-slate-900">
+              {editingId ? 'एडिट करें: ' + formData.title : 'नई रिपोर्ट / लैंडिंग पेज बनाएं'}
             </DialogTitle>
-            <DialogDescription className="text-xs text-[#6F625D]">
-              HTML फ़ाइल अपलोड करें या कोड पेस्ट करें, Razorpay पेमेंट ऑन/ऑफ करें, और मीडिया जोड़ें।
+            <DialogDescription>
+              मूल्य, नाम, कस्टम HTML कोड, रेज़रपे बटन व मीडिया का पूर्ण नियंत्रण
             </DialogDescription>
           </DialogHeader>
 
-          {/* Form Top Fields */}
-          <div className="space-y-4 py-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-[#241A18]">Page Title *</Label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder="e.g. वर्ष 2026 संपूर्ण जन्मकुंडली व फलादेश"
-                  className="rounded-xl border-[#E8DDD0]"
-                />
+          {/* TAB NAVIGATION */}
+          <div className="flex items-center gap-1.5 border-b pb-2 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('details')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'details'
+                  ? 'bg-[#7A1F2B] text-white shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              1. सामान्य विवरण व मूल्य
+            </button>
+            <button
+              onClick={() => setActiveTab('editor')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === 'editor'
+                  ? 'bg-[#7A1F2B] text-white shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Code2 className="h-3.5 w-3.5" /> 2. कस्टम लैंडिंग कोड (HTML)
+            </button>
+            <button
+              onClick={() => setActiveTab('razorpay')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === 'razorpay'
+                  ? 'bg-[#7A1F2B] text-white shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <CreditCard className="h-3.5 w-3.5" /> 3. Razorpay बटन
+            </button>
+            <button
+              onClick={() => setActiveTab('media')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === 'media'
+                  ? 'bg-[#7A1F2B] text-white shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <ImageIcon className="h-3.5 w-3.5" /> 4. फ़ोटो व वीडियो
+            </button>
+            <button
+              onClick={() => setActiveTab('preview')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === 'preview'
+                  ? 'bg-[#7A1F2B] text-white shadow-xs'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Eye className="h-3.5 w-3.5" /> 5. लाइव प्रीव्यू
+            </button>
+          </div>
+
+          {/* ── TAB 1: BASIC DETAILS & PRICING ── */}
+          {activeTab === 'details' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">रिपोर्ट का नाम (Title) *</Label>
+                  <Input
+                    placeholder="जैसे: Love chart या सम्पूर्ण जन्मकुंडली"
+                    value={formData.title}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">URL Slug *</Label>
+                  <Input
+                    placeholder="love-chart"
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  />
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    URL: /horoscope/{formData.slug || 'slug'}
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-[#241A18]">URL Slug *</Label>
-                <div className="flex items-center rounded-xl border border-[#E8DDD0] bg-zinc-50 px-3 h-10 text-xs">
-                  <span className="text-[#6F625D] shrink-0 font-mono">/horoscope/</span>
-                  <input
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
-                    placeholder="kundali-analysis"
-                    className="bg-transparent border-none outline-none font-mono text-zinc-900 w-full pl-1"
+                <Label className="text-xs font-bold">उप-शीर्षक / विवरण (Subtitle)</Label>
+                <Input
+                  placeholder="एक पंक्ति में इस रिपोर्ट का मुख्य लाभ लिखें..."
+                  value={formData.subtitle}
+                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">मूल्य (₹ दक्षिणा) *</Label>
+                  <Input
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">पुराना मूल्य (₹ Strikethrough)</Label>
+                  <Input
+                    type="number"
+                    value={formData.originalPrice}
+                    onChange={(e) => setFormData({ ...formData, originalPrice: Number(e.target.value) })}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">अनुमानित पेज संख्या</Label>
+                  <Input
+                    type="number"
+                    value={formData.pages}
+                    onChange={(e) => setFormData({ ...formData, pages: Number(e.target.value) })}
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-[#FAF6ED]/50 rounded-2xl border border-[#E8DDD0]">
-              <div className="space-y-1">
-                <Label className="text-[11px] font-bold text-[#241A18]">Layout Protection Mode</Label>
-                <select
-                  value={formData.layout}
-                  onChange={(e) => setFormData({ ...formData, layout: e.target.value as any })}
-                  className="w-full text-xs font-semibold rounded-xl border border-[#E8DDD0] bg-white h-9 px-2"
-                >
-                  <option value="container">🛡️ Vedic Card (Recommended - Max 1024px)</option>
-                  <option value="fullwidth">↔️ Full Width (Max 1280px)</option>
-                  <option value="clean">🎨 Clean Canvas (100% Fluid)</option>
-                </select>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold">कैटेगरी चुनें (Category Tags)</Label>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {ALL_AVAILABLE_CATEGORIES.map(cat => {
+                    const isSelected = (formData.categories || []).includes(cat)
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => toggleCategory(cat)}
+                        className={`px-3 py-1 rounded-full text-xs font-bold border transition-all flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-[#7A1F2B] text-white border-[#7A1F2B]'
+                            : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                        }`}
+                      >
+                        {isSelected ? <CheckSquare className="h-3 w-3" /> : <Square className="h-3 w-3" />}
+                        <span>{cat}</span>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <Label className="text-[11px] font-bold text-[#241A18]">Header Banner</Label>
-                <select
-                  value={formData.headerBanner ? 'true' : 'false'}
-                  onChange={(e) => setFormData({ ...formData, headerBanner: e.target.value === 'true' })}
-                  className="w-full text-xs font-semibold rounded-xl border border-[#E8DDD0] bg-white h-9 px-2"
-                >
-                  <option value="true">Show Vedic Title Header (ॐ)</option>
-                  <option value="false">Hide Header (Custom Only)</option>
-                </select>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-[11px] font-bold text-[#241A18]">Sticky Action Bar</Label>
-                <select
-                  value={formData.showBookingBar ? 'true' : 'false'}
-                  onChange={(e) => setFormData({ ...formData, showBookingBar: e.target.value === 'true' })}
-                  className="w-full text-xs font-semibold rounded-xl border border-[#E8DDD0] bg-white h-9 px-2"
-                >
-                  <option value="true">Enable Floating Bar</option>
-                  <option value="false">Disable Floating Bar</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Studio Tabs */}
-            <div className="flex border-b border-[#E8DDD0] space-x-1 sm:space-x-3 overflow-x-auto pt-2">
-              <button
-                type="button"
-                onClick={() => setActiveTab('editor')}
-                className={`py-2 px-2.5 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
-                  activeTab === 'editor'
-                    ? 'border-[#7A1F2B] text-[#7A1F2B]'
-                    : 'border-transparent text-[#6F625D] hover:text-[#241A18]'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <Code2 className="h-4 w-4" /> Code & HTML File
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('razorpay')}
-                className={`py-2 px-2.5 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
-                  activeTab === 'razorpay'
-                    ? 'border-[#7A1F2B] text-[#7A1F2B]'
-                    : 'border-transparent text-[#6F625D] hover:text-[#241A18]'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <CreditCard className="h-4 w-4" /> Razorpay Settings
-                  {formData.razorpay.enabled && <span className="h-2 w-2 rounded-full bg-emerald-500"></span>}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('images')}
-                className={`py-2 px-2.5 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
-                  activeTab === 'images'
-                    ? 'border-[#7A1F2B] text-[#7A1F2B]'
-                    : 'border-transparent text-[#6F625D] hover:text-[#241A18]'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <ImageIcon className="h-4 w-4" /> Images ({formData.images.length})
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('videos')}
-                className={`py-2 px-2.5 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
-                  activeTab === 'videos'
-                    ? 'border-[#7A1F2B] text-[#7A1F2B]'
-                    : 'border-transparent text-[#6F625D] hover:text-[#241A18]'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <Video className="h-4 w-4" /> Videos ({formData.videos.length})
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('preview')}
-                className={`py-2 px-2.5 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
-                  activeTab === 'preview'
-                    ? 'border-[#7A1F2B] text-[#7A1F2B]'
-                    : 'border-transparent text-[#6F625D] hover:text-[#241A18]'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <Eye className="h-4 w-4" /> Live Preview
-                </span>
-              </button>
-            </div>
-
-            {/* TAB 1: CODE & HTML FILE UPLOAD */}
-            {activeTab === 'editor' && (
-              <div className="space-y-3">
-                {/* HTML Upload Bar & Quick Templates */}
-                <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-zinc-50 rounded-xl border border-[#E8DDD0]">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="file"
-                      ref={htmlFileInputRef}
-                      onChange={handleHtmlFileUpload}
-                      accept=".html,.htm"
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => htmlFileInputRef.current?.click()}
-                      className="rounded-xl border-[#7A1F2B] text-[#7A1F2B] hover:bg-[#FAF6ED] font-bold text-xs"
-                    >
-                      <Upload className="h-3.5 w-3.5 mr-1" /> 📁 Upload .HTML File
-                    </Button>
-                    <span className="text-[11px] text-[#6F625D]">सीधे कंप्यूटर से फाइल लोड करें</span>
-                  </div>
-
-                  <div className="flex gap-1.5 flex-wrap">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFormData(prev => ({ ...prev, customCode: prev.customCode + '\n\n' + CODE_TEMPLATES.vedicCard }))}
-                      className="h-7 text-[10px] rounded-lg border-[#E8DDD0]"
-                    >
-                      + Vedic Card
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFormData(prev => ({ ...prev, customCode: prev.customCode + '\n\n' + CODE_TEMPLATES.bookingBox }))}
-                      className="h-7 text-[10px] rounded-lg border-[#E8DDD0]"
-                    >
-                      + Pricing Cards
-                    </Button>
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">बैज (वैकल्पिक, जैसे: BESTSELLER)</Label>
+                  <Input
+                    placeholder="जैसे: POPULAR, NEW, REMEDY-FOCUSED"
+                    value={formData.badge}
+                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
+                  />
                 </div>
 
-                <textarea
-                  value={formData.customCode}
-                  onChange={(e) => setFormData({ ...formData, customCode: e.target.value })}
-                  placeholder="Paste your HTML, iframe, CSS, Tailwind or JavaScript embed code here..."
-                  rows={13}
-                  className="w-full font-mono text-xs p-3.5 bg-zinc-900 text-emerald-400 rounded-2xl border border-zinc-800 outline-none focus:ring-2 focus:ring-[#7A1F2B] resize-y leading-relaxed"
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">प्रकाशन स्थिति (Status)</Label>
+                  <select
+                    value={formData.status}
+                    onChange={(e: any) => setFormData({ ...formData, status: e.target.value })}
+                    className="w-full h-10 px-3 rounded-md border border-slate-300 text-sm bg-white font-medium"
+                  >
+                    <option value="PUBLISHED">PUBLISHED (वेबसाइट पर लाइव दिखेगा)</option>
+                    <option value="DRAFT">DRAFT (छुपा रहेगा)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">लेआउट सुरक्षा मोड</Label>
+                  <select
+                    value={formData.layout}
+                    onChange={(e: any) => setFormData({ ...formData, layout: e.target.value })}
+                    className="w-full h-10 px-3 rounded-md border border-slate-300 text-sm bg-white"
+                  >
+                    <option value="container">वैदिक बॉक्स कंटेनर (सुरक्षित मार्जिन)</option>
+                    <option value="fullwidth">100% फुल-विड्थ (Fluid)</option>
+                    <option value="clean">क्लीन स्टैंडअलोन (Minimal)</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">हेडर बैनर</Label>
+                  <select
+                    value={formData.headerBanner ? 'yes' : 'no'}
+                    onChange={(e) => setFormData({ ...formData, headerBanner: e.target.value === 'yes' })}
+                    className="w-full h-10 px-3 rounded-md border border-slate-300 text-sm bg-white"
+                  >
+                    <option value="yes">दिखाएं</option>
+                    <option value="no">छिपाएं</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold">नीचे की व्हाट्सएप बार</Label>
+                  <select
+                    value={formData.showBookingBar ? 'yes' : 'no'}
+                    onChange={(e) => setFormData({ ...formData, showBookingBar: e.target.value === 'yes' })}
+                    className="w-full h-10 px-3 rounded-md border border-slate-300 text-sm bg-white"
+                  >
+                    <option value="yes">दिखाएं</option>
+                    <option value="no">छिपाएं</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── TAB 2: CUSTOM LANDING PAGE CODE (HTML) ── */}
+          {activeTab === 'editor' && (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-amber-50/70 p-3 rounded-xl border border-amber-200">
+                <div className="flex items-center gap-2">
+                  <Info className="h-4 w-4 text-amber-700 shrink-0" />
+                  <p className="text-xs text-amber-900 leading-snug font-medium">
+                    <strong>सुझाव:</strong> यदि आप कस्टम कोड खाली रखेंगे, तो यह रिपोर्ट मानक वैदिक जन्म विवरण फॉर्म और अध्यायों के साथ खुलेगी। यदि आप नीचे HTML कोड डालेंगे, तो वही कस्टम लैंडिंग पेज दिखेगा।
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <input
+                    type="file"
+                    ref={htmlFileInputRef}
+                    accept=".html,.htm"
+                    className="hidden"
+                    onChange={handleHtmlFileUpload}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => htmlFileInputRef.current?.click()}
+                    className="bg-white border-amber-300 text-amber-900 hover:bg-amber-100 gap-1.5 text-xs font-bold"
+                  >
+                    <Upload className="h-3.5 w-3.5" />
+                    <span>HTML फ़ाइल अपलोड करें</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-2">
+                <Label className="text-xs font-bold text-slate-700">
+                  HTML / Landing Page Source Code
+                </Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-400">टेम्पलेट्स:</span>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, customCode: CODE_TEMPLATES.vedicCard }))}
+                    className="text-[11px] text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded font-medium"
+                  >
+                    कार्ड 1
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, customCode: CODE_TEMPLATES.dualPricingCards }))}
+                    className="text-[11px] text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded font-medium"
+                  >
+                    दो कार्ड्स
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, customCode: '' }))}
+                    className="text-[11px] text-rose-600 hover:text-rose-800 bg-rose-50 px-2 py-0.5 rounded font-medium"
+                  >
+                    खाली करें
+                  </button>
+                </div>
+              </div>
+
+              <textarea
+                value={formData.customCode}
+                onChange={(e) => setFormData({ ...formData, customCode: e.target.value })}
+                rows={14}
+                className="w-full font-mono text-xs p-3 rounded-lg border border-slate-300 bg-slate-900 text-emerald-400 focus:outline-hidden focus:ring-2 focus:ring-[#7A1F2B]"
+                placeholder="<!-- यहाँ अपना कस्टम HTML, CSS या जावास्क्रिप्ट पेस्ट करें -->"
+              />
+            </div>
+          )}
+
+          {/* ── TAB 3: RAZORPAY PAYMENT ── */}
+          {activeTab === 'razorpay' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                <div>
+                  <h4 className="text-sm font-bold text-emerald-900">Razorpay Payment Integration</h4>
+                  <p className="text-xs text-emerald-700">
+                    लैंडिंग पेज पर ऑटोमैटिक सुरक्षित पेमेंट बटन सक्षम करें
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={formData.razorpay.enabled}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    razorpay: { ...prev.razorpay, enabled: e.target.checked }
+                  }))}
+                  className="w-5 h-5 accent-[#7A1F2B] cursor-pointer"
                 />
               </div>
-            )}
 
-            {/* TAB 2: RAZORPAY SETTINGS ("Laga saku / Hata saku") */}
-            {activeTab === 'razorpay' && (
-              <div className="space-y-4 p-4 bg-white rounded-2xl border border-[#E8DDD0]">
-                <div className="flex items-center justify-between border-b border-[#E8DDD0] pb-3">
-                  <div>
-                    <h4 className="text-sm font-bold text-[#241A18] flex items-center gap-1.5">
-                      <CreditCard className="h-4 w-4 text-[#7A1F2B]" />
-                      <span>Razorpay Payment Gateway Integration</span>
-                    </h4>
-                    <p className="text-xs text-[#6F625D]">
-                      पेमेंट सक्षम करने पर पेज पर सीधे पेमेंट विंडो या बटन सक्रिय हो जाएगा।
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-[#241A18]">
-                      {formData.razorpay.enabled ? 'सक्रिय (Enabled)' : 'निष्क्रिय (Disabled)'}
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={formData.razorpay.enabled}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        razorpay: { ...formData.razorpay, enabled: e.target.checked }
-                      })}
-                      className="h-5 w-5 accent-[#7A1F2B] cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                {formData.razorpay.enabled ? (
-                  <div className="space-y-4 pt-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <Label className="text-xs font-bold text-[#241A18]">Amount in ₹ (दक्षिणा / शुल्क)</Label>
-                        <Input
-                          type="number"
-                          value={formData.razorpay.amount || 501}
-                          onChange={(e) => setFormData({
-                            ...formData,
-                            razorpay: { ...formData.razorpay, amount: Number(e.target.value) }
-                          })}
-                          placeholder="501"
-                          className="rounded-xl border-[#E8DDD0]"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <Label className="text-xs font-bold text-[#241A18]">Button Text</Label>
-                        <Input
-                          value={formData.razorpay.buttonText || ''}
-                          onChange={(e) => setFormData({
-                            ...formData,
-                            razorpay: { ...formData.razorpay, buttonText: e.target.value }
-                          })}
-                          placeholder="सुरक्षित दक्षिणा / भुगतान करें (₹501)"
-                          className="rounded-xl border-[#E8DDD0]"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-bold text-[#241A18]">
-                        Custom Razorpay Payment Link (Optional)
-                      </Label>
-                      <Input
-                        value={formData.razorpay.paymentLink || ''}
-                        onChange={(e) => setFormData({
-                          ...formData,
-                          razorpay: { ...formData.razorpay, paymentLink: e.target.value }
-                        })}
-                        placeholder="e.g. https://rzp.io/l/your-link (अगर खाली छोड़ेंगे तो इन-पेज पॉपअप खुलेगा)"
-                        className="rounded-xl border-[#E8DDD0]"
-                      />
-                    </div>
-
-                    <div className="p-3 bg-[#FAF6ED] rounded-xl border border-[#C89B3C]/30 flex items-center justify-between gap-3 flex-wrap">
-                      <div className="text-xs text-[#241A18]">
-                        <p className="font-bold">💡 कोड में पेमेंट बटन जोड़ना चाहते हैं?</p>
-                        <p className="text-[#6F625D]">इस बटन को दबाएं, आपके HTML में Razorpay बटन कोड जुड़ जाएगा।</p>
-                      </div>
-                      <Button
-                        type="button"
-                        onClick={insertRazorpayButton}
-                        className="bg-[#7A1F2B] hover:bg-[#631822] text-white text-xs font-bold rounded-xl"
-                      >
-                        + Insert Pay Button into HTML
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-6 text-center text-[#6F625D] bg-zinc-50 rounded-xl">
-                    <p className="text-xs font-semibold">Razorpay वर्तमान में बंद (Disabled) है।</p>
-                    <p className="text-[11px] mt-1">चालू करने के लिए ऊपर दिए गए चेकबॉक्स को टिक करें।</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* TAB 3: IMAGES MANAGER (Add / Upload / Remove) */}
-            {activeTab === 'images' && (
-              <div className="space-y-4 p-4 bg-white rounded-2xl border border-[#E8DDD0]">
-                {/* Image Upload & Add Bar */}
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-zinc-50 rounded-xl border border-[#E8DDD0]">
-                  <div className="sm:col-span-6 space-y-1">
-                    <Label className="text-[11px] font-bold text-[#241A18]">Image URL or Link</Label>
+              {formData.razorpay.enabled && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 border rounded-xl bg-slate-50/50">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold">Amount in ₹ (दक्षिणा / शुल्क)</Label>
                     <Input
-                      value={newImageUrl}
-                      onChange={(e) => setNewImageUrl(e.target.value)}
-                      placeholder="https://example.com/image.jpg"
-                      className="rounded-xl border-[#E8DDD0] h-9 text-xs"
+                      type="number"
+                      value={formData.razorpay.amount || 501}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        razorpay: { ...prev.razorpay, amount: Number(e.target.value) }
+                      }))}
                     />
                   </div>
-                  <div className="sm:col-span-3 space-y-1">
-                    <Label className="text-[11px] font-bold text-[#241A18]">Caption / Title</Label>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold">Button Text</Label>
                     <Input
-                      value={newImageTitle}
-                      onChange={(e) => setNewImageTitle(e.target.value)}
-                      placeholder="e.g. माँ बगलामुखी यंत्र"
-                      className="rounded-xl border-[#E8DDD0] h-9 text-xs"
+                      value={formData.razorpay.buttonText || ''}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        razorpay: { ...prev.razorpay, buttonText: e.target.value }
+                      }))}
+                      placeholder="सुरक्षित दक्षिणा / भुगतान करें"
                     />
                   </div>
-                  <div className="sm:col-span-3 flex items-end gap-2">
+
+                  <div className="sm:col-span-2 pt-2">
                     <Button
                       type="button"
-                      onClick={handleAddImageUrl}
-                      className="h-9 rounded-xl bg-[#7A1F2B] hover:bg-[#631822] text-white text-xs font-bold flex-1"
+                      onClick={insertRazorpayButton}
+                      className="bg-emerald-700 hover:bg-emerald-800 text-white gap-2 text-xs font-bold"
                     >
-                      + Add Link
+                      <CreditCard className="h-4 w-4" />
+                      <span>HTML कोड में पेमेंट बटन जोड़ें (Insert Razorpay Button)</span>
                     </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── TAB 4: MEDIA (IMAGES & VIDEOS) ── */}
+          {activeTab === 'media' && (
+            <div className="space-y-6">
+              {/* IMAGES SECTION */}
+              <div className="space-y-3 p-4 border rounded-xl">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4 text-[#7A1F2B]" /> फ़ोटो / इमेजेज
+                  </h4>
+                  <div>
                     <input
                       type="file"
                       ref={imageUploadInputRef}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) handleMediaUpload(file, 'image')
-                      }}
                       accept="image/*"
                       className="hidden"
+                      onChange={(e) => handleFileUpload(e, 'image')}
                     />
                     <Button
                       type="button"
                       variant="outline"
-                      disabled={uploadingMedia}
+                      size="sm"
                       onClick={() => imageUploadInputRef.current?.click()}
-                      className="h-9 px-3 rounded-xl border-[#E8DDD0] text-xs font-bold"
-                      title="Upload Image File"
+                      disabled={uploadingMedia}
+                      className="gap-1.5 text-xs font-bold"
                     >
-                      {uploadingMedia ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      <Upload className="h-3.5 w-3.5" />
+                      <span>फ़ोटो अपलोड करें</span>
                     </Button>
                   </div>
                 </div>
 
-                {/* Images List */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-[#241A18]">Images Added to this Page ({formData.images.length})</h4>
-                  {formData.images.length === 0 ? (
-                    <p className="text-xs text-[#6F625D] p-6 text-center bg-zinc-50 rounded-xl">
-                      No images added yet. Upload or add a link above.
-                    </p>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[300px] overflow-y-auto">
-                      {formData.images.map((img) => (
-                        <div key={img.id} className="p-2 bg-[#FAF6ED] rounded-xl border border-[#E8DDD0] flex items-center gap-3">
-                          <img src={img.url} alt={img.title || ''} className="h-12 w-12 rounded-lg object-cover border border-[#E8DDD0] shrink-0" />
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-bold text-[#241A18] truncate">{img.title || 'Image'}</p>
-                            <p className="text-[10px] text-[#6F625D] truncate">{img.url}</p>
-                            <button
-                              type="button"
-                              onClick={() => insertImageIntoHtml(img.url, img.title)}
-                              className="text-[10px] text-[#7A1F2B] font-bold hover:underline"
-                            >
-                              + Insert into HTML
-                            </button>
-                          </div>
-                          <Button
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="या इमेज लिंक पेस्ट करें (https://...)"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    className="text-xs"
+                  />
+                  <Button type="button" size="sm" onClick={handleAddImageUrl} className="bg-slate-800 text-white text-xs">
+                    जोड़ें
+                  </Button>
+                </div>
+
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    {formData.images.map((img) => (
+                      <div key={img.id} className="relative group border rounded-lg overflow-hidden bg-slate-50">
+                        <img src={img.url} alt={img.title || ''} className="w-full h-24 object-cover" />
+                        <div className="p-1.5 text-[11px] truncate">{img.title || 'Image'}</div>
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                          <button
                             type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRemoveImage(img.id, img.url)}
-                            className="h-7 w-7 p-0 text-rose-600 hover:bg-rose-50 rounded-lg shrink-0"
-                            title="Remove Image"
+                            onClick={() => insertImageSnippet(img)}
+                            className="bg-white text-slate-900 px-2 py-1 rounded text-[10px] font-bold"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
+                            Insert
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(img.id)}
+                            className="bg-rose-600 text-white p-1 rounded"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* TAB 4: VIDEOS MANAGER (Add / Upload / Remove) */}
-            {activeTab === 'videos' && (
-              <div className="space-y-4 p-4 bg-white rounded-2xl border border-[#E8DDD0]">
-                {/* Video Add Bar */}
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-zinc-50 rounded-xl border border-[#E8DDD0]">
-                  <div className="sm:col-span-6 space-y-1">
-                    <Label className="text-[11px] font-bold text-[#241A18]">YouTube / Video Link</Label>
-                    <Input
-                      value={newVideoUrl}
-                      onChange={(e) => setNewVideoUrl(e.target.value)}
-                      placeholder="https://www.youtube.com/watch?v=... or .mp4"
-                      className="rounded-xl border-[#E8DDD0] h-9 text-xs"
-                    />
-                  </div>
-                  <div className="sm:col-span-3 space-y-1">
-                    <Label className="text-[11px] font-bold text-[#241A18]">Video Title</Label>
-                    <Input
-                      value={newVideoTitle}
-                      onChange={(e) => setNewVideoTitle(e.target.value)}
-                      placeholder="e.g. महादशा संपूर्ण मार्गदर्शन"
-                      className="rounded-xl border-[#E8DDD0] h-9 text-xs"
-                    />
-                  </div>
-                  <div className="sm:col-span-3 flex items-end gap-2">
-                    <Button
-                      type="button"
-                      onClick={handleAddVideoUrl}
-                      className="h-9 rounded-xl bg-[#7A1F2B] hover:bg-[#631822] text-white text-xs font-bold flex-1"
-                    >
-                      + Add Video
-                    </Button>
+              {/* VIDEOS SECTION */}
+              <div className="space-y-3 p-4 border rounded-xl">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <Video className="h-4 w-4 text-[#7A1F2B]" /> वीडियो / YouTube
+                  </h4>
+                  <div>
                     <input
                       type="file"
                       ref={videoUploadInputRef}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) handleMediaUpload(file, 'video')
-                      }}
                       accept="video/*"
                       className="hidden"
+                      onChange={(e) => handleFileUpload(e, 'video')}
                     />
                     <Button
                       type="button"
                       variant="outline"
-                      disabled={uploadingMedia}
+                      size="sm"
                       onClick={() => videoUploadInputRef.current?.click()}
-                      className="h-9 px-3 rounded-xl border-[#E8DDD0] text-xs font-bold"
-                      title="Upload MP4 Video"
+                      disabled={uploadingMedia}
+                      className="gap-1.5 text-xs font-bold"
                     >
-                      {uploadingMedia ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      <Upload className="h-3.5 w-3.5" />
+                      <span>वीडियो अपलोड करें</span>
                     </Button>
                   </div>
                 </div>
 
-                {/* Videos List */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-[#241A18]">Videos Added to this Page ({formData.videos.length})</h4>
-                  {formData.videos.length === 0 ? (
-                    <p className="text-xs text-[#6F625D] p-6 text-center bg-zinc-50 rounded-xl">
-                      No videos added yet. Paste a YouTube link or upload an MP4 above.
-                    </p>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto">
-                      {formData.videos.map((vid) => (
-                        <div key={vid.id} className="p-3 bg-[#FAF6ED] rounded-xl border border-[#E8DDD0] flex items-center justify-between gap-3">
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-bold text-[#241A18] truncate flex items-center gap-1.5">
-                              <Play className="h-3.5 w-3.5 text-[#7A1F2B]" />
-                              <span>{vid.title || 'Video Embed'}</span>
-                            </p>
-                            <p className="text-[10px] text-[#6F625D] truncate">{vid.url}</p>
-                            <button
-                              type="button"
-                              onClick={() => insertVideoIntoHtml(vid.url)}
-                              className="text-[10px] text-[#7A1F2B] font-bold hover:underline mt-1"
-                            >
-                              + Insert Embed into HTML
-                            </button>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRemoveVideo(vid.id, vid.url)}
-                            className="h-7 w-7 p-0 text-rose-600 hover:bg-rose-50 rounded-lg shrink-0"
-                            title="Remove Video"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="YouTube या MP4 लिंक पेस्ट करें (https://...)"
+                    value={newVideoUrl}
+                    onChange={(e) => setNewVideoUrl(e.target.value)}
+                    className="text-xs"
+                  />
+                  <Button type="button" size="sm" onClick={handleAddVideoUrl} className="bg-slate-800 text-white text-xs">
+                    जोड़ें
+                  </Button>
                 </div>
-              </div>
-            )}
 
-            {/* TAB 5: LIVE PREVIEW */}
-            {activeTab === 'preview' && (
-              <div className="rounded-2xl border border-[#E8DDD0] overflow-hidden max-h-[460px] overflow-y-auto bg-[#FFF9F1]">
-                <HoroscopeLandingViewer
-                  page={{
-                    id: 'preview',
-                    title: formData.title || 'Preview Title',
-                    slug: formData.slug || 'preview',
-                    subtitle: formData.subtitle,
-                    customCode: formData.customCode,
-                    layout: formData.layout,
-                    headerBanner: formData.headerBanner,
-                    showBookingBar: formData.showBookingBar,
-                    whatsappNumber: formData.whatsappNumber,
-                    images: formData.images,
-                    videos: formData.videos,
-                    razorpay: formData.razorpay,
-                    status: 'PUBLISHED',
-                    createdAt: '',
-                    updatedAt: ''
-                  }}
-                />
+                {formData.videos.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    {formData.videos.map((vid) => (
+                      <div key={vid.id} className="border rounded-lg p-2 flex items-center justify-between bg-slate-50 gap-2">
+                        <div className="truncate text-xs font-mono">
+                          {vid.title || vid.url}
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => insertVideoSnippet(vid)}
+                            className="bg-slate-800 text-white px-2 py-1 rounded text-[10px] font-bold"
+                          >
+                            Insert
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveVideo(vid.id)}
+                            className="bg-rose-600 text-white p-1 rounded"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          <DialogFooter className="gap-2 sm:gap-0 pt-2 border-t border-[#E8DDD0]">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setModalOpen(false)}
-              className="rounded-xl border-[#E8DDD0]"
-            >
-              Cancel
+          {/* ── TAB 5: LIVE PREVIEW ── */}
+          {activeTab === 'preview' && (
+            <div className="border rounded-2xl p-4 bg-slate-100 max-h-[500px] overflow-y-auto">
+              <div className="bg-white rounded-xl shadow-xs p-4 min-h-[350px]">
+                {formData.customCode ? (
+                  <HoroscopeLandingViewer
+                    page={{
+                      id: 'preview',
+                      title: formData.title || 'Untitled Report',
+                      slug: formData.slug || 'preview',
+                      subtitle: formData.subtitle,
+                      customCode: formData.customCode,
+                      layout: formData.layout,
+                      headerBanner: formData.headerBanner,
+                      showBookingBar: formData.showBookingBar,
+                      whatsappNumber: formData.whatsappNumber,
+                      images: formData.images,
+                      videos: formData.videos,
+                      razorpay: formData.razorpay,
+                      status: formData.status,
+                      createdAt: new Date().toISOString(),
+                      updatedAt: new Date().toISOString()
+                    }}
+                  />
+                ) : (
+                  <div className="text-center py-14 text-slate-400 space-y-2">
+                    <Sparkles className="h-8 w-8 mx-auto text-[#7A1F2B]" />
+                    <p className="text-sm font-bold text-slate-700">मानक वैदिक रिपोर्ट फॉर्म सक्रिय है</p>
+                    <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                      कस्टम HTML कोड खाली होने पर यह रिपोर्ट विमशोत्तरी दशा, 12 भावों के विश्लेषण और कुंडली फॉर्म के साथ खुलेगी।
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="border-t pt-4 flex sm:justify-between items-center">
+            <Button variant="outline" onClick={() => setModalOpen(false)}>
+              रद्द करें
             </Button>
-            <Button
-              type="button"
-              onClick={handleSave}
-              className="rounded-xl bg-[#7A1F2B] hover:bg-[#631822] text-white font-bold"
-            >
-              {editingId ? 'Save Changes' : 'Publish Landing Page'}
+            <Button onClick={handleSave} className="bg-[#7A1F2B] hover:bg-[#962837] text-white font-bold">
+              {editingId ? 'बदलाव सुरक्षित करें' : 'नई रिपोर्ट प्रकाशित करें'}
             </Button>
           </DialogFooter>
         </DialogContent>
