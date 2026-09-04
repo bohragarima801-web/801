@@ -1227,3 +1227,44 @@
 .puja-desc-text { color: #2D2523 !important; line-height: 1.75; }
 .puja-meta-text { color: #4A3E39 !important; font-weight: 500; }
 .puja-label-text { color: #665E58 !important; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+
+/* ============================================================
+   Navigation Container & Header Nav Styling
+   ============================================================ */
+/* Navigation Container */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Nav Links */
+.header-nav a {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  transition: color 0.2s ease;
+}
+
+/* Hover Effect */
+.header-nav a:hover {
+  color: #8b1d24; /* Theme matching dark red */
+}
+
+/* Ensure dropdown links don't inherit plain #333333 if styled */
+.header-nav .dropdown-menu-item a {
+  color: inherit;
+}
+
+/* CTA Button Balance */
+.header-cta-btn {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+}

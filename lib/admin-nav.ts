@@ -45,6 +45,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
   ]},
 
   { title: '🔮 Horoscope Orders', slug: 'horoscope-orders', icon: Compass, href: '/admin/horoscope-orders' },
+  { title: '📄 Horoscope Page Builder', slug: 'horoscope-pages', icon: FileText, href: '/admin/horoscope-pages' },
 
   { title: 'BhaktiSeva', slug: 'bhaktiSeva', icon: Sparkles, permission: 'bhaktiSeva.read', items: [
     { title: 'All', href: '/admin/bhaktiseva' }, { title: 'Flowers', href: '/admin/bhaktiseva?tab=flowers' },
