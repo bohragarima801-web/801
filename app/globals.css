@@ -1177,8 +1177,53 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  /* Consistent maroon brand color utility for checkout */
-  .text-brand { color: #8B1A21 !important; }
-  .bg-brand { background-color: #8B1A21 !important; }
-  .border-brand { border-color: rgba(139, 26, 33, 0.25) !important; }
 }
+
+/* ============================================================
+   BRAND COLOR UTILITIES — Site-wide consistent maroon/saffron
+   ============================================================ */
+.text-brand { color: #8B1A21 !important; }
+.bg-brand { background-color: #8B1A21 !important; }
+.border-brand { border-color: rgba(139, 26, 33, 0.25) !important; }
+
+/* ── High-contrast text helpers (WCAG AA compliant) ── */
+/* Use these instead of amber-900/50, amber-900/55 which fail contrast */
+.text-body-strong  { color: #1C1614 !important; }   /* near-black, all bg */
+.text-body         { color: #2D2523 !important; }   /* dark brown, on white/cream */
+.text-body-muted   { color: #4A3E39 !important; }   /* medium warm brown — WCAG AA on white */
+.text-body-subtle  { color: #665E58 !important; }   /* use only on large text (18px+) */
+.text-label        { color: #3D3430 !important; }   /* form labels, small caps */
+.text-saffron      { color: #B85C24 !important; }   /* saffron accent on light bg */
+.text-maroon       { color: #8B1A21 !important; }   /* maroon on white/cream */
+
+/* ── Checkout-specific readability fixes ── */
+.checkout-label {
+  color: #3D3430 !important;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.checkout-helper {
+  color: #4A3E39 !important;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.checkout-hint {
+  color: #665E58 !important;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+/* ── Checkout trust badge — was amber-900/65 too faint ── */
+.checkout-trust-text {
+  color: #4A3E39 !important;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ── Puja page specific fixes ── */
+.puja-desc-text { color: #2D2523 !important; line-height: 1.75; }
+.puja-meta-text { color: #4A3E39 !important; font-weight: 500; }
+.puja-label-text { color: #665E58 !important; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }

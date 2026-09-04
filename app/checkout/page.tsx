@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -58,7 +58,7 @@ export default function CheckoutPage() {
     } else {
        if (dakshinaItem) removeFromCart('addon-dakshina')
        addToCart({ id: 'addon-dakshina', name: 'Pandit Dakshina', price: amt, image: '' })
-       toast.success(`Dakshina ₹${amt} added!`)
+       toast.success(`Dakshina â‚¹${amt} added!`)
     }
   }
 
@@ -157,7 +157,7 @@ export default function CheckoutPage() {
       const data = await res.json()
       if (data.ok && data.coupon) {
         applyCoupon(data.coupon)
-        toast.success(`Coupon applied! You saved ₹${data.coupon.discountAmount}`)
+        toast.success(`Coupon applied! You saved â‚¹${data.coupon.discountAmount}`)
         setCouponCode('')
       } else {
         toast.error(data.error || 'Invalid coupon')
@@ -183,7 +183,7 @@ export default function CheckoutPage() {
 
   const handlePayment = async () => {
     if (paymentMethod === 'razorpay' && !(window as any).Razorpay) {
-      toast.error('Payment gateway loading... कृपया 2 सेकंड बाद पुनः प्रयास करें।')
+      toast.error('Payment gateway loading... à¤•à¥ƒà¤ªà¤¯à¤¾ 2 à¤¸à¥‡à¤•à¤‚à¤¡ à¤¬à¤¾à¤¦ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¯à¤¾à¤¸ à¤•à¤°à¥‡à¤‚à¥¤')
       return
     }
 
@@ -217,7 +217,7 @@ export default function CheckoutPage() {
 
       if (data.mode === 'manual') {
         clearCart()
-        toast.success('🎉 ऑर्डर सफलतापूर्वक दर्ज हो गया!')
+        toast.success('ðŸŽ‰ à¤‘à¤°à¥à¤¡à¤° à¤¸à¤«à¤²à¤¤à¤¾à¤ªà¥‚à¤°à¥à¤µà¤• à¤¦à¤°à¥à¤œ à¤¹à¥‹ à¤—à¤¯à¤¾!')
         const params = new URLSearchParams()
         if (data.orderNumber) params.set('order', data.orderNumber)
         if (data.total != null) params.set('amount', String(data.total))
@@ -249,7 +249,7 @@ export default function CheckoutPage() {
         key: razorpayKeyId,
         amount,
         currency,
-        name: 'Divya Yagyam 🕉️',
+        name: 'Divya Yagyam ðŸ•‰ï¸',
         description: 'Puja / Prasad / Sacred Seva',
         order_id: orderId,
         image: 'https://divyayagyam.com/logo.png',
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
 
             if (verifyRes.ok && verifyData.ok && verifyData.verified) {
               clearCart()
-              toast.success('🎉 भुगतान सफल! ऑर्डर दर्ज हो गया।')
+              toast.success('ðŸŽ‰ à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤¸à¤«à¤²! à¤‘à¤°à¥à¤¡à¤° à¤¦à¤°à¥à¤œ à¤¹à¥‹ à¤—à¤¯à¤¾à¥¤')
               const params = new URLSearchParams()
               if (orderNumber) params.set('order', orderNumber)
               const pid = verifyData.razorpay_payment_id || response.razorpay_payment_id
@@ -287,8 +287,8 @@ export default function CheckoutPage() {
               const pid = response.razorpay_payment_id || ''
               toast.error(
                 pid
-                  ? `Payment verification failed. Payment ID: ${pid} — कृपया इसे note करें और support से contact करें।`
-                  : 'Payment verification failed. अगर पैसे कट गए हों तो support से contact करें।',
+                  ? `Payment verification failed. Payment ID: ${pid} â€” à¤•à¥ƒà¤ªà¤¯à¤¾ à¤‡à¤¸à¥‡ note à¤•à¤°à¥‡à¤‚ à¤”à¤° support à¤¸à¥‡ contact à¤•à¤°à¥‡à¤‚à¥¤`
+                  : 'Payment verification failed. à¤…à¤—à¤° à¤ªà¥ˆà¤¸à¥‡ à¤•à¤Ÿ à¤—à¤ à¤¹à¥‹à¤‚ à¤¤à¥‹ support à¤¸à¥‡ contact à¤•à¤°à¥‡à¤‚à¥¤',
                 { duration: 10000 }
               )
               setProcessing(false)
@@ -297,8 +297,8 @@ export default function CheckoutPage() {
             const pid = response?.razorpay_payment_id || ''
             toast.error(
               pid
-                ? `Payment confirm नहीं हो सका। Payment ID: ${pid} — support से contact करें।`
-                : 'Payment confirm नहीं हो सका। Support से contact करें।',
+                ? `Payment confirm à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¾à¥¤ Payment ID: ${pid} â€” support à¤¸à¥‡ contact à¤•à¤°à¥‡à¤‚à¥¤`
+                : 'Payment confirm à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¾à¥¤ Support à¤¸à¥‡ contact à¤•à¤°à¥‡à¤‚à¥¤',
               { duration: 10000 }
             )
             setProcessing(false)
@@ -321,7 +321,7 @@ export default function CheckoutPage() {
       rzp.open()
 
     } catch (err: any) {
-      toast.error(err?.message || 'Order process करने में error आई। Please try again.')
+      toast.error(err?.message || 'Order process à¤•à¤°à¤¨à¥‡ à¤®à¥‡à¤‚ error à¤†à¤ˆà¥¤ Please try again.')
       setProcessing(false)
     }
   }
@@ -330,7 +330,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen checkout-page flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 rounded-full border-4 border-[#8B1A21]/20 border-t-[#8B1A21] animate-spin" />
-        <p className="text-sm text-amber-900 font-semibold">आपका Order तैयार हो रहा है...</p>
+        <p className="text-sm text-amber-900 font-semibold">à¤†à¤ªà¤•à¤¾ Order à¤¤à¥ˆà¤¯à¤¾à¤° à¤¹à¥‹ à¤°à¤¹à¤¾ à¤¹à¥ˆ...</p>
       </div>
     </div>
   )
@@ -342,13 +342,13 @@ export default function CheckoutPage() {
     <>
       <div className="checkout-page pb-28 lg:pb-12">
 
-        {/* ── STEP HEADER ───────────────────────────────────────── */}
+        {/* â”€â”€ STEP HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="border-b border-amber-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
           <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-[#8B1A21] font-black text-lg">🕉️ Divya Yagyam</span>
-              <span className="text-amber-900/40 hidden sm:block">|</span>
-              <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-amber-900/70">
+              <span className="text-[#8B1A21] font-black text-lg">ðŸ•‰ï¸ Divya Yagyam</span>
+              <span className="text-amber-700 hidden sm:block">|</span>
+              <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-amber-900">
                 {hasPuja && (
                   <>
                     <span className={`px-2 py-0.5 rounded-full transition-all ${step === 'addons' ? 'bg-[#8B1A21] text-white' : 'bg-amber-100 text-amber-800'}`}>1. Offerings</span>
@@ -365,7 +365,7 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* ── STEP 1: ADD-ONS (Puja only) ───────────────────────── */}
+        {/* â”€â”€ STEP 1: ADD-ONS (Puja only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {step === 'addons' && hasPuja && (
           <div className="container max-w-6xl mx-auto px-4 pt-6">
             <div className="grid lg:grid-cols-12 gap-6 items-start">
@@ -376,26 +376,26 @@ export default function CheckoutPage() {
                 {/* Puja Header */}
                 <div className="checkout-card p-5">
                   <div className="flex items-start gap-3">
-                    <button onClick={() => router.back()} className="mt-1 text-amber-900/60 hover:text-[#8B1A21] transition-colors p-1 rounded-lg hover:bg-[#8B1A21]/08">
+                    <button onClick={() => router.back()} className="mt-1 text-amber-800 hover:text-[#8B1A21] transition-colors p-1 rounded-lg hover:bg-[#8B1A21]/08">
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <div className="space-y-2.5 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 bg-[#8B1A21]/08 text-[#8B1A21] text-[11px] font-bold px-3 py-1 rounded-full border border-[#8B1A21]/15">
-                          ✦ Selected Puja
+                          âœ¦ Selected Puja
                         </span>
                       </div>
                       <h1 className="text-lg md:text-xl font-bold text-amber-950 leading-snug">
                         {primaryItem.name}
                       </h1>
-                      <div className="space-y-1.5 text-sm text-amber-900/65">
+                      <div className="space-y-1.5 text-sm text-amber-800">
                         <div className="flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5 shrink-0" />
                           <span>Sacred Temple / Online Booking</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <User className="w-3.5 h-3.5 shrink-0" />
-                          <span className="font-semibold text-amber-950">{primaryItem.name} — {totalItems} item(s) · ₹{cartTotal}</span>
+                          <span className="font-semibold text-amber-950">{primaryItem.name} â€” {totalItems} item(s) Â· â‚¹{cartTotal}</span>
                           <button onClick={() => router.back()} className="text-[#8B1A21] text-xs font-bold flex items-center gap-1 hover:underline">
                             <Edit2 className="w-3 h-3" /> Change
                           </button>
@@ -416,7 +416,7 @@ export default function CheckoutPage() {
                       className={`cursor-pointer checkout-card p-4 flex items-start justify-between transition-all duration-200 ${inCart ? 'bg-green-50 border-green-300 ring-1 ring-green-200' : 'hover:border-[#8B1A21]/30 hover:shadow-md'}`}>
                       <div className="space-y-1">
                         <p className="text-sm font-bold text-amber-950">{addon.title}</p>
-                        <p className="text-sm text-amber-900/60 font-medium">₹{addon.price}</p>
+                        <p className="text-sm text-amber-800 font-medium">â‚¹{addon.price}</p>
                       </div>
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all ${inCart ? 'bg-green-600 border-green-600 text-white' : 'border-amber-300 text-amber-700'}`}>
                         {inCart ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
                     </div>
                     <h3 className="font-bold text-amber-950 text-base">Pandit Dakshina (Optional)</h3>
                   </div>
-                  <p className="text-xs text-amber-900/55 mb-4 ml-10">Support the pandits performing your sacred puja.</p>
+                  <p className="text-xs text-amber-800 mb-4 ml-10">Support the pandits performing your sacred puja.</p>
 
                   <div className="flex flex-wrap gap-2 md:gap-3">
                     {[251, 551, 1100].map(amt => {
@@ -444,14 +444,14 @@ export default function CheckoutPage() {
                           onClick={() => handleDakshinaSelect(amt)}
                           className={`px-4 py-2 rounded-lg text-sm font-bold border-2 transition-all duration-200 ${isSelected ? 'bg-[#8B1A21] text-white border-[#8B1A21] shadow-md' : 'bg-amber-50 text-amber-900 border-amber-200 hover:border-[#8B1A21]/50 hover:bg-[#8B1A21]/05'}`}
                         >
-                          ₹{amt}
+                          â‚¹{amt}
                         </button>
                       )
                     })}
 
                     {/* Custom Input */}
                     <div className={`flex items-center border-2 rounded-lg overflow-hidden transition-all ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'border-[#8B1A21] shadow-md' : 'border-amber-200 focus-within:border-[#8B1A21]/60'}`}>
-                      <span className="px-3 text-amber-700 font-bold bg-amber-50 h-full flex items-center text-sm border-r border-amber-200">₹</span>
+                      <span className="px-3 text-amber-700 font-bold bg-amber-50 h-full flex items-center text-sm border-r border-amber-200">â‚¹</span>
                       <input
                         type="number"
                         value={customDakshinaInput}
@@ -463,7 +463,7 @@ export default function CheckoutPage() {
                         onClick={() => handleDakshinaSelect(Number(customDakshinaInput) || 2100)}
                         className={`px-3 py-2 text-sm font-bold transition-all border-l ${(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'bg-[#8B1A21] text-white border-[#8B1A21]' : 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200'}`}
                       >
-                        {(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? '✓' : 'Add'}
+                        {(![251,551,1100].includes(dakshinaItem?.price || 0) && dakshinaItem) ? 'âœ“' : 'Add'}
                       </button>
                     </div>
                   </div>
@@ -474,14 +474,14 @@ export default function CheckoutPage() {
                   <div className="checkout-card p-5 space-y-4 bg-gradient-to-br from-amber-50/80 to-[#8B1A21]/03">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl">🌸</span>
+                        <span className="text-xl">ðŸŒ¸</span>
                         <div>
-                          <h3 className="text-base font-bold text-amber-950">अतिरिक्त पुण्य एवं भक्ति सेवा</h3>
-                          <p className="text-xs text-amber-800/70">गो-सेवा, साधु भोजन व दीपदान जोड़ें (Optional)</p>
+                          <h3 className="text-base font-bold text-amber-950">à¤…à¤¤à¤¿à¤°à¤¿à¤•à¥à¤¤ à¤ªà¥à¤£à¥à¤¯ à¤à¤µà¤‚ à¤­à¤•à¥à¤¤à¤¿ à¤¸à¥‡à¤µà¤¾</h3>
+                          <p className="text-xs text-amber-800/70">à¤—à¥‹-à¤¸à¥‡à¤µà¤¾, à¤¸à¤¾à¤§à¥ à¤­à¥‹à¤œà¤¨ à¤µ à¤¦à¥€à¤ªà¤¦à¤¾à¤¨ à¤œà¥‹à¤¡à¤¼à¥‡à¤‚ (Optional)</p>
                         </div>
                       </div>
                       <span className="text-[11px] font-bold bg-[#8B1A21]/10 text-[#8B1A21] px-2.5 py-1 rounded-full border border-[#8B1A21]/15">
-                        {bhaktiSevaOfferings.length} सेवाएं
+                        {bhaktiSevaOfferings.length} à¤¸à¥‡à¤µà¤¾à¤à¤‚
                       </span>
                     </div>
 
@@ -492,27 +492,27 @@ export default function CheckoutPage() {
                         <div key={offering.id} className={`bg-white border rounded-xl p-4 flex gap-4 shadow-sm relative transition-all duration-200 ${inCart ? 'border-[#8B1A21]/40 ring-1 ring-[#8B1A21]/20 bg-[#8B1A21]/02' : 'border-amber-200/60 hover:border-[#8B1A21]/30'}`}>
                           <div className="space-y-1.5 flex-1">
                             <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md border border-amber-200">
-                              🪔 भक्ति सेवा
+                              ðŸª” à¤­à¤•à¥à¤¤à¤¿ à¤¸à¥‡à¤µà¤¾
                             </span>
                             <h4 className="font-bold text-sm text-amber-950">{offering.name}</h4>
-                            <p className="text-xs text-amber-900/60 line-clamp-2">
+                            <p className="text-xs text-amber-800 line-clamp-2">
                               {offering.description || `Offer ${offering.name} for divine blessings.`}
                             </p>
-                            <p className="font-black text-sm text-[#8B1A21] pt-1">₹{Number(offering.price).toLocaleString('en-IN')}</p>
+                            <p className="font-black text-sm text-[#8B1A21] pt-1">â‚¹{Number(offering.price).toLocaleString('en-IN')}</p>
                           </div>
                           <div className="relative flex flex-col items-center justify-center w-24">
                             <div className="w-20 h-20 bg-amber-50 rounded-lg overflow-hidden border border-amber-200 flex items-center justify-center">
                               {offering.image ? (
                                 <img src={offering.image} alt={offering.name} className="w-full h-full object-cover" />
                               ) : (
-                                <span className="text-xs text-amber-400">🌺</span>
+                                <span className="text-xs text-amber-400">ðŸŒº</span>
                               )}
                             </div>
                             <button
                               onClick={() => toggleAddonToCart(`bhaktiSeva-${offering.id}`, Number(offering.price), offering.name, offering.image)}
                               className={`absolute -bottom-2 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md transition-all ${inCart ? 'bg-[#8B1A21] hover:bg-[#701419]' : 'bg-green-600 hover:bg-green-700'}`}
                             >
-                              {inCart ? '✓ Added' : '+ Add'}
+                              {inCart ? 'âœ“ Added' : '+ Add'}
                             </button>
                           </div>
                         </div>
@@ -527,7 +527,7 @@ export default function CheckoutPage() {
                 <div className="sticky top-20">
                   <div className="checkout-card p-5">
                     <h3 className="font-bold text-amber-950 text-sm mb-4 flex items-center gap-2">
-                      <span className="text-[#8B1A21]">🛕</span> Your Offerings & Items
+                      <span className="text-[#8B1A21]">ðŸ›•</span> Your Offerings & Items
                     </h3>
 
                     <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1 mb-4 border-b border-dashed border-amber-200 pb-4">
@@ -537,7 +537,7 @@ export default function CheckoutPage() {
                             <p className="font-semibold text-amber-950 line-clamp-2 text-[13px]">{item.name}</p>
                             <div className="flex items-center gap-2 mt-1.5">
                               <div className="flex items-center border border-amber-200 rounded-md h-6 overflow-hidden">
-                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2 h-full bg-amber-50 hover:bg-amber-100 text-amber-800 border-r border-amber-200 text-xs">−</button>
+                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2 h-full bg-amber-50 hover:bg-amber-100 text-amber-800 border-r border-amber-200 text-xs">âˆ’</button>
                                 <span className="px-2 text-xs font-bold text-amber-950">{item.quantity}</span>
                                 <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2 h-full bg-amber-50 hover:bg-amber-100 text-amber-800 border-l border-amber-200 text-xs">+</button>
                               </div>
@@ -546,28 +546,28 @@ export default function CheckoutPage() {
                               </button>
                             </div>
                           </div>
-                          <span className="font-bold text-[#8B1A21] whitespace-nowrap text-sm">₹{item.price * item.quantity}</span>
+                          <span className="font-bold text-[#8B1A21] whitespace-nowrap text-sm">â‚¹{item.price * item.quantity}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Price Breakdown */}
-                    <div className="space-y-2.5 text-sm text-amber-900/70">
+                    <div className="space-y-2.5 text-sm text-amber-900">
                       <div className="flex justify-between">
                         <span>Subtotal</span>
-                        <span className="font-bold text-amber-950">₹{cartTotal}</span>
+                        <span className="font-bold text-amber-950">â‚¹{cartTotal}</span>
                       </div>
                       {discountAmount > 0 && (
                         <div className="flex justify-between text-green-700 font-semibold">
                           <span>Coupon Discount</span>
-                          <span>−₹{discountAmount}</span>
+                          <span>âˆ’â‚¹{discountAmount}</span>
                         </div>
                       )}
                       {hasProducts && (
                         <div className="flex justify-between items-center">
                           <span>Delivery</span>
                           {shippingFee > 0 ? (
-                            <span className="font-bold text-amber-950">₹{shippingFee}</span>
+                            <span className="font-bold text-amber-950">â‚¹{shippingFee}</span>
                           ) : (
                             <span className="text-green-700 font-bold text-xs bg-green-50 px-2 py-0.5 rounded border border-green-200">FREE</span>
                           )}
@@ -575,7 +575,7 @@ export default function CheckoutPage() {
                       )}
                       <div className="pt-3 border-t border-amber-200 flex justify-between font-black text-lg text-amber-950">
                         <span>Total</span>
-                        <span className="text-[#8B1A21]">₹{finalTotal}</span>
+                        <span className="text-[#8B1A21]">â‚¹{finalTotal}</span>
                       </div>
                     </div>
 
@@ -586,7 +586,7 @@ export default function CheckoutPage() {
                       Proceed to Details
                       <ArrowRight className="w-5 h-5" />
                     </button>
-                    <p className="text-center text-[11px] text-amber-900/40 mt-2 flex items-center justify-center gap-1">
+                    <p className="text-center text-[11px] text-amber-700 mt-2 flex items-center justify-center gap-1">
                       <Lock className="w-3 h-3" /> 100% Secure & Encrypted
                     </p>
                   </div>
@@ -598,8 +598,8 @@ export default function CheckoutPage() {
             <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-amber-200 p-4 z-50 shadow-[0_-8px_24px_rgba(42,21,8,0.08)]">
               <div className="max-w-xl mx-auto flex items-center gap-4">
                 <div>
-                  <p className="text-[11px] text-amber-900/50 font-medium">कुल राशि</p>
-                  <p className="text-xl font-black text-[#8B1A21]">₹{finalTotal}</p>
+                  <p className="text-[11px] text-amber-800 font-medium">à¤•à¥à¤² à¤°à¤¾à¤¶à¤¿</p>
+                  <p className="text-xl font-black text-[#8B1A21]">â‚¹{finalTotal}</p>
                 </div>
                 <button
                   onClick={() => setStep('details')}
@@ -612,7 +612,7 @@ export default function CheckoutPage() {
           </div>
         )}
 
-        {/* ── STEP 2: DETAILS & PAY ────────────────────────────── */}
+        {/* â”€â”€ STEP 2: DETAILS & PAY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         {step === 'details' && (
           <div className="container max-w-6xl mx-auto px-4 pt-8">
             <div className="flex items-center gap-3 mb-8">
@@ -622,7 +622,7 @@ export default function CheckoutPage() {
                 </button>
               )}
               <h1 className="text-2xl font-black text-amber-950">
-                {hasPuja ? '🕉️ Sankalp & Billing' : '🛍️ Secure Checkout'}
+                {hasPuja ? 'ðŸ•‰ï¸ Sankalp & Billing' : 'ðŸ›ï¸ Secure Checkout'}
               </h1>
             </div>
 
@@ -680,7 +680,7 @@ export default function CheckoutPage() {
                       />
                       <div>
                         <p className="font-bold text-sm text-amber-950">Cash on Delivery (COD)</p>
-                        <p className="text-xs text-amber-900/60">Pay when order is delivered</p>
+                        <p className="text-xs text-amber-800">Pay when order is delivered</p>
                       </div>
                     </label>
 
@@ -695,7 +695,7 @@ export default function CheckoutPage() {
                       />
                       <div>
                         <p className="font-bold text-sm text-amber-950">Online Payment</p>
-                        <p className="text-xs text-amber-900/60">UPI, Cards, NetBanking (Razorpay)</p>
+                        <p className="text-xs text-amber-800">UPI, Cards, NetBanking (Razorpay)</p>
                       </div>
                     </label>
                   </div>
@@ -704,13 +704,13 @@ export default function CheckoutPage() {
                 {/* Trust badges */}
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { icon: <Shield className="w-4 h-4" />, text: '100% शास्त्रोक्त संकल्प' },
-                    { icon: <Lock className="w-4 h-4" />, text: 'सुरक्षित भुगतान' },
-                    { icon: <Star className="w-4 h-4" />, text: '27+ वर्ष पावन सेवा' },
+                    { icon: <Shield className="w-4 h-4" />, text: '100% à¤¶à¤¾à¤¸à¥à¤¤à¥à¤°à¥‹à¤•à¥à¤¤ à¤¸à¤‚à¤•à¤²à¥à¤ª' },
+                    { icon: <Lock className="w-4 h-4" />, text: 'à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤ à¤­à¥à¤—à¤¤à¤¾à¤¨' },
+                    { icon: <Star className="w-4 h-4" />, text: '27+ à¤µà¤°à¥à¤· à¤ªà¤¾à¤µà¤¨ à¤¸à¥‡à¤µà¤¾' },
                   ].map((b, i) => (
                     <div key={i} className="flex flex-col items-center gap-1.5 p-3 bg-white rounded-xl border border-amber-100 text-center">
                       <div className="text-[#8B1A21]">{b.icon}</div>
-                      <span className="text-[10px] text-amber-900/65 font-semibold leading-tight">{b.text}</span>
+                      <span className="text-[10px] text-amber-800 font-semibold leading-tight">{b.text}</span>
                     </div>
                   ))}
                 </div>
@@ -721,21 +721,21 @@ export default function CheckoutPage() {
                 <div className="sticky top-20">
                   <div className="checkout-card p-5 space-y-5">
                     <h3 className="font-bold text-amber-950 flex items-center gap-2">
-                      <span className="text-[#8B1A21]">📦</span> Order Summary
+                      <span className="text-[#8B1A21]">ðŸ“¦</span> Order Summary
                     </h3>
                     <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                       {items.map(item => (
                         <div key={item.id} className="flex justify-between items-center text-sm border-b border-amber-100 pb-3 last:border-0">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-amber-50 border border-amber-200 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
-                              {item.image ? <img src={item.image} className="h-10 w-10 object-cover" /> : <span className="text-lg">🌺</span>}
+                              {item.image ? <img src={item.image} className="h-10 w-10 object-cover" /> : <span className="text-lg">ðŸŒº</span>}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-semibold text-amber-950 line-clamp-1 text-[13px]">{item.name}</p>
-                              <p className="text-[11px] text-amber-900/50 font-medium">Qty: {item.quantity}</p>
+                              <p className="text-[11px] text-amber-800 font-medium">Qty: {item.quantity}</p>
                             </div>
                           </div>
-                          <span className="font-bold text-[#8B1A21] ml-4 text-sm">₹{item.price * item.quantity}</span>
+                          <span className="font-bold text-[#8B1A21] ml-4 text-sm">â‚¹{item.price * item.quantity}</span>
                         </div>
                       ))}
                     </div>
@@ -760,27 +760,27 @@ export default function CheckoutPage() {
                       </div>
                     ) : (
                       <div className="flex items-center justify-between bg-green-50 rounded-lg px-3 py-2 border border-green-200">
-                        <span className="text-xs text-green-700 font-bold">✓ {appliedCoupon.code} applied</span>
+                        <span className="text-xs text-green-700 font-bold">âœ“ {appliedCoupon.code} applied</span>
                         <button onClick={removeCoupon} className="text-red-500 text-xs font-bold hover:underline">Remove</button>
                       </div>
                     )}
 
-                    <div className="pt-4 border-t border-amber-200 space-y-2 text-sm text-amber-900/70">
+                    <div className="pt-4 border-t border-amber-200 space-y-2 text-sm text-amber-900">
                       <div className="flex justify-between">
                         <span>Subtotal ({totalItems} items)</span>
-                        <span className="font-bold text-amber-950">₹{cartTotal}</span>
+                        <span className="font-bold text-amber-950">â‚¹{cartTotal}</span>
                       </div>
                       {discountAmount > 0 && (
                         <div className="flex justify-between text-green-700 font-semibold">
                           <span>Coupon Discount</span>
-                          <span>−₹{discountAmount}</span>
+                          <span>âˆ’â‚¹{discountAmount}</span>
                         </div>
                       )}
                       {hasProducts && (
                         <div className="flex justify-between items-center">
                           <span>Delivery</span>
                           {shippingFee > 0 ? (
-                            <span className="font-bold text-amber-950">₹{shippingFee}</span>
+                            <span className="font-bold text-amber-950">â‚¹{shippingFee}</span>
                           ) : (
                             <span className="text-green-700 font-bold text-xs bg-green-50 px-2 py-0.5 rounded border border-green-200">FREE</span>
                           )}
@@ -788,7 +788,7 @@ export default function CheckoutPage() {
                       )}
                       <div className="pt-3 border-t border-amber-200 flex justify-between font-black text-xl text-amber-950">
                         <span>Total to Pay</span>
-                        <span className="text-[#8B1A21]">₹{finalTotal}</span>
+                        <span className="text-[#8B1A21]">â‚¹{finalTotal}</span>
                       </div>
                     </div>
 
@@ -805,13 +805,13 @@ export default function CheckoutPage() {
                       ) : (
                         <>
                           <Lock className="h-4 w-4" />
-                          {paymentMethod === 'cod' ? `Confirm Order ₹${finalTotal} (COD)` : `Pay ₹${finalTotal} Securely`}
+                          {paymentMethod === 'cod' ? `Confirm Order â‚¹${finalTotal} (COD)` : `Pay â‚¹${finalTotal} Securely`}
                           <ArrowRight className="h-5 w-5" />
                         </>
                       )}
                     </button>
 
-                    <p className="text-center text-[11px] text-amber-900/40 flex items-center justify-center gap-1">
+                    <p className="text-center text-[11px] text-amber-700 flex items-center justify-center gap-1">
                       <Shield className="w-3 h-3" /> Divya Yagyam Secure Checkout
                     </p>
                   </div>
@@ -827,24 +827,24 @@ export default function CheckoutPage() {
         <DialogContent className="sm:max-w-[440px] border-amber-200">
           <DialogHeader className="space-y-2">
             <DialogTitle className="text-xl font-bold flex items-center gap-2 text-amber-950">
-              <span className="text-[#8B1A21] text-2xl font-black">ॐ</span> संकल्प विवरण
+              <span className="text-[#8B1A21] text-2xl font-black">à¥</span> à¤¸à¤‚à¤•à¤²à¥à¤ª à¤µà¤¿à¤µà¤°à¤£
             </DialogTitle>
-            <DialogDescription className="text-amber-900/65">
-              कृपया पूजा में संकल्प के लिए अपना गोत्र और उद्देश्य भरें।
+            <DialogDescription className="text-amber-800">
+              à¤•à¥ƒà¤ªà¤¯à¤¾ à¤ªà¥‚à¤œà¤¾ à¤®à¥‡à¤‚ à¤¸à¤‚à¤•à¤²à¥à¤ª à¤•à¥‡ à¤²à¤¿à¤ à¤…à¤ªà¤¨à¤¾ à¤—à¥‹à¤¤à¥à¤° à¤”à¤° à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ à¤­à¤°à¥‡à¤‚à¥¤
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-1.5">
-              <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Gotra (गोत्र)</Label>
+              <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Gotra (à¤—à¥‹à¤¤à¥à¤°)</Label>
               <Input
                 value={sankalp.gotra}
                 onChange={e => setSankalp({...sankalp, gotra: e.target.value})}
-                placeholder="e.g. Kashyap (कश्यप)"
+                placeholder="e.g. Kashyap (à¤•à¤¶à¥à¤¯à¤ª)"
                 className="border-amber-200 focus:border-[#8B1A21]/60 bg-amber-50/30"
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">पूजा का उद्देश्य / मन्नत</Label>
+              <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">à¤ªà¥‚à¤œà¤¾ à¤•à¤¾ à¤‰à¤¦à¥à¤¦à¥‡à¤¶à¥à¤¯ / à¤®à¤¨à¥à¤¨à¤¤</Label>
               <textarea
                 value={sankalp.purpose}
                 onChange={e => setSankalp({...sankalp, purpose: e.target.value})}
@@ -861,10 +861,10 @@ export default function CheckoutPage() {
               />
               <div className="grid gap-1 leading-none">
                 <label htmlFor="terms" className="text-sm font-semibold text-amber-950 cursor-pointer">
-                  Terms & Conditions स्वीकार करें
+                  Terms & Conditions à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¥‡à¤‚
                 </label>
-                <p className="text-[11px] text-amber-900/55">
-                  मैं संकल्प के लिए दी गई जानकारी सही होने की पुष्टि करता/करती हूं।
+                <p className="text-[11px] text-amber-800">
+                  à¤®à¥ˆà¤‚ à¤¸à¤‚à¤•à¤²à¥à¤ª à¤•à¥‡ à¤²à¤¿à¤ à¤¦à¥€ à¤—à¤ˆ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤¸à¤¹à¥€ à¤¹à¥‹à¤¨à¥‡ à¤•à¥€ à¤ªà¥à¤·à¥à¤Ÿà¤¿ à¤•à¤°à¤¤à¤¾/à¤•à¤°à¤¤à¥€ à¤¹à¥‚à¤‚à¥¤
                 </p>
               </div>
             </div>
@@ -887,3 +887,4 @@ export default function CheckoutPage() {
     </>
   )
 }
+
