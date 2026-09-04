@@ -24,6 +24,7 @@ const languages = [
 const navItems = [
   { title: 'Home', href: '/' },
   { title: 'Book Puja', href: '/pujas' },
+  { title: 'Horoscope', href: '/horoscope' },
   { title: 'Chadhawa', href: '/book-chadhawa' },
   { title: 'VIP Puja', href: '/vip-pujas' },
   { title: 'Store', href: '/products' },
@@ -243,14 +244,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 notranslate" translate="no">
+        <nav className="hidden lg:flex items-center header-nav notranslate" translate="no">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               prefetch={true}
               translate="no"
-              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] transition-all notranslate"
+              className="py-1 transition-colors notranslate"
             >
               {item.title}
             </Link>
@@ -268,9 +269,15 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               onClick={() => setToolsOpen(!toolsOpen)}
               translate="no"
               className={cn(
-                'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all notranslate',
-                toolsOpen ? 'text-[#7A1F2B] bg-[#FDF4F5]' : 'text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5]'
+                'flex items-center gap-1.5 py-1 font-medium transition-colors notranslate',
+                toolsOpen ? 'text-[#8b1d24]' : 'text-[#333333] hover:text-[#8b1d24]'
               )}
+              style={{
+                fontFamily: "'Inter', 'Poppins', sans-serif",
+                fontSize: '14px',
+                fontWeight: 500,
+                letterSpacing: '0.2px',
+              }}
             >
               <Sparkles className="h-3.5 w-3.5 text-[#C89B3C]" />
               <span className="notranslate" translate="no">Tools</span>
@@ -399,7 +406,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* "Book Puja" Button — Hidden on Mobile to prevent button stacking */}
           <Link
             href="/pujas"
-            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#7A1F2B] hover:bg-[#52131D] text-white text-xs font-bold tracking-wide shadow-sm hover:shadow-md border border-[#C89B3C]/40 transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
+            className="hidden lg:inline-flex items-center gap-2 header-cta-btn bg-[#8b1d24] hover:bg-[#70161c] text-white shadow-sm hover:shadow-md border border-[#C89B3C]/40 transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
           >
             <span>Book Puja</span>
             <span className="text-sm">➔</span>
