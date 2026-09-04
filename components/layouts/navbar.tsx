@@ -201,20 +201,20 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
       {/* 1. Compact Announcement Bar — Collapses on scroll down, reveals on scroll up */}
       <div
         className={cn(
-          'w-full bg-gradient-to-r from-[#7A1521] via-[#901323] to-[#7A1521] text-white text-[11px] font-semibold flex items-center justify-between shadow-xs transition-all duration-300 overflow-hidden notranslate',
-          showAnnouncement ? 'max-h-[24px] py-0.5 px-3 sm:px-4 opacity-100' : 'max-h-0 py-0 opacity-0 border-none'
+          'w-full bg-gradient-to-r from-[#52131D] via-[#7A1F2B] to-[#52131D] text-white text-[11px] font-semibold flex items-center justify-between shadow-xs transition-all duration-300 overflow-hidden notranslate border-b border-[#C89B3C]/30',
+          showAnnouncement ? 'max-h-[26px] py-0.5 px-3 sm:px-4 opacity-100' : 'max-h-0 py-0 opacity-0 border-none'
         )}
         translate="no"
       >
         <div className="hidden sm:flex items-center gap-2 text-white/90 text-xs notranslate" translate="no">
-          <span className="text-[#F5C542]">ॐ</span>
-          <span>Dedicated to Sacred Vedic Pujas & Services</span>
+          <span className="text-[#E2C46B]">ॐ</span>
+          <span>सनातन वैदिक परंपरा • शास्त्रोक्त पूजा एवं संकल्प सेवा</span>
         </div>
-        <div className="flex-1 text-center font-medium truncate px-1 text-[#FFE8CC] notranslate" translate="no">
-          <span>Pure Mantras, Name & Gotra Sankalp & Live WhatsApp Video Proof</span>
+        <div className="flex-1 text-center font-medium truncate px-1 text-[#F7F0E6] notranslate" translate="no">
+          <span>शुद्ध मंत्रोच्चार, नाम-गोत्र संकल्प एवं लाइव WhatsApp वीडियो प्रमाण</span>
         </div>
         <div className="hidden md:flex items-center gap-4 text-xs font-medium notranslate" translate="no">
-          <a href="tel:+919530401984" className="text-white hover:text-[#F5C542] transition-colors flex items-center gap-1">
+          <a href="tel:+919530401984" className="text-white hover:text-[#E2C46B] transition-colors flex items-center gap-1">
             <span>📞</span> {siteData?.contact?.phone || '+91 95304 01984'}
           </a>
         </div>
@@ -231,7 +231,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             onClick={() => setOpen(true)}
             aria-expanded={open}
             aria-label="Open Navigation Menu"
-            className="shrink-0 rounded-xl bg-[#FFF3E8] text-[#7A1521] hover:text-[#FF6600] hover:bg-[#FFE6D0] h-9 w-9 border border-[#FFD2B0] shadow-2xs active:scale-95 transition-transform"
+            className="shrink-0 rounded-xl bg-[#FDF4F5] text-[#7A1F2B] hover:bg-[#F9E5E7] h-10 w-10 border border-[#E8DDD0] shadow-xs active:scale-95 transition-transform"
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -250,7 +250,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               href={item.href}
               prefetch={true}
               translate="no"
-              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-all notranslate"
+              className="px-3.5 py-2 rounded-xl text-sm font-bold text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] transition-all notranslate"
             >
               {item.title}
             </Link>
@@ -269,18 +269,18 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               translate="no"
               className={cn(
                 'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all notranslate',
-                toolsOpen ? 'text-[#FF6600] bg-[#FFF3E8]' : 'text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8]'
+                toolsOpen ? 'text-[#7A1F2B] bg-[#FDF4F5]' : 'text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5]'
               )}
             >
-              <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" />
+              <Sparkles className="h-3.5 w-3.5 text-[#C89B3C]" />
               <span className="notranslate" translate="no">Tools</span>
-              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#FF6600]')} />
+              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', toolsOpen && 'rotate-180 text-[#7A1F2B]')} />
             </button>
 
             {/* Desktop dropdown — High Aesthetic 2-Column Mega Menu */}
             <div
               className={cn(
-                'absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-[560px] lg:w-[600px] rounded-2xl bg-white border border-[#EFE4D6] shadow-[0_20px_50px_rgba(28,22,20,0.12)] p-3 transition-all duration-200 z-50',
+                'absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-[560px] lg:w-[600px] rounded-2xl bg-white border border-[#E8DDD0] shadow-[0_12px_32px_rgba(36,26,24,0.08)] p-3 transition-all duration-200 z-50',
                 toolsOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
               )}
             >
@@ -292,21 +292,21 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                       key={t.href}
                       href={t.href}
                       onClick={() => setToolsOpen(false)}
-                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#FFF3E8] border border-transparent hover:border-[#FFD2B0] transition-all group"
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#FDF4F5] border border-transparent hover:border-[#E8DDD0] transition-all group"
                     >
-                      <div className="h-10 w-10 rounded-xl bg-[#FFF3E8] text-[#FF6600] flex items-center justify-center shrink-0 border border-[#FFD2B0] group-hover:bg-[#FF6600] group-hover:text-white transition-all shadow-2xs">
+                      <div className="h-10 w-10 rounded-xl bg-[#FAF6ED] text-[#C89B3C] flex items-center justify-center shrink-0 border border-[#E2C46B]/40 group-hover:bg-[#7A1F2B] group-hover:text-white transition-all shadow-2xs">
                         <IconComp className="h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-xs font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors truncate">
+                          <span className="text-xs font-bold text-[#241A18] group-hover:text-[#7A1F2B] transition-colors truncate">
                             {t.title}
                           </span>
                           <span className={cn('text-[9px] font-black px-1.5 py-0.5 rounded border shrink-0', t.badgeColor)}>
                             {t.badge}
                           </span>
                         </div>
-                        <p className="text-[11px] text-[#6B5E57] truncate font-normal mt-0.5">
+                        <p className="text-[11px] text-[#6F625D] truncate font-normal mt-0.5">
                           {t.desc}
                         </p>
                       </div>
@@ -316,14 +316,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               </div>
 
               {/* Bottom Explore All Bar */}
-              <div className="mt-2.5 pt-2.5 border-t border-[#EFE4D6] flex items-center justify-between px-2">
-                <span className="text-[11px] font-semibold text-[#6B5E57] flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-[#FF6600]" /> 100% Authentic Vedic Calculation Tools
+              <div className="mt-2.5 pt-2.5 border-t border-[#E8DDD0] flex items-center justify-between px-2">
+                <span className="text-[11px] font-semibold text-[#6F625D] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#C89B3C]" /> 100% प्रामाणिक वैदिक गणना टूल्स
                 </span>
                 <Link
                   href="/tools"
                   onClick={() => setToolsOpen(false)}
-                  className="text-xs font-extrabold text-[#FF6600] hover:text-[#E65C00] flex items-center gap-1 hover:gap-1.5 transition-all bg-[#FFF3E8] hover:bg-[#FFE6D0] px-3 py-1 rounded-lg border border-[#FFD2B0]"
+                  className="text-xs font-bold text-[#7A1F2B] hover:text-[#52131D] flex items-center gap-1 hover:gap-1.5 transition-all bg-[#FDF4F5] hover:bg-[#F9E5E7] px-3 py-1.5 rounded-lg border border-[#E8DDD0]"
                 >
                   <span>Explore All Tools ({toolsMenu.length}+)</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -342,7 +342,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Direct WhatsApp Consultation"
-            className="md:hidden flex items-center justify-center h-9 w-9 rounded-xl bg-emerald-50 text-[#25D366] hover:bg-[#25D366] hover:text-white border border-emerald-200 shadow-2xs transition-all active:scale-95 shrink-0"
+            className="md:hidden flex items-center justify-center h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 shadow-xs transition-all active:scale-95 shrink-0"
           >
             <MessageCircle className="h-4 w-4 fill-current" />
           </a>
@@ -353,12 +353,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             size="icon"
             aria-label="Cart"
             asChild
-            className="relative rounded-xl text-[#1C1614] bg-[#FFF3E8] md:bg-transparent hover:text-[#FF6600] hover:bg-[#FFE6D0] border border-[#FFD2B0] md:border-transparent transition-all h-9 w-9 active:scale-95 shrink-0"
+            className="relative rounded-xl text-[#241A18] bg-[#FDF4F5] md:bg-transparent hover:text-[#7A1F2B] hover:bg-[#F9E5E7] border border-[#E8DDD0] md:border-transparent transition-all h-10 w-10 active:scale-95 shrink-0"
           >
             <Link href="/cart">
-              <ShoppingBag className="h-4 w-4 text-[#7A1521] md:h-5 md:w-5" />
+              <ShoppingBag className="h-4 w-4 text-[#7A1F2B] md:h-5 md:w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF6600] text-[9px] font-black text-white shadow-xs ring-1 ring-white">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#7A1F2B] text-[9px] font-black text-white shadow-xs ring-1 ring-white">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -370,23 +370,23 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1 px-2.5 h-8 text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] rounded-full text-xs font-bold uppercase tracking-wide border border-[#EFE4D6]"
+              className="gap-1 px-2.5 h-8 text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] rounded-full text-xs font-bold uppercase tracking-wide border border-[#E8DDD0]"
               onClick={() => setLangOpen(!langOpen)}
               title="Change Language"
             >
-              <Languages className="h-3.5 w-3.5 text-[#FF6600]" />
+              <Languages className="h-3.5 w-3.5 text-[#C89B3C]" />
               <span>{currentLang === 'hi' ? 'HI' : 'EN'}</span>
               <ChevronDown className="h-3 w-3 opacity-60" />
             </Button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-[#EFE4D6] rounded-xl shadow-xl p-1 z-50">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-[#E8DDD0] rounded-xl shadow-xl p-1 z-50">
                 {languages.map((l) => (
                   <button
                     key={l.code}
                     onClick={() => changeLang(l.code)}
                     className={cn(
-                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-[#FFF3E8] transition-colors font-medium',
-                      currentLang === l.code ? 'text-[#FF6600] font-bold bg-[#FFF3E8]' : 'text-[#1C1614]'
+                      'w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-[#FDF4F5] transition-colors font-medium',
+                      currentLang === l.code ? 'text-[#7A1F2B] font-bold bg-[#FDF4F5]' : 'text-[#241A18]'
                     )}
                   >
                     {l.label}
@@ -399,7 +399,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           {/* "Book Puja" Button — Hidden on Mobile to prevent button stacking */}
           <Link
             href="/pujas"
-            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF7700] text-white text-xs font-extrabold tracking-wide shadow-[0_4px_14px_rgba(255,102,0,0.32)] hover:shadow-[0_6px_20px_rgba(255,102,0,0.45)] transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
+            className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#7A1F2B] hover:bg-[#52131D] text-white text-xs font-bold tracking-wide shadow-sm hover:shadow-md border border-[#C89B3C]/40 transition-all duration-200 shrink-0 whitespace-nowrap active:scale-[0.98]"
           >
             <span>Book Puja</span>
             <span className="text-sm">➔</span>
@@ -414,10 +414,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     asChild
                     size="sm"
                     variant="ghost"
-                    className="rounded-xl text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] font-bold text-xs gap-1.5 px-3 h-9 border border-[#EFE4D6] bg-white shadow-2xs"
+                    className="rounded-xl text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] font-bold text-xs gap-1.5 px-3 h-9 border border-[#E8DDD0] bg-white shadow-2xs"
                   >
                     <Link href="/dashboard" title="My Account">
-                      <User className="h-4 w-4 text-[#FF6600]" />
+                      <User className="h-4 w-4 text-[#7A1F2B]" />
                       <span className="hidden md:inline">{user.fullName?.split(' ')[0] || 'Account'}</span>
                     </Link>
                   </Button>
@@ -427,10 +427,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   asChild
                   size="sm"
                   variant="ghost"
-                  className="rounded-xl border border-[#EFE4D6] text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] font-bold text-xs px-3 h-9 bg-white shadow-2xs"
+                  className="rounded-xl border border-[#E8DDD0] text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] font-bold text-xs px-3 h-9 bg-white shadow-2xs"
                 >
                   <Link href="/login" title="Login / Register">
-                    <User className="h-4 w-4 mr-1 text-[#FF6600]" />
+                    <User className="h-4 w-4 mr-1 text-[#7A1F2B]" />
                     <span>Login</span>
                   </Link>
                 </Button>
@@ -460,16 +460,16 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         )}
       >
         {/* Drawer Top Bar: Pinned User Profile + Close Button */}
-        <div className="p-4 bg-gradient-to-b from-[#FFF3E8] to-white border-b border-[#EFE4D6] flex items-center justify-between shrink-0">
+        <div className="p-4 bg-gradient-to-b from-[#FDF4F5] to-white border-b border-[#E8DDD0] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-full bg-[#7A1521] text-white flex items-center justify-center font-black text-sm shadow-xs">
+            <div className="h-9 w-9 rounded-full bg-[#7A1F2B] text-white flex items-center justify-center font-black text-sm shadow-xs">
               {user ? (user.fullName?.[0]?.toUpperCase() || 'U') : 'ॐ'}
             </div>
             <div className="leading-tight">
-              <p className="text-xs font-black text-[#1C1614]">
+              <p className="text-xs font-black text-[#241A18]">
                 {user ? user.fullName || 'Devotee' : 'दिव्ययज्ञम् सनातन सेवा'}
               </p>
-              <p className="text-[10px] text-[#6B5E57] font-semibold">
+              <p className="text-[10px] text-[#6F625D] font-semibold">
                 {user ? user.email : 'स्वागतम् • प्रामाणिक पूजा सेवा'}
               </p>
             </div>
@@ -480,7 +480,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
             size="icon"
             onClick={() => setOpen(false)}
             aria-label="Close Drawer"
-            className="h-8 w-8 rounded-full hover:bg-black/5 text-[#6B5E57] hover:text-[#1C1614]"
+            className="h-8 w-8 rounded-full hover:bg-black/5 text-[#6F625D] hover:text-[#241A18]"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -491,7 +491,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           
           {/* Main Navigation Links */}
           <div className="space-y-1">
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1521] px-2 block">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1F2B] px-2 block">
               मुख्य पृष्ठ व सेवाएं
             </span>
             <div className="grid grid-cols-1 gap-1">
@@ -501,25 +501,25 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   href={item.href}
                   prefetch={true}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-[#1C1614] hover:text-[#FF6600] hover:bg-[#FFF3E8] transition-colors border border-transparent hover:border-[#FFD2B0]"
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-[#241A18] hover:text-[#7A1F2B] hover:bg-[#FDF4F5] transition-colors border border-transparent hover:border-[#E8DDD0]"
                 >
                   <span>{item.title}</span>
-                  <span className="text-xs text-[#D4AF37]">➔</span>
+                  <span className="text-xs text-[#C89B3C]">➔</span>
                 </Link>
               ))}
             </div>
           </div>
 
           {/* 4. Vedic Tools: 4-Column Compact Icon Tile Grid (Specification #4) */}
-          <div className="space-y-2 pt-1 border-t border-[#EFE4D6]">
+          <div className="space-y-2 pt-1 border-t border-[#E8DDD0]">
             <div className="flex items-center justify-between px-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1521] flex items-center gap-1">
-                <Sparkles className="h-3 w-3 text-[#FF6600]" /> वैदिक टूल्स ग्रिड
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1F2B] flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-[#C89B3C]" /> वैदिक टूल्स ग्रिड
               </span>
               <Link
                 href="/tools"
                 onClick={() => setOpen(false)}
-                className="text-[10px] font-extrabold text-[#FF6600] hover:underline"
+                className="text-[10px] font-extrabold text-[#7A1F2B] hover:underline"
               >
                 सभी 8+ टूल्स ➔
               </Link>
@@ -534,12 +534,12 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                     key={t.href}
                     href={t.href}
                     onClick={() => setOpen(false)}
-                    className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-[#FFF9F3] hover:bg-[#FFF3E8] border border-[#FFD2B0]/60 active:scale-95 transition-all text-center group"
+                    className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-[#FFF9F1] hover:bg-[#FDF4F5] border border-[#E8DDD0] active:scale-95 transition-all text-center group"
                   >
-                    <div className="h-10 w-10 rounded-xl bg-white text-[#FF6600] group-hover:bg-[#FF6600] group-hover:text-white flex items-center justify-center shadow-2xs border border-[#FFD2B0] transition-colors mb-1">
+                    <div className="h-10 w-10 rounded-xl bg-white text-[#C89B3C] group-hover:bg-[#7A1F2B] group-hover:text-white flex items-center justify-center shadow-2xs border border-[#E8DDD0] transition-colors mb-1">
                       <IconComp className="h-5 w-5" />
                     </div>
-                    <span className="text-[10px] font-bold text-[#1C1614] leading-tight line-clamp-1 w-full">
+                    <span className="text-[10px] font-bold text-[#241A18] leading-tight line-clamp-1 w-full">
                       {t.title}
                     </span>
                   </Link>
@@ -549,9 +549,9 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
           </div>
 
           {/* Language Selector in Drawer */}
-          <div className="p-2.5 rounded-xl bg-[#FFF9F3] border border-[#EFE4D6] space-y-1.5">
-            <span className="text-[10px] font-bold text-[#6B5E57] flex items-center gap-1">
-              <Languages className="h-3.5 w-3.5 text-[#FF6600]" /> भाषा चुनें / Select Language
+          <div className="p-2.5 rounded-xl bg-[#FFF9F1] border border-[#E8DDD0] space-y-1.5">
+            <span className="text-[10px] font-bold text-[#6F625D] flex items-center gap-1">
+              <Languages className="h-3.5 w-3.5 text-[#C89B3C]" /> भाषा चुनें / Select Language
             </span>
             <div className="flex gap-1.5">
               {languages.slice(0, 4).map((l) => (
@@ -561,8 +561,8 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   className={cn(
                     'flex-1 py-1 rounded-lg text-[11px] font-black transition-all text-center',
                     currentLang === l.code
-                      ? 'bg-[#FF6600] text-white shadow-xs'
-                      : 'bg-white text-[#1C1614] border border-[#EFE4D6]'
+                      ? 'bg-[#7A1F2B] text-white shadow-xs'
+                      : 'bg-white text-[#241A18] border border-[#E8DDD0]'
                   )}
                 >
                   {l.label}
@@ -578,7 +578,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#7A1521] to-[#901323] flex items-center justify-between shadow-xs"
+                  className="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#7A1F2B] to-[#52131D] flex items-center justify-between shadow-xs"
                 >
                   <span className="flex items-center gap-2">
                     <User className="h-4 w-4" /> मेरी पूजा व संकल्प डैशबोर्ड
@@ -589,7 +589,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                   <button
                     type="submit"
                     onClick={() => setOpen(false)}
-                    className="w-full py-2 px-3 rounded-xl text-[11px] font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors text-center"
+                    className="w-full py-2 px-3 rounded-xl text-[11px] font-bold text-[#B42318] bg-red-50 hover:bg-red-100 border border-red-200 transition-colors text-center"
                   >
                     खाते से लॉगआउट
                   </button>
@@ -600,14 +600,14 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 <Link
                   href="/login"
                   onClick={() => setOpen(false)}
-                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-[#1C1614] bg-[#FFF3E8] border border-[#FFD2B0] text-center shadow-2xs"
+                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-[#241A18] bg-[#FDF4F5] border border-[#E8DDD0] text-center shadow-2xs"
                 >
                   लॉगिन करें
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setOpen(false)}
-                  className="py-2.5 px-3 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#FF6600] to-[#FF8500] text-center shadow-sm"
+                  className="py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-[#7A1F2B] hover:bg-[#52131D] text-center shadow-sm"
                 >
                   साइन अप
                 </Link>
@@ -617,10 +617,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
         </div>
 
         {/* Pinned Bottom Helpline in Drawer */}
-        <div className="p-3 bg-[#FFF3E8] border-t border-[#EFE4D6] text-center text-xs text-[#6B5E57] shrink-0">
+        <div className="p-3 bg-[#FDF4F5] border-t border-[#E8DDD0] text-center text-xs text-[#6F625D] shrink-0">
           <a
             href="tel:+919530401984"
-            className="font-black text-[#7A1521] hover:text-[#FF6600] inline-flex items-center gap-1.5 text-xs"
+            className="font-bold text-[#7A1F2B] hover:text-[#52131D] inline-flex items-center gap-1.5 text-xs"
           >
             <Phone className="h-3.5 w-3.5 text-[#FF6600]" /> सहायता हेल्पलाइन: +91 95304 01984
           </a>

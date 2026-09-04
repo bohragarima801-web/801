@@ -92,15 +92,15 @@ export function CinematicHero() {
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-24 sm:py-32 text-center flex flex-col items-center justify-center">
         
         {/* Eyebrow Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#B85C24]/15 border border-[#B08A45]/30 text-[#B08A45] text-xs sm:text-sm font-semibold tracking-wider backdrop-blur-md mb-6 shadow-sm">
-          <span className="text-amber-400">ॐ</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#7A1F2B]/30 border border-[#C89B3C]/40 text-[#E2C46B] text-xs sm:text-sm font-semibold tracking-wider backdrop-blur-md mb-6 shadow-sm">
+          <span className="text-[#E2C46B]">ॐ</span>
           <span>सनातन वैदिक परंपरा • सिद्ध शक्तिपीठ अनुष्ठान</span>
         </div>
 
         {/* Primary Hindi Master Headline */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.12] max-w-4xl mb-6 drop-shadow-lg" style={{ fontFamily: "'Cinzel', 'Noto Serif Devanagari', 'Georgia', serif" }}>
           शुद्ध मंत्रों से <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F8F4EC] via-[#E59850] to-[#C99A3D]">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF9F1] via-[#E2C46B] to-[#C89B3C]">
             आपके संकल्प तक
           </span>
         </h1>
@@ -115,7 +115,7 @@ export function CinematicHero() {
           {/* Primary CTA */}
           <Link
             href="#featured-pujas"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#B85C24] to-[#D97706] hover:from-[#a04e1c] hover:to-[#b45309] text-white font-bold text-sm sm:text-base shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shrink-0 tracking-wide"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[#7A1F2B] to-[#52131D] hover:from-[#52131D] hover:to-[#380b13] text-white font-bold text-sm sm:text-base border border-[#C89B3C]/50 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shrink-0 tracking-wide min-h-[48px]"
           >
             <span>🔱 पूजा बुक करें</span>
             <ArrowRight className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function CinematicHero() {
             href="https://wa.me/919530401984?text=जय%20श्री%20राम!%20मुझे%20पूजा%20बुकिंग%20व%20संकल्प%20के%20विषय%20में%20जानकारी%20चाहिए।"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shrink-0"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shrink-0 min-h-[48px]"
           >
             <MessageCircle className="h-4 w-4 text-emerald-400" />
             <span>WhatsApp पर पूछें</span>
@@ -136,16 +136,16 @@ export function CinematicHero() {
         {/* Micro-Trust Line */}
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-zinc-400 font-medium">
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#B08A45]" /> शास्त्रोक्त विधि
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#C89B3C]" /> शास्त्रोक्त विधि
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#B08A45]" /> अनुभवी आचार्य
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#C89B3C]" /> अनुभवी आचार्य
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#B08A45]" /> सुरक्षित ऑनलाइन भुगतान
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#C89B3C]" /> सुरक्षित ऑनलाइन भुगतान
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#B08A45]" /> WhatsApp सहायता
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#C89B3C]" /> WhatsApp सहायता
           </span>
         </div>
 
@@ -154,7 +154,7 @@ export function CinematicHero() {
       {/* Subtle Scroll Indicator */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-zinc-400 text-xs pointer-events-none opacity-80">
         <span>नीचे देखें</span>
-        <ChevronDown className="h-4 w-4 animate-bounce text-[#B08A45]" />
+        <ChevronDown className="h-4 w-4 animate-bounce text-[#C89B3C]" />
       </div>
     </section>
   )

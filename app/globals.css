@@ -9,25 +9,27 @@
 
 @layer base {
   :root {
-    /* ── DIVYAYAGYAM MASTER BRAND DESIGN TOKENS (PREMIUM VIBRANT SPIRITUAL) ── */
-    --color-ivory: #FAF8F5;
-    --color-white: #FFFFFF;
-    --color-saffron: #FF6600;
-    --color-saffron-hover: #E65C00;
-    --color-gold: #D4AF37;
-    --color-charcoal: #1C1614;
-    --color-cream: #FBF4EA;
-    --color-maroon: #7A1521;
-    --color-maroon-dark: #580E17;
-    --color-border: #EFE4D6;
-    --color-muted: #6B5E57;
+    /* ── DIVYAYAGYAM MASTER BRAND DESIGN TOKENS (PREMIUM LUXURY VEDIC) ── */
+    --color-maroon: #7A1F2B;
+    --color-maroon-dark: #52131D;
+    --color-gold: #C89B3C;
+    --color-gold-highlight: #E2C46B;
+    --color-ivory: #FFF9F1;
+    --color-ivory-secondary: #F7F0E6;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #241A18;
+    --color-text-secondary: #6F625D;
+    --color-border: #E8DDD0;
+    --color-success: #2E7D5B;
+    --color-warning: #B7791F;
+    --color-error: #B42318;
 
     /* ── Standardized Spacing & Radius Tokens ── */
     --radius-sm: 8px;
     --radius-md: 12px;
-    --radius-lg: 18px;
-    --radius-card: 20px;
-    --radius-btn: 14px;
+    --radius-card: 14px;
+    --radius-lg: 20px;
+    --radius-btn: 12px;
     --min-touch-target: 44px;
     --sab: env(safe-area-inset-bottom, 0px);
     --sat: env(safe-area-inset-top, 0px);
@@ -36,41 +38,40 @@
     --font-heading-hi: var(--font-noto-serif-devanagari), 'Noto Serif Devanagari', 'Cinzel', serif;
     --font-body-hi: var(--font-poppins), var(--font-noto-sans-devanagari), 'Noto Sans Devanagari', sans-serif;
 
-    /* ── Core Surfaces & Semantic Tokens ── */
-    --background: 35 25% 98%;               /* #FAF8F5 - Pure Soft Pearl Warm White */
-    --foreground: 15 15% 12%;               /* #1C1614 - Rich Velvet Charcoal */
-    --card: 0 0% 100%;                      /* #FFFFFF - Pure Snow White */
-    --card-foreground: 15 15% 12%;
+    /* ── Core Surfaces & Semantic Tokens (HSL Formatted for Tailwind) ── */
+    --background: 36 100% 97%;              /* #FFF9F1 - Warm Ivory */
+    --foreground: 10 20% 12%;               /* #241A18 - Primary Text */
+    --card: 0 0% 100%;                      /* #FFFFFF - Pure White Surface */
+    --card-foreground: 10 20% 12%;          /* #241A18 */
     --popover: 0 0% 100%;
-    --popover-foreground: 15 15% 12%;
-    --primary: 24 100% 50%;                 /* #FF6600 - Radiant Sacred Kesariya */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 355 70% 28%;               /* #7A1521 - Royal Vedic Maroon */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 35 25% 94%;                    /* #F5EFE6 - Soft Pearl */
-    --muted-foreground: 20 10% 40%;         /* #6B5E57 - Muted Text */
-    --accent: 43 74% 53%;                   /* #D4AF37 - Radiant Temple Gold */
-    --accent-foreground: 15 15% 12%;
-    --destructive: 355 70% 28%;             /* #7A1521 */
+    --popover-foreground: 10 20% 12%;
+    --primary: 352 59% 30%;                 /* #7A1F2B - Sacred Deep Maroon */
+    --primary-foreground: 0 0% 100%;        /* #FFFFFF */
+    --secondary: 40 55% 51%;                /* #C89B3C - Premium Gold */
+    --secondary-foreground: 0 0% 100%;      /* #FFFFFF */
+    --muted: 36 43% 94%;                    /* #F7F0E6 - Secondary Background */
+    --muted-foreground: 17 9% 40%;          /* #6F625D - Secondary Text */
+    --accent: 40 55% 51%;                   /* #C89B3C - Premium Gold Accent */
+    --accent-foreground: 10 20% 12%;
+    --destructive: 4 76% 40%;               /* #B42318 - Error */
     --destructive-foreground: 0 0% 100%;
-    --border: 30 25% 89%;                   /* #EFE4D6 - Subtle Champagne Border */
-    --input: 30 25% 89%;
-    --ring: 24 100% 50%;                    /* Saffron Focus Ring */
-    --radius: 1rem;
+    --border: 34 32% 86%;                   /* #E8DDD0 - Soft Border */
+    --input: 34 32% 86%;                    /* #E8DDD0 */
+    --ring: 352 59% 30%;                    /* Maroon Focus Ring */
+    --radius: 0.875rem;                     /* 14px Card Radius */
 
     /* ── Gradients & Shadows ── */
-    --gradient-primary: linear-gradient(135deg, #FF6600 0%, #FF8500 100%);
-    --gradient-saffron: linear-gradient(135deg, #FF5500 0%, #FF8500 100%);
-    --gradient-maroon: linear-gradient(135deg, #7A1521 0%, #9B1B2A 100%);
-    --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #F5C542 50%, #D4AF37 100%);
-    --gradient-hero-light: linear-gradient(180deg, #FFFDF9 0%, #FDF6EE 50%, #FAF8F5 100%);
+    --gradient-primary: linear-gradient(135deg, #7A1F2B 0%, #52131D 100%);
+    --gradient-maroon: linear-gradient(135deg, #7A1F2B 0%, #962B3B 100%);
+    --gradient-gold: linear-gradient(135deg, #C89B3C 0%, #E2C46B 50%, #C89B3C 100%);
+    --gradient-hero-light: linear-gradient(180deg, #FFFDF9 0%, #F7F0E6 100%);
     --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%);
 
-    --shadow-soft: 0 4px 20px -2px rgba(122, 21, 33, 0.04);
-    --shadow-medium: 0 8px 30px rgba(122, 21, 33, 0.07);
-    --shadow-heavy: 0 16px 40px -4px rgba(122, 21, 33, 0.12);
-    --shadow-glow: 0 8px 25px -4px rgba(255, 102, 0, 0.35);
-    --shadow-card: 0 4px 20px -2px rgba(122, 21, 33, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+    --shadow-soft: 0 2px 10px -2px rgba(36, 26, 24, 0.04);
+    --shadow-medium: 0 6px 20px rgba(36, 26, 24, 0.06);
+    --shadow-heavy: 0 12px 32px -4px rgba(36, 26, 24, 0.09);
+    --shadow-glow: 0 4px 18px -2px rgba(122, 31, 43, 0.22);
+    --shadow-card: 0 2px 12px rgba(36, 26, 24, 0.04), 0 1px 3px rgba(36, 26, 24, 0.02);
   }
 
   .dark {
@@ -721,9 +722,9 @@
    FOOTER
    ============================================================ */
 .footer-spiritual {
-  background: #1E1917;
-  color: #E6D6BE;
-  border-top: 1px solid rgba(201, 154, 61, 0.30);
+  background: #0F1115;
+  color: #D4D4D8;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -861,38 +862,32 @@
 }
 
 /* ============================================================
-   SANATANI CHARCOAL & SACRED TEMPLE GOLD FOOTER SYSTEM
+   PRO OBSIDIAN & SACRED GOLD FOOTER SYSTEM
    ============================================================ */
 .divyayagyam-footer {
-  background-color: #140E0C !important; /* Rich Temple Ebony */
-  color: #FAF8F5 !important;             /* High contrast pearl text */
+  background-color: #0F1115 !important;
+  color: #D4D4D8 !important;
 }
 
 /* Headings inside footer */
 .divyayagyam-footer h2, 
 .divyayagyam-footer h3, 
 .divyayagyam-footer h4 {
-  color: #D4AF37 !important;             /* Antique Temple Gold */
-  font-family: var(--font-noto-serif-devanagari), var(--font-cinzel), serif !important;
-  letter-spacing: 0.04em !important;
+  color: #FBBF24 !important;
+  letter-spacing: 0.05em !important;
 }
 
 /* Footer Links */
 .divyayagyam-footer a {
-  color: #EFE4D6;
-  transition: color 0.2s ease;
+  color: #A1A1AA;
+  transition: color 0.15s ease;
 }
 
 .divyayagyam-footer a:hover {
-  color: #FF6A00 !important;             /* Radiant Kesariya Saffron */
-  text-decoration: underline;
+  color: #F59E0B !important;
+  text-decoration: none;
 }
 
-/* Bottom copyright bar */
-.divyayagyam-footer-bottom {
-  background-color: #0E0908 !important;
-  color: #A89F91;
-}
 
 .divine-glow {
   position: relative;
@@ -968,10 +963,10 @@
 }
 
 /* ============================================================
-   CHECKOUT PAGE — SENIOR LUXURY VEDIC SYSTEM
+   CHECKOUT PAGE — MASTER SACRED MAROON & IVORY SYSTEM
    ============================================================ */
 .checkout-page {
-  background-color: #FAF8F5 !important;
+  background-color: #FFF9F1 !important;
   min-height: 100vh;
 }
 
@@ -980,12 +975,12 @@
   align-items: center;
   gap: 6px;
   padding: 4px 14px 4px 4px;
-  background: rgba(122, 21, 33, 0.06);
-  border: 1px solid rgba(122, 21, 33, 0.15);
+  background: rgba(122, 31, 43, 0.06);
+  border: 1px solid rgba(122, 31, 43, 0.18);
   border-radius: 100px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #7A1521;
+  color: #7A1F2B;
   letter-spacing: 0.02em;
 }
 
@@ -993,7 +988,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #7A1521;
+  background: #7A1F2B;
   color: white;
   font-size: 0.65rem;
   font-weight: 800;
@@ -1004,24 +999,29 @@
 
 .checkout-card {
   background: #FFFFFF !important;
-  border: 1px solid #EFE4D6 !important;
-  border-radius: 20px !important;
-  box-shadow: 0 4px 20px -2px rgba(122, 21, 33, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 12px rgba(36, 26, 24, 0.04) !important;
 }
 
 .checkout-pay-btn {
-  background: linear-gradient(135deg, #FF6A00 0%, #FF8500 100%) !important;
+  background: linear-gradient(135deg, #7A1F2B 0%, #52131D 100%) !important;
   background-size: 100% auto !important;
   color: #FFFFFF !important;
-  font-weight: 900 !important;
-  border-radius: 16px !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(200, 155, 60, 0.4) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
-  box-shadow: 0 6px 20px rgba(255, 106, 0, 0.35) !important;
+  box-shadow: 0 4px 18px rgba(122, 31, 43, 0.28) !important;
 }
 .checkout-pay-btn:hover:not(:disabled) {
-  filter: brightness(1.04) !important;
+  filter: brightness(1.06) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 8px 28px rgba(255, 106, 0, 0.45) !important;
+  box-shadow: 0 6px 24px rgba(122, 31, 43, 0.38) !important;
+}
+.checkout-pay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .checkout-pay-btn:active:not(:disabled) {
   transform: scale(0.98) !important;
