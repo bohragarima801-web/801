@@ -171,27 +171,27 @@ export default async function HomePage() {
       {/* ============================================================
           SECTION 2: SACRED TRUST STRIP (Immediate Reassurance)
           ============================================================ */}
-      <div className="w-full bg-zinc-50 border-b border-zinc-200 py-3.5 shadow-2xs">
+      <div className="w-full bg-[#F7F0E6] border-b border-[#E8DDD0] py-3.5 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 items-center text-center">
           <div className="flex items-center justify-center gap-2 py-1 px-2">
             <span className="text-lg">🕉️</span>
-            <span className="text-xs font-extrabold text-zinc-900">शास्त्रसम्मत वैदिक विधि</span>
+            <span className="text-xs font-bold text-[#241A18]">शास्त्रसम्मत वैदिक विधि</span>
           </div>
           <div className="flex items-center justify-center gap-2 py-1 px-2">
             <span className="text-lg">📜</span>
-            <span className="text-xs font-extrabold text-zinc-900">व्यक्तिगत नाम-गोत्र संकल्प</span>
+            <span className="text-xs font-bold text-[#241A18]">व्यक्तिगत नाम-गोत्र संकल्प</span>
           </div>
           <div className="flex items-center justify-center gap-2 py-1 px-2">
             <span className="text-lg">🪔</span>
-            <span className="text-xs font-extrabold text-zinc-900">25+ वर्ष अनुभवी वेदाचार्य</span>
+            <span className="text-xs font-bold text-[#241A18]">25+ वर्ष अनुभवी वेदाचार्य</span>
           </div>
           <div className="flex items-center justify-center gap-2 py-1 px-2">
             <span className="text-lg">📹</span>
-            <span className="text-xs font-extrabold text-zinc-900">WhatsApp वीडियो प्रमाण</span>
+            <span className="text-xs font-bold text-[#241A18]">WhatsApp वीडियो प्रमाण</span>
           </div>
           <div className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 py-1 px-2">
             <span className="text-lg">📦</span>
-            <span className="text-xs font-extrabold text-zinc-900">घर तक पावन प्रसाद</span>
+            <span className="text-xs font-bold text-[#241A18]">घर तक पावन प्रसाद</span>
           </div>
         </div>
       </div>
@@ -201,24 +201,24 @@ export default async function HomePage() {
       {/* ============================================================
           SECTION 4: "अभी उपलब्ध विशेष पूजाएँ" (FEATURED PUJAS GRID)
           ============================================================ */}
-      <section id="featured-pujas" className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-b border-zinc-200 scroll-mt-20">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-zinc-200">
+      <section id="featured-pujas" className="container mx-auto px-4 md:px-6 py-14 md:py-20 border-b border-[#E8DDD0] scroll-mt-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#E8DDD0]">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-zinc-200 text-xs font-black text-amber-700">
-              <Sparkles className="h-3.5 w-3.5 text-[#E58A16]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF6ED] border border-[#C89B3C]/30 text-xs font-bold text-[#9A7528]">
+              <Sparkles className="h-3.5 w-3.5 text-[#C89B3C]" />
               <span>आगामी सिद्ध अनुष्ठान</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-zinc-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#241A18] tracking-tight font-heading">
               अभी उपलब्ध विशेष पूजाएँ
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 max-w-xl">
+            <p className="text-xs sm:text-sm text-[#6F625D] max-w-xl font-normal leading-relaxed">
               काशी विश्वनाथ, माँ बगलामुखी, महाकालेश्वर एवं सिद्ध धामों में विद्वान पंडितों द्वारा संपन्न होने वाली आगामी वैदिक पूजाएँ।
             </p>
           </div>
 
           <Link
             href="/pujas"
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white hover:bg-amber-50 text-zinc-900 hover:text-[#E58A16] font-bold text-xs sm:text-sm border border-zinc-200 shadow-2xs transition-all shrink-0"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FDF4F5] text-[#241A18] hover:text-[#7A1F2B] font-bold text-xs sm:text-sm border border-[#E8DDD0] shadow-xs transition-all shrink-0"
           >
             <span>सभी पूजाएँ देखें</span>
             <span>➔</span>
@@ -227,10 +227,10 @@ export default async function HomePage() {
 
         {/* Dynamic Puja Cards Grid */}
         {displayPujas.length === 0 ? (
-          <div className="text-center py-16 px-6 bg-white rounded-2xl border border-zinc-200 space-y-4 max-w-2xl mx-auto shadow-sm">
-            <div className="h-14 w-14 mx-auto rounded-full bg-amber-50 text-[#E58A16] flex items-center justify-center text-3xl">🪔</div>
-            <h3 className="text-xl font-bold text-zinc-900">पूजा विवरण शीघ्र उपलब्ध होगा</h3>
-            <p className="text-xs text-zinc-500">कृपया कुछ समय पश्चात पुनः देखें।</p>
+          <div className="text-center py-16 px-6 bg-white rounded-card border border-[#E8DDD0] space-y-4 max-w-2xl mx-auto shadow-card">
+            <div className="h-14 w-14 mx-auto rounded-full bg-[#FAF6ED] text-[#C89B3C] flex items-center justify-center text-3xl">🪔</div>
+            <h3 className="text-xl font-bold text-[#241A18]">पूजा विवरण शीघ्र उपलब्ध होगा</h3>
+            <p className="text-xs text-[#6F625D]">कृपया कुछ समय पश्चात पुनः देखें।</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -244,10 +244,10 @@ export default async function HomePage() {
       {/* ============================================================
           SECTION 5: SACRED EXPERIENCE & 4-STEP "HOW IT WORKS"
           ============================================================ */}
-      <section className="w-full bg-zinc-50/80 py-14 md:py-20 border-b border-zinc-200">
+      <section className="w-full bg-[#F7F0E6] py-14 md:py-20 border-b border-[#E8DDD0]">
         <div className="container mx-auto px-4 md:px-6 max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-zinc-200 text-xs font-black text-amber-700">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#E8DDD0] text-xs font-bold text-[#7A1F2B]">
               <span>🪔</span>
               <span>पूजा केवल बुकिंग नहीं — एक संकल्प है</span>
             </div>
