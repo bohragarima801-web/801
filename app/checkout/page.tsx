@@ -641,7 +641,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Phone Number (WhatsApp) *</Label>
-                      <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="9587171984" className="border-amber-200 focus:border-[#8B1A21]/60 focus:ring-[#8B1A21]/20 bg-amber-50/30" />
+                      <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="9530401984" className="border-amber-200 focus:border-[#8B1A21]/60 focus:ring-[#8B1A21]/20 bg-amber-50/30" />
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
                       <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Street Address *</Label>

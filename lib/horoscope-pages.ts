@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import prisma from '@/lib/prisma'
+import { ALL_ASTRO_REPORTS, type AstroReportDetail } from '@/lib/astro-data'
 
 export interface HoroscopeMediaItem {
   id: string
@@ -21,6 +22,17 @@ export interface HoroscopeCustomPage {
   title: string
   slug: string
   subtitle?: string
+  description?: string
+  tagline?: string
+  categories?: string[]
+  price?: number
+  originalPrice?: number
+  pages?: number
+  rating?: number
+  reviewCount?: number
+  badge?: string
+  badgeColor?: string
+  coverArtwork?: string
   customCode: string
   layout: 'container' | 'fullwidth' | 'clean'
   headerBanner: boolean
@@ -32,6 +44,10 @@ export interface HoroscopeCustomPage {
   status: 'PUBLISHED' | 'DRAFT'
   createdAt: string
   updatedAt: string
+  highlights?: string[]
+  chapters?: { number: string; title: string; desc: string }[]
+  samplePages?: { title: string; desc: string }[]
+  faqs?: { q: string; a: string }[]
 }
 
 // Memory cache
@@ -44,6 +60,46 @@ if (!globalForPages.horoscopeCustomPages) {
 const DATA_DIR = path.join(process.cwd(), 'data')
 const FILE_PATH = path.join(DATA_DIR, 'horoscope-pages.json')
 
+function getSeedFromBuiltInReports(): HoroscopeCustomPage[] {
+  const now = new Date().toISOString()
+  return ALL_ASTRO_REPORTS.map((r: AstroReportDetail) => ({
+    id: r.id,
+    title: r.title,
+    slug: r.slug,
+    subtitle: r.subtitle,
+    description: r.description,
+    tagline: r.tagline,
+    categories: r.categories || ['All', 'Life'],
+    price: r.price,
+    originalPrice: r.originalPrice,
+    pages: r.pages,
+    rating: r.rating || 4.9,
+    reviewCount: r.reviewCount || 1200,
+    badge: r.badge || '',
+    badgeColor: r.badgeColor || '',
+    coverArtwork: r.coverArtwork || 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)',
+    customCode: '',
+    layout: 'container' as const,
+    headerBanner: true,
+    showBookingBar: true,
+    whatsappNumber: '919530401984',
+    images: [],
+    videos: [],
+    razorpay: {
+      enabled: true,
+      amount: r.price,
+      buttonText: `Get ${r.title} (₹${r.price})`
+    },
+    status: 'PUBLISHED' as const,
+    createdAt: now,
+    updatedAt: now,
+    highlights: r.highlights || [],
+    chapters: r.chapters || [],
+    samplePages: r.samplePages || [],
+    faqs: r.faqs || []
+  }))
+}
+
 function readFromFile(): HoroscopeCustomPage[] {
   try {
     if (!fs.existsSync(DATA_DIR)) {
@@ -52,7 +108,7 @@ function readFromFile(): HoroscopeCustomPage[] {
     if (fs.existsSync(FILE_PATH)) {
       const raw = fs.readFileSync(FILE_PATH, 'utf8')
       const parsed = JSON.parse(raw)
-      if (Array.isArray(parsed)) {
+      if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed
       }
     }
@@ -75,7 +131,7 @@ function writeToFile(pages: HoroscopeCustomPage[]) {
 
 export async function getAllHoroscopePages(): Promise<HoroscopeCustomPage[]> {
   // 1. Try file
-  const filePages = readFromFile()
+  let filePages = readFromFile()
   if (filePages.length > 0) {
     globalForPages.horoscopeCustomPages = filePages
     return filePages
@@ -86,7 +142,7 @@ export async function getAllHoroscopePages(): Promise<HoroscopeCustomPage[]> {
     const setting = await prisma.websiteSetting.findUnique({
       where: { key: 'horoscope_custom_pages' }
     })
-    if (setting && Array.isArray(setting.value)) {
+    if (setting && Array.isArray(setting.value) && (setting.value as any).length > 0) {
       const dbPages = setting.value as unknown as HoroscopeCustomPage[]
       globalForPages.horoscopeCustomPages = dbPages
       writeToFile(dbPages)
@@ -96,7 +152,11 @@ export async function getAllHoroscopePages(): Promise<HoroscopeCustomPage[]> {
     // Database might not be connected in dev/build
   }
 
-  return globalForPages.horoscopeCustomPages || []
+  // 3. Auto-seed from built-in reports if empty
+  const seeded = getSeedFromBuiltInReports()
+  globalForPages.horoscopeCustomPages = seeded
+  writeToFile(seeded)
+  return seeded
 }
 
 export async function getHoroscopePageBySlug(slug: string): Promise<HoroscopeCustomPage | null> {
@@ -110,7 +170,7 @@ export async function getHoroscopePageById(id: string): Promise<HoroscopeCustomP
   return all.find(p => p.id === id) || null
 }
 
-export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { title: string; customCode: string }): Promise<HoroscopeCustomPage> {
+export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { title: string }): Promise<HoroscopeCustomPage> {
   const all = await getAllHoroscopePages()
   const now = new Date().toISOString()
   
@@ -131,9 +191,24 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
         ...all[existingIndex],
         ...data,
         slug,
+        title: data.title,
+        subtitle: data.subtitle !== undefined ? data.subtitle : all[existingIndex].subtitle,
+        description: data.description !== undefined ? data.description : (data.subtitle || all[existingIndex].description),
+        price: data.price !== undefined ? Number(data.price) : all[existingIndex].price,
+        originalPrice: data.originalPrice !== undefined ? Number(data.originalPrice) : all[existingIndex].originalPrice,
+        pages: data.pages !== undefined ? Number(data.pages) : all[existingIndex].pages,
+        categories: data.categories || all[existingIndex].categories || ['All', 'Life'],
+        badge: data.badge !== undefined ? data.badge : all[existingIndex].badge,
+        badgeColor: data.badgeColor !== undefined ? data.badgeColor : all[existingIndex].badgeColor,
+        customCode: data.customCode !== undefined ? data.customCode : all[existingIndex].customCode,
+        layout: data.layout || all[existingIndex].layout || 'container',
+        headerBanner: data.headerBanner ?? all[existingIndex].headerBanner ?? true,
+        showBookingBar: data.showBookingBar ?? all[existingIndex].showBookingBar ?? true,
+        whatsappNumber: data.whatsappNumber || all[existingIndex].whatsappNumber || '919530401984',
         images: data.images || all[existingIndex].images || [],
         videos: data.videos || all[existingIndex].videos || [],
         razorpay: data.razorpay || all[existingIndex].razorpay || { enabled: false },
+        status: data.status || all[existingIndex].status || 'PUBLISHED',
         updatedAt: now
       }
       all[existingIndex] = page
@@ -143,6 +218,17 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
         title: data.title,
         slug,
         subtitle: data.subtitle || '',
+        description: data.description || data.subtitle || '',
+        tagline: data.tagline || data.subtitle || '',
+        price: data.price !== undefined ? Number(data.price) : 199,
+        originalPrice: data.originalPrice !== undefined ? Number(data.originalPrice) : 499,
+        pages: data.pages !== undefined ? Number(data.pages) : 24,
+        rating: data.rating || 4.9,
+        reviewCount: data.reviewCount || 1200,
+        categories: data.categories || ['All', 'Life'],
+        badge: data.badge || '',
+        badgeColor: data.badgeColor || '',
+        coverArtwork: data.coverArtwork || 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)',
         customCode: data.customCode || '',
         layout: data.layout || 'container',
         headerBanner: data.headerBanner ?? true,
@@ -170,6 +256,17 @@ export async function saveHoroscopePage(data: Partial<HoroscopeCustomPage> & { t
       title: data.title,
       slug: finalSlug,
       subtitle: data.subtitle || '',
+      description: data.description || data.subtitle || '',
+      tagline: data.tagline || data.subtitle || '',
+      price: data.price !== undefined ? Number(data.price) : 199,
+      originalPrice: data.originalPrice !== undefined ? Number(data.originalPrice) : 499,
+      pages: data.pages !== undefined ? Number(data.pages) : 24,
+      rating: data.rating || 4.9,
+      reviewCount: data.reviewCount || 1200,
+      categories: data.categories || ['All', 'Life'],
+      badge: data.badge || '',
+      badgeColor: data.badgeColor || '',
+      coverArtwork: data.coverArtwork || 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)',
       customCode: data.customCode || '',
       layout: data.layout || 'container',
       headerBanner: data.headerBanner ?? true,
