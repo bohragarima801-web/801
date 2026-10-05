@@ -30,13 +30,6 @@ const nextConfig = {
         ]
       },
       {
-        // HTML pages: stale-while-revalidate for ISR — instant from edge, refresh in background
-        source: '/:path*',
-        headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=1800, stale-while-revalidate=3600' }
-        ]
-      },
-      {
         source: '/(.*)',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
@@ -46,8 +39,6 @@ const nextConfig = {
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
           { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
-          // DNS prefetch for key external domains (fonts, CDN, analytics)
-          { key: 'Link', value: '<https://d8j0ntlcm91z4.cloudfront.net>; rel=dns-prefetch, <https://fonts.googleapis.com>; rel=dns-prefetch, <https://fonts.gstatic.com>; rel=preconnect; crossorigin' },
           {
             key: 'Content-Security-Policy',
             value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https: http:; font-src 'self' data: https:; connect-src 'self' https: http: wss: ws:; frame-src 'self' https: http:; object-src 'none'; base-uri 'self'; form-action 'self';"
