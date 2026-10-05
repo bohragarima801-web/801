@@ -2,18 +2,17 @@ import { generatePageMeta } from '@/lib/seo'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = generatePageMeta({
-  title: 'आज का पंचांग — दैनिक तिथि, नक्षत्र, राहुकाल व शुभ मुहूर्त',
-  description: 'आज का सम्पूर्ण वैदिक पंचांग (Aaj Ka Panchang): आज की तिथि, नक्षत्र, योग, करण, सूर्योदय, सूर्यास्त, अभिजीत मुहूर्त, राहुकाल एवं चौघड़िया की 100% सटीक गणना।',
+  title: 'आज का पंचांग — तिथि, नक्षत्र, राहुकाल, शुभ मुहूर्त',
+  description: 'आज का वैदिक पंचांग (Aaj Ka Panchang): आज के वार, तिथि, नक्षत्र, योग, करण, राहुकाल, अभिजित मुहूर्त, शुभ मुहूर्त आज का 100% सटीक जानकारी',
   path: '/panchang',
 })
 
 export default function PanchangLayout({ children }: { children: React.ReactNode }) {
-  // Google Rich Snippets / FAQ & WebPage JSON-LD Structured Data
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'आज का पंचांग (Aaj Ka Panchang) - Divyayagyam',
-    description: 'सटीक वैदिक पंचांग, तिथि, नक्षत्र, योग, करण, सूर्योदय, सूर्यास्त व शुभ मुहूर्त।',
+    description: 'सटीक वैदिक पंचांग, वार, तिथि, नक्षत्र, योग, करण, राहुकाल, अभिजित मुहूर्त',
     url: 'https://divyayagyam.com/panchang',
     inLanguage: ['hi', 'en'],
     publisher: {
@@ -29,15 +28,15 @@ export default function PanchangLayout({ children }: { children: React.ReactNode
           name: 'आज का पंचांग क्या है? (What is today Panchang?)',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'पंचांग वैदिक हिन्दू कैलेंडर के 5 मुख्य अंगों (तिथि, नक्षत्र, योग, करण और वार) की खगोलीय गणना को कहते हैं।',
+            text: 'पंचांग वैदिक समय-गणना का 5 अंगों वाला शास्त्र है जिसमें वार, तिथि, नक्षत्र, योग और करण की जानकारी होती है।',
           },
         },
         {
           '@type': 'Question',
-          name: 'आज का अभिजीत मुहूर्त कब है? (When is today Abhijit Muhurat?)',
+          name: 'आज का अभिजित मुहूर्त कब है? (When is today Abhijit Muhurat?)',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'अभिजीत मुहूर्त दिन का सबसे शुभ मुहूर्त माना जाता है, जो मध्याह्न काल में लगभग 11:55 AM से 12:45 PM तक रहता है।',
+            text: 'अभिजित मुहूर्त दिन का सबसे शुभ मुहूर्त होता है, जो सामान्यतः दोपहर 11:55 AM से 12:45 PM तक रहता है।',
           },
         },
         {
@@ -45,7 +44,7 @@ export default function PanchangLayout({ children }: { children: React.ReactNode
           name: 'आज का राहुकाल कब है? (When is today Rahu Kaal?)',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'राहुकाल अशुभ समय होता है जिसमें नए व शुभ कार्य वर्जित होते हैं। इसकी सटीक समय सारणी आज के पंचांग में देखें।',
+            text: 'राहुकाल प्रत्येक दिन अलग होता है जिसमें शुभ कार्यों का आरम्भ वर्जित माना जाता है, अतः आज का पंचांग से जानकारी लें।',
           },
         },
       ],
