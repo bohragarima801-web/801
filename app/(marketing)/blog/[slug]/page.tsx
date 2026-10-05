@@ -160,6 +160,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
   const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
 
+  const datePublished = post.publishedAt
+    ? (typeof post.publishedAt === 'string' ? post.publishedAt : new Date(post.publishedAt).toISOString())
+    : (post.createdAt
+        ? (typeof post.createdAt === 'string' ? post.createdAt : new Date(post.createdAt).toISOString())
+        : new Date().toISOString())
+  const dateModified = post.updatedAt
+    ? (typeof post.updatedAt === 'string' ? post.updatedAt : new Date(post.updatedAt).toISOString())
+    : datePublished
+
   const schemaGraph: any[] = [
     generateArticleSchema({
       title: post.seoTitle || post.title,
@@ -167,8 +176,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       image: post.coverImage || '/logo.jpg',
       imageAlt: coverAlt,
       slug: post.slug,
-      datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
-      dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
+      datePublished,
+      dateModified,
     }),
     generateBreadcrumbSchema([
       { name: 'Home', url: BASE_URL },

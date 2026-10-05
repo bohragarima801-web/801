@@ -14,8 +14,7 @@ export default function ErrorBoundary({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service if available
-// console.error("App Error Boundary Caught:", error) (removed for production)
+    console.error("App Error Boundary Caught:", error)
   }, [error])
 
   return (
