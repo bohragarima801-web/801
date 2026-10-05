@@ -67,7 +67,7 @@ function formatBlogDate(date: string | Date | null | undefined): string {
   }
 }
 
-export const revalidate = 300
+export const revalidate = 1800
 
 // Fallback Pujas if DB has few items
 const fallbackPujas = [
