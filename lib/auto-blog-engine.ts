@@ -296,8 +296,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       })
     }
 
-    // 6. Use the Official Divyayagyam Master Template Image with Pandit Ji & Temple Branding
-    const coverImage = '/blog-banner-template.webp'
+    // 6. Use the Automated 16:9 Dynamic Cover Image Generator matching Universal System Rules
+    const coverImage = `/api/blog/cover?title=${encodeURIComponent(title)}`
 
     // Append FAQs to content Markdown if present
     let fullMarkdown = blogData.contentMarkdown || ''
