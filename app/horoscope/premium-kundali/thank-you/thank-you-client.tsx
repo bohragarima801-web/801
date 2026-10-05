@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import '../karam-kundali.css'
 
 export function ThankYouClient() {
   const searchParams = useSearchParams()

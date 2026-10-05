@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
 import { toast } from 'sonner'
+import './karam-kundali.css'
 
 declare global {
   interface Window {
@@ -22,34 +23,74 @@ export function KaramKundaliClient() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // FAQ accordion state
+  // FAQ Accordion State (0 is open by default)
   const [activeFaq, setActiveFaq] = useState<number | null>(0)
 
   const toggleFaq = (index: number) => {
     setActiveFaq(prev => (prev === index ? null : index))
   }
 
-  // Smooth video fade loop for hero video
+  // 3D Scroll Reveal Observer + Hero Video Smooth Loop
   const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
+    // 1. Intersection Observer for 3D Scroll Reveal
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12, rootMargin: '-60px' }
+    )
+
+    const revealElements = document.querySelectorAll('.reveal')
+    revealElements.forEach(el => observer.observe(el))
+
+    // 2. Play secondary videos
+    const otherVideos = document.querySelectorAll('video:not(#heroVideo)')
+    otherVideos.forEach(v => {
+      ;(v as HTMLVideoElement).play().catch(() => {})
+    })
+
+    // 3. Hero Video Smooth Fade Loop
     const video = heroVideoRef.current
     if (!video) return
 
+    function animateOpacity(from: number, to: number, duration: number, done?: () => void) {
+      const start = performance.now()
+      function frame(now: number) {
+        const p = Math.min((now - start) / duration, 1)
+        const eased = p * (2 - p)
+        if (video) {
+          video.style.opacity = String(from + (to - from) * eased)
+        }
+        if (p < 1) requestAnimationFrame(frame)
+        else if (done) done()
+      }
+      requestAnimationFrame(frame)
+    }
+
     const handleCanPlay = () => {
       video.play().catch(() => {})
-      video.style.opacity = '1'
+      animateOpacity(0, 1, 500)
     }
 
     video.addEventListener('canplay', handleCanPlay, { once: true })
     video.play().catch(() => {})
 
     return () => {
-      video.removeEventListener('canplay', handleCanPlay)
+      observer.disconnect()
+      if (video) {
+        video.removeEventListener('canplay', handleCanPlay)
+      }
     }
   }, [])
 
-  // Handle Form Submission & Razorpay Gateway Checkout
+  // Razorpay Checkout & Order Creation
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -108,12 +149,11 @@ export function KaramKundaliClient() {
         throw new Error(data?.error || 'ऑर्डर शुरू करने में असमर्थ। कृपया पुनः प्रयास करें।')
       }
 
-      // 2. Ensure Razorpay SDK is loaded
+      // 2. Open Razorpay Checkout Modal
       if (typeof window === 'undefined' || !window.Razorpay) {
-        throw new Error('Razorpay SDK लोड हो रहा है, कृपया कुछ सेकंड बाद प्रयास करें।')
+        throw new Error('Razorpay SDK लोड हो रहा है, कृपया 2 सेकंड बाद पुनः प्रयास करें।')
       }
 
-      // 3. Open Razorpay Checkout Modal
       const rzp = new window.Razorpay({
         key: data.razorpayKeyId,
         amount: data.amount,
@@ -146,7 +186,7 @@ export function KaramKundaliClient() {
             const verifyData = await verifyRes.json()
 
             if (verifyData?.ok) {
-              // Save client details to backend Horoscope Orders queue
+              // Sync order details to backend Horoscope Orders queue
               try {
                 await fetch('/api/horoscope/order', {
                   method: 'POST',
@@ -169,7 +209,7 @@ export function KaramKundaliClient() {
                   }),
                 })
               } catch (e) {
-                console.warn('Backend sync warning:', e)
+                console.warn('Backend sync note:', e)
               }
 
               toast.success('🎉 भुगतान सफल! धन्यवाद।')
@@ -216,1254 +256,15 @@ export function KaramKundaliClient() {
   }
 
   return (
-    <div className="karam-kundali-root">
+    <div className="karam-kundali-page">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
-
-      {/* ── GOOGLE FONTS & STYLES MATCHING UPLOADED HTML EXACTLY ── */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-
-      <style jsx global>{`
-        .karam-kundali-root {
-          --bg: #08080a;
-          --bg-card: rgba(255, 255, 255, 0.02);
-          --white: #ffffff;
-          --text-main: #f5f5f7;
-          --muted: rgba(240, 240, 245, 0.65);
-          --soft: rgba(255, 255, 255, 0.06);
-          --border: rgba(255, 255, 255, 0.1);
-          --gold-accent: #E5A638;
-          --gold-light: #FFE28A;
-          --gold-grad: linear-gradient(135deg, #FFE28A 0%, #E5A638 52%, #B86B14 100%);
-          --gold-glow: rgba(229, 166, 56, 0.35);
-          --border-gold: rgba(229, 166, 56, 0.22);
-
-          margin: 0;
-          background: var(--bg);
-          color: var(--text-main);
-          font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
-          overflow-x: hidden;
-        }
-
-        .karam-kundali-root * {
-          box-sizing: border-box;
-        }
-
-        .karam-kundali-root a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .karam-kundali-root button,
-        .karam-kundali-root input,
-        .karam-kundali-root select {
-          font: inherit;
-        }
-
-        .instrument {
-          font-family: 'Instrument Serif', Georgia, serif;
-        }
-
-        .liquid-glass {
-          background: var(--bg-card);
-          background-blend-mode: luminosity;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid var(--border);
-          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .liquid-glass::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          padding: 1px;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.3) 0%,
-            rgba(229, 166, 56, 0.18) 25%,
-            rgba(255, 255, 255, 0) 50%,
-            rgba(229, 166, 56, 0.12) 80%,
-            rgba(255, 255, 255, 0.25) 100%
-          );
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          pointer-events: none;
-        }
-
-        /* HIGH-IMPACT CATCHY BUTTON STYLES */
-        .btn-catchy {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          background: var(--gold-grad);
-          color: #120e06 !important;
-          font-weight: 700;
-          letter-spacing: 0.02em;
-          border-radius: 999px;
-          border: none;
-          cursor: pointer;
-          overflow: hidden;
-          box-shadow: 0 0 25px var(--gold-glow), 0 4px 18px rgba(0, 0, 0, 0.6);
-          transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .btn-catchy::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -75%;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
-          transform: skewX(-25deg);
-          animation: shine 3.5s infinite;
-        }
-
-        .btn-catchy:hover {
-          transform: translateY(-3px) scale(1.03);
-          box-shadow: 0 0 35px rgba(229, 166, 56, 0.65), 0 8px 25px rgba(0, 0, 0, 0.7);
-          color: #000 !important;
-        }
-
-        .btn-catchy:active {
-          transform: translateY(1px) scale(0.98);
-        }
-
-        @keyframes shine {
-          0% {
-            left: -75%;
-          }
-          35%,
-          100% {
-            left: 125%;
-          }
-        }
-
-        /* HERO */
-        .hero {
-          min-height: 100vh;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          background: radial-gradient(ellipse at 50% 15%, rgba(229, 166, 56, 0.09) 0%, transparent 65%),
-            var(--bg);
-        }
-
-        .hero-video {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center bottom;
-          opacity: 0.85;
-          filter: brightness(0.65) saturate(0.85);
-          transition: opacity 1s ease;
-        }
-
-        .hero-shade {
-          position: absolute;
-          inset: 0;
-          z-index: 1;
-          background: radial-gradient(
-              ellipse at 50% 48%,
-              transparent 18%,
-              rgba(8, 8, 10, 0.35) 52%,
-              rgba(8, 8, 10, 0.75) 100%
-            ),
-            linear-gradient(180deg, rgba(8, 8, 10, 0.4), transparent 38%, rgba(8, 8, 10, 0.85));
-          pointer-events: none;
-        }
-
-        .nav-wrap {
-          position: relative;
-          z-index: 20;
-          padding: 24px;
-        }
-
-        .nav {
-          max-width: 1024px;
-          margin: auto;
-          padding: 12px 24px;
-          min-height: 58px;
-          border-radius: 999px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .brand {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 18px;
-          font-weight: 600;
-          color: #fff;
-        }
-
-        .globe {
-          width: 24px;
-          height: 24px;
-          border: 1.5px solid var(--gold-accent);
-          border-radius: 50%;
-          position: relative;
-        }
-
-        .globe:before {
-          content: '';
-          position: absolute;
-          left: 5px;
-          right: 5px;
-          top: 2px;
-          bottom: 2px;
-          border-left: 1px solid var(--gold-accent);
-          border-right: 1px solid var(--gold-accent);
-          border-radius: 50%;
-        }
-
-        .globe:after {
-          content: '';
-          position: absolute;
-          left: 2px;
-          right: 2px;
-          top: 10px;
-          border-top: 1px solid var(--gold-accent);
-        }
-
-        .nav-left {
-          display: flex;
-          align-items: center;
-        }
-
-        .nav-links {
-          display: flex;
-          gap: 32px;
-          margin-left: 32px;
-        }
-
-        .nav-links a {
-          color: rgba(255, 255, 255, 0.78);
-          font-size: 14px;
-          font-weight: 500;
-          transition: 0.2s;
-        }
-
-        .nav-links a:hover {
-          color: var(--gold-light);
-        }
-
-        .nav-right {
-          display: flex;
-          align-items: center;
-          gap: 18px;
-        }
-
-        .login {
-          padding: 10px 22px;
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        /* HERO GRID */
-        .hero-content {
-          position: relative;
-          z-index: 10;
-          flex: 1;
-          max-width: 1152px;
-          width: 100%;
-          margin: auto;
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          align-items: center;
-          gap: 40px;
-          padding: 40px 24px;
-        }
-
-        .hero-text {
-          text-align: left;
-        }
-
-        .eyebrow {
-          font-size: 11px;
-          letter-spacing: 0.28em;
-          text-transform: uppercase;
-          color: var(--gold-accent);
-          font-weight: 600;
-          margin-bottom: 22px;
-        }
-
-        .hero h1 {
-          margin: 0;
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(50px, 6.5vw, 96px);
-          font-weight: 400;
-          line-height: 0.95;
-          letter-spacing: -0.045em;
-          color: #fff;
-        }
-
-        .hero h1 em {
-          font-style: italic;
-          color: var(--gold-light);
-        }
-
-        .hero-copy {
-          max-width: 540px;
-          margin: 24px 0 0;
-          color: var(--muted);
-          font-size: 15px;
-          line-height: 1.65;
-        }
-
-        .hero-cta {
-          margin-top: 30px;
-          padding: 16px 36px;
-          font-size: 15px;
-          text-transform: uppercase;
-        }
-
-        /* HERO RIGHT SIDE IMAGE */
-        .hero-image-wrap {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .hero-image-wrap img {
-          width: 100%;
-          max-width: 440px;
-          height: auto;
-          border-radius: 24px;
-          object-fit: cover;
-          border: 1px solid rgba(229, 166, 56, 0.28);
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 45px rgba(229, 166, 56, 0.18);
-        }
-
-        .socials {
-          position: relative;
-          z-index: 10;
-          display: flex;
-          justify-content: center;
-          gap: 12px;
-          padding-bottom: 30px;
-        }
-
-        .social {
-          width: 52px;
-          height: 52px;
-          border-radius: 50%;
-          display: grid;
-          place-items: center;
-          color: rgba(255, 255, 255, 0.8);
-          transition: 0.2s;
-        }
-
-        .social:hover {
-          color: var(--gold-light);
-          transform: translateY(-2px);
-          border-color: var(--border-gold);
-        }
-
-        section {
-          background: var(--bg);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .about {
-          padding: 140px 24px 55px;
-          background: radial-gradient(ellipse at top, rgba(229, 166, 56, 0.05) 0%, transparent 70%),
-            var(--bg);
-        }
-
-        .container {
-          max-width: 1152px;
-          margin: auto;
-        }
-
-        .label {
-          color: var(--gold-accent);
-          font-size: 12px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          font-weight: 600;
-        }
-
-        .about h2 {
-          margin: 25px 0 0;
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-weight: 400;
-          font-size: clamp(50px, 7vw, 90px);
-          line-height: 1.02;
-          letter-spacing: -0.035em;
-          color: #fff;
-        }
-
-        .about h2 em {
-          font-style: italic;
-          color: var(--gold-light);
-        }
-
-        .featured {
-          padding: 20px 24px 110px;
-        }
-
-        .video-card {
-          max-width: 1152px;
-          margin: auto;
-          aspect-ratio: 16/9;
-          border-radius: 28px;
-          overflow: hidden;
-          position: relative;
-          background: #111116;
-          border: 1px solid var(--border);
-        }
-
-        .video-card video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
-
-        .video-card:after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(8, 8, 10, 0.75), transparent 55%);
-        }
-
-        .video-info {
-          position: absolute;
-          z-index: 2;
-          left: 28px;
-          right: 28px;
-          bottom: 28px;
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: 20px;
-        }
-
-        .glass-info {
-          max-width: 430px;
-          padding: 25px;
-          border-radius: 18px;
-        }
-
-        .glass-info .label {
-          margin-bottom: 10px;
-        }
-
-        .glass-info p {
-          font-size: 14px;
-          line-height: 1.65;
-          margin: 0;
-          color: #fff;
-        }
-
-        .pill-btn {
-          padding: 14px 30px;
-          font-size: 13px;
-          text-transform: uppercase;
-          white-space: nowrap;
-        }
-
-        .philosophy {
-          padding: 110px 24px 145px;
-        }
-
-        .big-title {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(60px, 9vw, 115px);
-          line-height: 0.9;
-          font-weight: 400;
-          letter-spacing: -0.045em;
-          margin: 0 0 80px;
-          color: #fff;
-        }
-
-        .big-title em {
-          font-style: italic;
-          color: var(--gold-light);
-        }
-
-        .two-col {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 48px;
-          align-items: center;
-        }
-
-        .philosophy-video {
-          aspect-ratio: 4/3;
-          border-radius: 28px;
-          overflow: hidden;
-          background: #111116;
-          border: 1px solid var(--border);
-        }
-
-        .philosophy-video video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .text-block {
-          padding: 12px 0 35px;
-        }
-
-        .text-block + .text-block {
-          border-top: 1px solid var(--border);
-          padding-top: 35px;
-        }
-
-        .text-block p {
-          color: var(--muted);
-          font-size: 16px;
-          line-height: 1.7;
-          margin: 0;
-        }
-
-        .services {
-          padding: 110px 24px 145px;
-          background: radial-gradient(ellipse at center, rgba(229, 166, 56, 0.035), transparent 65%),
-            var(--bg);
-        }
-
-        .services-head {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin-bottom: 45px;
-        }
-
-        .services-head h2 {
-          margin: 0;
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-weight: 400;
-          font-size: clamp(45px, 6vw, 72px);
-          letter-spacing: -0.03em;
-          color: #fff;
-        }
-
-        .services-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 28px;
-        }
-
-        .service {
-          border-radius: 28px;
-          overflow: hidden;
-        }
-
-        .service-media {
-          aspect-ratio: 16/9;
-          overflow: hidden;
-          position: relative;
-        }
-
-        .service-media video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.7s;
-        }
-
-        .service:hover .service-media video {
-          transform: scale(1.05);
-        }
-
-        .service-media:after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(8, 8, 10, 0.65), transparent);
-        }
-
-        .service-body {
-          padding: 27px;
-        }
-
-        .service-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .service-tag {
-          font-size: 11px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--gold-accent);
-        }
-
-        .arrow-up {
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          display: grid;
-          place-items: center;
-          font-size: 20px;
-          color: var(--gold-light);
-        }
-
-        .service h3 {
-          font-size: 25px;
-          font-weight: 500;
-          margin: 26px 0 10px;
-          letter-spacing: -0.02em;
-          color: #fff;
-        }
-
-        .service p {
-          color: var(--muted);
-          font-size: 14px;
-          line-height: 1.65;
-          margin: 0;
-          max-width: 460px;
-        }
-
-        /* CHAPTERS / MODULES */
-        .report-chapters {
-          padding: 90px 24px 120px;
-          background: rgba(255, 255, 255, 0.01);
-        }
-
-        .chapter-cards {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-          margin-top: 50px;
-        }
-
-        .chap-box {
-          border-radius: 24px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .chap-box:hover {
-          transform: translateY(-6px);
-          border-color: var(--border-gold);
-        }
-
-        .chap-img-wrap {
-          width: 100%;
-          height: 190px;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .chap-img-wrap img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s ease;
-          filter: brightness(0.82) contrast(1.08);
-        }
-
-        .chap-box:hover .chap-img-wrap img {
-          transform: scale(1.07);
-        }
-
-        .chap-img-wrap::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(8, 8, 10, 0.92) 0%, rgba(8, 8, 10, 0.2) 60%, transparent 100%);
-        }
-
-        .chap-body {
-          padding: 24px 28px 30px;
-          flex: 1;
-        }
-
-        .chap-no {
-          font-size: 11px;
-          letter-spacing: 0.18em;
-          color: var(--gold-accent);
-          font-weight: 700;
-          margin-bottom: 10px;
-        }
-
-        .chap-box h3 {
-          font-size: 20px;
-          font-weight: 600;
-          margin: 0 0 10px;
-          letter-spacing: -0.01em;
-          color: #fff;
-        }
-
-        .chap-box p {
-          color: var(--muted);
-          font-size: 14px;
-          line-height: 1.65;
-          margin: 0;
-        }
-
-        .karam-value {
-          padding: 115px 24px;
-        }
-
-        .value-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          border-top: 1px solid var(--border);
-          margin-top: 55px;
-        }
-
-        .value-item {
-          padding: 32px 28px 10px 0;
-          border-right: 1px solid var(--border);
-        }
-
-        .value-item:not(:first-child) {
-          padding-left: 28px;
-        }
-
-        .value-item:last-child {
-          border-right: 0;
-        }
-
-        .value-no {
-          color: var(--gold-accent);
-          opacity: 0.75;
-          font-size: 11px;
-          letter-spacing: 0.15em;
-          font-weight: 600;
-        }
-
-        .value-item h3 {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-weight: 400;
-          font-size: 32px;
-          margin: 38px 0 12px;
-          color: #fff;
-        }
-
-        .value-item p {
-          color: var(--muted);
-          font-size: 14px;
-          line-height: 1.7;
-          margin: 0;
-        }
-
-        /* BUY SECTION */
-        .buy-section {
-          padding: 110px 24px 70px;
-        }
-
-        .buy-box {
-          max-width: 1152px;
-          margin: auto;
-          padding: 65px 60px;
-          border-radius: 32px;
-          display: grid;
-          grid-template-columns: 1.05fr 0.95fr;
-          gap: 60px;
-          align-items: center;
-        }
-
-        .buy-box h2 {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-weight: 400;
-          font-size: clamp(52px, 6vw, 82px);
-          line-height: 0.9;
-          letter-spacing: -0.04em;
-          margin: 0;
-          color: #fff;
-        }
-
-        .buy-box h2 em {
-          font-style: italic;
-          color: var(--gold-light);
-        }
-
-        .buy-box p {
-          color: var(--muted);
-          line-height: 1.7;
-          font-size: 14px;
-        }
-
-        .price {
-          display: flex;
-          align-items: baseline;
-          gap: 14px;
-          margin-top: 25px;
-        }
-
-        .current {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: 55px;
-          color: var(--gold-light);
-        }
-
-        .old {
-          text-decoration: line-through;
-          color: rgba(255, 255, 255, 0.45);
-        }
-
-        .buy {
-          margin-top: 28px;
-          padding: 20px 42px;
-          font-size: 16px;
-          text-transform: uppercase;
-        }
-
-        .report-mockup-wrap {
-          position: relative;
-          border-radius: 24px;
-          padding: 10px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-gold);
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 45px rgba(229, 166, 56, 0.16);
-          transform: rotate(1.5deg);
-          transition: transform 0.4s ease;
-        }
-
-        .report-mockup-wrap:hover {
-          transform: rotate(0deg) scale(1.02);
-        }
-
-        .report-mockup-wrap img {
-          width: 100%;
-          height: auto;
-          display: block;
-          border-radius: 18px;
-          filter: contrast(1.03) brightness(0.98);
-        }
-
-        /* BIRTH DETAILS ORDER FORM */
-        .order-form-container {
-          max-width: 1152px;
-          margin: 40px auto 130px;
-          padding: 0 24px;
-        }
-
-        .form-card {
-          padding: 50px 60px;
-          border-radius: 32px;
-        }
-
-        .form-title-wrap {
-          margin-bottom: 35px;
-        }
-
-        .form-title-wrap h3 {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(38px, 4.5vw, 55px);
-          margin: 10px 0 6px;
-          font-weight: 400;
-          color: #fff;
-        }
-
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 22px;
-        }
-
-        .form-field {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          margin-bottom: 20px;
-        }
-
-        .form-field.full {
-          grid-column: 1 / -1;
-        }
-
-        .form-field label {
-          font-size: 12px;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.78);
-          font-weight: 500;
-        }
-
-        .form-input {
-          width: 100%;
-          padding: 14px 18px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid var(--border);
-          color: #fff;
-          outline: none;
-          transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-          border-color: var(--gold-accent);
-          background: rgba(255, 255, 255, 0.07);
-          box-shadow: 0 0 16px rgba(229, 166, 56, 0.25);
-        }
-
-        .form-input option {
-          background: #121217;
-          color: #fff;
-        }
-
-        /* REVIEWS MARQUEE */
-        .reviews-section {
-          padding: 100px 0 120px;
-          background: radial-gradient(ellipse at center, rgba(229, 166, 56, 0.04) 0%, transparent 70%),
-            var(--bg);
-          overflow: hidden;
-        }
-
-        .reviews-section .container {
-          margin-bottom: 45px;
-        }
-
-        .marquee-container {
-          width: 100%;
-          overflow: hidden;
-          position: relative;
-          padding: 10px 0;
-          mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
-
-        .marquee-track {
-          display: flex;
-          gap: 24px;
-          width: max-content;
-          animation: marquee-scroll 110s linear infinite;
-          will-change: transform;
-        }
-
-        .marquee-track:hover {
-          animation-play-state: paused;
-        }
-
-        @keyframes marquee-scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-50% - 12px));
-          }
-        }
-
-        .review-card {
-          width: 360px;
-          flex-shrink: 0;
-          padding: 28px 30px;
-          border-radius: 22px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .review-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--border-gold);
-        }
-
-        .review-stars {
-          color: var(--gold-light);
-          font-size: 14px;
-          margin-bottom: 12px;
-          letter-spacing: 2px;
-        }
-
-        .review-card p {
-          color: var(--muted);
-          font-size: 13.5px;
-          line-height: 1.68;
-          margin: 0 0 20px;
-          flex: 1;
-        }
-
-        .review-author {
-          display: flex;
-          align-items: center;
-          gap: 13px;
-          border-top: 1px solid var(--border);
-          padding-top: 15px;
-        }
-
-        .author-avatar {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 1.5px solid var(--border-gold);
-          background: #17171e;
-          flex-shrink: 0;
-        }
-
-        .author-details {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-
-        .author-name {
-          font-weight: 600;
-          color: #fff;
-          font-size: 14px;
-        }
-
-        .author-loc {
-          color: var(--gold-accent);
-          font-size: 12px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        /* FAQ ACCORDION */
-        .faq-section {
-          padding: 80px 24px 140px;
-        }
-
-        .faq-wrap {
-          max-width: 900px;
-          margin: 50px auto 0;
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-        }
-
-        .faq-item {
-          border-radius: 20px;
-          transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-
-        .faq-item.active {
-          border-color: var(--border-gold);
-          background: rgba(229, 166, 56, 0.03);
-        }
-
-        .faq-question {
-          width: 100%;
-          padding: 26px 30px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          cursor: pointer;
-          background: none;
-          border: none;
-          color: #fff;
-          text-align: left;
-          gap: 20px;
-        }
-
-        .faq-question h4 {
-          margin: 0;
-          font-size: 18px;
-          font-weight: 600;
-          letter-spacing: -0.01em;
-          color: #fff;
-          transition: color 0.2s ease;
-        }
-
-        .faq-item.active .faq-question h4 {
-          color: var(--gold-light);
-        }
-
-        .faq-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1px solid var(--border);
-          display: grid;
-          place-items: center;
-          font-size: 20px;
-          font-weight: 300;
-          flex-shrink: 0;
-          color: var(--gold-accent);
-          transition: all 0.3s ease;
-          line-height: 1;
-        }
-
-        .faq-item.active .faq-icon {
-          transform: rotate(45deg);
-          border-color: var(--gold-accent);
-          background: rgba(229, 166, 56, 0.12);
-        }
-
-        .faq-answer {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.35s cubic-bezier(0, 1, 0, 1), padding 0.3s ease;
-          padding: 0 30px;
-        }
-
-        .faq-item.active .faq-answer {
-          max-height: 400px;
-          padding-bottom: 24px;
-        }
-
-        .faq-answer p {
-          margin: 0;
-          font-size: 14.5px;
-          line-height: 1.75;
-          color: var(--muted);
-        }
-
-        footer {
-          background: var(--bg);
-          padding: 45px 24px;
-          border-top: 1px solid var(--border);
-        }
-
-        .footer {
-          max-width: 1152px;
-          margin: auto;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .footer-logo {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: 34px;
-          color: var(--gold-light);
-        }
-
-        .footer-links {
-          display: flex;
-          gap: 25px;
-          color: rgba(255, 255, 255, 0.5);
-          font-size: 12px;
-        }
-
-        .footer-links a:hover {
-          color: var(--gold-light);
-        }
-
-        @media (max-width: 800px) {
-          .nav-wrap {
-            padding: 15px;
-          }
-          .nav {
-            padding: 10px 16px;
-          }
-          .nav-links {
-            display: none;
-          }
-          .hero-content {
-            grid-template-columns: 1fr;
-            text-align: center;
-            padding-top: 20px;
-            gap: 30px;
-          }
-          .hero-text {
-            text-align: center;
-          }
-          .hero h1 {
-            font-size: 14vw;
-            line-height: 1;
-          }
-          .hero-copy {
-            margin: 20px auto 0;
-            font-size: 14px;
-          }
-          .about {
-            padding-top: 95px;
-          }
-          .featured {
-            padding-bottom: 80px;
-          }
-          .video-info {
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            flex-direction: column;
-            align-items: flex-start;
-          }
-          .glass-info {
-            padding: 17px;
-          }
-          .philosophy {
-            padding: 80px 24px 100px;
-          }
-          .big-title {
-            margin-bottom: 55px;
-          }
-          .two-col,
-          .services-grid,
-          .buy-box,
-          .form-row,
-          .chapter-cards {
-            grid-template-columns: 1fr;
-          }
-          .form-card {
-            padding: 30px 20px;
-          }
-          .services {
-            padding: 80px 24px 100px;
-          }
-          .services-head {
-            align-items: flex-start;
-          }
-          .services-head .label {
-            display: none;
-          }
-          .value-grid {
-            grid-template-columns: 1fr;
-          }
-          .value-item,
-          .value-item:not(:first-child) {
-            padding: 28px 0;
-            border-right: 0;
-            border-bottom: 1px solid var(--border);
-          }
-          .buy-box {
-            padding: 40px 25px;
-            gap: 40px;
-          }
-          .report-mockup-wrap {
-            transform: none;
-          }
-          .review-card {
-            width: 290px;
-            padding: 22px;
-          }
-          .faq-question {
-            padding: 20px 22px;
-          }
-          .faq-answer {
-            padding: 0 22px;
-          }
-          .footer {
-            align-items: flex-start;
-            gap: 25px;
-            flex-direction: column;
-          }
-          .footer-links {
-            flex-wrap: wrap;
-          }
-        }
-      `}</style>
 
       {/* ── HERO ── */}
       <header className="hero" id="home">
         <video
           ref={heroVideoRef}
           className="hero-video"
+          id="heroVideo"
           muted
           autoPlay
           playsInline
@@ -1480,10 +281,10 @@ export function KaramKundaliClient() {
         <div className="nav-wrap">
           <nav className="nav liquid-glass">
             <div className="nav-left">
-              <Link href="#home" className="brand">
+              <a href="#home" className="brand">
                 <span className="globe" />
                 <span>DivyaYagyam</span>
-              </Link>
+              </a>
               <div className="nav-links">
                 <a href="#benefits">Kyun Zaroori Hai?</a>
                 <a href="#chapters">Report Me Kya Hai?</a>
@@ -1544,11 +345,11 @@ export function KaramKundaliClient() {
 
       {/* ── ABOUT ── */}
       <section className="about" id="about">
-        <div className="container">
+        <div className="container reveal">
           <div className="label">Karam Kundali Kya Hai?</div>
           <h2>
             Kismat ke bharose baithna nahi,
-            <br />
+            <br className="desktop" />
             sahi disha chun kar <em>safal hona seekhein.</em>
           </h2>
         </div>
@@ -1556,7 +357,7 @@ export function KaramKundaliClient() {
 
       {/* ── FEATURED VIDEO ── */}
       <section className="featured">
-        <div className="video-card">
+        <div className="video-card reveal">
           <video muted autoPlay loop playsInline preload="auto">
             <source
               src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260402_054547_9875cfc5-155a-4229-8ec8-b7ba7125cbf8.mp4"
@@ -1581,12 +382,12 @@ export function KaramKundaliClient() {
       {/* ── PHILOSOPHY ── */}
       <section className="philosophy" id="benefits">
         <div className="container">
-          <h2 className="big-title">
+          <h2 className="big-title reveal">
             Sahi Mehnat <em>x</em> Sahi Samay
           </h2>
 
           <div className="two-col">
-            <div className="philosophy-video">
+            <div className="philosophy-video reveal">
               <video muted autoPlay loop playsInline preload="auto">
                 <source
                   src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260307_083826_e938b29f-a43a-41ec-a153-3d4730578ab8.mp4"
@@ -1595,7 +396,7 @@ export function KaramKundaliClient() {
               </video>
             </div>
 
-            <div>
+            <div className="reveal">
               <div className="text-block">
                 <div className="label">Mushkilon Ki Wajah Samjhein</div>
                 <p>
@@ -1606,8 +407,8 @@ export function KaramKundaliClient() {
               <div className="text-block">
                 <div className="label">Sahi Faisle Lene Ki Shakti</div>
                 <p>
-                  Job badalni chahiye ya business shuru karna chahiye? Rishta kab banega? Apni kundali ke grahon ko
-                  samajh kar sahi samay par sahi faisla lein.
+                  Job badalni chahiye ya business shuru karna chahiye? Rishta kab banega? Apni kundali ke grahon ko samajh
+                  kar sahi samay par sahi faisla lein.
                 </p>
               </div>
             </div>
@@ -1615,21 +416,21 @@ export function KaramKundaliClient() {
         </div>
       </section>
 
-      {/* ── REPORT CHAPTERS (6 MODULES) ── */}
+      {/* ── CHAPTERS / 6 MODULES ── */}
       <section className="report-chapters" id="chapters">
         <div className="container">
-          <div className="label">Detailed Breakdown</div>
-          <h2 className="big-title" style={{ marginBottom: '20px' }}>
+          <div className="label reveal">Detailed Breakdown</div>
+          <h2 className="big-title reveal" style={{ marginBottom: 20 }}>
             Report Ke <em>6 Mukhya Stambh</em>
           </h2>
-          <p style={{ color: 'var(--muted)', maxWidth: '650px', marginBottom: '45px', fontSize: '15px' }}>
+          <p className="reveal" style={{ color: 'var(--muted)', maxWidth: 650, marginBottom: 45, fontSize: 15 }}>
             Yeh koi 2-line horoscope nahi hai. 40+ panno ki vyaktigat report me aapke jeevan ke pratyek ahem pehlu ka gehra
             Vedic aakalan shamil hai:
           </p>
 
           <div className="chapter-cards">
-            {/* Module 1 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 1: Lagna & Vyaktitva */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80"
@@ -1638,16 +439,13 @@ export function KaramKundaliClient() {
               </div>
               <div className="chap-body">
                 <div className="chap-no">MODULE 01</div>
-                <h3>Lagna &amp; Vyaktitva</h3>
-                <p>
-                  Aapki aantarik kshamta, shaktiyan aur astitva. Samaj aur karyakshetra me aapka swabhavik prabhav kaisa
-                  rahega.
-                </p>
+                <h3>Lagna & Vyaktitva</h3>
+                <p>Aapki aantarik kshamta, shaktiyan aur astitva. Samaj aur karyakshetra me aapka swabhavik prabhav kaisa rahega.</p>
               </div>
             </div>
 
-            {/* Module 2 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 2: Career / Business */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80"
@@ -1657,14 +455,12 @@ export function KaramKundaliClient() {
               <div className="chap-body">
                 <div className="chap-no">MODULE 02</div>
                 <h3>Naukri Ya Vyapar?</h3>
-                <p>
-                  Kis sector me safalta milegi—IT, Trade, Real Estate, Creative. Promotion aur job-shift ke shubh varsh.
-                </p>
+                <p>Kis sector me safalta milegi—IT, Trade, Real Estate, Creative. Promotion aur job-shift ke shubh varsh.</p>
               </div>
             </div>
 
-            {/* Module 3 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 3: Dhan Yog & Nivesh */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=600&q=80"
@@ -1673,15 +469,13 @@ export function KaramKundaliClient() {
               </div>
               <div className="chap-body">
                 <div className="chap-no">MODULE 03</div>
-                <h3>Dhan Yog &amp; Nivesh</h3>
-                <p>
-                  Laxmi Yog kab activate hoga? Dhan sanchay (savings) me aane wali badhayein aur unka nishchit nivaran.
-                </p>
+                <h3>Dhan Yog & Nivesh</h3>
+                <p>Laxmi Yog kab activate hoga? Dhan sanchay (savings) me aane wali badhayein aur unka nishchit nivaran.</p>
               </div>
             </div>
 
-            {/* Module 4 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 4: Vivah & Sambandh */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80"
@@ -1690,15 +484,13 @@ export function KaramKundaliClient() {
               </div>
               <div className="chap-body">
                 <div className="chap-no">MODULE 04</div>
-                <h3>Vivah &amp; Sambandh</h3>
-                <p>
-                  Shaadi ka anukool samay, jeevansathi ki rashi/swabhav aur parivarik jeevan me samanjasya ke upay.
-                </p>
+                <h3>Vivah & Sambandh</h3>
+                <p>Shaadi ka anukool samay, jeevansathi ki rashi/swabhav aur parivarik jeevan me samanjasya ke upay.</p>
               </div>
             </div>
 
-            {/* Module 5 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 5: Mahadasha Timeline */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=600&q=80"
@@ -1708,14 +500,12 @@ export function KaramKundaliClient() {
               <div className="chap-body">
                 <div className="chap-no">MODULE 05</div>
                 <h3>Mahadasha Timeline</h3>
-                <p>
-                  Agale 5 se 10 varshon ka roadmap. Kaun si dasha aapko tarakki degi aur kab satark rehna anivarya hai.
-                </p>
+                <p>Agale 5 se 10 varshon ka roadmap. Kaun si dasha aapko tarakki degi aur kab satark rehna anivarya hai.</p>
               </div>
             </div>
 
-            {/* Module 6 */}
-            <div className="chap-box liquid-glass">
+            {/* Module 6: Practical Vedic Remedies */}
+            <div className="chap-box liquid-glass reveal">
               <div className="chap-img-wrap">
                 <img
                   src="https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=600&q=80"
@@ -1724,10 +514,8 @@ export function KaramKundaliClient() {
               </div>
               <div className="chap-body">
                 <div className="chap-no">MODULE 06</div>
-                <h3>Saral &amp; Practical Upay</h3>
-                <p>
-                  Bina kisi mehnge karmakand ya anushthan ke, rozmarra ke aacharan, dhyan aur mantra dwara grah shanti.
-                </p>
+                <h3>Saral & Practical Upay</h3>
+                <p>Bina kisi mehnge karmakand ya anushthan ke, rozmarra ke aacharan, dhyan aur mantra dwara grah shanti.</p>
               </div>
             </div>
           </div>
@@ -1737,13 +525,13 @@ export function KaramKundaliClient() {
       {/* ── SERVICES / KEY INSIGHTS ── */}
       <section className="services">
         <div className="container">
-          <div className="services-head">
+          <div className="services-head reveal">
             <h2>Aapko Kya Milega?</h2>
             <div className="label">Key Insights</div>
           </div>
 
           <div className="services-grid">
-            <article className="service liquid-glass">
+            <article className="service liquid-glass reveal">
               <div className="service-media">
                 <video muted autoPlay loop playsInline preload="auto">
                   <source
@@ -1759,13 +547,12 @@ export function KaramKundaliClient() {
                 </div>
                 <h3>Naukri, Business Aur Paisa</h3>
                 <p>
-                  Kaun sa field aapko sabse zyada tarakki dega, arthik sthiti kab majboot hogi aur dhan ki rukawat kaise
-                  door karein.
+                  Kaun sa field aapko sabse zyada tarakki dega, arthik sthiti kab majboot hogi aur dhan ki rukawat kaise door karein.
                 </p>
               </div>
             </article>
 
-            <article className="service liquid-glass">
+            <article className="service liquid-glass reveal">
               <div className="service-media">
                 <video muted autoPlay loop playsInline preload="auto">
                   <source
@@ -1781,8 +568,7 @@ export function KaramKundaliClient() {
                 </div>
                 <h3>Rishte Aur Shubh Vivah Yog</h3>
                 <p>
-                  Shaadi me deri kyu ho rahi hai? Jeevansathi ke sath rishta kaisa rahega aur parivarik shanti ke saral upay
-                  kya hain.
+                  Shaadi me deri kyu ho rahi hai? Jeevansathi ke sath rishta kaisa rahega aur parivarik shanti ke saral upay kya hain.
                 </p>
               </div>
             </article>
@@ -1793,25 +579,25 @@ export function KaramKundaliClient() {
       {/* ── KARAM VALUE ── */}
       <section className="karam-value">
         <div className="container">
-          <div className="label">Report Ki Khaasiyat</div>
-          <h2 className="big-title" style={{ marginTop: '25px', marginBottom: 0 }}>
+          <div className="label reveal">Report Ki Khaasiyat</div>
+          <h2 className="big-title reveal" style={{ marginTop: 25, marginBottom: 0 }}>
             Sirf aapke liye
             <br />
             <em>Personalised.</em>
           </h2>
 
           <div className="value-grid">
-            <div className="value-item">
+            <div className="value-item reveal">
               <div className="value-no">01</div>
               <h3>100% Personalised</h3>
               <p>Koi generic ya copied prediction nahi. Yeh report sirf aapke janm vivaran par tayyar hoti hai.</p>
             </div>
-            <div className="value-item">
+            <div className="value-item reveal">
               <div className="value-no">02</div>
-              <h3>Grah &amp; Yog Vishleshak</h3>
+              <h3>Grah & Yog Vishleshak</h3>
               <p>Aapki kundali ke Rajyog, Dosh aur Dasha ko aasan Hindi me explain kiya jata hai.</p>
             </div>
-            <div className="value-item">
+            <div className="value-item reveal">
               <div className="value-no">03</div>
               <h3>24–48 Ghante Me Delivery</h3>
               <p>Aapke WhatsApp aur Email par direct share ki jaane wali high-quality verified digital PDF report.</p>
@@ -1820,19 +606,18 @@ export function KaramKundaliClient() {
         </div>
       </section>
 
-      {/* ── BUY SECTION & REPORT MOCKUP ── */}
+      {/* ── BUY SECTION & 3D REPORT MOCKUP ── */}
       <section className="buy-section" id="purchase">
-        <div className="buy-box liquid-glass">
+        <div className="buy-box liquid-glass reveal">
           <div>
             <div className="label">Limited Time Offer</div>
-            <h2 style={{ marginTop: '22px' }}>
+            <h2 style={{ marginTop: 22 }}>
               Kismat Badlo,
               <br />
               <em>Aaj Hi.</em>
             </h2>
             <p>
-              Aasan bhasha me apni kundali aur bhavishya ka pura sach jaaniye. DivyaYagyam ke sath apne sahi raste ki
-              shuruat karein.
+              Aasan bhasha me apni kundali aur bhavishya ka pura sach jaaniye. DivyaYagyam ke sath apne sahi raste ki shuruat karein.
             </p>
             <div className="price">
               <span className="current">₹501</span>
@@ -1853,13 +638,13 @@ export function KaramKundaliClient() {
         </div>
       </section>
 
-      {/* ── INTEGRATED BIRTH DETAILS ORDER FORM ── */}
+      {/* ── ORDER FORM ── */}
       <section className="order-form-container" id="order">
-        <div className="form-card liquid-glass">
+        <div className="form-card liquid-glass reveal">
           <div className="form-title-wrap">
             <div className="label">Birth Details Form</div>
             <h3>Apna Vivaran Darj Karein</h3>
-            <p style={{ color: 'var(--muted)', fontSize: '14px', margin: 0 }}>
+            <p style={{ color: 'var(--muted)', fontSize: 14, margin: 0 }}>
               Kripya sahi jankari bharein taaki calculation bilkul nirdosh ho sake. Report 24–48 ghante me deliver hoti hai.
             </p>
           </div>
@@ -1873,7 +658,7 @@ export function KaramKundaliClient() {
                   className="form-input"
                   placeholder="e.g. Rahul Sharma"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={e => setFullName(e.target.value)}
                   required
                 />
               </div>
@@ -1883,7 +668,7 @@ export function KaramKundaliClient() {
                 <select
                   className="form-input"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={e => setGender(e.target.value)}
                   required
                 >
                   <option value="male">Purush (Male)</option>
@@ -1898,7 +683,7 @@ export function KaramKundaliClient() {
                   type="date"
                   className="form-input"
                   value={dob}
-                  onChange={(e) => setDob(e.target.value)}
+                  onChange={e => setDob(e.target.value)}
                   required
                 />
               </div>
@@ -1909,7 +694,7 @@ export function KaramKundaliClient() {
                   type="time"
                   className="form-input"
                   value={birthTime}
-                  onChange={(e) => setBirthTime(e.target.value)}
+                  onChange={e => setBirthTime(e.target.value)}
                   required
                 />
               </div>
@@ -1921,7 +706,7 @@ export function KaramKundaliClient() {
                   className="form-input"
                   placeholder="e.g. Jaipur, Rajasthan"
                   value={birthPlace}
-                  onChange={(e) => setBirthPlace(e.target.value)}
+                  onChange={e => setBirthPlace(e.target.value)}
                   required
                 />
               </div>
@@ -1933,7 +718,7 @@ export function KaramKundaliClient() {
                   className="form-input"
                   placeholder="+91 98765 43210"
                   value={whatsapp}
-                  onChange={(e) => setWhatsapp(e.target.value)}
+                  onChange={e => setWhatsapp(e.target.value)}
                   required
                 />
               </div>
@@ -1945,7 +730,7 @@ export function KaramKundaliClient() {
                   className="form-input"
                   placeholder="rahul@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -1953,84 +738,61 @@ export function KaramKundaliClient() {
 
             <div
               style={{
-                marginTop: '25px',
+                marginTop: 25,
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '20px',
+                gap: 20,
                 borderTop: '1px solid var(--border)',
-                paddingTop: '25px',
+                paddingTop: 25,
               }}
             >
               <div>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    color: 'var(--gold-accent)',
-                    letterSpacing: '.1em',
-                    textTransform: 'uppercase',
-                    fontWeight: 600,
-                  }}
-                >
+                <div style={{ fontSize: 12, color: 'var(--gold-accent)', letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 600 }}>
                   Kul Rashi
                 </div>
-                <div
-                  style={{
-                    fontSize: '32px',
-                    fontFamily: "'Instrument Serif', Georgia, serif",
-                    color: 'var(--gold-light)',
-                  }}
-                >
-                  ₹501{' '}
-                  <span
-                    style={{
-                      fontSize: '15px',
-                      color: 'rgba(255,255,255,.45)',
-                      textDecoration: 'line-through',
-                    }}
-                  >
-                    ₹1,999
-                  </span>
+                <div style={{ fontSize: 32, fontFamily: "'Instrument Serif', serif", color: 'var(--gold-light)' }}>
+                  ₹501 <span style={{ fontSize: 15, color: 'rgba(255,255,255,.45)', textDecoration: 'line-through' }}>₹1,999</span>
                 </div>
               </div>
               <button
                 type="submit"
                 disabled={loading}
                 className="btn-catchy"
-                style={{ padding: '18px 40px', fontSize: '15px', opacity: loading ? 0.7 : 1 }}
+                style={{ padding: '18px 40px', fontSize: 15, opacity: loading ? 0.7 : 1 }}
               >
-                {loading ? 'भुगतान लोड हो रहा है... ⏳' : 'Surakshit Bhugtan Karein & Report Paayein ⚡'}
+                {loading ? 'कृपया प्रतीक्षा करें...' : 'Surakshit Bhugtan Karein & Report Paayein ⚡'}
               </button>
             </div>
 
-            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,.45)', textAlign: 'center', marginTop: '18px' }}>
-              🔒 256-Bit SSL Encrypted | UPI, Cards &amp; NetBanking Available
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,.45)', textAlign: 'center', marginTop: 18 }}>
+              🔒 256-Bit SSL Encrypted | UPI, Cards & NetBanking Available
             </div>
           </form>
         </div>
       </section>
 
-      {/* ── 20-REVIEW MARQUEE TRACK ── */}
+      {/* ── REVIEWS MARQUEE (20 CARDS) ── */}
       <section className="reviews-section" id="reviews">
         <div className="container">
-          <div className="label">Vastavik Anubhav</div>
-          <h2 className="big-title" style={{ marginBottom: 0 }}>
+          <div className="label reveal">Vastavik Anubhav</div>
+          <h2 className="big-title reveal" style={{ marginBottom: 0 }}>
             Logo Ka <em>Vishwas</em>
           </h2>
-          <p style={{ color: 'var(--muted)', fontSize: '14px', marginTop: '10px' }}>
+          <p className="reveal" style={{ color: 'var(--muted)', fontSize: 14, marginTop: 10 }}>
             12,000+ vishwasniya grahako ka anubhav (Card par hover karke padhein)
           </p>
         </div>
 
         <div className="marquee-container">
           <div className="marquee-track">
-            {/* 1 */}
+            {/* 1. Indian (Male) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Career ko lekar bohot confusion me tha. Karam Kundali ki dasha calculation follow karke switch kiya
-                aur aaj 3 mahine me package double ho gaya.&rdquo;
+                "Career ko lekar bohot confusion me tha. Karam Kundali ki dasha calculation follow karke switch kiya aur aaj 3
+                mahine me package double ho gaya."
               </p>
               <div className="review-author">
                 <img
@@ -2045,12 +807,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 2 */}
+            {/* 2. Indian (Female) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Sabse achi baat yeh lagi ki koi mehnge ratna ya havan nahi bataye. Dincharya aur aacharan se jude saral
-                upay the jisse mansik shanti mili.&rdquo;
+                "Sabse achi baat yeh lagi ki koi mehnge ratna ya havan nahi bataye. Dincharya aur aacharan se jude saral upay the
+                jisse mansik shanti mili."
               </p>
               <div className="review-author">
                 <img
@@ -2065,12 +827,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 3 */}
+            {/* 3. Foreigner (USA) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;I was curious about Vedic astrology. The Karam Kundali report broke down transits with pinpoint
-                mathematical logic. Zero superstition.&rdquo;
+                "I was curious about Vedic astrology. The Karam Kundali report broke down transits with pinpoint mathematical
+                logic. Zero superstition."
               </p>
               <div className="review-author">
                 <img
@@ -2085,12 +847,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 4 */}
+            {/* 4. Indian (Male) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;WhatsApp par samay par 42 panno ki verified PDF receive hui. Chart explanation itna aasan hai ki koi
-                bhi aam insaan samajh sakta hai.&rdquo;
+                "WhatsApp par samay par 42 panno ki verified PDF receive hui. Chart explanation itna aasan hai ki koi bhi aam
+                insaan samajh sakta hai."
               </p>
               <div className="review-author">
                 <img
@@ -2105,12 +867,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 5 */}
+            {/* 5. Foreigner (UK) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Exceptional clarity on my business roadmap. Delivered within the committed timeline. The cycles and
-                planetary math were spot on.&rdquo;
+                "Exceptional clarity on my business roadmap. Delivered within the committed timeline. The cycles and planetary
+                math were spot on."
               </p>
               <div className="review-author">
                 <img
@@ -2125,12 +887,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 6 */}
+            {/* 6. NRI (Dubai) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Partnership me business shuru karne se pehle lagna analysis dekha tha. Jo favorable time Karam
-                Kundali me likha tha wahi follow kiya.&rdquo;
+                "Partnership me business shuru karne se pehle lagna analysis dekha tha. Jo favorable time Karam Kundali me likha tha
+                wahi follow kiya."
               </p>
               <div className="review-author">
                 <img
@@ -2145,12 +907,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 7 */}
+            {/* 7. Indian (Female) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Shaadi me deri ki wajah aur shubh yog ka time report me bilkul clearly define tha. Parivaar me sabhi
-                log analysis se santusht hain.&rdquo;
+                "Shaadi me deri ki wajah aur shubh yog ka time report me bilkul clearly define tha. Parivaar me sabhi log
+                analysis se santusht hain."
               </p>
               <div className="review-author">
                 <img
@@ -2165,12 +927,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 8 */}
+            {/* 8. Foreigner (Canada) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;The precision in career transitions gave me the exact confidence needed to launch my tech consultancy.
-                Truly impressive format.&rdquo;
+                "The precision in career transitions gave me the exact confidence needed to launch my tech consultancy. Truly
+                impressive format."
               </p>
               <div className="review-author">
                 <img
@@ -2185,12 +947,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 9 */}
+            {/* 9. Indian (Male) */}
             <div className="review-card liquid-glass">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;501 rupaye me itna detailed Vedic calculation maine aaj tak kisi software ya pandit ji se nahi dekha.
-                Pure value for money.&rdquo;
+                "501 rupaye me itna detailed Vedic calculation maine aaj tak kisi software ya pandit ji se nahi dekha. Pure value
+                for money."
               </p>
               <div className="review-author">
                 <img
@@ -2205,32 +967,12 @@ export function KaramKundaliClient() {
               </div>
             </div>
 
-            {/* 10 */}
-            <div className="review-card liquid-glass">
-              <div className="review-stars">★★★★★</div>
-              <p>
-                &ldquo;Clean, dignified, and highly actionable report. Vedic philosophy delivered in modern language without
-                fear mongering.&rdquo;
-              </p>
-              <div className="review-author">
-                <img
-                  className="author-avatar"
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80"
-                  alt="Sarah Cooper"
-                />
-                <div className="author-details">
-                  <span className="author-name">Sarah Cooper</span>
-                  <span className="author-loc">🇦🇺 Sydney, Australia</span>
-                </div>
-              </div>
-            </div>
-
             {/* DUPLICATE SET FOR INFINITE CONTINUOUS LOOP */}
             <div className="review-card liquid-glass" aria-hidden="true">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Career ko lekar bohot confusion me tha. Karam Kundali ki dasha calculation follow karke switch kiya
-                aur package double ho gaya.&rdquo;
+                "Career ko lekar bohot confusion me tha. Karam Kundali ki dasha calculation follow karke switch kiya aur package
+                double ho gaya."
               </p>
               <div className="review-author">
                 <img
@@ -2248,8 +990,7 @@ export function KaramKundaliClient() {
             <div className="review-card liquid-glass" aria-hidden="true">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;Sabse achi baat yeh lagi ki koi mehnge ratna ya havan nahi bataye. Dincharya aur aacharan se jude saral
-                upay the.&rdquo;
+                "Sabse achi baat yeh lagi ki koi mehnge ratna ya havan nahi bataye. Dincharya aur aacharan se jude saral upay the."
               </p>
               <div className="review-author">
                 <img
@@ -2267,8 +1008,7 @@ export function KaramKundaliClient() {
             <div className="review-card liquid-glass" aria-hidden="true">
               <div className="review-stars">★★★★★</div>
               <p>
-                &ldquo;I was curious about Vedic astrology. The Karam Kundali report broke down transits with pinpoint
-                mathematical logic.&rdquo;
+                "I was curious about Vedic astrology. The Karam Kundali report broke down transits with pinpoint mathematical logic."
               </p>
               <div className="review-author">
                 <img
@@ -2286,106 +1026,85 @@ export function KaramKundaliClient() {
         </div>
       </section>
 
-      {/* ── FAQ ACCORDION ── */}
+      {/* ── FAQ SECTION (5 QUESTIONS WITH 3D ROTATING + / −) ── */}
       <section className="faq-section" id="faqs">
         <div className="container">
-          <div className="label">FAQ</div>
-          <h2 className="big-title" style={{ marginBottom: 0 }}>
+          <div className="label reveal">FAQ</div>
+          <h2 className="big-title reveal" style={{ marginBottom: 0 }}>
             Aam Taur Par <em>Poochhe Gaye Sawaal</em>
           </h2>
 
           <div className="faq-wrap">
-            {/* FAQ 1 */}
-            <div className={`faq-item liquid-glass ${activeFaq === 0 ? 'active' : ''}`}>
-              <button
-                type="button"
-                className="faq-question"
-                onClick={() => toggleFaq(0)}
-              >
+            {/* FAQ 1: Delivery Timing */}
+            <div className={`faq-item liquid-glass reveal ${activeFaq === 0 ? 'active' : ''}`}>
+              <button className="faq-question" onClick={() => toggleFaq(0)}>
                 <h4>Report kitne samay me prapt hogi aur kahan aayegi?</h4>
                 <span className="faq-icon">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  Order aur details darj hone ke baad Vedic calculations aur verification me samay lagta hai. Aapki 40+
-                  panno ki personalised PDF report safalta-purvak <strong>24 se 48 ghante ke bheetar</strong> seedhe aapke
-                  diye gaye WhatsApp number aur Email par bhej di jaati hai.
+                  Order aur details darj hone ke baad Vedic calculations aur verification me samay lagta hai. Aapki 40+ panno ki
+                  personalised PDF report safalta-purvak <strong>24 se 48 ghante ke bheetar</strong> seedhe aapke diye gaye WhatsApp
+                  number aur Email par bhej di jaati hai.
                 </p>
               </div>
             </div>
 
-            {/* FAQ 2 */}
-            <div className={`faq-item liquid-glass ${activeFaq === 1 ? 'active' : ''}`}>
-              <button
-                type="button"
-                className="faq-question"
-                onClick={() => toggleFaq(1)}
-              >
+            {/* FAQ 2: Birth Time Missing */}
+            <div className={`faq-item liquid-glass reveal ${activeFaq === 1 ? 'active' : ''}`}>
+              <button className="faq-question" onClick={() => toggleFaq(1)}>
                 <h4>Agar mujhe apna janam samay (Exact Time) na pata ho toh kya karein?</h4>
                 <span className="faq-icon">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  Aap lagbhag ka anumanit samay (jaise: Subah 8:00 se 8:30 ke beech ya Dopahar) darj kar sakte hain. Humare
-                  computation algorithms us samay-chakra ke dauran banne wale lagna aur planetary positions ke aadhar par
-                  sarvadhik nirdosh vishleshan generate karte hain.
+                  Aap lagbhag ka anumanit samay (jaise: Subah 8:00 se 8:30 ke beech ya Dopahar) darj kar sakte hain. Humare computation
+                  algorithms us samay-chakra ke dauran banne wale lagna aur planetary positions ke aadhar par sarvadhik nirdosh
+                  vishleshan generate karte hain.
                 </p>
               </div>
             </div>
 
-            {/* FAQ 3 */}
-            <div className={`faq-item liquid-glass ${activeFaq === 2 ? 'active' : ''}`}>
-              <button
-                type="button"
-                className="faq-question"
-                onClick={() => toggleFaq(2)}
-              >
+            {/* FAQ 3: Remedies & Expenses */}
+            <div className={`faq-item liquid-glass reveal ${activeFaq === 2 ? 'active' : ''}`}>
+              <button className="faq-question" onClick={() => toggleFaq(2)}>
                 <h4>Kya report me bataye gaye Upay (Remedies) mehnge hote hain?</h4>
                 <span className="faq-icon">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  Bilkul nahi. DivyaYagyam kisi bhi mehnge ratna, anushthan ya vyarth kharchon ko promote nahi karta. Report
-                  me bataye gaye sabhi upay aapki rozmarra ki dincharya, dhyan, mantra-jap aur aacharan-shuddhi se jude
-                  practical samadhan hote hain.
+                  Bilkul nahi. DivyaYagyam kisi bhi mehnge ratna, anushthan ya vyarth kharchon ko promote nahi karta. Report me bataye
+                  gaye sabhi upay aapki rozmarra ki dincharya, dhyan, mantra-jap aur aacharan-shuddhi se jude practical samadhan hote
+                  hain.
                 </p>
               </div>
             </div>
 
-            {/* FAQ 4 */}
-            <div className={`faq-item liquid-glass ${activeFaq === 3 ? 'active' : ''}`}>
-              <button
-                type="button"
-                className="faq-question"
-                onClick={() => toggleFaq(3)}
-              >
+            {/* FAQ 4: Ordering for Family */}
+            <div className={`faq-item liquid-glass reveal ${activeFaq === 3 ? 'active' : ''}`}>
+              <button className="faq-question" onClick={() => toggleFaq(3)}>
                 <h4>Kya main apne bachhe, pati/patni ya kisi anya parijan ke liye order kar sakta hu?</h4>
                 <span className="faq-icon">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  Haan, bilkul. Form me aap jinki kundali banwana chahte hain unka naam, date of birth, time aur birth city
-                  darj karein. WhatsApp aur Email number aap apna daal sakte hain taaki report aapke paas surakshit receive
-                  ho sake.
+                  Haan, bilkul. Form me aap jinki kundali banwana chahte hain unka naam, date of birth, time aur birth city darj karein.
+                  WhatsApp aur Email number aap apna daal sakte hain taaki report aapke paas surakshit receive ho sake.
                 </p>
               </div>
             </div>
 
-            {/* FAQ 5 */}
-            <div className={`faq-item liquid-glass ${activeFaq === 4 ? 'active' : ''}`}>
-              <button
-                type="button"
-                className="faq-question"
-                onClick={() => toggleFaq(4)}
-              >
+            {/* FAQ 5: Support & Guarantee */}
+            <div className={`faq-item liquid-glass reveal ${activeFaq === 4 ? 'active' : ''}`}>
+              <button className="faq-question" onClick={() => toggleFaq(4)}>
                 <h4>Agar payment ke baad report receive na ho toh support kahan milega?</h4>
                 <span className="faq-icon">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  Aapko payment karte hi instant order ID milti hai. Kisi bhi takneeki samasya ya delivery me sahayata ke
-                  liye hamari dedicated WhatsApp helpline (+91 95304 01984) aur Email support team 24/7 uplabdh rehti hai,
-                  jahan aapka samadhan turant kiya jata hai.
+                  Aapko payment karte hi instant order ID milti hai. Kisi bhi takneeki samasya ya delivery me sahayata ke liye hamari
+                  dedicated WhatsApp helpline aur Email support team 24/7 uplabdh rehti hai, jahan aapka samadhan turant kiya jata
+                  hai.
                 </p>
               </div>
             </div>
