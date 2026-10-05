@@ -39,9 +39,6 @@ export async function generateMetadata(): Promise<Metadata> {
       'astrology online', 'jyotish', 'sanatan seva'
     ],
     metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: baseUrl,
-    },
     robots: {
       index: true,
       follow: true,

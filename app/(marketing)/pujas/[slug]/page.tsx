@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!puja) return generatePageMeta({ title: 'Online Pujas | DivyaYagyam', description: 'Redirecting to authentic Vedic online pujas at DivyaYagyam.', path: `/pujas`, noIndex: true });
 
-  const title = puja.name || puja.seoTitle || 'वैदिक पूजा'
+  const title = puja.seoTitle || puja.name || 'वैदिक पूजा'
   const description = (puja.seoDescription || puja.shortDescription || puja.description || 'Participate in authentic online puja ritual at sacred temples with video proof on WhatsApp and prasad home delivery.').replace(/<[^>]*>?/gm, '')
   const keywords = puja.seoKeywords ? puja.seoKeywords.split(',').map((k: string) => k.trim()) : undefined
 

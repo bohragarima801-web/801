@@ -110,18 +110,125 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/book-chadawa',
-        destination: '/book-chadhawa',
-        permanent: true,
-      },
-      {
-        source: '/chadhawa',
-        destination: '/book-chadhawa',
-        permanent: true,
-      },
-      {
         source: '/home',
         destination: '/',
+        permanent: true,
+      },
+
+      // ── Consolidation redirects: Mahamrityunjaya Puja variants
+      {
+        source: '/pujas/maha-mrityunjay-jaap',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/pujas/mahamrityujaya-jaap-rudrabhishekam',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/pujas/11000-mahamrityunjaya-jaap-maharudrabhishekam',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/pujas/11000-maha-mrityunjay-mantra-jaap-panchamrit',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maha-shiv-rudra-abhishek-pooja-21-brahmins',
+        destination: '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
+        permanent: true,
+      },
+
+      // ── Consolidation redirects: Maa Baglamukhi Hawan variants
+      {
+        source: '/pujas/maa-bagalamukhi-',
+        destination: '/pujas/maa-baglamukhi-mahayagya-mirchi-havan',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maa-baglamukhi-mirchi-hawan',
+        destination: '/pujas/maa-baglamukhi-mahayagya-mirchi-havan',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maa-bagalamukhi-mirchi-hawan',
+        destination: '/pujas/maa-baglamukhi-mahayagya-mirchi-havan',
+        permanent: true,
+      },
+      {
+        source: '/pujas/mata-baglamukhi-mirchi-havan-sarva-karya-siddhi-mahayagya',
+        destination: '/pujas/maa-baglamukhi-mahayagya-mirchi-havan',
+        permanent: true,
+      },
+
+      // ── Consolidation redirects: Maa Varahi variants
+      {
+        source: '/pujas/maa-varahi-land-property-dispute-yagya',
+        destination: '/pujas/maa-varahi-puja-yagya',
+        permanent: true,
+      },
+
+      // ── Consolidation redirects: Pitra Shanti variants
+      {
+        source: '/pujas/vip-pitra-shanti-gita-path-shwet-til-hawan',
+        destination: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja',
+        permanent: true,
+      },
+      {
+        source: '/pujas/pitra-gita-path-shwet-til-puja',
+        destination: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja',
+        permanent: true,
+      },
+
+      // ── Consolidation redirects: Tools cannibalizing main pages
+      {
+        source: '/tools/panchang',
+        destination: '/panchang',
+        permanent: true,
+      },
+      {
+        source: '/tools/vedic-maha-calculator-check-today-s-choghadiya-hora-rahu-kaal',
+        destination: '/tools/vedic-maha-calculator',
+        permanent: true,
+      },
+      {
+        source: '/astro',
+        destination: '/horoscope',
+        permanent: true,
+      },
+
+      // ── Fix 404s: Renamed Puja and category slugs
+      {
+        source: '/pujas/durga-saptashati-hawan-puja',
+        destination: '/pujas/durga-saptashati-108-samagri-mahayagya',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maa-bagalamukhi-kavach-puja',
+        destination: '/pujas/maa-bagalamukhi-kavach-haldi-abhishek-puja',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maa-ashta-lakshmi-karz-mukti-puja',
+        destination: '/pujas/maa-ashta-lakshmi-16-day-karz-mukti-mahayagya',
+        permanent: true,
+      },
+      {
+        source: '/pujas/maa-pratyangira-hawan-yagya',
+        destination: '/pujas/maa-pratyangira-tantrok-hawan-bali-yagya',
+        permanent: true,
+      },
+      {
+        source: '/pujas/kaal-sarp-dosh-nivaran-puja-jodhpur',
+        destination: '/pujas/kalsarp-dosh-shanti-puja',
+        permanent: true,
+      },
+      {
+        source: '/pujas/category/devi',
+        destination: '/pujas/category/devi-pujas',
         permanent: true,
       },
     ]

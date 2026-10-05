@@ -41,20 +41,21 @@ export function generatePageMeta({
     ? title.replace(/\s*[|\-—]\s*(?:Divya\s*Yagyam|Divyayagyam)(\.com)?\s*$/gi, '').replace(/\s*[|\-—]\s*(?:Divya\s*Yagyam|Divyayagyam)(\.com)?\s*$/gi, '').trim()
     : 'Online Puja Booking & Sanatan Seva'
 
-  // Truncate clean title if necessary (aiming under 44 chars so final title with ' | DivyaYagyam' is under 58 chars)
-  if (cleanTitle.length > 44) {
-    cleanTitle = cleanTitle.substring(0, 42).trim() + '...'
+  // Ensure cleanTitle doesn't cut words awkwardly. Truncate only if excessively long (> 65 chars)
+  if (cleanTitle.length > 65) {
+    const spaceIdx = cleanTitle.lastIndexOf(' ', 62)
+    cleanTitle = (spaceIdx > 35 ? cleanTitle.substring(0, spaceIdx) : cleanTitle.substring(0, 62)).trim()
   }
 
-  // Clean and truncate description to 150-155 chars
+  // Clean and truncate description to 155-160 chars at natural word boundary
   let cleanDesc = (description || '')
     .replace(/<[^>]*>?/gm, '')
     .replace(/\s+/g, ' ')
     .trim()
 
-  if (cleanDesc.length > 155) {
-    const truncated = cleanDesc.substring(0, 150)
-    cleanDesc = truncated.substring(0, Math.max(truncated.lastIndexOf(' '), 130)) + '...'
+  if (cleanDesc.length > 160) {
+    const spaceIdx = cleanDesc.lastIndexOf(' ', 155)
+    cleanDesc = (spaceIdx > 120 ? cleanDesc.substring(0, spaceIdx) : cleanDesc.substring(0, 155)).trim() + '...'
   }
 
   const metaTitle = (isAbsoluteTitle || path === '/')

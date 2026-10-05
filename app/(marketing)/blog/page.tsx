@@ -1,6 +1,7 @@
 
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import Image from 'next/image'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { getSafeImageUrl } from '@/lib/utils'
@@ -14,7 +15,7 @@ export function generateMetadata() {
   })
 }
 
-export const revalidate = 30
+export const revalidate = 1800
 
 export default async function BlogListPage() {
   const posts = await prisma.blog.findMany({
@@ -97,12 +98,13 @@ export default async function BlogListPage() {
                 >
                   {/* Image Container */}
                   <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] w-full overflow-hidden bg-slate-900 group">
-                    <img
-                      loading="lazy"
+                    <Image
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       src={getSafeImageUrl(post.coverImage)}
                       alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`}
                       title={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {post.category?.name && (
                       <div className="absolute bottom-2.5 left-2.5 z-30">

@@ -11,6 +11,7 @@ export function generateMetadata() {
     title: 'रिफंड एवं निरस्तीकरण नीति',
     description: 'DivyaYagyam रिफंड एवं निरस्तीकरण नीति। 100% रिफंड गारंटी, पूजा निरस्तीकरण नियम, एवं रीशेड्यूलिंग प्रक्रिया की पूरी जानकारी।',
     path: '/refunds',
+    noIndex: true,
   })
 }
 
