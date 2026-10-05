@@ -37,11 +37,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!tool) return generatePageMeta({ title: 'Vedic Tools | DivyaYagyam', description: 'Redirecting to authentic Vedic tools at DivyaYagyam.', path: `/tools`, noIndex: true })
 
+  // Tailored high-CTR titles & descriptions based on Google Search Console queries
+  let pageTitle = `${tool.name} — ऑनलाइन वैदिक समाधान व सटीक गणना`
+  let pageDesc = tool.description
+    ? `${tool.description} 100% प्रामाणिक वैदिक गणना एवं समाधान ऑनलाइन प्राप्त करें।`
+    : `दिव्ययज्ञम् पर ${tool.name} का उपयोग करें। 100% सटीक वैदिक ज्योतिषीय गणना, उपाय एवं भविष्य फल तुरंत प्राप्त करें।`
+
+  const s = tool.slug.toLowerCase()
+  if (s.includes('ganesh') && s.includes('prashnavali')) {
+    pageTitle = 'श्री गणेश सिद्ध प्रश्नावली — अपने प्रश्न का तुरंत व सटीक उत्तर पाएं'
+    pageDesc = 'श्री गणेश सिद्ध प्रश्नावली (Shree Ganesh Prashnavali): मन में प्रश्न विचार कर गणपति बप्पा का ध्यान करें और चौपड़ पर क्लिक कर अपने कार्य की सफलता का 100% सटीक उत्तर जानें।'
+  } else if (s.includes('hanuman') && s.includes('prashnavali')) {
+    pageTitle = 'श्री हनुमान प्रश्नावली — तुरंत जानें अपने प्रश्न व मनोकामना का फल'
+    pageDesc = 'श्री हनुमान जी सिद्ध प्रश्नावली (Shree Hanuman Prashnavali): संकटमोचन हनुमान जी का स्मरण कर तुरंत जानें अपने प्रश्न का उत्तर। कार्य सिद्धि, लाभ-हानि व मनोकामना का सटीक फल।'
+  } else if (s === 'kundali' || s === 'free-kundali') {
+    pageTitle = 'फ्री जन्म कुंडली बनाएं — ऑनलाइन संपूर्ण वैदिक जन्म पत्रिका'
+    pageDesc = 'फ्री ऑनलाइन जन्म कुंडली (Free Online Kundali): जन्म विवरण दर्ज कर अपनी संपूर्ण वैदिक जन्म पत्रिका, लग्न चार्ट, नवमांश, ग्रह स्थिति व विंशोत्तरी महादशा तुरंत देखें।'
+  } else if (s === 'milan' || s === 'kundali-milan') {
+    pageTitle = 'कुंडली मिलान — 36 गुण मिलान एवं विवाह मेलापक रिपोर्ट'
+    pageDesc = 'वैदिक 36 गुण मिलान (Kundali Milan for Marriage): वर-कन्या के जन्म विवरण से अष्टकूट गुण मिलान, नाड़ी दोष, भकूट दोष, मांगलिक विचार व संपूर्ण विवाह रिपोर्ट मुफ्त देखें।'
+  } else if (s === 'numerology' || s === 'numerology-calculator') {
+    pageTitle = 'अंक ज्योतिष कैलकुलेटर — मूलांक, भाग्यांक व लकी नंबर निकालें'
+    pageDesc = 'अंक ज्योतिष (Numerology Calculator): अपनी जन्मतिथि से मूलांक, भाग्यांक, नामांक, लकी नंबर व शुभ रंग तुरंत जानें और अपने भविष्य का सटीक विश्लेषण देखें।'
+  } else if (s === 'mala' || s === 'japa-mala-counter') {
+    pageTitle = 'डिजिटल मंत्र जाप माला काउंटर — ऑनलाइन नाम सिमरन व साधना'
+    pageDesc = 'ऑनलाइन 108 मनका डिजिटल जाप माला (Digital Japa Mala Counter): किसी भी मंत्र का ध्यानपूर्वक जाप करें। ऑटो बीप, संकल्प ट्रैकर व पूर्ण सात्विक इंटरफेस।'
+  }
+
   return generatePageMeta({
-    title: `${tool.name} — Free Online Vedic Tool`,
-    description: tool.description
-      ? `${tool.description} 100% Authentic Vedic calculations & predictions online at DivyaYagyam.`
-      : `Calculate and check ${tool.name} online with accurate Vedic astrology algorithms, instant predictions & dosha remedies at DivyaYagyam.`,
+    title: pageTitle,
+    description: pageDesc,
     path: `/tools/${tool.slug}`,
     keywords: [
       tool.name,

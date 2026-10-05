@@ -5,8 +5,8 @@ import { Sparkles, HeartHandshake, Home, Car, Baby, Building2, ShieldCheck } fro
 import Link from 'next/link'
 
 export const metadata: Metadata = generatePageMeta({
-  title: 'शुभ मुहूर्त — विवाह, गृह प्रवेश व वाहन मुहूर्त',
-  description: 'वर्ष 2026 से 2030 तक के सम्पूर्ण शुभ मुहूर्त: विवाह, गृह प्रवेश, वाहन खरीदी, मुंडन, नामकरण व प्रॉपर्टी हेतु प्रमाणित वैदिक तिथियां।',
+  title: 'शुभ मुहूर्त 2026 — विवाह, गृह प्रवेश व वाहन मुहूर्त सूची',
+  description: 'शुभ मुहूर्त 2026 (Shubh Muhurat): विवाह, गृह प्रवेश, नया वाहन, मुंडन, नामकरण व प्रॉपर्टी रजिस्ट्री के सर्वश्रेष्ठ शुभ मुहूर्त, तिथि, नक्षत्र व समय की संपूर्ण सूची।',
   path: '/muhurat',
 })
 

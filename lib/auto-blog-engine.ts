@@ -276,8 +276,11 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
     }
 
     const title = blogData.h1 || blogData.seoTitle
-    const baseSlug = (blogData.slug || title.toLowerCase()).replace(/[^a-zA-Z0-9\u0900-\u097F]+/g, '-').replace(/^-+|-+$/g, '')
-    const uniqueSlug = `${baseSlug}-${Date.now()}`.toLowerCase()
+    const baseSlug = (blogData.slug || title.toLowerCase()).replace(/[^a-zA-Z0-9\u0900-\u097F]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase()
+    
+    // Check if slug already exists to create clean SEO slugs without ugly timestamps
+    const existingBlog = await prisma.blog.findUnique({ where: { slug: baseSlug } })
+    const uniqueSlug = existingBlog ? `${baseSlug}-${Math.floor(100 + Math.random() * 900)}` : baseSlug
 
     // 5. Ensure Category Exists
     let category = await prisma.blogCategory.findFirst({
@@ -328,8 +331,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       const { revalidateTag, revalidatePath } = await import('next/cache')
       revalidateTag('blogs')
       revalidateTag('blog')
-      revalidatePath('/blogs')
-      revalidatePath(`/blogs/${newBlog.slug}`)
+      revalidatePath('/blog')
+      revalidatePath(`/blog/${newBlog.slug}`)
       revalidatePath('/')
     } catch {
       // Revalidation error non-fatal

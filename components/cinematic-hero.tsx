@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { CheckCircle2, MessageCircle, ArrowRight, ChevronDown } from 'lucide-react'
 
@@ -76,9 +77,14 @@ export function CinematicHero() {
             style={{ opacity: videoOpacity }}
           />
         ) : (
-          <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${POSTER_URL})` }}
+          <Image
+            src={POSTER_URL}
+            alt="DivyaYagyam Sacred Vedic Pujas"
+            fill
+            priority
+            sizes="100vw"
+            quality={85}
+            className="object-cover object-center"
           />
         )}
 

@@ -1,7 +1,9 @@
+import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { notFound, permanentRedirect } from 'next/navigation'
 import Image from 'next/image';
 import Script from 'next/script'
-import { generateArticleSchema, generateBreadcrumbSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
+import { generateArticleSchema, generateBreadcrumbSchema, generateFaqSchema, generatePageMeta, BASE_URL } from '@/lib/seo'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User, Eye, FileText, Download, Sparkles } from 'lucide-react'
@@ -25,6 +27,7 @@ export async function generateStaticParams() {
     const posts = await prisma.blog.findMany({
       where: { status: 'PUBLISHED' },
       select: { slug: true },
+      take: 50,
     })
     return posts
       .filter(p => p.slug)
@@ -43,20 +46,80 @@ function getEmbedUrl(url: string | null): string | null {
   return url;
 }
 
+// Global cached fetch for blog posts (1-hour TTL on Vercel Edge Data Cache)
+const fetchBlogPostFromDb = async (cleanSlug: string) => {
+  try {
+    let post = await prisma.blog.findUnique({
+      where: { slug: cleanSlug },
+      include: {
+        category: { select: { name: true, id: true } },
+        author: { select: { fullName: true } }
+      }
+    })
+
+    if (!post) {
+      const withoutTimestamp = cleanSlug.replace(/-\d{10,}$/, '')
+      post = await prisma.blog.findFirst({
+        where: {
+          OR: [
+            { slug: { startsWith: withoutTimestamp } },
+            { slug: cleanSlug }
+          ]
+        },
+        include: {
+          category: { select: { name: true, id: true } },
+          author: { select: { fullName: true } }
+        }
+      })
+    }
+
+    if (!post) return null
+    return JSON.parse(JSON.stringify(post))
+  } catch (err) {
+    console.error('Error fetching blog post:', err)
+    return null
+  }
+}
+
+const getCachedBlogPostBySlug = (slug: string) =>
+  unstable_cache(
+    async () => fetchBlogPostFromDb(slug),
+    [`blog-detail-v2-${slug}`],
+    { revalidate: 3600, tags: ['blogs', `blog-${slug}`] }
+  )()
+
+const getBlogPost = cache(async (slug: string) => {
+  return getCachedBlogPostBySlug(slug)
+})
+
+const getCachedBlogFaqs = (postId: string) =>
+  unstable_cache(
+    async () => {
+      try {
+        const f = await prisma.fAQ.findMany({
+          where: { category: `blog-${postId}`, isActive: true },
+          orderBy: { order: 'asc' }
+        })
+        return JSON.parse(JSON.stringify(f))
+      } catch {
+        return []
+      }
+    },
+    [`blog-faqs-v2-${postId}`],
+    { revalidate: 3600, tags: ['faqs', `blog-faqs-${postId}`] }
+  )()
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const cleanSlug = sanitizeSlug(slug) || slug;
-  const post = await prisma.blog.findUnique({
-    where: { slug: cleanSlug },
-    select: { title: true, excerpt: true, seoTitle: true, seoDescription: true, seoKeywords: true, coverImage: true, coverImageAlt: true }
-  });
+  const post = await getBlogPost(cleanSlug)
 
   if (!post) return generatePageMeta({ title: 'Vedic Articles | DivyaYagyam', description: 'Redirecting to authentic Vedic articles at DivyaYagyam.', path: `/blog`, noIndex: true });
 
-  const keywords = post.seoKeywords ? post.seoKeywords.split(',').map(k => k.trim()) : undefined
+  const keywords = post.seoKeywords ? post.seoKeywords.split(',').map((k: string) => k.trim()) : undefined
 
   return generatePageMeta({
-    title: post.title || post.seoTitle || 'वैदिक लेख',
+    title: post.seoTitle || post.title || 'वैदिक लेख',
     description: post.seoDescription || post.excerpt || '',
     path: `/blog/${cleanSlug}`,
     image: post.coverImage || undefined,
@@ -67,25 +130,54 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const cleanSlug = sanitizeSlug(slug) || slug;
-  const post = await prisma.blog.findUnique({
-    where: { slug: cleanSlug },
-    include: {
-      category: { select: { name: true, id: true } },
-      author: { select: { fullName: true } }
-    }
-  })
+  const post = await getBlogPost(cleanSlug)
 
   if (!post || post.status !== 'PUBLISHED' || (post.publishedAt && new Date(post.publishedAt) > new Date())) {
     permanentRedirect('/blog')
   }
 
-  const faqs = await prisma.fAQ.findMany({
-    where: { category: `blog-${post.id}`, isActive: true },
-    orderBy: { order: 'asc' }
-  });
+  // Canonical 301 redirect if accessed via modified or timestamped variant
+  if (post.slug && cleanSlug !== post.slug) {
+    permanentRedirect(`/blog/${post.slug}`)
+  }
+
+  const faqs = await getCachedBlogFaqs(post.id)
+
+  // Extract FAQs from content if no database FAQs found
+  const parsedFaqs: { question: string; answer: string }[] = faqs.map(f => ({ question: f.question, answer: f.answer }))
+  if (parsedFaqs.length === 0 && post.content) {
+    const faqRegex = /###\s*(?:Q\d+[\.:]?\s*|\d+[\.:]\s*)?([^\n\?]+\?)\s*\n+([^#\n][^\n]+)/g
+    let match
+    while ((match = faqRegex.exec(post.content)) !== null) {
+      if (match[1] && match[2]) {
+        parsedFaqs.push({ question: match[1].trim(), answer: match[2].trim() })
+      }
+    }
+  }
 
   const embedVideoUrl = getEmbedUrl(post.videoUrl)
   const coverAlt = post.coverImageAlt || `${post.title} - ${post.category?.name || 'Spirituality'} | Online Puja Booking & Spiritual Guide DivyaYagyam`
+
+  const schemaGraph: any[] = [
+    generateArticleSchema({
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || post.content?.substring(0, 200) || '',
+      image: post.coverImage || '/logo.jpg',
+      imageAlt: coverAlt,
+      slug: post.slug,
+      datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
+      dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
+    }),
+    generateBreadcrumbSchema([
+      { name: 'Home', url: BASE_URL },
+      { name: 'Blog', url: `${BASE_URL}/blog` },
+      { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
+    ]),
+  ]
+
+  if (parsedFaqs.length > 0) {
+    schemaGraph.push(generateFaqSchema(parsedFaqs))
+  }
 
   return (
     <>
@@ -96,22 +188,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@graph": [
-              generateArticleSchema({
-                title: post.title,
-                description: post.excerpt || post.content?.substring(0, 200) || '',
-                image: post.coverImage || '/logo.jpg',
-                imageAlt: coverAlt,
-                slug: post.slug,
-                datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
-                dateModified: post.updatedAt?.toISOString() || new Date().toISOString(),
-              }),
-              generateBreadcrumbSchema([
-                { name: 'Home', url: BASE_URL },
-                { name: 'Blog', url: `${BASE_URL}/blog` },
-                { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
-              ]),
-            ]
+            "@graph": schemaGraph
           })
         }}
       />
@@ -159,19 +236,21 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
           <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-gradient-to-b from-[#2A1508] to-[#120703]">
             <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
-              <img 
+              <Image 
                 src={getSafeImageUrl(post.coverImage)} 
                 alt="" 
                 aria-hidden="true" 
+                fill
+                sizes="100vw"
                 className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-115 pointer-events-none" 
               />
-              <img 
-                loading="lazy" 
-                decoding="async" 
+              <Image 
+                priority
+                fill 
+                sizes="(max-width: 768px) 100vw, 896px"
                 src={getSafeImageUrl(post.coverImage)} 
                 alt={coverAlt} 
                 title={post.title} 
-                itemProp="image" 
                 className="relative z-10 w-full h-full max-h-[500px] object-contain p-1 sm:p-2" 
               />
             </div>
