@@ -1,4 +1,4 @@
-import { cache } from 'react'
+import { cache, Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import { notFound, permanentRedirect } from 'next/navigation'
 import Image from 'next/image';
@@ -21,13 +21,15 @@ import { BlogBannerPoster } from '@/components/blog/BlogBannerPoster'
 
 export const revalidate = 3600
 
-// Pre-build all published blog posts at deploy time for faster Google crawling
+// Pre-build top 200 published blog posts at deploy time — instant load on first visit
+// New blogs beyond this are built on-demand on first request, then cached for 1 hour
 export async function generateStaticParams() {
   try {
     const posts = await prisma.blog.findMany({
       where: { status: 'PUBLISHED' },
       select: { slug: true },
-      take: 50,
+      orderBy: { publishedAt: 'desc' },
+      take: 200,
     })
     return posts
       .filter(p => p.slug)
@@ -234,16 +236,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             Video disabled by admin.
           </div>
         ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
-          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-gradient-to-b from-[#2A1508] to-[#120703]">
+          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-[#120703]">
             <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
-              <Image 
-                src={getSafeImageUrl(post.coverImage)} 
-                alt="" 
-                aria-hidden="true" 
-                fill
-                sizes="100vw"
-                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-115 pointer-events-none" 
-              />
               <Image 
                 priority
                 fill 
@@ -476,11 +470,20 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           </div>
         )}
 
-        <RelatedPosts
-          currentPostId={post.id}
-          categoryId={post.categoryId ?? null}
-          categoryName={post.category?.name ?? null}
-        />
+        <Suspense fallback={
+          <div className="mt-16 pt-12 border-t border-amber-100 space-y-4">
+            <div className="h-8 w-48 rounded-xl bg-amber-50 animate-pulse" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {[1,2,3].map(i => <div key={i} className="h-56 rounded-3xl bg-amber-50 animate-pulse" />)}
+            </div>
+          </div>
+        }>
+          <RelatedPosts
+            currentPostId={post.id}
+            categoryId={post.categoryId ?? null}
+            categoryName={post.category?.name ?? null}
+          />
+        </Suspense>
       </article>
     </div>
     </>
