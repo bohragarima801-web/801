@@ -72,7 +72,7 @@ export function CinematicHero() {
             muted
             playsInline
             loop={false}
-            preload="auto"
+            preload="none"
             className="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-opacity duration-500 ease-out"
             style={{ opacity: videoOpacity }}
           />
