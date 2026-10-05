@@ -50,43 +50,41 @@ export function KaramKundaliClient() {
     const revealElements = document.querySelectorAll('.reveal')
     revealElements.forEach(el => observer.observe(el))
 
-    // 2. Play secondary videos
-    const otherVideos = document.querySelectorAll('video:not(#heroVideo)')
-    otherVideos.forEach(v => {
-      ;(v as HTMLVideoElement).play().catch(() => {})
-    })
-
-    // 3. Hero Video Smooth Fade Loop
-    const video = heroVideoRef.current
-    if (!video) return
-
-    function animateOpacity(from: number, to: number, duration: number, done?: () => void) {
-      const start = performance.now()
-      function frame(now: number) {
-        const p = Math.min((now - start) / duration, 1)
-        const eased = p * (2 - p)
-        if (video) {
-          video.style.opacity = String(from + (to - from) * eased)
+    // 2. Force muted and autoplay on ALL video elements immediately
+    const startAllVideos = () => {
+      const allVideos = document.querySelectorAll<HTMLVideoElement>('video')
+      allVideos.forEach(v => {
+        v.muted = true
+        v.defaultMuted = true
+        v.playsInline = true
+        v.setAttribute('muted', '')
+        v.setAttribute('playsinline', '')
+        v.style.opacity = '1'
+        const playPromise = v.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {})
         }
-        if (p < 1) requestAnimationFrame(frame)
-        else if (done) done()
-      }
-      requestAnimationFrame(frame)
+      })
     }
 
-    const handleCanPlay = () => {
-      video.play().catch(() => {})
-      animateOpacity(0, 1, 500)
-    }
+    startAllVideos()
+    const timer1 = setTimeout(startAllVideos, 250)
+    const timer2 = setTimeout(startAllVideos, 800)
 
-    video.addEventListener('canplay', handleCanPlay, { once: true })
-    video.play().catch(() => {})
+    const handleFirstInteraction = () => {
+      startAllVideos()
+      window.removeEventListener('click', handleFirstInteraction)
+      window.removeEventListener('touchstart', handleFirstInteraction)
+    }
+    window.addEventListener('click', handleFirstInteraction, { once: true })
+    window.addEventListener('touchstart', handleFirstInteraction, { once: true })
 
     return () => {
       observer.disconnect()
-      if (video) {
-        video.removeEventListener('canplay', handleCanPlay)
-      }
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      window.removeEventListener('click', handleFirstInteraction)
+      window.removeEventListener('touchstart', handleFirstInteraction)
     }
   }, [])
 
@@ -270,6 +268,7 @@ export function KaramKundaliClient() {
           playsInline
           loop
           preload="auto"
+          poster="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80"
         >
           <source
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4"
@@ -358,7 +357,14 @@ export function KaramKundaliClient() {
       {/* ── FEATURED VIDEO ── */}
       <section className="featured">
         <div className="video-card reveal">
-          <video muted autoPlay loop playsInline preload="auto">
+          <video
+            muted
+            autoPlay
+            loop
+            playsInline
+            preload="auto"
+            poster="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=1200&q=80"
+          >
             <source
               src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260402_054547_9875cfc5-155a-4229-8ec8-b7ba7125cbf8.mp4"
               type="video/mp4"
@@ -388,7 +394,14 @@ export function KaramKundaliClient() {
 
           <div className="two-col">
             <div className="philosophy-video reveal">
-              <video muted autoPlay loop playsInline preload="auto">
+              <video
+                muted
+                autoPlay
+                loop
+                playsInline
+                preload="auto"
+                poster="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80"
+              >
                 <source
                   src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260307_083826_e938b29f-a43a-41ec-a153-3d4730578ab8.mp4"
                   type="video/mp4"
@@ -533,7 +546,14 @@ export function KaramKundaliClient() {
           <div className="services-grid">
             <article className="service liquid-glass reveal">
               <div className="service-media">
-                <video muted autoPlay loop playsInline preload="auto">
+                <video
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload="auto"
+                  poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"
+                >
                   <source
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
                     type="video/mp4"
@@ -554,7 +574,14 @@ export function KaramKundaliClient() {
 
             <article className="service liquid-glass reveal">
               <div className="service-media">
-                <video muted autoPlay loop playsInline preload="auto">
+                <video
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload="auto"
+                  poster="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80"
+                >
                   <source
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
                     type="video/mp4"

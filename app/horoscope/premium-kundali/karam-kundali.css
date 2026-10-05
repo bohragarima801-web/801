@@ -1,22 +1,22 @@
 /* ========================================================
-   DIVYAYAGYAM KARAM KUNDALI — 3D LUXURY VEDIC STYLING
+   DIVYAYAGYAM KARAM KUNDALI — ULTRA-PREMIUM 3D VEDIC STYLING
    ======================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #08080a;
-  --bg-card: rgba(255, 255, 255, 0.02);
+  --bg-card: rgba(255, 255, 255, 0.03);
   --white: #ffffff;
   --text-main: #f5f5f7;
-  --muted: rgba(240, 240, 245, 0.65);
-  --soft: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.10);
+  --muted: rgba(240, 240, 245, 0.72);
+  --soft: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
   --gold-accent: #E5A638;
   --gold-light: #FFE28A;
   --gold-grad: linear-gradient(135deg, #FFE28A 0%, #E5A638 52%, #B86B14 100%);
-  --gold-glow: rgba(229, 166, 56, 0.35);
-  --border-gold: rgba(229, 166, 56, 0.32);
+  --gold-glow: rgba(229, 166, 56, 0.38);
+  --border-gold: rgba(229, 166, 56, 0.35);
 }
 
 .karam-kundali-page {
@@ -24,7 +24,7 @@
   margin: 0;
   background: var(--bg);
   color: var(--text-main);
-  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif !important;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
@@ -45,20 +45,36 @@
   font: inherit;
 }
 
-.instrument {
-  font-family: "Instrument Serif", serif;
+/* ========================================================
+   FORCE INSTRUMENT SERIF ON ALL MAIN HEADINGS
+   ======================================================== */
+.karam-kundali-page .instrument,
+.karam-kundali-page .hero h1,
+.karam-kundali-page .about h2,
+.karam-kundali-page .big-title,
+.karam-kundali-page .services-head h2,
+.karam-kundali-page .value-item h3,
+.karam-kundali-page .buy-box h2,
+.karam-kundali-page .form-title-wrap h3,
+.karam-kundali-page .footer-logo,
+.karam-kundali-page .current {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif !important;
+  letter-spacing: -0.03em;
 }
 
 /* ========================================================
-   AUTHENTIC 3D LIQUID GLASS WITH DUAL GRADIENT BORDER
+   AUTHENTIC 3D LIQUID GLASS WITH HIGH-CONTRAST DEPTH
    ======================================================== */
 .liquid-glass {
-  background: var(--bg-card);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 15px 35px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(22, 22, 28, 0.75) 45%, rgba(12, 12, 16, 0.92) 100%) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(229, 166, 56, 0.28) !important;
+  box-shadow: 
+    0 22px 50px rgba(0, 0, 0, 0.85),
+    inset 0 1px 1px rgba(255, 255, 255, 0.24),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(229, 166, 56, 0.10) !important;
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
@@ -71,11 +87,11 @@
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(229, 166, 56, 0.25) 25%,
+    rgba(255, 255, 255, 0.40) 0%,
+    rgba(229, 166, 56, 0.30) 25%,
     rgba(255, 255, 255, 0) 50%,
-    rgba(229, 166, 56, 0.18) 80%,
-    rgba(255, 255, 255, 0.30) 100%);
+    rgba(229, 166, 56, 0.20) 80%,
+    rgba(255, 255, 255, 0.35) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -91,15 +107,15 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: var(--gold-grad);
+  background: var(--gold-grad) !important;
   color: #120e06 !important;
-  font-weight: 700;
+  font-weight: 700 !important;
   letter-spacing: .02em;
   border-radius: 999px;
   border: none;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 0 25px var(--gold-glow), 0 4px 18px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 28px var(--gold-glow), 0 6px 20px rgba(0, 0, 0, 0.7) !important;
   transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
   transform: translateZ(0);
 }
@@ -111,19 +127,19 @@
   left: -75%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
   transform: skewX(-25deg);
   animation: shine 3.5s infinite;
 }
 
 .btn-catchy:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 0 40px rgba(229, 166, 56, 0.75), 0 12px 28px rgba(0, 0, 0, 0.75);
+  transform: translateY(-4px) scale(1.03) !important;
+  box-shadow: 0 0 45px rgba(229, 166, 56, 0.8), 0 14px 30px rgba(0, 0, 0, 0.8) !important;
   color: #000 !important;
 }
 
 .btn-catchy:active {
-  transform: translateY(1px) scale(0.98);
+  transform: translateY(1px) scale(0.98) !important;
 }
 
 @keyframes shine {
@@ -140,7 +156,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 15%, rgba(229, 166, 56, 0.12) 0%, transparent 65%), var(--bg);
+  background: radial-gradient(ellipse at 50% 18%, rgba(229, 166, 56, 0.16) 0%, transparent 68%), var(--bg);
 }
 
 .hero-video {
@@ -151,9 +167,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center bottom;
-  opacity: 1;
-  filter: brightness(0.68) saturate(0.85);
-  transition: opacity 0.6s ease;
+  filter: brightness(0.70) saturate(0.90);
+  background: #111116;
 }
 
 .hero-shade {
@@ -161,8 +176,8 @@
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(ellipse at 50% 48%, transparent 18%, rgba(8, 8, 10, 0.35) 52%, rgba(8, 8, 10, 0.75) 100%),
-    linear-gradient(180deg, rgba(8, 8, 10, 0.40), transparent 38%, rgba(8, 8, 10, 0.85));
+    radial-gradient(ellipse at 50% 48%, transparent 18%, rgba(8, 8, 10, 0.35) 52%, rgba(8, 8, 10, 0.85) 100%),
+    linear-gradient(180deg, rgba(8, 8, 10, 0.40), transparent 38%, rgba(8, 8, 10, 0.90));
   pointer-events: none;
 }
 
@@ -233,7 +248,7 @@
 }
 
 .nav-links a {
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.82);
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s;
@@ -286,7 +301,6 @@
 
 .hero h1 {
   margin: 0;
-  font-family: "Instrument Serif", serif;
   font-size: clamp(50px, 6.5vw, 96px);
   font-weight: 400;
   line-height: .95;
@@ -303,8 +317,8 @@
   max-width: 540px;
   margin: 24px 0 0;
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 15.5px;
+  line-height: 1.7;
 }
 
 .hero-cta {
@@ -321,7 +335,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .hero-image-wrap img {
@@ -330,15 +344,15 @@
   height: auto;
   border-radius: 24px;
   object-fit: cover;
-  border: 1px solid rgba(229, 166, 56, 0.35);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(229, 166, 56, 0.22);
-  transform: rotateY(-4deg) rotateX(2deg);
+  border: 1.5px solid rgba(229, 166, 56, 0.4);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 55px rgba(229, 166, 56, 0.28);
+  transform: rotateY(-5deg) rotateX(3deg);
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
 }
 
 .hero-image-wrap:hover img {
-  transform: rotateY(0deg) rotateX(0deg) scale(1.02);
-  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 65px rgba(229, 166, 56, 0.35);
+  transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+  box-shadow: 0 45px 95px rgba(0, 0, 0, 0.98), 0 0 75px rgba(229, 166, 56, 0.45);
 }
 
 .socials {
@@ -356,13 +370,13 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
   transition: 0.2s;
 }
 
 .social:hover {
   color: var(--gold-light);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--border-gold);
 }
 
@@ -373,8 +387,8 @@ section {
 }
 
 .about {
-  padding: 140px 24px 55px;
-  background: radial-gradient(ellipse at top, rgba(229, 166, 56, 0.05) 0%, transparent 70%), var(--bg);
+  padding: 140px 24px 60px;
+  background: radial-gradient(ellipse at top, rgba(229, 166, 56, 0.12) 0%, transparent 70%), var(--bg);
 }
 
 .container {
@@ -385,16 +399,15 @@ section {
 .label {
   color: var(--gold-accent);
   font-size: 12px;
-  letter-spacing: .18em;
+  letter-spacing: .20em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .about h2 {
   margin: 25px 0 0;
-  font-family: "Instrument Serif", serif;
   font-weight: 400;
-  font-size: clamp(50px, 7vw, 90px);
+  font-size: clamp(50px, 7vw, 92px);
   line-height: 1.02;
   letter-spacing: -.035em;
   color: #fff;
@@ -405,8 +418,12 @@ section {
   color: var(--gold-light);
 }
 
+/* ========================================================
+   FEATURED VIDEO CARD WITH 3D BORDER & SHADOW
+   ======================================================== */
 .featured {
-  padding: 20px 24px 110px;
+  padding: 30px 24px 110px;
+  background: radial-gradient(circle at center, rgba(229, 166, 56, 0.05) 0%, transparent 60%);
 }
 
 .video-card {
@@ -416,9 +433,9 @@ section {
   border-radius: 28px;
   overflow: hidden;
   position: relative;
-  background: #111116;
-  border: 1px solid var(--border);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  background: radial-gradient(circle at center, #1e1b26 0%, #0d0c12 100%);
+  border: 1.5px solid rgba(229, 166, 56, 0.35) !important;
+  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.92), 0 0 50px rgba(229, 166, 56, 0.22) !important;
 }
 
 .video-card video {
@@ -426,21 +443,23 @@ section {
   height: 100%;
   object-fit: cover;
   display: block;
+  background: #111116;
 }
 
 .video-card:after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8, 8, 10, 0.75), transparent 55%);
+  background: linear-gradient(to top, rgba(8, 8, 10, 0.85) 0%, rgba(8, 8, 10, 0.2) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .video-info {
   position: absolute;
   z-index: 2;
-  left: 28px;
-  right: 28px;
-  bottom: 28px;
+  left: 32px;
+  right: 32px;
+  bottom: 32px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -448,9 +467,9 @@ section {
 }
 
 .glass-info {
-  max-width: 430px;
-  padding: 25px;
-  border-radius: 18px;
+  max-width: 440px;
+  padding: 26px 28px;
+  border-radius: 20px;
 }
 
 .glass-info .label {
@@ -458,25 +477,27 @@ section {
 }
 
 .glass-info p {
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 14.5px;
+  line-height: 1.7;
   margin: 0;
   color: #fff;
 }
 
 .pill-btn {
-  padding: 14px 30px;
-  font-size: 13px;
+  padding: 16px 34px;
+  font-size: 13.5px;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
+/* ========================================================
+   PHILOSOPHY SECTION
+   ======================================================== */
 .philosophy {
   padding: 110px 24px 145px;
 }
 
 .big-title {
-  font-family: "Instrument Serif", serif;
   font-size: clamp(60px, 9vw, 115px);
   line-height: .9;
   font-weight: 400;
@@ -502,18 +523,19 @@ section {
   border-radius: 28px;
   overflow: hidden;
   background: #111116;
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border: 1.5px solid rgba(229, 166, 56, 0.32);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85), 0 0 35px rgba(229, 166, 56, 0.15);
 }
 
 .philosophy-video video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background: #111116;
 }
 
 .text-block {
-  padding: 12px 0 35px;
+  padding: 14px 0 35px;
 }
 
 .text-block+.text-block {
@@ -524,13 +546,16 @@ section {
 .text-block p {
   color: var(--muted);
   font-size: 16px;
-  line-height: 1.7;
+  line-height: 1.75;
   margin: 0;
 }
 
+/* ========================================================
+   SERVICES SECTION
+   ======================================================== */
 .services {
   padding: 110px 24px 145px;
-  background: radial-gradient(ellipse at center, rgba(229, 166, 56, 0.035), transparent 65%), var(--bg);
+  background: radial-gradient(ellipse at center, rgba(229, 166, 56, 0.06), transparent 65%), var(--bg);
 }
 
 .services-head {
@@ -542,7 +567,6 @@ section {
 
 .services-head h2 {
   margin: 0;
-  font-family: "Instrument Serif", serif;
   font-weight: 400;
   font-size: clamp(45px, 6vw, 72px);
   letter-spacing: -.03em;
@@ -558,19 +582,21 @@ section {
 .service {
   border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
-  transition: transform 0.4s ease, border-color 0.4s ease;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.7);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .service:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   border-color: var(--border-gold);
+  box-shadow: 0 35px 75px rgba(0, 0, 0, 0.9), 0 0 35px rgba(229, 166, 56, 0.2);
 }
 
 .service-media {
   aspect-ratio: 16/9;
   overflow: hidden;
   position: relative;
+  background: #111116;
 }
 
 .service-media video {
@@ -578,21 +604,22 @@ section {
   height: 100%;
   object-fit: cover;
   transition: transform .7s;
+  background: #111116;
 }
 
 .service:hover .service-media video {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .service-media:after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8, 8, 10, 0.65), transparent);
+  background: linear-gradient(to top, rgba(8, 8, 10, 0.75), transparent);
 }
 
 .service-body {
-  padding: 27px;
+  padding: 28px;
 }
 
 .service-top {
@@ -603,9 +630,10 @@ section {
 
 .service-tag {
   font-size: 11px;
-  letter-spacing: .18em;
+  letter-spacing: .20em;
   text-transform: uppercase;
   color: var(--gold-accent);
+  font-weight: 700;
 }
 
 .arrow-up {
@@ -620,7 +648,7 @@ section {
 
 .service h3 {
   font-size: 25px;
-  font-weight: 500;
+  font-weight: 600;
   margin: 26px 0 10px;
   letter-spacing: -.02em;
   color: #fff;
@@ -628,8 +656,8 @@ section {
 
 .service p {
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 14.5px;
+  line-height: 1.7;
   margin: 0;
   max-width: 460px;
 }
@@ -645,7 +673,7 @@ section {
 .chapter-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 26px;
   margin-top: 50px;
   perspective: 1200px;
 }
@@ -656,18 +684,18 @@ section {
   display: flex;
   flex-direction: column;
   transition: transform .4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color .4s ease, box-shadow .4s ease;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
 }
 
 .chap-box:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: var(--border-gold);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(229, 166, 56, 0.22);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(229, 166, 56, 0.26);
 }
 
 .chap-img-wrap {
   width: 100%;
-  height: 190px;
+  height: 200px;
   position: relative;
   overflow: hidden;
 }
@@ -677,7 +705,7 @@ section {
   height: 100%;
   object-fit: cover;
   transition: transform .6s ease;
-  filter: brightness(.82) contrast(1.08);
+  filter: brightness(.85) contrast(1.10);
 }
 
 .chap-box:hover .chap-img-wrap img {
@@ -688,7 +716,7 @@ section {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8, 8, 10, 0.92) 0%, rgba(8, 8, 10, 0.2) 60%, transparent 100%);
+  background: linear-gradient(to top, rgba(8, 8, 10, 0.95) 0%, rgba(8, 8, 10, 0.25) 60%, transparent 100%);
 }
 
 .chap-body {
@@ -698,14 +726,14 @@ section {
 
 .chap-no {
   font-size: 11px;
-  letter-spacing: .18em;
+  letter-spacing: .20em;
   color: var(--gold-accent);
   font-weight: 700;
   margin-bottom: 10px;
 }
 
 .chap-box h3 {
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 600;
   margin: 0 0 10px;
   letter-spacing: -.01em;
@@ -715,7 +743,7 @@ section {
 .chap-box p {
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.65;
+  line-height: 1.7;
   margin: 0;
 }
 
@@ -745,24 +773,23 @@ section {
 
 .value-no {
   color: var(--gold-accent);
-  opacity: 0.75;
+  opacity: 0.85;
   font-size: 11px;
-  letter-spacing: .15em;
-  font-weight: 600;
+  letter-spacing: .18em;
+  font-weight: 700;
 }
 
 .value-item h3 {
-  font-family: "Instrument Serif", serif;
   font-weight: 400;
-  font-size: 32px;
+  font-size: 34px;
   margin: 38px 0 12px;
   color: #fff;
 }
 
 .value-item p {
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 14.5px;
+  line-height: 1.75;
   margin: 0;
 }
 
@@ -782,11 +809,10 @@ section {
   grid-template-columns: 1.05fr .95fr;
   gap: 60px;
   align-items: center;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 30px 75px rgba(0, 0, 0, 0.85);
 }
 
 .buy-box h2 {
-  font-family: "Instrument Serif", serif;
   font-weight: 400;
   font-size: clamp(52px, 6vw, 82px);
   line-height: .9;
@@ -802,8 +828,8 @@ section {
 
 .buy-box p {
   color: var(--muted);
-  line-height: 1.7;
-  font-size: 14px;
+  line-height: 1.75;
+  font-size: 14.5px;
 }
 
 .price {
@@ -814,8 +840,7 @@ section {
 }
 
 .current {
-  font-family: "Instrument Serif", serif;
-  font-size: 55px;
+  font-size: 58px;
   color: var(--gold-light);
 }
 
@@ -835,18 +860,18 @@ section {
 .report-mockup-wrap {
   position: relative;
   border-radius: 24px;
-  padding: 10px;
-  background: rgba(255, 255, 255, .02);
-  border: 1px solid var(--border-gold);
-  box-shadow: 0 30px 75px rgba(0, 0, 0, .9), 0 0 50px rgba(229, 166, 56, .22);
-  transform: rotate(2deg) rotateY(-3deg);
+  padding: 12px;
+  background: rgba(255, 255, 255, .03);
+  border: 1.5px solid var(--border-gold);
+  box-shadow: 0 35px 85px rgba(0, 0, 0, .95), 0 0 60px rgba(229, 166, 56, 0.25);
+  transform: rotate(2deg) rotateY(-4deg);
   transition: transform .5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow .5s ease;
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .report-mockup-wrap:hover {
   transform: rotate(0deg) rotateY(0deg) scale(1.03);
-  box-shadow: 0 40px 90px rgba(0, 0, 0, .95), 0 0 70px rgba(229, 166, 56, .35);
+  box-shadow: 0 45px 105px rgba(0, 0, 0, .98), 0 0 80px rgba(229, 166, 56, 0.4);
 }
 
 .report-mockup-wrap img {
@@ -854,7 +879,7 @@ section {
   height: auto;
   display: block;
   border-radius: 18px;
-  filter: contrast(1.03) brightness(.98);
+  filter: contrast(1.05) brightness(.98);
 }
 
 /* ========================================================
@@ -867,9 +892,9 @@ section {
 }
 
 .form-card {
-  padding: 50px 60px;
+  padding: 55px 65px;
   border-radius: 32px;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.9);
 }
 
 .form-title-wrap {
@@ -877,7 +902,6 @@ section {
 }
 
 .form-title-wrap h3 {
-  font-family: "Instrument Serif", serif;
   font-size: clamp(38px, 4.5vw, 55px);
   margin: 10px 0 6px;
   font-weight: 400;
@@ -905,15 +929,15 @@ section {
   font-size: 12px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .78);
-  font-weight: 500;
+  color: rgba(255, 255, 255, .82);
+  font-weight: 600;
 }
 
 .form-input {
   width: 100%;
-  padding: 14px 18px;
+  padding: 15px 18px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, .04);
+  background: rgba(255, 255, 255, .05);
   border: 1px solid var(--border);
   color: #fff;
   outline: none;
@@ -922,8 +946,8 @@ section {
 
 .form-input:focus {
   border-color: var(--gold-accent);
-  background: rgba(255, 255, 255, .07);
-  box-shadow: 0 0 20px rgba(229, 166, 56, .35);
+  background: rgba(255, 255, 255, .08);
+  box-shadow: 0 0 22px rgba(229, 166, 56, .4);
 }
 
 .form-input option {
@@ -936,7 +960,7 @@ section {
    ======================================================== */
 .reviews-section {
   padding: 100px 0 120px;
-  background: radial-gradient(ellipse at center, rgba(229, 166, 56, .04) 0%, transparent 70%), var(--bg);
+  background: radial-gradient(ellipse at center, rgba(229, 166, 56, .06) 0%, transparent 70%), var(--bg);
   overflow: hidden;
 }
 
@@ -983,13 +1007,13 @@ section {
   flex-direction: column;
   justify-content: space-between;
   transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 }
 
 .review-card:hover {
   transform: translateY(-6px) scale(1.02);
   border-color: var(--border-gold);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(229, 166, 56, 0.18);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.85), 0 0 30px rgba(229, 166, 56, 0.22);
 }
 
 .review-stars {
@@ -1023,7 +1047,7 @@ section {
   border: 1.5px solid var(--border-gold);
   background: #17171e;
   flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(229, 166, 56, 0.2);
+  box-shadow: 0 0 14px rgba(229, 166, 56, 0.25);
 }
 
 .author-details {
@@ -1064,13 +1088,13 @@ section {
 .faq-item {
   border-radius: 20px;
   transition: border-color .35s ease, background-color .35s ease, box-shadow .35s ease;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 .faq-item.active {
   border-color: var(--border-gold);
-  background: rgba(229, 166, 56, .04);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(229, 166, 56, 0.12);
+  background: rgba(229, 166, 56, .05) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(229, 166, 56, 0.16) !important;
 }
 
 .faq-question {
@@ -1101,13 +1125,13 @@ section {
 }
 
 .faq-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 300;
   flex-shrink: 0;
   color: var(--gold-accent);
@@ -1118,8 +1142,8 @@ section {
 .faq-item.active .faq-icon {
   transform: rotate(45deg);
   border-color: var(--gold-accent);
-  background: rgba(229, 166, 56, .16);
-  box-shadow: 0 0 15px rgba(229, 166, 56, 0.35);
+  background: rgba(229, 166, 56, .20);
+  box-shadow: 0 0 18px rgba(229, 166, 56, 0.4);
 }
 
 .faq-answer {
@@ -1156,7 +1180,6 @@ footer {
 }
 
 .footer-logo {
-  font-family: "Instrument Serif", serif;
   font-size: 34px;
   color: var(--gold-light);
 }
@@ -1164,7 +1187,7 @@ footer {
 .footer-links {
   display: flex;
   gap: 25px;
-  color: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, .55);
   font-size: 12px;
 }
 
