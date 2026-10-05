@@ -80,6 +80,14 @@ export function HoroscopeLandingViewer({ page }: { page: HoroscopeCustomPage }) 
         image: '/logo.jpg',
         handler: async function (response: any) {
           toast.success('🎉 दक्षिणा / भुगतान सफल! धन्यवाद।')
+          if (page.slug === 'premium-kundali' || page.id === 'premium-kundali') {
+            const params = new URLSearchParams({
+              payment_id: response.razorpay_payment_id || '',
+              order_id: data.orderId || '',
+            })
+            window.location.href = `/horoscope/premium-kundali/thank-you?${params.toString()}`
+            return
+          }
           // Optional redirect to WhatsApp with payment confirmation
           const waPhone = page.whatsappNumber || '919530401984'
           const confirmText = encodeURIComponent(`नमस्ते पंडित जी, मैंने "${page.title}" के लिए ₹${amount} का भुगतान सफलता पूर्वक कर दिया है। Payment ID: ${response.razorpay_payment_id}`)
