@@ -119,7 +119,7 @@ export default async function BlogListPage() {
                   className="bg-white rounded-2xl border border-[#E8E1D5] hover:border-[#B85C24] transition-all duration-300 hover:-translate-y-1 shadow-2xs hover:shadow-lg flex flex-col overflow-hidden"
                 >
                   {/* Image Container — Next.js auto-compresses to WebP/AVIF */}
-                  <Link href={`/blog/${post.slug}`} prefetch={true} className="relative block aspect-[16/9] w-full overflow-hidden bg-slate-900 group">
+                  <Link href={`/blog/${post.slug}`} prefetch={true} className="relative block aspect-[16/9] w-full overflow-hidden bg-[#FDFBF7] group">
                     <Image
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -131,7 +131,7 @@ export default async function BlogListPage() {
                     />
                     {post.category?.name && (
                       <div className="absolute bottom-2.5 left-2.5 z-30">
-                        <span className="px-2.5 py-1 rounded-md bg-[#171513]/85 text-[#F8F4EC] text-[10px] font-bold border border-white/10 shadow-xs backdrop-blur-xs">
+                        <span className="px-2.5 py-1 rounded-md bg-gradient-to-r from-[#B85C24] to-[#E58A16] text-white text-[10px] font-bold shadow-xs">
                           {post.category.name}
                         </span>
                       </div>
