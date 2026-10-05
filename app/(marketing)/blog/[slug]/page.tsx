@@ -244,8 +244,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <div className="my-8 p-4 text-center italic text-sm text-slate-400 bg-slate-50 border rounded-xl">
             Video disabled by admin.
           </div>
-        ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('/api/blog/cover') && !post.coverImage.includes('pollinations') && !post.coverImage.startsWith('/ashta') && !post.coverImage.startsWith('/bagala') && !post.coverImage.startsWith('/mahamrityunjaya') ? (
-          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-[#120703]">
+        ) : post.coverImage && !post.coverImage.includes('blog-banner-template') ? (
+          <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-[#FDFBF7]">
             <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
               <Image 
                 priority
@@ -254,7 +254,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 src={getSafeImageUrl(post.coverImage)} 
                 alt={coverAlt} 
                 title={post.title} 
-                className="relative z-10 w-full h-full max-h-[500px] object-contain p-1 sm:p-2" 
+                className="relative z-10 w-full h-full max-h-[500px] object-cover" 
               />
             </div>
             <figcaption className="p-3 text-center text-xs font-semibold text-[#665E58] bg-[#F7EBD7] border-t border-[#E6D6BE] italic">
