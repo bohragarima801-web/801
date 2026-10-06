@@ -13,12 +13,14 @@ export type AdminNavSection = { title: string; icon: any; slug: string; href?: s
 export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Dashboard', slug: 'dashboard', icon: LayoutDashboard, href: '/admin' },
   { title: '⚡ Real-Time Data Status', slug: 'live-data', icon: DatabaseBackup, href: '/admin/live-data' },
-  { title: 'User Management', slug: 'users', icon: Users, permission: 'super_admin_only', items: [
-    { title: 'All Users', href: '/admin/users', permission: 'super_admin_only' }, { title: 'Customers', href: '/admin/customers', permission: 'super_admin_only' },
-    { title: 'Sub-Admins', href: '/admin/users/admins', permission: 'super_admin_only' }, { title: 'Pandits', href: '/admin/users?tab=pandits', permission: 'super_admin_only' },
-    { title: 'Volunteers', href: '/admin/users?tab=volunteers', permission: 'super_admin_only' }, { title: 'Roles', href: '/admin/users/roles', permission: 'super_admin_only' },
-    { title: 'Permissions', href: '/admin/users/permissions', permission: 'super_admin_only' }, { title: 'Login History', href: '/admin/users/activity', permission: 'super_admin_only' },
+  { title: 'Admin & Staff Control', slug: 'users', icon: Users, permission: 'super_admin_only', items: [
+    { title: 'Administrators & Staff', href: '/admin/users/admins', permission: 'super_admin_only' },
+    { title: 'Roles & Authority', href: '/admin/users/roles', permission: 'super_admin_only' },
+    { title: 'Security Permissions', href: '/admin/users/permissions', permission: 'super_admin_only' },
+    { title: 'Admin Login Activity', href: '/admin/users/activity', permission: 'super_admin_only' },
   ]},
+
+  { title: 'Devotee (Customer) Accounts', slug: 'customers', icon: HeartHandshake, href: '/admin/customers', permission: 'super_admin_only' },
 
   { title: 'Puja Management', slug: 'pujas', icon: Flame, permission: 'puja.read', items: [
     { title: 'All Pujas', href: '/admin/pujas' }, { title: 'Add Puja', href: '/admin/pujas/new' },
@@ -31,7 +33,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'Confirmed', href: '/admin/bookings?tab=confirmed' }, { title: 'Completed', href: '/admin/bookings?tab=completed' },
     { title: 'Cancelled', href: '/admin/bookings?tab=cancelled' }, { title: 'Refund Requests', href: '/admin/bookings?tab=refunds' },
   ]},
-  { title: 'Customers', slug: 'customers', icon: HeartHandshake, href: '/admin/customers', permission: 'super_admin_only' },
   { title: 'Products', slug: 'products', icon: ShoppingBag, permission: 'product.read', items: [
     { title: 'All Products', href: '/admin/products' }, { title: 'Add Product', href: '/admin/products/new' },
     { title: 'Categories', href: '/admin/products/categories' }, { title: 'Inventory', href: '/admin/products/inventory' },

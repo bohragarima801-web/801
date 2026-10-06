@@ -11,7 +11,7 @@ async function verifyAdminAuthority() {
 
   const sessionEmail = session.email.trim().toLowerCase()
   const envAdminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
-  const isEnvSuperAdmin = (!!envAdminEmail && sessionEmail === envAdminEmail) || sessionEmail === 'admin@divyayagyam.com' || sessionEmail === 'infosecredsecret@gmail.com'
+  const isEnvSuperAdmin = (!!envAdminEmail && sessionEmail === envAdminEmail) || sessionEmail === 'admin@divyayagyam.com'
 
   const caller = await prisma.user.findFirst({
     where: { email: { equals: sessionEmail, mode: 'insensitive' } },
@@ -46,9 +46,9 @@ export async function GET() {
     const admins = await prisma.user.findMany({
       where: {
         role: {
+          slug: { not: 'devotee' },
           OR: [
-            { isSystem: true },
-            { slug: { in: ['admin', 'manager', 'editor', 'astrologer', 'support'] } },
+            { slug: { in: ['super_admin', 'admin', 'temple_manager', 'pandit_manager', 'store_manager', 'content_manager', 'support_manager', 'finance_manager', 'marketing_manager', 'staff'] } },
             { slug: { startsWith: 'custom_' } }
           ]
         }
@@ -316,5 +316,23 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
     }
     return NextResponse.json({ ok: false, error: err?.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const auth = await verifyAdminAuthority()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
+    if (!id) return NextResponse.json({ ok: false, error: 'Admin ID is required' }, { status: 400 });
+
+    const { safelyDeleteUser } = await import('@/lib/user-delete')
+    await safelyDeleteUser(id)
+
+    return NextResponse.json({ ok: true, message: 'Administrator permanently deleted successfully' });
+  } catch (err: any) {
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete administrator' }, { status: 500 });
   }
 }

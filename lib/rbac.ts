@@ -70,7 +70,7 @@ export function isSuperAdminAccount(user?: { email?: string | null; role?: { slu
   if (!user) return false
   const email = (user.email || '').trim().toLowerCase()
   const envAdminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
-  if (email === 'admin@divyayagyam.com' || email === 'infosecredsecret@gmail.com' || (envAdminEmail && email === envAdminEmail)) {
+  if (email === 'admin@divyayagyam.com' || (envAdminEmail && email === envAdminEmail)) {
     return true
   }
   const roleSlug = user.role?.slug || user.roleSlug

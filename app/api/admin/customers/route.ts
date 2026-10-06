@@ -184,20 +184,11 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { id } })
-    if (!user) {
-      return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
-    }
+    const { safelyDeleteUser } = await import('@/lib/user-delete')
+    await safelyDeleteUser(id)
 
-    await prisma.user.delete({
-      where: { id },
-    })
-
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, message: 'Customer permanently deleted successfully' });
   } catch (err: any) {
-    if (err.code === 'P2003') {
-      return NextResponse.json({ ok: false, error: 'Cannot delete: This item has linked records.' }, { status: 400 });
-    }
-    return NextResponse.json({ ok: false, error: err?.message }, { status: 500 });
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete customer' }, { status: 500 });
   }
 }
