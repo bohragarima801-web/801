@@ -37,15 +37,15 @@ export async function safelyDeleteUser(userId: string): Promise<boolean> {
     }).catch(() => {})
 
     // 2. Clean up media, logs, support tickets & interactions
-    await tx.mediaLibrary.deleteMany({ where: { userId } }).catch(() => {})
+    await tx.mediaLibrary.updateMany({ where: { uploadedBy: userId }, data: { uploadedBy: null } }).catch(() => {})
     await tx.auditLog.deleteMany({ where: { userId } }).catch(() => {})
     await tx.ticketMessage.deleteMany({ where: { userId } }).catch(() => {})
     await tx.supportTicket.deleteMany({ where: { userId } }).catch(() => {})
     await tx.eventRegistration.deleteMany({ where: { userId } }).catch(() => {})
     await tx.blogComment.deleteMany({ where: { userId } }).catch(() => {})
     await tx.communityLike.deleteMany({ where: { userId } }).catch(() => {})
-    await tx.communityComment.deleteMany({ where: { userId } }).catch(() => {})
-    await tx.communityPost.deleteMany({ where: { userId } }).catch(() => {})
+    await tx.communityComment.deleteMany({ where: { authorId: userId } }).catch(() => {})
+    await tx.communityPost.deleteMany({ where: { authorId: userId } }).catch(() => {})
     await tx.review.deleteMany({ where: { userId } }).catch(() => {})
     await tx.astroReport.deleteMany({ where: { userId } }).catch(() => {})
     await tx.pandit.deleteMany({ where: { userId } }).catch(() => {})
@@ -56,13 +56,14 @@ export async function safelyDeleteUser(userId: string): Promise<boolean> {
     await tx.address.deleteMany({ where: { userId } }).catch(() => {})
     await tx.customerProfile.deleteMany({ where: { userId } }).catch(() => {})
 
-    // 3. Reassign critical bookings, orders, payments, donations to primary admin
+    // 3. Reassign critical bookings, orders, payments, donations, consultations to primary admin
     if (fallbackAdminId) {
       await tx.booking.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
       await tx.order.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
       await tx.payment.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
       await tx.donation.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
       await tx.bhaktiSeva.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
+      await tx.consultationBooking.updateMany({ where: { userId }, data: { userId: fallbackAdminId } }).catch(() => {})
     }
 
     // 4. Delete the User record
@@ -75,6 +76,9 @@ export async function safelyDeleteUser(userId: string): Promise<boolean> {
       await tx.rolePermission.deleteMany({ where: { roleId } }).catch(() => {})
       await tx.role.delete({ where: { id: roleId } }).catch(() => {})
     }
+  }, {
+    timeout: 30000, // 30 seconds timeout to safely handle all cascade unlinks
+    maxWait: 10000  // 10 seconds to acquire connection
   })
 
   return true

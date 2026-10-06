@@ -99,6 +99,32 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    if (action === 'draft_content') {
+      try {
+        const result = await generateAutoBlog({
+          forceTopic: forceTopic || undefined,
+          bypassLimit: true,
+          returnDraftOnly: true
+        })
+
+        if (!result.ok) {
+          return NextResponse.json({ ok: false, error: result.error || 'Draft generation failed' }, { status: 500 })
+        }
+
+        return NextResponse.json({
+          ok: true,
+          message: 'AI Draft Generated Successfully!',
+          data: result.data
+        })
+      } catch (genErr: any) {
+        console.error('[AutoBlog] Error generating draft content:', genErr?.message || genErr)
+        return NextResponse.json({
+          ok: false,
+          error: genErr?.message || 'Unexpected error generating blog draft'
+        }, { status: 500 })
+      }
+    }
+
     return NextResponse.json({ ok: false, error: 'Invalid action' }, { status: 400 })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to process auto-blog request' }, { status: 500 })
