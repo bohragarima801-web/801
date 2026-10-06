@@ -113,6 +113,7 @@ export const getAdminUser = cache(async () => {
     })
 
     if (user) {
+      if (user.status === 'SUSPENDED') return null
       const permissions = user.role?.permissions.map(p => p.permission.slug) || []
       return { ...user, permissions }
     }

@@ -34,24 +34,19 @@ const PERMISSION_GROUPS = [
     description: 'Manage blogs, sliders, events and gallery images.'
   },
   {
-    title: 'Finance & Payments',
-    permissions: ['payment.*', 'bhaktiSeva.*', 'report.*', 'analytics.*'],
-    description: 'Access payments details, refunds, and bhaktiSeva logs.'
-  },
-  {
     title: 'Customer Support',
     permissions: ['support.*'],
     description: 'View customer contact tickets and feedback.'
   },
   {
-    title: 'User Management',
-    permissions: ['user.*', 'security.read'],
-    description: 'Manage customers and other user profiles.'
+    title: 'Marketing & Notifications',
+    permissions: ['marketing.*', 'notification.*'],
+    description: 'Create discount codes, offers, and push alerts.'
   },
   {
-    title: 'Marketing & Settings',
-    permissions: ['marketing.*', 'notification.*', 'storage.*', 'settings.*'],
-    description: 'Create discount codes, offers, push alerts and configure main settings.'
+    title: 'Reports & Analytics View',
+    permissions: ['report.*', 'analytics.*', 'bhaktiSeva.read'],
+    description: 'View platform analytics and bhaktiSeva logs.'
   }
 ]
 
@@ -359,30 +354,40 @@ export default function SubAdminsPage() {
             {
               key: 'actions',
               label: 'Access Control',
-              render: (r) => (
-                <div className="flex items-center gap-1.5">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="h-8 px-2.5 text-xs flex gap-1"
-                    onClick={() => startEdit(r)}
-                  >
-                    <Edit className="h-3.5 w-3.5" /> Edit
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={r.status === 'SUSPENDED' ? 'outline' : 'destructive'} 
-                    className={r.status === 'SUSPENDED' ? 'text-green-600 border-green-200 hover:bg-green-50' : 'h-8 px-3'}
-                    onClick={() => toggleStatus(r.id, r.status)}
-                  >
-                    {r.status === 'SUSPENDED' ? (
-                      <><CheckCircle className="h-3 w-3 mr-1" /> Re-Activate</>
-                    ) : (
-                      <><Ban className="h-3 w-3 mr-1" /> Suspend</>
-                    )}
-                  </Button>
-                </div>
-              )
+              render: (r) => {
+                const isSuperAdminUser = r.role?.slug === 'super_admin'
+                if (isSuperAdminUser) {
+                  return (
+                    <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 border border-amber-300 px-2 py-1 rounded">
+                      Protected Super Admin
+                    </span>
+                  )
+                }
+                return (
+                  <div className="flex items-center gap-1.5">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="h-8 px-2.5 text-xs flex gap-1"
+                      onClick={() => startEdit(r)}
+                    >
+                      <Edit className="h-3.5 w-3.5" /> Edit
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant={r.status === 'SUSPENDED' ? 'outline' : 'destructive'} 
+                      className={r.status === 'SUSPENDED' ? 'text-green-600 border-green-200 hover:bg-green-50' : 'h-8 px-3'}
+                      onClick={() => toggleStatus(r.id, r.status)}
+                    >
+                      {r.status === 'SUSPENDED' ? (
+                        <><CheckCircle className="h-3 w-3 mr-1" /> Re-Activate</>
+                      ) : (
+                        <><Ban className="h-3 w-3 mr-1" /> Suspend</>
+                      )}
+                    </Button>
+                  </div>
+                )
+              }
             }
           ]}
           rows={admins}

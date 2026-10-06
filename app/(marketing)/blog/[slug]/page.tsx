@@ -244,7 +244,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <div className="my-8 p-4 text-center italic text-sm text-slate-400 bg-slate-50 border rounded-xl">
             Video disabled by admin.
           </div>
-        ) : post.coverImage && !post.coverImage.includes('blog-banner-template') ? (
+        ) : post.coverImage && !post.coverImage.includes('blog-banner-template') && !post.coverImage.includes('/api/blog/cover') ? (
           <figure className="my-8 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[#E6D6BE] bg-[#FDFBF7]">
             <div className="relative aspect-[16/9] w-full max-h-[500px] overflow-hidden flex items-center justify-center">
               <Image 

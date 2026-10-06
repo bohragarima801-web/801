@@ -1,13 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { isSuperAdminAccount } from '@/lib/rbac'
 
 export const dynamic = 'force-dynamic'
 
+async function checkSuperAdmin() {
+  const session = await getAdminSession()
+  if (!session) return { ok: false as const, status: 401, error: 'Unauthorized' }
+
+  const sessionEmail = session.email.trim().toLowerCase()
+  const caller = await prisma.user.findFirst({
+    where: { email: { equals: sessionEmail, mode: 'insensitive' } },
+    include: { role: true }
+  })
+
+  if (!isSuperAdminAccount({ email: sessionEmail, role: caller?.role })) {
+    return { ok: false as const, status: 403, error: 'Access denied: Payment settings are strictly restricted to Super Admin.' }
+  }
+
+  return { ok: true as const }
+}
+
 export async function GET() {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const settings = await prisma.websiteSetting.findMany({
       where: { key: { startsWith: 'payments.' } }
@@ -17,7 +35,6 @@ export async function GET() {
     settings.forEach(s => {
       const field = s.key.replace('payments.', '')
       const val = typeof s.value === 'string' ? s.value : JSON.stringify(s.value)
-      // Parse booleans and numbers correctly if possible
       if (val === 'true') data[field] = true
       else if (val === 'false') data[field] = false
       else if (!isNaN(Number(val)) && val !== '') data[field] = Number(val)
@@ -32,8 +49,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const body = await req.json()
     const upserts: any[] = []

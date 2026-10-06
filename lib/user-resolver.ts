@@ -70,12 +70,7 @@ export async function ensureDbUser(
 
   // 3. Fallback: Create a new user in DB with a guaranteed valid UUID
   const defaultRole = await prisma.role.findFirst({
-    where: {
-      OR: [
-        { isSystem: true },
-        { slug: 'devotee' }
-      ]
-    }
+    where: { slug: 'devotee' }
   }).catch(() => null)
 
   const finalEmail = email || `devotee-${Date.now()}-${Math.random().toString(36).substring(2, 7)}@divyayagyam.com`
