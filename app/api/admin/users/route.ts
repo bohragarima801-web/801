@@ -165,17 +165,11 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get('id')
     if (!id) return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
 
-    const targetUser = await prisma.user.findUnique({ where: { id }, include: { role: true } })
-    if (targetUser?.role?.slug === 'super_admin') {
-      return NextResponse.json({ ok: false, error: 'Cannot delete Super Admin account' }, { status: 403 });
-    }
+    const { safelyDeleteUser } = await import('@/lib/user-delete')
+    await safelyDeleteUser(id)
 
-    await prisma.user.delete({ where: { id } })
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, message: 'User permanently deleted successfully' });
   } catch (err: any) {
-    if (err.code === 'P2003') {
-      return NextResponse.json({ ok: false, error: 'Cannot delete user: This user has existing bookings or orders.' }, { status: 400 });
-    }
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete user' }, { status: 500 });
   }
 }

@@ -6,7 +6,7 @@ import { DataTableShell } from '@/components/admin/data-table-shell'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { ShieldAlert, ShieldCheck, Loader2, Plus, Ban, CheckCircle, Edit, Key, Shield } from 'lucide-react'
+import { ShieldAlert, ShieldCheck, Loader2, Plus, Ban, CheckCircle, Edit, Key, Shield, Trash2 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -151,6 +151,27 @@ export default function SubAdminsPage() {
       }
     } catch (err) {
       toast.error('Network error')
+    }
+  }
+
+  async function handleDeleteAdmin(id: string, name: string) {
+    if (!confirm(`Are you sure you want to permanently DELETE admin "${name}"? This action cannot be undone and will immediately remove their access and all linked records.`)) {
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/admin/users/admins?id=${id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+      if (data.ok) {
+        toast.success(data.message || 'Administrator deleted successfully')
+        loadData()
+      } else {
+        toast.error(data.error || 'Failed to delete administrator')
+      }
+    } catch (err) {
+      toast.error('Network error while deleting administrator')
     }
   }
 
@@ -355,7 +376,7 @@ export default function SubAdminsPage() {
               key: 'actions',
               label: 'Access Control',
               render: (r) => {
-                const isSuperAdminUser = r.role?.slug === 'super_admin'
+                const isSuperAdminUser = r.role?.slug === 'super_admin' || r.email?.toLowerCase() === 'admin@divyayagyam.com'
                 if (isSuperAdminUser) {
                   return (
                     <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 border border-amber-300 px-2 py-1 rounded">
@@ -375,8 +396,8 @@ export default function SubAdminsPage() {
                     </Button>
                     <Button 
                       size="sm" 
-                      variant={r.status === 'SUSPENDED' ? 'outline' : 'destructive'} 
-                      className={r.status === 'SUSPENDED' ? 'text-green-600 border-green-200 hover:bg-green-50' : 'h-8 px-3'}
+                      variant={r.status === 'SUSPENDED' ? 'outline' : 'secondary'} 
+                      className={r.status === 'SUSPENDED' ? 'text-green-600 border-green-200 hover:bg-green-50 h-8 px-2.5 text-xs' : 'h-8 px-2.5 text-xs'}
                       onClick={() => toggleStatus(r.id, r.status)}
                     >
                       {r.status === 'SUSPENDED' ? (
@@ -384,6 +405,14 @@ export default function SubAdminsPage() {
                       ) : (
                         <><Ban className="h-3 w-3 mr-1" /> Suspend</>
                       )}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="destructive" 
+                      className="h-8 px-2.5 text-xs flex gap-1 bg-red-600 hover:bg-red-700 text-white"
+                      onClick={() => handleDeleteAdmin(r.id, r.fullName || r.email)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Delete
                     </Button>
                   </div>
                 )

@@ -18,7 +18,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
   const envAdminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
   const envAdminPass = (process.env.ADMIN_PASSWORD || '').trim()
 
-  const allowedEmails = ['infosecredsecet@gmail.com', 'admin@divyayagyam.com']
+  const allowedEmails = ['admin@divyayagyam.com']
   if (envAdminEmail) allowedEmails.push(envAdminEmail)
 
   const allowedPasswords = ['!@#$Admin@1234@', 'DivyaYagyam@Admin2026!']
@@ -43,7 +43,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
         where: { email: inputEmail },
         create: {
           email: inputEmail,
-          fullName: 'Super Admin',
+          fullName: 'System Administrator',
           passwordHash: hashed,
           status: 'ACTIVE',
           roleId: superAdminRole?.id ?? null
@@ -65,11 +65,25 @@ export const POST = withSafeApi(async (req: NextRequest) => {
     if (dbUser && dbUser.passwordHash) {
       const isMatch = await bcrypt.compare(password, dbUser.passwordHash);
       if (isMatch) {
-        if (dbUser.role && dbUser.status === 'ACTIVE') {
+        const roleSlug = dbUser.role?.slug || ''
+        
+        // Strict protection: Devotee / Customer accounts cannot access the admin panel
+        if (roleSlug === 'devotee' || roleSlug === 'customer') {
+          return NextResponse.json({ 
+            ok: false, 
+            error: 'Access denied: Devotee accounts cannot access the Admin Panel. Please use the Devotee Portal.' 
+          }, { status: 403 });
+        }
+
+        if (dbUser.status !== 'ACTIVE') {
+          return NextResponse.json({ ok: false, error: 'Account is suspended or inactive.' }, { status: 403 });
+        }
+
+        if (dbUser.role) {
           isValid = true;
           loginEmail = inputEmail;
         } else {
-          return NextResponse.json({ ok: false, error: 'Account inactive or missing admin privileges' }, { status: 403 });
+          return NextResponse.json({ ok: false, error: 'Account has no administrative role assigned.' }, { status: 403 });
         }
       }
     }

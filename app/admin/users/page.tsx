@@ -12,7 +12,8 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Users, UserCheck, Star, HeartHandshake, Loader2, Plus, Edit2, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import { Users, UserCheck, Star, HeartHandshake, Loader2, Plus, Edit2, Trash2, Shield, ArrowRight } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Suspense } from 'react'
@@ -140,26 +141,27 @@ function UsersManager() {
     }
   }
 
-  // Filter users by active tab
+  // Filter users by active tab - default to admins to eliminate confusion
+  const currentTab = activeTab || 'admins'
   const filteredUsers = users.filter((u) => {
-    if (!activeTab) return true
-    if (activeTab === 'customers') return u.roleSlug === 'devotee'
-    if (activeTab === 'admins') return u.roleSlug === 'admin'
-    if (activeTab === 'pandits') return u.roleSlug === 'pandit'
-    if (activeTab === 'volunteers') return u.roleSlug === 'volunteer'
+    if (currentTab === 'admins') return u.roleSlug !== 'devotee' && u.roleSlug !== 'customer'
+    if (currentTab === 'customers') return u.roleSlug === 'devotee' || u.roleSlug === 'customer'
+    if (currentTab === 'pandits') return u.roleSlug === 'pandit'
+    if (currentTab === 'volunteers') return u.roleSlug === 'volunteer'
     return true
   })
 
   // KPI calculations
   const totalCount = users.length
-  const customerCount = users.filter((u) => u.roleSlug === 'devotee').length
+  const customerCount = users.filter((u) => u.roleSlug === 'devotee' || u.roleSlug === 'customer').length
+  const adminStaffCount = users.filter((u) => u.roleSlug !== 'devotee' && u.roleSlug !== 'customer').length
   const panditCount = users.filter((u) => u.roleSlug === 'pandit').length
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="User Management"
-        description="Manage all administrative roles, verified pandits, and devotee user accounts."
+        title="Staff & User Management"
+        description="Administrative roles and staff control. Devotee customer accounts are segregated into their dedicated portal."
         breadcrumbs={[{ label: 'Admin', href: '/admin' }, { label: 'Users' }]}
         action={{
           label: showAddForm ? 'Cancel' : 'Add User',
@@ -168,11 +170,50 @@ function UsersManager() {
         }}
       />
 
+      {/* QUICK BIFURCATION CARDS: SEPARATE ADMIN AND DEVOTEE SYSTEMS */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="border-l-4 border-l-amber-500 bg-amber-50/30">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-bold flex items-center gap-2 text-amber-900">
+                <Shield className="h-4 w-4 text-amber-600" /> Administrative Staff Control
+              </CardTitle>
+              <Link href="/admin/users/admins">
+                <Button size="sm" className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white">
+                  Manage Sub-Admins <ArrowRight className="h-3 w-3 ml-1" />
+                </Button>
+              </Link>
+            </div>
+            <CardDescription className="text-xs text-amber-800/80">
+              Manage System Administrator, Sub-Admins, modular permissions, and access roles. Devotees are strictly excluded.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-l-4 border-l-blue-500 bg-blue-50/30">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-bold flex items-center gap-2 text-blue-900">
+                <HeartHandshake className="h-4 w-4 text-blue-600" /> Devotee Customer Accounts
+              </CardTitle>
+              <Link href="/admin/customers">
+                <Button size="sm" variant="outline" className="h-7 text-xs border-blue-300 text-blue-700 hover:bg-blue-100">
+                  Devotee Portal <ArrowRight className="h-3 w-3 ml-1" />
+                </Button>
+              </Link>
+            </div>
+            <CardDescription className="text-xs text-blue-800/80">
+              Dedicated devotee customer registry with booking counts, store orders, and customer operations.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Total Users" value={totalCount.toString()} icon={Users} />
-        <KpiCard title="Customers" value={customerCount.toString()} icon={HeartHandshake} />
+        <KpiCard title="Admin & Staff" value={adminStaffCount.toString()} icon={Shield} />
+        <KpiCard title="Devotees (Customers)" value={customerCount.toString()} icon={HeartHandshake} />
         <KpiCard title="Pandits" value={panditCount.toString()} icon={Star} />
-        <KpiCard title="Verified" value={totalCount.toString()} icon={UserCheck} />
+        <KpiCard title="Total Accounts" value={totalCount.toString()} icon={Users} />
       </div>
 
       {showAddForm && (actionType === 'create' || actionType === 'edit') && (
@@ -231,11 +272,10 @@ function UsersManager() {
 
       <AdminTabs
         tabs={[
-          { label: 'All', value: '' },
-          { label: 'Customers', value: 'customers' },
-          { label: 'Admins', value: 'admins' },
-          { label: 'Pandits', value: 'pandits' },
-          { label: 'Volunteers', value: 'volunteers' },
+          { label: '🛡️ Administrators & Staff', value: 'admins' },
+          { label: '🙏 Devotee Customers', value: 'customers' },
+          { label: '🪔 Pandits', value: 'pandits' },
+          { label: '🤝 Volunteers', value: 'volunteers' },
         ]}
       />
 
@@ -273,7 +313,7 @@ function UsersManager() {
                   >
                     <Edit2 className="h-3 w-3" /> Edit
                   </Button>
-                  {r.roleSlug !== 'super_admin' && (
+                  {r.roleSlug !== 'super_admin' && r.email !== 'admin@divyayagyam.com' && (
                     <Button
                       size="icon"
                       variant="destructive"
