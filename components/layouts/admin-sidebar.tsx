@@ -9,7 +9,7 @@ import { ADMIN_NAV } from '@/lib/admin-nav'
 import { can } from '@/lib/rbac'
 import { LogOut, ChevronDown } from 'lucide-react'
 
-export function AdminSidebar({ permissions = ['*'], isMobile }: { permissions?: string[], isMobile?: boolean }) {
+export function AdminSidebar({ permissions = [], isMobile }: { permissions?: string[], isMobile?: boolean }) {
   const pathname = usePathname()
 
   return (
@@ -89,7 +89,9 @@ function SidebarSection({ section, pathname, permissions }: { section: (typeof A
       </button>
       {open && (
         <div className="mt-0.5 mb-1 ml-4 pl-3 border-l border-sidebar-border space-y-0.5">
-          {section.items!.map((item) => {
+          {section.items!
+            .filter((item) => !item.permission || can(permissions, item.permission))
+            .map((item) => {
             const active = pathname + (typeof window !== 'undefined' ? window.location.search : '') === item.href
             return (
               <Link

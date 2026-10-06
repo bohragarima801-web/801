@@ -66,11 +66,23 @@ export function isSuperAdmin(role?: string | null): boolean {
   return role === ROLES.SUPER_ADMIN
 }
 
+export function isSuperAdminAccount(user?: { email?: string | null; role?: { slug?: string | null } | null; roleSlug?: string | null } | null): boolean {
+  if (!user) return false
+  const email = (user.email || '').trim().toLowerCase()
+  const envAdminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
+  if (email === 'admin@divyayagyam.com' || email === 'infosecredsecret@gmail.com' || (envAdminEmail && email === envAdminEmail)) {
+    return true
+  }
+  const roleSlug = user.role?.slug || user.roleSlug
+  return roleSlug === ROLES.SUPER_ADMIN
+}
+
 // Permission checks (resource.action)
 export type Permission = string
 
 export function can(permissions: string[] | undefined, permission: Permission): boolean {
   if (!permissions?.length) return false
+  if (permission === 'super_admin_only') return permissions.includes('*')
   if (permissions.includes('*')) return true
   const [resource] = permission.split('.')
   return permissions.includes(permission) || permissions.includes(`${resource}.*`)

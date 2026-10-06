@@ -7,17 +7,17 @@ import {
   Code2, Bot, FileText, Package, ClipboardList, Layers, CalendarDays, Wand2, Video, Compass,
 } from 'lucide-react'
 
-export type AdminNavItem = { title: string; href: string; icon?: any; badge?: string | number }
+export type AdminNavItem = { title: string; href: string; icon?: any; badge?: string | number; permission?: string }
 export type AdminNavSection = { title: string; icon: any; slug: string; href?: string; items?: AdminNavItem[]; permission?: string }
 
 export const ADMIN_NAV: AdminNavSection[] = [
   { title: 'Dashboard', slug: 'dashboard', icon: LayoutDashboard, href: '/admin' },
   { title: '⚡ Real-Time Data Status', slug: 'live-data', icon: DatabaseBackup, href: '/admin/live-data' },
-  { title: 'User Management', slug: 'users', icon: Users, permission: 'user.read', items: [
-    { title: 'All Users', href: '/admin/users' }, { title: 'Customers', href: '/admin/customers' },
-    { title: 'Sub-Admins', href: '/admin/users/admins' }, { title: 'Pandits', href: '/admin/users?tab=pandits' },
-    { title: 'Volunteers', href: '/admin/users?tab=volunteers' }, { title: 'Roles', href: '/admin/users/roles' },
-    { title: 'Permissions', href: '/admin/users/permissions' }, { title: 'Login History', href: '/admin/users/activity' },
+  { title: 'User Management', slug: 'users', icon: Users, permission: 'super_admin_only', items: [
+    { title: 'All Users', href: '/admin/users', permission: 'super_admin_only' }, { title: 'Customers', href: '/admin/customers', permission: 'super_admin_only' },
+    { title: 'Sub-Admins', href: '/admin/users/admins', permission: 'super_admin_only' }, { title: 'Pandits', href: '/admin/users?tab=pandits', permission: 'super_admin_only' },
+    { title: 'Volunteers', href: '/admin/users?tab=volunteers', permission: 'super_admin_only' }, { title: 'Roles', href: '/admin/users/roles', permission: 'super_admin_only' },
+    { title: 'Permissions', href: '/admin/users/permissions', permission: 'super_admin_only' }, { title: 'Login History', href: '/admin/users/activity', permission: 'super_admin_only' },
   ]},
 
   { title: 'Puja Management', slug: 'pujas', icon: Flame, permission: 'puja.read', items: [
@@ -31,7 +31,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'Confirmed', href: '/admin/bookings?tab=confirmed' }, { title: 'Completed', href: '/admin/bookings?tab=completed' },
     { title: 'Cancelled', href: '/admin/bookings?tab=cancelled' }, { title: 'Refund Requests', href: '/admin/bookings?tab=refunds' },
   ]},
-  { title: 'Customers', slug: 'customers', icon: HeartHandshake, href: '/admin/customers', permission: 'user.read' },
+  { title: 'Customers', slug: 'customers', icon: HeartHandshake, href: '/admin/customers', permission: 'super_admin_only' },
   { title: 'Products', slug: 'products', icon: ShoppingBag, permission: 'product.read', items: [
     { title: 'All Products', href: '/admin/products' }, { title: 'Add Product', href: '/admin/products/new' },
     { title: 'Categories', href: '/admin/products/categories' }, { title: 'Inventory', href: '/admin/products/inventory' },
@@ -85,18 +85,18 @@ export const ADMIN_NAV: AdminNavSection[] = [
     { title: 'Live Preview', href: '/admin/customizer?tab=preview' },
   ]},
   { title: 'SEO', slug: 'seo', icon: Search, href: '/admin/seo', permission: 'seo.read' },
-  { title: 'Payment Settings', slug: 'payments', icon: CreditCard, href: '/admin/payments', permission: 'payment.read' },
+  { title: 'Payment Settings', slug: 'payments', icon: CreditCard, href: '/admin/payments', permission: 'super_admin_only' },
   { title: 'Storage', slug: 'storage', icon: HardDrive, href: '/admin/storage', permission: 'storage.read' },
   { title: '📢 Marketing & Meta CAPI', slug: 'marketing', icon: Megaphone, href: '/admin/marketing' },
   { title: '🎯 Pixels & Analytics', slug: 'pixels', icon: BarChart3, href: '/admin/settings?tab=pixels' },
-  { title: 'Website Settings', slug: 'settings', icon: Palette, permission: 'settings.read', items: [
-    { title: 'Branding & General', href: '/admin/settings?tab=general' },
-    { title: 'Contact Details', href: '/admin/settings?tab=contact' },
-    { title: '🎯 Pixels & Analytics', href: '/admin/settings?tab=pixels' },
-    { title: '📢 Marketing & Meta CAPI', href: '/admin/marketing' },
-    { title: '💬 WhatsApp Automation', href: '/admin/settings?tab=whatsapp' },
-    { title: '📥 Meta WhatsApp Downloads', href: '/admin/settings?tab=whatsapp' },
-    { title: 'Secrets & API Keys', href: '/admin/settings?tab=secrets' },
-    { title: 'System Status', href: '/admin/settings?tab=status' },
+  { title: 'Website Settings', slug: 'settings', icon: Palette, permission: 'super_admin_only', items: [
+    { title: 'Branding & General', href: '/admin/settings?tab=general', permission: 'super_admin_only' },
+    { title: 'Contact Details', href: '/admin/settings?tab=contact', permission: 'super_admin_only' },
+    { title: '🎯 Pixels & Analytics', href: '/admin/settings?tab=pixels', permission: 'super_admin_only' },
+    { title: '📢 Marketing & Meta CAPI', href: '/admin/marketing', permission: 'super_admin_only' },
+    { title: '💬 WhatsApp Automation', href: '/admin/settings?tab=whatsapp', permission: 'super_admin_only' },
+    { title: '📥 Meta WhatsApp Downloads', href: '/admin/settings?tab=whatsapp', permission: 'super_admin_only' },
+    { title: 'Secrets & API Keys', href: '/admin/settings?tab=secrets', permission: 'super_admin_only' },
+    { title: 'System Status', href: '/admin/settings?tab=status', permission: 'super_admin_only' },
   ]},
 ]

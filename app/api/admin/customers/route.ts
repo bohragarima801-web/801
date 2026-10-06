@@ -2,11 +2,30 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { getAdminSession } from '@/lib/admin-session'
+import { isSuperAdminAccount } from '@/lib/rbac'
+
+async function checkSuperAdmin() {
+  const session = await getAdminSession()
+  if (!session) return { ok: false as const, status: 401, error: 'Unauthorized' }
+
+  const sessionEmail = session.email.trim().toLowerCase()
+  const caller = await prisma.user.findFirst({
+    where: { email: { equals: sessionEmail, mode: 'insensitive' } },
+    include: { role: true }
+  })
+
+  if (!isSuperAdminAccount({ email: sessionEmail, role: caller?.role })) {
+    return { ok: false as const, status: 403, error: 'Access denied: Customer management is strictly restricted to Super Admin.' }
+  }
+
+  return { ok: true as const }
+}
 
 export async function GET() {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+
     const devotees = await prisma.user.findMany({
       where: {
         role: { slug: 'devotee' },
@@ -45,8 +64,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+
     const { action, userId, newPassword, alertMessage, name, email, phone } = await req.json()
 
     // 1. ACTION: Create a new devotee
@@ -55,7 +75,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: false, error: 'Name, Email, Phone and Password are required' }, { status: 400 });
       }
 
-      // Check if email already registered in DB
       const existing = await prisma.user.findUnique({ where: { email } })
       if (existing) {
         return NextResponse.json({ ok: false, error: 'Email already registered' }, { status: 400 });
@@ -69,7 +88,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: false, error: 'Devotee role not found in system' }, { status: 500 });
       }
 
-      // Create in DB
       const user = await prisma.user.create({
         data: {
           email,
@@ -78,38 +96,41 @@ export async function POST(req: NextRequest) {
           phone,
           roleId: devoteeRole.id,
           status: 'ACTIVE'
-        },
+        }
       })
 
-      return NextResponse.json({ ok: true, message: 'Devotee created successfully!', data: user });
+      return NextResponse.json({ ok: true, message: 'Devotee profile registered successfully!', user });
     }
 
-    // 2. ACTION: Update an existing devotee
-    if (action === 'update') {
+    // 2. ACTION: Update existing devotee details
+    if (action === 'edit') {
       if (!userId || !name || !email) {
         return NextResponse.json({ ok: false, error: 'User ID, Name, and Email are required' }, { status: 400 });
       }
 
+      const updateData: any = {
+        fullName: name,
+        email,
+        phone: phone || null,
+      }
+
+      if (newPassword && newPassword.trim().length >= 6) {
+        const salt = await bcrypt.genSalt(10)
+        updateData.passwordHash = await bcrypt.hash(newPassword, salt)
+      }
+
       const updated = await prisma.user.update({
         where: { id: userId },
-        data: {
-          fullName: name,
-          email,
-          phone: phone || null,
-        },
+        data: updateData
       })
 
-      return NextResponse.json({ ok: true, message: 'Devotee updated successfully!', data: updated });
+      return NextResponse.json({ ok: true, message: 'Devotee details updated successfully!', user: updated });
     }
 
-    // 3. ACTION: Reset user password
-    if (action === 'password') {
-      if (!userId) return NextResponse.json({ ok: false, error: 'User ID is required' }, { status: 400 });
-      const user = await prisma.user.findUnique({ where: { id: userId } })
-      if (!user) return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
-
-      if (!newPassword || newPassword.length < 6) {
-        return NextResponse.json({ ok: false, error: 'Password must be at least 6 characters' }, { status: 400 });
+    // 3. ACTION: Reset Password
+    if (action === 'reset_password') {
+      if (!userId || !newPassword) {
+        return NextResponse.json({ ok: false, error: 'User ID and New Password are required' }, { status: 400 });
       }
 
       const salt = await bcrypt.genSalt(10)
@@ -120,17 +141,18 @@ export async function POST(req: NextRequest) {
         data: { passwordHash }
       })
 
-      return NextResponse.json({ ok: true, message: 'Password reset successfully!' });
+      return NextResponse.json({ ok: true, message: 'Devotee password reset successfully!' });
     }
 
-    // 4. ACTION: Send WhatsApp Alert
-    if (action === 'whatsapp') {
-      if (!userId) return NextResponse.json({ ok: false, error: 'User ID is required' }, { status: 400 });
-      const user = await prisma.user.findUnique({ where: { id: userId } })
-      if (!user) return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
+    // 4. ACTION: Send WhatsApp Alert Notification
+    if (action === 'send_whatsapp') {
+      if (!userId || !alertMessage) {
+        return NextResponse.json({ ok: false, error: 'User ID and Alert Message are required' }, { status: 400 });
+      }
 
-      if (!alertMessage) {
-        return NextResponse.json({ ok: false, error: 'Alert message is required' }, { status: 400 });
+      const user = await prisma.user.findUnique({ where: { id: userId } })
+      if (!user) {
+        return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
       }
 
       const phoneNum = user.phone || ''
@@ -152,8 +174,9 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
 

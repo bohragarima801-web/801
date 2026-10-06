@@ -2,7 +2,6 @@ import { getLLM, getPreferredModel, MODELS } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { getSetting } from '@/lib/settings'
 import { getUpcomingRealFestivals } from '@/lib/real-festival-engine'
-import { generateContentAwareBlogImage } from '@/lib/blog-image-generator'
 
 export interface AutoBlogOptions {
   forceTopic?: string
@@ -306,22 +305,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       })
     }
 
-    // 6. Generate Content-Aware Visual Image and Metadata following the Article Subject, Deities & Cultural Context
-    let coverImage = '/ashta_lakshmi_16days.webp'
-    let coverImageAlt = title
-    try {
-      const imageResult = await generateContentAwareBlogImage({
-        title,
-        categoryName: category.name,
-        contentMarkdown: fullMarkdown,
-        tags: Array.isArray(blogData.tags) ? blogData.tags : [],
-        slug: uniqueSlug,
-      })
-      coverImage = imageResult.coverImage
-      coverImageAlt = imageResult.coverImageAlt || title
-    } catch (imgErr) {
-      console.error('[AutoBlog] Error generating content-aware image:', imgErr)
-    }
+    // 6. Use the Automated 16:9 Dynamic Cover Image Generator matching Universal System Rules
+    const coverImage = `/api/blog/cover?title=${encodeURIComponent(title)}`
 
     // 7. Save new Blog to Database
     const newBlog = await prisma.blog.create({
@@ -331,7 +316,7 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
         excerpt: blogData.excerpt || blogData.metaDescription,
         content: fullMarkdown,
         coverImage,
-        coverImageAlt,
+        coverImageAlt: title,
         status: targetStatus,
         seoTitle: blogData.seoTitle || title,
         seoDescription: blogData.metaDescription || blogData.excerpt,

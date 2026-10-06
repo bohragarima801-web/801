@@ -204,7 +204,7 @@ function UsersManager() {
                     <SelectValue placeholder="Select a role..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {roles.map((r: any) => (
+                    {roles.filter((r: any) => r.slug !== 'super_admin').map((r: any) => (
                       <SelectItem key={r.id} value={r.id}>
                         {r.name}
                       </SelectItem>
@@ -273,15 +273,17 @@ function UsersManager() {
                   >
                     <Edit2 className="h-3 w-3" /> Edit
                   </Button>
-                  <Button
-                    size="icon"
-                    variant="destructive"
-                    className="h-8 w-8"
-                    onClick={() => handleDelete(r.id)}
-                    title="Delete User"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  {r.roleSlug !== 'super_admin' && (
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="h-8 w-8"
+                      onClick={() => handleDelete(r.id)}
+                      title="Delete User"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
                 </div>
               ),
             },

@@ -34,7 +34,7 @@ export const POST = withSafeApi(async (req: NextRequest) => {
 
     // Upsert Super Admin user in DB
     try {
-      let superAdminRole = await prisma.role.findFirst({ where: { isSystem: true } })
+      let superAdminRole = await prisma.role.findFirst({ where: { slug: 'super_admin' } })
       if (!superAdminRole) {
         superAdminRole = await prisma.role.findFirst({ where: { slug: 'admin' } })
       }
