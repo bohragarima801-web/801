@@ -8,6 +8,7 @@ export interface AutoBlogOptions {
   status?: 'PUBLISHED' | 'DRAFT'
   authorId?: string
   bypassLimit?: boolean
+  returnDraftOnly?: boolean
 }
 
 const AVAILABLE_PUJA_LINKS = `
@@ -307,6 +308,27 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
 
     // 6. Use the Automated 16:9 Dynamic Cover Image Generator matching Universal System Rules
     const coverImage = `/api/blog/cover?title=${encodeURIComponent(title)}`
+
+    // If caller requested draft content for direct editor population (without committing to DB):
+    if (options.returnDraftOnly) {
+      return {
+        ok: true,
+        data: {
+          title,
+          slug: uniqueSlug,
+          excerpt: blogData.excerpt || blogData.metaDescription || '',
+          content: fullMarkdown,
+          coverImage,
+          coverImageAlt: title,
+          seoTitle: blogData.seoTitle || title,
+          seoDescription: blogData.metaDescription || blogData.excerpt || '',
+          seoKeywords: Array.isArray(blogData.tags) ? blogData.tags.join(', ') : (blogData.primaryKeyword || 'सनातन पूजा'),
+          categoryId: category.id,
+          categoryName: category.name,
+          faqs: Array.isArray(blogData.faqs) ? blogData.faqs : []
+        }
+      }
+    }
 
     // 7. Save new Blog to Database
     const newBlog = await prisma.blog.create({

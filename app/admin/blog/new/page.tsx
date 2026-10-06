@@ -52,6 +52,56 @@ function BlogForm() {
   const [driveUrl, setDriveUrl] = useState('')
   const [faqs, setFaqs] = useState<{ question: string, answer: string }[]>([])
 
+  // AI Auto-Writer state
+  const [aiTopic, setAiTopic] = useState('')
+  const [isAiWriting, setIsAiWriting] = useState(false)
+
+  async function handleAiGenerateBlog() {
+    const topicToUse = aiTopic.trim() || title.trim()
+    if (!topicToUse) {
+      toast.error('कृपया पहले कोई टॉपिक या शीर्षक (Title) लिखें!')
+      return
+    }
+
+    try {
+      setIsAiWriting(true)
+      toast.info('AI वैदिक शोध कर रहा है और 1500+ शब्दों का संपूर्ण ब्लॉग तैयार कर रहा है... कृपया 10-15 सेकंड प्रतीक्षा करें।')
+
+      const res = await fetch('/api/admin/blogs/auto-generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'draft_content',
+          forceTopic: topicToUse
+        })
+      })
+
+      const data = await res.json()
+      if (data.ok && data.data) {
+        const d = data.data
+        if (d.title) setTitle(d.title)
+        if (d.slug) setSlug(d.slug)
+        if (d.excerpt) setExcerpt(d.excerpt)
+        if (d.content) setContent(d.content)
+        if (d.seoTitle) setSeoTitle(d.seoTitle)
+        if (d.seoDescription) setSeoDescription(d.seoDescription)
+        if (d.seoKeywords) setSeoKeywords(d.seoKeywords)
+        if (d.coverImageAlt) setCoverImageAlt(d.coverImageAlt)
+        if (d.categoryId) setCategoryId(d.categoryId)
+        if (Array.isArray(d.faqs) && d.faqs.length > 0) {
+          setFaqs(d.faqs)
+        }
+        toast.success('🌸 AI ने पूरा ब्लॉग, SEO टैग्स और FAQs सफलतापूर्वक लिख दिया है!')
+      } else {
+        toast.error(data.error || 'AI ब्लॉग लिखने में विफल रहा।')
+      }
+    } catch {
+      toast.error('Network error during AI blog generation')
+    } finally {
+      setIsAiWriting(false)
+    }
+  }
+
   // Quick Link System state
   const [pujas, setPujas] = useState<{ id: string; title: string; slug: string }[]>([])
   const [products, setProducts] = useState<{ id: string; name: string; slug: string }[]>([])
@@ -299,6 +349,41 @@ function BlogForm() {
             <CardDescription>Write your content using Markdown</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* AI Auto Post Writer Tool */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 border-2 border-amber-500/30 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
+                  <span className="font-bold text-xs text-amber-950 uppercase tracking-wider">
+                    AI Auto Post Writer (पूरा ब्लॉग AI से लिखवाएं)
+                  </span>
+                </div>
+                <Badge variant="outline" className="text-[10px] bg-amber-100 text-amber-800 border-amber-300">
+                  Google Gemini ⚡
+                </Badge>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-tight">
+                अपना विषय/टॉपिक लिखें और बटन दबाएं — AI 1500+ शब्दों का संपूर्ण वैदिक लेख, Excerpt, SEO टैग्स और FAQs अपने आप तैयार करके फ़ील्ड्स में भर देगा।
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Input
+                  placeholder="विषय या टॉपिक लिखें (उदा: कालसर्प दोष लक्षण व उपाय, महाशिवरात्रि व्रत कथा)..."
+                  value={aiTopic}
+                  onChange={(e) => setAiTopic(e.target.value)}
+                  className="bg-white text-xs h-9 rounded-xl border-amber-300 flex-1 placeholder:text-slate-400"
+                />
+                <Button
+                  type="button"
+                  disabled={isAiWriting}
+                  onClick={handleAiGenerateBlog}
+                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold text-xs h-9 px-4 rounded-xl shrink-0 gap-1.5 shadow-sm"
+                >
+                  {isAiWriting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  {isAiWriting ? 'AI लिख रहा है… (10-15s)' : 'AI से पूरा पोस्ट लिखवाएं ✨'}
+                </Button>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label>Title</Label>
               <Input 
