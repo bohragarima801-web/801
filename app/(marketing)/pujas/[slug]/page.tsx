@@ -7,7 +7,7 @@ import { Metadata } from 'next'
 import { generatePageMeta } from '@/lib/seo'
 import { PujaSchema } from '@/components/seo/PujaSchema'
 
-export const revalidate = 3600; // ISR: Revalidate every 3600s
+export const revalidate = 30; // Fast ISR sync with admin updates
 
 const defaultFaqs = [
   { question: 'क्या मैं पूजा का वीडियो देख सकूँगा/सकूँगी?', answer: 'हाँ, पूजा सम्पन्न होने के पश्चात 24 से 48 घंटे के भीतर आपके नाम एवं गोत्र उच्चारण का मुख्य संकल्प वीडियो आपके दिए गए WhatsApp एवं Email पर प्रेषित कर दिया जाएगा।' },
@@ -88,6 +88,9 @@ const fetchPujaFromDb = async (slug: string) => {
     // If not found by exact slug, ID, or keywords, return null (404/redirect)
     if (!puja) return null;
 
+    // Strict validation: Inactive / DRAFT / ARCHIVED pujas must NEVER be accessible publicly on the frontend
+    if (puja.status !== 'PUBLISHED') return null;
+
     // Deep serialize to plain JSON to prevent Decimal/Date RSC serialization crashes
     return JSON.parse(JSON.stringify(puja));
   } catch (err) {
@@ -96,12 +99,12 @@ const fetchPujaFromDb = async (slug: string) => {
   }
 }
 
-// Global cross-request Data Cache for single Puja Detail (1-hour TTL)
+// Global cross-request Data Cache for single Puja Detail (30s TTL)
 const getCachedPujaBySlug = (slug: string) =>
   unstable_cache(
     async () => fetchPujaFromDb(slug),
     [`puja-detail-v3-${slug}`],
-    { revalidate: 3600, tags: ['pujas', `puja-${slug}`] }
+    { revalidate: 30, tags: ['pujas', `puja-${slug}`] }
   )()
 
 // Per-request memoization wrapper

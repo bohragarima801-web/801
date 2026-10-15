@@ -13,7 +13,7 @@ export function generateMetadata() {
   })
 }
 
-export const revalidate = 3600
+export const revalidate = 30
 
 export default async function PujasPage() {
   const pujas = await getCachedPujas()
