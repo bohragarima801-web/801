@@ -67,9 +67,9 @@ function formatBlogDate(date: string | Date | null | undefined): string {
   }
 }
 
-export const revalidate = 1800
+export const revalidate = 30
 
-// Fallback Pujas if DB has few items
+// Fallback Pujas only for initial database bootstrapping when DB has 0 items
 const fallbackPujas = [
   {
     id: 'fp-1',
@@ -171,9 +171,9 @@ export default async function HomePage() {
 
   const dbVideos = [...allMediaVideos, ...galleryMediaItems]
 
-  // Exclude VIP pujas from standard homepage grid
+  // Strictly show ONLY published non-VIP pujas from DB. Never show inactive/DRAFT pujas.
   const nonVipDbPujas = dbPujas.filter((p: any) => !p.isVip)
-  const displayPujas = nonVipDbPujas.length >= 3 ? nonVipDbPujas : [...nonVipDbPujas, ...fallbackPujas.filter(fp => !nonVipDbPujas.some((dp: any) => dp.slug === fp.slug))]
+  const displayPujas = nonVipDbPujas
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-[#E58A16]/20 notranslate" translate="no">
