@@ -10,6 +10,7 @@ import { PixelInjector } from '@/components/pixel-injector'
 import { TranslationProvider } from '@/components/translation-provider'
 import { getDynamicSiteConfig, getSetting } from '@/lib/settings'
 import { generateOrganizationSchema, generateWebSiteSchema, generateLocalBusinessSchema } from '@/lib/seo'
+import { Analytics } from '@vercel/analytics/next'
 
 const notoSansDevanagari = Noto_Sans_Devanagari({ subsets: ['devanagari'], weight: ['400', '500', '600', '700', '800'], variable: '--font-noto-sans-devanagari', display: 'swap' })
 const notoSerifDevanagari = Noto_Serif_Devanagari({ subsets: ['devanagari'], weight: ['600', '700', '800'], variable: '--font-noto-serif-devanagari', display: 'swap' })
@@ -151,6 +152,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <TranslationProvider />
           <WhatsAppFloatingWidget />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
