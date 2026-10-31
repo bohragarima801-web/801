@@ -1,14 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/admin-session'
+import { isSuperAdminAccount } from '@/lib/rbac'
 import bcrypt from 'bcryptjs'
 
 export const dynamic = 'force-dynamic'
 
+async function checkSuperAdmin() {
+  const session = await getAdminSession()
+  if (!session) return { ok: false as const, status: 401, error: 'Unauthorized' }
+
+  const sessionEmail = session.email.trim().toLowerCase()
+  const caller = await prisma.user.findFirst({
+    where: { email: { equals: sessionEmail, mode: 'insensitive' } },
+    include: { role: true }
+  })
+
+  if (!isSuperAdminAccount({ email: sessionEmail, role: caller?.role })) {
+    return { ok: false as const, status: 403, error: 'Access denied: User management is strictly restricted to Super Admin.' }
+  }
+
+  return { ok: true as const }
+}
+
 export async function GET(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const { searchParams } = new URL(req.url)
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
@@ -67,12 +85,19 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const { name, email, phone, roleId, password } = await req.json();
     if (!email) {
       return NextResponse.json({ ok: false, error: 'Email is required' }, { status: 400 });
+    }
+
+    if (roleId) {
+      const targetRole = await prisma.role.findUnique({ where: { id: roleId } })
+      if (targetRole?.slug === 'super_admin') {
+        return NextResponse.json({ ok: false, error: 'Cannot assign Super Admin role.' }, { status: 403 });
+      }
     }
 
     const existing = await prisma.user.findFirst({
@@ -97,14 +122,24 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
     if (!id) return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
 
+    const targetUser = await prisma.user.findUnique({ where: { id }, include: { role: true } })
+    if (!targetUser) return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
+
     const { name, email, phone, roleId, password, status } = await req.json()
+
+    if (roleId && roleId !== targetUser.roleId) {
+      const targetRole = await prisma.role.findUnique({ where: { id: roleId } })
+      if (targetRole?.slug === 'super_admin') {
+        return NextResponse.json({ ok: false, error: 'Cannot assign Super Admin role' }, { status: 403 });
+      }
+    }
 
     const updateData: any = {}
     if (name !== undefined) updateData.fullName = name
@@ -123,19 +158,18 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getAdminSession()
-    if (!session) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    const auth = await checkSuperAdmin()
+    if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
 
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
     if (!id) return NextResponse.json({ ok: false, error: 'ID is required' }, { status: 400 });
 
-    await prisma.user.delete({ where: { id } })
-    return NextResponse.json({ ok: true });
+    const { safelyDeleteUser } = await import('@/lib/user-delete')
+    await safelyDeleteUser(id)
+
+    return NextResponse.json({ ok: true, message: 'User permanently deleted successfully' });
   } catch (err: any) {
-    if (err.code === 'P2003') {
-      return NextResponse.json({ ok: false, error: 'Cannot delete user: This user has existing bookings or orders.' }, { status: 400 });
-    }
     return NextResponse.json({ ok: false, error: err?.message || 'Failed to delete user' }, { status: 500 });
   }
 }

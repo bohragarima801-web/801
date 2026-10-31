@@ -4,6 +4,9 @@ import prisma from '@/lib/prisma'
 import { getSetting } from '@/lib/settings'
 import { withCors, corsPreflightResponse, checkRateLimit } from '@/lib/api-security'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function OPTIONS(req: NextRequest) {
   return corsPreflightResponse(req)
 }

@@ -347,7 +347,7 @@ export default function CheckoutPage() {
           <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-[#8B1A21] font-black text-lg">🕉️ Divya Yagyam</span>
-              <span className="text-amber-900/40 hidden sm:block">|</span>
+              <span className="text-amber-700 hidden sm:block">|</span>
               <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-amber-900/70">
                 {hasPuja && (
                   <>
@@ -388,7 +388,7 @@ export default function CheckoutPage() {
                       <h1 className="text-lg md:text-xl font-bold text-amber-950 leading-snug">
                         {primaryItem.name}
                       </h1>
-                      <div className="space-y-1.5 text-sm text-amber-900/65">
+                      <div className="space-y-1.5 text-sm text-amber-800">
                         <div className="flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5 shrink-0" />
                           <span>Sacred Temple / Online Booking</span>
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
                     </div>
                     <h3 className="font-bold text-amber-950 text-base">Pandit Dakshina (Optional)</h3>
                   </div>
-                  <p className="text-xs text-amber-900/55 mb-4 ml-10">Support the pandits performing your sacred puja.</p>
+                  <p className="text-xs text-amber-800 mb-4 ml-10">Support the pandits performing your sacred puja.</p>
 
                   <div className="flex flex-wrap gap-2 md:gap-3">
                     {[251, 551, 1100].map(amt => {
@@ -477,7 +477,7 @@ export default function CheckoutPage() {
                         <span className="text-xl">🌸</span>
                         <div>
                           <h3 className="text-base font-bold text-amber-950">अतिरिक्त पुण्य एवं भक्ति सेवा</h3>
-                          <p className="text-xs text-amber-800/70">गो-सेवा, साधु भोजन व दीपदान जोड़ें (Optional)</p>
+                          <p className="text-xs text-amber-800">गो-सेवा, साधु भोजन व दीपदान जोड़ें (Optional)</p>
                         </div>
                       </div>
                       <span className="text-[11px] font-bold bg-[#8B1A21]/10 text-[#8B1A21] px-2.5 py-1 rounded-full border border-[#8B1A21]/15">
@@ -586,7 +586,7 @@ export default function CheckoutPage() {
                       Proceed to Details
                       <ArrowRight className="w-5 h-5" />
                     </button>
-                    <p className="text-center text-[11px] text-amber-900/40 mt-2 flex items-center justify-center gap-1">
+                    <p className="text-center text-[11px] text-amber-700 mt-2 flex items-center justify-center gap-1">
                       <Lock className="w-3 h-3" /> 100% Secure & Encrypted
                     </p>
                   </div>
@@ -598,7 +598,7 @@ export default function CheckoutPage() {
             <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-amber-200 p-4 z-50 shadow-[0_-8px_24px_rgba(42,21,8,0.08)]">
               <div className="max-w-xl mx-auto flex items-center gap-4">
                 <div>
-                  <p className="text-[11px] text-amber-900/50 font-medium">कुल राशि</p>
+                  <p className="text-[11px] text-amber-800 font-medium">कुल राशि</p>
                   <p className="text-xl font-black text-[#8B1A21]">₹{finalTotal}</p>
                 </div>
                 <button
@@ -641,7 +641,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Phone Number (WhatsApp) *</Label>
-                      <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="9587171984" className="border-amber-200 focus:border-[#8B1A21]/60 focus:ring-[#8B1A21]/20 bg-amber-50/30" />
+                      <Input value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="9530401984" className="border-amber-200 focus:border-[#8B1A21]/60 focus:ring-[#8B1A21]/20 bg-amber-50/30" />
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
                       <Label className="text-amber-900 font-semibold text-xs uppercase tracking-wide">Street Address *</Label>
@@ -710,7 +710,7 @@ export default function CheckoutPage() {
                   ].map((b, i) => (
                     <div key={i} className="flex flex-col items-center gap-1.5 p-3 bg-white rounded-xl border border-amber-100 text-center">
                       <div className="text-[#8B1A21]">{b.icon}</div>
-                      <span className="text-[10px] text-amber-900/65 font-semibold leading-tight">{b.text}</span>
+                      <span className="text-[10px] text-amber-800 font-semibold leading-tight">{b.text}</span>
                     </div>
                   ))}
                 </div>
@@ -732,7 +732,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-semibold text-amber-950 line-clamp-1 text-[13px]">{item.name}</p>
-                              <p className="text-[11px] text-amber-900/50 font-medium">Qty: {item.quantity}</p>
+                              <p className="text-[11px] text-amber-800 font-medium">Qty: {item.quantity}</p>
                             </div>
                           </div>
                           <span className="font-bold text-[#8B1A21] ml-4 text-sm">₹{item.price * item.quantity}</span>
@@ -811,7 +811,7 @@ export default function CheckoutPage() {
                       )}
                     </button>
 
-                    <p className="text-center text-[11px] text-amber-900/40 flex items-center justify-center gap-1">
+                    <p className="text-center text-[11px] text-amber-700 flex items-center justify-center gap-1">
                       <Shield className="w-3 h-3" /> Divya Yagyam Secure Checkout
                     </p>
                   </div>
@@ -829,7 +829,7 @@ export default function CheckoutPage() {
             <DialogTitle className="text-xl font-bold flex items-center gap-2 text-amber-950">
               <span className="text-[#8B1A21] text-2xl font-black">ॐ</span> संकल्प विवरण
             </DialogTitle>
-            <DialogDescription className="text-amber-900/65">
+            <DialogDescription className="text-amber-800">
               कृपया पूजा में संकल्प के लिए अपना गोत्र और उद्देश्य भरें।
             </DialogDescription>
           </DialogHeader>
@@ -863,7 +863,7 @@ export default function CheckoutPage() {
                 <label htmlFor="terms" className="text-sm font-semibold text-amber-950 cursor-pointer">
                   Terms & Conditions स्वीकार करें
                 </label>
-                <p className="text-[11px] text-amber-900/55">
+                <p className="text-[11px] text-amber-800">
                   मैं संकल्प के लिए दी गई जानकारी सही होने की पुष्टि करता/करती हूं।
                 </p>
               </div>

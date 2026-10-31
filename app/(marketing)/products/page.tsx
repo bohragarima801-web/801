@@ -91,12 +91,12 @@ export default async function ProductsPage() {
                 return (
                   <article 
                     key={p.id} 
-                    className="group relative flex flex-col bg-white rounded-2xl border border-[#E8E1D5] hover:border-[#B85C24] transition-all duration-300 hover:-translate-y-1 shadow-2xs hover:shadow-xl overflow-hidden justify-between"
+                    className="group relative flex flex-col bg-white rounded-card border border-[#E8DDD0] hover:border-[#7A1F2B]/60 transition-all duration-300 hover:-translate-y-1 shadow-card hover:shadow-medium overflow-hidden justify-between"
                   >
                     <Link href={`/products/${p.slug}`} className="absolute inset-0 z-0" aria-label={`View ${p.name}`} />
 
                     {/* Image */}
-                    <div className="relative aspect-square w-full overflow-hidden bg-slate-50">
+                    <div className="relative aspect-square w-full overflow-hidden bg-[#FAF6ED]">
                       <SacredImageFrame
                         src={p.coverImage}
                         alt={p.name}
@@ -108,7 +108,7 @@ export default async function ProductsPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                       
                       {p.isAbhimantrit && (
-                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#6B2635] text-white text-[9px] sm:text-[10px] font-black shadow-xs z-10 border border-[#B08A45]">
+                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#7A1F2B] text-white text-[9px] sm:text-[10px] font-bold shadow-xs z-10 border border-[#C89B3C]">
                           🔥 अभिमंत्रित
                         </span>
                       )}
@@ -122,17 +122,17 @@ export default async function ProductsPage() {
                     {/* Content */}
                     <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 bg-white relative z-10 pointer-events-none">
                       <div className="space-y-1">
-                        <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#B85C24] tracking-wider block truncate">
+                        <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#C89B3C] tracking-wider block truncate">
                           {p.category?.name || 'Sanatan Store'}
                         </span>
-                        <h3 className="font-bold text-xs sm:text-base text-[#171513] line-clamp-2 leading-snug group-hover:text-[#B85C24] transition-colors pointer-events-auto">
+                        <h3 className="font-bold text-xs sm:text-base text-[#241A18] line-clamp-2 leading-snug group-hover:text-[#7A1F2B] transition-colors pointer-events-auto font-heading">
                           <Link href={`/products/${p.slug}`}>{p.name}</Link>
                         </h3>
                       </div>
                       
-                      <div className="pt-2 border-t border-[#E8E1D5] flex items-center justify-between pointer-events-auto gap-2">
+                      <div className="pt-2 border-t border-[#E8DDD0] flex items-center justify-between pointer-events-auto gap-2">
                         <div>
-                          <span className="text-[9px] sm:text-[10px] text-[#665E58] block font-medium">मूल्य:</span>
+                          <span className="text-[9px] sm:text-[10px] text-[#6F625D] block font-medium">मूल्य:</span>
                           <span className="text-sm sm:text-lg font-black text-[#171513]">₹{Number(p.price).toLocaleString('en-IN')}</span>
                         </div>
                         <AddToCartButton

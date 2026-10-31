@@ -15,7 +15,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { PaymentTrustBadge } from '@/components/payment-trust-badge'
 import { ProFormattedDescription } from '@/components/pro-formatted-description'
 import { FAQAccordion } from '@/components/ui/FAQAccordion'
-import { DevoteeSocialProof } from '@/components/ui/devotee-social-proof'
 import { CustomHtmlViewer } from '@/components/ui/custom-html-viewer'
 import { VipPujaSingleView } from '@/components/vip-puja-single-view'
 
@@ -73,7 +72,7 @@ function PujaCountdownTimer({ targetTime }: { targetTime: number }) {
   }, [targetTime])
 
   return (
-    <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#1C1614] shadow-2xs">
+    <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-full bg-[#FFF3E8] border border-[#E8DDD0] text-[#241A18] shadow-2xs">
       <Clock className="w-4 h-4 text-[#FF6600] animate-spin" style={{ animationDuration: '8s' }} />
       <span className="text-[11px] sm:text-xs font-bold text-[#FF6600] uppercase tracking-wider">Puja Starts In:</span>
       <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-black text-white">
@@ -307,22 +306,22 @@ export function PujaClientView({ puja }: { puja: any }) {
   const { targetTime, formattedDate } = getPujaTargetDate(puja)
 
   return (
-    <div className="simple-puja-theme relative bg-[#FAF8F5] pb-28 sm:pb-32 font-sans antialiased text-[#1C1614] min-h-screen notranslate" translate="no">
+    <div className="simple-puja-theme relative bg-[#FAF8F5] pb-28 sm:pb-32 font-sans antialiased text-[#241A18] min-h-screen notranslate" translate="no">
       
       {/* 1. Hero Section (Simple Puja Light & Clean Saffron Theme) */}
-      <section className="relative w-full py-10 sm:py-16 lg:py-20 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-b from-[#FAF8F5] via-[#FDF4E9] to-[#FAF8F5] text-[#1C1614] border-b border-[#EFE4D6]">
+      <section className="relative w-full py-10 sm:py-16 lg:py-20 flex flex-col items-center justify-center px-4 overflow-hidden bg-gradient-to-b from-[#FAF8F5] via-[#FDF4E9] to-[#FAF8F5] text-[#241A18] border-b border-[#E8DDD0]">
         
         {/* Subtle Ambient Pattern */}
         <div aria-hidden="true" className="absolute right-0 top-0 text-[26vw] font-serif text-[#D4AF37]/5 leading-none pointer-events-none select-none overflow-hidden">ॐ</div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-12">
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           
           {/* Main Title & Details */}
-          <div className="flex-1 space-y-4 text-center lg:text-left w-full">
+          <div className="flex-1 space-y-4 text-center lg:text-left">
             
             {/* Countdown Timer & Category Badge */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] text-xs font-bold uppercase tracking-widest shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#E8DDD0] text-[#FF6600] text-xs font-bold uppercase tracking-widest shadow-2xs">
                 ✦ {puja.category?.name || 'वैदिक पूजा अनुष्ठान'}
               </span>
 
@@ -332,7 +331,7 @@ export function PujaClientView({ puja }: { puja: any }) {
             
             <div className="space-y-2">
               <h1 className={cn(
-                "font-black text-[#1C1614] tracking-tight leading-snug font-heading py-1",
+                "font-black text-[#241A18] tracking-tight leading-snug font-heading py-1",
                 puja.name.length > 50 ? "text-2xl sm:text-3xl lg:text-4xl" : "text-3xl sm:text-4xl lg:text-5xl"
               )}>
                 {puja.name}
@@ -344,37 +343,35 @@ export function PujaClientView({ puja }: { puja: any }) {
             </div>
 
             {/* Location & Date Details Card Container */}
-            <div className="p-4 rounded-2xl bg-white border border-[#EFE4D6] space-y-2.5 text-xs sm:text-sm shadow-2xs">
-              <div className="flex items-center gap-2 text-[#1C1614] font-medium">
+            <div className="p-4 rounded-2xl bg-white border border-[#E8DDD0] space-y-2.5 text-xs sm:text-sm shadow-2xs">
+              <div className="flex items-center gap-2 text-[#241A18] font-medium">
                 <MapPin className="h-4 w-4 text-[#FF6600] shrink-0" />
                 <span className="font-semibold">{puja.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'}</span>
               </div>
-              <div className="flex items-center gap-2 text-[#FF6600] font-bold border-t border-[#EFE4D6] pt-2">
+              <div className="flex items-center gap-2 text-[#FF6600] font-bold border-t border-[#E8DDD0] pt-2">
                 <Calendar className="h-4 w-4 text-[#FF6600] shrink-0" />
                 <span>{formattedDate}</span>
               </div>
             </div>
 
             {/* 3 Verified Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center text-xs font-bold text-[#1C1614] pt-1">
-              <div className="p-2.5 rounded-xl bg-white border border-[#EFE4D6] flex items-center justify-center gap-1.5 shadow-2xs">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center text-xs font-bold text-[#241A18] pt-1">
+              <div className="p-2.5 rounded-xl bg-white border border-[#E8DDD0] flex items-center justify-center gap-1.5 shadow-2xs">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>वेरीफाइड आचार्य</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EFE4D6] flex items-center justify-center gap-1.5 shadow-2xs">
+              <div className="p-2.5 rounded-xl bg-white border border-[#E8DDD0] flex items-center justify-center gap-1.5 shadow-2xs">
                 <ShieldCheck className="w-4 h-4 text-[#FF6600] shrink-0" />
                 <span>नाम-गोत्र संकल्प</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EFE4D6] flex items-center justify-center gap-1.5 shadow-2xs">
+              <div className="p-2.5 rounded-xl bg-white border border-[#E8DDD0] flex items-center justify-center gap-1.5 shadow-2xs">
                 <Video className="w-4 h-4 text-[#FF6600] shrink-0" />
                 <span>वीडियो प्रमाण</span>
               </div>
             </div>
 
             {/* Devotee Social Proof & CTA */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <DevoteeSocialProof pujaId={puja.id} pujaName={puja.name} />
-
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-start gap-4">
               <button
                 onClick={() => handleScrollTo('packages')}
                 className="w-full sm:w-auto px-8 py-3.5 text-sm sm:text-base bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-extrabold shadow-md hover:shadow-lg transition-all uppercase tracking-wider rounded-full border border-emerald-400/50 flex items-center justify-center gap-2 cursor-pointer active:scale-95 shrink-0"
@@ -388,7 +385,7 @@ export function PujaClientView({ puja }: { puja: any }) {
 
           {/* Hero Media / Banner Showcase Card */}
           <div className="w-full lg:w-[430px] shrink-0">
-            <div className="relative rounded-3xl overflow-hidden shadow-lg border border-[#EFE4D6] bg-white group">
+            <div className="relative rounded-3xl overflow-hidden shadow-lg border border-[#E8DDD0] bg-white group">
               
               {/* Main Media Viewer */}
               <div 
@@ -477,14 +474,14 @@ export function PujaClientView({ puja }: { puja: any }) {
 
               {/* Horizontal Thumbnails Carousel */}
               {mediaList.length > 1 && (
-                <div className="flex gap-2 p-2.5 bg-[#FFF3E8] overflow-x-auto scrollbar-hide border-t border-[#EFE4D6]">
+                <div className="flex gap-2 p-2.5 bg-[#FFF3E8] overflow-x-auto scrollbar-hide border-t border-[#E8DDD0]">
                   {mediaList.map((mediaUrl, idx) => (
                     <button 
                       key={idx} 
                       onClick={() => setActiveMediaIndex(idx)}
                       className={cn(
                         "relative h-12 w-16 shrink-0 rounded-lg overflow-hidden border transition-all p-0.5 bg-white cursor-pointer",
-                        activeMediaIndex === idx ? "border-[#FF6600] ring-2 ring-[#FF6600]/50 scale-105 shadow-xs" : "border-[#EFE4D6] opacity-75 hover:opacity-100"
+                        activeMediaIndex === idx ? "border-[#FF6600] ring-2 ring-[#FF6600]/50 scale-105 shadow-xs" : "border-[#E8DDD0] opacity-75 hover:opacity-100"
                       )}
                     >
                       {isVideoUrl(mediaUrl) ? (
@@ -500,10 +497,10 @@ export function PujaClientView({ puja }: { puja: any }) {
               )}
 
               {/* Booking Summary Box */}
-              <div className="p-5 bg-[#FAF8F5] border-t border-[#EFE4D6] space-y-4">
-                <div className="flex justify-between items-center text-sm border-b border-[#EFE4D6] pb-3">
-                  <span className="text-[#6B5E57] font-semibold">न्यूनतम दक्षिणा शुल्क:</span>
-                  <span className="text-2xl font-black text-[#1C1614] font-heading">₹{basePrice.toLocaleString('en-IN')}</span>
+              <div className="p-5 bg-[#FAF8F5] border-t border-[#E8DDD0] space-y-4">
+                <div className="flex justify-between items-center text-sm border-b border-[#E8DDD0] pb-3">
+                  <span className="text-[#6F625D] font-semibold">न्यूनतम दक्षिणा शुल्क:</span>
+                  <span className="text-2xl font-black text-[#241A18] font-heading">₹{basePrice.toLocaleString('en-IN')}</span>
                 </div>
                 
                 <button 
@@ -514,7 +511,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                   <ArrowRight className="w-5 h-5" />
                 </button>
 
-                <p className="text-center text-xs text-[#6B5E57] flex items-center justify-center gap-1.5 font-medium">
+                <p className="text-center text-xs text-[#6F625D] flex items-center justify-center gap-1.5 font-medium">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   अनुभवी वेदपाठी आचार्यों द्वारा संकल्पित
                 </p>
@@ -526,29 +523,29 @@ export function PujaClientView({ puja }: { puja: any }) {
       </section>
 
       {/* 1.5. How This Works Bar (Clean Saffron Cream Strip) */}
-      <div className="w-full bg-[#FDF4E9] border-b border-[#EFE4D6] py-4 shadow-2xs">
+      <div className="w-full bg-[#FDF4E9] border-b border-[#E8DDD0] py-4 shadow-2xs">
         <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#EFE4D6] shadow-2xs">
+          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#E8DDD0] shadow-2xs">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#8B1A21] to-[#FF6600] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-xs">1</div>
-            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#1C1614] truncate">पैकेज चुनें</p><p className="text-[10px] text-[#6B5E57] truncate">Select Package</p></div>
+            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#241A18] truncate">पैकेज चुनें</p><p className="text-[10px] text-[#6F625D] truncate">Select Package</p></div>
           </div>
-          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#EFE4D6] shadow-2xs">
+          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#E8DDD0] shadow-2xs">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#8B1A21] to-[#FF6600] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-xs">2</div>
-            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#1C1614] truncate">नाम व गोत्र दर्ज करें</p><p className="text-[10px] text-[#6B5E57] truncate">Name & Gotra</p></div>
+            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#241A18] truncate">नाम व गोत्र दर्ज करें</p><p className="text-[10px] text-[#6F625D] truncate">Name & Gotra</p></div>
           </div>
-          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#EFE4D6] shadow-2xs">
+          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#E8DDD0] shadow-2xs">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#8B1A21] to-[#FF6600] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-xs">3</div>
-            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#1C1614] truncate">व्हाट्सएप लाइव वीडियो</p><p className="text-[10px] text-[#6B5E57] truncate">Live Video Proof</p></div>
+            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#241A18] truncate">व्हाट्सएप लाइव वीडियो</p><p className="text-[10px] text-[#6F625D] truncate">Live Video Proof</p></div>
           </div>
-          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#EFE4D6] shadow-2xs">
+          <div className="flex items-center gap-2.5 p-3 bg-white rounded-2xl border border-[#E8DDD0] shadow-2xs">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#8B1A21] to-[#FF6600] text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-xs">4</div>
-            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#1C1614] truncate">सिद्ध प्रसाद डिलीवरी</p><p className="text-[10px] text-[#6B5E57] truncate">Prasad at Doorstep</p></div>
+            <div className="text-left min-w-0"><p className="text-xs font-bold text-[#241A18] truncate">सिद्ध प्रसाद डिलीवरी</p><p className="text-[10px] text-[#6F625D] truncate">Prasad at Doorstep</p></div>
           </div>
         </div>
       </div>
 
       {/* 2. Sticky Sub-Header Anchor Menu */}
-      <div className="sticky top-[58px] sm:top-[68px] z-40 w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EFE4D6] shadow-xs overflow-x-auto scrollbar-hide">
+      <div className="sticky top-[58px] sm:top-[68px] z-40 w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E8DDD0] shadow-xs overflow-x-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto flex items-center justify-start md:justify-center gap-6 sm:gap-8 px-4 py-3 min-w-max">
           {[
             { id: 'packages', label: 'विकल्प (PACKAGES)' },
@@ -564,7 +561,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                 "font-extrabold text-xs sm:text-sm whitespace-nowrap transition-all border-b-2 pb-1.5 px-2 tracking-wide uppercase cursor-pointer",
                 activeTab === tab.id 
                   ? "border-[#FF6600] text-[#FF6600]" 
-                  : "border-transparent text-[#6B5E57] hover:text-[#1C1614]"
+                  : "border-transparent text-[#6F625D] hover:text-[#241A18]"
               )}
             >
               {tab.label}
@@ -626,57 +623,18 @@ export function PujaClientView({ puja }: { puja: any }) {
         </div>
         
         {/* Admin Decided: Pandit Ji Choice Feature Banner */}
-        {showPanditChoice && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-[#EFE4D6] space-y-4">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border border-[#EFE4D6] shrink-0 shadow-xs bg-[#FFF3E8]">
-                  <img 
-                    src={getSafeImageUrl(assignedPandit?.photo || '/pandit_mukesh_bohra.jpg')} 
-                    alt={assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'} 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = '/pandit_mukesh_bohra.jpg';
-                    }}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 bg-[#FFF3E8] text-[#FF6600] border border-[#EFE4D6] text-[11px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#FF6600]" /> पंडित जी चॉइस उपलब्ध (Pandit Ji Choice Enabled)
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-[#1C1614] font-heading">
-                    {assignedPandit?.name || 'पं. मुकेश बोहरा (Pt. Mukesh Bohra)'}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#6B5E57] font-medium">
-                    {assignedPandit?.title || 'मुख्य पीठाधीश्वर व वेदाचार्य (माँ कात्यायनी शक्ति पीठ)'}
-                  </p>
-                  <p className="text-[11px] text-[#6B5E57]">
-                    📍 {assignedPandit?.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'} • 📜 {assignedPandit?.experience || '25+ वर्ष अनुभव'}
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0 text-center sm:text-right">
-                <Button 
-                  onClick={() => handleScrollTo('packages')}
-                  className="bg-[#1C1614] hover:bg-black text-white font-black px-5 py-3 rounded-xl shadow-md border-b-2 border-black/50 text-sm uppercase tracking-wide cursor-pointer"
-                >
-                  ✓ पंडित जी चॉइस के साथ बुक करें &rarr;
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        
 
         {/* 3. Packages Section (Simple Puja Light & Clean Theme) */}
-        <section id="packages" className="scroll-mt-32 bg-white border border-[#EFE4D6] rounded-3xl p-6 sm:p-10 shadow-xs space-y-8">
+        <section id="packages" className="scroll-mt-32 bg-white border border-[#E8DDD0] rounded-3xl p-6 sm:p-10 shadow-xs space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#E8DDD0] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
               🌸 अपने परिवार की समृद्धि हेतु पवित्र संकल्प पैकेज चुनें
             </span>
-            <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#1C1614] tracking-wide pt-1">
+            <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-[#241A18] tracking-wide pt-1">
               पूजा सेवा पैकेज का चयन करें
             </h2>
-            <p className="text-[#6B5E57] text-xs sm:text-sm leading-relaxed font-medium">
+            <p className="text-[#6F625D] text-xs sm:text-sm leading-relaxed font-medium">
               आपके और आपके परिजनों के नाम व गोत्र से वेदमंत्रों द्वारा विशेष आहुतियाँ दी जाएंगी।
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-[#8B1A21] to-[#FF6600] mx-auto mt-3 rounded-full"></div>
@@ -694,7 +652,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                     "relative rounded-2xl p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between hover:-translate-y-1 group",
                     isSelected 
                       ? "bg-white border-2 border-[#FF6600] ring-2 ring-[#FF6600]/20 shadow-md" 
-                      : "bg-[#FFFDF9] border border-[#EFE4D6] hover:border-[#FF6600] shadow-xs"
+                      : "bg-[#FFFDF9] border border-[#E8DDD0] hover:border-[#FF6600] shadow-xs"
                   )}
                 >
                   {/* Dynamic Popular Badges */}
@@ -719,7 +677,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                   <div className="space-y-4">
                     {/* Package Specific Image Frame */}
                     {pkg.image && (
-                      <div className="relative w-full rounded-xl overflow-hidden border border-[#EFE4D6] bg-[#FFF3E8]/40 p-2 flex items-center justify-center min-h-[130px] max-h-[180px]">
+                      <div className="relative w-full rounded-xl overflow-hidden border border-[#E8DDD0] bg-[#FFF3E8]/40 p-2 flex items-center justify-center min-h-[130px] max-h-[180px]">
                         <img 
                           src={pkg.image || '/package-1.jpg'} 
                           alt={pkg.name} 
@@ -731,13 +689,13 @@ export function PujaClientView({ puja }: { puja: any }) {
                       </div>
                     )}
 
-                    <div className="border-b border-[#EFE4D6] pb-3 text-center">
-                      <h3 className="text-base font-bold text-[#1C1614] group-hover:text-[#FF6600] transition-colors leading-snug">
+                    <div className="border-b border-[#E8DDD0] pb-3 text-center">
+                      <h3 className="text-base font-bold text-[#241A18] group-hover:text-[#FF6600] transition-colors leading-snug">
                         {pkg.name}
                       </h3>
                       <div className="mt-2 flex items-baseline justify-center gap-1">
-                        <span className="text-xs text-[#6B5E57]">दक्षिणा शुल्क:</span>
-                        <span className="text-2xl font-black text-[#1C1614] font-heading">₹{pkgPrice.toLocaleString('en-IN')}</span>
+                        <span className="text-xs text-[#6F625D]">दक्षिणा शुल्क:</span>
+                        <span className="text-2xl font-black text-[#241A18] font-heading">₹{pkgPrice.toLocaleString('en-IN')}</span>
                       </div>
                     </div>
                     
@@ -757,7 +715,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                   </div>
 
                   {/* Super Attractive BOOK PUJA Button */}
-                  <div className="pt-4 mt-auto border-t border-[#EFE4D6]">
+                  <div className="pt-4 mt-auto border-t border-[#E8DDD0]">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
@@ -778,20 +736,20 @@ export function PujaClientView({ puja }: { puja: any }) {
 
         {/* 4. Benefits & Importance Section */}
         <section id="benefits" className="scroll-mt-32">
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#EFE4D6] shadow-xs space-y-8 text-[#1C1614]">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#EFE4D6] pb-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E8DDD0] shadow-xs space-y-8 text-[#241A18]">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#E8DDD0] pb-4">
               <div className="space-y-1 text-center sm:text-left">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3E8] border border-[#E8DDD0] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
                   ✨ महिमा एवं फलप्राप्ति
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1C1614] tracking-wide">
+                <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#241A18] tracking-wide">
                   पूजा अनुष्ठान का महत्व एवं लाभ
                 </h2>
               </div>
 
-              <div className="bg-[#FFF3E8] border border-[#EFE4D6] px-4 py-2 rounded-2xl text-center shrink-0">
+              <div className="bg-[#FFF3E8] border border-[#E8DDD0] px-4 py-2 rounded-2xl text-center shrink-0">
                 <p className="text-xl font-black text-[#8B1A21] font-heading">100%</p>
-                <p className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
+                <p className="text-[10px] text-[#6F625D] uppercase font-bold tracking-wider">सिद्धि व शांतिप्रद</p>
               </div>
             </div>
 
@@ -804,21 +762,21 @@ export function PujaClientView({ puja }: { puja: any }) {
             </div>
 
             {/* Why Perform This Puja? Dynamic Benefits Grid */}
-            <div className="space-y-4 pt-4 border-t border-[#EFE4D6]">
-              <h3 className="text-lg font-heading font-extrabold text-[#1C1614] flex items-center gap-2">
+            <div className="space-y-4 pt-4 border-t border-[#E8DDD0]">
+              <h3 className="text-lg font-heading font-extrabold text-[#241A18] flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#FF6600]" />
                 <span>Why perform this Puja? (अनुष्ठान के दिव्य फल)</span>
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {getDynamicPujaBenefits(puja).map((b, i) => (
-                  <div key={i} className="bg-[#FFFDF9] p-5 rounded-2xl border border-[#EFE4D6] flex items-start gap-3.5 hover:border-[#FF6600] transition-all group shadow-2xs">
-                    <div className="h-10 w-10 rounded-xl bg-[#FFF3E8] text-[#FF6600] border border-[#EFE4D6] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-110 transition-transform">
+                  <div key={i} className="bg-[#FFFDF9] p-5 rounded-2xl border border-[#E8DDD0] flex items-start gap-3.5 hover:border-[#FF6600] transition-all group shadow-2xs">
+                    <div className="h-10 w-10 rounded-xl bg-[#FFF3E8] text-[#FF6600] border border-[#E8DDD0] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-110 transition-transform">
                       <b.icon className="h-5 w-5" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-bold text-[#1C1614] text-sm leading-snug">{b.title}</h4>
-                      <p className="text-[#6B5E57] text-xs leading-relaxed font-normal">{b.desc}</p>
+                      <h4 className="font-bold text-[#241A18] text-sm leading-snug">{b.title}</h4>
+                      <p className="text-[#6F625D] text-xs leading-relaxed font-normal">{b.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -829,12 +787,12 @@ export function PujaClientView({ puja }: { puja: any }) {
 
         {/* 6. Ritual Step-by-Step Process */}
         <section id="process" className="scroll-mt-32">
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#EFE4D6] shadow-xs space-y-10 text-[#1C1614]">
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E8DDD0] shadow-xs space-y-10 text-[#241A18]">
             <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#EFE4D6] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF3E8] border border-[#E8DDD0] text-[#FF6600] text-xs font-bold uppercase tracking-widest">
                 ✨ सरल व पारदर्शी प्रक्रिया
               </span>
-              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1C1614] tracking-wide pt-1">
+              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#241A18] tracking-wide pt-1">
                 पूजा सम्पादन प्रक्रिया (Step-by-Step Process)
               </h2>
               <div className="w-20 h-1 bg-gradient-to-r from-[#8B1A21] to-[#FF6600] mx-auto mt-2 rounded-full"></div>
@@ -847,7 +805,7 @@ export function PujaClientView({ puja }: { puja: any }) {
                 { step: '03', title: 'वीडियो/फोटो शेयरिंग', desc: 'पूजा सम्पादन एवं संकल्प का व्यक्तिगत वीडियो 24-48 घंटों में WhatsApp पर प्राप्त करें।' },
                 { step: '04', title: 'पवित्र प्रसाद डिलीवरी', desc: 'मंत्राभिमंत्रित सिद्ध प्रसाद एवं रक्षा सूत्र आपके दिए गए पते पर कुरियर द्वारा भेजा जाएगा।' }
               ].map((item, index) => (
-                <div key={index} className="relative bg-[#FFFDF9] p-6 rounded-2xl border border-[#EFE4D6] flex flex-col justify-between space-y-4 shadow-2xs hover:border-[#FF6600] transition-colors">
+                <div key={index} className="relative bg-[#FFFDF9] p-6 rounded-2xl border border-[#E8DDD0] flex flex-col justify-between space-y-4 shadow-2xs hover:border-[#FF6600] transition-colors">
                   <div className="flex justify-between items-center">
                     <span className="text-3xl font-black text-[#EFE4D6] font-heading">{item.step}</span>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#8B1A21] to-[#FF6600] text-white flex items-center justify-center font-bold text-xs shadow-xs">
@@ -855,8 +813,8 @@ export function PujaClientView({ puja }: { puja: any }) {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#1C1614] text-base mb-1">{item.title}</h4>
-                    <p className="text-[#6B5E57] text-xs leading-relaxed">{item.desc}</p>
+                    <h4 className="font-bold text-[#241A18] text-base mb-1">{item.title}</h4>
+                    <p className="text-[#6F625D] text-xs leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -866,14 +824,14 @@ export function PujaClientView({ puja }: { puja: any }) {
 
         {/* 7. Temple Details */}
         <section id="temple" className="scroll-mt-32">
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#EFE4D6] shadow-xs space-y-6 text-[#1C1614]">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-[#EFE4D6] pb-6">
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E8DDD0] shadow-xs space-y-6 text-[#241A18]">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-[#E8DDD0] pb-6">
               <div className="space-y-1 text-center sm:text-left">
                 <span className="text-[#FF6600] font-bold text-xs tracking-widest uppercase">📍 पवित्र स्थान विवरण</span>
-                <h3 className="text-xl sm:text-2xl font-heading font-extrabold text-[#1C1614]">
+                <h3 className="text-xl sm:text-2xl font-heading font-extrabold text-[#241A18]">
                   {puja.location || 'माँ कात्यायनी दुर्गा शक्ति पीठ, जोधपुर (राजस्थान)'}
                 </h3>
-                <p className="text-[#6B5E57] text-xs sm:text-sm">
+                <p className="text-[#6F625D] text-xs sm:text-sm">
                   संस्कृत विश्वविद्यालय एवं वेद पाठशाला से शिक्षित आचार्यों द्वारा अनुष्ठान
                 </p>
               </div>
@@ -883,20 +841,20 @@ export function PujaClientView({ puja }: { puja: any }) {
             </div>
 
             <div className="grid sm:grid-cols-3 gap-4 text-center">
-              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6] space-y-1.5 shadow-2xs">
+              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#E8DDD0] space-y-1.5 shadow-2xs">
                 <ShieldCheck className="w-6 h-6 text-[#FF6600] mx-auto mb-2" />
-                <p className="font-bold text-sm text-[#1C1614]">शुद्ध वैदिक परम्परा</p>
-                <p className="text-xs text-[#6B5E57]">मंत्रोच्चार एवं विधि-विधान की 100% शुद्धता</p>
+                <p className="font-bold text-sm text-[#241A18]">शुद्ध वैदिक परम्परा</p>
+                <p className="text-xs text-[#6F625D]">मंत्रोच्चार एवं विधि-विधान की 100% शुद्धता</p>
               </div>
-              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6] space-y-1.5 shadow-2xs">
+              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#E8DDD0] space-y-1.5 shadow-2xs">
                 <PhoneCall className="w-6 h-6 text-[#FF6600] mx-auto mb-2" />
-                <p className="font-bold text-sm text-[#1C1614]">समर्पित सहायता</p>
-                <p className="text-xs text-[#6B5E57]">पूजा सम्पादन तक लगातार WhatsApp अपडेट</p>
+                <p className="font-bold text-sm text-[#241A18]">समर्पित सहायता</p>
+                <p className="text-xs text-[#6F625D]">पूजा सम्पादन तक लगातार WhatsApp अपडेट</p>
               </div>
-              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4D6] space-y-1.5 shadow-2xs">
+              <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#E8DDD0] space-y-1.5 shadow-2xs">
                 <Gift className="w-6 h-6 text-[#FF6600] mx-auto mb-2" />
-                <p className="font-bold text-sm text-[#1C1614]">सुरक्षित प्रसाद पैकिंग</p>
-                <p className="text-xs text-[#6B5E57]">हाईजीनिक एवं वाटरप्रूफ सुरक्षा बॉक्स</p>
+                <p className="font-bold text-sm text-[#241A18]">सुरक्षित प्रसाद पैकिंग</p>
+                <p className="text-xs text-[#6F625D]">हाईजीनिक एवं वाटरप्रूफ सुरक्षा बॉक्स</p>
               </div>
             </div>
           </div>
@@ -906,10 +864,10 @@ export function PujaClientView({ puja }: { puja: any }) {
         {puja.videos && puja.videos.length > 0 && (
           <section id="media" className="scroll-mt-32">
             <div className="text-center max-w-2xl mx-auto mb-8">
-              <span className="text-[#FF6600] font-bold text-xs tracking-widest uppercase bg-[#FFF3E8] px-3 py-1 rounded-full border border-[#EFE4D6]">
+              <span className="text-[#FF6600] font-bold text-xs tracking-widest uppercase bg-[#FFF3E8] px-3 py-1 rounded-full border border-[#E8DDD0]">
                 प्रत्यक्ष प्रमाण
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#1C1614] uppercase tracking-wide mt-2">
+              <h2 className="text-2xl sm:text-3xl font-black text-[#241A18] uppercase tracking-wide mt-2">
                 पूजा एवं हवन की दिव्य झलकियां
               </h2>
               <div className="w-16 h-1 bg-[#FF6600] mx-auto mt-3 rounded-full"></div>
@@ -985,33 +943,27 @@ export function PujaClientView({ puja }: { puja: any }) {
       </div>
 
       {/* 10. Floating Sticky Mobile/Desktop Bottom Bar */}
-      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-2.5 sm:p-4 bg-white/95 backdrop-blur-md border-t border-[#EFE4D6] shadow-[0_-6px_20px_rgba(0,0,0,0.08)] z-40 pb-[calc(0.6rem+env(safe-area-inset-bottom,0px))]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-3 sm:p-4 bg-white/95 backdrop-blur-md border-t border-[#E8DDD0] shadow-[0_-6px_20px_rgba(0,0,0,0.08)] z-40 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <div className="hidden md:block">
-            <p className="text-sm font-extrabold text-[#1C1614] truncate max-w-md font-heading">{puja.name}</p>
-            <p className="text-xs font-semibold text-[#6B5E57]">
-              चयनित पैकेज: <span className="text-[#FF6600] font-black">{currentSelectedPkgObj?.name} (₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')})</span>
+            <p className="text-sm font-extrabold text-[#241A18] truncate max-w-md font-heading">{puja.name}</p>
+            <p className="text-xs font-semibold text-[#6F625D]">
+              चयनित पैकेज: <span className="text-[#7A1F2B] font-black">{currentSelectedPkgObj?.name} (₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')})</span>
             </p>
           </div>
-          
           <div className="w-full md:w-auto flex items-center gap-3 justify-between">
             <div className="md:hidden flex flex-col min-w-0">
-              <span className="text-[10px] text-[#6B5E57] uppercase font-bold tracking-tight truncate">
-                {currentSelectedPkgObj?.name || 'संकल्प दक्षिणा'}:
+              <span className="text-[10px] text-[#6F625D] uppercase font-bold tracking-tight truncate">
+                {currentSelectedPkgObj?.name || 'पूजा संकल्प शुल्क'}:
               </span>
-              <span className="text-lg font-black text-[#FF6600] font-heading leading-tight">
+              <span className="text-xl font-black text-[#7A1F2B] font-heading leading-tight">
                 ₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')}
               </span>
             </div>
-            
             <button 
               onClick={() => handleBookNow()}
-              className="flex-1 sm:flex-none sm:w-auto px-6 sm:px-9 py-3 text-xs sm:text-sm bg-gradient-to-r from-[#FF6600] to-[#FF8500] hover:from-[#E65C00] hover:to-[#FF6600] text-white font-black shadow-md hover:shadow-lg transition-all rounded-xl border border-[#FFD2B0] shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
+              className="flex-1 sm:flex-none sm:w-auto px-7 sm:px-9 py-3 text-sm sm:text-base bg-[#7A1F2B] hover:bg-[#631822] text-white font-black shadow-md hover:shadow-lg transition-all uppercase tracking-wider rounded-xl border border-[#C89B3C]/40 shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-200"></span>
-              </span>
               <span>संकल्प लें व बुक करें ➔</span>
             </button>
           </div>

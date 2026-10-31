@@ -169,6 +169,19 @@ export function HoroscopeReportClientView({ report }: HoroscopeReportClientViewP
                 console.warn('Failed to sync horoscope order:', e)
               }
 
+              // Redirect to dedicated Thank You page for Premium Kundali
+              if (report.slug === 'premium-kundali' || report.id === 'premium-kundali') {
+                const query = new URLSearchParams({
+                  payment_id: response.razorpay_payment_id || '',
+                  order_id: data.orderId || '',
+                  name: devoteeName || '',
+                  phone: whatsappPhone || '',
+                  email: email || '',
+                })
+                window.location.href = `/horoscope/premium-kundali/thank-you?${query.toString()}`
+                return
+              }
+
               setPaymentSuccess({
                 paymentId: response.razorpay_payment_id,
                 orderId: data.orderId,

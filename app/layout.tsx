@@ -39,9 +39,6 @@ export async function generateMetadata(): Promise<Metadata> {
       'astrology online', 'jyotish', 'sanatan seva'
     ],
     metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: baseUrl,
-    },
     robots: {
       index: true,
       follow: true,
@@ -121,6 +118,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Google Fonts Preconnect for ultra-fast font rendering */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        {/* CDN & Payment DNS prefetch — browser starts DNS lookup immediately */}
+        <link rel="dns-prefetch" href="https://d8j0ntlcm91z4.cloudfront.net" />
+        <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+        <link rel="dns-prefetch" href="https://api.razorpay.com" />
+        <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
       </head>
       <body className={`${notoSansDevanagari.className} ${notoSansDevanagari.variable} ${notoSerifDevanagari.variable} ${poppins.variable} ${cinzel.variable} ${outfit.variable} ${mukta.variable} ${inter.variable} font-sans bg-[#FAF8F5] text-[#1C1614] overflow-x-hidden selection:bg-[#FF6600]/20 selection:text-[#FF6600] antialiased`} suppressHydrationWarning>
         {/* 

@@ -11,6 +11,7 @@ export function generateMetadata() {
     title: 'नियम एवं शर्तें (Terms of Service)',
     description: 'DivyaYagyam नियम एवं शर्तें। ऑनलाइन पूजा बुकिंग, नाम-गोत्र संकल्प, प्रसाद डिलीवरी, एवं सेवा उपयोग से जुड़ी संपूर्ण नियम व शर्तें।',
     path: '/terms',
+    noIndex: true,
   })
 }
 export const revalidate = 30

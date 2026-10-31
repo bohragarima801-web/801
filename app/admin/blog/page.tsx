@@ -100,9 +100,14 @@ function BlogManager() {
 
       const data = await res.json()
       if (data.ok) {
-        toast.success('🌸 Instant AI Blog Generated & Published Successfully!')
+        toast.success(`🌸 AI Blog "${data.data?.title || 'New Post'}" Generated Successfully!`)
         setCustomTopicInput('')
-        loadPosts()
+        if (publishMode === 'DRAFT') {
+          setActiveTab('drafts')
+        } else {
+          setActiveTab('published')
+        }
+        await loadPosts()
       } else {
         toast.error(data.error || 'Failed to generate AI blog')
       }

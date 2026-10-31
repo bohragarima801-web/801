@@ -8,6 +8,7 @@ export interface AutoBlogOptions {
   status?: 'PUBLISHED' | 'DRAFT'
   authorId?: string
   bypassLimit?: boolean
+  returnDraftOnly?: boolean
 }
 
 const AVAILABLE_PUJA_LINKS = `
@@ -276,8 +277,11 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
     }
 
     const title = blogData.h1 || blogData.seoTitle
-    const baseSlug = (blogData.slug || title.toLowerCase()).replace(/[^a-zA-Z0-9\u0900-\u097F]+/g, '-').replace(/^-+|-+$/g, '')
-    const uniqueSlug = `${baseSlug}-${Date.now()}`.toLowerCase()
+    const baseSlug = (blogData.slug || title.toLowerCase()).replace(/[^a-zA-Z0-9\u0900-\u097F]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase()
+    
+    // Check if slug already exists to create clean SEO slugs without ugly timestamps
+    const existingBlog = await prisma.blog.findUnique({ where: { slug: baseSlug } })
+    const uniqueSlug = existingBlog ? `${baseSlug}-${Math.floor(100 + Math.random() * 900)}` : baseSlug
 
     // 5. Ensure Category Exists
     let category = await prisma.blogCategory.findFirst({
@@ -293,9 +297,6 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       })
     }
 
-    // 6. Use the Official Divyayagyam Master Template Image with Pandit Ji & Temple Branding
-    const coverImage = '/blog-banner-template.webp'
-
     // Append FAQs to content Markdown if present
     let fullMarkdown = blogData.contentMarkdown || ''
     if (blogData.faqs && Array.isArray(blogData.faqs) && blogData.faqs.length > 0) {
@@ -305,7 +306,31 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       })
     }
 
-    // 6. Save new Blog to Database
+    // 6. Use the Automated 16:9 Dynamic Cover Image Generator matching Universal System Rules
+    const coverImage = `/api/blog/cover?title=${encodeURIComponent(title)}`
+
+    // If caller requested draft content for direct editor population (without committing to DB):
+    if (options.returnDraftOnly) {
+      return {
+        ok: true,
+        data: {
+          title,
+          slug: uniqueSlug,
+          excerpt: blogData.excerpt || blogData.metaDescription || '',
+          content: fullMarkdown,
+          coverImage,
+          coverImageAlt: title,
+          seoTitle: blogData.seoTitle || title,
+          seoDescription: blogData.metaDescription || blogData.excerpt || '',
+          seoKeywords: Array.isArray(blogData.tags) ? blogData.tags.join(', ') : (blogData.primaryKeyword || 'सनातन पूजा'),
+          categoryId: category.id,
+          categoryName: category.name,
+          faqs: Array.isArray(blogData.faqs) ? blogData.faqs : []
+        }
+      }
+    }
+
+    // 7. Save new Blog to Database
     const newBlog = await prisma.blog.create({
       data: {
         title,
@@ -328,8 +353,8 @@ MUST RETURN VALID JSON ONLY with this structure. No markdown, no code fences, no
       const { revalidateTag, revalidatePath } = await import('next/cache')
       revalidateTag('blogs')
       revalidateTag('blog')
-      revalidatePath('/blogs')
-      revalidatePath(`/blogs/${newBlog.slug}`)
+      revalidatePath('/blog')
+      revalidatePath(`/blog/${newBlog.slug}`)
       revalidatePath('/')
     } catch {
       // Revalidation error non-fatal

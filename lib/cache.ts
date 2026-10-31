@@ -52,7 +52,7 @@ export const getCachedPujas = unstable_cache(
   },
   ['public-pujas-list-v2'],
   {
-    revalidate: 300,
+    revalidate: 30,
     tags: ['pujas']
   }
 )

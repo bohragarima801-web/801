@@ -113,6 +113,12 @@ export const getAdminUser = cache(async () => {
     })
 
     if (user) {
+      if (user.status === 'SUSPENDED') return null
+      const roleSlug = user.role?.slug || ''
+      // Devotees / Customers are strictly barred from the Admin Panel
+      if (roleSlug === 'devotee' || roleSlug === 'customer') {
+        return null
+      }
       const permissions = user.role?.permissions.map(p => p.permission.slug) || []
       return { ...user, permissions }
     }

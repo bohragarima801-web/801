@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Compass, Clock, CheckCircle2, MessageCircle, Phone,
-  User, Calendar, MapPin, Eye, FileText, RefreshCw, Send
+  User, Calendar, MapPin, Eye, FileText, RefreshCw, Send,
+  Mail, Copy
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -84,10 +85,59 @@ ${order.specialConcern ? `• प्रश्न/चिंता: ${order.specia
     handleUpdateStatus(order.id, 'SENT_ON_WHATSAPP')
   }
 
+  // Open default Email client to dispatch PDF report to devotee
+  const handleOpenEmailDispatch = (order: HoroscopeOrderData) => {
+    if (!order.email) {
+      toast.error('Client ने Email Address दर्ज नहीं किया है')
+      return
+    }
+
+    const subject = `आपकी वैदिक जन्मकुंडली रिपोर्ट (${order.reportTitle}) — दिव्ययज्ञम्`
+    const body = `हरि ओम् / Namaste ${order.devoteeName}! ॐ
+
+दिव्ययज्ञम् (DivyaYagyam) की ओर से आपकी "${order.reportTitle}" (PDF) वरिष्ठ ज्योतिषाचार्यों द्वारा वैदिक गणना सहित तैयार कर ली गई है।
+
+*यजमान जन्म विवरण:*
+• नाम: ${order.devoteeName} (${order.gender})
+• जन्म तिथि: ${order.dob}
+• जन्म समय: ${order.birthTime}
+• जन्म स्थान: ${order.birthPlace}
+• भाषा: ${order.language}
+${order.specialConcern ? `• प्रश्न/चिंता: ${order.specialConcern}\n` : ''}
+
+कृपया इस ईमेल के साथ संलग्न अपनी रिपोर्ट (PDF) डाउनलोड करें।
+भगवान शिव एवं माँ कात्यायनी की कृपा आप और आपके परिवार पर सदा बनी रहे! 🙏
+
+सादर,
+दिव्ययज्ञम् (DivyaYagyam)
+https://divyayagyam.com`
+
+    window.open(`mailto:${order.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank')
+    handleUpdateStatus(order.id, 'SENT_ON_EMAIL')
+  }
+
+  // Copy full birth details to clipboard in 1 click
+  const handleCopyDetails = (order: HoroscopeOrderData) => {
+    const text = `नाम: ${order.devoteeName} (${order.gender})
+DOB: ${order.dob}
+समय: ${order.birthTime}
+स्थान: ${order.birthPlace}
+WhatsApp: ${order.whatsappPhone}
+Email: ${order.email || 'उपलब्ध नहीं'}
+भाषा: ${order.language}
+प्रश्न/चिंता: ${order.specialConcern || 'कोई नहीं'}
+Order ID: ${order.orderId || order.id}
+Payment ID: ${order.paymentId || 'N/A'}
+Report: ${order.reportTitle}`
+
+    navigator.clipboard.writeText(text)
+    toast.success('यजमान का सम्पूर्ण जन्म विवरण कॉपी हो गया!')
+  }
+
   // Filtered orders
   const filtered = orders.filter((o) => {
     if (activeFilter === 'PENDING') return o.dispatchStatus === 'PENDING'
-    if (activeFilter === 'SENT') return o.dispatchStatus === 'SENT_ON_WHATSAPP'
+    if (activeFilter === 'SENT') return o.dispatchStatus === 'SENT_ON_WHATSAPP' || o.dispatchStatus === 'SENT_ON_EMAIL'
     if (activeFilter === 'COMPLETED') return o.dispatchStatus === 'COMPLETED'
     return true
   })
@@ -95,7 +145,7 @@ ${order.specialConcern ? `• प्रश्न/चिंता: ${order.specia
   // KPIs
   const totalOrders = orders.length
   const pendingCount = orders.filter((o) => o.dispatchStatus === 'PENDING').length
-  const sentCount = orders.filter((o) => o.dispatchStatus === 'SENT_ON_WHATSAPP' || o.dispatchStatus === 'COMPLETED').length
+  const sentCount = orders.filter((o) => o.dispatchStatus === 'SENT_ON_WHATSAPP' || o.dispatchStatus === 'SENT_ON_EMAIL' || o.dispatchStatus === 'COMPLETED').length
   const totalRevenue = orders.reduce((sum, o) => sum + (o.paymentStatus === 'PAID' ? o.amount : 0), 0)
 
   return (
@@ -266,15 +316,43 @@ ${order.specialConcern ? `• प्रश्न/चिंता: ${order.specia
 
                     {/* Col 6: Direct Actions */}
                     <td className="py-4 px-4 text-right space-y-1.5">
-                      {/* Send via WhatsApp Button */}
-                      <Button
-                        onClick={() => handleOpenWhatsAppDispatch(order)}
-                        size="sm"
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold h-8 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs ml-auto cursor-pointer"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5 fill-white" />
-                        <span>Send PDF on WhatsApp</span>
-                      </Button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {/* Send via WhatsApp Button */}
+                        <Button
+                          onClick={() => handleOpenWhatsAppDispatch(order)}
+                          size="sm"
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold h-8 px-2.5 rounded-lg flex items-center gap-1 shadow-2xs cursor-pointer"
+                          title="WhatsApp पर PDF भेजें"
+                        >
+                          <MessageCircle className="h-3.5 w-3.5 fill-white" />
+                          <span>WhatsApp</span>
+                        </Button>
+
+                        {/* Send via Email Button (if email available) */}
+                        {order.email && (
+                          <Button
+                            onClick={() => handleOpenEmailDispatch(order)}
+                            size="sm"
+                            variant="outline"
+                            className="text-sky-700 border-sky-300 hover:bg-sky-50 text-xs font-bold h-8 px-2 rounded-lg flex items-center gap-1 cursor-pointer"
+                            title="Email पर PDF भेजें"
+                          >
+                            <Mail className="h-3.5 w-3.5" />
+                            <span>Mail</span>
+                          </Button>
+                        )}
+
+                        {/* Quick Copy Details Button */}
+                        <Button
+                          onClick={() => handleCopyDetails(order)}
+                          size="sm"
+                          variant="ghost"
+                          className="text-slate-500 hover:text-slate-800 text-xs h-8 px-2 rounded-lg cursor-pointer"
+                          title="Client का जन्म विवरण कॉपी करें"
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
 
                       <div className="flex items-center justify-end gap-1.5 pt-1">
                         <button
@@ -348,18 +426,37 @@ ${order.specialConcern ? `• प्रश्न/चिंता: ${order.specia
                 )}
               </div>
 
-              <div className="flex gap-2 pt-2">
+              <div className="flex flex-wrap gap-2 pt-2">
                 <Button
                   onClick={() => handleOpenWhatsAppDispatch(selectedOrder)}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl gap-2"
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl gap-2 cursor-pointer"
                 >
                   <MessageCircle className="h-4 w-4 fill-white" />
                   <span>Send PDF on WhatsApp</span>
                 </Button>
+                {selectedOrder.email && (
+                  <Button
+                    onClick={() => handleOpenEmailDispatch(selectedOrder)}
+                    variant="outline"
+                    className="text-sky-700 border-sky-300 hover:bg-sky-50 font-bold rounded-xl gap-2 cursor-pointer"
+                  >
+                    <Mail className="h-4 w-4" />
+                    <span>Send PDF on Email</span>
+                  </Button>
+                )}
+                <Button
+                  onClick={() => handleCopyDetails(selectedOrder)}
+                  variant="outline"
+                  className="rounded-xl gap-1.5 cursor-pointer"
+                  title="विवरण कॉपी करें"
+                >
+                  <Copy className="h-4 w-4" />
+                  <span>Copy Details</span>
+                </Button>
                 <Button
                   onClick={() => setSelectedOrder(null)}
                   variant="outline"
-                  className="rounded-xl"
+                  className="rounded-xl cursor-pointer"
                 >
                   Close
                 </Button>

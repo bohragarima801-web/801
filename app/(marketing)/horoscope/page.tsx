@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   Sparkles, Star, ShieldCheck, ArrowRight, Clock,
@@ -14,6 +14,18 @@ const CATEGORIES = ['All', 'Life', 'Career', 'Marriage', 'Finance', 'Health']
 export default function HoroscopeListingPage() {
   const [activeTab, setActiveTab] = useState<string>('All')
   const [openFaq, setOpenFaq] = useState<number | null>(0)
+  const [customPages, setCustomPages] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('/api/admin/horoscope-pages')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.ok && Array.isArray(d.data)) {
+          setCustomPages(d.data.filter((p: any) => p.status === 'PUBLISHED'))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const filteredReports = activeTab === 'All'
     ? ALL_ASTRO_REPORTS
@@ -90,6 +102,60 @@ export default function HoroscopeListingPage() {
         </div>
       </section>
 
+      {/* ── 2.5 CUSTOM HOROSCOPE PAGES SHOWCASE ── */}
+      {customPages.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 md:px-6 pt-8 sm:pt-10">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DDD0] shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#E8DDD0] pb-4">
+              <div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FAF6ED] text-[#7A1F2B] font-bold text-xs border border-[#E8DDD0]">
+                  <Sparkles className="h-3 w-3 text-[#C89B3C]" /> विशेष हस्तनिर्मित फलादेश
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-[#241A18] font-heading mt-1">
+                  विशेष जन्मकुंडली व परामर्श सेवाएं
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {customPages.map((cp) => (
+                <Link
+                  key={cp.id}
+                  href={`/horoscope/${cp.slug}`}
+                  className="p-5 rounded-2xl bg-[#FFF9F1] hover:bg-[#FAF6ED] border border-[#E8DDD0] hover:border-[#7A1F2B] transition-all flex flex-col justify-between space-y-3 group shadow-2xs hover:shadow-md"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#7A1F2B] bg-white px-2 py-0.5 rounded-md border border-[#E8DDD0]">
+                        {cp.layout === 'container' ? '🛡️ वैदिक विश्लेषण' : '🔮 विशेष रिपोर्ट'}
+                      </span>
+                      {cp.razorpay?.enabled && (
+                        <span className="text-xs font-black text-emerald-700">
+                          ₹{cp.razorpay.amount || 501}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-sm sm:text-base text-[#241A18] group-hover:text-[#7A1F2B] transition-colors line-clamp-2">
+                      {cp.title}
+                    </h3>
+                    {cp.subtitle && (
+                      <p className="text-xs text-[#6F625D] line-clamp-2 leading-relaxed">
+                        {cp.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="pt-2 border-t border-[#E8DDD0] flex items-center justify-between text-xs font-bold text-[#7A1F2B]">
+                    <span>विवरण देखें व परामर्श लें</span>
+                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── 3. HOROSCOPE REPORTS 2-COLUMN LUXURY GRID ── */}
       <section className="max-w-6xl mx-auto px-4 md:px-6 py-10 sm:py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -105,7 +171,7 @@ export default function HoroscopeListingPage() {
                     {/* Simulated elegant report artwork thumbnail */}
                     <div
                       className="w-10 h-14 rounded-md shadow-xs border border-white/40 flex items-center justify-center text-white text-[10px] font-black shrink-0 relative overflow-hidden"
-                      style={{ background: report.coverArtwork }}
+                      style={{ background: report.coverArtwork || 'linear-gradient(135deg, #B85C24 0%, #D97706 100%)' }}
                     >
                       <span className="text-white/80 font-serif">ॐ</span>
                     </div>
@@ -141,7 +207,7 @@ export default function HoroscopeListingPage() {
               <div className="pt-4 border-t border-[#E8E1D5] flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs text-[#6E665D] font-bold">
                   <span className="text-base text-[#B08A45]">▤</span>
-                  <span>{report.pages} pages</span>
+                  <span>{report.pages || 24} pages</span>
                 </div>
 
                 <Link

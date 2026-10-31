@@ -145,69 +145,69 @@ export function InvoiceSystem({ initialData, allowDemoSwitcher = true }: Invoice
         }
 
         .gold-card {
-          background-color: rgba(255, 253, 248, 0.95);
-          border: 1.5px solid #F0D695;
-          border-radius: 1.25rem;
-          box-shadow: 0 10px 30px rgba(200, 155, 60, 0.07);
+          background-color: #FFFFFF;
+          border: 1px solid #E8DDD0;
+          border-radius: 14px;
+          box-shadow: 0 2px 12px rgba(36, 26, 24, 0.04);
         }
 
         .gold-table th {
-          background-color: #FFF8EB;
-          color: #8B1A21;
+          background-color: #F7F0E6;
+          color: #7A1F2B;
           font-weight: 800;
           font-size: 0.75rem;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           padding: 0.875rem 1rem;
-          border-bottom: 1.5px solid #F0D695;
+          border-bottom: 1.5px solid #E8DDD0;
         }
 
         .gold-table td {
           padding: 0.875rem 1rem;
-          border-bottom: 1px solid #F5E2B8;
+          border-bottom: 1px solid #E8DDD0;
           font-size: 0.875rem;
-          color: #2A1508;
+          color: #241A18;
         }
 
         .gold-table tr:nth-child(even) {
-          background-color: #FFFDF8;
+          background-color: #FFF9F1;
         }
       `}</style>
 
       {/* ============================================================
           TOP ACTION TOOLBAR (NO-PRINT)
           ============================================================ */}
-      <div className="no-print max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-[#F0D695] shadow-lg">
+      <div className="no-print max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/95 backdrop-blur-md p-4 rounded-card border border-[#E8DDD0] shadow-card">
         {/* Left: Branding & Status */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#8B1A21] to-[#C89B3C] text-white flex items-center justify-center font-serif font-black text-xl shadow-xs">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7A1F2B] to-[#52131D] text-white flex items-center justify-center font-serif font-black text-xl shadow-xs border border-[#C89B3C]/40">
             ॐ
           </div>
           <div>
-            <h2 className="text-sm font-extrabold text-[#2A1508]">Divyayagyam Official Invoice Engine</h2>
-            <p className="text-[11px] text-[#8B5A00] font-bold">Sanatan Seva · Luxury Certificate & Receipt</p>
+            <h2 className="text-sm font-extrabold text-[#241A18]">DivyaYagyam Official Invoice Engine</h2>
+            <p className="text-[11px] text-[#C89B3C] font-bold">Sanatan Seva · Luxury Certificate & Receipt</p>
           </div>
         </div>
 
         {/* Right: Actions */}
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
           {allowDemoSwitcher && (
-            <div className="flex items-center gap-1 bg-[#FFF8EB] p-1 rounded-xl border border-[#F0D695] mr-2 text-xs">
+            <div className="flex items-center gap-1 bg-[#FFF9F1] p-1 rounded-xl border border-[#E8DDD0] mr-2 text-xs">
               <button
                 onClick={() => setData(mockAllInOneInvoice)}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockAllInOneInvoice.invoiceNumber ? 'bg-[#8B1A21] text-white' : 'text-[#6A4D3B] hover:text-[#8B1A21]'}`}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockAllInOneInvoice.invoiceNumber ? 'bg-[#7A1F2B] text-white' : 'text-[#6F625D] hover:text-[#7A1F2B]'}`}
               >
                 All-in-One
               </button>
               <button
                 onClick={() => setData(mockPujaOnlyInvoice)}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockPujaOnlyInvoice.invoiceNumber ? 'bg-[#8B1A21] text-white' : 'text-[#6A4D3B] hover:text-[#8B1A21]'}`}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockPujaOnlyInvoice.invoiceNumber ? 'bg-[#7A1F2B] text-white' : 'text-[#6F625D] hover:text-[#7A1F2B]'}`}
               >
                 Puja Only
               </button>
               <button
                 onClick={() => setData(mockProductsOnlyInvoice)}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockProductsOnlyInvoice.invoiceNumber ? 'bg-[#8B1A21] text-white' : 'text-[#6A4D3B] hover:text-[#8B1A21]'}`}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${data.invoiceNumber === mockProductsOnlyInvoice.invoiceNumber ? 'bg-[#7A1F2B] text-white' : 'text-[#6F625D] hover:text-[#7A1F2B]'}`}
               >
                 Products Only
               </button>
@@ -216,7 +216,7 @@ export function InvoiceSystem({ initialData, allowDemoSwitcher = true }: Invoice
 
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#8B1A21] via-[#A8232B] to-[#C89B3C] text-white font-black text-xs shadow-md hover:shadow-lg transition-all hover:scale-[1.02]"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7A1F2B] hover:bg-[#52131D] text-white font-bold text-xs shadow-sm hover:shadow-md transition-all hover:scale-[1.02] border border-[#C89B3C]/30"
           >
             <Printer className="h-3.5 w-3.5" /> Print / Save PDF
           </button>

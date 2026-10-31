@@ -31,7 +31,7 @@ export function AddToCartButton({
         })
         setTimeout(() => router.push('/cart'), 50)
       }}
-      className="bg-[var(--primary-color)] hover:bg-orange-700 text-white font-bold h-8 px-3 text-xs gap-1"
+      className="bg-[#7A1F2B] hover:bg-[#52131D] text-white font-bold h-9 px-3.5 text-xs gap-1.5 rounded-lg border border-[#C89B3C]/30 shadow-2xs transition-colors"
     >
       <ShoppingCart className="h-3.5 w-3.5" /> खरीदे (Buy)
     </Button>

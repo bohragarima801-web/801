@@ -67,7 +67,7 @@ const defaultVipPackages: VipPackageItem[] = [
 ]
 
 export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageItem[] }) {
-  const displayPujas = dbPackages.length > 0 ? dbPackages : defaultVipPackages
+  const displayPujas = dbPackages
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
 
   const categories = ['ALL', ...Array.from(new Set(displayPujas.map(p => p.categoryTag || 'VIP Ritual')))]
@@ -157,8 +157,15 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
           </div>
 
           {/* Cards Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredPujas.map((p) => (
+          {filteredPujas.length === 0 ? (
+            <div className="text-center py-16 px-6 bg-white rounded-2xl border border-[#E6D6BE] space-y-4 max-w-2xl mx-auto shadow-2xs">
+              <div className="h-14 w-14 mx-auto rounded-full bg-[#FFF9EF] text-[#E58A16] flex items-center justify-center text-3xl">👑</div>
+              <h3 className="text-xl font-bold text-[#292321]">VIP अनुष्ठान शीघ्र उपलब्ध होंगे</h3>
+              <p className="text-xs text-[#665E58]">वर्तमान में कोई सक्रिय VIP अनुष्ठान उपलब्ध नहीं है। कृपया कुछ समय पश्चात पुनः देखें।</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredPujas.map((p) => (
               <article
                 key={p.id}
                 className="group relative flex flex-col bg-white rounded-2xl border border-[#E6D6BE] hover:border-[#E58A16] transition-all duration-300 hover:-translate-y-1 shadow-2xs hover:shadow-xl overflow-hidden justify-between"
@@ -258,6 +265,7 @@ export function VipPujasSection({ dbPackages = [] }: { dbPackages?: VipPackageIt
               </article>
             ))}
           </div>
+        )}
 
           {/* ── VIP Trust Guarantee Section ── */}
           <div className="mt-14 p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-[#292321] via-[#3D302B] to-[#292321] text-white shadow-xl relative overflow-hidden text-center space-y-4 border border-[#C99A3D]/40">

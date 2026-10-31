@@ -1,36 +1,59 @@
 
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import Image from 'next/image'
 import Script from 'next/script'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 import { getSafeImageUrl } from '@/lib/utils'
-import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
+import { Calendar, User, BookOpen } from 'lucide-react'
+import { unstable_cache } from 'next/cache'
 
 export function generateMetadata() {
   return generatePageMeta({
     title: 'सनातन धर्म एवं वैदिक ज्ञान ब्लॉग',
-    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
+    description: 'सनातन धर्म, पूजा विधि, मंत्र, व्रत कथा, ज्योतिष ज्ञान। पढ़ें विद्वान आचार्यों के लेख और आध्यात्मिक मार्गदर्शन।',
     path: '/blog',
   })
 }
 
-export const revalidate = 30
+export const revalidate = 1800
+
+// ── Cached blog list — served from Vercel edge, revalidates on new blog publish
+// New blogs auto-appear because auto-blog-engine calls revalidateTag('blogs')
+const getCachedBlogList = unstable_cache(
+  async () => {
+    try {
+      return await prisma.blog.findMany({
+        where: {
+          status: 'PUBLISHED',
+          OR: [
+            { publishedAt: null },
+            { publishedAt: { lte: new Date() } }
+          ]
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,       // only excerpt — no raw content (saves ~80% DB payload)
+          coverImage: true,
+          publishedAt: true,
+          createdAt: true,
+          category: { select: { name: true } },
+          author: { select: { fullName: true } }
+        },
+        orderBy: { publishedAt: 'desc' }
+      })
+    } catch {
+      return []
+    }
+  },
+  ['blog-list-page-v3'],
+  { revalidate: 1800, tags: ['blogs'] }
+)
 
 export default async function BlogListPage() {
-  const posts = await prisma.blog.findMany({
-    where: {
-      status: 'PUBLISHED',
-      OR: [
-        { publishedAt: null },
-        { publishedAt: { lte: new Date() } }
-      ]
-    },
-    include: {
-      category: { select: { name: true } },
-      author: { select: { fullName: true } }
-    },
-    orderBy: { publishedAt: 'desc' }
-  })
+  const posts = await getCachedBlogList()
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -95,18 +118,20 @@ export default async function BlogListPage() {
                   key={post.id}
                   className="bg-white rounded-2xl border border-[#E8E1D5] hover:border-[#B85C24] transition-all duration-300 hover:-translate-y-1 shadow-2xs hover:shadow-lg flex flex-col overflow-hidden"
                 >
-                  {/* Image Container */}
-                  <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] w-full overflow-hidden bg-slate-900 group">
-                    <img
-                      loading="lazy"
+                  {/* Image Container — Next.js auto-compresses to WebP/AVIF */}
+                  <Link href={`/blog/${post.slug}`} prefetch={true} className="relative block aspect-[16/9] w-full overflow-hidden bg-[#FDFBF7] group">
+                    <Image
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       src={getSafeImageUrl(post.coverImage)}
                       alt={`${post.title} - ${post.category?.name || 'Spirituality'} | DivyaYagyam`}
                       title={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {post.category?.name && (
                       <div className="absolute bottom-2.5 left-2.5 z-30">
-                        <span className="px-2.5 py-1 rounded-md bg-[#171513]/85 text-[#F8F4EC] text-[10px] font-bold border border-white/10 shadow-xs backdrop-blur-xs">
+                        <span className="px-2.5 py-1 rounded-md bg-gradient-to-r from-[#B85C24] to-[#E58A16] text-white text-[10px] font-bold shadow-xs">
                           {post.category.name}
                         </span>
                       </div>
@@ -117,10 +142,10 @@ export default async function BlogListPage() {
                   <div className="p-5 flex flex-col justify-between flex-1 gap-3">
                     <div className="space-y-2">
                       <h3 className="font-bold text-base sm:text-lg text-[#171513] line-clamp-2 leading-snug hover:text-[#B85C24] transition-colors">
-                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                        <Link href={`/blog/${post.slug}`} prefetch={true}>{post.title}</Link>
                       </h3>
                       <p className="text-xs sm:text-sm text-[#4A403C] line-clamp-3 leading-relaxed">
-                        {post.excerpt || post.content.substring(0, 140).replace(/[#*`]/g, '') + '…'}
+                        {post.excerpt || ''}
                       </p>
                     </div>
 
@@ -138,6 +163,7 @@ export default async function BlogListPage() {
 
                       <Link
                         href={`/blog/${post.slug}`}
+                        prefetch={true}
                         className="text-xs font-bold text-[#B85C24] hover:text-[#d4790e] inline-flex items-center gap-1"
                       >
                         पढ़ें ➔

@@ -3,6 +3,9 @@ import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { getSetting } from '@/lib/settings'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 // In-memory idempotency cache for webhook events
 // Razorpay may retry events - this prevents duplicate processing
 const processedEventIds = new Map<string, number>() // eventId -> timestamp

@@ -27,20 +27,13 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
       return null
     })
     if (adminSession) {
-      // Find real admin in DB or return dummy if DB fails
+      const sessionEmail = adminSession.email.trim().toLowerCase()
       let dbAdmin = await prisma.user.findFirst({
         where: { 
-          email: adminSession.email,
-          role: {
-            OR: [
-              { isSystem: true },
-              { slug: { in: ['admin', 'manager', 'editor', 'astrologer', 'support'] } }
-            ]
-          }
+          email: { equals: sessionEmail, mode: 'insensitive' }
         },
         include: { role: true }
       }).catch((err) => {
-// console.error('[getCurrentUser] prisma findFirst admin error:', err) (removed for production)
         return null
       })
       
@@ -54,19 +47,25 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
           email: dbAdmin.email,
           fullName: dbAdmin.fullName,
           avatar: dbAdmin.avatar,
-          role: (dbAdmin.role?.slug as RoleSlug) ?? 'admin',
-          supabaseId: dbAdmin.supabaseId || 'admin-system-id',
+          role: (dbAdmin.role?.slug as RoleSlug) ?? 'staff',
+          supabaseId: dbAdmin.supabaseId || dbAdmin.id,
         }
       }
       
-      return {
-        id: 'admin-system-id',
-        email: adminSession.email,
-        fullName: 'System Administrator',
-        avatar: null,
-        role: 'admin',
-        supabaseId: 'admin-system-id',
+      // Fallback: ONLY the configured environment Super Admin email gets system admin access if DB record missing
+      const envAdminEmail = process.env.ADMIN_EMAIL ? process.env.ADMIN_EMAIL.trim().toLowerCase() : null
+      if (envAdminEmail && sessionEmail === envAdminEmail) {
+        return {
+          id: 'admin-system-id',
+          email: sessionEmail,
+          fullName: 'System Administrator',
+          avatar: null,
+          role: 'super_admin' as RoleSlug,
+          supabaseId: 'admin-system-id',
+        }
       }
+
+      return null
     }
 
     const supaUser = await getSession()

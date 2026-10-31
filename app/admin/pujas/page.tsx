@@ -107,6 +107,19 @@ function PujasManager() {
       if (data.ok) {
         toast.success('Puja deleted successfully')
         loadPujas()
+      } else if (data.hasBookings) {
+        if (confirm(`${data.error}\n\nDo you want to FORCE DELETE this puja and all related test bookings/slots?`)) {
+          const forceRes = await fetch(`/api/admin/pujas?id=${id}&force=true`, {
+            method: 'DELETE'
+          })
+          const forceData = await forceRes.json()
+          if (forceData.ok) {
+            toast.success('Puja force deleted successfully')
+            loadPujas()
+          } else {
+            toast.error(forceData.error || 'Failed to force delete puja')
+          }
+        }
       } else {
         toast.error(data.error || 'Failed to delete puja')
       }

@@ -16,10 +16,10 @@ export function BlogBannerPoster({
   dateStr,
 }: BlogBannerPosterProps) {
   return (
-    <div className="relative w-full max-w-2xl mx-auto my-8 rounded-3xl overflow-hidden shadow-2xl border-4 border-[#E2B765]/40 bg-[#1A0B05]">
-      {/* Aspect ratio container matching template 682x1024 (approx 2:3) */}
-      <div className="relative w-full aspect-[682/1024]">
-        {/* Base Template Image */}
+    <div className="relative w-full max-w-4xl mx-auto my-8 rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#E2B765]/50 bg-[#0d0905]">
+      {/* 16:9 Aspect Ratio Master Container */}
+      <div className="relative w-full aspect-[16/9]">
+        {/* Universal Brahma Muhurta Golden Temple Master 16:9 Image */}
         <img
           src="/blog-banner-template.webp"
           alt={title}
@@ -28,50 +28,30 @@ export function BlogBannerPoster({
           decoding="async"
         />
 
-        {/* Dynamic Content Overlay in the empty bottom parchment frame */}
-        <div className="absolute top-[48%] bottom-[8%] left-[10%] right-[10%] flex flex-col justify-between items-center text-center p-2 sm:p-4 md:p-5 overflow-hidden">
-          
-          {/* Top Decorative Header */}
-          <div className="space-y-1 sm:space-y-1.5 w-full">
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 sm:py-1 rounded-full bg-[#8B1A21]/10 border border-[#8B1A21]/25 text-[#8B1A21] text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider">
-              <span>卐</span>
-              <span>{categoryName}</span>
-              <span>卐</span>
-            </div>
-
-            {/* Sacred Divider */}
-            <div className="flex items-center justify-center gap-2 text-[#C47F00] text-[10px] sm:text-xs">
-              <span className="h-[1px] w-6 sm:w-12 bg-gradient-to-r from-transparent to-[#C47F00]" />
-              <span>ॐ</span>
-              <span className="h-[1px] w-6 sm:w-12 bg-gradient-to-l from-transparent to-[#C47F00]" />
-            </div>
-          </div>
-
-          {/* Main Blog Title */}
-          <div className="my-auto px-1 sm:px-3 w-full">
-            <h2 className="text-[#2A0E04] font-heading font-bold text-xs sm:text-base md:text-lg lg:text-xl leading-[1.38] line-clamp-3 sm:line-clamp-4 drop-shadow-2xs">
-              {title}
-            </h2>
-
-            {excerpt && (
-              <p className="mt-1 sm:mt-2 text-[#5A331A] text-[10px] sm:text-xs md:text-sm leading-relaxed line-clamp-2 font-medium">
-                {excerpt}
-              </p>
-            )}
-          </div>
-
-          {/* Bottom Footer Stamp */}
-          <div className="w-full pt-1 sm:pt-1.5 border-t border-[#D4A843]/30 flex items-center justify-between text-[9px] sm:text-[10px] md:text-xs font-bold text-[#7A4B1A]">
-            <span className="flex items-center gap-1">
-              <span>🚩</span> {authorName || 'दिव्ययज्ञम्'}
-            </span>
-            {dateStr && (
-              <span className="text-[#8B5A2B]">
-                {dateStr}
-              </span>
-            )}
-          </div>
+        {/* Dynamic Title overlay precisely inside the top ornamental parchment box */}
+        <div className="absolute top-[5%] sm:top-[6%] md:top-[7.5%] left-[22%] right-[22%] h-[18%] sm:h-[19%] md:h-[20%] flex items-center justify-center text-center px-2 sm:px-4 pointer-events-none">
+          <h2 className="text-[#321808] font-serif font-black text-[11px] sm:text-sm md:text-lg lg:text-xl xl:text-2xl leading-tight sm:leading-snug drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)] tracking-tight line-clamp-2 max-w-full">
+            {title}
+          </h2>
         </div>
+
+        {/* Optional Category pill on bottom-left for extra context */}
+        {categoryName && (
+          <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 pointer-events-none">
+            <span className="px-2.5 py-1 rounded-full bg-black/60 text-[#FFE28A] text-[9px] sm:text-xs font-semibold backdrop-blur-md border border-[#E5A638]/40 shadow-md">
+              卐 {categoryName}
+            </span>
+          </div>
+        )}
+
+        {/* Date stamp on bottom-right */}
+        {dateStr && (
+          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 pointer-events-none">
+            <span className="px-2.5 py-1 rounded-full bg-black/60 text-white/80 text-[9px] sm:text-xs font-medium backdrop-blur-md border border-white/10 shadow-md">
+              📅 {dateStr}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

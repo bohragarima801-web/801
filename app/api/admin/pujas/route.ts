@@ -197,13 +197,55 @@ export async function DELETE(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
+    const force = searchParams.get('force') === 'true'
 
     if (!id) {
       return NextResponse.json({ ok: false, error: 'Puja ID is required' }, { status: 400 });
     }
 
-    await prisma.puja.delete({
-      where: { id }
+    const bookingCount = await prisma.booking.count({
+      where: { pujaId: id }
+    })
+
+    if (bookingCount > 0 && !force) {
+      return NextResponse.json({ 
+        ok: false, 
+        hasBookings: true,
+        bookingCount,
+        error: `Cannot delete puja: This puja has ${bookingCount} existing booking(s). You can Inactivate (hide) it instead, or confirm force delete.` 
+      }, { status: 400 });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      // 1. If force deleting with bookings, clean up dependent booking records
+      if (bookingCount > 0 && force) {
+        const bookings = await tx.booking.findMany({
+          where: { pujaId: id },
+          select: { id: true }
+        })
+        const bookingIds = bookings.map(b => b.id)
+        if (bookingIds.length > 0) {
+          await tx.certificate.deleteMany({ where: { bookingId: { in: bookingIds } } }).catch(() => {})
+          await tx.bookingMember.deleteMany({ where: { bookingId: { in: bookingIds } } }).catch(() => {})
+          await tx.invoice.deleteMany({ where: { bookingId: { in: bookingIds } } }).catch(() => {})
+          await tx.booking.deleteMany({ where: { id: { in: bookingIds } } }).catch(() => {})
+        }
+      }
+
+      // 2. Clean up child records that might not have DB-level CASCADE
+      await tx.review.deleteMany({ where: { pujaId: id } }).catch(() => {})
+      await tx.pujaTimeSlot.deleteMany({ where: { pujaId: id } }).catch(() => {})
+      await tx.pujaPackage.deleteMany({ where: { pujaId: id } }).catch(() => {})
+      await tx.pujaImage.deleteMany({ where: { pujaId: id } }).catch(() => {})
+      await tx.pujaVideo.deleteMany({ where: { pujaId: id } }).catch(() => {})
+
+      // 3. Delete the Puja itself
+      await tx.puja.delete({
+        where: { id }
+      })
+    }, {
+      timeout: 20000,
+      maxWait: 5000
     })
 
     revalidateTag('pujas')

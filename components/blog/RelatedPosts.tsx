@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { getSafeImageUrl } from '@/lib/utils'
 import { ArrowRight, BookOpen } from 'lucide-react'
+import { unstable_cache } from 'next/cache'
 
 interface RelatedPostsProps {
   currentPostId: string
@@ -9,34 +11,42 @@ interface RelatedPostsProps {
   categoryName: string | null
 }
 
+const getCachedRelatedPosts = (categoryId: string, currentPostId: string) =>
+  unstable_cache(
+    async () => {
+      const now = new Date()
+      return prisma.blog.findMany({
+        where: {
+          id: { not: currentPostId },
+          status: 'PUBLISHED',
+          categoryId,
+          OR: [
+            { publishedAt: null },
+            { publishedAt: { lte: now } }
+          ]
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          coverImage: true,
+          coverImageAlt: true,
+          publishedAt: true,
+          views: true,
+        },
+        orderBy: { publishedAt: 'desc' },
+        take: 3,
+      }).catch(() => [])
+    },
+    [`related-posts-${categoryId}-${currentPostId}`],
+    { revalidate: 3600, tags: ['blogs', `related-${categoryId}`] }
+  )()
+
 export default async function RelatedPosts({ currentPostId, categoryId, categoryName }: RelatedPostsProps) {
   if (!categoryId) return null
 
-  const now = new Date()
-
-  const related = await prisma.blog.findMany({
-    where: {
-      id: { not: currentPostId },
-      status: 'PUBLISHED',
-      categoryId,
-      OR: [
-        { publishedAt: null },
-        { publishedAt: { lte: now } }
-      ]
-    },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      coverImage: true,
-      coverImageAlt: true,
-      publishedAt: true,
-      views: true,
-    },
-    orderBy: { publishedAt: 'desc' },
-    take: 3,
-  }).catch(() => [])
+  const related = await getCachedRelatedPosts(categoryId, currentPostId)
 
   if (!related || related.length === 0) return null
 
@@ -77,18 +87,20 @@ export default async function RelatedPosts({ currentPostId, categoryId, category
               <div className="aspect-[16/9] w-full bg-gradient-to-b from-[#2A1508] to-[#120703] overflow-hidden relative flex items-center justify-center">
                 {imgSrc ? (
                   <>
-                    <img
+                    <Image
                       src={imgSrc}
                       alt=""
                       aria-hidden="true"
-                      className="absolute inset-0 w-full h-full object-cover blur-md opacity-45 scale-115 pointer-events-none"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 350px"
+                      className="object-cover blur-md opacity-45 scale-115 pointer-events-none"
                     />
-                    <img
+                    <Image
                       src={imgSrc}
                       alt={alt}
-                      loading="lazy"
-                      decoding="async"
-                      className="relative z-10 w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 350px"
+                      className="relative z-10 object-contain p-1 group-hover:scale-105 transition-transform duration-500"
                     />
                   </>
                 ) : (

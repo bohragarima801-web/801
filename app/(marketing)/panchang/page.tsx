@@ -20,14 +20,45 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { ShubhMuhuratFinder } from '@/components/shubh-muhurat-finder'
+import { calculateRealPanchang } from '@/lib/real-panchang-engine'
 
 export default function PublicPanchangPage() {
   const [lang, setLang] = useState<'hi' | 'en'>('hi')
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     return new Date().toISOString().split('T')[0]
   })
-  const [loading, setLoading] = useState(true)
-  const [panchang, setPanchang] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [panchang, setPanchang] = useState<any>(() => {
+    const today = new Date().toISOString().split('T')[0]
+    const real = calculateRealPanchang(today)
+    return {
+      id: `real-${today}`,
+      date: today,
+      day: real.dayEn,
+      dayHi: real.dayHi,
+      hinduMonth: real.hinduMonthEn,
+      hinduMonthHi: real.hinduMonthHi,
+      paksha: real.pakshaEn,
+      pakshaHi: real.pakshaHi,
+      tithi: real.tithiEn,
+      tithiHi: real.tithiHi,
+      nakshatra: real.nakshatraEn,
+      nakshatraHi: real.nakshatraHi,
+      yog: real.yogEn,
+      yogHi: real.yogHi,
+      karan: real.karanEn,
+      karanHi: real.karanHi,
+      sunrise: real.sunrise,
+      sunset: real.sunset,
+      moonrise: real.moonrise,
+      moonset: real.moonset,
+      rahuKaal: real.rahuKaal,
+      yamagandaKaal: real.yamagandaKaal,
+      gulikaKaal: real.gulikaKaal,
+      abhijitMuhurat: real.abhijitMuhurat,
+      specialFestival: real.specialFestivalHi,
+    }
+  })
 
   const fetchPanchang = async (dateStr: string) => {
     setLoading(true)

@@ -41,7 +41,7 @@ export default async function EventsPage() {
         '@type': 'Event',
         name: e.title,
         description: e.description || '',
-        startDate: e.startsAt.toISOString(),
+        startDate: e.startsAt ? new Date(e.startsAt).toISOString() : new Date().toISOString(),
         location: {
           '@type': 'Place',
           name: e.location || 'DivyaYagyam Sanctuary',
