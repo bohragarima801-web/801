@@ -32,13 +32,13 @@ import { processToolPurchase } from '@/lib/tool-purchase'
 
 // Category definitions with icons and matching keywords
 const CATEGORIES = [
-  { id: 'all', label: 'All Tools', icon: Sparkles },
-  { id: 'kundli', label: 'Kundali & Astrology', icon: Compass },
-  { id: 'oracle', label: 'Sacred Oracle', icon: Flame },
-  { id: 'panchang', label: 'Panchang & Muhurat', icon: Calendar },
-  { id: 'sadhana', label: 'Sadhana & Japa', icon: Zap },
-  { id: 'gemstone', label: 'Gems & Numerology', icon: Gem },
-  { id: 'ai', label: 'AI Pandit Ji', icon: Bot }
+  { id: 'all', label: 'सभी टूल्स (All)', icon: Sparkles },
+  { id: 'kundli', label: 'कुंडली व ज्योतिष', icon: Compass },
+  { id: 'oracle', label: 'सिद्ध प्रश्नावली', icon: Flame },
+  { id: 'panchang', label: 'पंचांग व मुहूर्त', icon: Calendar },
+  { id: 'sadhana', label: 'साधना व विधि', icon: Zap },
+  { id: 'gemstone', label: 'रत्न व अंक ज्योतिष', icon: Gem },
+  { id: 'ai', label: 'एआई पंडित जी', icon: Bot }
 ]
 
 export default function ToolsPage() {
@@ -112,10 +112,10 @@ export default function ToolsPage() {
     const staticPortalTools = [
       {
         id: 'static-ai-pandit',
-        name: 'AI Pandit Ji — Sacred Vedic AI Chat',
+        name: 'एआई पंडित जी (AI Pandit Ji) — 24x7 वैदिक चैट',
         slug: 'ask-a-pandit',
         href: '/ask-a-pandit',
-        description: 'Get instant answers on puja vidhi, kundali dosh, vrat niyam & astrology queries 24x7. Accurate scriptural guidance powered by AI.',
+        description: 'पूजा विधि, मंत्र, व्रत नियम, ग्रह शांति व कुंडली शंकाओं का तुरंत शास्त्रसम्मत समाधान।',
         isFree: true,
         price: 0,
         trialDays: 0,
@@ -127,10 +127,10 @@ export default function ToolsPage() {
       },
       {
         id: 'static-panchang',
-        name: 'Daily Panchang — Dainik Panchang',
+        name: 'दैनिक पंचांग (Daily Panchang) — पंचांग व राहुकाल',
         slug: 'panchang',
         href: '/panchang',
-        description: '5-year daily Panchang with Tithi, Nakshatra, Karan, Yoga, Abhijit Muhurat, Rahukaal & sunrise/sunset timings.',
+        description: 'प्रतिदिन की तिथि, नक्षत्र, योग, करण, अभिजित मुहूर्त, राहुकाल व सूर्योदय-सूर्यास्त की सटीक गणना।',
         isFree: true,
         price: 0,
         trialDays: 0,
@@ -142,10 +142,10 @@ export default function ToolsPage() {
       },
       {
         id: 'static-festivals',
-        name: 'Festival Calendar — Vrat & Tyohar',
+        name: 'त्योहार व व्रत कैलेंडर (Festivals) — 2024-2030',
         slug: 'festivals',
         href: '/festivals',
-        description: 'Complete Hindu festival & vrat calendar — Ekadashi, Pradosh, Purnima, Amavasya dates with detailed significance.',
+        description: 'सनातन पर्व, एकादशी, प्रदोष, पूर्णिमा, अमावस्या व प्रमुख व्रतों की संपूर्ण प्रामाणिक सूची।',
         isFree: true,
         price: 0,
         trialDays: 0,
@@ -157,10 +157,10 @@ export default function ToolsPage() {
       },
       {
         id: 'static-muhurat',
-        name: 'Shubh Muhurat Finder',
+        name: 'शुभ मुहूर्त फाइंडर (Shubh Muhurat Finder)',
         slug: 'muhurat',
         href: '/muhurat',
-        description: 'Find the most auspicious muhurats & Choghadiya for weddings, Griha Pravesh, vehicle purchase, Namkaran & business launches.',
+        description: 'विवाह, गृह प्रवेश, वाहन क्रय, नामकरण व व्यापार शुभारंभ हेतु श्रेष्ठ चौघड़िया व शुभ मुहूर्त।',
         isFree: true,
         price: 0,
         trialDays: 0,
@@ -182,10 +182,10 @@ export default function ToolsPage() {
         let cat = 'kundli'
         let IconComp = Compass
 
-        if (s.includes('prashnavali') || n.includes('प्रश्नावली') || n.includes('गणेश') || s.includes('ganesh')) {
+        if (s.includes('prashnavali') || n.includes('प्रश्नावली') || n.includes('गणेश') || s.includes('ganesh') || s.includes('hanuman')) {
           cat = 'oracle'
           IconComp = Flame
-        } else if (s.includes('mala') || n.includes('माला') || n.includes('जाप') || s.includes('japa')) {
+        } else if (s.includes('mala') || n.includes('माला') || n.includes('जाप') || s.includes('japa') || s.includes('samagri') || s.includes('pujan') || n.includes('सामग्री')) {
           cat = 'sadhana'
           IconComp = Zap
         } else if (s.includes('samay') || s.includes('choghadiya') || s.includes('hora') || s.includes('muhurat') || n.includes('समय') || n.includes('चौघड़िया')) {
@@ -194,7 +194,7 @@ export default function ToolsPage() {
         } else if (s.includes('ratna') || s.includes('gemstone') || s.includes('numerology') || n.includes('रत्न') || n.includes('अंक')) {
           cat = 'gemstone'
           IconComp = Gem
-        } else if (s.includes('milan') || s.includes('kundali') || n.includes('कुंडली') || n.includes('मिलान')) {
+        } else if (s.includes('milan') || s.includes('kundali') || s.includes('calculator') || n.includes('कुंडली') || n.includes('मिलान')) {
           cat = 'kundli'
           IconComp = Compass
         }
@@ -254,28 +254,28 @@ export default function ToolsPage() {
           {/* Premium badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-orange-300 text-xs font-bold tracking-wider uppercase">
             <Sparkles className="h-3.5 w-3.5" />
-            <span>100% Authentic Vedic & Astrology Tools</span>
+            <span>100% प्रामाणिक वैदिक ज्योतिष टूल्स</span>
           </div>
 
           {/* Main heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
-            <span className="text-white">Sacred Vedic</span>
+            <span className="text-white">सिद्ध वैदिक ज्योतिष</span>
             <br />
             <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
-              & Astrology Tools
+              एवं पंचांग टूल्स
             </span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300/90 leading-relaxed max-w-2xl mx-auto font-medium">
-            Powered by 27+ years of Vedic wisdom & modern AI — access Kundali, Panchang, Muhurat, Japa Mala & more, all in one place.
+            27+ वर्षों के वैदिक ज्ञान एवं आधुनिक AI द्वारा संचालित — जन्म कुंडली, पंचांग, 36 गुण मिलान, सिद्ध प्रश्नावली व डिजिटल जाप माला।
           </p>
 
           {/* Stats row */}
           <div className="flex items-center justify-center gap-6 sm:gap-10 pt-2">
             {[
-              { num: '8+', label: 'Vedic Tools' },
-              { num: '100%', label: 'Free Access' },
-              { num: '24/7', label: 'Available' },
+              { num: '14+', label: 'वैदिक टूल्स' },
+              { num: '100%', label: 'निःशुल्क सेवा' },
+              { num: '24/7', label: 'सटीक गणना' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-2xl sm:text-3xl font-black text-white">{stat.num}</div>
@@ -297,7 +297,7 @@ export default function ToolsPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <Input
               type="text"
-              placeholder="Search tools... (e.g., Kundali, Panchang, Muhurat, Japa Mala)"
+              placeholder="वैदिक टूल खोजें... (उदा: जन्म कुंडली, पंचांग, 36 गुण मिलान, प्रश्नावली, जाप माला, मुहूर्त)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 h-12 bg-slate-50 rounded-xl border-slate-200 text-sm font-medium placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
@@ -450,7 +450,7 @@ export default function ToolsPage() {
                         className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-md hover:shadow-lg hover:shadow-orange-500/20 transition-all inline-flex items-center justify-center gap-2 group/btn"
                       >
                         <Play className="h-4 w-4 fill-white" />
-                        <span>Open Tool</span>
+                        <span>टूल शुरू करें</span>
                         <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
                       </Link>
                     ) : (
