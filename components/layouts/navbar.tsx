@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone, Sparkles, Bot, Calendar, Heart, Clock, Zap, Gem, ArrowRight, MessageCircle } from 'lucide-react'
+import { Menu, X, ShoppingBag, User, ChevronDown, Languages, Flame, Sun, Moon, Phone, Sparkles, Bot, Calendar, Heart, Clock, Zap, Gem, ArrowRight, MessageCircle, Youtube, Instagram, Facebook } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -621,6 +621,49 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
                 </Link>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Social Platforms in Drawer */}
+        <div className="px-4 py-2.5 bg-white border-t border-[#E8DDD0] flex items-center justify-between shrink-0">
+          <span className="text-[11px] font-bold text-[#6F625D]">सोशल मीडिया:</span>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://www.youtube.com/@divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              aria-label="YouTube"
+              className="w-7 h-7 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs"
+            >
+              <Youtube className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href="https://www.instagram.com/divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              aria-label="Instagram"
+              className="w-7 h-7 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs"
+            >
+              <Instagram className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href="https://www.facebook.com/divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              aria-label="Facebook"
+              className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs"
+            >
+              <Facebook className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href="https://wa.me/919530401984?text=जय%20श्री%20राम!%20मुझे%20पूजा%20बुकिंग%20हेतु%20जानकारी%20चाहिए।"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-2xs"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+            </a>
           </div>
         </div>
 

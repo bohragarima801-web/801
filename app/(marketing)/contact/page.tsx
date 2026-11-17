@@ -1,6 +1,6 @@
 import Script from 'next/script'
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Clock, MessageSquare, ShieldCheck, Sparkles } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, MessageSquare, ShieldCheck, Sparkles, Youtube, Instagram, Facebook } from 'lucide-react'
 import { generatePageMeta, generateBreadcrumbSchema, BASE_URL } from '@/lib/seo'
 
 export const revalidate = 3600
@@ -142,6 +142,50 @@ export default function ContactPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs sm:text-sm shadow-md transition-all"
             >
               <span>💬 व्हाट्सएप पर संदेश भेजें ➔</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Social Media Connect Box */}
+        <div className="p-6 rounded-3xl bg-white border border-[#E6D6BE] text-center space-y-4 shadow-2xs">
+          <div className="space-y-1">
+            <h3 className="text-lg sm:text-xl font-bold text-[#292321]">
+              पावन सोशल मीडिया से जुड़ें
+            </h3>
+            <p className="text-xs text-[#4A403C] max-w-md mx-auto">
+              नित्य दिव्य दर्शन, वेदोक्त अनुष्ठान वीडियो एवं वैदिक ज्ञान प्राप्त करने हेतु हमारे आधिकारिक सोशल प्लेटफॉर्म्स को फॉलो करें।
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+            <a
+              href="https://www.youtube.com/@divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white font-bold text-xs border border-red-200 transition-all duration-200 shadow-xs"
+            >
+              <Youtube className="h-4 w-4" />
+              <span>YouTube चैनल</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-50 hover:bg-pink-600 text-pink-700 hover:text-white font-bold text-xs border border-pink-200 transition-all duration-200 shadow-xs"
+            >
+              <Instagram className="h-4 w-4" />
+              <span>Instagram पेज</span>
+            </a>
+
+            <a
+              href="https://www.facebook.com/divyayagyam"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white font-bold text-xs border border-blue-200 transition-all duration-200 shadow-xs"
+            >
+              <Facebook className="h-4 w-4" />
+              <span>Facebook पेज</span>
             </a>
           </div>
         </div>
