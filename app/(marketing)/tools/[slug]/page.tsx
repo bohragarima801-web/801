@@ -117,7 +117,7 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
   }
 
   if (!tool) {
-    permanentRedirect('/tools')
+    notFound()
   }
 
   // Fetch other related tools for recommendations
@@ -343,10 +343,10 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
                 <span>दोष निवारण एवं शास्त्रोक्त उपाय</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-[#1C1614] tracking-tight">
-                कुंडली दोष, साढ़ेसाती या जीवन बाधा निवारण हेतु पावन अनुष्ठान
+                कुंडली दोष, ग्रह शांति या जीवन बाधा निवारण हेतु पावन अनुष्ठान
               </h2>
               <p className="text-xs sm:text-sm text-[#6B5E57]">
-                यदि आपकी गणना या कुंडली में कोई दोष (मांगलिक, कालसर्प, साढ़ेसाती, पितृ दोष) है, तो अपने नाम से सिद्ध पीठों में संकल्प करवाएं।
+                यदि आपकी गणना या कुंडली में कोई दोष है, तो अपने नाम-गोत्र से सिद्ध शक्तिपीठों में संकल्प पूर्वक वैदिक अनुष्ठान संपन्न करवाएं।
               </p>
             </div>
 
@@ -363,25 +363,25 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               {
-                title: "शनि साढ़ेसाती व नवग्रह शांति यज्ञ",
-                desc: "शनि महादशा, ढैय्या एवं नवग्रह दोष शांति हेतु 9 समिधा वेदोक्त हवन।",
-                price: "₹901",
-                badge: "ग्रह दोष शांति",
-                href: "/pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya"
+                title: "श्री सत्यनारायण महापूजा व कथा",
+                desc: "परिवार में सुख-शांति, समृद्धि, मनोकामना पूर्ति एवं श्री हरि विष्णु कृपा प्राप्ति हेतु पावन अनुष्ठान।",
+                price: "₹501",
+                badge: "सुख-शांति व समृद्धि",
+                href: "/pujas/satya-narayan-puja"
               },
               {
-                title: "माँ बगलामुखी मिर्ची हवन व रक्षा कवच",
-                desc: "शत्रु बाधा, कोर्ट-कचहरी, नजर दोष व व्यापारिक अवरोध मुक्ति हेतु महायज्ञ।",
-                price: "₹1,100",
-                badge: "महाविद्या अनुष्ठान",
-                href: "/pujas/maa-bagalamukhi-mirchi-hawan"
-              },
-              {
-                title: "महामृत्युंजय जाप एवं रुद्राभिषेक",
-                desc: "स्वास्थ्य रक्षा, असाध्य रोग निवारण, दीर्घायु एवं मानसिक शांति हेतु शिव आराधना।",
+                title: "👑 VIP विशिष्ट 1-on-1 वैदिक अनुष्ठान",
+                desc: "आपके व परिवार के नाम-गोत्र से संपूर्ण विधि-विधान एवं वरिष्ठ आचार्यों द्वारा समर्पित व्यक्तिगत महायज्ञ।",
                 price: "₹2,100",
-                badge: "स्वास्थ्य व दीर्घायु",
-                href: "/pujas/mahamrityunjaya-jaap-rudrabhishekam"
+                badge: "व्यक्तिगत यजमान",
+                href: "/vip-pujas"
+              },
+              {
+                title: "पावन मंदिर चढ़ावा एवं दीपदान सेवा",
+                desc: "प्राचीन सिद्ध मंदिरों में अपने नाम से भोग, पुष्प, दीप एवं वस्त्र अर्पण सेवा घर बैठे करवाएं।",
+                price: "₹251",
+                badge: "नित्य देव सेवा",
+                href: "/book-chadhawa"
               }
             ].map((remedy, idx) => (
               <div
@@ -424,10 +424,10 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
           <div className="bg-[#FAF8F5] rounded-xl p-3 border border-[#EFE4D6] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#4A3E39]">
             <div className="flex items-center gap-2">
               <span className="text-base">📜</span>
-              <span><strong>नाम-गोत्र संकल्प:</strong> सभी अनुष्ठान 27+ वर्षों के अनुभवी आचार्यों द्वारा विधि-विधान से संपन्न होते हैं।</span>
+              <span><strong>नाम-गोत्र संकल्प:</strong> सभी अनुष्ठान 27+ वर्षों के अनुभवी आचार्यों द्वारा शास्त्रसम्मत विधि से संपन्न होते हैं।</span>
             </div>
             <Link href="/pujas" className="text-[#FF6600] font-bold hover:underline shrink-0">
-              सभी 12+ वैदिक पूजाएं देखें ➔
+              सभी वैदिक पूजाएं देखें ➔
             </Link>
           </div>
         </section>

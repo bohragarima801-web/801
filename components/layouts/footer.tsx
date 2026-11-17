@@ -166,12 +166,12 @@ export function Footer({ siteData }: FooterProps) {
             </h4>
             <ul className="space-y-2 text-xs">
               {[
-                { label: 'माँ बगलामुखी मिर्ची हवन', href: '/pujas/maa-bagalamukhi-mirchi-hawan' },
-                { label: 'महारुद्राभिषेक व मृत्युंजय जाप', href: '/pujas/mahamrityunjaya-jaap-rudrabhishekam' },
-                { label: 'कालसर्प दोष शांति पूजा', href: '/pujas/kalsarp-dosh-shanti-puja' },
-                { label: 'पितृ शांति व सर्व पितृ तर्पण', href: '/pujas/pitra-shanti-vishesh-sarva-pitra-tarpan-puja' },
-                { label: 'नवग्रह शांति महायज्ञ', href: '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja' },
-                { label: '👑 VIP विशिष्ट 1-on-1 अनुष्ठान', href: '/vip-pujas' },
+                { label: 'श्री सत्यनारायण महापूजा व कथा', href: '/pujas/satya-narayan-puja' },
+                { label: 'वैदिक पूजा व अनुष्ठान संग्रह', href: '/pujas' },
+                { label: '👑 VIP विशिष्ट 1-on-1 महायज्ञ', href: '/vip-pujas' },
+                { label: 'पावन मंदिर चढ़ावा व दीपदान सेवा', href: '/book-chadhawa' },
+                { label: 'पूजा संकल्प एवं ऑनलाइन बुकिंग', href: '/bookings/new' },
+                { label: '🔍 लाइव संकल्प व ऑर्डर ट्रैकिंग', href: '/track' },
               ].map((p) => (
                 <li key={p.label}>
                   <Link
@@ -205,8 +205,9 @@ export function Footer({ siteData }: FooterProps) {
                 { label: 'दैनिक पंचांग व चौघड़िया', href: '/panchang' },
                 { label: 'निःशुल्क जन्मकुंडली', href: '/tools/kundali' },
                 { label: 'शुभ मुहूर्त व तिथि', href: '/muhurat' },
-                { label: 'कुंडली मिलान (गुण मिलान)', href: '/tools/milan' },
+                { label: 'कुंडली मिलान (36 गुण मिलान)', href: '/tools/kundali-milan' },
                 { label: 'गणेश सिद्ध प्रश्नवाली', href: '/tools/shree-ganesh-siddha-prashnavali' },
+                { label: 'हनुमान सिद्ध प्रश्नवाली', href: '/tools/shree-hanuman-prashnavali' },
                 { label: 'डिजिटल जाप माला', href: '/tools/mala' },
                 { label: '🤖 AI पंडित जी परामर्श', href: '/ask-a-pandit' },
               ].map((t) => (

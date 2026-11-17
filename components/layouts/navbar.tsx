@@ -60,7 +60,7 @@ const toolsMenu = [
   },
   {
     title: 'Kundali Milan',
-    href: '/tools/milan',
+    href: '/tools/kundali-milan',
     desc: '36 Guna Horoscope Matching for Marriage',
     icon: Heart,
     badge: '36 GUNA',

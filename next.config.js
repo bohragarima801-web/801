@@ -64,8 +64,33 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/tools/milan',
+        destination: '/tools/kundali-milan',
+        permanent: true,
+      },
+      {
         source: '/tools/Kunadali-milan',
         destination: '/tools/kundali-milan',
+        permanent: true,
+      },
+      {
+        source: '/tools/muhurat',
+        destination: '/muhurat',
+        permanent: true,
+      },
+      {
+        source: '/tools/festivals',
+        destination: '/festivals',
+        permanent: true,
+      },
+      {
+        source: '/tools/free-kundali',
+        destination: '/tools/kundali',
+        permanent: true,
+      },
+      {
+        source: '/tools/japa-mala-counter',
+        destination: '/tools/mala',
         permanent: true,
       },
       {

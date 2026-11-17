@@ -4,57 +4,81 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Sparkles, Calendar, Sun, Heart, Compass, ArrowRight, Bot, Repeat, ChevronRight } from 'lucide-react'
+import { Sparkles, Calendar, Sun, Heart, Compass, ArrowRight, Bot, Repeat, ChevronRight, Flame, Gem } from 'lucide-react'
 
 export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
   const toolsList = [
     {
-      title: 'AI Pandit Ji',
-      desc: 'Ask questions regarding puja rituals and astrology.',
+      title: 'एआई पंडित जी (AI Pandit Ji)',
+      desc: 'पूजा विधि, व्रत नियम, मंत्र व कुंडली शंका का 24x7 सटीक समाधान।',
       icon: Bot,
       slug: '/ask-a-pandit',
-      tag: 'Free Chat',
+      tag: '100% Free Chat',
       color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
     },
     {
-      title: 'Free Janam Kundali',
-      desc: 'View Vedic birth chart, planetary positions, and predictions.',
+      title: 'निःशुल्क जन्म कुंडली (Free Kundali)',
+      desc: 'वैदिक लग्न चार्ट, नवमांश, ग्रह स्थिति, महादशा व भविष्य फल देखें।',
       icon: Sun,
       slug: '/tools/kundali',
-      tag: 'Free Service',
+      tag: 'वैदिक कुंडली',
       color: 'bg-amber-500/10 text-amber-600 border-amber-500/20'
     },
     {
-      title: 'Daily Panchang',
-      desc: 'Today\'s Tithi, Nakshatra, and auspicious Muhurat.',
+      title: 'दैनिक पंचांग व चौघड़िया',
+      desc: 'आज की तिथि, नक्षत्र, योग, करण, अभिजित मुहूर्त व राहुकाल समय।',
       icon: Calendar,
-      slug: '/tools/panchang',
-      tag: 'Daily Update',
+      slug: '/panchang',
+      tag: 'दैनिक पंचांग',
       color: 'bg-orange-500/10 text-orange-600 border-orange-500/20'
     },
     {
-      title: 'Kundali Guna Matching',
-      desc: '36 Guna Milan compatibility analysis for marriage.',
+      title: 'कुंडली मिलान (36 Guna Milan)',
+      desc: 'वर-कन्या विवाह हेतु 36 गुण मिलान, नाड़ी दोष व मांगलिक विचार।',
       icon: Heart,
-      slug: '/tools/milan',
-      tag: 'Marriage Matching',
+      slug: '/tools/kundali-milan',
+      tag: 'विवाह मेलापक',
       color: 'bg-rose-500/10 text-rose-600 border-rose-500/20'
     },
     {
-      title: 'Shubh Muhurat',
-      desc: 'Auspicious timings for marriage, vehicle purchase, and Griha Pravesh.',
+      title: 'श्री गणेश सिद्ध प्रश्नावली',
+      desc: 'मन में प्रश्न विचार कर गणपति बप्पा से कार्य सिद्धि का सटीक उत्तर जानें।',
+      icon: Flame,
+      slug: '/tools/shree-ganesh-siddha-prashnavali',
+      tag: 'सिद्ध चौपड़',
+      color: 'bg-orange-500/10 text-orange-600 border-orange-500/20'
+    },
+    {
+      title: 'श्री हनुमान प्रश्नावली',
+      desc: 'संकटमोचन हनुमान जी का स्मरण कर तुरंत जानें मनोकामना व कार्य का फल।',
+      icon: Flame,
+      slug: '/tools/shree-hanuman-prashnavali',
+      tag: 'संकटमोचन फल',
+      color: 'bg-red-500/10 text-red-600 border-red-500/20'
+    },
+    {
+      title: 'डिजिटल जाप माला (108 Japa Mala)',
+      desc: '108 मनका डिजिटल काउंटर, ऑटो बीप व संकल्प ट्रैकर के साथ नाम सिमरन।',
+      icon: Repeat,
+      slug: '/tools/mala',
+      tag: 'मंत्र साधना',
+      color: 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+    },
+    {
+      title: 'शुभ मुहूर्त फाइंडर (Shubh Muhurat)',
+      desc: 'विवाह, गृह प्रवेश, वाहन क्रय, नामकरण व व्यापार शुभारंभ के श्रेष्ठ मुहूर्त।',
       icon: Compass,
-      slug: '/tools/muhurat',
-      tag: 'Auspicious Time',
+      slug: '/muhurat',
+      tag: 'शुभ काल',
       color: 'bg-purple-500/10 text-purple-600 border-purple-500/20'
     },
     {
-      title: 'Digital Japa Mala',
-      desc: 'Digital counter for 108 mantra chanting.',
-      icon: Repeat,
-      slug: '/tools/mala',
-      tag: 'Devotional Practice',
-      color: 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+      title: 'अंक ज्योतिष (Numerology Calculator)',
+      desc: 'जन्मतिथि से मूलांक, भाग्यांक, लकी नंबर व शुभ रंग तुरंत जानें।',
+      icon: Gem,
+      slug: '/tools/numerology',
+      tag: 'अंक फल',
+      color: 'bg-violet-500/10 text-violet-600 border-violet-500/20'
     }
   ]
 
@@ -65,11 +89,11 @@ export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
       {/* Compact Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-zinc-200 pb-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
-            <Sparkles className="h-3 w-3" /> Vedic Astrology & Panchang
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold text-xs border border-amber-200">
+            <Sparkles className="h-3 w-3 text-amber-600" /> 100% प्रामाणिक वैदिक ज्योतिष टूल्स
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 tracking-tight">
-            🔮 Sacred Vedic <span className="text-amber-600">& Astrology Tools</span>
+          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 tracking-tight font-heading">
+            🔮 पावन वैदिक ज्योतिष <span className="text-amber-600">& पंचांग टूल्स</span>
           </h2>
         </div>
 
@@ -78,7 +102,7 @@ export function SacredAstroTools({ limit = 6 }: { limit?: number }) {
           prefetch={true}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-amber-50 text-zinc-900 hover:text-amber-600 font-bold text-xs border border-zinc-200 shadow-2xs transition-all self-start sm:self-auto"
         >
-          <span>All Tools ({toolsList.length})</span>
+          <span>सभी टूल्स देखें ({toolsList.length})</span>
           <span>➔</span>
         </Link>
       </div>
