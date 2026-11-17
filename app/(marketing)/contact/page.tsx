@@ -179,7 +179,7 @@ export default function ContactPage() {
             </a>
 
             <a
-              href="https://www.facebook.com/divyayagyam"
+              href="https://www.facebook.com/Dvecomm1.1"
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white font-bold text-xs border border-blue-200 transition-all duration-200 shadow-xs"

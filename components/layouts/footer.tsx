@@ -140,7 +140,7 @@ export function Footer({ siteData }: FooterProps) {
                     href={socials.facebook}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    aria-label="Facebook — @divyayagyam"
+                    aria-label="Facebook — Dvecomm1.1"
                     title="Facebook पर फॉलो करें"
                     className="w-8 h-8 rounded-xl bg-zinc-800/90 hover:bg-[#1877F2] text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-105"
                   >

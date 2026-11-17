@@ -647,7 +647,7 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
               <Instagram className="h-3.5 w-3.5" />
             </a>
             <a
-              href="https://www.facebook.com/divyayagyam"
+              href="https://www.facebook.com/Dvecomm1.1"
               target="_blank"
               rel="noopener noreferrer nofollow"
               aria-label="Facebook"
