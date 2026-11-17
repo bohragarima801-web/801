@@ -43,7 +43,7 @@ export const SITE = {
   social: [
     "https://www.youtube.com/@divyayagyam",
     "https://www.instagram.com/divyayagyam",
-    "https://www.facebook.com/divyayagyam",
+    "https://www.facebook.com/Dvecomm1.1",
   ],
 } as const;
 

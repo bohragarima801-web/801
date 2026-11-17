@@ -111,15 +111,16 @@ export function Footer({ siteData }: FooterProps) {
               </a>
 
               <div className="flex items-center gap-2">
-                {socials?.facebook && socials.facebook !== '#' && (
+                {socials?.youtube && socials.youtube !== '#' && (
                   <a
-                    href={socials.facebook}
+                    href={socials.youtube}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    aria-label="Facebook"
-                    className="w-7 h-7 rounded-lg bg-zinc-800/80 hover:bg-amber-600 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+                    aria-label="YouTube — @divyayagyam"
+                    title="YouTube पर फॉलो करें"
+                    className="w-8 h-8 rounded-xl bg-zinc-800/90 hover:bg-[#FF0000] text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-105"
                   >
-                    <Facebook className="h-3.5 w-3.5" />
+                    <Youtube className="h-4 w-4" />
                   </a>
                 )}
                 {socials?.instagram && socials.instagram !== '#' && (
@@ -127,21 +128,23 @@ export function Footer({ siteData }: FooterProps) {
                     href={socials.instagram}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    aria-label="Instagram"
-                    className="w-7 h-7 rounded-lg bg-zinc-800/80 hover:bg-amber-600 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+                    aria-label="Instagram — @divyayagyam"
+                    title="Instagram पर फॉलो करें"
+                    className="w-8 h-8 rounded-xl bg-zinc-800/90 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-105"
                   >
-                    <Instagram className="h-3.5 w-3.5" />
+                    <Instagram className="h-4 w-4" />
                   </a>
                 )}
-                {socials?.youtube && socials.youtube !== '#' && (
+                {socials?.facebook && socials.facebook !== '#' && (
                   <a
-                    href={socials.youtube}
+                    href={socials.facebook}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    aria-label="YouTube"
-                    className="w-7 h-7 rounded-lg bg-zinc-800/80 hover:bg-amber-600 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+                    aria-label="Facebook — Dvecomm1.1"
+                    title="Facebook पर फॉलो करें"
+                    className="w-8 h-8 rounded-xl bg-zinc-800/90 hover:bg-[#1877F2] text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-105"
                   >
-                    <Youtube className="h-3.5 w-3.5" />
+                    <Facebook className="h-4 w-4" />
                   </a>
                 )}
                 {socials?.twitter && socials.twitter !== '#' && (
@@ -149,10 +152,11 @@ export function Footer({ siteData }: FooterProps) {
                     href={socials.twitter}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    aria-label="Twitter"
-                    className="w-7 h-7 rounded-lg bg-zinc-800/80 hover:bg-amber-600 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+                    aria-label="Twitter / X — @divyayagyam"
+                    title="X (Twitter) पर फॉलो करें"
+                    className="w-8 h-8 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-105"
                   >
-                    <Twitter className="h-3.5 w-3.5" />
+                    <Twitter className="h-4 w-4" />
                   </a>
                 )}
               </div>
