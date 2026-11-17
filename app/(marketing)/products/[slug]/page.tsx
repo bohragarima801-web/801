@@ -160,7 +160,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   const product = await getProductBySlugOrFallback(slug);
 
   if (!product) {
-    permanentRedirect('/products')
+    notFound()
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID

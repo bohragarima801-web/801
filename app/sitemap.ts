@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/pujas`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
 
     { url: `${baseUrl}/products`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/track`, lastModified: now, changeFrequency: 'daily', priority: 0.85 },
     { url: `${baseUrl}/vip-pujas`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: 'daily', priority: 0.8 },
@@ -56,13 +57,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
-      // 2. Products (Active or Out of Stock)
+      // 2. Products (Only Active)
       const products = await prisma.product.findMany({
         where: {
-          OR: [
-            { status: 'ACTIVE' },
-            { status: 'OUT_OF_STOCK' }
-          ]
+          status: 'ACTIVE'
         },
         select: { slug: true, updatedAt: true }
       })
@@ -77,10 +75,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       })
 
-      // 3. Puja & Product Categories
+      // 3. Puja & Product Categories (ONLY non-empty categories to prevent Google Soft 404 / Thin Content)
       const [pujaCats, prodCats] = await Promise.all([
-        prisma.pujaCategory.findMany({ select: { slug: true } }).catch(() => []),
-        prisma.productCategory.findMany({ select: { slug: true } }).catch(() => [])
+        prisma.pujaCategory.findMany({
+          where: {
+            pujas: { some: { status: 'PUBLISHED' } }
+          },
+          select: { slug: true }
+        }).catch(() => []),
+        prisma.productCategory.findMany({
+          where: {
+            products: { some: { status: 'ACTIVE' } }
+          },
+          select: { slug: true }
+        }).catch(() => [])
       ])
       pujaCats.forEach(c => {
         if (c.slug) sitemapEntries.push({ url: `${baseUrl}/pujas/category/${encodeURIComponent(c.slug)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 })

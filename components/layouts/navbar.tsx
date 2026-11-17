@@ -28,6 +28,7 @@ const navItems = [
   { title: 'Chadhawa', href: '/book-chadhawa' },
   { title: 'VIP Puja', href: '/vip-pujas' },
   { title: 'Store', href: '/products' },
+  { title: 'Track', href: '/track' },
   { title: 'About Us', href: '/about' },
   { title: 'Blogs', href: '/blog' },
 ]

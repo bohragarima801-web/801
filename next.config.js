@@ -231,6 +231,53 @@ const nextConfig = {
         destination: '/pujas/category/devi-pujas',
         permanent: true,
       },
+
+      // ── Consolidate old/deleted product URLs to live products (Prevents 404s on Google)
+      {
+        source: '/products/siddha-abhimantrit-rudraksha-mala',
+        destination: '/products/rudraksh-mala-abhimantrit',
+        permanent: true,
+      },
+      {
+        source: '/products/rudraksha-mala',
+        destination: '/products/rudraksh-mala-abhimantrit',
+        permanent: true,
+      },
+      {
+        source: '/products/rudraksh-mala',
+        destination: '/products/rudraksh-mala-abhimantrit',
+        permanent: true,
+      },
+      {
+        source: '/products/siddha-9-abhimantrit-lakshmi-kaudi-set-free-gifts',
+        destination: '/products/original-pili-kaudi-yellow-cowrie-for-wealth-attraction-prosperity-pack-of-21',
+        permanent: true,
+      },
+      {
+        source: '/products/laxmi-kaudi',
+        destination: '/products/original-pili-kaudi-yellow-cowrie-for-wealth-attraction-prosperity-pack-of-21',
+        permanent: true,
+      },
+      {
+        source: '/products/pili-kaudi',
+        destination: '/products/original-pili-kaudi-yellow-cowrie-for-wealth-attraction-prosperity-pack-of-21',
+        permanent: true,
+      },
+      {
+        source: '/products/pure-gomti-chakra',
+        destination: '/products/pure-gomati-chakra',
+        permanent: true,
+      },
+      {
+        source: '/products/gomati-chakra',
+        destination: '/products/pure-gomati-chakra',
+        permanent: true,
+      },
+      {
+        source: '/products/siddha-pure-copper-naag-naagin-pair-rahu-shanti',
+        destination: '/products',
+        permanent: true,
+      },
     ]
   },
 

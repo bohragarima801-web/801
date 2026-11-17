@@ -149,7 +149,7 @@ export default async function PujaDetailsPage({ params }: { params: Promise<{ sl
   const puja = await getPujaBySlugOrFallback(slug);
 
   if (!puja) {
-    permanentRedirect('/pujas')
+    notFound()
   }
 
   // Redirect to canonical short slug if accessed via old long URL or ID

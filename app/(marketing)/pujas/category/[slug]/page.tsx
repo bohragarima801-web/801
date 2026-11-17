@@ -33,6 +33,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     })
   }
 
+  // Check if category has any published pujas; if empty, do not let Google index it
+  const activePujaCount = await prisma.puja.count({
+    where: {
+      categoryId: category.id,
+      status: 'PUBLISHED'
+    }
+  }).catch(() => 0)
+
+  if (activePujaCount === 0) {
+    return generatePageMeta({
+      title: `${category.name} | DivyaYagyam`,
+      description: `Explore authentic Vedic pujas and rituals at DivyaYagyam.`,
+      path: `/pujas/category/${category.slug}`,
+      noIndex: true
+    })
+  }
+
   return generatePageMeta({
     title: `${category.name} — Online Vedic Puja & Anushthan`,
     description: `Book authentic online ${category.name} performed by learned Vedic priests at sacred temples. Name-Gotra Sankalp, live WhatsApp proof & prasad delivery.`,
