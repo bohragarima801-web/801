@@ -230,6 +230,7 @@ export function Footer({ siteData }: FooterProps) {
             </h4>
             <ul className="space-y-2 text-xs">
               {[
+                { label: '🔍 ट्रैक पूजा / ऑर्डर', href: '/track' },
                 { label: 'हमारे बारे में', href: '/about' },
                 { label: 'संपर्क करें', href: '/contact' },
                 { label: 'अक्सर पूछे जाने वाले सवाल', href: '/faq' },
