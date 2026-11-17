@@ -34,6 +34,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     })
   }
 
+  // Check if category has any active products; if empty, do not let Google index it
+  const activeProductCount = await prisma.product.count({
+    where: {
+      categoryId: category.id,
+      status: 'ACTIVE'
+    }
+  }).catch(() => 0)
+
+  if (activeProductCount === 0) {
+    return generatePageMeta({
+      title: `${category.name} | DivyaYagyam Store`,
+      description: `Explore consecrated spiritual items at DivyaYagyam.`,
+      path: `/products/category/${category.slug}`,
+      noIndex: true
+    })
+  }
+
   return generatePageMeta({
     title: `${category.name} — Authentic Consecrated Store`,
     description: `Buy 100% authentic energized ${category.name} directly from sacred temples. Holy blessed items delivered to your home by DivyaYagyam.`,
