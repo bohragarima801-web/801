@@ -11,8 +11,8 @@ export function GargiChatbot() {
 
   return (
     <>
-      {/* Floating Action Button (Positioned Bottom-Left to avoid overlap with WhatsApp on Bottom-Right) */}
-      <div className="fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-40 flex items-center gap-2">
+      {/* Floating Action Button (Desktop only — on mobile, direct WhatsApp & sticky CTA give 100% clean UX) */}
+      <div className="fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-40 hidden md:flex items-center gap-2">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
