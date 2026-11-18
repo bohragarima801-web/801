@@ -333,6 +333,23 @@ export async function POST(req: NextRequest) {
     // 4. Razorpay Payment Gateway integration
     const isExplicitManual = body.paymentMethod === 'cod' || body.paymentMethod === 'manual'
 
+    // Validate that Cash on Delivery (COD) is NOT allowed for online Pujas, ritual services, or digital tools
+    const hasPujaOrService = items.some((i: any) => 
+      typeof i.id === 'string' && (
+        i.id.startsWith('puja-') || 
+        i.id.startsWith('addon-') || 
+        i.id.startsWith('tool-')
+      )
+    )
+
+    if (isExplicitManual && hasPujaOrService) {
+      await prisma.order.delete({ where: { id: dbOrder.id } }).catch(() => {})
+      return NextResponse.json({
+        ok: false,
+        error: 'वैदिक पूजा, संकल्प अनुष्ठान एवं डिजिटल टूल्स के लिए कैश ऑन डिलीवरी (COD) मान्य नहीं है। कृपया ऑनलाइन अग्रिम भुगतान (UPI/Card/NetBanking) चुनें।'
+      }, { status: 400 });
+    }
+
     if (total === 0) {
       await prisma.order.update({
         where: { id: dbOrder.id },

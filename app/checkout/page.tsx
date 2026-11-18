@@ -21,7 +21,7 @@ export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState('')
   const [validatingCoupon, setValidatingCoupon] = useState(false)
   const [step, setStep] = useState<'addons' | 'details'>('details')
-  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'cod'>('cod')
+  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'cod'>('razorpay')
 
   const [address, setAddress] = useState({
     name: '',
@@ -42,14 +42,17 @@ export default function CheckoutPage() {
 
   const isItemInCart = (id: string) => items.some(i => i.id === id)
   const dakshinaItem = items.find(i => i.id === 'addon-dakshina')
-  const hasPuja = items.some(i => i.id.startsWith('puja-'))
+  const hasPuja = items.some(i => i.id.startsWith('puja-') || i.id.startsWith('addon-') || i.id.startsWith('tool-'))
 
-  // Automatically start on 'details' step for product-only carts
+  // Automatically start on 'details' step for product-only carts and enforce online payment for pujas
   useEffect(() => {
     if (!loading && items.length > 0 && !hasPuja) {
       setStep('details')
     }
-  }, [loading, items, hasPuja])
+    if (hasPuja && paymentMethod === 'cod') {
+      setPaymentMethod('razorpay')
+    }
+  }, [loading, items, hasPuja, paymentMethod])
 
   const handleDakshinaSelect = (amt: number) => {
     if (dakshinaItem && dakshinaItem.price === amt) {
@@ -172,6 +175,11 @@ export default function CheckoutPage() {
   const initiatePayment = () => {
     if (!address.name || !address.phone || !address.pincode || !address.street || !address.city || !address.state) {
       toast.error('Please fill all address fields completely')
+      return
+    }
+    if (hasPuja && paymentMethod === 'cod') {
+      toast.error('वैदिक पूजा व संकल्प अनुष्ठान के लिए केवल ऑनलाइन भुगतान मान्य है।')
+      setPaymentMethod('razorpay')
       return
     }
     if (items.some(i => i.id.startsWith('puja-'))) {
@@ -669,22 +677,44 @@ export default function CheckoutPage() {
                     Payment Method
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-3">
-                    <label className={`cursor-pointer border-2 rounded-xl p-4 flex items-center gap-3 transition-all ${paymentMethod === 'cod' ? 'border-[#8B1A21] bg-[#8B1A21]/05' : 'border-amber-200 hover:border-amber-300'}`}>
-                      <input 
-                        type="radio" 
-                        name="paymentMethod" 
-                        value="cod" 
-                        checked={paymentMethod === 'cod'} 
-                        onChange={() => setPaymentMethod('cod')} 
-                        className="accent-[#8B1A21] w-4 h-4"
-                      />
-                      <div>
-                        <p className="font-bold text-sm text-amber-950">Cash on Delivery (COD)</p>
-                        <p className="text-xs text-amber-900/60">Pay when order is delivered</p>
+                    {hasPuja ? (
+                      <div className="border-2 border-dashed border-amber-200/80 bg-amber-50/50 rounded-xl p-4 flex items-start gap-3 opacity-80 cursor-not-allowed">
+                        <input 
+                          type="radio" 
+                          disabled 
+                          checked={false} 
+                          className="mt-1 accent-slate-400 w-4 h-4 cursor-not-allowed"
+                        />
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-bold text-sm text-amber-950/70">Cash on Delivery (COD)</p>
+                            <span className="text-[10px] bg-amber-100/90 text-amber-800 font-bold px-2 py-0.5 rounded-full">
+                              पूजा हेतु अनुपलब्ध
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-amber-900/75 leading-relaxed">
+                            वैदिक पूजा व संकल्प अनुष्ठान केवल ऑनलाइन अग्रिम दक्षिणा (UPI / Card) द्वारा ही मान्य हैं।
+                          </p>
+                        </div>
                       </div>
-                    </label>
+                    ) : (
+                      <label className={`cursor-pointer border-2 rounded-xl p-4 flex items-center gap-3 transition-all ${paymentMethod === 'cod' ? 'border-[#8B1A21] bg-[#8B1A21]/05' : 'border-amber-200 hover:border-amber-300'}`}>
+                        <input 
+                          type="radio" 
+                          name="paymentMethod" 
+                          value="cod" 
+                          checked={paymentMethod === 'cod'} 
+                          onChange={() => setPaymentMethod('cod')} 
+                          className="accent-[#8B1A21] w-4 h-4"
+                        />
+                        <div>
+                          <p className="font-bold text-sm text-amber-950">Cash on Delivery (COD)</p>
+                          <p className="text-xs text-amber-900/60">Pay when order is delivered</p>
+                        </div>
+                      </label>
+                    )}
 
-                    <label className={`cursor-pointer border-2 rounded-xl p-4 flex items-center gap-3 transition-all ${paymentMethod === 'razorpay' ? 'border-[#8B1A21] bg-[#8B1A21]/05' : 'border-amber-200 hover:border-amber-300'}`}>
+                    <label className={`cursor-pointer border-2 rounded-xl p-4 flex items-center gap-3 transition-all ${paymentMethod === 'razorpay' ? 'border-[#8B1A21] bg-[#8B1A21]/05 shadow-xs' : 'border-amber-200 hover:border-amber-300'}`}>
                       <input 
                         type="radio" 
                         name="paymentMethod" 
@@ -694,7 +724,14 @@ export default function CheckoutPage() {
                         className="accent-[#8B1A21] w-4 h-4"
                       />
                       <div>
-                        <p className="font-bold text-sm text-amber-950">Online Payment</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-sm text-amber-950">Online Payment</p>
+                          {hasPuja && (
+                            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                              ✓ पूजा हेतु मान्य
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs text-amber-900/60">UPI, Cards, NetBanking (Razorpay)</p>
                       </div>
                     </label>
