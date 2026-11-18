@@ -1232,11 +1232,18 @@
 /* ============================================================
    Navigation Container & Header Nav Styling
    ============================================================ */
-/* Navigation Container */
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+/* Navigation Container - Strict Desktop Display (Never leak to mobile) */
+@media (min-width: 1024px) {
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+}
+@media (max-width: 1023px) {
+  .header-nav {
+    display: none !important;
+  }
 }
 
 /* Nav Links */
