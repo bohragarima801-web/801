@@ -120,6 +120,12 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
     notFound()
   }
 
+  // Serialize Prisma Decimal to plain Number for Client Component props
+  const safeTool = {
+    ...tool,
+    price: Number(tool.price)
+  }
+
   // Fetch other related tools for recommendations
   const relatedTools = await prisma.spiritualTool.findMany({
     where: {
@@ -201,7 +207,7 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
       '@type': 'Organization',
       name: 'DivyaYagyam',
       url: BASE_URL,
-      logo: `${BASE_URL}/logo.png`
+      logo: `${BASE_URL}/logo.jpg`
     },
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -327,11 +333,11 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
               !allowed ? 'max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative' : ''
             }
           >
-            <ToolMapper tool={tool} isPremiumUnlocked={allowed} />
+            <ToolMapper tool={safeTool} isPremiumUnlocked={allowed} />
           </div>
 
           {/* Paywall Overlay */}
-          {!allowed && <PaywallOverlay tool={tool} />}
+          {!allowed && <PaywallOverlay tool={safeTool} />}
         </section>
 
         {/* ── HIGH-CONVERTING CRO PUJA UPSELL & REMEDY SECTION ── */}
@@ -365,23 +371,26 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
               {
                 title: "श्री सत्यनारायण महापूजा व कथा",
                 desc: "परिवार में सुख-शांति, समृद्धि, मनोकामना पूर्ति एवं श्री हरि विष्णु कृपा प्राप्ति हेतु पावन अनुष्ठान।",
-                price: "₹501",
-                badge: "सुख-शांति व समृद्धि",
-                href: "/pujas/satya-narayan-puja"
-              },
-              {
-                title: "👑 VIP विशिष्ट 1-on-1 वैदिक अनुष्ठान",
-                desc: "आपके व परिवार के नाम-गोत्र से संपूर्ण विधि-विधान एवं वरिष्ठ आचार्यों द्वारा समर्पित व्यक्तिगत महायज्ञ।",
                 price: "₹2,100",
-                badge: "व्यक्तिगत यजमान",
-                href: "/vip-pujas"
+                badge: "सुख-शांति व समृद्धि",
+                href: "/pujas/satya-narayan-puja",
+                isExternal: false
               },
               {
-                title: "पावन मंदिर चढ़ावा एवं दीपदान सेवा",
-                desc: "प्राचीन सिद्ध मंदिरों में अपने नाम से भोग, पुष्प, दीप एवं वस्त्र अर्पण सेवा घर बैठे करवाएं।",
-                price: "₹251",
-                badge: "नित्य देव सेवा",
-                href: "/book-chadhawa"
+                title: "वैदिक ज्योतिष एवं ग्रह शांति परामर्श",
+                desc: "कुंडली के अनुसार उचित पूजा, नवग्रह शांति व दोष निवारण हेतु वरिष्ठ वेदाचार्य जी से सीधा मार्गदर्शन।",
+                price: "निःशुल्क",
+                badge: "आचार्य परामर्श",
+                href: `https://wa.me/919530401984?text=${encodeURIComponent(`प्रणाम पंडित जी, मैंने दिव्ययज्ञम् पर ${tool.name} का उपयोग किया है। कृपया मुझे मेरी कुंडली के अनुसार उचित वैदिक उपाय व पूजा का मार्गदर्शन प्रदान करें।`)}`,
+                isExternal: true
+              },
+              {
+                title: "सिद्ध अभिमंत्रित रुद्राक्ष व पूजा सामग्री",
+                desc: "प्रामाणिक सिद्ध रुद्राक्ष माला, पीली कौड़ी एवं प्राण-प्रतिष्ठित गोमती चक्र सीधा दिव्ययज्ञम् स्टोर से।",
+                price: "₹199",
+                badge: "अभिमंत्रित स्टोर",
+                href: "/products",
+                isExternal: false
               }
             ].map((remedy, idx) => (
               <div
@@ -408,14 +417,26 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 <div className="pt-2 border-t border-[#EFE4D6] flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-semibold text-emerald-700">✓ लाइव वीडियो प्रमाण</span>
-                  <Link
-                    href={remedy.href}
-                    className="px-3 py-1.5 rounded-lg bg-[#FF6600] hover:bg-[#E65C00] text-white text-[11px] font-bold shadow-2xs transition-all flex items-center gap-1 shrink-0"
-                  >
-                    <span>संकल्प करें</span>
-                    <span>➔</span>
-                  </Link>
+                  <span className="text-[10px] font-semibold text-emerald-700">✓ {remedy.isExternal ? '100% निःशुल्क सेवा' : 'लाइव वीडियो प्रमाण'}</span>
+                  {remedy.isExternal ? (
+                    <a
+                      href={remedy.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white text-[11px] font-bold shadow-2xs transition-all flex items-center gap-1 shrink-0"
+                    >
+                      <span>परामर्श लें</span>
+                      <span>➔</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={remedy.href}
+                      className="px-3 py-1.5 rounded-lg bg-[#FF6600] hover:bg-[#E65C00] text-white text-[11px] font-bold shadow-2xs transition-all flex items-center gap-1 shrink-0"
+                    >
+                      <span>{remedy.href === '/products' ? 'स्टोर देखें' : 'संकल्प करें'}</span>
+                      <span>➔</span>
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

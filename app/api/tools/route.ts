@@ -8,6 +8,18 @@ export async function GET(req: NextRequest) {
       where: { 
         isActive: true
       },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        isFree: true,
+        price: true,
+        trialDays: true,
+        thumbnail: true,
+        isActive: true,
+        createdAt: true
+      },
       orderBy: { createdAt: 'asc' }
     })
 
