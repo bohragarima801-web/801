@@ -41,11 +41,11 @@ export function Logo({ className, showText = true, size = "md" }: { className?: 
       </div>
 
       {showText && (
-        <div className="flex flex-col justify-center notranslate leading-tight" translate="no">
-          <span className="text-[15px] sm:text-[20px] font-black sacred-gradient-text tracking-wide leading-none py-0.5" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
+        <div className="flex flex-col justify-center notranslate leading-tight min-w-0" translate="no">
+          <span className="text-[14px] sm:text-[20px] font-black sacred-gradient-text tracking-wide leading-none py-0.5 truncate" style={{ fontFamily: "'Cinzel', 'Georgia', serif" }}>
             {siteName}
           </span>
-          <span className="text-[7.5px] sm:text-[9.5px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.1em] uppercase mt-[1px]">
+          <span className="text-[7.5px] sm:text-[9.5px] text-[#8B5A00] dark:text-amber-400 font-extrabold tracking-[0.1em] uppercase mt-[1px] truncate">
             Online Vedic Pujas & Seva
           </span>
         </div>

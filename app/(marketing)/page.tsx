@@ -345,7 +345,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <SacredVideoGallery videos={dbVideos} />
+          <SacredVideoGallery videos={dbVideos} showHeader={false} />
         </div>
       </section>
 

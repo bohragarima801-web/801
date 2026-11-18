@@ -7,11 +7,13 @@ import { MessageCircle, Flame } from 'lucide-react'
 export function MobileBottomNav() {
   const pathname = usePathname()
 
-  // Hide sticky bottom bar on admin, checkout, or booking wizard pages to prevent form obstruction
+  // Hide sticky bottom bar on admin, checkout, booking wizard, or single puja detail pages
+  // (Puja detail pages have their own dedicated package booking sticky bar with exact pricing & CTA)
   if (
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/checkout') ||
-    pathname?.startsWith('/bookings/new')
+    pathname?.startsWith('/bookings/new') ||
+    (pathname?.startsWith('/pujas/') && pathname !== '/pujas')
   ) {
     return null
   }
