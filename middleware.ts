@@ -15,15 +15,30 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, { status: 301 })
   }
 
+    // ── Permanent 308 Redirects from Legacy Ghost Slugs to New Live Canonical Pujas ──
+  const legacyPujaRedirects: Record<string, string> = {
+    '/pujas/kalsarp-dosh-shanti-puja': '/pujas/kalsarp-dosh-nivaran-puja',
+    '/pujas/kaal-sarp-dosh-nivaran-puja-jodhpur': '/pujas/kalsarp-dosh-nivaran-puja',
+    '/pujas/rudrabhishek': '/pujas/maha-rudrabhishek-puja',
+    '/pujas/rudrabhishek-mahapuja': '/pujas/maha-rudrabhishek-puja',
+    '/pujas/maha-mrityunjay-jaap': '/pujas/maha-mrityunjaya-jaap-hawan',
+    '/pujas/mahamrityujaya-jaap-rudrabhishekam': '/pujas/maha-mrityunjaya-jaap-hawan',
+    '/pujas/11000-mahamrityunjaya-jaap-maharudrabhishekam': '/pujas/maha-mrityunjaya-jaap-hawan',
+    '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja': '/pujas/navgrah-shanti-puja',
+  }
+
+  if (legacyPujaRedirects[pathname]) {
+    const targetUrl = req.nextUrl.clone()
+    targetUrl.pathname = legacyPujaRedirects[pathname]
+    return NextResponse.redirect(targetUrl, { status: 308 })
+  }
+
   // ── Permanently Discontinued Ghost Pujas (HTTP 410 Gone) ──
   // Prevents Soft-404 penalties on Google Search Console by explicitly signaling discontinued rituals
   const discontinuedGhostPujas = new Set([
-    '/pujas/kalsarp-dosh-shanti-puja',
-    '/pujas/kaal-sarp-dosh-nivaran-puja-jodhpur',
     '/pujas/durga-saptashati-108-samagri-mahayagya',
     '/pujas/durga-saptashati-hawan-puja',
     '/pujas/shani-saadesati-dhaiya-dosh-nivaran-yagya',
-    '/pujas/navgrah-shanti-sarva-graha-dosh-nivaran-puja',
     '/pujas/maa-bagalamukhi-kavach-haldi-abhishek-puja',
     '/pujas/maa-bagalamukhi-kavach-puja',
     '/pujas/maa-pratyangira-tantrok-hawan-bali-yagya',
@@ -42,11 +57,6 @@ export async function middleware(request: NextRequest) {
     '/pujas/maa-bagalamukhi-mirchi-hawan',
     '/pujas/mata-baglamukhi-mirchi-havan-sarva-karya-siddhi-mahayagya',
     '/pujas/maa-baglamukhi-mahayagya-mirchi-havan',
-    '/pujas/rudrabhishek',
-    '/pujas/rudrabhishek-mahapuja',
-    '/pujas/maha-mrityunjay-jaap',
-    '/pujas/mahamrityujaya-jaap-rudrabhishekam',
-    '/pujas/11000-mahamrityunjaya-jaap-maharudrabhishekam',
     '/pujas/11000-maha-mrityunjay-mantra-jaap-panchamrit',
     '/pujas/maha-shiv-rudra-abhishek-pooja-21-brahmins',
     '/pujas/mahamrityunjaya-jaap-rudrabhishekam',
