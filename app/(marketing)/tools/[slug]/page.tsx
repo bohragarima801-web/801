@@ -120,6 +120,12 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
     notFound()
   }
 
+  // Serialize Prisma Decimal to plain Number for Client Component props
+  const safeTool = {
+    ...tool,
+    price: Number(tool.price)
+  }
+
   // Fetch other related tools for recommendations
   const relatedTools = await prisma.spiritualTool.findMany({
     where: {
@@ -327,11 +333,11 @@ export default async function ToolViewPage({ params }: { params: Promise<{ slug:
               !allowed ? 'max-h-[400px] overflow-hidden blur-[2px] opacity-60 pointer-events-none select-none relative' : ''
             }
           >
-            <ToolMapper tool={tool} isPremiumUnlocked={allowed} />
+            <ToolMapper tool={safeTool} isPremiumUnlocked={allowed} />
           </div>
 
           {/* Paywall Overlay */}
-          {!allowed && <PaywallOverlay tool={tool} />}
+          {!allowed && <PaywallOverlay tool={safeTool} />}
         </section>
 
         {/* ── HIGH-CONVERTING CRO PUJA UPSELL & REMEDY SECTION ── */}
