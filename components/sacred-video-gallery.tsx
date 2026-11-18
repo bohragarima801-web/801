@@ -18,6 +18,7 @@ export interface VideoItem {
 
 interface SacredVideoGalleryProps {
   videos?: VideoItem[]
+  showHeader?: boolean
 }
 
 function checkIsVideo(url?: string, type?: string) {
@@ -35,7 +36,7 @@ function checkIsVideo(url?: string, type?: string) {
   )
 }
 
-export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
+export function SacredVideoGallery({ videos = [], showHeader = true }: SacredVideoGalleryProps) {
   const displayVideos = videos || []
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null)
 
@@ -64,19 +65,21 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
   }
 
   return (
-    <section className="container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-zinc-200 notranslate" translate="no">
-      {/* DivyaYagyam Luxury Ultra-Attractive Clean Header */}
-      <div className="space-y-2.5 mb-10 text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
-          <Sparkles className="h-3.5 w-3.5" /> Sacred Darshan & Proof
+    <div className={showHeader ? "container mx-auto px-4 md:px-6 py-12 md:py-20 border-t border-zinc-200 notranslate" : "w-full notranslate"} translate="no">
+      {/* Optional Header */}
+      {showHeader && (
+        <div className="space-y-2.5 mb-10 text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 font-bold text-xs border border-zinc-200">
+            <Sparkles className="h-3.5 w-3.5" /> Sacred Darshan & Proof
+          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">
+            Sacred Puja Darshan & Live Videos
+          </h2>
+          <p className="text-xs sm:text-sm text-zinc-500 font-medium max-w-xl mx-auto">
+            Authentic videos and darshan of pujas performed with devotees' name and gotra across various sacred shrines.
+          </p>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">
-          Sacred Puja Darshan & Live Videos
-        </h2>
-        <p className="text-xs sm:text-sm text-zinc-500 font-medium max-w-xl mx-auto">
-          Authentic videos and darshan of pujas performed with devotees' name and gotra across various sacred shrines.
-        </p>
-      </div>
+      )}
 
       {/* Media Grid - Vertical Portrait Cards */}
       {displayVideos.length === 0 ? (
@@ -203,6 +206,6 @@ export function SacredVideoGallery({ videos = [] }: SacredVideoGalleryProps) {
           </div>
         </DialogContent>
       </Dialog>
-    </section>
+    </div>
   )
 }

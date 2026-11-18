@@ -345,7 +345,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <SacredVideoGallery videos={dbVideos} />
+          <SacredVideoGallery videos={dbVideos} showHeader={false} />
         </div>
       </section>
 
@@ -516,7 +516,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {products.slice(0, 4).map((p: any) => {
               const price = Number(p.price || 501)
-              const imgSrc = p.coverImage || '/product_fallback.jpg'
+              const imgSrc = p.coverImage || '/package-1.webp'
               return (
                 <Link
                   key={p.id}

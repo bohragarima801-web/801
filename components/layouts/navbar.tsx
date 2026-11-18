@@ -200,10 +200,10 @@ export function Navbar({ user: initialUser, siteData }: { user?: any, siteData?:
       )}
       translate="no"
     >
-      {/* 1. Compact Announcement Bar — Collapses on scroll down, reveals on scroll up */}
+      {/* 1. Compact Announcement Bar (Desktop/Tablet) — Collapses on scroll down, reveals on scroll up */}
       <div
         className={cn(
-          'w-full bg-gradient-to-r from-[#52131D] via-[#7A1F2B] to-[#52131D] text-white text-[11px] font-semibold flex items-center justify-between shadow-xs transition-all duration-300 overflow-hidden notranslate border-b border-[#C89B3C]/30',
+          'w-full bg-gradient-to-r from-[#52131D] via-[#7A1F2B] to-[#52131D] text-white text-[11px] font-semibold hidden sm:flex items-center justify-between shadow-xs transition-all duration-300 overflow-hidden notranslate border-b border-[#C89B3C]/30',
           showAnnouncement ? 'max-h-[26px] py-0.5 px-3 sm:px-4 opacity-100' : 'max-h-0 py-0 opacity-0 border-none'
         )}
         translate="no"

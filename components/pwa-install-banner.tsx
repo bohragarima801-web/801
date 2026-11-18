@@ -10,9 +10,11 @@ export function PwaInstallBanner() {
   const [showIosTip, setShowIosTip] = useState(false)
 
   useEffect(() => {
-    // Check if already dismissed in this session
-    const isDismissed = sessionStorage.getItem('dy_pwa_dismissed')
-    if (isDismissed) return
+    // Check if dismissed within last 7 days
+    const dismissedTime = localStorage.getItem('dy_pwa_dismissed')
+    if (dismissedTime && Date.now() - Number(dismissedTime) < 7 * 24 * 60 * 60 * 1000) {
+      return
+    }
 
     // Detect iOS
     const ua = window.navigator.userAgent.toLowerCase()
@@ -23,28 +25,32 @@ export function PwaInstallBanner() {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone
     if (isStandalone) return
 
+    let timer: NodeJS.Timeout | null = null
+
     // Listen for beforeinstallprompt event (Android / Chrome / Edge / Brave)
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e)
-      setShowBanner(true)
+      // Delay banner display by 3 seconds so page content renders smoothly first
+      timer = setTimeout(() => setShowBanner(true), 3000)
     }
 
     const handleAppInstalled = () => {
       setShowBanner(false)
       setDeferredPrompt(null)
-      sessionStorage.setItem('dy_pwa_dismissed', 'true')
+      localStorage.setItem('dy_pwa_dismissed', Date.now().toString())
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
 
-    // For iOS Safari or Android browsers where prompt fires early
+    // For iOS Safari: Delay by 4 seconds so user experiences the page first
     if (isIosDevice && !isStandalone) {
-      setShowBanner(true)
+      timer = setTimeout(() => setShowBanner(true), 4000)
     }
 
     return () => {
+      if (timer) clearTimeout(timer)
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
     }
@@ -74,7 +80,7 @@ export function PwaInstallBanner() {
   const handleDismiss = () => {
     setShowBanner(false)
     setShowIosTip(false)
-    sessionStorage.setItem('dy_pwa_dismissed', 'true')
+    localStorage.setItem('dy_pwa_dismissed', Date.now().toString())
   }
 
   if (!showBanner) return null

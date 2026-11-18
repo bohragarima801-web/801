@@ -943,26 +943,26 @@ export function PujaClientView({ puja }: { puja: any }) {
       </div>
 
       {/* 10. Floating Sticky Mobile/Desktop Bottom Bar */}
-      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-3 sm:p-4 bg-white/95 backdrop-blur-md border-t border-[#E8DDD0] shadow-[0_-6px_20px_rgba(0,0,0,0.08)] z-40 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <div className="sticky-footer-bar fixed bottom-0 left-0 w-full p-2.5 sm:p-4 bg-white/98 backdrop-blur-xl border-t border-[#E8DDD0] shadow-[0_-8px_32px_rgba(28,22,20,0.14)] z-50 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
           <div className="hidden md:block">
             <p className="text-sm font-extrabold text-[#241A18] truncate max-w-md font-heading">{puja.name}</p>
             <p className="text-xs font-semibold text-[#6F625D]">
               चयनित पैकेज: <span className="text-[#7A1F2B] font-black">{currentSelectedPkgObj?.name} (₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')})</span>
             </p>
           </div>
-          <div className="w-full md:w-auto flex items-center gap-3 justify-between">
-            <div className="md:hidden flex flex-col min-w-0">
-              <span className="text-[10px] text-[#6F625D] uppercase font-bold tracking-tight truncate">
-                {currentSelectedPkgObj?.name || 'पूजा संकल्प शुल्क'}:
+          <div className="w-full md:w-auto flex items-center gap-2 sm:gap-3 justify-between">
+            <div className="md:hidden flex flex-col min-w-0 pr-1">
+              <span className="text-[10px] text-[#6F625D] uppercase font-bold tracking-tight truncate max-w-[120px]">
+                {currentSelectedPkgObj?.name || 'संकल्प शुल्क'}:
               </span>
-              <span className="text-xl font-black text-[#7A1F2B] font-heading leading-tight">
+              <span className="text-lg sm:text-xl font-black text-[#7A1F2B] font-heading leading-tight">
                 ₹{Number(currentSelectedPkgObj?.price).toLocaleString('en-IN')}
               </span>
             </div>
             <button 
               onClick={() => handleBookNow()}
-              className="flex-1 sm:flex-none sm:w-auto px-7 sm:px-9 py-3 text-sm sm:text-base bg-[#7A1F2B] hover:bg-[#631822] text-white font-black shadow-md hover:shadow-lg transition-all uppercase tracking-wider rounded-xl border border-[#C89B3C]/40 shrink-0 flex items-center justify-center gap-2 cursor-pointer active:scale-95 whitespace-nowrap"
+              className="flex-1 sm:flex-none sm:w-auto px-5 sm:px-9 py-2.5 sm:py-3 text-xs sm:text-base bg-[#7A1F2B] hover:bg-[#631822] text-white font-black shadow-md hover:shadow-lg transition-all uppercase tracking-wider rounded-xl border border-[#C89B3C]/40 shrink-0 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-95 whitespace-nowrap min-h-[44px]"
             >
               <span>संकल्प लें व बुक करें ➔</span>
             </button>
